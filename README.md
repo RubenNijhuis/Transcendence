@@ -1,4 +1,4 @@
-## Transcendence
+## 🤖🧠 Transcendence
 
 ### Quick start
 ```
@@ -8,3 +8,5 @@ npm run start:dev
 Run front-end with
 npm run start
 ```
+
+### Folder structure
