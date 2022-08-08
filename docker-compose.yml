@@ -10,12 +10,14 @@ services:
       - ./back-end:/home/node/app # copy files
     expose:
       - "8081"
-    command: "npm install ; npm run build ; npm start:dev" # install packages and start
+    command: "npm install"
+    command: "npm run build"
+    command: "npm run start:dev" # install packages and start
 
   database:
     image: "postgres:14"
     restart: always
-    environment:
+    env_file:
       - ./back-end/.env
     ports:
       - "5432:5432"
