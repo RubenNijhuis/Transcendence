@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  backend:
+    image: "node:18" # Latest stable node version
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=development # configure node for development environment
+    volumes:
+      - ./backend:/home/node/app # copy files
+    expose:
+      - "8081"
+    command: "npm install ; npm run build ; npm start"
