@@ -1,4 +1,5 @@
-## 🤖🧠 Transcendence
+## Transcendence
+Built by: rnijhuis, ztan, akramp and dgiannop
 
 ### Quick start
 ```
@@ -10,3 +11,8 @@ npm run start
 ```
 
 ### Folder structure
+```
+Front-end
+Back-end
+...
+```
