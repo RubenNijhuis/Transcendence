@@ -5,13 +5,17 @@ services:
     container_name: Transcendence_backend
     build:
       context: ./back-end
+    env_file:
+      - ./back-end/.env
     volumes:
       - ./back-end:/home/node/app # copy files
     ports:
-      - "8000:8000"
-    command: "ls -la"
+      - "3000:3000"
+    depends_on:
+      - database
 
   database:
+    container_name: Transcendence_database
     image: "postgres:14"
     restart: always
     env_file:
