@@ -4,7 +4,6 @@ up:
 stop:
 	docker-compose down
 
-clear: stop
-	docker rm $(docker ps -qa)
+clean: stop
 
 re: clear up
