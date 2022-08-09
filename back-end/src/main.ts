@@ -6,7 +6,7 @@ import { env } from 'node:process';
 
 async function bootstrap() {
   const app: NestExpressApplication = await NestFactory.create(AppModule);
-  const port: number = Number(env.PORT);
+  const port = Number(env.PORT);
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
