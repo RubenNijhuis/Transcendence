@@ -1,3 +1,10 @@
-NAME = Transcendence
+up:
+	docker-compose up -d --build
 
-all: docker-compose up --build
+stop:
+	docker-compose down
+
+clear: stop
+	docker rm $(docker ps -qa)
+
+re: clear up
