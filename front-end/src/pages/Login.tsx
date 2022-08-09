@@ -1,10 +1,12 @@
 import React from "react";
 
+import Layout from "../components/Layout";
+
 const Login = () => {
   return (
-    <div className="App">
-      <h1>Oh wow we are on the login page</h1>
-    </div>
+    <Layout>
+      <h1>Oh wow we are on the Login page</h1>
+    </Layout>
   );
 };
 
