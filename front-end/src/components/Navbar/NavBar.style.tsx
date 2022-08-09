@@ -1,14 +1,22 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-    height: 72px;
-    padding: calc(72px / 4);
-    background: rgb(30,30,30);
-    color: white;
+    padding-top: calc(72px / 2);
+    
+    .bar {
+        height: 72px;
+        width: calc(100% - 72px);
+        margin: auto;
+        padding: calc(72px / 4);
+
+        color: white;
+        background: rgb(30,30,30);
+        border-radius: 6px;
+    }
     
     .logo {
-        width: 18px;
-        height: 18px;
+        width: calc(72px / 4);
+        height: calc(72px / 4);
         border-radius: 100px;
         background: white;
     }
@@ -24,7 +32,7 @@ const Container = styled.div`
             list-style-type: none;
 
             li {
-                margin-right: 8px;
+                margin-right: calc(72px / 8);
 
                 a {
                     color: white;

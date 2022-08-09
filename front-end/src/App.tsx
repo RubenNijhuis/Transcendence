@@ -1,29 +1,22 @@
 import { Fragment } from "react";
 
-// Routing
-import { Routes, Route } from "react-router-dom";
-
-// Pages
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import NotFound from "./pages/NotFound";
+// Authentication
+import AuthContext from "./utils/AuthContext";
 
 // Misc
 import GlobalStyle from "./utils/GlobalStyle";
+import Router from "./containers/Routes/Routes";
 
 const App = () => {
     return (
         <Fragment>
-            {/* Global Styling */}
-            <GlobalStyle />
+            <AuthContext.Provider value={{ user: true }}>
+                {/* Global Styling */}
+                <GlobalStyle />
 
-            {/* Routing */}
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                {/* 404 not found route */}
-                <Route path="*" element={<NotFound />} />
-            </Routes>
+                {/* Page routing */}
+                <Router />
+            </AuthContext.Provider>
         </Fragment>
     );
 };

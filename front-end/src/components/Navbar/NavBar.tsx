@@ -21,15 +21,17 @@ const locations = [
 const NavBar = () => {
     return (
         <Container>
-            <div className="content">
-                <Link to={'/'}><div className="logo" /></Link>
-                <ul>
-                    {locations.map(({ name, url }) => (
-                        <li>
-                            <Link to={url}>{name}</Link>
-                        </li>
-                    ))}
-                </ul>
+            <div className="bar">
+                <div className="content">
+                    <Link to={'/'}><div className="logo" /></Link>
+                    <ul>
+                        {locations.map(({ name, url }) => (
+                            <li>
+                                <Link to={url}>{name}</Link>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
         </Container>
     );

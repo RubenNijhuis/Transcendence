@@ -1,6 +1,9 @@
+// Components
 import Footer from "../Footer";
 import NavBar from "../Navbar";
-import { Container } from "./Layout.style";
+
+// Styling
+import { Container, Content } from "./Layout.style";
 
 type Props = {
     children: JSX.Element;
@@ -10,8 +13,8 @@ const Layout = ({ children }: Props) => {
     return (
         <Container>
             <NavBar />
-            {children}
-            <Footer/>
+            <Content>{children}</Content>
+            <Footer />
         </Container>
     );
 };

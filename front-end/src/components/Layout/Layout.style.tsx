@@ -1,8 +1,12 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Container = styled.div`
-    background: rgba(235,235,235,0.9);
+    height: 100%;
+    background: rgba(235, 235, 235, 0.9);
 `;
 
-export { Container };
+const Content = styled.main`
+    padding: calc(72px / 2);
+`;
 
+export { Container, Content };
