@@ -1,5 +1,5 @@
 // A lot of this was taken from https://stackblitz.com/github/remix-run/react-router/tree/main/examples/auth?file=src%2FApp.tsx
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 // Define what the auth context contains
 interface AuthContextType {
@@ -27,10 +27,10 @@ const fakeAuthProvider = {
 // Shorthand to use auth as a hook
 const useAuth = () => {
     return useContext(AuthContext);
-}
+};
 
 /**
- * The authprovider creates a "bucket" in which we can store all 
+ * The authprovider creates a "bucket" in which we can store all
  * the user data as well as the utility functions like login and logout
  */
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -41,11 +41,19 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setUser({
                 name: "Ruben",
                 intra_name: "rnijhuis",
-                ranking: 1
+                ranking: 1,
             });
             callback();
         });
     };
+
+    useEffect(() => {
+        setUser({
+            name: "Ruben",
+            intra_name: "rnijhuis",
+            ranking: 1,
+        });
+    }, []);
 
     let signout = (callback: VoidFunction) => {
         return fakeAuthProvider.signout(() => {
@@ -59,7 +67,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return (
         <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
     );
-}
+};
 
 export { useAuth };
 export default AuthProvider;

@@ -9,14 +9,17 @@ const locations = [
     {
         name: "Home",
         url: "/",
+        onlyWhenLoggedin: false,
     },
     {
         name: "About",
         url: "/about",
+        onlyWhenLoggedin: false,
     },
     {
         name: "Profile",
         url: "/profile",
+        onlyWhenLoggedin: true,
     },
 ];
 
@@ -31,12 +34,19 @@ const NavBar = () => {
                         <div className="logo">PongHub</div>
                     </Link>
                     <ul>
-                        {locations.map(({ name, url }, count) => (
-                            <li key={count}>
-                                <Link to={url}>{name}</Link>
-                            </li>
-                        ))}
+                        {locations.map(
+                            ({ name, url, onlyWhenLoggedin }, count) => {
+                                // Only show certain items if logged in
+                                if (onlyWhenLoggedin && !auth.user) return null;
+                                return (
+                                    <li key={count}>
+                                        <Link to={url}>{name}</Link>
+                                    </li>
+                                );
+                            }
+                        )}
                     </ul>
+                    {/* Change the nav primary button based on login */}
                     {auth.user ? (
                         <Link className="login-button" to={"/play"}>
                             <Button theme={"light"}>Play a game</Button>
