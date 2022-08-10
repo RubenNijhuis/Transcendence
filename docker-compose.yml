@@ -1,6 +1,17 @@
-version: '2'
+version: '3'
 
 services:
+  frontend:
+    container_name: Transcendence_frontend
+    build:
+      context: ./front-end
+    volumes:
+      - ./front-end:/home/node/app
+    ports:
+      - "8080:8080"
+    links: # Using links since it connects to the backend port no matter what hostport
+      - backend
+
   backend:
     container_name: Transcendence_backend
     build:

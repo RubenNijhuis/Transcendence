@@ -6,4 +6,4 @@ stop:
 
 clean: stop
 
-re: clear up
+re: clean up
