@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-    height: 100%;
     background: rgba(235, 235, 235, 0.9);
+    position: relative;
 `;
 
 const Content = styled.main`
