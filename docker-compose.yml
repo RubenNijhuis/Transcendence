@@ -6,7 +6,7 @@ services:
     build:
       context: ./front-end
     volumes:
-      - ./front-end:/home/node/app
+      - ./front-end:/app
     ports:
       - "8080:8080"
     links: # Using links since it connects to the backend port no matter what hostport
@@ -19,7 +19,7 @@ services:
     env_file:
       - ./back-end/.env
     volumes:
-      - ./back-end:/home/node/app # copy files
+      - ./back-end:/app # copy files
     ports:
       - "3000:3000"
     depends_on:
