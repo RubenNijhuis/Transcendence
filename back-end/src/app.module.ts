@@ -7,8 +7,11 @@ import { TypeOrmConfigService } from './typeorm/typeorm.service';
 import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }), UsersModule],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [
+        TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
+        UsersModule,
+    ],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule {}

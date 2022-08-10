@@ -5,19 +5,22 @@ import { AppModule } from './app.module';
 import { env } from 'node:process';
 
 async function bootstrap() {
-  const app: NestExpressApplication = await NestFactory.create(AppModule);
-  const port = Number(env.PORT);
+    const app: NestExpressApplication = await NestFactory.create(AppModule);
+    const port = Number(env.PORT);
 
-  app.enableCors({
-    origin: 'http://localhost:8080',
-    methods: 'GET, PUT, POST, DELETE',
-    allowedHeaders: 'Content-Type, Authorization',
-  });
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+    // Enable cors so the front-end can communicate
+    app.enableCors({
+        origin: 'http://localhost:8080',
+        methods: 'GET, PUT, POST, DELETE',
+        allowedHeaders: 'Content-Type, Authorization',
+    });
+    app.useGlobalPipes(
+        new ValidationPipe({ whitelist: true, transform: true }),
+    );
 
-  await app.listen(port, () => {
-    console.log('[WEB]', String(env.BASE_URL));
-  });
+    await app.listen(port, () => {
+        console.log('[WEB]', String(env.BASE_URL));
+    });
 }
 
 bootstrap();
