@@ -10,7 +10,7 @@ COPY . .
 RUN npm install
 
 # Build nest application
-RUN npm run build
+# RUN npm run build
 
 EXPOSE 3000
 
