@@ -6,6 +6,7 @@ import Home from "../../pages/Home";
 import Login from "../../pages/Login";
 import About from "../../pages/About";
 import Profile from "../../pages/Profile";
+import Play from "../../pages/Play";
 import NotFound from "../../pages/NotFound";
 
 // Authentication
@@ -21,6 +22,7 @@ const Router = () => {
             <Route path="/login" element={<Login />} />
             <Route element={<Guard />}>
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/play" element={<Play />} />
             </Route>
             {/* 404 not found route */}
             <Route path="*" element={<NotFound />} />

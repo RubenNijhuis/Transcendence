@@ -5,7 +5,7 @@ import NavBar from "../Navbar";
 // Styling
 import { Container, Content } from "./Layout.style";
 
-type Props = {
+interface Props {
     children: JSX.Element;
 };
 

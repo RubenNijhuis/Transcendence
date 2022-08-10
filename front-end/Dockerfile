@@ -9,10 +9,7 @@ COPY . .
 
 RUN npm install
 
-# Build nest application
-# RUN npm run build
-
 EXPOSE 8080
 
 # Start nest in watch mode
-CMD npm run serve
+CMD npm run start

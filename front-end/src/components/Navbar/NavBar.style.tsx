@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const Container = styled.div`
     padding-top: calc(72px / 2);
-    
+
     .bar {
         height: 72px;
         width: calc(100% - 72px);
@@ -10,15 +10,19 @@ const Container = styled.div`
         padding: calc(72px / 4);
 
         color: white;
-        background: rgb(30,30,30);
+        background: rgb(30, 30, 30);
         border-radius: 6px;
     }
-    
+
     .logo {
-        width: calc(72px / 4);
-        height: calc(72px / 4);
-        border-radius: 100px;
-        background: white;
+        color: white;
+        font-size: 24px;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .login-button {
+        text-decoration: none;
     }
 
     .content {

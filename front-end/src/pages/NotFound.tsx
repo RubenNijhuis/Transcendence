@@ -1,5 +1,11 @@
-import Layout from "../components/Layout";
 import styled from "styled-components";
+
+// Styling constants
+import { magicNum } from "../utils/StylingConstants";
+
+// Components
+import Layout from "../components/Layout";
+import Heading from "../components/Heading";
 
 const GoodBye = styled.div`
     h2 {
@@ -9,7 +15,7 @@ const GoodBye = styled.div`
     }
 
     img {
-        width: clamp(72px, 100%, calc(72px * 10)); 
+        width: clamp(${magicNum}, 100%, calc(${magicNum} * 10)); 
         margin: calc(72px / 2) auto;
         display: block;
         box-shadow: 0px 16px 36px 0px rgba(0,0,0,0.2);
@@ -21,7 +27,7 @@ const NotFound = () => {
     return (
         <Layout>
             <GoodBye>
-                <h2>Page not found</h2>
+                <Heading type={2}>Page not found :(</Heading>
                 <img
                     alt="my_death"
                     src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia1.tenor.com%2Fimages%2Ffda908ec27c4ee119e49bcf63ef86ade%2Ftenor.gif%3Fitemid%3D10478234&f=1&nofb=1"

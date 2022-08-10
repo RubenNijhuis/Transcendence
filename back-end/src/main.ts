@@ -8,6 +8,11 @@ async function bootstrap() {
   const app: NestExpressApplication = await NestFactory.create(AppModule);
   const port = Number(env.PORT);
 
+  app.enableCors({
+    origin: 'http://localhost:8080',
+    methods: 'GET, PUT, POST, DELETE',
+    allowedHeaders: 'Content-Type, Authorization',
+  });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
   await app.listen(port, () => {

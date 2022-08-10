@@ -1,9 +1,10 @@
+import Heading from "../components/Heading";
 import Layout from "../components/Layout";
 
 const About = () => {
   return (
     <Layout>
-      <h1>About page</h1>
+      <Heading type={1}>About</Heading>
     </Layout>
   );
 };
