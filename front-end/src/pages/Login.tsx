@@ -21,9 +21,12 @@ const Login = () => {
     const from = "/profile";
 
     const handleLogin = () => {
-        auth.signin("Ruben", () => {
-            navigate(from, { replace: true });
-        });
+        auth.signin(
+            { email: "contact@rubennijhuis.com", password: "peepee" },
+            () => {
+                navigate(from, { replace: true });
+            }
+        );
     };
 
     const handleLogout = () => {

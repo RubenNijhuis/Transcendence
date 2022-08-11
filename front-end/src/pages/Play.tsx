@@ -1,6 +1,11 @@
+
+// Components
 import Heading from "../components/Heading";
 import Layout from "../components/Layout";
 import PongGame from "../containers/PongGame";
+
+// Debug
+import Logger from "../utils/Logger";
 
 const Play = () => {
     return (

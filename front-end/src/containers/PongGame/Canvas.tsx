@@ -1,34 +1,51 @@
 import { useRef, useEffect } from "react";
+
+// Styling
 import styled from "styled-components";
 
-const drawGame = (canvas: HTMLCanvasElement, context: any) => {
-    const c = context;
+// Game components
+import Ball from "./Ball";
+import Bat from "./Bat";
 
+const drawGame = (canvas: HTMLCanvasElement, context: any) => {
+
+    // Setup components to be drawn on the canvas
+    const PongBall = new Ball(100, 100, context, canvas);
+    const Player1 = new Bat(100, canvas.clientHeight / 2, context, canvas);
+    const Player2 = new Bat(
+        canvas.clientWidth - 100,
+        canvas.clientHeight / 2,
+        context,
+        canvas
+    );
+
+    // Keylogger
+    window.addEventListener("keypress", (e) => {
+        const splitValue = e.code.split('Key')[1];
+        console.log(splitValue);
+    });
+
+    // Draws the canvas in an animationFrame
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const animate = () => {
         requestAnimationFrame(animate);
-
-        /*
-            drawPlayerBat();
-            drawOpponentBat();
-            drawBall();
-        */
-
-        c.clearRect(0, 0, 400, 400);
-        c.beginPath();
-        c.arc(50, 50, 30, 0, Math.PI * 2, false);
-        c.strokeStyle = "blue";
-        c.stroke();
+        context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+        PongBall.draw();
+        Player1.draw();
+        Player2.draw();
     };
 
     animate();
 };
 
 const StyledCanvas = styled.canvas`
-    border: solid 2px black;
+    box-sizing: border-box;
+    outline: black 1px solid;
 `;
 
 const Container = styled.div`
+    aspect-ratio: 16/9;
+    background-color: rgba(0, 0, 0, 0.1);
     width: 100%;
 `;
 
@@ -43,8 +60,8 @@ const Canvas = () => {
 
             let context = canvas.getContext("2d");
 
-            canvas.width = canvasContainer.clientWidth;
-            canvas.height = canvasContainer.clientHeight;
+            canvas.width = canvasContainer.offsetWidth;
+            canvas.height = canvasContainer.offsetHeight;
 
             if (context !== null) {
                 drawGame(canvas, context);
@@ -54,12 +71,7 @@ const Canvas = () => {
 
     return (
         <Container ref={canvasContainerRef}>
-            <StyledCanvas
-                ref={canvasRef}
-                id="pong"
-                width="500px"
-                height="500px"
-            />
+            <StyledCanvas ref={canvasRef} id="pong" width="0px" height="0px" />
         </Container>
     );
 };
