@@ -6,11 +6,11 @@ import styled from "styled-components";
 // Game components
 import Ball from "./Ball";
 import Bat from "./Bat";
+import GameManager from "./GameManager";
 
 const drawGame = (canvas: HTMLCanvasElement, context: any) => {
-
     // Setup components to be drawn on the canvas
-    const PongBall = new Ball(100, 100, context, canvas);
+    const PongBall = new Ball(context, canvas);
     const Player1 = new Bat(100, canvas.clientHeight / 2, context, canvas);
     const Player2 = new Bat(
         canvas.clientWidth - 100,
@@ -19,9 +19,17 @@ const drawGame = (canvas: HTMLCanvasElement, context: any) => {
         canvas
     );
 
+    const GameManagement = new GameManager(
+        PongBall,
+        Player1,
+        Player2,
+        canvas,
+        context
+    );
+
     // Keylogger
     window.addEventListener("keypress", (e) => {
-        const splitValue = e.code.split('Key')[1];
+        const splitValue = e.code.split("Key")[1];
         console.log(splitValue);
     });
 
@@ -30,9 +38,15 @@ const drawGame = (canvas: HTMLCanvasElement, context: any) => {
     const animate = () => {
         requestAnimationFrame(animate);
         context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+
+        // Draw the elements
         PongBall.draw();
         Player1.draw();
         Player2.draw();
+        GameManagement.displayText();
+
+        // Check game
+        GameManagement.checkIfBallHitsSide();
     };
 
     animate();

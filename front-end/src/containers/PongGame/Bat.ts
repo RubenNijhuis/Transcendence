@@ -24,7 +24,6 @@ class Bat {
     }
 
     draw() {
-        // this.calculatePosition();
         this.context.beginPath();
         this.context.fillRect(
             this.positionX - this.width / 2,
@@ -32,25 +31,13 @@ class Bat {
             this.width,
             this.height
         );
-        // this.context.fill();
         this.context.closePath();
     }
 
-    // calculatePosition() {
-    //     this.positionX += this.velocityX;
-    //     this.positionY += this.velocityY;
-
-    //     if (this.positionX + this.radius > this.canvas.width || this.positionX - this.radius < 0) {
-    //         this.velocityX = -this.velocityX;
-    //     }
-
-    //     if (this.positionY + this.radius > this.canvas.height || this.positionY - this.radius < 0) {
-    //         this.velocityY = -this.velocityY;
-    //     }
-
-    //     this.positionX += this.velocityX;
-    //     this.positionY += this.velocityY;
-    // }
+    setPosition(posX: number, posY: number) {
+        this.positionX = posX;
+        this.positionY = posY;
+    }
 }
 
 export default Bat;
