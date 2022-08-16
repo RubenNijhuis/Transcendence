@@ -28,6 +28,16 @@ export class UsersController {
   @Post('create')
   @UsePipes(ValidationPipe)
   createUsers(@Body() createUserDto: CreateUserDto) {
-    return this.userService.createUser(createUserDto);
+    const promise = this.userService.createUser(createUserDto);
+    promise.then(function(arg){
+      console.log("test");
+      return arg.username;
+    }, function(arg){
+      return arg;
+    }).catch(function(arg){
+      return arg;
+    });
+    return "erroryep";
+    // this is a promise and idk how to get the value from a promise
   }
 }
