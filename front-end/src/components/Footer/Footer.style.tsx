@@ -1,7 +1,10 @@
 import styled from "styled-components";
+import { magicNum } from "../../utils/StylingConstants";
 
 const Container = styled.div`
     color: white;
+
+    padding-bottom: calc(${magicNum} / 2);
 
     .footer {
         display: flex;

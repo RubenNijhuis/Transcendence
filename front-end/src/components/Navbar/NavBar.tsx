@@ -1,30 +1,53 @@
+import { Fragment } from "react";
+
+// Styling
 import Container from "./NavBar.style";
 
 // Navigation
 import { Link } from "react-router-dom";
 import Button from "../Button";
+
+// Authentication
 import { useAuth } from "../../utils/AuthContext";
 
-const locations = [
-    {
-        name: "Home",
-        url: "/",
-        onlyWhenLoggedin: false,
-    },
-    {
-        name: "About",
-        url: "/about",
-        onlyWhenLoggedin: false,
-    },
-    {
-        name: "Profile",
-        url: "/profile",
-        onlyWhenLoggedin: true,
-    },
-];
+// Links
+import { locations } from "./NavBar.config";
+
+const CTAButton = ({ authStatus }: any) => {
+    return (
+        <Fragment>
+            {/* Change the nav primary button based on login */}
+            {authStatus ? (
+                <Link className="login-button" to={"/play"}>
+                    <Button theme={"light"}>Play a game</Button>
+                </Link>
+            ) : (
+                <Link className="login-button" to={"/login"}>
+                    <Button theme={"light"}>Login</Button>
+                </Link>
+            )}
+        </Fragment>
+    );
+};
+
+const NavLinks = ({ authStatus }: any) => {
+    return (
+        <ul>
+            {locations.map(({ name, url, onlyWhenLoggedin }, count) => {
+                // Only show certain items if logged in
+                if (onlyWhenLoggedin && !authStatus) return null;
+                return (
+                    <li key={count}>
+                        <Link to={url}>{name}</Link>
+                    </li>
+                );
+            })}
+        </ul>
+    );
+};
 
 const NavBar = () => {
-    const auth = useAuth();
+    const { isLoggedIn } = useAuth();
 
     return (
         <Container>
@@ -33,29 +56,8 @@ const NavBar = () => {
                     <Link to={"/"} className="logo">
                         <div className="logo">PongHub</div>
                     </Link>
-                    <ul>
-                        {locations.map(
-                            ({ name, url, onlyWhenLoggedin }, count) => {
-                                // Only show certain items if logged in
-                                if (onlyWhenLoggedin && !auth.user) return null;
-                                return (
-                                    <li key={count}>
-                                        <Link to={url}>{name}</Link>
-                                    </li>
-                                );
-                            }
-                        )}
-                    </ul>
-                    {/* Change the nav primary button based on login */}
-                    {auth.user ? (
-                        <Link className="login-button" to={"/play"}>
-                            <Button theme={"light"}>Play a game</Button>
-                        </Link>
-                    ) : (
-                        <Link className="login-button" to={"/login"}>
-                            <Button theme={"light"}>Login</Button>
-                        </Link>
-                    )}
+                    <NavLinks authStatus={isLoggedIn} />
+                    <CTAButton authStatus={isLoggedIn} />
                 </div>
             </div>
         </Container>

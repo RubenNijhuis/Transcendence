@@ -3,7 +3,7 @@ import { magicNum } from "../../utils/StylingConstants";
 
 const StyledH1 = styled.h1`
     font-size: 54.93px;
-    margin-bottom: calc(${magicNum});
+    margin-bottom: calc(${magicNum} / 2 * 1.5);
 `;
 
 const StyledH2 = styled.h2`

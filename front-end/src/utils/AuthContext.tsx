@@ -1,10 +1,11 @@
 // A lot of this was taken from https://stackblitz.com/github/remix-run/react-router/tree/main/examples/auth?file=src%2FApp.tsx
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 // Define what the auth context contains
 interface AuthContextType {
     user: any;
-    signin: (user: string, callback: VoidFunction) => void;
+    isLoggedIn: boolean;
+    signin: (user: any, callback: VoidFunction) => any;
     signout: (callback: VoidFunction) => void;
 }
 
@@ -12,16 +13,33 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>(null!);
 
 // (temporary) Fake authentication module to emulate logging in
+// Will run some code and eventually set a callback
+// Will set user variable
 const fakeAuthProvider = {
     isAuthenticated: false,
-    signin(callback: VoidFunction) {
-        fakeAuthProvider.isAuthenticated = true;
-        setTimeout(callback, 1000); // fake async
+    signin(loginData: any, callback: any) {
+        fetch("http://localhost:3000/users/create", {
+            method: "post",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: "ztan",
+                password: "123456789",
+                email: "zenotan@outlook.nl"
+            })
+        })
+            .then((res) => res.json())
+            .then((r) => {
+                fakeAuthProvider.isAuthenticated = true;
+                setTimeout(() => callback(r), 1000); // fake async
+            });
     },
     signout(callback: VoidFunction) {
         fakeAuthProvider.isAuthenticated = false;
         setTimeout(callback, 1000);
-    },
+    }
 };
 
 // Shorthand to use auth as a hook
@@ -35,34 +53,25 @@ const useAuth = () => {
  */
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     let [user, setUser] = useState<any>(null);
+    let [isLoggedIn, setLoggedIn] = useState<boolean>(false);
 
-    let signin = (newUser: string, callback: VoidFunction) => {
-        return fakeAuthProvider.signin(() => {
-            setUser({
-                name: "Ruben",
-                intra_name: "rnijhuis",
-                ranking: 1,
-            });
+    let signin = (loginData: any, callback: VoidFunction) => {
+        return fakeAuthProvider.signin(loginData, (newUserData: any) => {
+            setUser(newUserData);
+            setLoggedIn(true);
             callback();
         });
     };
-
-    useEffect(() => {
-        setUser({
-            name: "Ruben",
-            intra_name: "rnijhuis",
-            ranking: 1,
-        });
-    }, []);
 
     let signout = (callback: VoidFunction) => {
         return fakeAuthProvider.signout(() => {
             setUser(null);
+            setLoggedIn(false);
             callback();
         });
     };
 
-    const value = { user, signin, signout };
+    const value = { user, signin, signout, isLoggedIn };
 
     return (
         <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
