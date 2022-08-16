@@ -17,8 +17,8 @@ const AuthContext = createContext<AuthContextType>(null!);
 // Will set user variable
 const fakeAuthProvider = {
     isAuthenticated: false,
-    signin(loginData: any, callback: any) {
-        fetch("http://localhost:3000/users/create", {
+    async signin(loginData: any, callback: any) {
+        const opt = {
             method: "post",
             headers: {
                 Accept: "application/json",
@@ -29,12 +29,11 @@ const fakeAuthProvider = {
                 password: "123456789",
                 email: "zenotan@outlook.nl"
             })
-        })
-            .then((res) => res.json())
-            .then((r) => {
-                fakeAuthProvider.isAuthenticated = true;
-                setTimeout(() => callback(r), 1000); // fake async
-            });
+        };
+        const res = await fetch("http://localhost:3000/users/create", opt)
+        const json = await res.json()
+        fakeAuthProvider.isAuthenticated = true;
+        setTimeout(() => callback(json), 1000); // fake async
     },
     signout(callback: VoidFunction) {
         fakeAuthProvider.isAuthenticated = false;

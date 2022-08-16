@@ -16,10 +16,10 @@ export class UsersService {
   }
 
   getUsers() {
-    return this.userRepository.find();
+    return this.userRepository.find()
   }
 
   findUsersById(id: number) {
-    return this.userRepository.findOne({where: {id}});
+    return this.userRepository.findOne({where: {id}})
   }
 }

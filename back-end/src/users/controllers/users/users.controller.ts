@@ -22,22 +22,18 @@ export class UsersController {
 
   @Get('id/:id')
   findUsersById(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.findUsersById(id);
+    return this.userService.findUsersById(id)
   }
 
   @Post('create')
   @UsePipes(ValidationPipe)
-  createUsers(@Body() createUserDto: CreateUserDto) {
-    const promise = this.userService.createUser(createUserDto);
-    promise.then(function(arg){
-      console.log("test");
-      return arg.username;
-    }, function(arg){
-      return arg;
-    }).catch(function(arg){
-      return arg;
-    });
-    return "erroryep";
-    // this is a promise and idk how to get the value from a promise
+  async createUsers(@Body() createUserDto: CreateUserDto) {
+    try {
+      const user = await this.userService.createUser(createUserDto)
+      const ret = {"username": user.username, "email": user.email}
+      return ret
+    } catch (error) {
+      return error
+    }
   }
 }
