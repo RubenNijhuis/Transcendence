@@ -2,6 +2,9 @@ class Bat {
     positionX: number;
     positionY: number;
 
+    startX: number;
+    startY: number;
+
     width: number;
     height: number;
 
@@ -11,6 +14,9 @@ class Bat {
     color: string;
 
     constructor(posX: number, posY: number, context: any, c: any) {
+        this.startX = posX;
+        this.startY = posY;
+
         this.positionX = posX;
         this.positionY = posY;
 
@@ -34,8 +40,12 @@ class Bat {
         this.context.closePath();
     }
 
-    setPosition(posX: number, posY: number) {
-        this.positionX = posX;
+    reset() {
+        this.positionX = this.startX;
+        this.positionY = this.startY;
+    }
+
+    setPosition(posY: number) {
         this.positionY = posY;
     }
 }
