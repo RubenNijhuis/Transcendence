@@ -30,8 +30,8 @@ const fakeAuthProvider = {
                 email: "zenotan@outlook.nl"
             })
         };
-        const res = await fetch("http://localhost:3000/users/create", opt)
-        const json = await res.json()
+        const res = await fetch("http://localhost:3000/users/create", opt);
+        const json = await res.json();
         fakeAuthProvider.isAuthenticated = true;
         setTimeout(() => callback(json), 1000); // fake async
     },

@@ -4,10 +4,9 @@ const Container = styled.div`
     padding-top: calc(72px / 2);
 
     .bar {
-        height: 72px;
         width: calc(100% - 72px);
         margin: auto;
-        padding: calc(72px / 4);
+        padding: calc(72px / 4) calc(72px / 2);
 
         color: white;
         background: rgb(30, 30, 30);

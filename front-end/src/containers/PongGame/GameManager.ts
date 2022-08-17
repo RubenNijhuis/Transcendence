@@ -36,19 +36,32 @@ class GameManager {
         this.context.fillText(
             `${this.player1Score} - ${this.player2Score}`,
             this.canvas.clientWidth / 2,
-            50
+            100
         );
+    }
+
+    resetGame() {
+        this.player1Bat.reset();
+        this.player2Bat.reset();
+
+        setTimeout(() => {
+            this.pongBall.reset();
+        }, 1000);
+    }
+
+    checkIfBallHitsBats() {
+        if (this.pongBall.positionX - this.pongBall.radius < this.player1Bat.positionX + this.player1Bat.width / 2) {
+            console.log("LEFTHIT");
+        }
     }
 
     checkIfBallHitsSide() {
         if (this.pongBall.positionX < this.player1Bat.positionX) {
-            console.log("WHEN PAST BAT1");
-            this.pongBall.reset();
+            this.resetGame();
         }
 
         if (this.pongBall.positionX > this.player2Bat.positionX) {
-            console.log("WHEN PAST BAT2");
-            this.pongBall.reset();
+            this.resetGame();
         }
     }
 }

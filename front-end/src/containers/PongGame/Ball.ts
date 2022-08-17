@@ -46,14 +46,19 @@ class Ball {
     }
 
     start() {
-        this.velocityX = randomIntFromInterval(-2.5, 2.5);
-        this.velocityY = randomIntFromInterval(-2.5, 2.5);
+        // this.velocityX = randomIntFromInterval(-2.5, 2.5);
+        // this.velocityY = randomIntFromInterval(-2.5, 2.5);
     }
 
     reset() {
         this.positionX = this.canvas.clientWidth / 2;
         this.positionY = this.canvas.clientHeight / 2;
         this.start();
+    }
+
+    setPosition(posX: number, posY: number) {
+        this.positionX = posX;
+        this.positionY = posY;
     }
 
     calculatePosition() {
