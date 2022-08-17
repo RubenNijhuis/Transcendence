@@ -17,7 +17,8 @@ services:
     build:
       context: ./back-end
     env_file:
-      - ./back-end/.env
+      - ./back-end/.env.backend
+      - ./back-end/.env.auth
     volumes:
       - ./back-end:/app # copy files
     ports:
@@ -30,7 +31,7 @@ services:
     image: "postgres:14"
     restart: always
     env_file:
-      - ./back-end/.env
+      - ./back-end/.env.database
     ports:
       - "5432:5432"
     volumes:

@@ -15,11 +15,15 @@ export class UsersService {
     return this.userRepository.save(newUser);
   }
 
-  getUsers() {
+  getUsers() { // debugging purposes lol
     return this.userRepository.find()
   }
 
   findUsersById(id: number) {
     return this.userRepository.findOne({where: {id}})
   }
+
+//   async findOne(username: string): Promise<User | undefined> {
+//     return this.find(user => user.username === username);
+//   }
 }

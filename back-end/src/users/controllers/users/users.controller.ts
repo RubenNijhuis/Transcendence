@@ -23,7 +23,7 @@ export class UsersController {
   @Get('id/:id')
   findUsersById(@Param('id', ParseIntPipe) id: number) {
     return this.userService.findUsersById(id)
-  }
+  }  
 
   @Post('create')
   @UsePipes(ValidationPipe)
