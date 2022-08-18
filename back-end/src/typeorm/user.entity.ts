@@ -25,21 +25,21 @@ export class User {
   @Column({
 	name: 'rank',
     nullable: false,
-    default: '',
+    default: 0
   })
   rank: number;
 
   @Column({
 	name: 'wins',
     nullable: false,
-    default: '',
+    default: 0
   })
   wins: number;
 
   @Column({
 	name: 'losses',
     nullable: false,
-    default: '',
+    default: 0
   })
   losses: number;
 

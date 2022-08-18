@@ -23,6 +23,7 @@ import { configSchema } from './config.schema';
         database: configService.get<string>('DB_NAME'),
         entities: entities,
         synchronize: true,
+        isGlobal: true
       }),
       inject: [ConfigService],
     }),
