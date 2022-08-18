@@ -3,8 +3,8 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService} from '@nestjs/config';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import entities from './typeorm';
-import { AuthModule } from './auth/auth.module';
 import { configSchema } from './config.schema';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
