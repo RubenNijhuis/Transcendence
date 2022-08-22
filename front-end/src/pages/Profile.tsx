@@ -1,16 +1,13 @@
 import { Fragment, useEffect, useState } from "react";
 
-// Utils
-import { capitalizeString } from "../utils/StringManipulation";
-
 // Optional url params
 import { useParams } from "react-router-dom";
 
 // Components
-import Heading from "../components/Heading";
 import Layout from "../components/Layout";
 import Loader from "../components/Loader";
 import GameHistory from "../containers/GameHistory";
+import ProfileDisplay from "../containers/ProfileDisplay";
 
 // Authentication
 import { useAuth } from "../utils/AuthContext";
@@ -73,23 +70,14 @@ const ProfilePage = () => {
 
     return (
         <Layout>
-            <Fragment>
-                {userData !== null ? (
-                    <Fragment>
-                        <Heading type={1}>
-                            {capitalizeString(userData.username)}'s Profile
-                        </Heading>
-                        <div>
-                            <img src={userData.img_url} alt="profile" />
-                            <p>Name: {userData.username}</p>
-                        </div>
-                        {/* <p>Leaderboard pos: {ranking}</p> */}
-                        <GameHistory player={userData} matches={game_history} />
-                    </Fragment>
-                ) : (
-                    <Loader />
-                )}
-            </Fragment>
+            {userData !== null ? (
+                <Fragment>
+                    <ProfileDisplay user={userData} />
+                    <GameHistory player={userData} matches={game_history} />
+                </Fragment>
+            ) : (
+                <Loader />
+            )}
         </Layout>
     );
 };

@@ -2,7 +2,13 @@ import styled from "styled-components";
 import { readBuilderProgram } from "typescript";
 
 const Container = styled.div`
-    max-width: 560px;
+    background: rgba(0,0,0,0.1);
+    border-radius: 6px;
+    padding: 36px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 72px;
 `;
 
 const MatchList = styled.div`
