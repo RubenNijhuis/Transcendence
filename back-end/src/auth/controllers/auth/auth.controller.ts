@@ -1,4 +1,4 @@
-import { Controller, Get, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { FortyTwoAuthGuard } from 'src/auth/guard';
 
@@ -9,6 +9,7 @@ export class AuthController {
   login() {}
 
   @Get('42/callback')
+  @UseGuards(FortyTwoAuthGuard)
   redirect(@Res() res: Response) {
     res.sendStatus(200);
   }

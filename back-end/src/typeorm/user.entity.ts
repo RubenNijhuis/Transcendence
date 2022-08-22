@@ -1,15 +1,22 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity() // need to have a token to search on
 export class User {
-  @PrimaryColumn({ // create this with 42 profile uid
+  @PrimaryGeneratedColumn({ // create this with 42 profile uid
     type: 'bigint',
     name: 'user_id',
   })
   id: number;
 
   @Column({
-	name: 'username',
+    name: 'uid',
+    nullable: false,
+    default: '',
+  })
+  uid: string;
+
+  @Column({
+	  name: 'username',
     nullable: false,
     default: '',
   })

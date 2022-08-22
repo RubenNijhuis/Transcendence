@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { env } from 'node:process';
+import passport from 'passport';
 
 async function bootstrap() {
     const app: NestExpressApplication = await NestFactory.create(AppModule);
