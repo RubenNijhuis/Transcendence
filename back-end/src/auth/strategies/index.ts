@@ -1,13 +1,14 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-42';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
+import { AuthenticationProvider } from '../services/auth/auth';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, '42'){
-  constructor(private readonly configService: ConfigService,
-      private readonly httpService: HttpService
+  constructor(@Inject('AUTH_SERVICE') private readonly authService: AuthenticationProvider, 
+  private readonly httpService: HttpService, private readonly configService: ConfigService,
     ) {
     super({
       authorizationURL: configService.get('INTRA_AUTH_URL'),
@@ -26,5 +27,12 @@ export class LocalStrategy extends PassportStrategy(Strategy, '42'){
 		const intraID = data.data.id;
 		const username = data.data.login;
 		const validateUserDto = { intraID, username };
+    console.log(intraID);
+    console.log(username);
+    const details = { username, intraId: intraID };
+    return this.authService.validateUser( details );
   }
 }
+
+//constructor params: private readonly configService: ConfigService,
+//      private readonly httpService: HttpService

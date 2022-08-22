@@ -9,6 +9,7 @@ export class AuthController {
   login() {}
 
   @Get('42/callback')
+  @UseGuards(FortyTwoAuthGuard)
   redirect(@Res() res: Response) {
     res.sendStatus(200);
   }

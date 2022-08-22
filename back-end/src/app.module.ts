@@ -5,6 +5,7 @@ import {TypeOrmModule} from '@nestjs/typeorm';
 import entities from './typeorm';
 import { AuthModule } from './auth/auth.module';
 import { configSchema } from './config.schema';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { configSchema } from './config.schema';
       inject: [ConfigService],
     }),
   	UsersModule,
-  	AuthModule
+  	AuthModule,
+    PassportModule.register({ session: true }),
 	],
   controllers: [],
   providers: [],

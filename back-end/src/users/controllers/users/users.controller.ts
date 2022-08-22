@@ -30,7 +30,7 @@ export class UsersController {
   async createUsers(@Body() createUserDto: CreateUserDto) {
     try {
       const user = await this.userService.createUser(createUserDto)
-      const ret = {"username": user.username, "email": user.email}
+      const ret = {"username": user.username}
       return ret
     } catch (error) {
       return error

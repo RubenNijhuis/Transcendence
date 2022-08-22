@@ -16,44 +16,52 @@ export class User {
   username: string;
 
   @Column({
-    name: 'email_address',
-    nullable: false,
-    default: '',
-  })
-  email: string;
+    name: 'intraId',
+      unique: true,
+      nullable: false,
+      default: '',
+    })
+    intraId: string;
 
-  @Column({
-	name: 'rank',
-    nullable: false,
-    default: 0
-  })
-  rank: number;
+  // @Column({
+  //   name: 'email_address',
+  //   nullable: false,
+  //   default: '',
+  // })
+  // email: string;
 
-  @Column({
-	name: 'wins',
-    nullable: false,
-    default: 0
-  })
-  wins: number;
+  // @Column({
+	// name: 'rank',
+  //   nullable: false,
+  //   default: 0
+  // })
+  // rank: number;
 
-  @Column({
-	name: 'losses',
-    nullable: false,
-    default: 0
-  })
-  losses: number;
+  // @Column({
+	// name: 'wins',
+  //   nullable: false,
+  //   default: 0
+  // })
+  // wins: number;
 
-  @Column({
-	name: 'friendlist',
-    nullable: false,
-    default: '',
-  })
-  friends: string;
+  // @Column({
+	// name: 'losses',
+  //   nullable: false,
+  //   default: 0
+  // })
+  // losses: number;
 
-  @Column({
-	name: 'blocklist',
-    nullable: false,
-    default: '',
-  })
-  blocked: string;
+  // @Column({
+	// name: 'friendlist',
+  //   nullable: false,
+  //   default: '',
+  // })
+  // friends: string;
+
+  // @Column({
+	// name: 'blocklist',
+  //   nullable: false,
+  //   default: '',
+  // })
+  // blocked: string;
 }
