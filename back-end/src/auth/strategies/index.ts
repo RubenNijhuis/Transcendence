@@ -30,7 +30,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, '42'){
     console.log(intraID);
     console.log(username);
     const details = { username, intraId: intraID };
-    return this.authService.validateUser( details );
+    return this.authService.validateUser( validateUserDto );
   }
 }
 

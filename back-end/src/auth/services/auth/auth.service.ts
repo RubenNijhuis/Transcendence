@@ -10,7 +10,7 @@ export class AuthService implements AuthenticationProvider {
     constructor(@InjectRepository(User) private userRepo: 
     Repository<User>)  {}
 
-    async validateUser(details: UserDetails) {
+    async validateUser(createUserDto: createUserDto) {
         const { intraId } = details;
         const user = await this.userRepo.findOne({
             where: {
