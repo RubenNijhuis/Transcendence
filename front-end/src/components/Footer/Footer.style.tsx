@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { magicNum } from "../../utils/StylingConstants";
+import { magicNum, smallRadius } from "../../utils/StylingConstants";
 
 const Container = styled.div`
     color: white;
@@ -10,7 +10,7 @@ const Container = styled.div`
         grid-template-rows: repeat(2, 1fr);
         grid-template-columns: 2fr 1fr;
 
-        row-gap: calc(72px / 2);
+        row-gap: calc(${magicNum} / 2);
         align-items: flex-end;
 
         grid-template-areas: 
@@ -18,15 +18,15 @@ const Container = styled.div`
         "rights links"
         ;
 
-        min-height: calc(72px * 2);
-        width: calc(100% - 72px);
+        min-height: calc(${magicNum} * 2);
+        width: calc(100% - ${magicNum});
 
         margin: auto;
-        padding: calc(72px / 2);
+        padding: calc(${magicNum} / 2);
 
         color: white;
         background: rgb(30,30,30);
-        border-radius: 6px;
+        border-radius: ${smallRadius};
 
         .heading {
             grid-area: heading;
@@ -44,7 +44,7 @@ const Container = styled.div`
             height: 100%;
 
             .inbound {
-                margin-right: calc(72px / 2);
+                margin-right: calc(${magicNum} / 2);
             }
 
             .inbound, .outbound {
@@ -56,7 +56,7 @@ const Container = styled.div`
 
             a {
                 font-size: 18px;
-                margin-bottom: calc(72px / 4);
+                margin-bottom: calc(${magicNum} / 4);
                 color: white;
                 text-decoration: none;
 
@@ -77,7 +77,7 @@ const Container = styled.div`
         }
 
         p {
-            margin-right: calc(72px / 4);
+            margin-right: calc(${magicNum} / 4);
 
             &:last-child {
                 margin-right: 0;

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { magicNum } from "../../utils/StylingConstants";
 
 const Container = styled.div`
     background: rgba(235, 235, 235, 0.9);
@@ -6,7 +7,7 @@ const Container = styled.div`
 `;
 
 const Content = styled.main`
-    padding: calc(72px / 2);
+    padding: calc(${magicNum} / 2);
 `;
 
 export { Container, Content };

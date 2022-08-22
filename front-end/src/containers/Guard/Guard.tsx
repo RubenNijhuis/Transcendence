@@ -15,11 +15,18 @@ const Guard = () => {
     const auth = useAuth();
     const location = useLocation();
 
-    return auth.user ? (
-        <Outlet />
-    ) : (
-        <Navigate to="/login" state={{ from: location }} replace />
-    );
+    /*
+        If the user is logged in we render the outlet 
+        which is pretty much the component we wanted 
+        to render anyway.
+
+        Otherwise we reroute them to the login page
+    */
+    if (auth.isLoggedIn) {
+        return <Outlet />;
+    } else {
+        return <Navigate to="/login" state={{ from: location }} replace />;
+    }
 };
 
 export default Guard;

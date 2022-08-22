@@ -3,16 +3,19 @@ import Layout from "../components/Layout";
 
 // Authentication
 import { useAuth } from "../utils/AuthContext";
+import Logger from "../utils/Logger";
 
 const Profile = () => {
     const auth = useAuth();
-    console.log(auth.user);
+
+    Logger("AUTH", "User object", auth.user);
+
     const { username, email } = auth.user;
 
     return (
         <Layout>
             <div>
-                <Heading type={1}>Profile page</Heading>
+                <Heading type={1}>Profile</Heading>
 
                 <p>Name: {username}</p>
                 {/* <p>Intra name: {intra_name}</p> */}

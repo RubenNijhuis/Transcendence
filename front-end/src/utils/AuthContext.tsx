@@ -51,10 +51,10 @@ const useAuth = () => {
  * the user data as well as the utility functions like login and logout
  */
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    let [user, setUser] = useState<any>(null);
-    let [isLoggedIn, setLoggedIn] = useState<boolean>(false);
+    const [user, setUser] = useState<any>(null);
+    const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
 
-    let signin = (loginData: any, callback: VoidFunction) => {
+    const signin = (loginData: any, callback: VoidFunction) => {
         return fakeAuthProvider.signin(loginData, (newUserData: any) => {
             setUser(newUserData);
             setLoggedIn(true);
@@ -62,7 +62,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         });
     };
 
-    let signout = (callback: VoidFunction) => {
+    const signout = (callback: VoidFunction) => {
         return fakeAuthProvider.signout(() => {
             setUser(null);
             setLoggedIn(false);

@@ -15,7 +15,7 @@ const Login = () => {
     const auth = useAuth();
     const navigate = useNavigate();
 
-    Logger("AUTH", "user data", auth.user);
+    Logger("AUTH", "User data", auth.user);
 
     // Page to go to after login
     const from = "/profile";

@@ -1,16 +1,17 @@
 import styled from "styled-components";
+import { magicNum, smallRadius } from "../../utils/StylingConstants";
 
 const Container = styled.div`
-    padding-top: calc(72px / 2);
+    padding-top: calc(${magicNum} / 2);
 
     .bar {
-        width: calc(100% - 72px);
+        width: calc(100% - ${magicNum});
         margin: auto;
-        padding: calc(72px / 4) calc(72px / 2);
+        padding: calc(${magicNum} / 4) calc(${magicNum} / 2);
 
         color: white;
         background: rgb(30, 30, 30);
-        border-radius: 6px;
+        border-radius: ${smallRadius};
     }
 
     .logo {
@@ -35,7 +36,7 @@ const Container = styled.div`
             list-style-type: none;
 
             li {
-                margin-right: calc(72px / 8);
+                margin-right: calc(${magicNum} / 8);
 
                 a {
                     color: white;

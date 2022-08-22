@@ -1,3 +1,4 @@
+import Logger from "../../utils/Logger";
 import Ball from "./Ball";
 import Bat from "./Bat";
 
@@ -51,7 +52,7 @@ class GameManager {
 
     checkIfBallHitsBats() {
         if (this.pongBall.positionX - this.pongBall.radius < this.player1Bat.positionX + this.player1Bat.width / 2) {
-            console.log("LEFTHIT");
+            Logger("GAME", "LEFTHIT", {});
         }
     }
 

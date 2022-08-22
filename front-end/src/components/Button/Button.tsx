@@ -6,12 +6,10 @@ interface Props {
     onClick?: React.MouseEventHandler<HTMLElement>;
 }
 
-const Button = ({ theme, children, onClick }: Props) => {
-    return (
-        <StyledButton theme={theme} onClick={onClick}>
-            {children}
-        </StyledButton>
-    );
-};
+const Button = ({ theme, children, onClick }: Props) => (
+    <StyledButton theme={theme} onClick={onClick}>
+        {children}
+    </StyledButton>
+);
 
 export default Button;

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 // Styling constants
-import { magicNum } from "../utils/StylingConstants";
+import { magicNum, smallRadius } from "../utils/StylingConstants";
 
 // Components
 import Layout from "../components/Layout";
@@ -16,10 +16,10 @@ const GoodBye = styled.div`
 
     img {
         width: clamp(${magicNum}, 100%, calc(${magicNum} * 10)); 
-        margin: calc(72px / 2) auto;
+        margin: calc(${magicNum} / 2) auto;
         display: block;
         box-shadow: 0px 16px 36px 0px rgba(0,0,0,0.2);
-        border-radius: 6px;
+        border-radius: ${smallRadius};
     }
 `;
 
