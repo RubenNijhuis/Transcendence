@@ -17,7 +17,6 @@ const GlobalStyle = createGlobalStyle`
     body {
         text-rendering: geometricPrecision;
         word-wrap: break-word;
-        -webkit-font-feature-settings: "kern","liga","clig","calt";
         font-feature-settings: "kern","liga","clig","calt";
         font-family: Montserrat, Helvetica Neue,Helvetica,sans-serif;
         font-kerning: normal;

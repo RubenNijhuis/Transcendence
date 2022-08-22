@@ -3,6 +3,8 @@ import Layout from "../components/Layout";
 
 // Authentication
 import { useAuth } from "../utils/AuthContext";
+
+// Debug
 import Logger from "../utils/Logger";
 
 const Leaderboard = () => {

@@ -1,30 +1,32 @@
-// Navigation after login
-import { useEffect } from "react";
+// Routing
 import { useNavigate } from "react-router-dom";
-import Button from "../components/Button";
-import Heading from "../components/Heading";
 
 // Components
+import Button from "../components/Button";
+import Heading from "../components/Heading";
 import Layout from "../components/Layout";
 
 // Authentication
 import { useAuth } from "../utils/AuthContext";
+
+// Debug
 import Logger from "../utils/Logger";
 
 const Login = () => {
     const auth = useAuth();
     const navigate = useNavigate();
 
+    // Temp debug
     Logger("AUTH", "User data", auth.user);
 
     // Page to go to after login
-    const from = "/profile";
+    const to = "/profile";
 
     const handleLogin = () => {
         auth.signin(
             { email: "contact@rubennijhuis.com", password: "peepee" },
             () => {
-                navigate(from, { replace: true });
+                navigate(to, { replace: true });
             }
         );
     };
