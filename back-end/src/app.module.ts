@@ -9,7 +9,7 @@ import { configSchema } from './config.schema';
 @Module({
   imports: [
     ConfigModule.forRoot({
-		envFilePath: ['.env.backend', '.env.auth'],
+		envFilePath: ['.env'],
 		validationSchema: configSchema,
 	}),
     TypeOrmModule.forRootAsync({
