@@ -21,7 +21,7 @@ const Login = () => {
     Logger("AUTH", "User data", auth.user);
 
     // Page to go to after login
-    const to = "/profile";
+    const to = "/profile/me";
 
     const handleLogin = () => {
         auth.signin(

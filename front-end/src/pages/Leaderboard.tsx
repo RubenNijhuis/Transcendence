@@ -13,53 +13,58 @@ const list = [
     {
         username: "Ruben",
         id: 1,
-        img_url: "https://picsum.photos/200/300"
+        user_id: 3,
+        img_url: "https://picsum.photos/200/100"
     },
     {
         username: "Zeno",
         id: 2,
-        img_url: "https://picsum.photos/200/300"
+        user_id: 4,
+        img_url: "https://picsum.photos/200/500"
     },
     {
         username: "Danai",
         id: 3,
+        user_id: 5,
         img_url: "https://picsum.photos/200/300"
     },
     {
         username: "Nathalie",
         id: 4,
-        img_url: "https://picsum.photos/200/300"
+        user_id: 6,
+        img_url: "https://picsum.photos/400/400"
     },
     {
         username: "Angie",
         id: 5,
-        img_url: "https://picsum.photos/200/300"
+        user_id: 7,
+        img_url: "https://picsum.photos/100/100"
     },
     {
         username: "David",
         id: 6,
-        img_url: "https://picsum.photos/200/300"
+        user_id: 8,
+        img_url: "https://picsum.photos/500/500"
     },
     {
         username: "Pissboi",
         id: 7,
-        img_url: "https://picsum.photos/200/300"
+        user_id: 10,
+        img_url: "https://picsum.photos/300/300"
     }
 ];
-
-const getRankingList = () => {
-    const reqPromise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(list);
-        }, 1000);
-    });
-    return reqPromise;
-};
 
 const Leaderboard = () => {
     const [rankings, setRankings] = useState<any>(null);
 
-    // Logger("AUTH", "User object", auth.user);
+    const getRankingList = () => {
+        const reqPromise = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(list);
+            }, 1000);
+        });
+        return reqPromise;
+    };
 
     useEffect(() => {
         // Set the ranking list after request

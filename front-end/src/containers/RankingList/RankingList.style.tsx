@@ -41,7 +41,7 @@ const ProfileData = styled.div`
         z-index: 10;
         font-size: 36px;
         font-weight: 900;
-        opacity: 0.75;
+        text-shadow: 2px 2px #fff;
     }
     
     div {
@@ -74,6 +74,10 @@ const EntryList = styled.ol`
 const GameData = styled.div`
     display: flex;
     flex-direction: column;
+
+    a {
+        color: black;
+    }
 
     h3 {
         font-size: 24px;
