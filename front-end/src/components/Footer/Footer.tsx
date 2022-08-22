@@ -15,8 +15,10 @@ const Footer = () => (
             </div>
             <div className="links">
                 <div className="inbound">
-                    {InboundLinks.map(({ name, url }) => (
-                        <Link to={url}>{name}</Link>
+                    {InboundLinks.map(({ name, url }, count) => (
+                        <Link key={count} to={url}>
+                            {name}
+                        </Link>
                     ))}
                 </div>
                 <div className="outbound">
