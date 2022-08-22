@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Heading from "../components/Heading";
 import Layout from "../components/Layout";
 
@@ -14,14 +15,14 @@ const Profile = () => {
 
     return (
         <Layout>
-            <div>
+            <Fragment>
                 <Heading type={1}>Profile</Heading>
 
                 <p>Name: {username}</p>
                 {/* <p>Intra name: {intra_name}</p> */}
                 <p>E-mail: {email} </p>
                 {/* <p>Leaderboard pos: {ranking}</p> */}
-            </div>
+            </Fragment>
         </Layout>
     );
 };

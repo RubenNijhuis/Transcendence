@@ -1,13 +1,14 @@
 // Components
 import Layout from "../components/Layout";
 import Heading from "../components/Heading";
+import { Fragment } from "react";
 
 const Home = () => {
     return (
         <Layout>
-            <div>
+            <Fragment>
                 <Heading type={1}>Home page</Heading>
-            </div>
+            </Fragment>
         </Layout>
     );
 };

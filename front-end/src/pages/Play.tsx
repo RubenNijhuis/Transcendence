@@ -1,4 +1,5 @@
 // Components
+import { Fragment } from "react";
 import Layout from "../components/Layout";
 import PongGame from "../containers/PongGame";
 
@@ -8,9 +9,9 @@ import Logger from "../utils/Logger";
 const Play = () => {
     return (
         <Layout>
-            <div>
+            <Fragment>
                 <PongGame/>
-            </div>
+            </Fragment>
         </Layout>
     );
 };

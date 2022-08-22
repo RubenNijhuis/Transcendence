@@ -1,10 +1,11 @@
+import { Fragment } from "react";
 import Heading from "../components/Heading";
 import Layout from "../components/Layout";
 
 const About = () => {
     return (
         <Layout>
-            <div>
+            <Fragment>
                 <Heading type={1}>About</Heading>
                 <p
                     style={{
@@ -166,7 +167,7 @@ const About = () => {
                     why I always say 'Shumshumschilpiddydah!' Nothing to read
                     into there!
                 </p>
-            </div>
+            </Fragment>
         </Layout>
     );
 };

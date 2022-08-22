@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 // Components
 import Heading from "../components/Heading";
 import Layout from "../components/Layout";
+import Loader from "../components/Loader";
 import RankingList from "../containers/RankingList";
 
 // Debug
@@ -50,7 +51,7 @@ const getRankingList = () => {
     const reqPromise = new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve(list);
-        }, 500);
+        }, 1000);
     });
     return reqPromise;
 };
@@ -69,10 +70,14 @@ const Leaderboard = () => {
 
     return (
         <Layout>
-            <div>
+            <Fragment>
                 <Heading type={1}>Leaderboard</Heading>
-                {rankings !== null ? <RankingList rankings={rankings} /> : null}
-            </div>
+                {rankings !== null ? (
+                    <RankingList rankings={rankings} />
+                ) : (
+                    <Loader />
+                )}
+            </Fragment>
         </Layout>
     );
 };

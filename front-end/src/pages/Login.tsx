@@ -1,4 +1,5 @@
 // Routing
+import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Components
@@ -39,11 +40,11 @@ const Login = () => {
 
     return (
         <Layout>
-            <div>
+            <Fragment>
                 <Heading type={1}>Login page</Heading>
                 <Button onClick={handleLogin}>Login with the button</Button>
                 <Button onClick={handleLogout}>Logout with the button</Button>
-            </div>
+            </Fragment>
         </Layout>
     );
 };

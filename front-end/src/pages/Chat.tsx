@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Heading from "../components/Heading";
 import Layout from "../components/Layout";
 
@@ -14,9 +15,9 @@ const Chat = () => {
 
     return (
         <Layout>
-            <div>
+            <Fragment>
                 <Heading type={1}>Chat</Heading>
-            </div>
+            </Fragment>
         </Layout>
     );
 };
