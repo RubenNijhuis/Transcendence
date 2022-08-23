@@ -4,7 +4,7 @@ import { magicNum } from "../../utils/StylingConstants";
 const Container = styled.div`
     background: rgba(235, 235, 235, 0.9);
     position: relative;
-    height: 100%;
+    min-height: 100%;
 
     display: flex;
     flex-direction: column;

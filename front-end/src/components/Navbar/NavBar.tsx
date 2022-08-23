@@ -56,8 +56,6 @@ const ProfileIcon = ({ url }: any) => (
 const NavBar = () => {
     const { isLoggedIn, user } = useAuth();
 
-    console.log(user);
-
     return (
         <Container>
             <div className="bar">

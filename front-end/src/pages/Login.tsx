@@ -22,7 +22,7 @@ const Login = () => {
 
     const handleLogin = () => {
         auth.signin({}, () => {
-            navigate("/profile/me", { replace: true });
+            navigate("/play", { replace: true });
         });
     };
 

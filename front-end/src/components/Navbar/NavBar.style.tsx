@@ -26,6 +26,7 @@ const Container = styled.div`
         justify-self: flex-end;
 
         button {
+            padding: calc(${magicNum} / 4) calc(${magicNum} / 2 * 1.5);
             height: 72px;
         }
     }
