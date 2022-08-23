@@ -1,24 +1,17 @@
 import styled from "styled-components";
+import { magicNum } from "../../utils/StylingConstants";
 
 const AdvancedCard = styled.div`
-    border-radius: 20px;
-
-    background: black;
-
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    position: relative;
     height: 100%;
-    /* width: 500px; */
-
     aspect-ratio: 5 / 7;
 
-    position: relative;
-
+    border-radius: 20px;
+    background: black;
     overflow: hidden;
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: end;
 
     .img {
         position: absolute;
@@ -68,7 +61,7 @@ const AdvancedCard = styled.div`
         display: flex;
         justify-content: center;
         flex-direction: column;
-        padding: 36px;
+        padding: calc(${magicNum} / 2);
         border-radius: 20px;
 
         height: 35%;
@@ -87,7 +80,7 @@ const AdvancedCard = styled.div`
 
         p {
             margin: auto;
-            margin-bottom: 36px;
+            margin-bottom: calc(${magicNum} / 2);
             max-width: 36ch;
         }
 

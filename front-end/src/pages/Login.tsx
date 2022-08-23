@@ -18,7 +18,7 @@ const Login = () => {
     const navigate = useNavigate();
 
     // Temp debug
-    Logger("AUTH", "User data", auth.user);
+    Logger("AUTH", "Login page", "Profile", auth.user);
 
     const handleLogin = () => {
         auth.signin({}, () => {

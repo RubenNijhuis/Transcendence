@@ -12,9 +12,13 @@ import ProfileDisplay from "../containers/ProfileDisplay";
 // Authentication
 import { useAuth } from "../utils/AuthContext";
 
+// Types
+import { Profile } from "../utils/GlobalTypes";
+
 // Debug
 import Logger from "../utils/Logger";
-import { Profile } from "../utils/GlobalTypes";
+
+// Random data
 import { generateGameResult, generateProfile } from "../utils/randomDataGenerator";
 
 const ProfilePage = () => {
@@ -22,7 +26,7 @@ const ProfilePage = () => {
     const auth = useAuth();
     const { id } = useParams();
 
-    Logger("AUTH", "User object", auth.user);
+    Logger("AUTH", "Profile page", "Profile", auth.user);
 
     const getUserData = (id: number) => {
         const reqPromise = new Promise((resolve, reject) => {

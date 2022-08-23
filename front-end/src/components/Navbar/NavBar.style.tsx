@@ -27,7 +27,7 @@ const Container = styled.div`
 
         button {
             padding: calc(${magicNum} / 4) calc(${magicNum} / 2 * 1.5);
-            height: 72px;
+            height: ${magicNum};
         }
     }
 
@@ -40,7 +40,7 @@ const Container = styled.div`
         .cta {
             display: flex;
             flex-direction: row;
-            gap: 18px;
+            gap: calc(${magicNum} / 4);
         }
 
         ul {
@@ -67,11 +67,11 @@ const Container = styled.div`
 `;
 
 const ProfileIconContainer = styled.div`
-    width: 72px;
-    height: 72px;
+    width: ${magicNum};
+    height: ${magicNum};
 
     border: solid white 2px;
-    border-radius: 6px;
+    border-radius: ${smallRadius};
     overflow: hidden;
 
     .asset {

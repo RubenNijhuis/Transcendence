@@ -2,10 +2,9 @@
 import { Fragment } from "react";
 import GameCard from "../components/GameCard";
 import Layout from "../components/Layout";
-import PongGame from "../containers/PongGame";
+import { magicNum } from "../utils/StylingConstants";
 
-// Debug
-import Logger from "../utils/Logger";
+// import PongGame from "../containers/PongGame";
 
 const Play = () => {
     return (
@@ -17,10 +16,8 @@ const Play = () => {
                         margin: "0 auto",
                         display: "flex",
                         flexDirection: "row",
-                        gap: "72px",
-                        height: '100%',
+                        gap: magicNum,
                         justifyContent: 'center',
-                        minHeight: '100%'
                     }}
                 >
                     <GameCard

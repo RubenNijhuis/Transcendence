@@ -1,4 +1,3 @@
-import { idText } from "typescript";
 import { Profile, MatchRecord } from "./GlobalTypes";
 import randomIntFromInterval from "./randomNumFromInterval";
 
@@ -41,8 +40,8 @@ const generateProfile = (amount: number): Profile[] => {
         const rank: number = i + 1;
 
         const randomWidth: number = Math.ceil(randomIntFromInterval(100, 1000)/100)*100;
-        const randomHeight: number = Math.ceil(randomIntFromInterval(100, 1000)/100)*100;
-        const img_url: string = `https://picsum.photos/${randomWidth}/${randomHeight}`;
+        const randomHeight: number = Math.ceil(randomIntFromInterval(100, 1000) / 100) * 100;
+        const img_url: string = `https://source.unsplash.com/random/${randomWidth}x${randomHeight}`;
 
         const wins: number = randomIntFromInterval(1, 100);
         const losses: number = randomIntFromInterval(1, 100);
