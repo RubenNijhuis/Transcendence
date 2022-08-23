@@ -1,14 +1,16 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-42';
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { AuthenticationProvider } from '../services/auth/auth';
+import { AuthService } from '../services/auth/auth.service';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, '42'){
-  constructor(@Inject('AUTH_SERVICE') private readonly authService: AuthenticationProvider, 
-  private readonly httpService: HttpService, private readonly configService: ConfigService,
+  constructor(private readonly configService: ConfigService,
+    private readonly httpService: HttpService,
+    private readonly AuthService: AuthService,
     ) {
     super({
       authorizationURL: configService.get('INTRA_AUTH_URL'),
@@ -20,17 +22,15 @@ export class LocalStrategy extends PassportStrategy(Strategy, '42'){
   }
 
   async validate(accessToken: string) {
+    console.log("Entered Validate");
     const data = await this.httpService.get(this.configService.get('INTRA_GET_ME_URL'),
       {
         headers: { Authorization: `Bearer ${accessToken}` },
       }).toPromise();
-		const intraID = data.data.id;
+		const uid = data.data.id;
 		const username = data.data.login;
-		const validateUserDto = { intraID, username };
-    console.log(intraID);
-    console.log(username);
-    const details = { username, intraId: intraID };
-    return this.authService.validateUser( validateUserDto );
+		const CreateUserDto = { uid, username };
+    return await this.AuthService.validateUser(CreateUserDto);
   }
 }
 

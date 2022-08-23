@@ -30,6 +30,13 @@ async function bootstrap() {
     }))
     app.use(passport.initialize());
     app.use(passport.session());
+    passport.serializeUser((user, done) => {
+        done(null, user);
+      });
+      
+    passport.deserializeUser((user, done) => { // why does this fix the "Error: Failed to serialize user into session"?
+        done(null, user);
+    });
     await app.listen(port, () => {
         console.log('[WEB]', String(env.BASE_URL));
     });

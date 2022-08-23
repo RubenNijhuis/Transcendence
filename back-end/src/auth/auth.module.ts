@@ -5,15 +5,10 @@ import { AuthController } from './controllers/auth/auth.controller';
 import { AuthService } from './services/auth/auth.service';
 import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/typeorm';
 
 @Module({
-  imports: [UsersModule, ConfigModule, HttpModule, TypeOrmModule.forFeature([User])],
-  providers: [LocalStrategy, {
-    provide: 'AUTH_SERVICE',
-    useClass: AuthService
-  }],
+  imports: [UsersModule, ConfigModule, HttpModule],
+  providers: [LocalStrategy, AuthService],
   controllers: [AuthController]
 })
 export class AuthModule {}
