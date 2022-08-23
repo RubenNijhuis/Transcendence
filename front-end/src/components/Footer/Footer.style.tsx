@@ -8,15 +8,15 @@ const Container = styled.div`
     .footer {
         display: grid;
         grid-template-rows: repeat(2, 1fr);
-        grid-template-columns: 2fr 1fr;
+        grid-template-columns: repeat(2, 1fr);
 
+        column-gap: calc(${magicNum});
         row-gap: calc(${magicNum} / 2);
         align-items: flex-end;
 
         grid-template-areas: 
-        "heading links"
-        "rights links"
-        ;
+            "heading links"
+            "rights links";
 
         min-height: calc(${magicNum} * 2);
         width: calc(100% - ${magicNum});

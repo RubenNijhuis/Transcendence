@@ -12,19 +12,8 @@ import { Link } from "react-router-dom";
 
 // Components
 import Heading from "../../components/Heading";
-import type { Profile } from "../../utils/GlobalTypes";
+import type { Profile, MatchRecord } from "../../utils/GlobalTypes";
 import { capitalizeString } from "../../utils/StringManipulation";
-
-// Interfaces
-interface Score {
-    opponent: number;
-    self: number;
-}
-
-interface MatchRecord {
-    opponent: Profile;
-    score: Score;
-}
 
 interface Props {
     player: Profile;
