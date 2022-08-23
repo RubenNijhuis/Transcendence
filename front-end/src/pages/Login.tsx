@@ -20,16 +20,10 @@ const Login = () => {
     // Temp debug
     Logger("AUTH", "User data", auth.user);
 
-    // Page to go to after login
-    const to = "/profile/me";
-
     const handleLogin = () => {
-        auth.signin(
-            { email: "contact@rubennijhuis.com", password: "peepee" },
-            () => {
-                navigate(to, { replace: true });
-            }
-        );
+        auth.signin({}, () => {
+            navigate("/profile/me", { replace: true });
+        });
     };
 
     const handleLogout = () => {

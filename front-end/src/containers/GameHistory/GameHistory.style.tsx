@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import { readBuilderProgram } from "typescript";
 
 const Container = styled.div`
-    background: rgba(0,0,0,0.1);
+    background: rgba(0, 0, 0, 0.1);
     border-radius: 6px;
     padding: 36px;
 
@@ -22,7 +21,8 @@ const MatchList = styled.div`
 `;
 
 const Match = styled.div<{ win: boolean }>`
-    padding: 18px 36px;
+    padding: 18px;
+    padding-right: 36px;
 
     display: flex;
     border-radius: 6px;
@@ -40,10 +40,11 @@ const OpponentProfile = styled.div`
     flex-direction: row;
     align-items: center;
 
-    img {
+    .asset {
         width: 56px;
         height: 56px;
-        border-radius: 100px;
+        border-radius: 6px;
+        overflow: hidden;
 
         margin-right: 18px;
     }
@@ -57,6 +58,18 @@ const OpponentProfile = styled.div`
     }
 `;
 
-const ScoreBoard = styled.div``;
+const ScoreBoard = styled.div`
+    font-weight: 900;
+    font-size: 36px;
+
+    span {
+        margin-right: 8px;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+
+`;
 
 export { Container, MatchList, Match, OpponentProfile, ScoreBoard };

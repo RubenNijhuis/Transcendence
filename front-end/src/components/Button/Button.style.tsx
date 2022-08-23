@@ -9,7 +9,7 @@ const StyledButton = styled.button`
     padding: calc(${magicNum} / 4) calc(${magicNum} / 2);
     border-radius: ${smallRadius};
 
-    color: ${(props) => (props.theme === "light" ? "#1e1e1e" :  "#cdcdcd")};
+    color: ${(props) => (props.theme === "light" ? "#1e1e1e" : "#cdcdcd")};
     background: ${(props) => (props.theme === "light" ? "#cdcdcd" : "#1e1e1e")};
 
     border: none;

@@ -4,25 +4,27 @@ const Container = styled.div`
     margin-bottom: 36px;
 
     .profile {
-        display: flex;
+        display: grid;
+
+        grid-template-columns: 256px 1fr;
+        column-gap: 36px;
 
         .user-data {
             padding: 36px;
             border-radius: 6px;
             width: 100%;
 
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.05);
 
             p {
                 margin-bottom: 18px;
             }
         }
 
-        img {
-            display: block;
+        .asset {
+            aspect-ratio: 1/1;
             width: 256px;
             height: 256px;
-            margin-right: 36px;
             border-radius: 6px;
         }
     }

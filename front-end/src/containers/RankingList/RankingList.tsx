@@ -21,18 +21,18 @@ const RankingList = ({ rankings }: Props) => (
     <EntryList>
         {rankings.map(
             (
-                { username, ranking, img_url, user_id }: Profile,
+                { username, rank, img_url, uid }: Profile,
                 count: number
             ) => (
                 <Entry key={count}>
                     <ProfileData>
-                        <span>{ranking}</span>
+                        <span>{rank}</span>
                         <ImageContainer>
                             <img src={img_url} alt={`profile of ${username}`} />
                         </ImageContainer>
                     </ProfileData>
                     <GameData>
-                        <Link to={`/profile/${user_id}`}>
+                        <Link to={`/profile/${uid}`}>
                             <h3>{username}</h3>
                         </Link>
                         <span>Games won: 10</span>

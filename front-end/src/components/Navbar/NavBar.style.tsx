@@ -23,6 +23,11 @@ const Container = styled.div`
 
     .login-button {
         text-decoration: none;
+        justify-self: flex-end;
+
+        button {
+            height: 72px;
+        }
     }
 
     .content {
@@ -30,6 +35,12 @@ const Container = styled.div`
         align-items: center;
         justify-content: space-between;
         height: 100%;
+
+        .cta {
+            display: flex;
+            flex-direction: row;
+            gap: 18px;
+        }
 
         ul {
             display: flex;
@@ -54,4 +65,18 @@ const Container = styled.div`
     }
 `;
 
-export default Container;
+const ProfileIconContainer = styled.div`
+    width: 72px;
+    height: 72px;
+
+    border: solid white 2px;
+    border-radius: 6px;
+    overflow: hidden;
+
+    .asset {
+        width: 100%;
+        height: 100%;
+    }
+`;
+
+export { Container, ProfileIconContainer };

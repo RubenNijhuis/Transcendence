@@ -1,11 +1,14 @@
 import { Fragment } from "react";
 
+// Components
+import Asset from "../Asset";
+import Button from "../Button";
+
 // Styling
-import Container from "./NavBar.style";
+import { Container, ProfileIconContainer } from "./NavBar.style";
 
 // Navigation
 import { Link } from "react-router-dom";
-import Button from "../Button";
 
 // Authentication hook
 import { useAuth } from "../../utils/AuthContext";
@@ -42,8 +45,18 @@ const NavLinks = ({ authStatus }: any) => (
     </ul>
 );
 
+const ProfileIcon = ({ url }: any) => (
+    <Link to={"/profile/me"}>
+        <ProfileIconContainer>
+            <Asset url={url} alt={"profile"} />
+        </ProfileIconContainer>
+    </Link>
+);
+
 const NavBar = () => {
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn, user } = useAuth();
+
+    console.log(user);
 
     return (
         <Container>
@@ -53,7 +66,10 @@ const NavBar = () => {
                         <div className="logo">PongHub</div>
                     </Link>
                     <NavLinks authStatus={isLoggedIn} />
-                    <CTAButton authStatus={isLoggedIn} />
+                    <div className="cta">
+                        <CTAButton authStatus={isLoggedIn} />
+                        {isLoggedIn ? <ProfileIcon url={user.img_url} /> : null}
+                    </div>
                 </div>
             </div>
         </Container>

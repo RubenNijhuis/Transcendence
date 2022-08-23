@@ -67,7 +67,6 @@ const EntryList = styled.ol`
     border-radius: ${smallRadius};
     overflow: hidden;
 
-    max-width: calc(${magicNum} * 10);
     margin: auto;
 `;
 

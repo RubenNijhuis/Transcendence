@@ -1,5 +1,3 @@
-import { Fragment } from "react";
-
 // Authentication
 import AuthProvider from "./utils/AuthContext";
 
@@ -7,18 +5,14 @@ import AuthProvider from "./utils/AuthContext";
 import GlobalStyle from "./utils/GlobalStyle";
 import Router from "./containers/Routes/Routes";
 
-const App = () => {
-    return (
-        <Fragment>
-            <AuthProvider>
-                {/* Global Styling */}
-                <GlobalStyle />
+const App = () => (
+    <AuthProvider>
+        {/* Global Styling */}
+        <GlobalStyle />
 
-                {/* Page routing */}
-                <Router />
-            </AuthProvider>
-        </Fragment>
-    );
-};
+        {/* Page routing */}
+        <Router />
+    </AuthProvider>
+);
 
 export default App;

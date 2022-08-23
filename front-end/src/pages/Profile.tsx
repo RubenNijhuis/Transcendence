@@ -48,7 +48,7 @@ const ProfilePage = () => {
             {userData !== null ? (
                 <Fragment>
                     <ProfileDisplay user={userData} />
-                    <GameHistory player={userData} matches={generateGameResult(10)} />
+                    <GameHistory player={userData} matches={generateGameResult(userData, 50)} />
                 </Fragment>
             ) : (
                 <Loader />
