@@ -5,11 +5,12 @@ import {TypeOrmModule} from '@nestjs/typeorm';
 import entities from './typeorm';
 import { configSchema } from './config.schema';
 import { AuthModule } from './auth/auth.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-		envFilePath: ['.env.backend', '.env.auth'],
+		envFilePath: ['.env'],
 		validationSchema: configSchema,
 	}),
     TypeOrmModule.forRootAsync({
@@ -23,11 +24,13 @@ import { AuthModule } from './auth/auth.module';
         database: configService.get<string>('DB_NAME'),
         entities: entities,
         synchronize: true,
+        isGlobal: true
       }),
       inject: [ConfigService],
     }),
   	UsersModule,
-  	AuthModule
+  	AuthModule,
+    PassportModule.register({ session: true }),
 	],
   controllers: [],
   providers: [],

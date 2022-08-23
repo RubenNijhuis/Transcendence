@@ -25,15 +25,15 @@ export class UsersController {
         return this.userService.findUsersById(id)
     }
 
-    @Post("create")
+    @Post('create')
     @UsePipes(ValidationPipe)
     async createUsers(@Body() createUserDto: CreateUserDto) {
         try {
-            const user = await this.userService.createUser(createUserDto);
-            const ret = { username: user.username, email: user.email };
-            return ret;
+        const user = await this.userService.createUser(createUserDto)
+        const ret = {"username": user.username}
+        return ret
         } catch (error) {
-            return error;
+        return error
         }
     }
 }

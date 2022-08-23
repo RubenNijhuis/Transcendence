@@ -4,6 +4,9 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { env } from 'node:process';
 
+import * as session from 'express-session';
+import * as passport from 'passport';
+
 async function bootstrap() {
     const app: NestExpressApplication = await NestFactory.create(AppModule);
     const port = Number(env.PORT);
@@ -17,7 +20,23 @@ async function bootstrap() {
     app.useGlobalPipes(
         new ValidationPipe({ whitelist: true, transform: true }),
     );
-
+    app.use(session({
+        cookie: {
+            maxAge: 60000 * 60 * 24,
+        },
+        secret: 'jdsjfkldjfkld', //keep this an actual secret pls!!
+        resave: false,
+        saveUninitialized: false,
+    }))
+    app.use(passport.initialize());
+    app.use(passport.session());
+    passport.serializeUser((user, done) => {
+        done(null, user);
+      });
+      
+    passport.deserializeUser((user, done) => { // why does this fix the "Error: Failed to serialize user into session"?
+        done(null, user);
+    });
     await app.listen(port, () => {
         console.log('[WEB]', String(env.BASE_URL));
     });

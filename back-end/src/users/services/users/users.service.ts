@@ -24,6 +24,9 @@ export class UsersService {
       return this.userRepository.findOne({where: {id}})
     }
 
+  findUsersByIntraId(uid: string) {
+    return this.userRepository.findOne({where: {uid}})
+  }
 //   async findOne(username: string): Promise<User | undefined> {
 //     return this.find(user => user.username === username);
 //   }
