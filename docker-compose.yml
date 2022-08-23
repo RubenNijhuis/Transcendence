@@ -8,7 +8,7 @@ services:
     volumes:
       - ./front-end:/app
     ports:
-      - "8080:8080"
+      - "8081:8081"
     links: # Using links since it connects to the backend port no matter what hostport
       - backend
 
@@ -19,11 +19,24 @@ services:
     env_file:
       - ./back-end/.env
     volumes:
-      - ./back-end:/app # copy files
+      - ./back-end:/app
     ports:
       - "3000:3000"
     depends_on:
       - database
+
+  loadbalancer:
+    container_name: Transcendence_nginx
+    image: nginx:latest
+    volumes:
+      - ./back-end/nginx/:/etc/nginx/
+    ports:
+      - "8080:80"
+    environment:
+      - ./back-end/.env
+    links:
+      - frontend
+      - backend
 
   database:
     container_name: Transcendence_database

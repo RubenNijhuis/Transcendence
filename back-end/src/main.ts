@@ -28,6 +28,7 @@ async function bootstrap() {
         resave: false,
         saveUninitialized: false,
     }))
+    app.setGlobalPrefix('api');
     app.use(passport.initialize());
     app.use(passport.session());
     passport.serializeUser((user, done) => {
