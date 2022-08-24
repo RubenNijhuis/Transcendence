@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { magicNum } from "../../utils/StylingConstants";
+import { lightTextColor, magicNum, mainColor } from "../../utils/StylingConstants";
 
 const AdvancedCard = styled.div`
     display: flex;
@@ -10,7 +10,7 @@ const AdvancedCard = styled.div`
     aspect-ratio: 5 / 7;
 
     border-radius: 20px;
-    background: black;
+    background: ${mainColor};
     overflow: hidden;
 
     .img {
@@ -69,13 +69,13 @@ const AdvancedCard = styled.div`
         transition: all 0.35s ease-in-out;
 
         /* From https://css.glass */
-        background: rgba(0, 0, 0, 0);
+        background: rgba(0, 0, 0, 0.1);
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         backdrop-filter: blur(10px);
 
         h3,
         p {
-            color: white;
+            color: ${lightTextColor};
         }
 
         p {
@@ -96,9 +96,9 @@ const AdvancedCard = styled.div`
             padding: 14px 32px;
             border-radius: 100px;
             text-decoration: none;
-            color: black;
+            color: ${mainColor};
             font-weight: 700;
-            background: white;
+            background: ${lightTextColor};
         }
     }
 `;

@@ -5,7 +5,7 @@ import { generateProfile } from "./randomDataGenerator";
 
 // Define what the auth context contains
 interface AuthContextType {
-    user: Profile;
+    user: any;
     isLoggedIn: boolean;
     signin: (user: any, callback: VoidFunction) => any;
     signout: (callback: VoidFunction) => void;
@@ -43,7 +43,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
 
     const signin = (loginData: any, callback: VoidFunction) => {
-        return fakeAuthProvider.signin(loginData, (newUserData: any) => {
+        return fakeAuthProvider.signin(loginData, (newUserData: Profile) => {
+            newUserData.id = 424242;
             setUser(newUserData);
             setLoggedIn(true);
             callback();

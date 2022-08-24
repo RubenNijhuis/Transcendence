@@ -1,5 +1,12 @@
 import styled from "styled-components";
-import { magicNum, smallRadius } from "../../utils/StylingConstants";
+import {
+    magicNum,
+    smallRadius,
+    mainColor,
+    backgroundColor,
+    darkTextColor,
+    lightTextColor
+} from "../../utils/StylingConstants";
 
 const StyledButton = styled.button`
     display: inline-flex;
@@ -9,8 +16,10 @@ const StyledButton = styled.button`
     padding: calc(${magicNum} / 4) calc(${magicNum} / 2);
     border-radius: ${smallRadius};
 
-    color: ${(props) => (props.theme === "light" ? "#1e1e1e" : "#cdcdcd")};
-    background: ${(props) => (props.theme === "light" ? "#cdcdcd" : "#1e1e1e")};
+    color: ${(props) =>
+        props.theme === "light" ? `${darkTextColor}` : `${lightTextColor}`};
+    background: ${(props) =>
+        props.theme === "light" ? `${backgroundColor}` : `${mainColor}`};
 
     border: none;
 

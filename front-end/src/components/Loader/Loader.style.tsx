@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { backgroundColor, magicNum, mainColor } from "../../utils/StylingConstants";
 
 const LoaderContainer = styled.div`
     width: 100%;
@@ -7,11 +8,11 @@ const LoaderContainer = styled.div`
 
 const LoaderLine = styled.div`
     width: 50%;
-    height: 10px;
+    height: calc(${magicNum} / 8);
     margin: auto;
     border-radius: 100px;
     position: relative;
-    background: rgba(0, 0, 0, 0.1);
+    background: ${backgroundColor};
     overflow: hidden;
 
     @keyframes minToMaxWidth {
@@ -30,11 +31,11 @@ const LoaderLine = styled.div`
         left: 0;
         top: 0;
 
-        height: 10px;
+        height: calc(${magicNum} / 4);
         width: 0%;
         max-width: 100%;
 
-        background-color: black;
+        background-color: ${mainColor};
 
         animation-name: minToMaxWidth;
         animation-duration: 3s;
