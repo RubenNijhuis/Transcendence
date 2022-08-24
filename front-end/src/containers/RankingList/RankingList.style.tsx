@@ -39,7 +39,7 @@ const ProfileData = styled.div`
 
     span {
         z-index: 10;
-        font-size: 36px;
+        font-size: calc(${magicNum} / 2);
         font-weight: 900;
         text-shadow: 2px 2px #fff;
     }
@@ -50,8 +50,8 @@ const ProfileData = styled.div`
 `;
 
 const ImageContainer = styled.div`
-    width: 72px;
-    height: 72px;
+    width: ${magicNum};
+    height: ${magicNum};
 
     img {
         border-radius: 100px;
@@ -67,7 +67,6 @@ const EntryList = styled.ol`
     border-radius: ${smallRadius};
     overflow: hidden;
 
-    max-width: calc(${magicNum} * 10);
     margin: auto;
 `;
 

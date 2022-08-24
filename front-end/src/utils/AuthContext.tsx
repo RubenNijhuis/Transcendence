@@ -1,9 +1,11 @@
 // A lot of this was taken from https://stackblitz.com/github/remix-run/react-router/tree/main/examples/auth?file=src%2FApp.tsx
 import { createContext, useContext, useState } from "react";
+import { Profile } from "./GlobalTypes";
+import { generateProfile } from "./randomDataGenerator";
 
 // Define what the auth context contains
 interface AuthContextType {
-    user: any;
+    user: Profile;
     isLoggedIn: boolean;
     signin: (user: any, callback: VoidFunction) => any;
     signout: (callback: VoidFunction) => void;
@@ -18,22 +20,8 @@ const AuthContext = createContext<AuthContextType>(null!);
 const fakeAuthProvider = {
     isAuthenticated: false,
     async signin(loginData: any, callback: any) {
-        const opt = {
-            method: "post",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                username: "ztan",
-                password: "123456789",
-                email: "zenotan@outlook.nl"
-            })
-        };
-        const res = await fetch("http://localhost:3000/users/create", opt);
-        const json = await res.json();
         fakeAuthProvider.isAuthenticated = true;
-        setTimeout(() => callback(json), 1000); // fake async
+        setTimeout(() => callback(generateProfile(1)[0]), 1000); // fake async
     },
     signout(callback: VoidFunction) {
         fakeAuthProvider.isAuthenticated = false;

@@ -18,18 +18,12 @@ const Login = () => {
     const navigate = useNavigate();
 
     // Temp debug
-    Logger("AUTH", "User data", auth.user);
-
-    // Page to go to after login
-    const to = "/profile/me";
+    Logger("AUTH", "Login page", "Profile", auth.user);
 
     const handleLogin = () => {
-        auth.signin(
-            { email: "contact@rubennijhuis.com", password: "peepee" },
-            () => {
-                navigate(to, { replace: true });
-            }
-        );
+        auth.signin({}, () => {
+            navigate("/play", { replace: true });
+        });
     };
 
     const handleLogout = () => {

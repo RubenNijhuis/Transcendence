@@ -18,7 +18,7 @@ const GoodBye = styled.div`
         width: clamp(${magicNum}, 100%, calc(${magicNum} * 10)); 
         margin: calc(${magicNum} / 2) auto;
         display: block;
-        box-shadow: 0px 16px 36px 0px rgba(0,0,0,0.2);
+        box-shadow: 0px 16px calc(${magicNum} / 2) 0px rgba(0,0,0,0.2);
         border-radius: ${smallRadius};
     }
 `;

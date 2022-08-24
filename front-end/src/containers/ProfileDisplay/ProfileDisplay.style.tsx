@@ -1,29 +1,32 @@
 import styled from "styled-components";
+import { magicNum, smallRadius } from "../../utils/StylingConstants";
 
 const Container = styled.div`
-    margin-bottom: 36px;
+    margin-bottom: calc(${magicNum});
 
     .profile {
-        display: flex;
+        display: grid;
+
+        grid-template-columns: calc(${magicNum} * 3.5) 1fr;
+        column-gap: calc(${magicNum} / 2);
 
         .user-data {
-            padding: 36px;
-            border-radius: 6px;
+            padding: calc(${magicNum} / 2);
+            border-radius: ${smallRadius};
             width: 100%;
 
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.05);
 
             p {
-                margin-bottom: 18px;
+                margin-bottom: calc(${magicNum} / 4);
             }
         }
 
-        img {
-            display: block;
-            width: 256px;
-            height: 256px;
-            margin-right: 36px;
-            border-radius: 6px;
+        .asset {
+            aspect-ratio: 1/1;
+            width: calc(${magicNum} * 3.5);
+            height: calc(${magicNum} * 3.5);
+            border-radius: ${smallRadius};
         }
     }
 `;

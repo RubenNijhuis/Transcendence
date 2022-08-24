@@ -52,7 +52,7 @@ class GameManager {
 
     checkIfBallHitsBats() {
         if (this.pongBall.positionX - this.pongBall.radius < this.player1Bat.positionX + this.player1Bat.width / 2) {
-            Logger("GAME", "LEFTHIT", {});
+            // Logger("GAME", "LEFTHIT", {});
         }
     }
 

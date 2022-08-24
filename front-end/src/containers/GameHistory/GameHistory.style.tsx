@@ -1,31 +1,32 @@
 import styled from "styled-components";
-import { readBuilderProgram } from "typescript";
+import { magicNum, smallRadius } from "../../utils/StylingConstants";
 
 const Container = styled.div`
-    background: rgba(0,0,0,0.1);
-    border-radius: 6px;
-    padding: 36px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: ${smallRadius};
+    padding: calc(${magicNum} / 2);
 
     display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: 72px;
+    column-gap: ${magicNum};
 `;
 
 const MatchList = styled.div`
     display: flex;
 
-    border-radius: 6px;
+    border-radius: ${smallRadius};
 
-    gap: 18px;
+    gap: calc(${magicNum} / 4);
 
     flex-direction: column;
 `;
 
 const Match = styled.div<{ win: boolean }>`
-    padding: 18px 36px;
+    padding: calc(${magicNum} / 4);
+    padding-right: calc(${magicNum} / 2);
 
     display: flex;
-    border-radius: 6px;
+    border-radius: ${smallRadius};
 
     flex-direction: row;
     align-items: center;
@@ -40,12 +41,13 @@ const OpponentProfile = styled.div`
     flex-direction: row;
     align-items: center;
 
-    img {
-        width: 56px;
-        height: 56px;
-        border-radius: 100px;
+    .asset {
+        width: calc(${magicNum} / 2 * 1.5);
+        height: calc(${magicNum} / 2 * 1.5);
+        border-radius: ${smallRadius};
+        overflow: hidden;
 
-        margin-right: 18px;
+        margin-right: calc(${magicNum} / 4);
     }
 
     a {
@@ -57,6 +59,17 @@ const OpponentProfile = styled.div`
     }
 `;
 
-const ScoreBoard = styled.div``;
+const ScoreBoard = styled.div`
+    font-weight: 900;
+    font-size: calc(${magicNum} / 2);
+
+    span {
+        margin-right: calc(${magicNum} / 8);
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+`;
 
 export { Container, MatchList, Match, OpponentProfile, ScoreBoard };

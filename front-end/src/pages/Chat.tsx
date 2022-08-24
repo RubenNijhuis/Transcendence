@@ -5,12 +5,7 @@ import { Fragment } from "react";
 import Heading from "../components/Heading";
 import Layout from "../components/Layout";
 
-// Debug
-import Logger from "../utils/Logger";
-
 const Chat = () => {
-    // Logger("AUTH", "User object", auth.user);
-
     return (
         <Layout>
             <Fragment>
