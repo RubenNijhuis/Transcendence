@@ -1,4 +1,4 @@
 .DS_Store
-*.env
+back-end/.env
 node_modules
 build/

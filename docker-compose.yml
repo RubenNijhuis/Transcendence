@@ -29,11 +29,11 @@ services:
     container_name: Transcendence_nginx
     image: nginx:latest
     volumes:
-      - ./back-end/nginx/:/etc/nginx/
+      - ./nginx/conf:/etc/nginx/
     ports:
       - "8080:80"
     environment:
-      - ./back-end/.env
+      - ./nginx/.env
     links:
       - frontend
       - backend

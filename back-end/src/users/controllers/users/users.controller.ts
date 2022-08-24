@@ -36,4 +36,11 @@ export class UsersController {
         return error
         }
     }
+
+    @Get('seeder')
+    seedUsers() {
+        for (var i = 0; i < 200; i++) {
+            
+        }
+    }
 }
