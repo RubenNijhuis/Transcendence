@@ -21,7 +21,7 @@ const CTAButton = ({ authStatus }: any) => (
         {/* Change the nav primary button based on login */}
         {authStatus ? (
             <Link className="login-button" to={"/play"}>
-                <Button theme={"light"}>Play a game</Button>
+                <Button theme={"light"}>Play Pong</Button>
             </Link>
         ) : (
             <Link className="login-button" to={"/login"}>

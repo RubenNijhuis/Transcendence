@@ -43,4 +43,18 @@ const Leaderboard = () => {
     );
 };
 
+
+/**
+ * 
+ * React
+ * View - display data
+ * 
+ * Nestjs
+ * Model - user: {username: 'jadjajaj', password: 'dwadwa'}
+ * Controller - GET /api/user/jadjajaj
+ * - UserController
+ *      - findOne(id) -> find in database user by id
+ *          return user
+ */
+
 export default Leaderboard;

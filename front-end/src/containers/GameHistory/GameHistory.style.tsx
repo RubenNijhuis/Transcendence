@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { magicNum, smallRadius } from "../../utils/StylingConstants";
+import { backgroundColor, darkTextColor, magicNum, smallRadius } from "../../utils/StylingConstants";
 
 const Container = styled.div`
-    background: rgba(0, 0, 0, 0.1);
+    background: ${backgroundColor};
     border-radius: ${smallRadius};
     padding: calc(${magicNum} / 2);
 
@@ -51,7 +51,7 @@ const OpponentProfile = styled.div`
     }
 
     a {
-        color: black;
+        color: ${darkTextColor};
     }
 
     span {

@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { magicNum } from "../../utils/StylingConstants";
+import { magicNum, secondaryColor } from "../../utils/StylingConstants";
 
 const Container = styled.div`
-    background: rgba(235, 235, 235, 0.9);
+    background: ${secondaryColor};
     position: relative;
     min-height: 100%;
 

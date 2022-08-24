@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { magicNum, smallRadius } from "../../utils/StylingConstants";
+import { backgroundColor, darkTextColor, magicNum, mainColor, smallRadius } from "../../utils/StylingConstants";
 
 const Container = styled.div`
-    margin-bottom: calc(${magicNum});
+    margin-bottom: calc(${magicNum} / 2);
 
     .profile {
         display: grid;
@@ -15,7 +15,8 @@ const Container = styled.div`
             border-radius: ${smallRadius};
             width: 100%;
 
-            background: rgba(0, 0, 0, 0.05);
+            color: ${darkTextColor};
+            background: ${backgroundColor};
 
             p {
                 margin-bottom: calc(${magicNum} / 4);
@@ -27,6 +28,11 @@ const Container = styled.div`
             width: calc(${magicNum} * 3.5);
             height: calc(${magicNum} * 3.5);
             border-radius: ${smallRadius};
+
+            border-radius: ${smallRadius};
+            overflow: hidden;
+
+            background-color: ${mainColor};
         }
     }
 `;
