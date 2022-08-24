@@ -23,14 +23,14 @@ interface MatchRecord {
 }
 
 // Game types
-enum GameType {
+const enum GameType {
     Classic,
     Powered
 }
 
 // Content types
-enum MessageContentType {
-    SimpleMessage,
+const enum MessageContentType {
+    Simple,
     Picture,
     InvitePlay
 }
@@ -41,12 +41,13 @@ interface SimpleMessage {
 }
 
 // How we define a picture message
-interface Picture {
+interface PictureMessage {
     url: string;
+    alt: string;
 }
 
 // Game invite
-interface InvitePlay {
+interface InvitePlayMessage {
     opponent: Profile;
     user: Profile;
     game_type: GameType;
@@ -55,23 +56,29 @@ interface InvitePlay {
 
 // Message interface
 interface Message {
-    content: SimpleMessage | Picture | InvitePlay;
+    content: SimpleMessage | PictureMessage | InvitePlayMessage;
     content_type: MessageContentType;
     timestamp: string;
     sender: Profile;
+    id: number;
+    group_id: number;
+    read_by: null | Profile[];
 }
 
-// How we define a direct message
-interface DirectMessage {
-    profile: Profile;
-    message: Message;
-}
-
-// How we define a full chat
-interface Chat {
-    user: Profile;
-    friend: Profile;
+interface GroupChat {
+    id: number;
+    members: Profile[];
     messages: Message[];
 }
 
-export type { Profile, MatchRecord, DirectMessage, Chat };
+export type {
+    Profile,
+    MatchRecord,
+    Message,
+    GroupChat,
+    InvitePlayMessage,
+    PictureMessage,
+    SimpleMessage
+};
+
+export { GameType, MessageContentType };
