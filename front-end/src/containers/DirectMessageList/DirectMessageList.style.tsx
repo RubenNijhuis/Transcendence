@@ -35,6 +35,10 @@ const DirectMessageEntry = styled.li<{ active: boolean }>`
     padding: 18px 36px;
 
     border-bottom: 2px solid ${mainColor};
+    
+    &:last-child {
+        border-bottom: 0;
+    }
 
     background-color: ${({ active }) =>
         active ? `${mainColor}` : `${backgroundColor}`};
