@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import { magicNum, smallRadius } from "../../utils/StylingConstants";
+import { lightTextColor, magicNum, mainColor, mediumRadius, smallRadius } from "../../utils/StylingConstants";
 
 const Container = styled.div`
-    color: white;
     padding-bottom: calc(${magicNum} / 2);
     
     .footer {
@@ -24,9 +23,9 @@ const Container = styled.div`
         margin: auto;
         padding: calc(${magicNum} / 2);
 
-        color: white;
-        background: rgb(30,30,30);
-        border-radius: ${smallRadius};
+        color: ${lightTextColor};
+        background: ${mainColor};
+        border-radius: ${mediumRadius};
 
         .heading {
             grid-area: heading;
@@ -57,7 +56,7 @@ const Container = styled.div`
             a {
                 font-size: 18px;
                 margin-bottom: calc(${magicNum} / 4);
-                color: white;
+                color: ${lightTextColor};
                 text-decoration: none;
 
                 &:last-child {

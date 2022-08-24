@@ -1,5 +1,6 @@
 // globalStyles.js
 import { createGlobalStyle } from "styled-components";
+import { mainColor, secondaryColor } from "./StylingConstants";
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -12,6 +13,7 @@ const GlobalStyle = createGlobalStyle`
         margin: 0;
         padding: 0;
         height: 100%;
+        background-color: ${secondaryColor};
     }
 
     body {

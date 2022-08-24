@@ -42,17 +42,17 @@ const GameHistory = ({ player, matches }: Props) => {
     return (
         <Container>
             <div className="left-col">
-                <Heading type={2}>Player statistics</Heading>
+                <Heading type={3}>Player statistics</Heading>
                 <p>Rank: {player.rank}</p>
                 <p>Streak: 2</p>
                 <p>Wins: 100</p>
                 <p>Losses: 10</p>
             </div>
             <div className="right-col">
-                <Heading type={2}>History</Heading>
+                <Heading type={3}>History</Heading>
                 <MatchList>
                     <div>
-                        <Heading type={3}>Page {selectedPage}</Heading>
+                        <Heading type={4}>Page {selectedPage}</Heading>
                         <div>
                             <Button theme="dark" onClick={() => changePage(-1)}>
                                 👈

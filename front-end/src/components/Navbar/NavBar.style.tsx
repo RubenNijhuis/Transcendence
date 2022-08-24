@@ -1,21 +1,30 @@
 import styled from "styled-components";
-import { magicNum, smallRadius } from "../../utils/StylingConstants";
+import {
+    lightTextColor,
+    magicNum,
+    mainColor,
+    mediumRadius,
+    smallRadius
+} from "../../utils/StylingConstants";
 
 const Container = styled.div`
     padding-top: calc(${magicNum} / 2);
 
     .bar {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
         width: calc(100% - ${magicNum});
+        min-height: calc(${magicNum} * 1.25);
         margin: auto;
         padding: calc(${magicNum} / 4) calc(${magicNum} / 2);
 
-        color: white;
-        background: rgb(30, 30, 30);
-        border-radius: ${smallRadius};
+        background: ${mainColor};
+        border-radius: ${mediumRadius};
     }
 
     .logo {
-        color: white;
+        color: ${lightTextColor};
         font-size: 24px;
         font-weight: 700;
         text-decoration: none;
@@ -26,21 +35,36 @@ const Container = styled.div`
         justify-self: flex-end;
 
         button {
-            padding: calc(${magicNum} / 4) calc(${magicNum} / 2 * 1.5);
-            height: ${magicNum};
+            height: calc(${magicNum} / 2 * 1.25);
+            padding: calc(${magicNum} / 4) calc(${magicNum} / 2);
+            border-radius: 100px;
+
+            color: ${lightTextColor};
+            font-weight: 700;
+            letter-spacing: 0.5px;
+
+            box-shadow: 0px 0px 5px 2px rgba(53, 113, 255, 0.15);
+            background: rgb(53, 113, 255);
+            background: linear-gradient(
+                45deg,
+                rgba(51, 112, 252, 1) 0%,
+                rgba(34, 96, 255, 1) 100%
+            );
         }
     }
 
     .content {
         display: flex;
         align-items: center;
+        width: 100%;
         justify-content: space-between;
         height: 100%;
 
         .cta {
             display: flex;
             flex-direction: row;
-            gap: calc(${magicNum} / 4);
+            align-items: center;
+            gap: calc(${magicNum} / 2);
         }
 
         ul {
@@ -48,13 +72,15 @@ const Container = styled.div`
             list-style-type: none;
 
             li {
-                margin-right: calc(${magicNum} / 8);
+                margin-right: calc(${magicNum} / 6);
 
                 a {
-                    color: white;
+                    color: ${lightTextColor}
+                    font-weight: 500;
                     text-decoration: none;
+
                     &:visited {
-                        color: white;
+                        color: ${lightTextColor};
                     }
 
                     &:last {
@@ -67,10 +93,10 @@ const Container = styled.div`
 `;
 
 const ProfileIconContainer = styled.div`
-    width: ${magicNum};
-    height: ${magicNum};
+    width: calc(${magicNum} / 2 * 1.5);
+    height: calc(${magicNum} / 2 * 1.5);
 
-    border: solid white 2px;
+    border: solid #9d653d 2px;
     border-radius: ${smallRadius};
     overflow: hidden;
 

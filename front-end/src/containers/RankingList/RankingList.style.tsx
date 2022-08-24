@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { magicNum, smallRadius } from "../../utils/StylingConstants";
+import { backgroundColor, darkTextColor, magicNum, mainColor, smallRadius } from "../../utils/StylingConstants";
 
 const Entry = styled.li`
     display: flex;
@@ -11,14 +11,14 @@ const Entry = styled.li`
 
     padding: calc(${magicNum} / 2) calc(${magicNum} / 2);
 
-    background: rgba(0, 0, 0, 0.1);
+    background: ${backgroundColor};
 
     &:after {
         content: "";
         width: calc(100% - ${magicNum});
         height: 2px;
         border: 10px;
-        background-color: rgba(0, 0, 0, 0.1);
+        background-color: rgba(0,0,0,0.1);
         position: absolute;
         bottom: -2px;
         left: 50%;
@@ -41,7 +41,8 @@ const ProfileData = styled.div`
         z-index: 10;
         font-size: calc(${magicNum} / 2);
         font-weight: 900;
-        text-shadow: 2px 2px #fff;
+        text-shadow: 2px 2px rgba(255,255,255,0.25);
+        color: ${mainColor};
     }
     
     div {
@@ -75,7 +76,7 @@ const GameData = styled.div`
     flex-direction: column;
 
     a {
-        color: black;
+        color: ${darkTextColor};
     }
 
     h3 {
