@@ -45,9 +45,7 @@ class GameManager {
         this.player1Bat.reset();
         this.player2Bat.reset();
 
-        setTimeout(() => {
             this.pongBall.reset();
-        }, 1000);
     }
 
     checkIfBallHitsBats() {

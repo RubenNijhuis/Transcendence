@@ -15,6 +15,11 @@ export const locations = [
         onlyWhenLoggedin: true
     },
     {
+        name: "PongTestPage",
+        url: "/pong",
+        onlyWhenLoggedin: false
+    },
+    {
         name: "Leaderboard",
         url: "/leaderboard",
         onlyWhenLoggedin: true

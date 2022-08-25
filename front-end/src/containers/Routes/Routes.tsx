@@ -15,6 +15,7 @@ import NotFound from "../../pages/NotFound";
 
 // Authentication
 import Guard from "../../containers/Guard";
+import Pong from "../../pages/Pong";
 
 const Router = () => (
     <Routes>
@@ -22,6 +23,8 @@ const Router = () => (
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
+
+        <Route path="/pong" element={<Pong />} />
 
         {/* Routes that have to pass through authentication to be loaded */}
         <Route element={<Guard />}>
