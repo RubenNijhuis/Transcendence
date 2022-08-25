@@ -71,3 +71,5 @@ export class User {
   })
   blocked: string;
 }
+
+export default User;
