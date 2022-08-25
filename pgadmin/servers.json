@@ -1,0 +1,14 @@
+{
+    "Servers": {
+      "1": {
+        "Name": "Transcendence_database",
+        "Group": "Transcendence_database_group",
+        "Host": "host.docker.internal",
+        "Port": 5432,
+        "MaintenanceDB": "postgres",
+        "Username": "admin",
+        "PassFile": "/pgpass",
+        "SSLMode": "prefer"
+      }
+    }
+  }

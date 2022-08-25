@@ -1,16 +1,15 @@
 import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
-import { ConfigModule, ConfigService} from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import {TypeOrmModule} from '@nestjs/typeorm';
-import entities from './typeorm';
-import { configSchema } from './config.schema';
 import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
-import { typeOrmAsyncConfig } from './typeorm/typeorm.config';
+import { typeOrmAsyncConfig } from './configs/typeorm.config';
+import { envConfig } from './configs/env.config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: ['.env'], validationSchema: configSchema,}),
+    ConfigModule.forRoot(envConfig),
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
   	UsersModule,
   	AuthModule,

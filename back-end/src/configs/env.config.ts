@@ -1,6 +1,7 @@
+import { ConfigModuleOptions } from "@nestjs/config";
 import * as Joi from 'joi';
 
-export const configSchema = Joi.object({
+const configSchema = Joi.object({
   FORTYTWO_APP_ID: Joi.string().required(),
   FORTYTWO_APP_SECRET: Joi.string().required(),
   FORTYTWO_CALLBACK_URL: Joi.string().required(),
@@ -14,3 +15,7 @@ export const configSchema = Joi.object({
   DB_PASS: Joi.string().required(),
   DB_NAME: Joi.string().required(),
 });
+
+export const envConfig: ConfigModuleOptions = {
+    envFilePath: ['.env'], validationSchema: configSchema,
+}

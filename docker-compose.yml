@@ -5,6 +5,7 @@ services:
     container_name: Transcendence_frontend
     build:
       context: ./front-end
+    restart: always
     volumes:
       - ./front-end:/app
     ports:
@@ -16,6 +17,7 @@ services:
     container_name: Transcendence_backend
     build:
       context: ./back-end
+    restart: always
     env_file:
       - ./back-end/.env
     volumes:
@@ -28,6 +30,7 @@ services:
   loadbalancer:
     container_name: Transcendence_nginx
     image: nginx:latest
+    restart: always
     volumes:
       - ./nginx/conf:/etc/nginx/
     ports:
@@ -49,5 +52,22 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
 
+  pgadmin:
+    container_name: Transcendence_dbadmin
+    image: dpage/pgadmin4
+    restart: always
+    volumes:
+       - ./pgadmin/servers.json:/pgadmin4/servers.json
+       - ./pgadmin/pgpass:/pgpass
+    env_file:
+      - ./back-end/.env
+    ports:
+      - "5050:80"
+    links:
+      - "database:pgsql-server"
+    depends_on:
+      - database
+
 volumes: # create volume for postgres
   db: {}
+  pgadmin:
