@@ -30,9 +30,7 @@ const fakeAuthProvider = {
 };
 
 // Shorthand to use auth as a hook
-const useAuth = () => {
-    return useContext(AuthContext);
-};
+const useAuth = () => useContext(AuthContext);
 
 /**
  * The authprovider creates a "bucket" in which we can store all

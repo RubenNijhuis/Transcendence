@@ -32,9 +32,11 @@ import {
     mediumRadius
 } from "../utils/StylingConstants";
 import GameHistory from "../components/GameHistory";
+import { useDataDebug } from "../utils/DebugDataContext";
 
 const ProfilePage = () => {
     const [userData, setUserData] = useState<Profile | null>(null);
+    const { profiles } = useDataDebug();
     const { user, isLoggedIn } = useAuth();
     const { id } = useParams();
 
@@ -45,7 +47,7 @@ const ProfilePage = () => {
     const getUserData = (id: number) => {
         const reqPromise = new Promise((resolve, reject) => {
             setTimeout(() => {
-                resolve(generateProfile(1)[0]);
+                resolve(profiles[id - 1]);
             }, 1000);
         });
         return reqPromise;
