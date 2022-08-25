@@ -18,7 +18,6 @@ import { locations } from "./NavBar.config";
 
 const CTAButton = ({ authStatus }: any) => (
     <Fragment>
-        {/* Change the nav primary button based on login */}
         {authStatus ? (
             <Link className="login-button" to={"/play"}>
                 <Button theme={"light"}>Play Pong</Button>
@@ -34,7 +33,6 @@ const CTAButton = ({ authStatus }: any) => (
 const NavLinks = ({ authStatus }: any) => (
     <ul>
         {locations.map(({ name, url, onlyWhenLoggedin }, count) => {
-            // Only show certain items if logged in
             if (onlyWhenLoggedin && !authStatus) return null;
             return (
                 <li key={count}>
@@ -66,7 +64,9 @@ const NavBar = () => {
                     <NavLinks authStatus={isLoggedIn} />
                     <div className="cta">
                         <CTAButton authStatus={isLoggedIn} />
-                        {isLoggedIn && user ? <ProfileIcon url={user.img_url} /> : null}
+                        {isLoggedIn && user && (
+                            <ProfileIcon url={user.img_url} />
+                        )}
                     </div>
                 </div>
             </div>

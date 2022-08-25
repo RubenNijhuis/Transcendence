@@ -15,11 +15,23 @@ import InviteMessageDisplay from "./InviteMessageDisplay";
 
 interface Props {
     receiver: Profile;
+    sender: Profile;
     content: Message;
 }
 
-const ChatElement = ({ receiver, content }: Props) => {
+const ChatElement = ({ receiver, sender, content }: Props) => {
     const fromUser: boolean = receiver.uid === content.sender.uid;
+
+    if (!fromUser)
+        console.log(
+            "\nReceiver:",
+            receiver.username,
+            "\nSender",
+            content.sender.username,
+            "\nType:",
+            content.content_type,
+            "\n"
+        );
 
     switch (content.content_type) {
         case MessageContentType.Simple:

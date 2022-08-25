@@ -1,6 +1,11 @@
+// Types
 import { PictureMessage } from "../../../utils/GlobalTypes";
-import styled from "styled-components";
+
+// Components
 import Asset from "../../Asset";
+
+// Styling
+import styled from "styled-components";
 import { smallRadius } from "../../../utils/StylingConstants";
 
 interface Props {

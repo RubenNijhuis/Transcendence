@@ -1,6 +1,13 @@
+// Types
 import { SimpleMessage } from "../../../utils/GlobalTypes";
+
+// Styling
 import styled from "styled-components";
-import { lightTextColor, mainColor, smallRadius } from "../../../utils/StylingConstants";
+import {
+    lightTextColor,
+    mainColor,
+    smallRadius
+} from "../../../utils/StylingConstants";
 
 interface Props {
     content: SimpleMessage;

@@ -6,8 +6,9 @@ import { useParams } from "react-router-dom";
 // Components
 import Layout from "../components/Layout";
 import Loader from "../components/Loader";
-import GameHistory from "../containers/GameHistory";
-import ProfileDisplay from "../containers/ProfileDisplay";
+import ProfileDisplay from "../components/ProfileDisplay";
+import ProfileStats from "../components/ProfileStats";
+import GameHistory from "../components/GameHistory";
 
 // Authentication
 import { useAuth } from "../utils/AuthContext";
@@ -19,14 +20,21 @@ import { Profile } from "../utils/GlobalTypes";
 import Logger from "../utils/Logger";
 
 // Random data
-import { generateGameResult, generateProfile } from "../utils/randomDataGenerator";
+import {
+    generateGameResult,
+    generateProfile
+} from "../utils/randomDataGenerator";
+import { largeRadius, mainColor, mediumRadius } from "../utils/StylingConstants";
 
 const ProfilePage = () => {
     const [userData, setUserData] = useState<Profile | null>(null);
     const auth = useAuth();
     const { id } = useParams();
 
-    Logger("AUTH", "Profile page", "Profile", auth.user);
+    useEffect(() => {
+        if (auth.isLoggedIn)
+            Logger("AUTH", "Profile page", "Profile", auth.user);
+    }, [auth]);
 
     const getUserData = (id: number) => {
         const reqPromise = new Promise((resolve, reject) => {
@@ -50,10 +58,18 @@ const ProfilePage = () => {
     return (
         <Layout>
             {userData !== null ? (
-                <Fragment>
+                <div
+                    style={{
+                        borderRadius: largeRadius,
+                        backgroundColor: mainColor
+                    }}
+                >
                     <ProfileDisplay user={userData} />
-                    <GameHistory player={userData} matches={generateGameResult(userData, 50)} />
-                </Fragment>
+                    <ProfileStats
+                        player={userData}
+                        matches={generateGameResult(userData, 50)}
+                    />
+                </div>
             ) : (
                 <Loader />
             )}

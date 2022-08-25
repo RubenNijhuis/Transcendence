@@ -2,8 +2,9 @@ export const magicNum = '72px';
 
 export const smallRadius = '6px';
 export const mediumRadius = '12px';
+export const largeRadius = '24px';
 
-export const mainColor = 'rgba(26, 34, 45, 1)';
+export const mainColor = 'rgba(46, 54, 65, 1)';
 export const secondaryColor = 'rgba(226,226,240,1)';
 export const backgroundColor = 'rgba(0,0,0,0.1)';
 

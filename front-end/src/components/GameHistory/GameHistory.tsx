@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 // Style
 import {
     Container,
@@ -14,11 +16,11 @@ import { Link } from "react-router-dom";
 import type { Profile, MatchRecord } from "../../utils/GlobalTypes";
 
 // Components
-import Heading from "../../components/Heading";
-import Asset from "../../components/Asset";
-import Logger from "../../utils/Logger";
-import { useState } from "react";
-import Button from "../../components/Button";
+import Heading from "../Heading";
+import Asset from "../Asset";
+import Button from "../Button";
+
+// Utils
 import { PaginateArray } from "../../utils/paginateArray";
 
 interface Props {
@@ -42,11 +44,7 @@ const GameHistory = ({ player, matches }: Props) => {
     return (
         <Container>
             <div className="left-col">
-                <Heading type={3}>Player statistics</Heading>
-                <p>Rank: {player.rank}</p>
-                <p>Streak: 2</p>
-                <p>Wins: 100</p>
-                <p>Losses: 10</p>
+                <Heading type={3}>Friends</Heading>
             </div>
             <div className="right-col">
                 <Heading type={3}>History</Heading>

@@ -4,12 +4,14 @@ interface Profile {
     uid: number;
     username: string;
     img_url: string;
+    banner_url: string;
+    color: string;
     email: string;
     rank: number;
     wins: number;
     losses: number;
-    friends: string;
-    blocked: string;
+    friends: Profile[];
+    blocked: Profile[];
 }
 
 // How we define match data

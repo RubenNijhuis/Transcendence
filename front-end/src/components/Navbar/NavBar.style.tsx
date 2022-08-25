@@ -75,7 +75,7 @@ const Container = styled.div`
                 margin-right: calc(${magicNum} / 6);
 
                 a {
-                    color: ${lightTextColor}
+                    color: ${lightTextColor};
                     font-weight: 500;
                     text-decoration: none;
 

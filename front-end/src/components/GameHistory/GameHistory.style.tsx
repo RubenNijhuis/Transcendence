@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { backgroundColor, darkTextColor, magicNum, smallRadius } from "../../utils/StylingConstants";
 
 const Container = styled.div`
-    background: ${backgroundColor};
     border-radius: ${smallRadius};
     padding: calc(${magicNum} / 2);
 

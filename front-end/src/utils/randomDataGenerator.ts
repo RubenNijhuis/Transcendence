@@ -55,7 +55,14 @@ const generateProfile = (amount: number): Profile[] => {
             Math.ceil(randomIntFromInterval(100, 1000) / 100) * 100;
         const randomHeight: number =
             Math.ceil(randomIntFromInterval(100, 1000) / 100) * 100;
+
+        const randomWidthBanner: number =
+            Math.ceil(randomIntFromInterval(1000, 2000) / 100) * 100;
+        const randomHeightBanner: number =
+            Math.ceil(randomIntFromInterval(1000, 2000) / 100) * 100;
+
         const img_url: string = `https://source.unsplash.com/random/${randomWidth}x${randomHeight}`;
+        const banner_url: string = `https://source.unsplash.com/random/${randomWidthBanner}x${randomHeightBanner}`;
 
         const wins: number = randomIntFromInterval(1, 100);
         const losses: number = randomIntFromInterval(1, 100);
@@ -64,13 +71,15 @@ const generateProfile = (amount: number): Profile[] => {
             username,
             email,
             id: uid,
+            banner_url,
             uid,
+            color: "#1e1e1e",
             rank,
             img_url,
             wins,
             losses,
-            friends: "",
-            blocked: ""
+            friends: [],
+            blocked: []
         };
 
         profileList.push(newProfile);
@@ -174,18 +183,17 @@ const generateMessage = (
     const messages: Message[] = [];
 
     for (let i = 0; i < amount; i++) {
-        const rand = randomIntFromInterval(0, 2);
-        let newMessage: Message = {
+        const rand: number = randomIntFromInterval(0, 2);
+
+        const newMessage: Message = {
             content: generateNewMessageContent(user, other, rand),
             content_type: rand,
-            timestamp: "",
+            timestamp: new Date().toString(),
             sender: user,
             id: i,
             group_id,
             read_by: [user, other]
         };
-
-        newMessage.timestamp = new Date().toString();
 
         messages.push(newMessage);
     }
@@ -202,15 +210,12 @@ const generateGroupChats = (
     const profiles: Profile[] = generateProfile(amount * amount_people);
 
     for (let i = 0; i < amount; i++) {
-        let newGroup: GroupChat = {
+        const newGroup: GroupChat = {
             id: i,
             members: [],
             messages: []
         };
 
-        // for (let j = 0; j < amount_people; j++) {
-        //     newGroup.members.push(profiles[i + i + 1]);
-        // }
         newGroup.members.push(profiles[i]);
         newGroup.members.push(user);
 
@@ -231,6 +236,7 @@ const generateGroupChats = (
                 randomIntFromInterval(1, 4)
             )
         );
+
         newGroup.messages.push(
             ...generateMessage(
                 profiles[i],
@@ -242,8 +248,6 @@ const generateGroupChats = (
 
         groupChatList.push(newGroup);
     }
-
-    console.log(groupChatList);
 
     return groupChatList;
 };

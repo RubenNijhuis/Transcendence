@@ -1,7 +1,13 @@
+// Types
 import { InvitePlayMessage } from "../../../utils/GlobalTypes";
+
+// Styling
 import styled from "styled-components";
 import { mainColor, smallRadius } from "../../../utils/StylingConstants";
+
+// Components
 import Button from "../../Button";
+
 interface Props {
     content: InvitePlayMessage;
     fromUser: boolean;
