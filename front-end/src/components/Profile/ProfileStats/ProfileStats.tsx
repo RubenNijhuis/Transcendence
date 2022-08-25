@@ -1,9 +1,9 @@
 // Types
-import { MatchRecord, Profile } from "../../utils/GlobalTypes";
+import { MatchRecord, Profile } from "../../../utils/GlobalTypes";
 
 // Components
-import GameHistory from "../GameHistory";
-import Heading from "../Heading";
+import GameHistory from "../../GameHistory";
+import Heading from "../../Heading";
 
 // Styling
 import { Container } from "./ProfileStats.style";
@@ -26,7 +26,7 @@ const ProfileStats = ({ player, matches }: Props) => {
                     <span>{player.losses + player.wins}</span>
                 </div>
                 <div className="item">
-                    <Heading type={3}>Bat color</Heading>
+                    <Heading type={3}>Skin</Heading>
                     <div
                         className="color"
                         style={{
@@ -41,7 +41,6 @@ const ProfileStats = ({ player, matches }: Props) => {
                     <span>{player.friends.length}</span>
                 </div>
             </div>
-            <GameHistory player={player} matches={matches} />
         </Container>
     );
 };

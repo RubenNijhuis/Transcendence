@@ -49,6 +49,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             newUserData.username = "LowerRes";
             newUserData.img_url =
                 "https://images.ctfassets.net/vf2eiv36rew2/6vLLgPp8PvG9hfReO0dCIS/1b576d6080c255d6a5e6e884a11741ea/a.jpg?w=4000&h=2666&q=50&fm=webp";
+            newUserData.banner_url =
+                "https://images.unsplash.com/photo-1621687578668-aa1b449c7b29?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2970&q=80";
             newUserData.friends = generateProfile(2);
 
             setUser(newUserData);

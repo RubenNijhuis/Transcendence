@@ -6,9 +6,11 @@ import { useParams } from "react-router-dom";
 // Components
 import Layout from "../components/Layout";
 import Loader from "../components/Loader";
-import ProfileDisplay from "../components/ProfileDisplay";
-import ProfileStats from "../components/ProfileStats";
-import GameHistory from "../components/GameHistory";
+
+// Profile components
+import ProfileDisplay from "../components/Profile/ProfileDisplay";
+import ProfileStats from "../components/Profile/ProfileStats";
+import ProfileActions from "../components/Profile/ProfileActions";
 
 // Authentication
 import { useAuth } from "../utils/AuthContext";
@@ -24,17 +26,21 @@ import {
     generateGameResult,
     generateProfile
 } from "../utils/randomDataGenerator";
-import { largeRadius, mainColor, mediumRadius } from "../utils/StylingConstants";
+import {
+    largeRadius,
+    mainColor,
+    mediumRadius
+} from "../utils/StylingConstants";
+import GameHistory from "../components/GameHistory";
 
 const ProfilePage = () => {
     const [userData, setUserData] = useState<Profile | null>(null);
-    const auth = useAuth();
+    const { user, isLoggedIn } = useAuth();
     const { id } = useParams();
 
     useEffect(() => {
-        if (auth.isLoggedIn)
-            Logger("AUTH", "Profile page", "Profile", auth.user);
-    }, [auth]);
+        if (isLoggedIn) Logger("AUTH", "Profile page", "Profile", user);
+    }, [isLoggedIn, user]);
 
     const getUserData = (id: number) => {
         const reqPromise = new Promise((resolve, reject) => {
@@ -51,9 +57,25 @@ const ProfilePage = () => {
                 setUserData(res as Profile);
             });
         } else {
-            setUserData(auth.user);
+            setUserData(user);
         }
-    }, [auth.user, id]);
+    }, [user, id]);
+
+    useEffect(() => {
+        if (userData !== null) {
+            const obj = {
+                userContextNam: user.username,
+                requestesUsername: userData.username,
+                isMatch: user.username === userData.username
+            };
+            Logger(
+                "DEBUG",
+                "Profile page",
+                "Checking if this is the users page",
+                obj
+            );
+        }
+    }, [userData, user]);
 
     return (
         <Layout>
@@ -68,6 +90,13 @@ const ProfilePage = () => {
                     <ProfileStats
                         player={userData}
                         matches={generateGameResult(userData, 50)}
+                    />
+                    {userData.username !== user.username && (
+                        <ProfileActions profile={userData} />
+                    )}
+                    <GameHistory
+                        player={userData}
+                        matches={generateGameResult(userData, 10)}
                     />
                 </div>
             ) : (
