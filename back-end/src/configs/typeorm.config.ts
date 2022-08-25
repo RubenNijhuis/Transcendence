@@ -1,11 +1,15 @@
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from "@nestjs/typeorm";
-import entities from "../typeorm";
+import { User } from "../typeorm/user.entity";
+import { DataSource } from "typeorm";
+import { CreateUser1661450378131 } from "../database/migrations/1661450378131-CreateUser";
+const { SeedingSource } = require('@concepta/typeorm-seeding')
+import { UserSeeder } from "src/database/seeds/user-create.seed";
+
+const configService = new ConfigService();
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
-    imports: [ConfigModule],
-    inject: [ConfigService],
-    useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => {
+    useFactory: async (): Promise<TypeOrmModuleOptions> => {
         return {
             type: 'postgres',
             host: configService.get<string>('DB_HOST'),
@@ -13,44 +17,27 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
             username: configService.get<string>('DB_USER'),
             password: configService.get<string>('DB_PASS'),
             database: configService.get<string>('DB_NAME'),
-            entities: entities,
-            migrations: [__dirname + '../migrations', ],
-            extra: { charset: 'utf8mb4_unicode_ci', },
-            synchronize: true,
+            entities: [User],
+            migrations: [CreateUser1661450378131],
+            synchronize: false,
             logging: true,
+            autoLoadEntities: true,
         };
     }
 }
 
-export const typeormConfig: TypeOrmModuleAsyncOptions = {
-    imports: [ConfigModule],
-    inject: [ConfigService],
-    useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('DB_HOST'),
-        port: configService.get<number>('DB_PORT'),
-        username: configService.get<string>('DB_USER'),
-        password: configService.get<string>('DB_PASS'),
-        database: configService.get<string>('DB_NAME'),
-        entities: entities,
-        migrations: [__dirname + '../database/migrations/*.ts', ],
-        extra: { charset: 'utf8mb4_unicode_ci', },
-        logging: true,
-    })
-};
+export const typeOrmConfig = new DataSource({
+    type: 'postgres',
+    host: configService.get<string>('DB_HOST'),
+    port: configService.get<number>('DB_PORT'),
+    username: configService.get<string>('DB_USER'),
+    password: configService.get<string>('DB_PASS'),
+    database: configService.get<string>('DB_NAME'),
+    entities: [User],
+    migrations: [CreateUser1661450378131],
+});
 
-// export const typeOrmConfigAsync: TypeOrmModuleAsyncOptions = {
-//     imports: [ConfigModule],
-//     inject: [ConfigService],
-//     useFactory: (configService: ConfigService) => ({
-//         type: 'postgres',
-//         host: configService.get<string>('DB_HOST'),
-//         port: configService.get<number>('DB_PORT'),
-//         username: configService.get<string>('DB_USER'),
-//         password: configService.get<string>('DB_PASS'),
-//         database: configService.get<string>('DB_NAME'),
-//         entities: entities,
-//         synchronize: true,
-//         isGlobal: true
-//     })
-// }
+export const seederConfig = new SeedingSource({
+    typeOrmAsyncConfig,
+    seeders: [UserSeeder,],
+})

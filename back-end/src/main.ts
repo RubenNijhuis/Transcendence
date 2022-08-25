@@ -6,6 +6,7 @@ import { env } from 'node:process';
 
 import * as session from 'express-session';
 import * as passport from 'passport';
+import { getConnection } from 'typeorm';
 
 async function bootstrap() {
     const app: NestExpressApplication = await NestFactory.create(AppModule);
