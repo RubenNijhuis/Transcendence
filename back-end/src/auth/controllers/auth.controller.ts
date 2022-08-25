@@ -1,6 +1,7 @@
-import { Controller, Get, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { FortyTwoAuthGuard } from 'src/auth/guard';
+import { AuthService } from '../services/auth.service';
 
 @Controller('auth')
 export class AuthController {
@@ -19,4 +20,16 @@ export class AuthController {
 
   @Get('logout')
   logout() {}
+
+  constructor (private authService: AuthService) {}
+
+  @Post('singup')
+  signup() {
+    return this.authService.signup;
+  }
+
+  @Post('singin')
+  signin() {
+    return this.authService.signin;
+  }
 }

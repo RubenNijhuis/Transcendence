@@ -23,4 +23,11 @@ export class AuthService {
         throw new Error('Method not implemented.');
     }
     
+    signup() {
+        return { msg: 'I have signed up' }
+    }
+
+    signin() {
+        return { msg: 'I have signed in' }
+    }
 }

@@ -12,12 +12,18 @@ export class UsersService {
   ) {}
 
   createUser(createUserDto: CreateUserDto) {
-    const newUser = this.userRepository.create(createUserDto);
-    return this.userRepository.save(newUser);
+    if (this.findUserByUsername(createUserDto.username) === null) {
+      const newUser = this.userRepository.create(createUserDto);
+      return this.userRepository.save(newUser);
+    }
   }
 
   getUsers() { // debugging purposes lol
     return this.userRepository.find()
+  }
+
+  findUserByUsername(username: string) {
+    return this.userRepository.findOne({where: {username}});
   }
 
   findUsersById(id: number) {

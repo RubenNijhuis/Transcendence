@@ -23,6 +23,13 @@ export class User {
   username: string;
 
   @Column({
+    name: 'img_url',
+    nullable: false,
+    default: '',
+  })
+  img_url: string;
+
+  @Column({
     name: 'email_address',
     nullable: false,
     default: '',
