@@ -11,42 +11,39 @@ import ChatBox from "../containers/ChatBox";
 import { generateGroupChats } from "../utils/randomDataGenerator";
 import { GroupChat, Profile } from "../utils/GlobalTypes";
 import { useAuth } from "../utils/AuthContext";
+import { useDataDebug } from "../utils/DebugDataContext";
 
 // Temporary function to get all chats
-const getMessages = (user: Profile) => {
-    const reqPromise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-            const mixChats: GroupChat[] = [
-                ...generateGroupChats(user, 2, 1)
-                // ...generateGroupChats(user, 1, 2),
-                // ...generateGroupChats(user, 1, 1),
-            ];
-            resolve(mixChats);
-        }, 1000);
-    });
-    return reqPromise;
-};
+// const getMessages = (user: Profile) => {
+//     const reqPromise = new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             resolve(mixChats);
+//         }, 1000);
+//     });
+//     return reqPromise;
+// };
 
 const Chat = () => {
-    const [chats, setMessages] = useState<GroupChat[] | null>(null);
+    const [messages, setMessages] = useState<GroupChat[] | null>(null);
     const [selectedChat, setSelectedChat] = useState<number>(0);
 
-    const { user } = useAuth();
+    const { chats } = useDataDebug();
 
     useEffect(() => {
-        getMessages(user).then((res) => setMessages(res as GroupChat[]));
-    }, [user]);
+        setMessages(chats);
+        console.log(chats);
+    }, []);
 
     return (
         <Layout>
-            {chats !== null ? (
+            {messages !== null ? (
                 <ChatInterface>
                     <DirectMessageList
-                        directMessages={chats}
+                        directMessages={messages}
                         selectedChat={selectedChat}
                         setSelectedChat={setSelectedChat}
                     />
-                    <ChatBox chat={chats[selectedChat]} />
+                    <ChatBox chat={messages[selectedChat]} />
                 </ChatInterface>
             ) : (
                 <Loader />

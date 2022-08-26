@@ -8,7 +8,7 @@ import {
     mainColor,
     mediumRadius,
     smallRadius
-} from "../../utils/StylingConstants";
+} from "../../../utils/StylingConstants";
 
 const Container = styled.div`
     background-color: ${mainColor};
@@ -20,22 +20,39 @@ const Container = styled.div`
     .banner {
         width: 100%;
         aspect-ratio: 9/4;
+
         .asset {
+            img {
+                transition: filter 0.35s ease-in-out;
+                filter: blur(8px);
+            }
+            background-color: ${lightTextColor};
             border-radius: ${mediumRadius};
             overflow: hidden;
             width: 100%;
             height: 100%;
         }
+
+        &:hover {
+            .asset img {
+                filter: blur(0px);
+            }
+        }
     }
 
     .profile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         position: absolute;
         left: 50%;
         top: 50%;
-
         transform: translate(-50%, -50%);
-
         width: fit-content;
+
+        .crown {
+            width: calc(${magicNum} * 1.5);
+        }
 
         .asset {
             aspect-ratio: 1/1;

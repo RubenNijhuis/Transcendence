@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import {
+    backgroundColor,
     largeRadius,
     lightTextColor,
     magicNum,
     mainColor,
-    mediumRadius
-} from "../../utils/StylingConstants";
+    mainColorMono
+} from "../../../utils/StylingConstants";
 
 const Container = styled.div`
     .stats {
@@ -21,7 +22,7 @@ const Container = styled.div`
         flex-direction: row;
         justify-content: space-evenly;
         border-radius: ${largeRadius};
-        background-color: ${mainColor};
+        background-color: ${mainColorMono};
         box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.1);
         min-width: 75%;
         transform: translateY(-50%);

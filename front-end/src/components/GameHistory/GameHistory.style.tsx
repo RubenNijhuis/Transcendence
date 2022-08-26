@@ -1,5 +1,11 @@
 import styled from "styled-components";
-import { backgroundColor, darkTextColor, magicNum, smallRadius } from "../../utils/StylingConstants";
+import {
+    backgroundColor,
+    darkTextColor,
+    lightTextColor,
+    magicNum,
+    smallRadius
+} from "../../utils/StylingConstants";
 
 const Container = styled.div`
     border-radius: ${smallRadius};
@@ -8,6 +14,10 @@ const Container = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: ${magicNum};
+
+    .heading {
+        color: ${lightTextColor};
+    }
 `;
 
 const MatchList = styled.div`
@@ -31,7 +41,7 @@ const Match = styled.div<{ win: boolean }>`
     align-items: center;
     justify-content: space-between;
     background-color: ${(props) =>
-        props.win ? `rgba(0, 255, 0, 0.1)` : `rgba(255, 0, 0, 0.1)`};
+        props.win ? `rgba(0, 255, 0, 0.5)` : `rgba(255, 0, 0, 0.5)`};
 `;
 
 const OpponentProfile = styled.div`
