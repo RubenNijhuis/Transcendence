@@ -60,17 +60,21 @@ export class User {
 
   @Column({
 	  name: 'friendlist',
-    type: 'text',
-    array: true,
+    type: 'jsonb',
+    array: false,
+    nullable: false,
+    default: () => "'[]'"
   })
-  friends: [];
+  friends: Array<{ username: string }>;
 
   @Column({
 	  name: 'blocklist',
-    type: 'text',
-    array: true,
+    type: 'jsonb',
+    array: false,
+    nullable: false,
+    default: () => "'[]'"
   })
-  blocked: [];
+  blocked: Array<{ username: string }>;
 }
 
 export default User;

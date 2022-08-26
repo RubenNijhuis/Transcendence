@@ -1,3 +1,8 @@
-import { seederConfig } from "src/typeorm/typeorm.config";
+import { UserSeeder } from "src/database/seeds/user-create.seed";
+import { typeOrmConfig } from "./typeorm.config-migrations";
+const { SeedingSource } = require('@concepta/typeorm-seeding')
 
-export = seederConfig;
+export const seederConfig = new SeedingSource({
+    dataSource: typeOrmConfig,
+    seeders: [UserSeeder,],
+})

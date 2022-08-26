@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/typeorm";
 import { Repository } from "typeorm";
@@ -35,11 +35,45 @@ export class UsersService {
     return this.userRepository.save(newUser);
   }
 
-  addFriend(userOppDto: UserOppDto) {
-    const ret = this.findUserByUsername(userOppDto.username);
-    if (!ret || userOppDto.username === userOppDto.friend)
-      return ;
-    return this.userRepository
-      .query(`SELECT * from post WHERE ${userOppDto.friend} = ANY(friend)`);
+  async addFriend(userOppDto: UserOppDto) {
+    const ret = await this.findUserByUsername(userOppDto.username);
+    if (!ret || 
+        userOppDto.username === userOppDto.selectedUsername || 
+        ret.friends.find(element => element.username === userOppDto.selectedUsername)) {
+      throw TypeError; // idk what to throw lol
+    }
+    return await this.userRepository.createQueryBuilder()
+      .update({ friends: [...ret.friends, { username: userOppDto.selectedUsername}]})
+      .where({ id: ret.id })
+      .returning('*')
+      .execute();
+  }
+
+  async addBlocked(userOppDto: UserOppDto) {
+    const ret = await this.findUserByUsername(userOppDto.username);
+    if (!ret || 
+        userOppDto.username === userOppDto.selectedUsername || 
+        ret.blocked.find(element => element.username === userOppDto.selectedUsername)) {
+      throw TypeError; // idk what to throw lol
+    }
+    return await this.userRepository.createQueryBuilder()
+      .update({ blocked: [...ret.blocked, { username: userOppDto.selectedUsername}]})
+      .where({ id: ret.id })
+      .returning('*')
+      .execute();
+  }
+
+  async deleteFriend(userOppDto: UserOppDto) {
+    const ret = await this.findUserByUsername(userOppDto.username);
+    if (!ret || 
+        userOppDto.username === userOppDto.selectedUsername || 
+        ret.blocked.find(element => element.username !== userOppDto.selectedUsername)) {
+      throw TypeError; // idk what to throw lol
+    }
+    return await this.userRepository.createQueryBuilder()
+      .update({ friends: [...ret.friends, { username: userOppDto.selectedUsername}]})
+      .where({ id: ret.id })
+      .returning('*')
+      .execute();
   }
 }

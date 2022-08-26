@@ -8,8 +8,8 @@ import {
     UsePipes,
     ValidationPipe
 } from "@nestjs/common";
+import { seederConfig } from "src/configs/seeder.config";
 import { UserSeeder } from "src/database/seeds/user-create.seed";
-import { seederConfig } from "src/typeorm/typeorm.config";
 import { CreateUserDto } from "src/users/dtos/create-users.dto";
 import { UserOppDto } from "src/users/dtos/user-opp.dto";
 import { UsersService } from "src/users/services/users/users.service";
@@ -56,10 +56,22 @@ export class UsersController {
         await seed.run();
     }
 
-    @Post('addFriend')
+    @Post('addfriend')
+    @UsePipes(ValidationPipe)
     async addFriend(@Body() userOppDto: UserOppDto) {
         try {
             await this.userService.addFriend(userOppDto);
+        }
+        catch (error) {
+            return error;
+        }
+    }
+
+    @Post('addblocked')
+    @UsePipes(ValidationPipe)
+    async addBlocked(@Body() userOppDto: UserOppDto) {
+        try {
+            await this.userService.addBlocked(userOppDto);
         }
         catch (error) {
             return error;

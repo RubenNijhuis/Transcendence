@@ -1,9 +1,9 @@
-import { IsNotEmpty, isNotEmpty } from "class-validator";
+import { IsNotEmpty } from "class-validator";
 
 export class UserOppDto {
     @IsNotEmpty()
     username: string
 
     @IsNotEmpty()
-    friend: string
+    selectedUsername: string
 }

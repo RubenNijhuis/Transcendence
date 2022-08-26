@@ -2,8 +2,8 @@ import { IsNotEmpty, MinLength } from "class-validator";
 
 export class CreateUserDto {
   @IsNotEmpty()
-  uid: string;
+  uid: string
   
   @IsNotEmpty()
-  username: string;
+  username: string
 }
