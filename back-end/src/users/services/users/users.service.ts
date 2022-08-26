@@ -22,10 +22,6 @@ export class UsersService {
     return this.userRepository.find()
   }
 
-  findUserByUsername(username: string) {
-    return this.userRepository.findOne({where: {username}});
-  }
-
   findUsersById(id: number) {
     return this.userRepository.findOne({where: {id}})
   }
@@ -33,7 +29,8 @@ export class UsersService {
   findUsersByIntraId(uid: string) {
     return this.userRepository.findOne({where: {uid}})
   }
-//   async findOne(username: string): Promise<User | undefined> {
-//     return this.find(user => user.username === username);
-//   }
+
+  findUserByUsername(username: string) {
+    return this.userRepository.findOne({where: {username}});
+  }
 }

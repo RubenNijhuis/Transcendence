@@ -1,3 +1,3 @@
-import { seederConfig } from "src/configs/typeorm.config";
+import { seederConfig } from "src/typeorm/typeorm.config";
 
 export = seederConfig;

@@ -1,6 +1,6 @@
-import { ConfigModule, ConfigService } from "@nestjs/config";
+import { ConfigService } from "@nestjs/config";
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from "@nestjs/typeorm";
-import { User } from "../typeorm/user.entity";
+import { User } from "./user.entity";
 import { DataSource } from "typeorm";
 import { CreateUser1661450378131 } from "../database/migrations/1661450378131-CreateUser";
 const { SeedingSource } = require('@concepta/typeorm-seeding')

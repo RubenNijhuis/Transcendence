@@ -1,4 +1,3 @@
-import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
@@ -6,36 +5,28 @@ import { env } from 'node:process';
 
 import * as session from 'express-session';
 import * as passport from 'passport';
-import { getConnection } from 'typeorm';
+import { seederConfig } from './typeorm/typeorm.config';
+import { UserSeeder } from './database/seeds/user-create.seed';
+import { corsConfig, pipenConfig, sessionConfig } from './configs/app.config';
 
 async function bootstrap() {
     const app: NestExpressApplication = await NestFactory.create(AppModule);
     const port = Number(env.PORT);
 
     // Enable cors so the front-end can communicate
-    app.enableCors({
-        origin: 'http://localhost:8080',
-        methods: 'GET, PUT, POST, DELETE',
-        allowedHeaders: 'Content-Type, Authorization',
-    });
-    app.useGlobalPipes(
-        new ValidationPipe({ whitelist: true, transform: true }),
-    );
-    app.use(session({
-        cookie: {
-            maxAge: 60000 * 60 * 24,
-        },
-        secret: 'jdsjfkldjfkld', //keep this an actual secret pls!!
-        resave: false,
-        saveUninitialized: false,
-    }))
+    app.enableCors(corsConfig);
+    app.useGlobalPipes(pipenConfig);
+    app.use(session(sessionConfig));
     app.setGlobalPrefix('api');
     app.use(passport.initialize());
     app.use(passport.session());
     passport.serializeUser((user, done) => {
         done(null, user);
-      });
-      
+    });
+    // Running seeders
+    const seed = new UserSeeder({ seedingSource: seederConfig });
+    seed.run();
+    //
     passport.deserializeUser((user, done) => { // why does this fix the "Error: Failed to serialize user into session"?
         done(null, user);
     });
