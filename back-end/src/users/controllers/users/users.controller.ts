@@ -78,5 +78,8 @@ export class UsersController {
         }
     }
 
+    // @Get('angi')
+    // angi(user: User) { return this.userService.generateTwoFactorAuthenticationSecret(user);}
+
 
 }

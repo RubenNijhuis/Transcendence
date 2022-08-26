@@ -1,6 +1,8 @@
 import { Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
+import { ADDRCONFIG } from 'dns';
 import { Response } from 'express';
 import { FortyTwoAuthGuard } from 'src/auth/guard';
+import { User } from 'src/typeorm';
 import { AuthService } from '../services/auth.service';
 
 @Controller('auth')
@@ -32,4 +34,7 @@ export class AuthController {
   signin() {
     return this.authService.signin;
   }
+
 }
+
+

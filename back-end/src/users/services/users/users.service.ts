@@ -4,6 +4,8 @@ import { User } from "src/typeorm";
 import { Repository } from "typeorm";
 import { CreateUserDto } from "src/users/dtos/create-users.dto";
 import { UserOppDto } from "src/users/dtos/user-opp.dto";
+import { authenticator } from 'otplib';
+import { toDataURL } from 'qrcode';
 
 @Injectable()
 export class UsersService {
@@ -26,6 +28,18 @@ export class UsersService {
 
   findUserByUsername(username: string) {
     return this.userRepository.findOne({where: {username}});
+  }
+
+  findUserByemail(email: string) {
+    return this.userRepository.findOne({where: {email}});
+  }
+
+  setTwoFactorAuthSecret(id: number, twoFactorAuthenticationSecret: string) {
+    return this.userRepository.update( id, {twoFactorAuthenticationSecret,} );
+  }
+
+  async setTwoFactorAuthenticationSecret(secret: string, userId: number) {
+    this.setTwoFactorAuthSecret(userId, secret);
   }
 
   createUser(createUserDto: CreateUserDto) { // should this be async?
@@ -75,5 +89,21 @@ export class UsersService {
       .where({ id: ret.id })
       .returning('*')
       .execute();
+  }
+
+  async generateTwoFactorAuthenticationSecret(user: User) {
+    const secret = authenticator.generateSecret();
+    console.log(secret);
+
+    const otpauthUrl = authenticator.keyuri('mehj177@gmail.com', 'AUTH_APP_NAME', secret);
+    
+    console.log(otpauthUrl);
+    return(toDataURL(otpauthUrl));
+    // await this.setTwoFactorAuthenticationSecret(secret, user.id);
+    // console.log(user.twoFactorAuthenticationSecret);
+    // return {
+    //   secret,
+    //   otpauthUrl
+    // }
   }
 }
