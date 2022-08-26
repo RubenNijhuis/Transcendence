@@ -5,10 +5,14 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "./AuthContext";
 
 // Types
-import { GroupChat, Profile } from "./GlobalTypes";
+import { GroupChat, MatchRecord, Profile } from "./GlobalTypes";
 
 // Data generation
-import { generateGroupChats, generateProfile } from "./randomDataGenerator";
+import {
+    generateGameResult,
+    generateGroupChats,
+    generateProfile
+} from "./randomDataGenerator";
 
 // What kind of data and functions the context consists of
 interface DataDebugContextType {
@@ -20,6 +24,9 @@ interface DataDebugContextType {
 
     chats: GroupChat[];
     setChats: React.Dispatch<React.SetStateAction<GroupChat[]>>;
+
+    matchHistory: MatchRecord[];
+    setMatchHistory: React.Dispatch<React.SetStateAction<MatchRecord[]>>;
 }
 
 // Create context
@@ -33,13 +40,17 @@ const DataDebugProvider = ({ children }: { children: React.ReactNode }) => {
     const [profiles, setProfiles] = useState<Profile[]>([]);
     const [chats, setChats] = useState<GroupChat[]>([]);
     const [leaderBoard, setLeaderBoard] = useState<Profile[]>([]);
+    const [matchHistory, setMatchHistory] = useState<MatchRecord[]>([]);
 
     const { user } = useAuth();
 
     useEffect(() => {
-        setProfiles(generateProfile(10));
-        setChats(generateGroupChats(user, 3, 2));
-        setLeaderBoard(profiles);
+        if (user) {
+            setProfiles(generateProfile(10));
+            setChats(generateGroupChats(user, 3, 2));
+            setLeaderBoard(profiles);
+            setMatchHistory(generateGameResult(user, 50));
+        }
     }, [user]);
 
     const value = {
@@ -48,7 +59,9 @@ const DataDebugProvider = ({ children }: { children: React.ReactNode }) => {
         chats,
         setChats,
         leaderBoard,
-        setLeaderBoard
+        setLeaderBoard,
+        matchHistory,
+        setMatchHistory
     };
 
     return (

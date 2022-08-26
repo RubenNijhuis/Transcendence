@@ -175,8 +175,8 @@ const generateInvite = (
 };
 
 const generateNewMessageContent = (
-    user: Profile,
-    other: Profile,
+    sender: Profile,
+    receiver: Profile,
     type: MessageContentType
 ): SimpleMessage | PictureMessage | InvitePlayMessage => {
     let messageContent: SimpleMessage | PictureMessage | InvitePlayMessage;
@@ -194,8 +194,8 @@ const generateNewMessageContent = (
         };
     } else if (type === MessageContentType.InvitePlay) {
         messageContent = {
-            opponent: other,
-            user: user,
+            opponent: receiver,
+            user: sender,
             game_type: GameType.Classic,
             accepted: false
         };
@@ -209,8 +209,8 @@ const generateNewMessageContent = (
 };
 
 const generateMessage = (
-    user: Profile,
-    other: Profile,
+    sender: Profile,
+    receiver: Profile,
     group_id: number,
     amount: number
 ): Message[] => {
@@ -220,13 +220,13 @@ const generateMessage = (
         const rand: number = randomIntFromInterval(0, 2);
 
         const newMessage: Message = {
-            content: generateNewMessageContent(user, other, rand),
+            content: generateNewMessageContent(sender, receiver, rand),
             content_type: rand,
             timestamp: new Date().toString(),
-            sender: user,
+            sender,
             id: i,
             group_id,
-            read_by: [user, other]
+            read_by: []
         };
 
         messages.push(newMessage);
@@ -258,7 +258,7 @@ const generateGroupChats = (
                 profiles[i],
                 user,
                 i,
-                randomIntFromInterval(1, 4)
+                randomIntFromInterval(2, 3)
             )
         );
 
@@ -267,7 +267,7 @@ const generateGroupChats = (
                 user,
                 profiles[i],
                 i,
-                randomIntFromInterval(1, 4)
+                randomIntFromInterval(2, 3)
             )
         );
 
@@ -276,13 +276,12 @@ const generateGroupChats = (
                 profiles[i],
                 user,
                 i,
-                randomIntFromInterval(1, 4)
+                randomIntFromInterval(2, 3)
             )
         );
-
         groupChatList.push(newGroup);
     }
-
+    console.log(groupChatList);
     return groupChatList;
 };
 

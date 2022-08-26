@@ -1,5 +1,7 @@
 ## Transcendence
 
+Online competitive pong made easy
+
 Built by: <a href="https://github.com/rubennijhuis">rnijhuis</a>, <a href="https://github.com/zenololtan">ztan</a>, <a href="https://github.com/angeli-sk">akramp</a>, <a href="https://github.com/Maxberkenbosch">mberkenb</a> and <a href="https://github.com/juvan-de">juvan-de</a>
 
 <img src="./readme/profile_page.png">

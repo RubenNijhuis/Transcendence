@@ -36,13 +36,9 @@ import { useDataDebug } from "../utils/DebugDataContext";
 
 const ProfilePage = () => {
     const [userData, setUserData] = useState<Profile | null>(null);
-    const { profiles } = useDataDebug();
-    const { user, isLoggedIn } = useAuth();
+    const { profiles, matchHistory } = useDataDebug();
+    const { user } = useAuth();
     const { id } = useParams();
-
-    useEffect(() => {
-        if (isLoggedIn) Logger("AUTH", "Profile page", "Profile", user);
-    }, [isLoggedIn, user]);
 
     const getUserData = (id: number) => {
         const reqPromise = new Promise((resolve, reject) => {
@@ -63,22 +59,6 @@ const ProfilePage = () => {
         }
     }, [user, id]);
 
-    useEffect(() => {
-        if (userData !== null) {
-            const obj = {
-                userContextNam: user.username,
-                requestesUsername: userData.username,
-                isMatch: user.username === userData.username
-            };
-            Logger(
-                "DEBUG",
-                "Profile page",
-                "Checking if this is the users page",
-                obj
-            );
-        }
-    }, [userData, user]);
-
     return (
         <Layout>
             {userData !== null ? (
@@ -96,10 +76,7 @@ const ProfilePage = () => {
                     {userData.username !== user.username && (
                         <ProfileActions profile={userData} />
                     )}
-                    <GameHistory
-                        player={userData}
-                        matches={generateGameResult(userData, 10)}
-                    />
+                    <GameHistory player={userData} matches={matchHistory} />
                 </div>
             ) : (
                 <Loader />
