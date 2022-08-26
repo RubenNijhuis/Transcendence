@@ -8,7 +8,10 @@ import {
     UsePipes,
     ValidationPipe
 } from "@nestjs/common";
+import { UserSeeder } from "src/database/seeds/user-create.seed";
+import { seederConfig } from "src/typeorm/typeorm.config";
 import { CreateUserDto } from "src/users/dtos/create-users.dto";
+import { userOppDto } from "src/users/dtos/user-opp.dto";
 import { UsersService } from "src/users/services/users/users.service";
 
 // GET
@@ -38,18 +41,31 @@ export class UsersController {
     @UsePipes(ValidationPipe)
     async createUsers(@Body() createUserDto: CreateUserDto) {
         try {
-            const user = await this.userService.createUser(createUserDto)
-            const ret = { "username": user.username }
-            return ret
+            const user = await this.userService.createUser(createUserDto);
+            const ret = { "username": user.username };
+            return ret;
         } catch (error) {
-            return error
+            return error;
         }
     }
 
     @Get('seeder')
-    seedUsers() {
-        for (var i = 0; i < 200; i++) {
+    async seedUsers() {
+        // Creates 200 users
+        const seed = new UserSeeder({ seedingSource: seederConfig });
+        await seed.run();
+    }
+
+    @Post('addFriend')
+    async addFriend(@Body() userOppDto:userOppDto) {
+        try {
+            await this.userService.findUserByUsername(userOppDto.username);
 
         }
+        catch (error) {
+            return error;
+        }
     }
+
+
 }
