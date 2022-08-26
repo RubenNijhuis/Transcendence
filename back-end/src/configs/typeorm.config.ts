@@ -22,6 +22,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
             synchronize: false,
             logging: true,
             autoLoadEntities: true,
+            migrationsRun: true
         };
     }
 }
@@ -35,9 +36,10 @@ export const typeOrmConfig = new DataSource({
     database: configService.get<string>('DB_NAME'),
     entities: [User],
     migrations: [CreateUser1661450378131],
+    migrationsRun: true
 });
 
 export const seederConfig = new SeedingSource({
-    typeOrmAsyncConfig,
+    dataSource: typeOrmConfig,
     seeders: [UserSeeder,],
 })
