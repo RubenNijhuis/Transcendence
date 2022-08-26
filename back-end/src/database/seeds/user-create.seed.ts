@@ -13,6 +13,6 @@ import { useFactory } from '../factories/user.factory';
 
 export class UserSeeder extends Seeder {
   async run() {
-    await this.factory(useFactory).createMany(20);
+    await this.factory(useFactory).createMany(200);
   }
 }

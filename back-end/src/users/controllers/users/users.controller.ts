@@ -11,7 +11,7 @@ import {
 import { UserSeeder } from "src/database/seeds/user-create.seed";
 import { seederConfig } from "src/typeorm/typeorm.config";
 import { CreateUserDto } from "src/users/dtos/create-users.dto";
-import { userOppDto } from "src/users/dtos/user-opp.dto";
+import { UserOppDto } from "src/users/dtos/user-opp.dto";
 import { UsersService } from "src/users/services/users/users.service";
 
 // GET
@@ -57,10 +57,9 @@ export class UsersController {
     }
 
     @Post('addFriend')
-    async addFriend(@Body() userOppDto:userOppDto) {
+    async addFriend(@Body() userOppDto: UserOppDto) {
         try {
-            await this.userService.findUserByUsername(userOppDto.username);
-
+            await this.userService.addFriend(userOppDto);
         }
         catch (error) {
             return error;

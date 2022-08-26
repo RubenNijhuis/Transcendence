@@ -1,3 +1,4 @@
+import { text } from 'stream/consumers';
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity() // need to have a token to search on
@@ -37,39 +38,39 @@ export class User {
   email: string;
 
   @Column({
-	name: 'rank',
+  	name: 'rank',
     nullable: false,
     default: 0
   })
   rank: number;
 
   @Column({
-	name: 'wins',
+	  name: 'wins',
     nullable: false,
     default: 0
   })
   wins: number;
 
   @Column({
-	name: 'losses',
+	  name: 'losses',
     nullable: false,
     default: 0
   })
   losses: number;
 
   @Column({
-	name: 'friendlist',
-    nullable: false,
-    default: '',
+	  name: 'friendlist',
+    type: 'text',
+    array: true,
   })
-  friends: string;
+  friends: [];
 
   @Column({
-	name: 'blocklist',
-    nullable: false,
-    default: '',
+	  name: 'blocklist',
+    type: 'text',
+    array: true,
   })
-  blocked: string;
+  blocked: [];
 }
 
 export default User;

@@ -5,8 +5,6 @@ import { env } from 'node:process';
 
 import * as session from 'express-session';
 import * as passport from 'passport';
-import { seederConfig } from './typeorm/typeorm.config';
-import { UserSeeder } from './database/seeds/user-create.seed';
 import { corsConfig, pipenConfig, sessionConfig } from './configs/app.config';
 
 async function bootstrap() {
@@ -23,10 +21,6 @@ async function bootstrap() {
     passport.serializeUser((user, done) => {
         done(null, user);
     });
-    // Running seeders
-    const seed = new UserSeeder({ seedingSource: seederConfig });
-    seed.run();
-    //
     passport.deserializeUser((user, done) => { // why does this fix the "Error: Failed to serialize user into session"?
         done(null, user);
     });
