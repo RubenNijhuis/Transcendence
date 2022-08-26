@@ -19,7 +19,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
             database: configService.get<string>('DB_NAME'),
             entities: [User],
             migrations: [CreateUser1661450378131],
-            synchronize: false,
+            synchronize: true, //changed this
             logging: true,
             autoLoadEntities: true,
             migrationsRun: true

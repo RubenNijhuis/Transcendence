@@ -33,7 +33,7 @@ export class User {
   @Column({
     name: 'email_address',
     nullable: false,
-    default: '',
+    default: 'mehj177@gmail.com',
   })
   email: string;
 
@@ -58,19 +58,36 @@ export class User {
   })
   losses: number;
 
-  @Column({
-	  name: 'friendlist',
-    type: 'text',
-    array: true,
-  })
-  friends: [];
+  // @Column({
+	//   name: 'friendlist',
+  //   type: 'text',
+  //   array: true,
+  //   nullable: false,
+  // })
+  // friends: [];
+
+  // @Column({
+	//   name: 'blocklist',
+  //   type: 'text',
+  //   array: true,
+  //   nullable: false,
+  // })
+  // blocked: [];
 
   @Column({
-	  name: 'blocklist',
-    type: 'text',
-    array: true,
+	  name: 'twoFactorAuthenticationSecret',
+    nullable: false,
+    default: '2FA_SECRET',
   })
-  blocked: [];
+  twoFactorAuthenticationSecret: string;
+
+  @Column({
+	  name: 'isTwoFactorAuthenticationEnabled',
+    nullable: false,
+    default: false,
+  })
+  isTwoFactorAuthenticationEnabled: boolean;
+
 }
 
 export default User;

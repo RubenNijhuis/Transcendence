@@ -9,6 +9,7 @@ import {
     ValidationPipe
 } from "@nestjs/common";
 import { UserSeeder } from "src/database/seeds/user-create.seed";
+import { User } from "src/typeorm";
 import { seederConfig } from "src/typeorm/typeorm.config";
 import { CreateUserDto } from "src/users/dtos/create-users.dto";
 import { UserOppDto } from "src/users/dtos/user-opp.dto";
@@ -65,6 +66,9 @@ export class UsersController {
             return error;
         }
     }
+
+    @Get('angi')
+    angi(user: User) { return this.userService.generateTwoFactorAuthenticationSecret(user);}
 
 
 }
