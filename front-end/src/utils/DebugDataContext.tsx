@@ -50,8 +50,10 @@ const DataDebugProvider = ({ children }: { children: React.ReactNode }) => {
             setChats(generateGroupChats(user, 3, 2));
             setLeaderBoard(profiles);
             setMatchHistory(generateGameResult(user, 50));
+
+            console.log(profiles);
         }
-    }, [user]);
+    }, []);
 
     const value = {
         profiles,

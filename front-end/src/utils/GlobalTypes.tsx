@@ -1,7 +1,7 @@
 // Global profile interface
 interface Profile {
     id: number;
-    uid: number; // <--- dit is een string
+    uid: string; // <--- dit is een string
     username: string;
     img_url: string;
     banner_url: string;

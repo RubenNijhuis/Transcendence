@@ -18,14 +18,6 @@ import { useAuth } from "../utils/AuthContext";
 // Types
 import { Profile } from "../utils/GlobalTypes";
 
-// Debug
-import Logger from "../utils/Logger";
-
-// Random data
-import {
-    generateGameResult,
-    generateProfile
-} from "../utils/randomDataGenerator";
 import {
     largeRadius,
     mainColor,
@@ -57,7 +49,7 @@ const ProfilePage = () => {
         } else {
             setUserData(user);
         }
-    }, [user, id]);
+    }, []);
 
     return (
         <Layout>
@@ -69,10 +61,7 @@ const ProfilePage = () => {
                     }}
                 >
                     <ProfileDisplay user={userData} />
-                    <ProfileStats
-                        player={userData}
-                        matches={generateGameResult(userData, 50)}
-                    />
+                    <ProfileStats player={userData} matches={matchHistory} />
                     {userData.username !== user.username && (
                         <ProfileActions profile={userData} />
                     )}

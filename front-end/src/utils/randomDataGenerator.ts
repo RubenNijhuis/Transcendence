@@ -82,7 +82,7 @@ const generateProfile = (amount: number): Profile[] => {
         const username: string =
             names[randomIntFromInterval(0, names.length - 1)];
         const email: string = `${username}@outlook.com`;
-        const uid: number = i + 1;
+        const uid: string = randomIntFromInterval(1, 1000000000).toString();
         const rank: number = i + 1;
 
         const randomWidth: number =
@@ -104,7 +104,7 @@ const generateProfile = (amount: number): Profile[] => {
         const newProfile: Profile = {
             username,
             email,
-            id: uid,
+            id: i,
             banner_url,
             uid,
             color: "#1e1e1e",
