@@ -48,7 +48,11 @@ export class UsersService {
     const newUser = this.userRepository.create(createUserDto);
     return this.userRepository.save(newUser);
   }
-
+/* 
+      checking if selected user is already a friend, if the user/selected is blocked by either of the users, etc
+      adding the selected user to the friendlist
+      after adding to the friendlist, im also adding the user to the friendlist of the selected user
+*/
   async addFriend(userOppDto: UserOppDto) { // what should be checked in front-end and what in back-end
     const user = await this.findUserByUsername(userOppDto.username);
     const selectedUser = await this.findUserByUsername(userOppDto.selectedUsername);    
@@ -75,7 +79,11 @@ export class UsersService {
     if (!selectedFriendlist.includes(userOppDto.username, 0))
       this.addFriend({ username: userOppDto.selectedUsername, selectedUsername: userOppDto.username});
   }
-
+/* 
+      checking if selected user is already blocked, etc
+      adding the selected user to the blocklist
+      after adding to the blocklist, im also removing the user and selected from eachothers friendlist
+*/
   async addBlocked(userOppDto: UserOppDto) { // what should be checked in front-end and what in back-end
     const user = await this.findUserByUsername(userOppDto.username);
     const selectedUser = await this.findUserByUsername(userOppDto.selectedUsername);
@@ -90,7 +98,6 @@ export class UsersService {
       console.log("\nthrows error\n");
       throw TypeError; // idk what to throw lol
     }
-    // remove each other from friendlist
     blockList.push(userOppDto.selectedUsername);
     await this.userRepository.createQueryBuilder()
       .update({ blocked: JSON.stringify(blockList) }) // protect from injections?
@@ -98,11 +105,14 @@ export class UsersService {
       .execute();
     if (friendlist.includes(userOppDto.selectedUsername)) {
         this.removeFriend(userOppDto);
-        console.log("\nhier gaat het fout\n");
         this.removeFriend({username: userOppDto.selectedUsername, selectedUsername: userOppDto.username});
       }
   }
-
+/* 
+      checking if selected user is on the friendlist, etc
+      removing the selected from the friendlist
+      after removing from friendlist, im also removing the user from the selected friendlist
+*/
   async removeFriend(userOppDto: UserOppDto) { // what should be checked in front-end and what in back-end
     const user = await this.findUserByUsername(userOppDto.username);
     const selectedUser = await this.findUserByUsername(userOppDto.selectedUsername);
