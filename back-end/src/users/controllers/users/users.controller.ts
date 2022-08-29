@@ -58,9 +58,9 @@ export class UsersController {
 
     @Post('addfriend')
     @UsePipes(ValidationPipe)
-    async addFriend(@Body() userOppDto: UserOppDto) {
+    async addfriend(@Body() userOppDto: UserOppDto) {
         try {
-            await this.userService.addFriend(userOppDto);
+        await this.userService.addFriend(userOppDto);
         }
         catch (error) {
             return error;
@@ -69,9 +69,31 @@ export class UsersController {
 
     @Post('addblocked')
     @UsePipes(ValidationPipe)
-    async addBlocked(@Body() userOppDto: UserOppDto) {
+    async addblocked(@Body() userOppDto: UserOppDto) {
         try {
-            await this.userService.addBlocked(userOppDto);
+        await this.userService.addBlocked(userOppDto);
+        }
+        catch (error) {
+            return error;
+        }
+    }
+
+    @Post('removefriend')
+    @UsePipes(ValidationPipe)
+    async removefriend(@Body() userOppDto: UserOppDto) {
+        try {
+        await this.userService.removeFriend(userOppDto);
+        }
+        catch (error) {
+            return error;
+        }
+    }
+
+    @Post('removeblocked')
+    @UsePipes(ValidationPipe)
+    async removeblocked(@Body() userOppDto: UserOppDto) {
+        try {
+        await this.userService.removeBlocked(userOppDto);
         }
         catch (error) {
             return error;
