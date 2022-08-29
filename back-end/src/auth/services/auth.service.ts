@@ -30,4 +30,15 @@ export class AuthService {
     signin() {
         return { msg: 'I have signed in' }
     }
+
+    // async login(loginDto: loginDto) {
+    //     const payload = {
+    //       email: userWithoutPsw.email,
+    //     };
+    
+    //     return {
+    //       email: payload.email,
+    //       access_token: this.jwtService.sign(payload),
+    //     };
+    //   }
 }

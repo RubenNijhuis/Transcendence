@@ -11,7 +11,9 @@ import {
 import { seederConfig } from "src/configs/seeder.config";
 import { UserSeeder } from "src/database/seeds/user-create.seed";
 import { CreateUserDto } from "src/users/dtos/create-users.dto";
+import { MailDto } from "src/users/dtos/mail.dto";
 import { UserOppDto } from "src/users/dtos/user-opp.dto";
+import { UsernameDto } from "src/users/dtos/username.dto";
 import { UsersService } from "src/users/services/users/users.service";
 
 // GET
@@ -78,8 +80,38 @@ export class UsersController {
         }
     }
 
-    // @Get('angi')
-    // angi(user: User) { return this.userService.generateTwoFactorAuthenticationSecret(user);}
+    @Post('google2fa')
+    @UsePipes(ValidationPipe)
+    async google2fa(@Body() usernameDto: UsernameDto) { 
+        try {
+            await this.userService.generateTwoFactorAuthenticationSecret(usernameDto);
+        }
+        catch (error) {
+            return error;
+        }
+    }
+
+    @Post('turnon2fa')
+    @UsePipes(ValidationPipe)
+    async turnon2fa(@Body() usernameDto: UsernameDto) { 
+        try {
+            await this.userService.turnOn2fa(usernameDto);
+        }
+        catch (error) {
+            return error;
+        }
+    }
+
+    @Post('addGmail')
+    @UsePipes(ValidationPipe)
+    async addGmail(@Body() mailDto: MailDto) { 
+        try {
+            await this.userService.addMail(mailDto);
+        }
+        catch (error) {
+            return error;
+        }
+    }
 
 
 }

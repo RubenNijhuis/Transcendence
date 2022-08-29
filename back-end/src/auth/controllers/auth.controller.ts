@@ -9,7 +9,9 @@ import { AuthService } from '../services/auth.service';
 export class AuthController {
   @Get('login')
   @UseGuards(FortyTwoAuthGuard)
-  login() {}
+  login() {
+      // this.authService.login();
+  }
 
   @Get('42/callback')
   @UseGuards(FortyTwoAuthGuard)
