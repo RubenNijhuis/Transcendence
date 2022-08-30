@@ -1,24 +1,27 @@
-// import { ExtractJwt, Strategy } from 'passport-jwt';
-// import { PassportStrategy } from '@nestjs/passport';
-// import { Injectable } from '@nestjs/common';
-// import { UsersService } from '../../users/users.service';
-// import { TokenPayload } from '../token-payload.entity';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { PassportStrategy } from '@nestjs/passport';
+import { Injectable } from '@nestjs/common';
+import { UsersService } from 'src/users/services/users/users.service';
 
-// @Injectable()
-// export class JwtStrategy extends PassportStrategy(Strategy) {
-//   constructor(private readonly userService: UsersService) {
-//     super({
-//       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-//       secretOrKey: 'secret',
-//     });
-//   }
+@Injectable()
+export class Jwt2faStrategy extends PassportStrategy(Strategy, 'jwt-2fa') {
+  constructor(private readonly userService: UsersService) {
+    console.log("check");
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: 'secret',//make this a secret?
+    });
+  }
 
-//   async validate(payload: TokenPayload) {
-//     const user = await this.userService.findOne(payload.email);
+  async validate(payload: any) {
+    console.log("help");
+    const user = await this.userService.findUserByUsername(payload.username);
 
-//     if (user) {
-//       return user;
-//     }
-//   }
-// }
-
+    if (!user.isTwoFactorAuthenticationEnabled) {
+      return user;
+    }
+    if (payload.isTwoFactorAuthenticated) {
+      return user;
+    }
+  }
+}

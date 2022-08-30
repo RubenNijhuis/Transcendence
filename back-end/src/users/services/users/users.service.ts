@@ -8,6 +8,7 @@ import { authenticator } from 'otplib';
 import { toDataURL } from 'qrcode';
 import { UsernameDto } from "src/users/dtos/username.dto";
 import { MailDto } from "src/users/dtos/mail.dto";
+import { twofadto } from "src/users/dtos/2fa.dto";
 
 @Injectable()
 export class UsersService {
@@ -94,8 +95,39 @@ export class UsersService {
       .execute();
   }
 
-  async turnOn2fa(usernameDto: UsernameDto) {
+  
+  async update2fasecret(usernameDto: UsernameDto, secret: string) {
     const ret = await this.findUserByUsername(usernameDto.username);
+    
+    return await this.userRepository.createQueryBuilder()
+    .update(ret)
+    .set({ twoFactorAuthenticationSecret: secret,})
+    .where({ id: ret.id })
+    .returning('*')
+    .execute();
+  }
+  
+  async addMail(mailDto: MailDto) {
+    const ret = await this.findUserByUsername(mailDto.username);
+    
+    return await this.userRepository.createQueryBuilder()
+    .update(ret)
+    .set({ email: mailDto.email,})
+    .where({ id: ret.id })
+    .returning('*')
+    .execute();
+  }
+  
+  async isTwoFactorAuthenticationCodeValid(Twofadto: twofadto) {
+    const ret = await this.findUserByUsername(Twofadto.username);
+    return authenticator.verify({
+      token: Twofadto.twoFactorAuthenticationCode,
+      secret: ret.twoFactorAuthenticationSecret,
+    });
+  }
+  
+  async turnOn2fa(Twofadto: twofadto) {
+    const ret = await this.findUserByUsername(Twofadto.username);
 
     return await this.userRepository.createQueryBuilder()
     .update(ret)
@@ -105,36 +137,6 @@ export class UsersService {
     .execute();
   }
 
-  async update2fasecret(usernameDto: UsernameDto, secret: string) {
-    const ret = await this.findUserByUsername(usernameDto.username);
-
-    return await this.userRepository.createQueryBuilder()
-    .update(ret)
-    .set({ twoFactorAuthenticationSecret: secret,})
-    .where({ id: ret.id })
-    .returning('*')
-    .execute();
-  }
-
-  async addMail(mailDto: MailDto) {
-    const ret = await this.findUserByUsername(mailDto.username);
-
-    return await this.userRepository.createQueryBuilder()
-    .update(ret)
-    .set({ email: mailDto.email,})
-    .where({ id: ret.id })
-    .returning('*')
-    .execute();
-  }
-
-  isTwoFactorAuthenticationCodeValid(twoFactorAuthenticationCode: string, user: User) {
-    return authenticator.verify({
-      token: twoFactorAuthenticationCode,
-      secret: user.twoFactorAuthenticationSecret,
-    });
-  }
-
-
   async generateTwoFactorAuthenticationSecret(usernameDto: UsernameDto) {
     const ret = await this.findUserByUsername(usernameDto.username);
     
@@ -143,12 +145,16 @@ export class UsersService {
   }
 
     const secret = authenticator.generateSecret();
+    console.log("secret:");
     console.log(secret);
     this.update2fasecret(usernameDto, secret);
 
     const otpauthUrl = authenticator.keyuri(ret.email, 'AUTH_APP_NAME', ret.twoFactorAuthenticationSecret);
     
+    console.log("otapathurl:");
     console.log(otpauthUrl);
+
+    console.log("todataurl:");
     console.log(toDataURL(otpauthUrl));
     return(toDataURL(otpauthUrl));
     // await this.setTwoFactorAuthenticationSecret(secret, user.id);
