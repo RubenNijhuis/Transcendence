@@ -33,7 +33,7 @@ export class User {
   @Column({
     name: 'email_address',
     nullable: false,
-    default: 'mehj177@gmail.com',
+    default: '',
   })
   email: string;
 
@@ -58,39 +58,37 @@ export class User {
   })
   losses: number;
 
+  @Column({
+    name: 'friendlist',
+    nullable: false,
+    default: '[]',
+  })
+  friends: string;
+
+  @Column({
+    name: 'blocklist',
+    nullable: false,
+    default: '[]',
+  })
+  blocked: string;
+
   // @Column({
 	//   name: 'friendlist',
-  //   type: 'text',
-  //   array: true,
+  //   type: 'jsonb',
+  //   array: false,
   //   nullable: false,
+  //   default: () => "'[]'"
   // })
-  // friends: [];
+  // friends: Array<{ username: string }>;
 
   // @Column({
 	//   name: 'blocklist',
-  //   type: 'text',
-  //   array: true,
+  //   type: 'jsonb',
+  //   array: false,
   //   nullable: false,
+  //   default: () => "'[]'"
   // })
-  // blocked: [];
-
-  @Column({
-	  name: 'friendlist',
-    type: 'jsonb',
-    array: false,
-    nullable: false,
-    default: () => "'[]'"
-  })
-  friends: Array<{ username: string }>;
-
-  @Column({
-	  name: 'blocklist',
-    type: 'jsonb',
-    array: false,
-    nullable: false,
-    default: () => "'[]'"
-  })
-  blocked: Array<{ username: string }>;
+  // blocked: Array<{ username: string }>;
   
   @Column({
 	  name: 'twoFactorAuthenticationSecret',

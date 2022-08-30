@@ -30,7 +30,7 @@ export class UsersService {
     return this.userRepository.findOne({where: {username}});
   }
 
-  findUserByemail(email: string) {
+  findUserByEmail(email: string) {
     return this.userRepository.findOne({where: {email}});
   }
 
@@ -48,46 +48,111 @@ export class UsersService {
     const newUser = this.userRepository.create(createUserDto);
     return this.userRepository.save(newUser);
   }
+/* 
+      checking if selected user is already a friend, if the user/selected is blocked by either of the users, etc
+      adding the selected user to the friendlist
+      after adding to the friendlist, im also adding the user to the friendlist of the selected user
+*/
+  async addFriend(userOppDto: UserOppDto) { // what should be checked in front-end and what in back-end
+    const user = await this.findUserByUsername(userOppDto.username);
+    const selectedUser = await this.findUserByUsername(userOppDto.selectedUsername);    
+    let friendlist: Array<string> = JSON.parse(user.friends);
+    let blocklist: Array<string> = JSON.parse(user.blocked);
+    let selectedFriendlist: Array<string> = JSON.parse(selectedUser.friends);
+    let selectedBlocklist: Array<string> = JSON.parse(selectedUser.blocked);
 
-  async addFriend(userOppDto: UserOppDto) {
-    const ret = await this.findUserByUsername(userOppDto.username);
-    if (!ret || 
-        userOppDto.username === userOppDto.selectedUsername || 
-        ret.friends.find(element => element.username === userOppDto.selectedUsername)) {
+    if (!user 
+        || !selectedUser 
+        || userOppDto.username === userOppDto.selectedUsername 
+        || blocklist.includes(userOppDto.selectedUsername, 0) 
+        || selectedBlocklist.includes(userOppDto.username, 0) 
+        || (friendlist.includes(userOppDto.selectedUsername, 0) 
+        && friendlist.length != 0)) {
+      console.log("\nthrows error\n");
       throw TypeError; // idk what to throw lol
     }
-    return await this.userRepository.createQueryBuilder()
-      .update({ friends: [...ret.friends, { username: userOppDto.selectedUsername}]})
-      .where({ id: ret.id })
-      .returning('*')
+    friendlist.push(userOppDto.selectedUsername);
+    await this.userRepository.createQueryBuilder()
+      .update({ friends: JSON.stringify(friendlist) }) // protect from injections?
+      .where({ id: user.id })
       .execute();
+    if (!selectedFriendlist.includes(userOppDto.username, 0))
+      this.addFriend({ username: userOppDto.selectedUsername, selectedUsername: userOppDto.username});
+  }
+/* 
+      checking if selected user is already blocked, etc
+      adding the selected user to the blocklist
+      after adding to the blocklist, im also removing the user and selected from eachothers friendlist
+*/
+  async addBlocked(userOppDto: UserOppDto) { // what should be checked in front-end and what in back-end
+    const user = await this.findUserByUsername(userOppDto.username);
+    const selectedUser = await this.findUserByUsername(userOppDto.selectedUsername);
+    let blockList: Array<string> = JSON.parse(user.blocked);
+    let friendlist: Array<string> = JSON.parse(user.friends);
+
+    if (!user 
+        || !selectedUser 
+        || userOppDto.username === userOppDto.selectedUsername 
+        || (blockList.includes(userOppDto.selectedUsername, 0) 
+        && blockList.length != 0)) {
+      console.log("\nthrows error\n");
+      throw TypeError; // idk what to throw lol
+    }
+    blockList.push(userOppDto.selectedUsername);
+    await this.userRepository.createQueryBuilder()
+      .update({ blocked: JSON.stringify(blockList) }) // protect from injections?
+      .where({ id: user.id })
+      .execute();
+    if (friendlist.includes(userOppDto.selectedUsername)) {
+        this.removeFriend(userOppDto);
+        this.removeFriend({username: userOppDto.selectedUsername, selectedUsername: userOppDto.username});
+      }
+  }
+/* 
+      checking if selected user is on the friendlist, etc
+      removing the selected from the friendlist
+      after removing from friendlist, im also removing the user from the selected friendlist
+*/
+  async removeFriend(userOppDto: UserOppDto) { // what should be checked in front-end and what in back-end
+    const user = await this.findUserByUsername(userOppDto.username);
+    const selectedUser = await this.findUserByUsername(userOppDto.selectedUsername);
+    let friendlist: Array<string> = JSON.parse(user.friends);
+    let selectedFriendlist: Array<string> = JSON.parse(selectedUser.friends);
+
+    if (!user 
+        || !selectedUser 
+        || userOppDto.username === userOppDto.selectedUsername 
+        || !friendlist.includes(userOppDto.selectedUsername, 0) 
+        || friendlist.length == 0) {
+      console.log("\nthrows error\n");
+      throw TypeError; // idk what to throw lol
+    }
+    friendlist.splice(friendlist.indexOf(userOppDto.selectedUsername, 0));
+    await this.userRepository.createQueryBuilder()
+      .update({ friends: JSON.stringify(friendlist) }) // protect from injections?
+      .where({ id: user.id })
+      .execute();
+    if (selectedFriendlist.includes(userOppDto.username, 0))
+      this.removeFriend({ username: userOppDto.selectedUsername, selectedUsername: userOppDto.username});
   }
 
-  async addBlocked(userOppDto: UserOppDto) {
-    const ret = await this.findUserByUsername(userOppDto.username);
-    if (!ret || 
-        userOppDto.username === userOppDto.selectedUsername || 
-        ret.blocked.find(element => element.username === userOppDto.selectedUsername)) {
-      throw TypeError; // idk what to throw lol
-    }
-    return await this.userRepository.createQueryBuilder()
-      .update({ blocked: [...ret.blocked, { username: userOppDto.selectedUsername}]})
-      .where({ id: ret.id })
-      .returning('*')
-      .execute();
-  }
+  async removeBlocked(userOppDto: UserOppDto) { // what should be checked in front-end and what in back-end
+    const user = await this.findUserByUsername(userOppDto.username);
+    const selectedUser = await this.findUserByUsername(userOppDto.selectedUsername);
+    let blockList: Array<string> = JSON.parse(user.blocked);
 
-  async deleteFriend(userOppDto: UserOppDto) {
-    const ret = await this.findUserByUsername(userOppDto.username);
-    if (!ret || 
-        userOppDto.username === userOppDto.selectedUsername || 
-        ret.blocked.find(element => element.username !== userOppDto.selectedUsername)) {
+    if (!user 
+        || !selectedUser 
+        || userOppDto.username === userOppDto.selectedUsername 
+        || !blockList.includes(userOppDto.selectedUsername, 0) 
+        || blockList.length == 0) {
+      console.log("\nthrows error\n");
       throw TypeError; // idk what to throw lol
     }
-    return await this.userRepository.createQueryBuilder()
-      .update({ friends: [...ret.friends, { username: userOppDto.selectedUsername}]})
-      .where({ id: ret.id })
-      .returning('*')
+    blockList.splice(blockList.indexOf(userOppDto.selectedUsername, 0));
+    await this.userRepository.createQueryBuilder()
+      .update({ blocked: JSON.stringify(blockList) }) // protect from injections?
+      .where({ id: user.id })
       .execute();
   }
 
