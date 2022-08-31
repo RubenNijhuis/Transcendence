@@ -2,6 +2,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { CreateUser1661542055999 } from "src/database/migrations/1661542055999-CreateUser";
 import { User } from "./user.entity";
+import { Chat } from "../chat/chat.entity";
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
     imports: [ConfigModule],
@@ -14,12 +15,12 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
             username: configService.get<string>('DB_USER'),
             password: configService.get<string>('DB_PASS'),
             database: configService.get<string>('DB_NAME'),
-            entities: [User],
+            entities: [User, Chat],
             migrations: [CreateUser1661542055999],
-            synchronize: false,
+            synchronize: true,
             logging: true,
             autoLoadEntities: true,
-            migrationsRun: true
+            // migrationsRun: true
         };
     }
 }

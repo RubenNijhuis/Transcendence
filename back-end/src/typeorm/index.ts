@@ -1,6 +1,7 @@
 import { User } from "./user.entity";
-
-const entities = [User,];
+import { Chat } from "../chat/chat.entity";
+const entities = [User,Chat];
 
 export { User };
+export { Chat };
 export default entities;
