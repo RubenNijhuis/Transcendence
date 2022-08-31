@@ -4,6 +4,7 @@ class Ball {
     positionX: number;
     positionY: number;
 
+    velocity: number;
     velocityX: number;
     velocityY: number;
 
@@ -17,15 +18,17 @@ class Ball {
     constructor(context: any, c: HTMLCanvasElement) {
         this.positionX = c.clientWidth / 2;
         this.positionY = c.clientHeight / 2;
-
-        this.velocityX = 2.5;
-        this.velocityY = 2.5;
-
-        this.radius = 10;
-
+        
         this.canvas = c;
         this.context = context;
+        
+        this.radius = this.canvas.width / 75;
+        
+        this.velocity = this.canvas.width / 300
 
+        this.velocityX = randomIntFromInterval(-(this.velocity), this.velocity);
+        this.velocityY = randomIntFromInterval(-(this.velocity), this.velocity);
+        
         this.color = "#1e1e1e";
     }
 
@@ -53,7 +56,8 @@ class Ball {
     reset() {
         this.positionX = this.canvas.clientWidth / 2;
         this.positionY = this.canvas.clientHeight / 2;
-        this.start();
+        this.velocityX = this.velocityY = randomIntFromInterval(-(this.velocity), this.velocity);
+        //this.start();
     }
 
     setPosition(posX: number, posY: number) {
