@@ -3,6 +3,7 @@ import { GroupChat } from "../../utils/GlobalTypes";
 
 // Components
 import ChatElement from "../../components/ChatElements";
+import ChatInput from "../ChatInput";
 
 // Styling
 import { Container } from "./ChatBox.style";
@@ -31,6 +32,7 @@ const ChatBox = ({ chat }: Props) => {
                     />
                 ))}
             </div>
+            <ChatInput user={user} groupchat={chat} />
         </Container>
     );
 };

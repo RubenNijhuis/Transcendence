@@ -1,12 +1,11 @@
 // Global profile interface
 interface Profile {
     id: number;
-    uid: string; // <--- dit is een string
+    uid: string;
     username: string;
     img_url: string;
     banner_url: string;
     color: string;
-    email: string;
     rank: number;
     wins: number;
     losses: number;
@@ -37,6 +36,8 @@ const enum MessageContentType {
     InvitePlay
 }
 
+type AllMessageTypes = SimpleMessage | PictureMessage | InvitePlayMessage;
+
 // How we define a simple message
 interface SimpleMessage {
     content: string;
@@ -58,13 +59,13 @@ interface InvitePlayMessage {
 
 // Message interface
 interface Message {
-    content: SimpleMessage | PictureMessage | InvitePlayMessage;
+    content: AllMessageTypes;
     content_type: MessageContentType;
     timestamp: string;
     sender: Profile;
     id: number;
     group_id: number;
-    read_by: null | Profile[];
+    read_by: Profile[];
 }
 
 interface GroupChat {
@@ -80,7 +81,8 @@ export type {
     GroupChat,
     InvitePlayMessage,
     PictureMessage,
-    SimpleMessage
+    SimpleMessage,
+    AllMessageTypes
 };
 
 export { GameType, MessageContentType };

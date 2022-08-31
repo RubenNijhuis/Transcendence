@@ -7,7 +7,8 @@ import {
     SimpleMessage,
     InvitePlayMessage,
     GameType,
-    MessageContentType
+    MessageContentType,
+    AllMessageTypes
 } from "./GlobalTypes";
 
 import randomIntFromInterval from "./randomNumFromInterval";
@@ -81,7 +82,6 @@ const generateProfile = (amount: number): Profile[] => {
     for (let i = 0; i < amount; i++) {
         const username: string =
             names[randomIntFromInterval(0, names.length - 1)];
-        const email: string = `${username}@outlook.com`;
         const uid: string = randomIntFromInterval(1, 1000000000).toString();
         const rank: number = i + 1;
 
@@ -103,7 +103,6 @@ const generateProfile = (amount: number): Profile[] => {
 
         const newProfile: Profile = {
             username,
-            email,
             id: i,
             banner_url,
             uid,
@@ -178,8 +177,8 @@ const generateNewMessageContent = (
     sender: Profile,
     receiver: Profile,
     type: MessageContentType
-): SimpleMessage | PictureMessage | InvitePlayMessage => {
-    let messageContent: SimpleMessage | PictureMessage | InvitePlayMessage;
+): AllMessageTypes => {
+    let messageContent: AllMessageTypes;
 
     const rand = randomIntFromInterval(0, 1);
 
@@ -281,7 +280,6 @@ const generateGroupChats = (
         );
         groupChatList.push(newGroup);
     }
-    console.log(groupChatList);
     return groupChatList;
 };
 

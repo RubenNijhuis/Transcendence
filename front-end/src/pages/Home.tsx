@@ -2,12 +2,11 @@
 import Layout from "../components/Layout";
 import Heading from "../components/Heading";
 import { Fragment, useEffect } from "react";
+import axios from "axios";
 
 const Home = () => {
     useEffect(() => {
-        fetch("/api/users/")
-            .then((res) => res.json())
-            .then((res) => console.log(res));
+        axios.get("/api/users/seeder");
     }, []);
 
     return (
