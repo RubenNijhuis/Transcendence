@@ -33,7 +33,7 @@ const Container = styled.div<{ fromUser: boolean }>`
 const InviteMessageDisplay = ({ fromUser, content }: Props) => (
     <Container fromUser={fromUser}>
         <div>
-            <span>{content.opponent.username}</span>
+            <span>{content.user.username}</span>
             <p>Is inviting you to play</p>
             <Button>Play a game</Button>
         </div>

@@ -76,7 +76,8 @@ const Container = styled.div`
 
                 a {
                     color: ${lightTextColor};
-                    font-weight: 500;
+                    font-size: 18px;
+                    font-weight: 600;
                     text-decoration: none;
 
                     &:visited {

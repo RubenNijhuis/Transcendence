@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { text } from 'stream/consumers';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity() // need to have a token to search on
 export class User {
@@ -37,37 +38,72 @@ export class User {
   email: string;
 
   @Column({
-	name: 'rank',
+  	name: 'rank',
     nullable: false,
     default: 0
   })
   rank: number;
 
   @Column({
-	name: 'wins',
+	  name: 'wins',
     nullable: false,
     default: 0
   })
   wins: number;
 
   @Column({
-	name: 'losses',
+	  name: 'losses',
     nullable: false,
     default: 0
   })
   losses: number;
 
   @Column({
-	name: 'friendlist',
+    name: 'friendlist',
     nullable: false,
-    default: '',
+    default: '[]',
   })
   friends: string;
 
   @Column({
-	name: 'blocklist',
+    name: 'blocklist',
     nullable: false,
-    default: '',
+    default: '[]',
   })
   blocked: string;
+
+  // @Column({
+	//   name: 'friendlist',
+  //   type: 'jsonb',
+  //   array: false,
+  //   nullable: false,
+  //   default: () => "'[]'"
+  // })
+  // friends: Array<{ username: string }>;
+
+  // @Column({
+	//   name: 'blocklist',
+  //   type: 'jsonb',
+  //   array: false,
+  //   nullable: false,
+  //   default: () => "'[]'"
+  // })
+  // blocked: Array<{ username: string }>;
+  
+  @Column({
+	  name: 'twoFactorAuthenticationSecret',
+    nullable: false,
+    default: '2FA_SECRET',
+  })
+  twoFactorAuthenticationSecret: string;
+
+  @Column({
+	  name: 'isTwoFactorAuthenticationEnabled',
+    nullable: false,
+    default: false,
+  })
+  isTwoFactorAuthenticationEnabled: boolean;
+
 }
+
+export default User;

@@ -12,6 +12,7 @@ import {
 import SimpleMessageDisplay from "./SimpleMessageDisplay";
 import PictureMessageDisplay from "./PictureMessageDisplay";
 import InviteMessageDisplay from "./InviteMessageDisplay";
+import Logger from "../../utils/Logger";
 
 interface Props {
     receiver: Profile;
@@ -20,18 +21,13 @@ interface Props {
 }
 
 const ChatElement = ({ receiver, sender, content }: Props) => {
-    const fromUser: boolean = receiver.uid === content.sender.uid;
+    const fromUser: boolean = receiver.username === sender.username;
 
-    if (!fromUser)
-        console.log(
-            "\nReceiver:",
-            receiver.username,
-            "\nSender",
-            content.sender.username,
-            "\nType:",
-            content.content_type,
-            "\n"
-        );
+    Logger("DEBUG", "Chat element", "From user?", {
+        fromUser,
+        sender: sender.username,
+        receiver: receiver.username
+    });
 
     switch (content.content_type) {
         case MessageContentType.Simple:
