@@ -19,12 +19,12 @@ class Bat {
 
         this.positionX = posX;
         this.positionY = posY;
-
-        this.width = 20;
-        this.height = 125;
-
+        
         this.canvas = c;
         this.context = context;
+
+        this.width = this.canvas.width / 40;
+        this.height = this.canvas.width / 7;
 
         this.color = "#1e1e1e";
     }
@@ -47,6 +47,19 @@ class Bat {
 
     setPosition(posY: number) {
         this.positionY = posY;
+    }
+    
+    wallCollisionBatUp() {
+        if (this.positionY - this.height/2 <= 0)
+            return (true);
+        else    
+            return (false);
+    }
+    wallCollisionBatDown() {
+        if (this.positionY + this.height/2 >= this.canvas.height)
+            return (true);
+        else    
+            return (false);
     }
 }
 
