@@ -6,7 +6,6 @@ export class useFactory extends Factory<User> {
   protected async entity(): Promise<User> {
     const user = new User()
     user.username = randFullName()
-    user.email = randEmail()
     return user
   }
 }

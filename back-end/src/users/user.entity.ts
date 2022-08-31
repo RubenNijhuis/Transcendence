@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity() // need to have a token to search on
 export class User {
@@ -49,39 +49,6 @@ export class User {
     default: 0
   })
   losses: number;
-
-  // change thiss
-  @Column({
-    name: 'friendlist',
-    nullable: false,
-    default: '[]',
-  })
-  friends: string;
-
-  @Column({
-    name: 'blocklist',
-    nullable: false,
-    default: '[]',
-  })
-  blocked: string;
-
-  // @Column({
-	//   name: 'friendlist',
-  //   type: 'jsonb',
-  //   array: false,
-  //   nullable: false,
-  //   default: () => "'[]'"
-  // })
-  // friends: Array<{ username: string }>;
-
-  // @Column({
-	//   name: 'blocklist',
-  //   type: 'jsonb',
-  //   array: false,
-  //   nullable: false,
-  //   default: () => "'[]'"
-  // })
-  // blocked: Array<{ username: string }>;
   
   @Column({
 	  name: 'twoFactorAuthenticationSecret',
@@ -97,6 +64,16 @@ export class User {
   })
   isTwoFactorAuthenticationEnabled: boolean;
 
-}
+  @ManyToMany(type => User)
+  @JoinTable({ joinColumn: { name: 'users_id_1' } })
+  friendsrequests: User[];
 
+  @ManyToMany(type => User)
+  @JoinTable({ joinColumn: { name: 'users_id_1' } })
+  friends: User[];
+
+  @ManyToMany(type => User)
+  @JoinTable({ joinColumn: { name: 'users_id_1' } })
+  Blocked: User[];
+}
 export default User;

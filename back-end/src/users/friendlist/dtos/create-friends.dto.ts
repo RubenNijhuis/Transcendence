@@ -1,9 +1,9 @@
 import { IsNotEmpty } from "class-validator";
 
-export class UserOppDto {
+export class CreateFriensdDto {
     @IsNotEmpty()
     username: string
 
     @IsNotEmpty()
-    selectedUsername: string
+    friendname: string
 }
