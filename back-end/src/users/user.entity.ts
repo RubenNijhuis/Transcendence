@@ -64,16 +64,16 @@ export class User {
   })
   isTwoFactorAuthenticationEnabled: boolean;
 
-  @ManyToMany(type => User)
-  @JoinTable({ joinColumn: { name: 'users_id_1' } })
-  friendsrequests: User[];
+  // @ManyToMany(type => User)
+  // @JoinTable({ joinColumn: { name: 'users_id_1' } })
+  // friendsrequests: User[];
 
-  @ManyToMany(type => User)
-  @JoinTable({ joinColumn: { name: 'users_id_1' } })
-  friends: User[];
+  // @ManyToMany(type => User)
+  // @JoinTable({ joinColumn: { name: 'users_id_1' } })
+  // friends: User[];
 
-  @ManyToMany(type => User)
-  @JoinTable({ joinColumn: { name: 'users_id_1' } })
-  Blocked: User[];
+  // @ManyToMany(type => User)
+  // @JoinTable({ joinColumn: { name: 'users_id_1' } })
+  // Blocked: User[];
 }
 export default User;

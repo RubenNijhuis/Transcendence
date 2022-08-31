@@ -8,16 +8,16 @@ export class FriendRequestController {
 
     @Get('getrequests?')
     async getrequests(@Query('username') username) {
-        await this.friendrequestService.getRequests(username);
+        return await this.friendrequestService.getRequests(username);
     }
 
     @Post('sendrequest')
     async senrequest(@Body() requestDto: CreateRequestDto) {
-        await this.friendrequestService.sendRequest(requestDto);
+        return await this.friendrequestService.sendRequest(requestDto);
     }
 
     @Post('removerequest')
     async removerequest(@Body() requestDto: CreateRequestDto) {
-        await this.friendrequestService.removeRequest(requestDto.username, requestDto.requested);
+        return await this.friendrequestService.removeRequest(requestDto.username, requestDto.requested);
     }
 }

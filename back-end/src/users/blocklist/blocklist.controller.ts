@@ -8,21 +8,21 @@ export class BlockListController {
 
     @Get('getblocked?')
     async getblocked(@Query('username') username) {
-        await this.blocklistService.getBlocked(username);
+        return await this.blocklistService.getBlocked(username);
     }
 
     @Post('getblock')
     async getblock(@Body() createBlockDto: CreateBlockDto) {
-        await this.blocklistService.getBlock(createBlockDto.username, createBlockDto.blocked);
+        return await this.blocklistService.getBlock(createBlockDto.username, createBlockDto.blocked);
     }
 
     @Post('addblock')
     async addblock(@Body() createBlockDto: CreateBlockDto) {
-        await this.blocklistService.blockPerson(createBlockDto);
+        return await this.blocklistService.blockPerson(createBlockDto);
     }
 
     @Post('unblock')
     async unblock(@Body() createBlockDto: CreateBlockDto) {
-        await this.blocklistService.unblockPerson(createBlockDto.username, createBlockDto.blocked);
+        return await this.blocklistService.unblockPerson(createBlockDto.username, createBlockDto.blocked);
     }
 }
