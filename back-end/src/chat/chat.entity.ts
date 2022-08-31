@@ -8,7 +8,7 @@ export class Chat {
   id: number;
 
   @Column()
-  group_id: string;
+  group_id: number;
  
   @CreateDateColumn({
     nullable: true

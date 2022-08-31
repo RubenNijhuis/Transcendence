@@ -14,13 +14,17 @@ export class ChatService {
     getAllMessages() {
         return this.chatRepository.find();
     }
-    async getAllMessagesByGroupId(group_id: string): Promise<Chat[]> {
+
+    async getAllMessagesByGroupId(group_id: number): Promise<Chat[]> {
+      console.log(group_id);
         const allMessages = await this.chatRepository
-            .createQueryBuilder("Chat")
+            .createQueryBuilder('chat')
             .where("group_id = :group_id", { group_id })
             .getMany();
+            console.log(allMessages);
         return allMessages;
     }
+    
     createChat(CreateChatDto: CreateChatDto) {
         const newChat = this.chatRepository.create(CreateChatDto);
         return this.chatRepository.save(newChat);

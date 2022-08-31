@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Query , Param, Post, Put } from '@nestjs/common';
 import { ChatService } from "src/chat/chat.service";
 import { CreateChatDto } from './dtos/create-chat.dto';
  
@@ -10,11 +10,13 @@ export class ChatController {
     getAllMessages() {
         return this.ChatService.getAllMessages();
     }
-    @Get('id/:groupid')
-    async getAllMessagesByGroupId(group_id: string) {
+
+    @Get('id/group_id?')
+    async getAllMessagesByGroupId(@Query('group_id') group_id) {
         const ret = await this.ChatService.getAllMessagesByGroupId(group_id);
       return ret;
     }
+
     @Post('createChat')
     async createChat(@Body() CreateChatDto: CreateChatDto) {
         try {

@@ -2,7 +2,7 @@ import { IsNotEmpty, MinLength } from "class-validator";
 
 export class CreateChatDto {
     @IsNotEmpty()
-    group_id: string;
+    group_id: number;
 
     @IsNotEmpty()
     content: string;
