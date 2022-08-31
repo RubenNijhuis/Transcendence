@@ -1,7 +1,9 @@
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { CreateUser1661771716474 } from "src/database/migrations/1661771716474-CreateUser";
+import { BlockList } from "src/users/blocklist/blocklist.entity";
 import { FriendList } from "src/users/friendlist/friendlist.entity";
+import FriendRequests from "src/users/friendrequests/friendrequest.entity";
 import { User } from "src/users/user.entity";
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
@@ -15,7 +17,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
             username: configService.get<string>('DB_USER'),
             password: configService.get<string>('DB_PASS'),
             database: configService.get<string>('DB_NAME'),
-            entities: [User, FriendList],
+            entities: [User, FriendList, BlockList, FriendRequests],
             migrations: [CreateUser1661771716474],
             synchronize: true,
             logging: true,

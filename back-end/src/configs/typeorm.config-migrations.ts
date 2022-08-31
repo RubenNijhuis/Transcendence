@@ -3,6 +3,8 @@ import { CreateUser1661771716474 } from "../database/migrations/1661771716474-Cr
 import { DataSource } from "typeorm";
 import { User } from "../users/user.entity";
 import { FriendList } from "../users/friendlist/friendlist.entity";
+import { BlockList } from "../users/blocklist/blocklist.entity";
+import FriendRequests from "../users/friendrequests/friendrequest.entity";
 
 const configService = new ConfigService();
 
@@ -13,7 +15,7 @@ export const typeOrmConfig = new DataSource({
     username: configService.get<string>('DB_USER'),
     password: configService.get<string>('DB_PASS'),
     database: configService.get<string>('DB_NAME'),
-    entities: [User, FriendList],
+    entities: [User, FriendList, BlockList, FriendRequests],
     migrations: [CreateUser1661771716474],
     migrationsRun: true
 });

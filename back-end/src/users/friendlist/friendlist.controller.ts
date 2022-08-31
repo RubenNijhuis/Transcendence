@@ -16,6 +16,11 @@ export class FriendlistController {
         await this.friendlistService.getFriend(createfriendsDto.username, createfriendsDto.friendname);
     }
 
+    @Post('isfriend')
+    async isfriend(@Body() createfriendsDto: CreateFriensdDto) {
+        return await this.friendlistService.isFriend(createfriendsDto.username, createfriendsDto.friendname);
+    }
+
     @Post('addfriend')
     async addfriend(@Body() createfriendsDto: CreateFriensdDto) {
         await this.friendlistService.addFriend(createfriendsDto);

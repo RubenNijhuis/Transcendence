@@ -22,14 +22,17 @@ export class FriendlistService {
 
     //getfriend
     async getFriend(username: string, friendname: string): Promise<FriendList> {
-        console.log("usr: " + username + ", frend: " + friendname)
-        const friends = await this.friendlistRepository
+        const friend = await this.friendlistRepository
             .createQueryBuilder('friend_list')
             .where('users = :username', { username })
             .andWhere('friends = :friendname', { friendname })
             .getOne();
-        console.log("hasfriend: " + friends);
-        return friends;
+        return friend;
+    }
+
+    async isFriend(username: string, friendname: string): Promise<boolean> {
+        return (!(await this.getFriend(username, friendname) === null) 
+            || !(await this.getFriend(friendname, username) === null))
     }
 
     //addfriend
