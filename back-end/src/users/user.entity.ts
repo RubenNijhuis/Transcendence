@@ -1,25 +1,24 @@
-import { text } from 'stream/consumers';
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity() // need to have a token to search on
 export class User {
-  @PrimaryGeneratedColumn({ // create this with 42 profile uid
+  @PrimaryGeneratedColumn({
     type: 'bigint',
     name: 'user_id',
   })
   id: number;
 
   @Column({
-    name: 'uid',
-    nullable: false,
-    default: '',
+    name: 'intra_id',
+    nullable: true,
+    unique: true
   })
-  uid: string;
+  intraID: string;
 
   @Column({
 	  name: 'username',
-    nullable: false,
-    default: '',
+    nullable: true,
+    unique: true
   })
   username: string;
 
@@ -29,13 +28,6 @@ export class User {
     default: '',
   })
   img_url: string;
-
-  @Column({
-    name: 'email_address',
-    nullable: false,
-    default: '',
-  })
-  email: string;
 
   @Column({
   	name: 'rank',
@@ -58,6 +50,7 @@ export class User {
   })
   losses: number;
 
+  // change thiss
   @Column({
     name: 'friendlist',
     nullable: false,

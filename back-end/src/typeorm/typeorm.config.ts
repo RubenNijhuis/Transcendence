@@ -1,7 +1,7 @@
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { CreateUser1661771716474 } from "src/database/migrations/1661771716474-CreateUser";
-import { User } from "./user.entity";
+import { User } from "../users/user.entity";
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
     imports: [ConfigModule],

@@ -9,7 +9,7 @@ export class AuthService {
     )  {}
 
     async validateUser(userDto: CreateUserDto): Promise<any> {
-        const user = await this.usersService.findUsersByIntraId(userDto.uid);
+        const user = await this.usersService.findUsersByIntraId(userDto.intraID);
     if (!user)
       return await this.createUser(userDto);
     return user;

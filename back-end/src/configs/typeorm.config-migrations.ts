@@ -1,7 +1,7 @@
 import { ConfigService } from "@nestjs/config";
 import { CreateUser1661771716474 } from "../database/migrations/1661771716474-CreateUser";
 import { DataSource } from "typeorm";
-import { User } from "../typeorm/user.entity";
+import { User } from "../users/user.entity";
 
 const configService = new ConfigService();
 

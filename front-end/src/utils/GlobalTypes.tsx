@@ -1,12 +1,12 @@
 // Global profile interface
 interface Profile {
     id: number;
-    uid: number; // <--- dit is een string
+    intraID: number; // <--- dit is een string en hete nu intraID want dats gwn beter
     username: string;
     img_url: string;
     banner_url: string;
     color: string;
-    email: string;
+    email: string; // <--- deze gedelete want dit hebben we niet echt nodig
     rank: number;
     wins: number;
     losses: number;

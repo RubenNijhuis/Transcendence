@@ -7,7 +7,7 @@ const Home = () => {
 
     // useEffect(() => {
     //     const user = {
-    //         uid: '123456789',
+    //         intraID: '123456789',
     //         username: "mberkenb",
     //     }
 

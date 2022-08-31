@@ -1,3 +1,4 @@
+import { HttpService } from "@nestjs/axios";
 import {
     Body,
     Controller,
@@ -13,15 +14,6 @@ import { UserSeeder } from "src/database/seeds/user-create.seed";
 import { CreateUserDto } from "src/users/dtos/create-users.dto";
 import { UserOppDto } from "src/users/dtos/user-opp.dto";
 import { UsersService } from "src/users/services/users/users.service";
-
-// GET
-//     / api / users /
-
-//     GET
-//     / api / users / 2
-
-// POST
-//     / api / user
 
 @Controller("users")
 export class UsersController {
@@ -60,7 +52,7 @@ export class UsersController {
     @UsePipes(ValidationPipe)
     async addfriend(@Body() userOppDto: UserOppDto) {
         try {
-        await this.userService.addFriend(userOppDto);
+            await this.userService.addFriend(userOppDto);
         }
         catch (error) {
             return error;
@@ -71,7 +63,7 @@ export class UsersController {
     @UsePipes(ValidationPipe)
     async addblocked(@Body() userOppDto: UserOppDto) {
         try {
-        await this.userService.addBlocked(userOppDto);
+            await this.userService.addBlocked(userOppDto);
         }
         catch (error) {
             return error;
@@ -82,7 +74,7 @@ export class UsersController {
     @UsePipes(ValidationPipe)
     async removefriend(@Body() userOppDto: UserOppDto) {
         try {
-        await this.userService.removeFriend(userOppDto);
+            await this.userService.removeFriend(userOppDto);
         }
         catch (error) {
             return error;
@@ -93,7 +85,7 @@ export class UsersController {
     @UsePipes(ValidationPipe)
     async removeblocked(@Body() userOppDto: UserOppDto) {
         try {
-        await this.userService.removeBlocked(userOppDto);
+            await this.userService.removeBlocked(userOppDto);
         }
         catch (error) {
             return error;
