@@ -25,7 +25,7 @@ const DirectMessageList = ({
             <ul className="list">
                 {directMessages.map(({ members, messages }, count) => {
                     const otherMembers: Profile[] = members.filter(
-                        (member) => member.id !== user.id
+                        (member) => member.intraID !== user.intraID
                     );
 
                     return (
