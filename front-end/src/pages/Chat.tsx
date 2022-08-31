@@ -12,6 +12,7 @@ import { generateGroupChats } from "../utils/randomDataGenerator";
 import { GroupChat, Profile } from "../utils/GlobalTypes";
 import { useAuth } from "../utils/AuthContext";
 import { useDataDebug } from "../utils/DebugDataContext";
+import Logger from "../utils/Logger";
 
 // Temporary function to get all chats
 // const getMessages = (user: Profile) => {
@@ -31,7 +32,6 @@ const Chat = () => {
 
     useEffect(() => {
         setMessages(chats);
-        console.log(chats);
     }, []);
 
     return (

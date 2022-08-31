@@ -2,12 +2,13 @@
 import Layout from "../components/Layout";
 import Heading from "../components/Heading";
 import { Fragment, useEffect } from "react";
+import axios from "axios";
 
 const Home = () => {
 
     // useEffect(() => {
     //     const user = {
-    //         intraID: '123456789',
+    //         uid: '123456789',
     //         username: "mberkenb",
     //     }
 

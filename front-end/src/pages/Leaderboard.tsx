@@ -5,12 +5,12 @@ import Heading from "../components/Heading";
 import Layout from "../components/Layout";
 import Loader from "../components/Loader";
 import RankingList from "../containers/RankingList";
-import { useDataDebug } from "../utils/DebugDataContext";
-import { Profile } from "../utils/GlobalTypes";
 
-// Debug
-import Logger from "../utils/Logger";
-import { generateProfile } from "../utils/randomDataGenerator";
+// Data temp
+import { useDataDebug } from "../utils/DebugDataContext";
+
+// Types
+import { Profile } from "../utils/GlobalTypes";
 
 const Leaderboard = () => {
     const [rankings, setRankings] = useState<Profile[] | null>(null);
@@ -27,9 +27,7 @@ const Leaderboard = () => {
 
     useEffect(() => {
         // Set the ranking list after request
-        getRankingList().then((res) => {
-            setRankings(res as Profile[]);
-        });
+        getRankingList().then((res) => setRankings(res as Profile[]));
     }, []);
 
     return (
@@ -45,18 +43,5 @@ const Leaderboard = () => {
         </Layout>
     );
 };
-
-/**
- *
- * React
- * View - display data
- *
- * Nestjs
- * Model - user: {username: 'jadjajaj', password: 'dwadwa'}
- * Controller - GET /api/user/jadjajaj
- * - UserController
- *      - findOne(id) -> find in database user by id
- *          return user
- */
 
 export default Leaderboard;
