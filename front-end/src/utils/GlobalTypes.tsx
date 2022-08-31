@@ -1,11 +1,12 @@
 // Global profile interface
 interface Profile {
     id: number;
-    uid: string;
+    uid: number; // <--- dit is een string
     username: string;
     img_url: string;
     banner_url: string;
     color: string;
+    email: string;
     rank: number;
     wins: number;
     losses: number;

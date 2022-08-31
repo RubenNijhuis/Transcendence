@@ -72,7 +72,7 @@ const GameHistory = ({ player, matches }: Props) => {
                                             url={opponent.img_url}
                                             alt="opponent"
                                         />
-                                        <Link to={`/profile/${opponent.uid}`}>
+                                        <Link to={`/profile/${opponent.intraID}`}>
                                             <span>{opponent.username}</span>
                                         </Link>
                                     </OpponentProfile>

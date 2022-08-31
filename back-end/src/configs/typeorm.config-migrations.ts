@@ -1,7 +1,8 @@
 import { ConfigService } from "@nestjs/config";
 import { CreateUser1661771716474 } from "../database/migrations/1661771716474-CreateUser";
 import { DataSource } from "typeorm";
-import { User } from "../typeorm/user.entity";
+import { User } from "../users/user.entity";
+import { FriendList } from "../users/friendlist/friendlist.entity";
 
 const configService = new ConfigService();
 
@@ -12,7 +13,7 @@ export const typeOrmConfig = new DataSource({
     username: configService.get<string>('DB_USER'),
     password: configService.get<string>('DB_PASS'),
     database: configService.get<string>('DB_NAME'),
-    entities: [User],
+    entities: [User, FriendList],
     migrations: [CreateUser1661771716474],
     migrationsRun: true
 });
