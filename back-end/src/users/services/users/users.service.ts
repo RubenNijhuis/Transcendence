@@ -96,12 +96,23 @@ export class UsersService {
   }
 
   
-  async update2fasecret(usernameDto: UsernameDto, secret: string) {
-    const ret = await this.findUserByUsername(usernameDto.username);
+  async update2fasecret(mailDto: MailDto, secret: string) {
+    const ret = await this.findUserByUsername(mailDto.username);
     
     return await this.userRepository.createQueryBuilder()
     .update(ret)
     .set({ twoFactorAuthenticationSecret: secret,})
+    .where({ id: ret.id })
+    .returning('*')
+    .execute();
+  }
+
+  async addsessiontoken(mailDto: MailDto, token: string) {
+    const ret = await this.findUserByUsername(mailDto.username);
+    
+    return await this.userRepository.createQueryBuilder()
+    .update(ret)
+    .set({ jwtsession_token: token,})
     .where({ id: ret.id })
     .returning('*')
     .execute();
@@ -118,16 +129,8 @@ export class UsersService {
     .execute();
   }
   
-  async isTwoFactorAuthenticationCodeValid(Twofadto: twofadto) {
-    const ret = await this.findUserByUsername(Twofadto.username);
-    return authenticator.verify({
-      token: Twofadto.twoFactorAuthenticationCode,
-      secret: ret.twoFactorAuthenticationSecret,
-    });
-  }
-  
-  async turnOn2fa(Twofadto: twofadto) {
-    const ret = await this.findUserByUsername(Twofadto.username);
+  async turnOn2fa(usernameDto: UsernameDto) {
+    const ret = await this.findUserByUsername(usernameDto.username);
 
     return await this.userRepository.createQueryBuilder()
     .update(ret)
@@ -137,33 +140,34 @@ export class UsersService {
     .execute();
   }
 
-  async generateTwoFactorAuthenticationSecret(usernameDto: UsernameDto) {
-    const ret = await this.findUserByUsername(usernameDto.username);
+  // async generateTwoFactorAuthenticationSecret(mailDto: MailDto) {
+  //   const ret = await this.findUserByUsername(mailDto.username);
     
-    if (!ret || ret.isTwoFactorAuthenticationEnabled === false ) {
-    throw TypeError;
-  }
+  //   if (!ret || ret.isTwoFactorAuthenticationEnabled === false ) {
+  //   throw TypeError;
+  // }
 
-    const secret = authenticator.generateSecret();
-    console.log("secret:");
-    console.log(secret);
-    this.update2fasecret(usernameDto, secret);
+  //   const secret = authenticator.generateSecret();
+  //   console.log("secret:");
+  //   console.log(secret);
+  //   this.update2fasecret(mailDto, secret);
 
-    const otpauthUrl = authenticator.keyuri(ret.email, 'AUTH_APP_NAME', ret.twoFactorAuthenticationSecret);
+  //   const otpauthUrl = authenticator.keyuri(mailDto.email, 'AUTH_APP_NAME', ret.twoFactorAuthenticationSecret);
     
-    console.log("otapathurl:");
-    console.log(otpauthUrl);
+  //   console.log("otapathurl:");
+  //   console.log(otpauthUrl);
 
-    console.log("todataurl:");
-    console.log(toDataURL(otpauthUrl));
-    return(toDataURL(otpauthUrl));
-    // await this.setTwoFactorAuthenticationSecret(secret, user.id);
-    // console.log(user.twoFactorAuthenticationSecret);
-    // return {
-    //   secret,
-    //   otpauthUrl
-    // }
-  }
+  //   console.log("todataurl:");
+  //   const res = toDataURL(otpauthUrl);
+
+  //   return(toDataURL(otpauthUrl));
+  //   // await this.setTwoFactorAuthenticationSecret(secret, user.id);
+  //   // console.log(user.twoFactorAuthenticationSecret);
+  //   // return {
+  //   //   secret,
+  //   //   otpauthUrl
+  //   // }
+  // }
 }
 
 /**

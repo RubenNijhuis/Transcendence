@@ -12,6 +12,8 @@ import {
     ValidationPipe
 } from "@nestjs/common";
 import { JwtAuthGuard } from "src/auth/guard/jwt.guard";
+import { AuthService } from "src/auth/services/auth.service";
+import { Jwt2faStrategy } from "src/auth/strategies/jwt.strategy";
 import { seederConfig } from "src/configs/seeder.config";
 import { UserSeeder } from "src/database/seeds/user-create.seed";
 import { twofadto } from "src/users/dtos/2fa.dto";
@@ -32,7 +34,7 @@ import { UsersService } from "src/users/services/users/users.service";
 
 @Controller("users")
 export class UsersController {
-    constructor(private readonly userService: UsersService) { }
+    constructor(private readonly userService: UsersService, private authService: AuthService) { }
 
     @Get()
     getUsers() {
@@ -85,27 +87,15 @@ export class UsersController {
         }
     }
 
-    @Post('google2fa')
-    @UseGuards(JwtAuthGuard)
-    @UsePipes(ValidationPipe)
-    async google2fa(@Body() usernameDto: UsernameDto) { 
-        try {
-            await this.userService.generateTwoFactorAuthenticationSecret(usernameDto);
-        }
-        catch (error) {
-            return error;
-        }
-    }
-
     @Post('turnon2fa')
     @UsePipes(ValidationPipe) //what does this do
-    async turnon2fa(@Body() Twofadto: twofadto) { 
+    async turnon2fa(@Body() usernameDto: UsernameDto) { 
     // const isCodeValid = this.userService.isTwoFactorAuthenticationCodeValid(Twofadto);
     // if (!isCodeValid) {
     //     throw new UnauthorizedException('Wrong authentication code');
     // }
     try {
-            await this.userService.turnOn2fa(Twofadto);
+            await this.userService.turnOn2fa(usernameDto);
         }
     catch (error) {
             return error;

@@ -93,9 +93,9 @@ export class User {
   @Column({
 	  name: 'jwtsession_token',
     nullable: false,
-    default: false,
+    default: "EMPTY",
   })
-  jwtsession_token: boolean;
+  jwtsession_token: string;
 
 }
 
