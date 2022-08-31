@@ -11,8 +11,9 @@ export class ChatController {
         return this.ChatService.getAllMessages();
     }
     @Get('id/:groupid')
-    getAllMessagesByGroupId(group_id: string) {
-      return this.ChatService.getAllMessagesByGroupId(group_id);
+    async getAllMessagesByGroupId(group_id: string) {
+        const ret = await this.ChatService.getAllMessagesByGroupId(group_id);
+      return ret;
     }
     @Post('createChat')
     async createChat(@Body() CreateChatDto: CreateChatDto) {
