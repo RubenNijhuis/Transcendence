@@ -30,7 +30,7 @@ interface Props {
 
 const GameHistory = ({ player, matches }: Props) => {
     const [selectedPage, setSelectedPage] = useState(0);
-    const paginatedMatches: MatchRecord[][] = PaginateArray(matches);
+    const paginatedMatches: MatchRecord[][] = PaginateArray(matches, 8);
 
     const changePage = (number: number) => {
         if (
