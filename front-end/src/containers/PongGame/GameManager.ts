@@ -15,7 +15,7 @@ class GameManager {
     powerUp: PowerUps;
 
     canvas: HTMLCanvasElement;
-    context: any;
+    context: CanvasRenderingContext2D;
 
     constructor(
         pongBall: Ball,
@@ -23,7 +23,7 @@ class GameManager {
         player2Bat: Bat,
         powerUp: PowerUps,
         canvas: HTMLCanvasElement,
-        context: any
+        context: CanvasRenderingContext2D
     ) {
         this.player1Score = 0;
         this.player2Score = 0;
@@ -34,20 +34,22 @@ class GameManager {
         this.player2Bat = player2Bat;
         this.powerUp = powerUp;
 
-
         this.canvas = canvas;
         this.context = context;
     }
 
     displayText() {
-        if (this.player1Score != this.maxScore && this.player2Score != this.maxScore) {
+        if (
+            this.player1Score != this.maxScore &&
+            this.player2Score != this.maxScore
+        ) {
             this.context.font = "30px Arial";
             this.context.textAlign = "center";
             this.context.fillText(
                 `${this.player1Score} - ${this.player2Score}`,
                 this.canvas.clientWidth / 2,
                 100
-        );
+            );
         }
     }
 
@@ -55,22 +57,38 @@ class GameManager {
         this.player1Bat.reset();
         this.player2Bat.reset();
 
-            this.pongBall.reset();
+        this.pongBall.reset();
     }
 
     checkIfBallHitsBats() {
-        if  ((this.pongBall.positionX - this.pongBall.radius <= this.player1Bat.positionX + (this.player1Bat.width / 2) &&
-            this.pongBall.positionX > this.player1Bat.positionX + this.player1Bat.width - this.player1Bat.width / 4) &&
-            (this.pongBall.positionY > this.player1Bat.positionY - this.player1Bat.height / 2 &&
-            this.pongBall.positionY < this.player1Bat.positionY + this.player1Bat.height / 2)) {
+        if (
+            this.pongBall.positionX - this.pongBall.radius <=
+                this.player1Bat.positionX + this.player1Bat.width / 2 &&
+            this.pongBall.positionX >
+                this.player1Bat.positionX +
+                    this.player1Bat.width -
+                    this.player1Bat.width / 4 &&
+            this.pongBall.positionY >
+                this.player1Bat.positionY - this.player1Bat.height / 2 &&
+            this.pongBall.positionY <
+                this.player1Bat.positionY + this.player1Bat.height / 2
+        ) {
             // Logger("GAME", "LEFTHIT", {});
             this.pongBall.velocityX = -this.pongBall.velocityX;
             //this.pongBall.positionX - this.pongBall.radius < this.player1Bat.positionX + this.player1Bat.width / 2
         }
-        if ((this.pongBall.positionX + this.pongBall.radius >= this.player2Bat.positionX - (this.player2Bat.width / 2) &&
-            this.pongBall.positionX < this.player2Bat.positionX - this.player1Bat.width + this.player1Bat.width / 4) &&
-            (this.pongBall.positionY > this.player2Bat.positionY - this.player2Bat.height / 2 &&
-            this.pongBall.positionY < this.player2Bat.positionY + this.player2Bat.height / 2)) {
+        if (
+            this.pongBall.positionX + this.pongBall.radius >=
+                this.player2Bat.positionX - this.player2Bat.width / 2 &&
+            this.pongBall.positionX <
+                this.player2Bat.positionX -
+                    this.player1Bat.width +
+                    this.player1Bat.width / 4 &&
+            this.pongBall.positionY >
+                this.player2Bat.positionY - this.player2Bat.height / 2 &&
+            this.pongBall.positionY <
+                this.player2Bat.positionY + this.player2Bat.height / 2
+        ) {
             this.pongBall.velocityX = -this.pongBall.velocityX;
         }
     }
@@ -81,28 +99,45 @@ class GameManager {
             this.resetGame();
         }
 
-        if (this.pongBall.positionX + this.pongBall.radius > this.canvas.width) {
+        if (
+            this.pongBall.positionX + this.pongBall.radius >
+            this.canvas.width
+        ) {
             this.player1Score++;
             this.resetGame();
         }
     }
 
     checkIfGameIsFinished() {
-        if (this.player1Score >= this.maxScore || this.player2Score >= this.maxScore) {
+        if (
+            this.player1Score >= this.maxScore ||
+            this.player2Score >= this.maxScore
+        ) {
             this.context.font = "60px Arial";
             this.context.textAlign = "center";
             this.context.fillText(
-                `${this.player1Score > this.player2Score ? "Player 1 won!" : "Player 2 won!"}`,
+                `${
+                    this.player1Score > this.player2Score
+                        ? "Player 1 won!"
+                        : "Player 2 won!"
+                }`,
                 this.canvas.clientWidth / 2,
-                this.canvas.height / 3);
+                this.canvas.height / 3
+            );
         }
     }
 
     checkIfBallHitsPowerUp() {
-        if ((this.pongBall.positionX >= this.powerUp.positionX - this.powerUp.width / 2 &&
-            this.pongBall.positionX <= this.powerUp.positionX + this.powerUp.width / 2) &&
-            (this.pongBall.positionY >= this.powerUp.positionY - this.powerUp.height / 2 &&
-            this.pongBall.positionY <= this.powerUp.positionY + this.powerUp.height / 2))
+        if (
+            this.pongBall.positionX >=
+                this.powerUp.positionX - this.powerUp.width / 2 &&
+            this.pongBall.positionX <=
+                this.powerUp.positionX + this.powerUp.width / 2 &&
+            this.pongBall.positionY >=
+                this.powerUp.positionY - this.powerUp.height / 2 &&
+            this.pongBall.positionY <=
+                this.powerUp.positionY + this.powerUp.height / 2
+        )
             this.powerUp.hit = 1;
     }
 }

@@ -21,7 +21,7 @@ const RankingList = ({ rankings }: Props) => (
     <EntryList>
         {rankings.map(
             (
-                { username, rank, img_url, intraID }: Profile,
+                { username, rank, img_url, intraID, wins }: Profile,
                 count: number
             ) => (
                 <Entry key={count}>
@@ -35,8 +35,8 @@ const RankingList = ({ rankings }: Props) => (
                         <Link to={`/profile/${intraID}`}>
                             <h3>{username}</h3>
                         </Link>
-                        <span>Games won: 10</span>
-                        <span>Highest streak: 10</span>
+                        <span>Games won: {wins}</span>
+                        <span>Elo: 100</span>
                     </GameData>
                 </Entry>
             )

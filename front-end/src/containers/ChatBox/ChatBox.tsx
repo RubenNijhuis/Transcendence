@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 // Types
 import { GroupChat } from "../../utils/GlobalTypes";
 
@@ -22,17 +24,21 @@ const ChatBox = ({ chat }: Props) => {
             <div className="title">
                 <Heading type={3}>Chat</Heading>
             </div>
-            <div className="chat-content">
-                {chat.messages.map((message, count) => (
-                    <ChatElement
-                        key={count}
-                        receiver={user}
-                        sender={message.sender}
-                        content={message}
-                    />
-                ))}
-            </div>
-            <ChatInput user={user} groupchat={chat} />
+            {user && (
+                <Fragment>
+                    <div className="chat-content">
+                        {chat.messages.map((message, count) => (
+                            <ChatElement
+                                key={count}
+                                receiver={user}
+                                sender={message.sender}
+                                content={message}
+                            />
+                        ))}
+                    </div>
+                    <ChatInput user={user} groupchat={chat} />
+                </Fragment>
+            )}
         </Container>
     );
 };

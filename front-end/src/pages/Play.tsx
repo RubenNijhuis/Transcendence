@@ -1,7 +1,10 @@
-// Components
 import { Fragment } from "react";
+
+// Components
 import GameCard from "../components/GameCard";
 import Layout from "../components/Layout";
+
+// Styling
 import { magicNum } from "../utils/StylingConstants";
 
 // import PongGame from "../containers/PongGame";
@@ -12,12 +15,12 @@ const Play = () => {
             <Fragment>
                 <div
                     style={{
-                        width: '100%',
+                        width: "100%",
                         margin: "0 auto",
                         display: "flex",
                         flexDirection: "row",
                         gap: magicNum,
-                        justifyContent: 'center',
+                        justifyContent: "center"
                     }}
                 >
                     <GameCard

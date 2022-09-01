@@ -1,9 +1,16 @@
 // Components
 import Asset from "../../components/Asset";
 import Heading from "../../components/Heading";
+
+// Auth
 import { useAuth } from "../../utils/AuthContext";
+
+// Types
 import { GroupChat, Profile } from "../../utils/GlobalTypes";
+
+// Stylinh
 import { Container, DirectMessageEntry } from "./DirectMessageList.style";
+
 interface Props {
     directMessages: GroupChat[];
     selectedChat: number;
@@ -23,38 +30,43 @@ const DirectMessageList = ({
                 <Heading type={3}>Direct messages</Heading>
             </div>
             <ul className="list">
-                {directMessages.map(({ members, messages }, count) => {
-                    const otherMembers: Profile[] = members.filter(
-                        (member) => member.intraID !== user.intraID
-                    );
+                {user &&
+                    directMessages.map(({ members, messages }, count) => {
+                        const otherMembers: Profile[] = members.filter(
+                            (member) => member.intraID !== user.intraID
+                        );
 
-                    return (
-                        <DirectMessageEntry
-                            key={count}
-                            onClick={() => setSelectedChat(count)}
-                            active={count === selectedChat}
-                        >
-                            <div className="content">
-                                {otherMembers.map(
-                                    ({ img_url, username }, count) => (
-                                        <div className="profile" key={count}>
-                                            <Asset
-                                                url={img_url}
-                                                alt="profile"
-                                            />
-                                            <span>{username}</span>
-                                        </div>
-                                    )
-                                )}
-                                <div className="activity">
-                                    <div className="newMessage" />
+                        return (
+                            <DirectMessageEntry
+                                key={count}
+                                onClick={() => setSelectedChat(count)}
+                                active={count === selectedChat}
+                            >
+                                <div className="content">
+                                    {otherMembers.map(
+                                        ({ img_url, username }, count) => (
+                                            <div
+                                                className="profile"
+                                                key={count}
+                                            >
+                                                <Asset
+                                                    url={img_url}
+                                                    alt="profile"
+                                                />
+                                                <span>{username}</span>
+                                            </div>
+                                        )
+                                    )}
+                                    <div className="activity">
+                                        <div className="newMessage" />
+                                    </div>
                                 </div>
-                            </div>
-                        </DirectMessageEntry>
-                    );
-                })}
+                            </DirectMessageEntry>
+                        );
+                    })}
             </ul>
         </Container>
     );
 };
+
 export default DirectMessageList;

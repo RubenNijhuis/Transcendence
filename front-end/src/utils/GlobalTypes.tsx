@@ -35,6 +35,7 @@ const enum MessageContentType {
     InvitePlay
 }
 
+// General type
 type AllMessageTypes = SimpleMessage | PictureMessage | InvitePlayMessage;
 
 // How we define a simple message

@@ -10,25 +10,25 @@ class Ball {
 
     radius: number;
 
-    context: any;
-    canvas: any;
+    context: CanvasRenderingContext2D;
+    canvas: HTMLCanvasElement;
 
     color: string;
 
-    constructor(context: any, c: HTMLCanvasElement) {
+    constructor(context: CanvasRenderingContext2D, c: HTMLCanvasElement) {
         this.positionX = c.clientWidth / 2;
         this.positionY = c.clientHeight / 2;
-        
+
         this.canvas = c;
         this.context = context;
-        
-        this.radius = this.canvas.width / 75;
-        
-        this.velocity = this.canvas.width / 300
 
-        this.velocityX = randomIntFromInterval(-(this.velocity), this.velocity);
-        this.velocityY = randomIntFromInterval(-(this.velocity), this.velocity);
-        
+        this.radius = this.canvas.width / 75;
+
+        this.velocity = this.canvas.width / 300;
+
+        this.velocityX = randomIntFromInterval(-this.velocity, this.velocity);
+        this.velocityY = randomIntFromInterval(-this.velocity, this.velocity);
+
         this.color = "#1e1e1e";
     }
 
@@ -56,7 +56,10 @@ class Ball {
     reset() {
         this.positionX = this.canvas.clientWidth / 2;
         this.positionY = this.canvas.clientHeight / 2;
-        this.velocityX = this.velocityY = randomIntFromInterval(-(this.velocity), this.velocity);
+        this.velocityX = this.velocityY = randomIntFromInterval(
+            -this.velocity,
+            this.velocity
+        );
         //this.start();
     }
 

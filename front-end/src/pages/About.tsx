@@ -1,4 +1,6 @@
 import { Fragment } from "react";
+
+// Components
 import Heading from "../components/Heading";
 import Layout from "../components/Layout";
 

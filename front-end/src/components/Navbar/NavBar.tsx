@@ -16,7 +16,7 @@ import { useAuth } from "../../utils/AuthContext";
 // Links
 import { locations } from "./NavBar.config";
 
-const CTAButton = ({ authStatus }: any) => (
+const CTAButton = ({ authStatus }: { authStatus: boolean }) => (
     <Fragment>
         {authStatus ? (
             <Link className="login-button" to={"/play"}>
@@ -30,7 +30,7 @@ const CTAButton = ({ authStatus }: any) => (
     </Fragment>
 );
 
-const NavLinks = ({ authStatus }: any) => (
+const NavLinks = ({ authStatus }: { authStatus: boolean }) => (
     <ul>
         {locations.map(({ name, url, onlyWhenLoggedin }, count) => {
             if (onlyWhenLoggedin && !authStatus) return null;
@@ -43,7 +43,7 @@ const NavLinks = ({ authStatus }: any) => (
     </ul>
 );
 
-const ProfileIcon = ({ url }: any) => (
+const ProfileIcon = ({ url }: { url: string }) => (
     <Link to={"/profile/me"}>
         <ProfileIconContainer>
             <Asset url={url} alt={"profile"} />

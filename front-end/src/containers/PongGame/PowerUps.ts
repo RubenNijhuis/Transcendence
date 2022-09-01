@@ -10,12 +10,12 @@ class PowerUps {
     positionX: number;
     positionY: number;
 
-    context: any;
-    canvas: any;
+    context: CanvasRenderingContext2D;
+    canvas: HTMLCanvasElement;
 
     color: string[];
 
-    constructor(context: any, c: HTMLCanvasElement) {
+    constructor(context: CanvasRenderingContext2D, c: HTMLCanvasElement) {
         this.turn = 0;
         this.hit = 0;
        

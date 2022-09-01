@@ -8,21 +8,8 @@ import DirectMessageList from "../containers/DirectMessageList";
 import ChatBox from "../containers/ChatBox";
 
 // Data
-import { generateGroupChats } from "../utils/randomDataGenerator";
-import { GroupChat, Profile } from "../utils/GlobalTypes";
-import { useAuth } from "../utils/AuthContext";
+import { GroupChat } from "../utils/GlobalTypes";
 import { useDataDebug } from "../utils/DebugDataContext";
-import Logger from "../utils/Logger";
-
-// Temporary function to get all chats
-// const getMessages = (user: Profile) => {
-//     const reqPromise = new Promise((resolve, reject) => {
-//         setTimeout(() => {
-//             resolve(mixChats);
-//         }, 1000);
-//     });
-//     return reqPromise;
-// };
 
 const Chat = () => {
     const [messages, setMessages] = useState<GroupChat[] | null>(null);
