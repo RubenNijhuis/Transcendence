@@ -11,12 +11,9 @@ import {
     UsePipes,
     ValidationPipe
 } from "@nestjs/common";
-import { JwtAuthGuard } from "src/auth/guard/jwt.guard";
 import { AuthService } from "src/auth/services/auth.service";
-import { Jwt2faStrategy } from "src/auth/strategies/jwt.strategy";
 import { seederConfig } from "src/configs/seeder.config";
 import { UserSeeder } from "src/database/seeds/user-create.seed";
-import { twofadto } from "src/users/dtos/2fa.dto";
 import { CreateUserDto } from "src/users/dtos/create-users.dto";
 import { MailDto } from "src/users/dtos/mail.dto";
 import { UserOppDto } from "src/users/dtos/user-opp.dto";

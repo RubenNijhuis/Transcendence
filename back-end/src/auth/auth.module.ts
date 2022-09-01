@@ -6,14 +6,13 @@ import { AuthService } from './services/auth.service';
 import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
 import { JwtModule } from "@nestjs/jwt";
-import { jwtConstants } from './constants/constants';
 import { PassportModule } from '@nestjs/passport';
 import { Jwt2faStrategy } from './strategies/jwt.strategy';
 
 @Module({
-  imports: [UsersModule, ConfigModule, HttpModule, PassportModule, JwtModule.register({
-    secret: jwtConstants.secret,
-    signOptions: { expiresIn: '1D' },
+  imports: [UsersModule, ConfigModule.forRoot(), HttpModule, PassportModule, JwtModule.register({
+    secret: process.env.JWT_CONSTANTS_PRIV_SECRET,
+    signOptions: { expiresIn: '365D' },
   }),
 ],
   providers: [LocalStrategy, AuthService, Jwt2faStrategy],

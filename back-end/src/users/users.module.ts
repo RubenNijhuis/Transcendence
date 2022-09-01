@@ -3,19 +3,18 @@ import { UsersController } from './controllers/users/users.controller';
 import { UsersService } from './services/users/users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/typeorm';
-import { Jwt2faStrategy } from 'src/auth/strategies/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from 'src/auth/constants/constants';
 import { AuthService } from 'src/auth/services/auth.service';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), PassportModule, JwtModule.register({
-    secret: jwtConstants.secret,
-    signOptions: { expiresIn: '1D' },
+  imports: [TypeOrmModule.forFeature([User]), ConfigModule.forRoot(), PassportModule, JwtModule.register({
+    secret: process.env.JWT_CONSTANTS_PRIV_SECRET,
+    signOptions: { expiresIn: '365D' },
   }),],
   controllers: [UsersController],
-  providers: [UsersService, AuthService, Jwt2faStrategy],
+  providers: [UsersService, AuthService],
   exports: [UsersService],
 })
 export class UsersModule {}

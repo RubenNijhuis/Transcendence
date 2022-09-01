@@ -79,7 +79,7 @@ export class User {
   @Column({
 	  name: 'twoFactorAuthenticationSecret',
     nullable: false,
-    default: '2FA_SECRET',
+    default: '',
   })
   twoFactorAuthenticationSecret: string;
 
@@ -93,7 +93,7 @@ export class User {
   @Column({
 	  name: 'jwtsession_token',
     nullable: false,
-    default: "EMPTY",
+    default: "",
   })
   jwtsession_token: string;
 

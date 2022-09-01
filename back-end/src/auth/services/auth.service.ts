@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { authenticator } from 'otplib';
 import { toDataURL } from 'qrcode';
 import { twofadto } from 'src/users/dtos/2fa.dto';
+import e from 'express';
 
 @Injectable()
 export class AuthService {
@@ -41,13 +42,16 @@ export class AuthService {
     }
 
     async addjwttoken(mailDto: MailDto, token: string) {
-        this.usersService.addsessiontoken(mailDto, token)
+        const ret = await this.usersService.findUserByUsername(mailDto.username);
+
+        if (ret.jwtsession_token === "")
+            this.usersService.addsessiontoken(mailDto, token);
     }
 
     async login(mailDto: MailDto) {
         const payload = {
             email: mailDto.email,
-          };
+        };
         const ret = this.jwtService.sign(payload);
         this.addjwttoken(mailDto, ret);
 
@@ -70,15 +74,21 @@ export class AuthService {
     async generateTwoFactorAuthenticationSecret(mailDto: MailDto) {
         const ret = await this.usersService.findUserByUsername(mailDto.username);
         
-        if (!ret || ret.isTwoFactorAuthenticationEnabled === false ) {
+    if (!ret || ret.isTwoFactorAuthenticationEnabled === false ) {
         throw TypeError;
-      }
-    
-        const secret = authenticator.generateSecret();
-        console.log("secret:");
-        console.log(secret);
-        this.usersService.update2fasecret(mailDto, secret);
-    
+    }
+        var secret = "";
+        if (ret.twoFactorAuthenticationSecret == "2FA_SECRET")
+        {
+            secret = authenticator.generateSecret();
+            console.log("secret:");
+            console.log(secret);
+            this.usersService.update2fasecret(mailDto, secret);
+        }
+        else
+        {
+            secret = ret.twoFactorAuthenticationSecret;
+        }
         const otpauthUrl = authenticator.keyuri(mailDto.email, 'AUTH_APP_NAME', secret);
         
         console.log("otapathurl:");
@@ -88,11 +98,5 @@ export class AuthService {
         const res = toDataURL(otpauthUrl);
     
         return(toDataURL(otpauthUrl));
-        // await this.setTwoFactorAuthenticationSecret(secret, user.id);
-        // console.log(user.twoFactorAuthenticationSecret);
-        // return {
-        //   secret,
-        //   otpauthUrl
-        // }
-      }
+    }
 }

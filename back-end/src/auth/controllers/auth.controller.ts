@@ -18,10 +18,11 @@ export class AuthController {
   @UseGuards(FortyTwoAuthGuard)
   login(){}
 
+  //curl --data "username=akramp&email=mehj177@gmail.com"  http://localhost:3000/api/auth/jwtsession
   @UseGuards(Jwt2faStrategy)
-  @Post('test')
+  @Post('jwtsession')
   @UsePipes(ValidationPipe)
-  async test(@Body() mailDto: MailDto) {
+  async jwtsession(@Body() mailDto: MailDto) {
     console.log("jwt test:");
     console.log(this.authService.login(mailDto)); //I still need to make sure this then gets saved and used with right guards
 }
@@ -49,6 +50,8 @@ export class AuthController {
     return this.authService.signin;
   }
 
+  //curl --data "username=akramp"  http://localhost:3000/api/users/turnon2fa
+  //curl --data "username=akramp&email=mehj177@gmail.com"  -H "Authorization: Bearer {'jwtsession_token'}" http://localhost:3000/api/auth/google2fa
   @Post('google2fa')
   @UseGuards(Jwt2faStrategy)
   @UsePipes(ValidationPipe)
@@ -62,6 +65,7 @@ export class AuthController {
       }
   }
 
+  //curl --data "username=akramp&twoFactorAuthenticationCode="  http://localhost:3000/api/auth/google2fa/authenticate
   @Post('google2fa/authenticate')
   @UseGuards(Jwt2faStrategy)
   async authenticate(@Res() res: Response, @Body() twofadto: twofadto) {
