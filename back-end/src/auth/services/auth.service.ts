@@ -59,10 +59,10 @@ export class AuthService {
         console.log(Twofadto.twoFactorAuthenticationCode);
         console.log(ret.twoFactorAuthenticationSecret);
         
-        const res = authenticator.verify({
-          token: Twofadto.twoFactorAuthenticationCode,
-          secret: ret.twoFactorAuthenticationSecret,
-        });
+        const res = authenticator.check(
+          Twofadto.twoFactorAuthenticationCode,
+          ret.twoFactorAuthenticationSecret,
+        );
         console.log(res);
         return res;
     }
@@ -79,7 +79,7 @@ export class AuthService {
         console.log(secret);
         this.usersService.update2fasecret(mailDto, secret);
     
-        const otpauthUrl = authenticator.keyuri(mailDto.email, 'AUTH_APP_NAME', ret.twoFactorAuthenticationSecret);
+        const otpauthUrl = authenticator.keyuri(mailDto.email, 'AUTH_APP_NAME', secret);
         
         console.log("otapathurl:");
         console.log(otpauthUrl);

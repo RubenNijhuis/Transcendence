@@ -65,8 +65,8 @@ export class AuthController {
   @Post('google2fa/authenticate')
   @UseGuards(Jwt2faStrategy)
   async authenticate(@Res() res: Response, @Body() twofadto: twofadto) {
-  const isCodeValid = this.authService.isTwoFactorAuthenticationCodeValid(twofadto);
-  if (!isCodeValid) {
+  const isCodeValid = await this.authService.isTwoFactorAuthenticationCodeValid(twofadto);
+  if (isCodeValid === false) {
       throw new UnauthorizedException('Wrong authentication code');
    }
   res.sendStatus(200);
