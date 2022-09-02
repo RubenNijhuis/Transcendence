@@ -1,5 +1,3 @@
-import { stringify } from "querystring";
-import Logger from "../../utils/Logger";
 import Ball from "./Ball";
 import Bat from "./Bat";
 import PowerUps from "./PowerUps";
@@ -40,8 +38,8 @@ class GameManager {
 
     displayText() {
         if (
-            this.player1Score != this.maxScore &&
-            this.player2Score != this.maxScore
+            this.player1Score !== this.maxScore &&
+            this.player2Score !== this.maxScore
         ) {
             this.context.font = "30px Arial";
             this.context.textAlign = "center";

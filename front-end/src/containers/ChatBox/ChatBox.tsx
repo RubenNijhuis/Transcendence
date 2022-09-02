@@ -24,21 +24,17 @@ const ChatBox = ({ chat }: Props) => {
             <div className="title">
                 <Heading type={3}>Chat</Heading>
             </div>
-            {user && (
-                <Fragment>
-                    <div className="chat-content">
-                        {chat.messages.map((message, count) => (
-                            <ChatElement
-                                key={count}
-                                receiver={user}
-                                sender={message.sender}
-                                content={message}
-                            />
-                        ))}
-                    </div>
-                    <ChatInput user={user} groupchat={chat} />
-                </Fragment>
-            )}
+            <div className="chat-content">
+                {chat.messages.map((message, count) => (
+                    <ChatElement
+                        key={count}
+                        receiver={user!}
+                        sender={message.sender}
+                        content={message}
+                    />
+                ))}
+            </div>
+            <ChatInput user={user!} groupchat={chat} />
         </Container>
     );
 };

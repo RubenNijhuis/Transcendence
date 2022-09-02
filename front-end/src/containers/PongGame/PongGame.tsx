@@ -93,8 +93,8 @@ const drawGame = (
 
         // Draw the elements
         if (
-            GameManagement.player1Score != GameManagement.maxScore &&
-            GameManagement.player2Score != GameManagement.maxScore
+            GameManagement.player1Score !== GameManagement.maxScore &&
+            GameManagement.player2Score !== GameManagement.maxScore
         ) {
             PongBall.draw();
             Player1.draw();

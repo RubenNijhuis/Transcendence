@@ -7,11 +7,22 @@ Built by: <a href="https://github.com/rubennijhuis">rnijhuis</a>, <a href="https
 <img src="./readme/profile_page.png">
 
 ### Quick start
+
 Requires that <a href="https://www.docker.com/">Docker</a> is installed
 
 ```
 $ make
 ```
+
+### Extra Features
+
+Chat:
+Pictures
+Complex invites
+
+Pong game:
+Side preference
+3D assets
 
 ### Folder structure
 

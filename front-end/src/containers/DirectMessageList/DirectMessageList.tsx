@@ -30,40 +30,36 @@ const DirectMessageList = ({
                 <Heading type={3}>Direct messages</Heading>
             </div>
             <ul className="list">
-                {user &&
-                    directMessages.map(({ members, messages }, count) => {
-                        const otherMembers: Profile[] = members.filter(
-                            (member) => member.intraID !== user.intraID
-                        );
+                {directMessages.map(({ members, messages }, count) => {
+                    const otherMembers: Profile[] = members.filter(
+                        (member) => member.intraID !== user!.intraID
+                    );
 
-                        return (
-                            <DirectMessageEntry
-                                key={count}
-                                onClick={() => setSelectedChat(count)}
-                                active={count === selectedChat}
-                            >
-                                <div className="content">
-                                    {otherMembers.map(
-                                        ({ img_url, username }, count) => (
-                                            <div
-                                                className="profile"
-                                                key={count}
-                                            >
-                                                <Asset
-                                                    url={img_url}
-                                                    alt="profile"
-                                                />
-                                                <span>{username}</span>
-                                            </div>
-                                        )
-                                    )}
-                                    <div className="activity">
-                                        <div className="newMessage" />
-                                    </div>
+                    return (
+                        <DirectMessageEntry
+                            key={count}
+                            onClick={() => setSelectedChat(count)}
+                            active={count === selectedChat}
+                        >
+                            <div className="content">
+                                {otherMembers.map(
+                                    ({ img_url, username }, count) => (
+                                        <div className="profile" key={count}>
+                                            <Asset
+                                                url={img_url}
+                                                alt="profile"
+                                            />
+                                            <span>{username}</span>
+                                        </div>
+                                    )
+                                )}
+                                <div className="activity">
+                                    <div className="newMessage" />
                                 </div>
-                            </DirectMessageEntry>
-                        );
-                    })}
+                            </div>
+                        </DirectMessageEntry>
+                    );
+                })}
             </ul>
         </Container>
     );

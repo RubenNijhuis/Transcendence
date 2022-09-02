@@ -64,9 +64,7 @@ const NavBar = () => {
                     <NavLinks authStatus={isLoggedIn} />
                     <div className="cta">
                         <CTAButton authStatus={isLoggedIn} />
-                        {isLoggedIn && user && (
-                            <ProfileIcon url={user.img_url} />
-                        )}
+                        {isLoggedIn && <ProfileIcon url={user!.img_url} />}
                     </div>
                 </div>
             </div>
