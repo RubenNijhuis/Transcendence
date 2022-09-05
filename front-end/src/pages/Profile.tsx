@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 // Optional url params
 import { useParams } from "react-router-dom";
@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 // Components
 import Layout from "../components/Layout";
 import Loader from "../components/Loader";
+import GameHistory from "../components/GameHistory";
 
 // Profile components
 import ProfileDisplay from "../components/Profile/ProfileDisplay";
@@ -18,12 +19,10 @@ import { useAuth } from "../utils/AuthContext";
 // Types
 import { Profile } from "../utils/GlobalTypes";
 
-import {
-    largeRadius,
-    mainColor,
-    mediumRadius
-} from "../utils/StylingConstants";
-import GameHistory from "../components/GameHistory";
+// Styling constants
+import { largeRadius, mainColor } from "../utils/StylingConstants";
+
+// Debug data
 import { useDataDebug } from "../utils/DebugDataContext";
 
 const ProfilePage = () => {
@@ -53,7 +52,7 @@ const ProfilePage = () => {
 
     return (
         <Layout>
-            {userData !== null ? (
+            {user !== null && userData !== null ? (
                 <div
                     style={{
                         borderRadius: largeRadius,

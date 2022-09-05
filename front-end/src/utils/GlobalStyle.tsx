@@ -1,6 +1,5 @@
-// globalStyles.js
 import { createGlobalStyle } from "styled-components";
-import { mainColor, secondaryColor } from "./StylingConstants";
+import { secondaryColor } from "./StylingConstants";
 
 const GlobalStyle = createGlobalStyle`
     * {

@@ -30,9 +30,9 @@ interface Props {
 
 const GameHistory = ({ player, matches }: Props) => {
     const [selectedPage, setSelectedPage] = useState(0);
-    const paginatedMatches: MatchRecord[][] = PaginateArray(matches);
+    const paginatedMatches: MatchRecord[][] = PaginateArray(matches, 8);
 
-    const changePage = (number: any) => {
+    const changePage = (number: number) => {
         if (
             selectedPage + number !== -1 &&
             selectedPage + number <= paginatedMatches.length - 1
@@ -72,7 +72,9 @@ const GameHistory = ({ player, matches }: Props) => {
                                             url={opponent.img_url}
                                             alt="opponent"
                                         />
-                                        <Link to={`/profile/${opponent.intraID}`}>
+                                        <Link
+                                            to={`/profile/${opponent.intraID}`}
+                                        >
                                             <span>{opponent.username}</span>
                                         </Link>
                                     </OpponentProfile>

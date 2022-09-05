@@ -82,12 +82,7 @@ const generateProfile = (amount: number): Profile[] => {
     for (let i = 0; i < amount; i++) {
         const username: string =
             names[randomIntFromInterval(0, names.length - 1)];
-<<<<<<< HEAD
-        const uid: string = randomIntFromInterval(1, 1000000000).toString();
-=======
-        const email: string = `${username}@outlook.com`;
         const intraID: number = i + 1;
->>>>>>> bbde79032dc61776d43ce98488fab336a6daa71d
         const rank: number = i + 1;
 
         const randomWidth: number =
@@ -107,15 +102,9 @@ const generateProfile = (amount: number): Profile[] => {
         const losses: number = randomIntFromInterval(1, 100);
 
         const newProfile: Profile = {
-            username,
-<<<<<<< HEAD
-            id: i,
-=======
-            email,
-            id: intraID,
->>>>>>> bbde79032dc61776d43ce98488fab336a6daa71d
-            banner_url,
             intraID,
+            username,
+            banner_url,
             color: "#1e1e1e",
             rank,
             img_url,
@@ -254,7 +243,7 @@ const generateGroupChats = (
 
     for (let i = 0; i < amount; i++) {
         const newGroup: GroupChat = {
-            id: i,
+            group_id: i,
             members: [],
             messages: []
         };

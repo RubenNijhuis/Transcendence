@@ -8,6 +8,8 @@ import { typeOrmAsyncConfig } from './typeorm/typeorm.config';
 import { envConfig } from './configs/env.config';
 import { ChatModule } from './chat/chat.module';
 import { FriendslistModule } from './users/friendlist/friendlist.module';
+import { BlockListModule } from './users/blocklist/blocklist.module';
+import { FriendRequestModule } from './users/friendrequests/friendrequest.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { FriendslistModule } from './users/friendlist/friendlist.module';
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
   	UsersModule,
     FriendslistModule,
+    BlockListModule,
+    FriendRequestModule,
   	AuthModule,
     ChatModule,
     PassportModule.register({ session: true }),

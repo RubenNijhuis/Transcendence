@@ -13,7 +13,7 @@ export const InboundLinks = [
         name: "Login",
         url: "/login",
         onlyWhenLoggedin: false
-    },
-]
+    }
+];
 
 export const GithubLink = "https://github.com/rubennijhuis/transcendence";

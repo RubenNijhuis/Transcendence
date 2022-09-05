@@ -3,8 +3,8 @@ const Logger = (type: string, from: string, message: string, obj: any) => {
     const settings = {
         AUTH: false,
         GAME: true,
-        DEBUG: true,
-    }
+        DEBUG: true
+    };
 
     // Formatting for in the console
     let typeEmoij: string = "";
@@ -15,22 +15,18 @@ const Logger = (type: string, from: string, message: string, obj: any) => {
 
     // Change icon and color based on message type
     if (type === "AUTH") {
-        if (!settings.AUTH)
-            return;
+        if (!settings.AUTH) return;
         typeEmoij = "💂‍♂️";
         color = "#374f6b";
     } else if (type === "GAME") {
-        if (!settings.GAME)
-            return;
+        if (!settings.GAME) return;
         typeEmoij = "🏓";
         color = "#fb21ff";
     } else if (type === "DEBUG") {
-        if (!settings.DEBUG)
-            return;
+        if (!settings.DEBUG) return;
         typeEmoij = "🕷";
         color = "#fff536";
     }
-
 
     // Output the message
     console.log(

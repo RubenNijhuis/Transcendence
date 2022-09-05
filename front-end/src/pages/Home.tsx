@@ -5,15 +5,10 @@ import { Fragment, useEffect } from "react";
 import axios from "axios";
 
 const Home = () => {
-<<<<<<< HEAD
-    useEffect(() => {
-        axios.get("/api/users/seeder");
-    }, []);
-=======
 
     // useEffect(() => {
     //     const user = {
-    //         intraID: '123456789',
+    //         uid: '123456789',
     //         username: "mberkenb",
     //     }
 
@@ -33,7 +28,6 @@ const Home = () => {
     //             .then(res => console.log(res));
     //     }, 1000);
     // }, [])
->>>>>>> bbde79032dc61776d43ce98488fab336a6daa71d
 
     return (
         <Layout>

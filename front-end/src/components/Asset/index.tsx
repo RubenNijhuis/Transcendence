@@ -1,3 +1,3 @@
-import Asset from './Asset'
+import Asset from "./Asset";
 
 export default Asset;

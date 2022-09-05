@@ -5,7 +5,7 @@ import { generateProfile } from "./randomDataGenerator";
 
 // Define what the auth context contains
 interface AuthContextType {
-    user: any;
+    user: Profile | null;
     isLoggedIn: boolean;
     signin: (user: any, callback: VoidFunction) => any;
     signout: (callback: VoidFunction) => void;
@@ -43,7 +43,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const signin = (loginData: any, callback: VoidFunction) => {
         return fakeAuthProvider.signin(loginData, (newUserData: Profile) => {
             // Permanent data
-            newUserData.id = 424242;
+            newUserData.intraID = 424242;
             newUserData.username = "LowerRes";
             newUserData.img_url =
                 "https://images.ctfassets.net/vf2eiv36rew2/6vLLgPp8PvG9hfReO0dCIS/1b576d6080c255d6a5e6e884a11741ea/a.jpg?w=4000&h=2666&q=50&fm=webp";
