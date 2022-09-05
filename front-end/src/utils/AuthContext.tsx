@@ -5,7 +5,7 @@ import { generateProfile } from "./randomDataGenerator";
 
 // Define what the auth context contains
 interface AuthContextType {
-    user: any;
+    user: Profile | null;
     isLoggedIn: boolean;
     signin: (user: any, callback: VoidFunction) => any;
     signout: (callback: VoidFunction) => void;

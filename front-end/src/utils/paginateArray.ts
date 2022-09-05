@@ -1,22 +1,26 @@
-const PaginateArray = (matches: any[]): any[][] => {
-    const paginatedItems: any[][] = [];
-
-    let amountPerPage = 8;
+/**
+ * Paginates an array into a double array
+ * @param items
+ * @param amountPerPage
+ * @returns
+ */
+const PaginateArray = (items: any[], amountPerPage: number): any[][] => {
+    const pageCollection: any[][] = [];
 
     let page: any[] = [];
 
-    for (let i = 0; i < matches.length; i++) {
+    for (let i = 0; i < items.length; i++) {
         if (i % amountPerPage === 0 && i !== 0) {
-            paginatedItems.push(page);
+            pageCollection.push(page);
             page = [];
         }
 
-        page.push(matches[i]);
+        page.push(items[i]);
     }
 
-    if (page.length !== 0) paginatedItems.push(page);
+    if (page.length !== 0) pageCollection.push(page);
 
-    return paginatedItems;
+    return pageCollection;
 };
 
 export { PaginateArray };

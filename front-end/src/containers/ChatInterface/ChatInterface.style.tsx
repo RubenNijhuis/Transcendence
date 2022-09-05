@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { magicNum } from '../../utils/StylingConstants';
+import styled from "styled-components";
+import { magicNum } from "../../utils/StylingConstants";
 
 const Container = styled.div`
     display: grid;

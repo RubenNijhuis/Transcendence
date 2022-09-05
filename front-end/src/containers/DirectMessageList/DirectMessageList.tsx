@@ -1,9 +1,16 @@
 // Components
 import Asset from "../../components/Asset";
 import Heading from "../../components/Heading";
+
+// Auth
 import { useAuth } from "../../utils/AuthContext";
+
+// Types
 import { GroupChat, Profile } from "../../utils/GlobalTypes";
+
+// Stylinh
 import { Container, DirectMessageEntry } from "./DirectMessageList.style";
+
 interface Props {
     directMessages: GroupChat[];
     selectedChat: number;
@@ -25,7 +32,7 @@ const DirectMessageList = ({
             <ul className="list">
                 {directMessages.map(({ members, messages }, count) => {
                     const otherMembers: Profile[] = members.filter(
-                        (member) => member.intraID !== user.intraID
+                        (member) => member.intraID !== user!.intraID
                     );
 
                     return (
@@ -57,4 +64,5 @@ const DirectMessageList = ({
         </Container>
     );
 };
+
 export default DirectMessageList;

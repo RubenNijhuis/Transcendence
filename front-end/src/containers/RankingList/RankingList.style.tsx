@@ -1,5 +1,12 @@
 import styled from "styled-components";
-import { backgroundColor, darkTextColor, magicNum, mainColor, smallRadius } from "../../utils/StylingConstants";
+
+import {
+    backgroundColor,
+    darkTextColor,
+    magicNum,
+    mainColor,
+    smallRadius
+} from "../../utils/StylingConstants";
 
 const Entry = styled.li`
     display: flex;
@@ -18,7 +25,7 @@ const Entry = styled.li`
         width: calc(100% - ${magicNum});
         height: 2px;
         border: 10px;
-        background-color: rgba(0,0,0,0.1);
+        background-color: rgba(0, 0, 0, 0.1);
         position: absolute;
         bottom: -2px;
         left: 50%;
@@ -41,10 +48,10 @@ const ProfileData = styled.div`
         z-index: 10;
         font-size: calc(${magicNum} / 2);
         font-weight: 900;
-        text-shadow: 2px 2px rgba(255,255,255,0.25);
+        text-shadow: 2px 2px rgba(255, 255, 255, 0.25);
         color: ${mainColor};
     }
-    
+
     div {
         transform: translate(-25%, 20%);
     }
