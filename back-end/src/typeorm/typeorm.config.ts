@@ -5,7 +5,8 @@ import { BlockList } from "src/users/blocklist/blocklist.entity";
 import { FriendList } from "src/users/friendlist/friendlist.entity";
 import FriendRequests from "src/users/friendrequests/friendrequest.entity";
 import { User } from "src/users/user.entity";
-import { Chat } from "src/chat/chat.entity";
+import { Chat } from "src/groups/chat/chat.entity";
+import { Group } from "src/groups/groups.entity";
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
     imports: [ConfigModule],
@@ -18,12 +19,12 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
             username: configService.get<string>('DB_USER'),
             password: configService.get<string>('DB_PASS'),
             database: configService.get<string>('DB_NAME'),
-            entities: [User, FriendList, BlockList, FriendRequests, Chat],
-            migrations: [CreateTables1661971166323],
-            synchronize: false,
+            entities: [User, FriendList, FriendRequests, Chat, Group],
+            // migrations: [CreateTables1661971166323],
+            synchronize: true,
             logging: true,
             autoLoadEntities: true,
-            migrationsRun: true
+            // migrationsRun: true
         };
     }
 }

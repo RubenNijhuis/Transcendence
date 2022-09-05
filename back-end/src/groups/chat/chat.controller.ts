@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Query , Param, Post, Put } from '@nestjs/common';
-import { ChatService } from "src/chat/chat.service";
+import { Body, Controller, UsePipes, ValidationPipe, Delete, Get, Query , Param, Post, Put } from '@nestjs/common';
+import { ChatService } from "src/groups/chat/chat.service";
 import { CreateChatDto } from './dtos/create-chat.dto';
  
 @Controller("chat")
@@ -18,6 +18,7 @@ export class ChatController {
     }
 
     @Post('createChat')
+    @UsePipes(ValidationPipe)
     async createChat(@Body() CreateChatDto: CreateChatDto) {
         try {
             const chat = await this.ChatService.createChat(CreateChatDto);

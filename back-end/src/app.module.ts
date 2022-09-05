@@ -6,10 +6,11 @@ import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
 import { typeOrmAsyncConfig } from './typeorm/typeorm.config';
 import { envConfig } from './configs/env.config';
-import { ChatModule } from './chat/chat.module';
+import { ChatModule } from './groups/chat/chat.module';
 import { FriendslistModule } from './users/friendlist/friendlist.module';
 import { BlockListModule } from './users/blocklist/blocklist.module';
 import { FriendRequestModule } from './users/friendrequests/friendrequest.module';
+import { GroupModule } from './groups/groups.module';
 
 @Module({
   imports: [
@@ -17,10 +18,10 @@ import { FriendRequestModule } from './users/friendrequests/friendrequest.module
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
   	UsersModule,
     FriendslistModule,
-    BlockListModule,
     FriendRequestModule,
   	AuthModule,
     ChatModule,
+    GroupModule,
     PassportModule.register({ session: true }),
 	],
   controllers: [],

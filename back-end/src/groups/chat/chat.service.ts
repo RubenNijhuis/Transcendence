@@ -16,12 +16,10 @@ export class ChatService {
     }
 
     async getAllMessagesByGroupId(group_id: number): Promise<Chat[]> {
-      console.log(group_id);
         const allMessages = await this.chatRepository
             .createQueryBuilder('chat')
             .where("group_id = :group_id", { group_id })
             .getMany();
-            console.log(allMessages);
         return allMessages;
     }
     

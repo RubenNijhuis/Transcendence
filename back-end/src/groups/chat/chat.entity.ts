@@ -13,7 +13,7 @@ export class Chat {
   @CreateDateColumn({
     nullable: true
   })
-  createdDate: Date
+  createdDate: Date;
  
   @Column()
   content: string;
