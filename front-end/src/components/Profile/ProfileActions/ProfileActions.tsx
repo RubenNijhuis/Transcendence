@@ -22,7 +22,6 @@ const UserStatus = () => {
         activityElement = <span className="playing">Playing</span>;
     }
 
-    console.log(rand);
     return (
         <UserStatusDisplay activity={rand}>
             <div>{activityElement}</div>

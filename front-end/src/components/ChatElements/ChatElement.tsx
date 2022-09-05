@@ -23,12 +23,6 @@ interface Props {
 const ChatElement = ({ receiver, sender, content }: Props) => {
     const fromUser: boolean = receiver.username === sender.username;
 
-    Logger("DEBUG", "Chat element", "From user?", {
-        fromUser,
-        sender: sender.username,
-        receiver: receiver.username
-    });
-
     switch (content.content_type) {
         case MessageContentType.Simple:
             return (

@@ -37,6 +37,8 @@ const enum MessageContentType {
     InvitePlay
 }
 
+type AllMessageTypes = SimpleMessage | PictureMessage | InvitePlayMessage;
+
 // How we define a simple message
 interface SimpleMessage {
     content: string;
@@ -58,13 +60,13 @@ interface InvitePlayMessage {
 
 // Message interface
 interface Message {
-    content: SimpleMessage | PictureMessage | InvitePlayMessage;
+    content: AllMessageTypes;
     content_type: MessageContentType;
     timestamp: string;
     sender: Profile;
     id: number;
     group_id: number;
-    read_by: null | Profile[];
+    read_by: Profile[];
 }
 
 interface GroupChat {
@@ -80,7 +82,8 @@ export type {
     GroupChat,
     InvitePlayMessage,
     PictureMessage,
-    SimpleMessage
+    SimpleMessage,
+    AllMessageTypes
 };
 
 export { GameType, MessageContentType };

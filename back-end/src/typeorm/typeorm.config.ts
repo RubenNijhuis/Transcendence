@@ -1,8 +1,9 @@
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from "@nestjs/typeorm";
-import { CreateUser1661542055999 } from "src/database/migrations/1661542055999-CreateUser";
-import { User } from "./user.entity";
-import { Chat } from "../chat/chat.entity";
+import { CreateUser1661771716474 } from "src/database/migrations/1661771716474-CreateUser";
+import { FriendList } from "src/users/friendlist/friendlist.entity";
+import { User } from "src/users/user.entity";
+import { Chat } from "src/chat/chat.entity";
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
     imports: [ConfigModule],
@@ -15,12 +16,12 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
             username: configService.get<string>('DB_USER'),
             password: configService.get<string>('DB_PASS'),
             database: configService.get<string>('DB_NAME'),
-            entities: [User, Chat],
-            migrations: [CreateUser1661542055999],
+            entities: [User, FriendList, Chat],
+            migrations: [CreateUser1661771716474],
             synchronize: true,
             logging: true,
             autoLoadEntities: true,
-            // migrationsRun: true
+            migrationsRun: false
         };
     }
 }

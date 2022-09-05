@@ -26,9 +26,9 @@ export class LocalStrategy extends PassportStrategy(Strategy, '42'){
       {
         headers: { Authorization: `Bearer ${accessToken}` },
       }).toPromise();
-		const uid = data.data.id;
+		const intraID = data.data.id;
 		const username = data.data.login;
-		const CreateUserDto = { uid, username };
+		const CreateUserDto = { intraID, username };
     return await this.AuthService.validateUser(CreateUserDto);
   }
 }
