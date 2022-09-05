@@ -21,7 +21,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, '42'){
   }
 
   async validate(accessToken: string) {
-    console.log("Entered Validate");
+    console.log("Entered Validate: " + accessToken);
     const data = await this.httpService.get(this.configService.get('INTRA_GET_ME_URL'),
       {
         headers: { Authorization: `Bearer ${accessToken}` },

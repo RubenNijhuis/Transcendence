@@ -1,3 +1,4 @@
+import { randAmount, randEmail, randFullName, randPassword, randSkill } from '@ngneat/falso';
 import { HttpException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/typeorm";
@@ -29,9 +30,6 @@ export class UsersService {
     return this.userRepository.findOne({where: {username}});
   }
 
-  // findUserByEmail(email: string) {
-  //   return this.userRepository.findOne({where: {email}});
-  // }
   createUser(createUserDto: CreateUserDto) { // should this be async?
     if (!this.findUserByUsername(createUserDto.username))
       return ;
@@ -47,78 +45,11 @@ export class UsersService {
     this.setTwoFactorAuthSecret(userId, secret);
   }
 
-// /* 
-//       checking if selected user is already blocked, etc
-//       adding the selected user to the blocklist
-//       after adding to the blocklist, im also removing the user and selected from eachothers friendlist
-// */
-//   async addBlocked(userOppDto: UserOppDto) { // what should be checked in front-end and what in back-end
-//     const user = await this.findUserByUsername(userOppDto.username);
-//     const selectedUser = await this.findUserByUsername(userOppDto.selectedUsername);
-
-//     if (!user || !selectedUser || userOppDto.username === userOppDto.selectedUsername) {
-//       throw TypeError;
-//     }
-//     let blockList: Array<string> = JSON.parse(user.blocked);
-//     let friendlist: Array<string> = JSON.parse(user.friends);
-
-//     if (blockList.includes(userOppDto.selectedUsername, 0) && blockList.length != 0) {
-//       throw TypeError;
-//     }
-//     blockList.push(userOppDto.selectedUsername);
-//     await this.userRepository.createQueryBuilder()
-//       .update({ blocked: JSON.stringify(blockList) })
-//       .where({ id: user.id })
-//       .execute();
-//     if (friendlist.includes(userOppDto.selectedUsername)) {
-//       await this.removeFriend(userOppDto);
-//       await  this.removeFriend({username: userOppDto.selectedUsername, selectedUsername: userOppDto.username});
-//     }
-//   }
-// /* 
-//       checking if selected user is on the friendlist, etc
-//       removing the selected from the friendlist
-//       after removing from friendlist, im also removing the user from the selected friendlist
-// */
-//   async removeFriend(userOppDto: UserOppDto) {
-//     const user = await this.findUserByUsername(userOppDto.username);
-//     const selectedUser = await this.findUserByUsername(userOppDto.selectedUsername);
-
-//     if (!user || !selectedUser || userOppDto.username === userOppDto.selectedUsername) {
-//       throw TypeError;
-//     }
-//     let friendlist: Array<string> = JSON.parse(user.friends);
-//     let selectedFriendlist: Array<string> = JSON.parse(selectedUser.friends);
-
-//     if (!friendlist.includes(userOppDto.selectedUsername, 0) || friendlist.length == 0)
-//       throw TypeError;
-//     friendlist.splice(friendlist.indexOf(userOppDto.selectedUsername, 0));
-//     await this.userRepository.createQueryBuilder()
-//       .update({ friends: JSON.stringify(friendlist) })
-//       .where({ id: user.id })
-//       .execute();
-//     if (selectedFriendlist.includes(userOppDto.username, 0))
-//       await this.removeFriend({ username: userOppDto.selectedUsername, selectedUsername: userOppDto.username});
-//   }
-
-//   async removeBlocked(userOppDto: UserOppDto) { // what should be checked in front-end and what in back-end
-//     const user = await this.findUserByUsername(userOppDto.username);
-//     const selectedUser = await this.findUserByUsername(userOppDto.selectedUsername);
-
-//     if (!user || !selectedUser || userOppDto.username === userOppDto.selectedUsername) {
-//       throw TypeError;
-//     }
-//     let blockList: Array<string> = JSON.parse(user.blocked);
-
-//     if (!blockList.includes(userOppDto.selectedUsername, 0) || blockList.length == 0) {
-//       throw TypeError;
-//     }
-//     blockList.splice(blockList.indexOf(userOppDto.selectedUsername, 0));
-//     await this.userRepository.createQueryBuilder()
-//       .update({ blocked: JSON.stringify(blockList) }) // protect from injections?
-//       .where({ id: user.id })
-//       .execute();
-//   }
+  async seedCustom(amount: number) {
+    for (var i = 1; i <= amount; i++) {
+      await this.createUser({ intraID: randAmount().toString(), username: randFullName()})
+    }
+  }
 
   async generateTwoFactorAuthenticationSecret(user: User) {
     const secret = authenticator.generateSecret();
