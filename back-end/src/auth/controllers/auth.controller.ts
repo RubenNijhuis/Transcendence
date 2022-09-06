@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Res,
   UseGuards
 } from "@nestjs/common";
@@ -13,10 +14,8 @@ import { FortyTwoAuthGuard } from "src/auth/guard";
 import { User } from "src/typeorm";
 import { ConfirmDto } from "../dto/confirm.dto";
 import { AuthService } from "../services/auth.service";
-import { HttpService } from "@nestjs/axios";
 import Axios from "axios";
 import { ConfigService } from "@nestjs/config";
-import { env } from "process";
 
 @Controller("auth")
 export class AuthController {
@@ -27,8 +26,18 @@ export class AuthController {
   ) {}
 
   @Get("login")
-  @UseGuards(FortyTwoAuthGuard)
-  login() {}
+  //   @UseGuards(FortyTwoAuthGuard)
+  login() {
+    const url: string = this.configService.get<string>("INTRA_AUTH_URL");
+    const params: any = {
+      client_id: this.configService.get<string>("FORTYTWO_APP_ID"),
+      redirect_uri: this.configService.get<string>("FORTYTWO_CALLBACK_URL"),
+      response_type: "code"
+    };
+    const redirectUrl: string = Axios.getUri({ url, params });
+
+    return redirectUrl;
+  }
 
   // @Get('42/callback')
   // // @UseGuards(FortyTwoAuthGuard)
@@ -36,29 +45,39 @@ export class AuthController {
   //   res.sendStatus(200);
   // }
 
-  @Post("confirm")
+  @Get("confirm?")
   // @UseGuards(FortyTwoAuthGuard)
-  async confirm(@Body() confirmDto: ConfirmDto) {
-    const ret: any = await Axios.post(
+  async confirm(@Query("token") token: string) {
+    // Turns the token from redirect into a token
+    const accessTokenResp: any = await Axios.post(
       this.configService.get<string>("INTRA_TOKEN_URL"),
+      null,
       {
         params: {
           grant_type: "authorization_code",
           client_id: this.configService.get<string>("FORTYTWO_APP_ID"),
           client_secret: this.configService.get<string>("FORTYTWO_APP_SECRET"),
-          code: confirmDto.token,
-          redirect_url: this.configService.get<string>("FORTYTWO_CALLBACK_URL")
+          code: token,
+          redirect_uri: this.configService.get<string>("FORTYTWO_CALLBACK_URL")
         }
       }
     );
 
-    const data = await Axios.get(this.configService.get("INTRA_GET_ME_URL"), {
-      headers: { Authorization: `Bearer ${ret.access_token}` }
-    });
+    console.log(accessTokenResp.data.access_token);
+
+    const userData = await Axios.get(
+      this.configService.get("INTRA_GET_ME_URL"),
+      {
+        headers: {
+          Authorization: `Bearer ${accessTokenResp.data.access_token}`
+        }
+      }
+    );
+
     // const intraID = data.data.id;
     // const username = data.data.login;
     // const CreateUserDto = { intraID, username };
-    return data;
+    return userData.data;
   }
 
   @Get("status")
