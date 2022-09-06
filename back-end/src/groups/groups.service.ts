@@ -42,12 +42,12 @@ export class GroupService {
             owner === EditPasswordDto.owner &&
             oldPassword === EditPasswordDto.oldPassword
         )
-            return await this.groupRepository  //this shit don't work just yet
+            return await this.groupRepository
                 .createQueryBuilder()
                 .update()
                 .set({ password: EditPasswordDto.newPassword })
-                .where("password = :password", {
-                    password: EditPasswordDto.newPassword
+                .where({
+                    id: EditPasswordDto.id
                 })
                 .execute();
     }

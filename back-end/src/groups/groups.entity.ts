@@ -18,15 +18,15 @@ export class Group {
 	password: string
 
     @ManyToMany((type) => User)
-    @JoinTable({ joinColumn: { name: "admins_id" } })
+    @JoinTable({ joinColumn: { name: "intra_id" } })
     admins: User[];
 
     @ManyToMany((type) => User)
-    @JoinTable({ joinColumn: { name: "users_id" } })
+    @JoinTable({ joinColumn: { name: "intra_id"} })
     users: User[];
 
     @ManyToMany((type) => Chat)
-    @JoinTable({ joinColumn: { name: "chat_id" } })
+    @JoinTable({ joinColumn:  { name: "group_id" } })
     messages: Chat[];
 
 }
