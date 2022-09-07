@@ -1,5 +1,5 @@
 // Routing
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 
 // Pages
 import Home from "../../pages/Home";
@@ -22,36 +22,38 @@ import NewPongGame from "../../pages/NewPongGame";
 import SuccesfulLogin from "../../pages/SuccesfulLogin";
 
 const Router = () => (
+  <BrowserRouter>
     <Routes>
-        {/* Public routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/login" element={<Login />} />
+      {/* Public routes */}
+      <Route path="/" element={<Home />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/login" element={<Login />} />
 
-        {/* Pong debugging */}
-        <Route path="/pong" element={<Pong />} />
-        <Route path="/new-pong" element={<NewPongGame />} />
+      {/* Pong debugging */}
+      <Route path="/pong" element={<Pong />} />
+      <Route path="/new-pong" element={<NewPongGame />} />
 
-        {/* Callback route after login */}
-        <Route path="/auth/succesful-login" element={<SuccesfulLogin />} />
+      {/* Callback route after login */}
+      <Route path="/auth/succesful-login" element={<SuccesfulLogin />} />
 
-        {/* Routes that have to pass through authentication to be loaded */}
-        <Route element={<Guard />}>
-            {/* Profile page is rendered in two different ways but same component */}
-            <Route path="profile">
-                <Route path=":id" element={<ProfilePage />} />
-                <Route path="me" element={<ProfilePage />} />
-            </Route>
-
-            {/* Regular private routes */}
-            <Route path="/play" element={<Play />} />
-            <Route path="/chat" element={<Chat />} />
-            <Route path="/leaderboard" element={<Leaderboard />} />
+      {/* Routes that have to pass through authentication to be loaded */}
+      <Route element={<Guard />}>
+        {/* Profile page is rendered in two different ways but same component */}
+        <Route path="profile">
+          <Route path=":id" element={<ProfilePage />} />
+          <Route path="me" element={<ProfilePage />} />
         </Route>
 
-        {/* 404 route */}
-        <Route path="*" element={<NotFound />} />
+        {/* Regular private routes */}
+        <Route path="/play" element={<Play />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
+      </Route>
+
+      {/* 404 route */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
+  </BrowserRouter>
 );
 
 export default Router;
