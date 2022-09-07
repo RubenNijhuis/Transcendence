@@ -78,7 +78,7 @@ export class AuthService {
         throw TypeError;
     }
         var secret = "";
-        if (ret.twoFactorAuthenticationSecret == "2FA_SECRET")
+        if (ret.twoFactorAuthenticationSecret == "")
         {
             secret = authenticator.generateSecret();
             console.log("secret:");
@@ -89,7 +89,7 @@ export class AuthService {
         {
             secret = ret.twoFactorAuthenticationSecret;
         }
-        const otpauthUrl = authenticator.keyuri(mailDto.email, 'AUTH_APP_NAME', secret);
+        const otpauthUrl = authenticator.keyuri(mailDto.email, 'TRANSCEND_2FA', secret);
         
         console.log("otapathurl:");
         console.log(otpauthUrl);
