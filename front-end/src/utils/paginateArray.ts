@@ -19,6 +19,7 @@ const PaginateArray = (items: any[], amountPerPage: number): any[][] => {
     }
 
     if (page.length !== 0) pageCollection.push(page);
+    page = [];
 
     return pageCollection;
 };

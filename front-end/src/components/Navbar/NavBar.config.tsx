@@ -1,10 +1,5 @@
 export const locations = [
     {
-        name: "Home",
-        url: "/",
-        onlyWhenLoggedin: false
-    },
-    {
         name: "About",
         url: "/about",
         onlyWhenLoggedin: false

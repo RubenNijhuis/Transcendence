@@ -26,7 +26,7 @@ import { largeRadius, mainColor } from "../utils/StylingConstants";
 import { useDataDebug } from "../utils/DebugDataContext";
 
 const ProfilePage = () => {
-    const [userData, setUserData] = useState<Profile | null>(null);
+    const [userData, setUserData] = useState<Profile | null>(null!);
     const { profiles, matchHistory } = useDataDebug();
     const { user } = useAuth();
     const { id } = useParams();
@@ -52,7 +52,7 @@ const ProfilePage = () => {
 
     return (
         <Layout>
-            {user !== null && userData !== null ? (
+            {userData && user ? (
                 <div
                     style={{
                         borderRadius: largeRadius,

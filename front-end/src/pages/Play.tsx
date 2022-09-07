@@ -1,5 +1,3 @@
-import { Fragment } from "react";
-
 // Components
 import GameCard from "../components/GameCard";
 import Layout from "../components/Layout";
@@ -7,12 +5,9 @@ import Layout from "../components/Layout";
 // Styling
 import { magicNum } from "../utils/StylingConstants";
 
-// import PongGame from "../containers/PongGame";
-
 const Play = () => {
     return (
         <Layout>
-            <Fragment>
                 <div
                     style={{
                         width: "100%",
@@ -26,7 +21,7 @@ const Play = () => {
                     <GameCard
                         img_url="https://images.unsplash.com/photo-1570572137089-1655117ad216?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cG9uZ3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60"
                         title="Classic"
-                        description="Try to beat your friends in this old and classic version of pong"
+                        description="Try to beat your friends in this classic version of pong"
                         url="classic"
                         cta="Play Classic Pong"
                     />
@@ -39,8 +34,6 @@ const Play = () => {
                         cta="Play Powered Pong"
                     />
                 </div>
-                {/* <PongGame /> */}
-            </Fragment>
         </Layout>
     );
 };

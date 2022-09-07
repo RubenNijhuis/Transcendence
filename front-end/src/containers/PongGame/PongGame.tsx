@@ -119,16 +119,14 @@ const drawGame = (
 };
 
 const PongGame = () => {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null!);
 
     useEffect(() => {
-        if (canvasRef.current !== null) {
-            const context = canvasRef.current.getContext("2d");
+        const context = canvasRef.current.getContext("2d");
 
-            // Start drawing the game
-            if (context !== null) {
-                drawGame(canvasRef.current, context);
-            }
+        // Start drawing the game
+        if (context !== null) {
+            drawGame(canvasRef.current, context);
         }
     }, []);
 

@@ -1,5 +1,3 @@
-import { Fragment } from "react";
-
 // Components
 import Heading from "../components/Heading";
 import Layout from "../components/Layout";
@@ -7,7 +5,6 @@ import Layout from "../components/Layout";
 const About = () => {
     return (
         <Layout>
-            <Fragment>
                 <Heading type={1}>About</Heading>
                 <p
                     style={{
@@ -169,7 +166,6 @@ const About = () => {
                     why I always say 'Shumshumschilpiddydah!' Nothing to read
                     into there!
                 </p>
-            </Fragment>
         </Layout>
     );
 };

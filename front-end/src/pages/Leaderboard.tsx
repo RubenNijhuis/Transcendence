@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 // Components
 import Heading from "../components/Heading";
@@ -13,33 +13,26 @@ import { useDataDebug } from "../utils/DebugDataContext";
 import { Profile } from "../utils/GlobalTypes";
 
 const Leaderboard = () => {
-    const [rankings, setRankings] = useState<Profile[] | null>(null);
+    const [rankings, setRankings] = useState<Profile[]>(null!);
     const { leaderBoard } = useDataDebug();
 
     const getRankingList = () => {
-        const reqPromise = new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve(leaderBoard);
-            }, 1000);
-        });
-        return reqPromise;
+        return new Promise((resolve, reject) => resolve(leaderBoard));
     };
 
     useEffect(() => {
         // Set the ranking list after request
         getRankingList().then((res) => setRankings(res as Profile[]));
-    }, []);
+    });
 
     return (
         <Layout>
-            <Fragment>
                 <Heading type={1}>Leaderboard</Heading>
                 {rankings !== null ? (
                     <RankingList rankings={rankings} />
                 ) : (
                     <Loader />
                 )}
-            </Fragment>
         </Layout>
     );
 };

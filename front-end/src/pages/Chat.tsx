@@ -12,7 +12,7 @@ import { GroupChat } from "../utils/GlobalTypes";
 import { useDataDebug } from "../utils/DebugDataContext";
 
 const Chat = () => {
-    const [messages, setMessages] = useState<GroupChat[] | null>(null);
+    const [messages, setMessages] = useState<GroupChat[]>(null!);
     const [selectedChat, setSelectedChat] = useState<number>(0);
 
     const { chats } = useDataDebug();

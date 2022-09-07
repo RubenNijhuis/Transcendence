@@ -19,6 +19,7 @@ import NotFound from "../../pages/NotFound";
 import Guard from "../../containers/Guard";
 import Pong from "../../pages/Pong";
 import NewPongGame from "../../pages/NewPongGame";
+import SuccesfulLogin from "../../pages/SuccesfulLogin";
 
 const Router = () => (
     <Routes>
@@ -30,6 +31,9 @@ const Router = () => (
         {/* Pong debugging */}
         <Route path="/pong" element={<Pong />} />
         <Route path="/new-pong" element={<NewPongGame />} />
+
+        {/* Callback route after login */}
+        <Route path="/auth/succesful-login" element={<SuccesfulLogin />} />
 
         {/* Routes that have to pass through authentication to be loaded */}
         <Route element={<Guard />}>
