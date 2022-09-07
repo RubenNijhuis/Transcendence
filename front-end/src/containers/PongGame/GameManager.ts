@@ -1,6 +1,9 @@
 import Ball from "./Ball";
 import Bat from "./Bat";
 import PowerUps from "./PowerUps";
+import randomIntFromInterval from "../../utils/randomNumFromInterval";
+import { runInThisContext } from "vm";
+import { Match } from "../../components/GameHistory/GameHistory.style";
 
 class GameManager {
     player1Score: number;
@@ -57,60 +60,114 @@ class GameManager {
 
         this.pongBall.reset();
     }
+    
+    checkGame (pongball: Ball) {
+        this.checkIfBallHitsSide(pongball);
+        this.checkIfBallHitsBats(pongball);
+        this.checkIfBallHitsPowerUp();
+        this.checkIfGameIsFinished();
+    }
 
-    checkIfBallHitsBats() {
-        if (
-            this.pongBall.positionX - this.pongBall.radius <=
-                this.player1Bat.positionX + this.player1Bat.width / 2 &&
-            this.pongBall.positionX >
-                this.player1Bat.positionX +
-                    this.player1Bat.width -
-                    this.player1Bat.width / 4 &&
-            this.pongBall.positionY >
-                this.player1Bat.positionY - this.player1Bat.height / 2 &&
-            this.pongBall.positionY <
-                this.player1Bat.positionY + this.player1Bat.height / 2
-        ) {
-            // Logger("GAME", "LEFTHIT", {});
-            this.pongBall.velocityX = -this.pongBall.velocityX;
-            //this.pongBall.positionX - this.pongBall.radius < this.player1Bat.positionX + this.player1Bat.width / 2
+    checkIfBallHitsBats(pongball: Ball) {
+        // Checks if the left bat is hit
+        // if  (pongball.positionX - (pongball.radius * 1.1) <= this.player1Bat.positionX &&
+        //     (pongball.positionY >= this.player1Bat.positionY - this.player1Bat.height / 2 &&
+        //     pongball.positionY <= this.player1Bat.positionY + this.player1Bat.height / 2)) {
+        //     var relativeIntersectY = this.player1Bat.positionY - pongball.positionY;
+        //     var normalizedRelativeIntersectionY = (relativeIntersectY / (this.player1Bat.height / 2));
+        //     var bounceAngle = normalizedRelativeIntersectionY * (5 * Math.PI / 12);
+        //     pongball.velocityX = -pongball.velocityX;
+        //     pongball.velocityY = (pongball.velocity) * -Math.sin(bounceAngle);
+        //     pongball.velocity = this.canvas.width / 270;
+        //     this.powerUp.turn = 0;
+        // }
+        // Checks if right bat is hit
+        if (pongball.positionX + (pongball.radius * 1.1) >= this.player2Bat.positionX  &&
+            (pongball.positionY >= this.player2Bat.positionY - this.player2Bat.height / 2 &&
+            pongball.positionY <= this.player2Bat.positionY + this.player2Bat.height / 2)) {
+            var relativeIntersectY = this.player2Bat.positionY - pongball.positionY;
+            var normalizedRelativeIntersectionY = (relativeIntersectY / (this.player2Bat.height / 2));
+            var bounceAngle = normalizedRelativeIntersectionY * (5 * Math.PI / 12);
+            pongball.velocityX = -pongball.velocityX;
+            pongball.velocityY = -(pongball.velocity) * Math.sin(bounceAngle);
+            pongball.velocity = this.canvas.width / 270;
+            this.powerUp.turn = 1;
         }
-        if (
-            this.pongBall.positionX + this.pongBall.radius >=
-                this.player2Bat.positionX - this.player2Bat.width / 2 &&
-            this.pongBall.positionX <
-                this.player2Bat.positionX -
-                    this.player1Bat.width +
-                    this.player1Bat.width / 4 &&
-            this.pongBall.positionY >
-                this.player2Bat.positionY - this.player2Bat.height / 2 &&
-            this.pongBall.positionY <
-                this.player2Bat.positionY + this.player2Bat.height / 2
-        ) {
-            this.pongBall.velocityX = -this.pongBall.velocityX;
+        if (pongball.positionX <= (this.player1Bat.positionX + this.player1Bat.width + pongball.radius)) {
+            if (pongball.positionY > this.player1Bat.positionY - (this.player1Bat.height / 2) && 
+                pongball.positionY < this.player1Bat.positionY + this.player1Bat.height) {
+                var relativeIntersectY = this.player1Bat.positionY - pongball.positionY;
+                var normalizedRelativeIntersectionY = (relativeIntersectY / (this.player1Bat.height / 2));
+                var bounceAngle = normalizedRelativeIntersectionY * (5 * Math.PI / 12);
+                pongball.velocityX = -pongball.velocityX;
+                pongball.velocityY = (pongball.velocity) * -Math.sin(bounceAngle);
+                pongball.velocity = this.canvas.width / 270;
+                this.powerUp.turn = 0;
+            }
         }
     }
 
-    checkIfBallHitsSide() {
-        if (this.pongBall.positionX - this.pongBall.radius < 0) {
+    checkIfBallHitsSide(pongball: Ball) {
+        // Checks if left side of the field is hit
+        if (pongball.positionX - pongball.radius < 0) {
             this.player2Score++;
+            this.powerUp.power = false;
+            if (this.powerUp.hit == true) {
+                this.powerUp.hit = false;
+                this.powerUp.positionX = this.powerUp.getPositionX(4);
+                this.powerUp.positionY = this.powerUp.getPositionY(3);
+            }
+            this.powerUp.powerTaken = false;
             this.resetGame();
         }
-
-        if (
-            this.pongBall.positionX + this.pongBall.radius >
-            this.canvas.width
-        ) {
+        // Checks if right side of the field is hit
+        if (pongball.positionX + pongball.radius > this.canvas.width) {
             this.player1Score++;
+            this.powerUp.power = false;
+            if (this.powerUp.hit == true) {
+                this.powerUp.hit = false;
+                this.powerUp.positionX = this.powerUp.getPositionX(4);
+                this.powerUp.positionY = this.powerUp.getPositionY(3);
+            }
+            this.powerUp.powerTaken = false;
             this.resetGame();
+        }
+    }
+
+    checkIfBallHitsPowerUp() {
+        if ((this.pongBall.positionX + this.pongBall.radius >= this.powerUp.positionX &&
+            this.pongBall.positionX + this.pongBall.radius <= this.powerUp.positionX + this.powerUp.width) &&
+            (this.pongBall.positionY + this.pongBall.radius >= this.powerUp.positionY &&
+            this.pongBall.positionY + this.pongBall.radius <= this.powerUp.positionY + this.powerUp.height)) {
+            this.powerUp.hit = true; 
+            this.powerUp.power = true;
+        }
+        if ((this.pongBall.positionX - this.pongBall.radius >= this.powerUp.positionX &&
+            this.pongBall.positionX - this.pongBall.radius <= this.powerUp.positionX + this.powerUp.width) &&
+            (this.pongBall.positionY + this.pongBall.radius >= this.powerUp.positionY &&
+            this.pongBall.positionY + this.pongBall.radius <= this.powerUp.positionY + this.powerUp.height)) {
+            this.powerUp.hit = true; 
+            this.powerUp.power = true;
+        }
+        if ((this.pongBall.positionX - this.pongBall.radius >= this.powerUp.positionX &&
+            this.pongBall.positionX - this.pongBall.radius <= this.powerUp.positionX + this.powerUp.width) &&
+            (this.pongBall.positionY - this.pongBall.radius >= this.powerUp.positionY &&
+            this.pongBall.positionY - this.pongBall.radius <= this.powerUp.positionY + this.powerUp.height)) {
+            this.powerUp.hit = true; 
+            this.powerUp.power = true;
+        }
+        if ((this.pongBall.positionX + this.pongBall.radius >= this.powerUp.positionX &&
+            this.pongBall.positionX + this.pongBall.radius <= this.powerUp.positionX + this.powerUp.width) &&
+            (this.pongBall.positionY - this.pongBall.radius >= this.powerUp.positionY &&
+            this.pongBall.positionY - this.pongBall.radius <= this.powerUp.positionY + this.powerUp.height)) {
+            this.powerUp.hit = true;
+            this.powerUp.power = true;
         }
     }
 
     checkIfGameIsFinished() {
-        if (
-            this.player1Score >= this.maxScore ||
-            this.player2Score >= this.maxScore
-        ) {
+        //If one of the player's score exeeds maxScore, the game is over
+        if (this.player1Score >= this.maxScore || this.player2Score >= this.maxScore) {
             this.context.font = "60px Arial";
             this.context.textAlign = "center";
             this.context.fillText(
