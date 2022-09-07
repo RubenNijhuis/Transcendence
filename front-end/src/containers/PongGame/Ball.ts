@@ -22,9 +22,9 @@ class Ball {
         this.canvas = c;
         this.context = context;
         
-        this.radius = this.canvas.width / 75;
+        this.radius = this.canvas.width / 65;
         
-        this.velocity = this.canvas.width / 300
+        this.velocity = this.canvas.width / 120;
 
         this.velocityX = randomIntFromInterval(-(this.velocity), this.velocity);
         this.velocityY = randomIntFromInterval(-(this.velocity), this.velocity);
@@ -56,7 +56,9 @@ class Ball {
     reset() {
         this.positionX = this.canvas.clientWidth / 2;
         this.positionY = this.canvas.clientHeight / 2;
-        this.velocityX = this.velocityY = randomIntFromInterval(-(this.velocity), this.velocity);
+        this.velocity = this.canvas.width / 120;
+        this.velocityX = randomIntFromInterval(-(this.velocity), this.velocity);
+        this.velocityY = randomIntFromInterval(-(this.velocity), this.velocity);
         //this.start();
     }
 
@@ -71,16 +73,16 @@ class Ball {
 
         // if the ball hits the sides (X axis) swap velocities
         if (
-            this.positionX + this.radius > this.canvas.width ||
-            this.positionX - this.radius < 0
+            this.positionX + this.radius >= this.canvas.width ||
+            this.positionX - this.radius <= 0
         ) {
             this.velocityX = -this.velocityX;
         }
 
         // If the ball hits the sides (Y axis) swap velocities
         if (
-            this.positionY + this.radius > this.canvas.height ||
-            this.positionY - this.radius < 0
+            this.positionY + this.radius >= this.canvas.height ||
+            this.positionY - this.radius <= 0
         ) {
             this.velocityY = -this.velocityY;
         }

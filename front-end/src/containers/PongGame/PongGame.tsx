@@ -41,7 +41,6 @@ const keyPressListener = (gameManager: GameManager) => {
         if (splitValue === "L" && !Player2Bat.wallCollisionBatDown()) {
             Player2Bat.setPosition(Player2Bat.positionY + Player2Bat.height/10);
         }
-
     };
 
     // Keylogger
@@ -52,9 +51,10 @@ const keyPressListener = (gameManager: GameManager) => {
 const drawGame = (canvas: HTMLCanvasElement, context: any) => {
     // Setup components to be drawn on the canvas
     const PongBall = new Ball(context, canvas);
-    const Player1 = new Bat(canvas.clientWidth/8, canvas.clientHeight / 2, context, canvas);
+    const PongBallPower = new Ball(context, canvas);
+    const Player1 = new Bat(canvas.clientWidth * 0.01, canvas.clientHeight / 2, context, canvas);
     const Player2 = new Bat(
-        canvas.clientWidth/8 * 7,
+        canvas.clientWidth * 0.99,
         canvas.clientHeight / 2,
         context,
         canvas
@@ -75,22 +75,27 @@ const drawGame = (canvas: HTMLCanvasElement, context: any) => {
     const animate = () => {
         requestAnimationFrame(animate);
         context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
-
+        
+        // PowerUps
+        Power.getRandomPower (Player1, Player2, PongBall, PongBallPower);
+       
         // Draw the elements
         if (GameManagement.player1Score != GameManagement.maxScore && GameManagement.player2Score != GameManagement.maxScore) {
             PongBall.draw();
             Player1.draw();
             Player2.draw();
-            //if (GameManagement.player1Score >= 1 || GameManagement.player2Score >= 1)
             Power.draw();
         }
+        // Draws and checks extra ball (Powerup)
+        if (Power.extraPongBall == true) {
+            PongBallPower.draw();
+            GameManagement.checkGame(PongBallPower);
+        }
+        
         GameManagement.displayText();
 
         // Check game
-        GameManagement.checkIfBallHitsSide();
-        GameManagement.checkIfBallHitsBats();
-        GameManagement.checkIfGameIsFinished();
-        GameManagement.checkIfBallHitsPowerUp();
+        GameManagement.checkGame(PongBall);
     };
 
     // Respond to keypresses

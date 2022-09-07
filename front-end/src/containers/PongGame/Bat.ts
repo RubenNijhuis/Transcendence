@@ -23,7 +23,7 @@ class Bat {
         this.canvas = c;
         this.context = context;
 
-        this.width = this.canvas.width / 40;
+        this.width = this.canvas.width / 130;
         this.height = this.canvas.width / 7;
 
         this.color = "#1e1e1e";
