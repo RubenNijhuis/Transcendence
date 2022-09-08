@@ -1,6 +1,7 @@
 // Routing
-import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
+
+import Axios from "axios";
 
 // Components
 import Button from "../components/Button";
@@ -21,23 +22,16 @@ const Login = () => {
     Logger("AUTH", "Login page", "Profile", auth.user);
 
     const handleLogin = () => {
-        auth.signin({}, () => {
-            navigate("/play", { replace: true });
-        });
-    };
-
-    const handleLogout = () => {
-        auth.signout(() => {
-            navigate("/", { replace: true });
-        });
+        console.log("Login");
+        Axios.get("/api/auth/login").then((res) =>
+            window.location.assign(res.data)
+        );
     };
 
     return (
         <Layout>
-            <Fragment>
-                <Heading type={1}>Login page</Heading>
-                <Button onClick={handleLogin}>Fake Login</Button>
-            </Fragment>
+            <Heading type={1}>Login page</Heading>
+            <Button onClick={handleLogin}>Login with the button</Button>
         </Layout>
     );
 };

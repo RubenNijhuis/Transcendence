@@ -6,12 +6,18 @@ import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
 import { typeOrmAsyncConfig } from './typeorm/typeorm.config';
 import { envConfig } from './configs/env.config';
+import { FriendslistModule } from './users/friendlist/friendlist.module';
+import { BlockListModule } from './users/blocklist/blocklist.module';
+import { FriendRequestModule } from './users/friendrequests/friendrequest.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(envConfig),
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
   	UsersModule,
+    FriendslistModule,
+    BlockListModule,
+    FriendRequestModule,
   	AuthModule,
     PassportModule.register({ session: true }),
 	],

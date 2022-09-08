@@ -1,11 +1,11 @@
 // A lot of this was taken from https://stackblitz.com/github/remix-run/react-router/tree/main/examples/auth?file=src%2FApp.tsx
 import { createContext, useContext, useState } from "react";
 import { Profile } from "./GlobalTypes";
-import { generateProfile } from "./randomDataGenerator";
+import { generateProfile } from "./randomData";
 
 // Define what the auth context contains
 interface AuthContextType {
-    user: any;
+    user: Profile | null;
     isLoggedIn: boolean;
     signin: (user: any, callback: VoidFunction) => any;
     signout: (callback: VoidFunction) => void;
@@ -37,13 +37,13 @@ const useAuth = () => useContext(AuthContext);
  * the user data as well as the utility functions like login and logout
  */
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<Profile | null>(null!);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
 
     const signin = (loginData: any, callback: VoidFunction) => {
         return fakeAuthProvider.signin(loginData, (newUserData: Profile) => {
             // Permanent data
-            newUserData.id = 424242;
+            newUserData.intraID = 424242;
             newUserData.username = "LowerRes";
             newUserData.img_url =
                 "https://images.ctfassets.net/vf2eiv36rew2/6vLLgPp8PvG9hfReO0dCIS/1b576d6080c255d6a5e6e884a11741ea/a.jpg?w=4000&h=2666&q=50&fm=webp";

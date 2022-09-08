@@ -1,9 +1,14 @@
 import styled from "styled-components";
-import { lightTextColor, magicNum, mainColor, mediumRadius, smallRadius } from "../../utils/StylingConstants";
+import {
+    lightTextColor,
+    magicNum,
+    mainColor,
+    mediumRadius
+} from "../../utils/StylingConstants";
 
 const Container = styled.div`
     padding-bottom: calc(${magicNum} / 2);
-    
+
     .footer {
         display: grid;
         grid-template-rows: repeat(2, 1fr);
@@ -13,7 +18,7 @@ const Container = styled.div`
         row-gap: calc(${magicNum} / 2);
         align-items: flex-end;
 
-        grid-template-areas: 
+        grid-template-areas:
             "heading links"
             "rights links";
 
@@ -46,7 +51,8 @@ const Container = styled.div`
                 margin-right: calc(${magicNum} / 2);
             }
 
-            .inbound, .outbound {
+            .inbound,
+            .outbound {
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-end;

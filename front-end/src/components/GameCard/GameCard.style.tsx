@@ -1,5 +1,10 @@
 import styled from "styled-components";
-import { lightTextColor, magicNum, mainColor } from "../../utils/StylingConstants";
+
+import {
+    lightTextColor,
+    magicNum,
+    mainColor
+} from "../../utils/StylingConstants";
 
 const AdvancedCard = styled.div`
     display: flex;

@@ -1,33 +1,34 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from 'src/users/dtos/create-users.dto';
-import { UsersService } from 'src/users/services/users/users.service';
+import { Injectable } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { CreateUserDto } from "src/users/dtos/create-users.dto";
+import { UsersService } from "src/users/users.service";
 
 @Injectable()
 export class AuthService {
-    constructor(
-        private readonly usersService: UsersService,
-    )  {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService
+  ) {}
 
-    async validateUser(userDto: CreateUserDto): Promise<any> {
-        const user = await this.usersService.findUsersByIntraId(userDto.uid);
-    if (!user)
-      return await this.createUser(userDto);
+  async validateUser(userDto: CreateUserDto): Promise<any> {
+    const user = await this.usersService.findUsersByIntraId(userDto.intraID);
+    if (!user) return await this.createUser(userDto);
     return user;
-    }
+  }
 
-    private async createUser(userDto: CreateUserDto): Promise<any> {
+  private async createUser(userDto: CreateUserDto): Promise<any> {
     return await this.usersService.createUser(userDto);
-    }
+  }
 
-    findUser() {
-        throw new Error('Method not implemented.');
-    }
-    
-    signup() {
-        return { msg: 'I have signed up' }
-    }
+  findUser() {
+    throw new Error("Method not implemented.");
+  }
 
-    signin() {
-        return { msg: 'I have signed in' }
-    }
+  signup() {
+    return { msg: "I have signed up" };
+  }
+
+  signin() {
+    return { msg: "I have signed in" };
+  }
 }

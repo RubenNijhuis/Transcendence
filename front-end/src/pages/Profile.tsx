@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 // Optional url params
 import { useParams } from "react-router-dom";
@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 // Components
 import Layout from "../components/Layout";
 import Loader from "../components/Loader";
+import GameHistory from "../components/GameHistory";
 
 // Profile components
 import ProfileDisplay from "../components/Profile/ProfileDisplay";
@@ -18,24 +19,14 @@ import { useAuth } from "../utils/AuthContext";
 // Types
 import { Profile } from "../utils/GlobalTypes";
 
-// Debug
-import Logger from "../utils/Logger";
+// Styling constants
+import { largeRadius, mainColor } from "../utils/StylingConstants";
 
-// Random data
-import {
-    generateGameResult,
-    generateProfile
-} from "../utils/randomDataGenerator";
-import {
-    largeRadius,
-    mainColor,
-    mediumRadius
-} from "../utils/StylingConstants";
-import GameHistory from "../components/GameHistory";
+// Debug data
 import { useDataDebug } from "../utils/DebugDataContext";
 
 const ProfilePage = () => {
-    const [userData, setUserData] = useState<Profile | null>(null);
+    const [userData, setUserData] = useState<Profile | null>(null!);
     const { profiles, matchHistory } = useDataDebug();
     const { user } = useAuth();
     const { id } = useParams();
@@ -57,11 +48,11 @@ const ProfilePage = () => {
         } else {
             setUserData(user);
         }
-    }, [user, id]);
+    }, []);
 
     return (
         <Layout>
-            {userData !== null ? (
+            {userData && user ? (
                 <div
                     style={{
                         borderRadius: largeRadius,
@@ -69,10 +60,7 @@ const ProfilePage = () => {
                     }}
                 >
                     <ProfileDisplay user={userData} />
-                    <ProfileStats
-                        player={userData}
-                        matches={generateGameResult(userData, 50)}
-                    />
+                    <ProfileStats player={userData} matches={matchHistory} />
                     {userData.username !== user.username && (
                         <ProfileActions profile={userData} />
                     )}

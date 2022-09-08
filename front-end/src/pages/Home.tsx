@@ -1,7 +1,7 @@
 // Components
 import Layout from "../components/Layout";
 import Heading from "../components/Heading";
-import { Fragment, useEffect } from "react";
+import axios from "axios";
 
 const Home = () => {
 
@@ -30,9 +30,8 @@ const Home = () => {
 
     return (
         <Layout>
-            <Fragment>
-                <Heading type={1}>Home page</Heading>
-            </Fragment>
+            <Heading type={1}>Home page</Heading>
+            <Heading type={1}>Home page</Heading>
         </Layout>
     );
 };

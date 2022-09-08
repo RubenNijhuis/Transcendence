@@ -6,7 +6,7 @@ import NavBar from "../Navbar";
 import { Container, Content } from "./Layout.style";
 
 interface Props {
-    children: JSX.Element;
+    children: React.ReactNode;
 };
 
 const Layout = ({ children }: Props) => {

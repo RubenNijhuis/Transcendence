@@ -1,5 +1,7 @@
 // Router
 import { Navigate, useLocation, Outlet } from "react-router-dom";
+
+// Auth check
 import { useAuth } from "../../utils/AuthContext";
 
 const Guard = () => {

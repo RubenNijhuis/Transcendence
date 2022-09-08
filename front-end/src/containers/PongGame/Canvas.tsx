@@ -19,10 +19,10 @@ interface Props {
 }
 
 const Canvas = ({ canvasRef }: Props) => {
-    const canvasContainerRef = useRef(null);
+    const canvasContainerRef = useRef(null!);
 
     useEffect(() => {
-        if (canvasRef.current !== null && canvasContainerRef.current !== null) {
+        if (canvasRef.current !== null) {
             const canvasContainer: HTMLElement = canvasContainerRef.current;
 
             // Set canvas width and height to container

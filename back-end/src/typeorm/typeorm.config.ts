@@ -1,7 +1,10 @@
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from "@nestjs/typeorm";
-import { CreateUser1661771716474 } from "src/database/migrations/1661771716474-CreateUser";
-import { User } from "./user.entity";
+import { CreateTables1661971166323 } from "src/database/migrations/1661971166323-CreateTables";
+import { BlockList } from "src/users/blocklist/blocklist.entity";
+import { FriendList } from "src/users/friendlist/friendlist.entity";
+import FriendRequests from "src/users/friendrequests/friendrequest.entity";
+import { User } from "src/users/user.entity";
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
     imports: [ConfigModule],
@@ -14,8 +17,8 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
             username: configService.get<string>('DB_USER'),
             password: configService.get<string>('DB_PASS'),
             database: configService.get<string>('DB_NAME'),
-            entities: [User],
-            migrations: [CreateUser1661771716474],
+            entities: [User, FriendList, BlockList, FriendRequests],
+            migrations: [CreateTables1661971166323],
             synchronize: false,
             logging: true,
             autoLoadEntities: true,

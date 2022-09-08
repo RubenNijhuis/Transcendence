@@ -22,7 +22,7 @@ const Container = styled.div`
 
     .chat-content {
         padding: 18px;
-
+        min-height: 720px;
         max-height: 720px;
         overflow: scroll;
     }

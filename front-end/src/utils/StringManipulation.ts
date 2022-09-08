@@ -1,3 +1,8 @@
+/**
+ * Capitalizes the first letter of any string
+ * @param str 
+ * @returns 
+ */
 const capitalizeString = (str: string) => {
     const firstLetterCap = str.charAt(0).toUpperCase();
     const remainingLetters = str.slice(1);

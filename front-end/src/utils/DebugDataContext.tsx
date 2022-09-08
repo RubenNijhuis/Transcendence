@@ -12,7 +12,7 @@ import {
     generateGameResult,
     generateGroupChats,
     generateProfile
-} from "./randomDataGenerator";
+} from "./randomData";
 
 // What kind of data and functions the context consists of
 interface DataDebugContextType {
@@ -46,9 +46,10 @@ const DataDebugProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         if (user) {
-            setProfiles(generateProfile(10));
-            setChats(generateGroupChats(user, 3, 2));
-            setLeaderBoard(profiles);
+            const tempProfiles: Profile[] = generateProfile(20);
+            setProfiles(tempProfiles);
+            setChats(generateGroupChats(user, 3, 2, tempProfiles));
+            setLeaderBoard(tempProfiles);
             setMatchHistory(generateGameResult(user, 50));
         }
     }, [user]);

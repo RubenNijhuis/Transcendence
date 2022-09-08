@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { Profile } from "../../../utils/GlobalTypes";
 import randomIntFromInterval from "../../../utils/randomNumFromInterval";
 import Button from "../../Button";
@@ -12,7 +12,7 @@ interface Props {
 const UserStatus = () => {
     const rand = randomIntFromInterval(0, 2);
 
-    let activityElement: any;
+    let activityElement: ReactElement = <></>;
 
     if (rand === 0) {
         activityElement = <span className="offline">Offline</span>;
@@ -22,7 +22,6 @@ const UserStatus = () => {
         activityElement = <span className="playing">Playing</span>;
     }
 
-    console.log(rand);
     return (
         <UserStatusDisplay activity={rand}>
             <div>{activityElement}</div>

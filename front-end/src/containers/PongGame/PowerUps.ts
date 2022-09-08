@@ -20,9 +20,25 @@ class PowerUps {
     width: number;
     height: number;
 
+>>>>>>> origin/master
+    positionX: number;
+    positionY: number;
+    
+    turn: number;
+    hit: boolean;
+    power: boolean;
+    powerTaken: boolean;
+
+<<<<<<< HEAD
+    context: CanvasRenderingContext2D;
+    canvas: HTMLCanvasElement;
+
     color: string[];
 
-    constructor(context: any, c: HTMLCanvasElement) {
+    constructor(context: CanvasRenderingContext2D, c: HTMLCanvasElement) {
+        this.turn = 0;
+        this.hit = 0;
+
         this.context = context;
         this.canvas = c;
         
@@ -50,8 +66,7 @@ class PowerUps {
                 this.positionX,
                 this.positionY,
                 this.width,
-                this.height,
-                this.color
+                this.height
             );
         }
         this.context.closePath();
