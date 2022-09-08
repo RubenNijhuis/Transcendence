@@ -53,7 +53,7 @@ export class User {
   @Column({
 	  name: 'twoFactorAuthenticationSecret',
     nullable: false,
-    default: '2FA_SECRET',
+    default: '',
   })
   twoFactorAuthenticationSecret: string;
 
@@ -63,6 +63,13 @@ export class User {
     default: false,
   })
   isTwoFactorAuthenticationEnabled: boolean;
+
+  @Column({
+	  name: 'jwtsession_token',
+    nullable: false,
+    default: "",
+  })
+  jwtsession_token: string;
 
   // @ManyToMany(type => User)
   // @JoinTable({ joinColumn: { name: 'users_id_1' } })
