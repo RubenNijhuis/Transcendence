@@ -17,17 +17,17 @@ export class Group {
 	})
 	password: string
 
-    @ManyToMany((type) => User)
-    @JoinTable({ joinColumn: { name: "intra_id" } })
-    admins: User[];
-
-    @ManyToMany((type) => User)
-    @JoinTable({ joinColumn: { name: "intra_id"} })
+    @ManyToMany(() => User, (user) => user.groups)
+    @JoinTable()
     users: User[];
 
-    @ManyToMany((type) => Chat)
-    @JoinTable({ joinColumn:  { name: "group_id" } })
-    messages: Chat[];
+    // @ManyToMany((type) => User)
+    // @JoinTable({ joinColumn: { name: "intra_id" } })
+    // admins: User[];
+
+    // @ManyToMany((type) => Chat)
+    // @JoinTable({ joinColumn:  { name: "group_id" } })
+    // messages: Chat[];
 
 }
 export default Group;

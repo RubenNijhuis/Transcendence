@@ -1,6 +1,5 @@
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from "@nestjs/typeorm";
-import { CreateTables1661971166323 } from "src/database/migrations/1661971166323-CreateTables";
 import { BlockList } from "src/users/blocklist/blocklist.entity";
 import { FriendList } from "src/users/friendlist/friendlist.entity";
 import FriendRequests from "src/users/friendrequests/friendrequest.entity";
@@ -20,7 +19,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
             password: configService.get<string>('DB_PASS'),
             database: configService.get<string>('DB_NAME'),
             entities: [User, FriendList, FriendRequests, Chat, Group],
-            // migrations: [CreateTables1661971166323],
+            migrations: [],
             synchronize: true,
             logging: true,
             autoLoadEntities: true,

@@ -14,6 +14,7 @@ import { GroupService } from "src/groups/groups.service";
 import { CreateGroupDto } from "./dtos/create-group.dto";
 import { CreatePasswordDto } from "./dtos/create-password.dto";
 import { EditPasswordDto } from "./dtos/edit-password.dto";
+import { AddMembersDto } from "./dtos/add-members.dto";
 
 @Controller("group")
 export class GroupController {
@@ -58,4 +59,15 @@ export class GroupController {
             return error;
         }
     }
+
+    // @Post("addMembers")
+    // async addMembers(@Body() AddMembersDto: AddMembersDto) {
+    //     try {
+    //         await this.GroupService.createGroup(AddMembersDto);
+    //         const ret = { message: "members added " };
+    //         return ret;
+    //     } catch (error) {
+    //         return error;
+    //     }
+    // }
 }
