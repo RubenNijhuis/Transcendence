@@ -111,7 +111,7 @@ class PowerUps {
 
     getRandomPower (player1: Bat, player2: Bat, pongball: Ball, pongballpower: Ball) {
         var randomNum: Number = Math.floor(Math.random() * 5);
-        randomNum = 2;
+        // randomNum = 0;
         if (this.power == true && !this.powerTaken) {
             this.powerTaken = true;
             if (randomNum == 0)
