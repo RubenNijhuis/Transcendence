@@ -193,20 +193,6 @@ class GameManager {
             );
         }
     }
-
-    checkIfBallHitsPowerUp() {
-        if (
-            this.pongBall.positionX >=
-                this.powerUp.positionX - this.powerUp.width / 2 &&
-            this.pongBall.positionX <=
-                this.powerUp.positionX + this.powerUp.width / 2 &&
-            this.pongBall.positionY >=
-                this.powerUp.positionY - this.powerUp.height / 2 &&
-            this.pongBall.positionY <=
-                this.powerUp.positionY + this.powerUp.height / 2
-        )
-            this.powerUp.hit = 1;
-    }
 }
 
 export default GameManager;
