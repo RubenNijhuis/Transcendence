@@ -1,4 +1,7 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Timestamp } from 'typeorm';
+import { group } from 'console';
+import { userInfo } from 'os';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, Timestamp } from 'typeorm';
+import Group from '../groups.entity';
  
 @Entity()
 export class Chat {
@@ -28,6 +31,9 @@ export class Chat {
     nullable: true
   })
   read_by: string;
+
+  @ManyToOne((type) => Group, (group) => group.messages)
+  group: Group
 }
  
 export default Chat;

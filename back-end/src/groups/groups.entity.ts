@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, Timestamp } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, Timestamp } from 'typeorm';
 import { User } from "src/typeorm"
 import { Chat } from 'src/typeorm';
+import { GroupService } from './groups.service';
 
 @Entity()
 export class Group {
@@ -17,17 +18,17 @@ export class Group {
 	})
 	password: string
 
-    @ManyToMany(() => User, (user) => user.groups)
+    @ManyToMany((type) => User, (user) => user.groups)
     @JoinTable()
     users: User[];
 
-    // @ManyToMany((type) => User)
-    // @JoinTable({ joinColumn: { name: "intra_id" } })
+    // @ManyToMany((type) => User, (user) => user.groups)
+    // @JoinTable()
     // admins: User[];
 
-    // @ManyToMany((type) => Chat)
-    // @JoinTable({ joinColumn:  { name: "group_id" } })
-    // messages: Chat[];
+    @OneToMany((type) => Chat, (chat) => chat.group)
+    @JoinTable()
+    messages: Chat[];
 
 }
 export default Group;
