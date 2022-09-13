@@ -15,13 +15,13 @@ export class AuthService {
   // { creatAccount: authToken, jwt: string}
   // return await this.createUser(userDto);
   // new user in table zetten (uninit)
-  async validateUser(userDto: CreateUserDto): Promise<any> {
+  async validateUser(intraId: string): Promise<any> {
     let res = {
       shouldCreateUser: false,
       profile: null,
       authToken: "sock yer dads"
     }
-    const user = await this.usersService.findUsersByIntraId(userDto.intraID);
+    const user = await this.usersService.findUsersByintraId(intraId);
     if (user)
       res.profile = user;
     else

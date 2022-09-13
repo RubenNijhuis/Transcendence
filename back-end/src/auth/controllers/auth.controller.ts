@@ -74,10 +74,10 @@ export class AuthController {
       }
     );
 
-    const intraID = userData.data.id;
+    const intraId = userData.data.id;
     const username = userData.data.login;
-    const CreateUserDto = { intraID, username };
-    return this.authService.validateUser(CreateUserDto);
+    const CreateUserDto = { intraId, username };
+    return this.authService.validateUser(intraId);
   }
 
   @Get("status")
