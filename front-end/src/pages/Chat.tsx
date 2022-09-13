@@ -18,8 +18,8 @@ const Chat = () => {
     const { chats } = useDataDebug();
 
     useEffect(() => {
-        setMessages(chats);
-    }, []);
+        if (chats) setMessages(chats);
+    }, [chats]);
 
     return (
         <Layout>

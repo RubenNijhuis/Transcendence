@@ -26,7 +26,7 @@ const ProfileStats = ({ player, matches }: Props) => {
                     <span>{player.losses + player.wins}</span>
                 </div>
                 <div className="item">
-                    <Heading type={3}>Skin</Heading>
+                    <Heading type={3}>Color</Heading>
                     <div
                         className="color"
                         style={{

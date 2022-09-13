@@ -10,7 +10,7 @@ const Guard = () => {
 
     // If the user isn't logged in we reroute them to the login page
     if (!auth.isLoggedIn)
-        return <Navigate to="/login" state={{ from: location }} replace />;
+        return <Navigate to="/" state={{ from: location }} replace />;
 
     return <Outlet />;
 };

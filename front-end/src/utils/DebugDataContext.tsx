@@ -27,6 +27,9 @@ interface DataDebugContextType {
 
     matchHistory: MatchRecord[];
     setMatchHistory: React.Dispatch<React.SetStateAction<MatchRecord[]>>;
+
+    fakeUser: Profile;
+    setFakeUser: React.Dispatch<React.SetStateAction<Profile>>;
 }
 
 // Create context
@@ -37,6 +40,7 @@ const useDataDebug = () => useContext(DataDebugContext);
 
 // Setup data storage and update functions
 const DataDebugProvider = ({ children }: { children: React.ReactNode }) => {
+    const [fakeUser, setFakeUser] = useState<Profile>(null!);
     const [profiles, setProfiles] = useState<Profile[]>([]);
     const [chats, setChats] = useState<GroupChat[]>([]);
     const [leaderBoard, setLeaderBoard] = useState<Profile[]>([]);
@@ -55,6 +59,8 @@ const DataDebugProvider = ({ children }: { children: React.ReactNode }) => {
     }, [user]);
 
     const value = {
+        fakeUser,
+        setFakeUser,
         profiles,
         setProfiles,
         chats,

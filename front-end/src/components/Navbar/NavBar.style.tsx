@@ -30,27 +30,26 @@ const Container = styled.div`
         text-decoration: none;
     }
 
-    .login-button {
+    .play-button {
         text-decoration: none;
-        justify-self: flex-end;
+    }
 
-        button {
-            height: calc(${magicNum} / 2 * 1.25);
-            padding: calc(${magicNum} / 4) calc(${magicNum} / 2);
-            border-radius: 100px;
+    .login-button, .play-button button {
+        height: calc(${magicNum} / 2 * 1.25);
+        padding: calc(${magicNum} / 4) calc(${magicNum} / 2);
+        border-radius: 100px;
 
-            color: ${lightTextColor};
-            font-weight: 700;
-            letter-spacing: 0.5px;
+        color: ${lightTextColor};
+        font-weight: 700;
+        letter-spacing: 0.5px;
 
-            box-shadow: 0px 0px 5px 2px rgba(53, 113, 255, 0.15);
-            background: rgb(53, 113, 255);
-            background: linear-gradient(
-                45deg,
-                rgba(51, 112, 252, 1) 0%,
-                rgba(34, 96, 255, 1) 100%
-            );
-        }
+        box-shadow: 0px 0px 5px 2px rgba(53, 113, 255, 0.15);
+        background: rgb(53, 113, 255);
+        background: linear-gradient(
+            45deg,
+            rgba(51, 112, 252, 1) 0%,
+            rgba(34, 96, 255, 1) 100%
+        );
     }
 
     .content {

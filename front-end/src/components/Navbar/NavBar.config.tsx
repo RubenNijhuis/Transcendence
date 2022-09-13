@@ -21,7 +21,7 @@ export const locations = [
     },
     {
         name: "Profile",
-        url: "/profile/me",
+        url: "/profile",
         onlyWhenLoggedin: true
     }
 ];
