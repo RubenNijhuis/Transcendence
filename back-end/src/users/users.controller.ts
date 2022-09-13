@@ -4,6 +4,7 @@ import {
     Controller,
     Get,
     Post,
+    Res,
     UsePipes,
     ValidationPipe
 } from "@nestjs/common";
@@ -23,8 +24,12 @@ export class UsersController {
     }
 
     @Get('id/:username')
-    findUsersById(username: string) {
-        return this.userService.findUserByUsername(username);
+    findUsersById(@Res() res: Response, username: string) {
+        try {
+            return this.userService.findUserByUsername(username);
+        } catch (error) {
+            res.status
+        }
     }
 
     @Post('create')

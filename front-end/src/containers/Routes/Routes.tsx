@@ -4,7 +4,6 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 // Pages
 import Home from "../../pages/Home";
 import About from "../../pages/About";
-import Login from "../../pages/Login";
 
 // Private pages
 import ProfilePage from "../../pages/Profile";
@@ -20,6 +19,7 @@ import Guard from "../../containers/Guard";
 import Pong from "../../pages/Pong";
 import NewPongGame from "../../pages/NewPongGame";
 import SuccesfulLogin from "../../pages/SuccesfulLogin";
+import CreateAccount from "../../pages/CreateAccount";
 
 const Router = () => (
   <BrowserRouter>
@@ -27,7 +27,6 @@ const Router = () => (
       {/* Public routes */}
       <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />
-      <Route path="/login" element={<Login />} />
 
       {/* Pong debugging */}
       <Route path="/pong" element={<Pong />} />
@@ -35,6 +34,9 @@ const Router = () => (
 
       {/* Callback route after login */}
       <Route path="/auth/succesful-login" element={<SuccesfulLogin />} />
+
+      {/* TODO: only allow to go to this page if user has jwt */}
+      <Route path="/create-account" element={<CreateAccount />} />
 
       {/* Routes that have to pass through authentication to be loaded */}
       <Route element={<Guard />}>

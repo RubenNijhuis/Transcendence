@@ -13,7 +13,7 @@ export class User {
     nullable: true,
     unique: true
   })
-  intraID: string;
+  intraId: string;
 
   @Column({
 	  name: 'username',

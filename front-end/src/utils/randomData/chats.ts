@@ -1,3 +1,4 @@
+import { get_img_url } from ".";
 import {
     Profile,
     Message,
@@ -35,13 +36,15 @@ const generateSimpleMessage = () => {
     return simpleMessage;
 };
 
+const image_url = "";
+
 const generatePictureMessage = () => {
     const randomWidth: number =
         Math.ceil(randomIntFromInterval(1000, 2000) / 100) * 100;
     const randomHeight: number =
         Math.ceil(randomIntFromInterval(1000, 2000) / 100) * 100;
 
-    const img_url: string = `https://source.unsplash.com/random/${randomWidth}x${randomHeight}`;
+    const img_url: string = get_img_url(randomWidth, randomHeight);
 
     const picture: PictureMessage = {
         url: img_url,

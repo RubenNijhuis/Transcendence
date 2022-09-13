@@ -1,3 +1,4 @@
+import { get_img_url } from ".";
 import { Profile } from "../GlobalTypes";
 import randomIntFromInterval from "../randomNumFromInterval";
 
@@ -46,7 +47,7 @@ const names = [
     "Cominast",
     "Morapern",
     "Tinsen",
-    "StandDown         ",
+    "StandDown",
     "Relaxerca",
     "TownWin",
     "Azlantaph",
@@ -70,8 +71,10 @@ const generateProfile = (amount: number): Profile[] => {
     for (let i = 0; i < amount; i++) {
         const username: string =
             names[randomIntFromInterval(0, names.length - 1)];
-        const intraID: number = i + 1;
+        const intraID: string = username;
         const rank: number = i + 1;
+
+        const color: string = "#1e1e1e";
 
         const randomWidth: number =
             Math.ceil(randomIntFromInterval(100, 1000) / 100) * 100;
@@ -83,8 +86,11 @@ const generateProfile = (amount: number): Profile[] => {
         const randomHeightBanner: number =
             Math.ceil(randomIntFromInterval(1000, 2000) / 100) * 100;
 
-        const img_url: string = `https://source.unsplash.com/random/${randomWidth}x${randomHeight}`;
-        const banner_url: string = `https://source.unsplash.com/random/${randomWidthBanner}x${randomHeightBanner}`;
+        const img_url: string = get_img_url(randomWidth, randomHeight);
+        const banner_url: string = get_img_url(
+            randomWidthBanner,
+            randomHeightBanner
+        );
 
         const wins: number = randomIntFromInterval(1, 100);
         const losses: number = randomIntFromInterval(1, 100);
@@ -93,7 +99,7 @@ const generateProfile = (amount: number): Profile[] => {
             intraID,
             username,
             banner_url,
-            color: "#1e1e1e",
+            color,
             rank,
             img_url,
             wins,

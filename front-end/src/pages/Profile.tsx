@@ -48,7 +48,7 @@ const ProfilePage = () => {
         } else {
             setUserData(user);
         }
-    }, []);
+    });
 
     return (
         <Layout>

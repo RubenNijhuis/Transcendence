@@ -4,6 +4,8 @@ import { Fragment } from "react";
 import Asset from "../Asset";
 import Button from "../Button";
 
+import Axios from "axios";
+
 // Styling
 import { Container, ProfileIconContainer } from "./NavBar.style";
 
@@ -16,19 +18,31 @@ import { useAuth } from "../../utils/AuthContext";
 // Links
 import { locations } from "./NavBar.config";
 
-const CTAButton = ({ authStatus }: { authStatus: boolean }) => (
-    <Fragment>
-        {authStatus ? (
-            <Link className="login-button" to={"/play"}>
-                <Button theme={"light"}>Play Pong</Button>
-            </Link>
-        ) : (
-            <Link className="login-button" to={"/login"}>
-                <Button theme={"light"}>Login</Button>
-            </Link>
-        )}
-    </Fragment>
-);
+const CTAButton = ({ authStatus }: { authStatus: boolean }) => {
+    const startLogin = () => {
+        Axios.get("/api/auth/login").then((res) =>
+            window.location.assign(res.data)
+        );
+    };
+
+    return (
+        <Fragment>
+            {authStatus ? (
+                <Link className="play-button" to={"/play"}>
+                    <Button theme={"light"}>Play Pong</Button>
+                </Link>
+            ) : (
+                <Button
+                    className="login-button"
+                    theme={"light"}
+                    onClick={startLogin}
+                >
+                    Login
+                </Button>
+            )}
+        </Fragment>
+    );
+};
 
 const NavLinks = ({ authStatus }: { authStatus: boolean }) => (
     <ul>
@@ -44,7 +58,7 @@ const NavLinks = ({ authStatus }: { authStatus: boolean }) => (
 );
 
 const ProfileIcon = ({ url }: { url: string }) => (
-    <Link to={"/profile/me"}>
+    <Link to={"/profile"}>
         <ProfileIconContainer>
             <Asset url={url} alt={"profile"} />
         </ProfileIconContainer>

@@ -24,6 +24,7 @@ import { Jwt2faStrategy } from "../strategies/jwt.strategy";
 import { MailDto } from "../dto/mail.dto";
 import { twofadto } from "../dto/2fa.dto";
 import { UsernameDto } from "../dto/username.dto";
+import { CreateUserDto } from "src/users/dtos/create-users.dto";
 
 @Controller("auth")
 export class AuthController {
@@ -89,7 +90,7 @@ export class AuthController {
       }
     );
 
-    console.log(accessTokenResp.data.access_token);
+    console.log("token: ", accessTokenResp.data.access_token);
 
     const userData = await Axios.get(
       this.configService.get("INTRA_GET_ME_URL"),
@@ -104,7 +105,7 @@ export class AuthController {
     console.log(intraID);
     console.log(username);
     const CreateUserDto = { intraID, username}
-    await this.authService.validateUser(CreateUserDto);
+    await this.authService.validateUser(intraID);
     return userData.data;
   }
 

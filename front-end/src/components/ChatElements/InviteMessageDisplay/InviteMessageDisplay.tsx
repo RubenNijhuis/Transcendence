@@ -3,7 +3,11 @@ import { InvitePlayMessage } from "../../../utils/GlobalTypes";
 
 // Styling
 import styled from "styled-components";
-import { mainColor, smallRadius } from "../../../utils/StylingConstants";
+import {
+    lightTextColor,
+    mainColor,
+    smallRadius
+} from "../../../utils/StylingConstants";
 
 // Components
 import Button from "../../Button";
@@ -20,11 +24,14 @@ const Container = styled.div<{ fromUser: boolean }>`
     margin-bottom: 18px;
 
     div {
-        border: 2px solid ${mainColor};
+        background-color: ${mainColor};
+        min-width: 50%;
         padding: 8px 16px;
+        border: 2px solid ${mainColor};
         border-radius: ${smallRadius};
 
-        p {
+        span, p {
+            color: ${lightTextColor};
             margin-bottom: 9px;
         }
     }
@@ -35,7 +42,7 @@ const InviteMessageDisplay = ({ fromUser, content }: Props) => (
         <div>
             <span>{content.user.username}</span>
             <p>Is inviting you to play</p>
-            <Button>Play a game</Button>
+            <Button theme="light">Play a game</Button>
         </div>
     </Container>
 );
