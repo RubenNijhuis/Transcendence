@@ -13,6 +13,6 @@ export class Uninitialized {
     nullable: true,
     unique: true
   })
-  intraID: string;
+  intraId: string;
 }
 export default Uninitialized;

@@ -1,4 +1,4 @@
-import { randAmount, randEmail, randFullName, randPassword, randSkill } from '@ngneat/falso';
+import { randAmount, randColor, randEmail, randFullName, randPassword, randSkill } from '@ngneat/falso';
 import { HttpException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/typeorm";
@@ -22,8 +22,8 @@ export class UsersService {
     return this.userRepository.findOne({where: {id}})
   }
 
-  findUsersByIntraId(intraID: string) {
-    return this.userRepository.findOne({where: {intraID}})
+  findUsersByintraId(intraId: string) {
+    return this.userRepository.findOne({where: {intraId}})
   }
 
   findUserByUsername(username: string) {
@@ -57,7 +57,7 @@ export class UsersService {
 
   async seedCustom(amount: number) {
     for (var i = 1; i <= amount; i++) {
-      await this.createUser({ intraID: randAmount().toString(), username: randFullName()})
+      await this.createUser({ authToken: "sock yer dads" ,intraId: randAmount().toString(), username: randFullName(), color: randColor().toString(), })
     }
   }
 

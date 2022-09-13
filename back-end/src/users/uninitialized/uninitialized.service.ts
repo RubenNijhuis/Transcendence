@@ -11,23 +11,23 @@ export class UninitService {
         private readonly uninitRepo: Repository<Uninitialized>
     ) {}
 
-    findUninit(intraID: string) {
-        return this.uninitRepo.findOne({ where: {intraID} })
+    findUninit(intraId: string) {
+        return this.uninitRepo.findOne({ where: {intraId} })
     }
 
     createUninit(createUninitDto: CreateUninitDto) { // should this be async?
-        if (!this.findUninit(createUninitDto.intraID))
+        if (!this.findUninit(createUninitDto.intraId))
           return ;
         const newUser = this.uninitRepo.create(createUninitDto);
         return this.uninitRepo.save(newUser);
       }
     
-    removeUninit(intraID: string) {
+    removeUninit(intraId: string) {
         const ret = this.uninitRepo
             .createQueryBuilder('uninitialized')
             .delete()
             .from('Uninitialized')
-            .where('intraID =:intraID', { intraID })
+            .where('intraId =:intraId', { intraId })
             .execute()
         return ret;
     }
