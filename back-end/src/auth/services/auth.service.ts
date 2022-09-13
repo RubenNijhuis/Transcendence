@@ -10,10 +10,23 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
+  // returnen of de eerste keer inloggen
+  // jwt token aanmaken
+  // { creatAccount: authToken, jwt: string}
+  // return await this.createUser(userDto);
+  // new user in table zetten (uninit)
   async validateUser(userDto: CreateUserDto): Promise<any> {
+    let res = {
+      shouldCreateUser: false,
+      profile: null,
+      authToken: "sock yer dads"
+    }
     const user = await this.usersService.findUsersByIntraId(userDto.intraID);
-    if (!user) return await this.createUser(userDto);
-    return user;
+    if (user)
+      res.profile = user;
+    else
+      res.shouldCreateUser = true;
+    return res;
   }
 
   private async createUser(userDto: CreateUserDto): Promise<any> {

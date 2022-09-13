@@ -37,6 +37,16 @@ export class UsersService {
     return this.userRepository.save(newUser);
   }
 
+  removeUser(username: string) {
+    const ret = this.userRepository
+      .createQueryBuilder('Users')
+      .delete()
+      .from('users')
+      .where('username =:username', { username })
+      .execute()
+    return ret;
+  }
+
   setTwoFactorAuthSecret(id: number, twoFactorAuthenticationSecret: string) {
     return this.userRepository.update( id, {twoFactorAuthenticationSecret,} );
   }

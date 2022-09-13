@@ -63,7 +63,7 @@ export class AuthController {
       }
     );
 
-    console.log(accessTokenResp.data.access_token);
+    console.log("token: ", accessTokenResp.data.access_token);
 
     const userData = await Axios.get(
       this.configService.get("INTRA_GET_ME_URL"),
@@ -74,10 +74,10 @@ export class AuthController {
       }
     );
 
-    // const intraID = data.data.id;
-    // const username = data.data.login;
-    // const CreateUserDto = { intraID, username };
-    return userData.data;
+    const intraID = userData.data.id;
+    const username = userData.data.login;
+    const CreateUserDto = { intraID, username };
+    return this.authService.validateUser(CreateUserDto);
   }
 
   @Get("status")
