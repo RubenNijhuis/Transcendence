@@ -124,17 +124,20 @@ export class AuthController {
     return this.authService.signin;
   }
 
-  //curl --data "username=akramp&email=mehj177@gmail.com"  http://localhost:3000/api/auth/jwtsession
+  //curl --data "username=akramp"  http://localhost:3000/api/auth/jwtsession
   @UseGuards(Jwt2faStrategy)
   @Post('jwtsession')
   @UsePipes(ValidationPipe)
   async jwtsession(@Body() userDto: UsernameDto) {
     console.log("jwt test:");
-    console.log(this.authService.login(userDto)); //I still need to make sure this then gets saved and used with right guards
+    const ret = await this.authService.login(userDto);
+    console.log(ret);
+    return ret;
+     //I still need to make sure this then gets saved and used with right guards
   }
 
    //curl --data "username=akramp"  http://localhost:3000/api/users/turnon2fa
-  //curl --data "username=akramp&email=mehj177@gmail.com"  -H "Authorization: Bearer {'jwtsession_token'}" http://localhost:3000/api/auth/google2fa
+  //curl --data "username=akramp"  -H "Authorization: Bearer {'jwtsession_token'}" http://localhost:3000/api/auth/google2fa
   @Post('google2fa')
   @UseGuards(Jwt2faStrategy)
   @UsePipes(ValidationPipe)
@@ -159,7 +162,11 @@ export class AuthController {
   res.sendStatus(200);
   }
 
-
+@Post('Test')
+@UseGuards(Jwt2faStrategy)
+async test(){
+  console.log("UwU!!");
+}
 
 
  

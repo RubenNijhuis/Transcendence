@@ -45,11 +45,11 @@ export class AuthService {
 
 async login(usernameDto: UsernameDto) {
     const r = await this.usersService.findUserByUsername(usernameDto.username);
-    if (r.jwtsession_token != "")
-    {
-      console.log("jwt token already exists dayo~!");
-      return -1;
-    }
+    // if (r.jwtsession_token != "")
+    // {
+    //   console.log("jwt token already exists dayo~!");
+    //   return -1 ;
+    // }
       
     const payload = {
         username: usernameDto.username,
