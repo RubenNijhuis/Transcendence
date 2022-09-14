@@ -3,12 +3,16 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Chat } from "src/typeorm";
 import { Repository } from "typeorm";
 import { CreateChatDto } from "./dtos/create-chat.dto";
+import { GroupService } from "../groups.service";
 
 @Injectable()
 export class ChatService {
+//     import: [GroupService]
+// inject: [GroupService]
     constructor(
         @InjectRepository(Chat)
-        private readonly chatRepository: Repository<Chat>
+        private readonly chatRepository: Repository<Chat>,
+        private readonly groupService: GroupService
     ) {}
 
     getAllMessages() {
@@ -23,8 +27,13 @@ export class ChatService {
         return allMessages;
     }
     
-    createChat(CreateChatDto: CreateChatDto) {
+    async createChat(CreateChatDto: CreateChatDto) {
+        const group = await this.groupService.findGroupById(CreateChatDto.group_id);
+        // if (!group)
+        //     return console.error();
         const newChat = this.chatRepository.create(CreateChatDto);
+
+        newChat.group = group;
         return this.chatRepository.save(newChat);
     }
 }

@@ -71,14 +71,14 @@ export class GroupController {
         }
     }
 
-    @Post("removeMembers")
-    async removeMembers(@Body() EditMembersDto: EditMembersDto) {
-        try {
-            await this.GroupService.removeMembers(EditMembersDto);
-            const ret = { message: "members removed " };
-            return ret;
-        } catch (error) {
-            return error;
-        }
-    }
+    // @Post("removeMembers")
+    // async removeMembers(@Body() EditMembersDto: EditMembersDto) {
+    //     try {
+    //         await this.GroupService.removeMembers(EditMembersDto);
+    //         const ret = { message: "members removed " };
+    //         return ret;
+    //     } catch (error) {
+    //         return error;
+    //     }
+    // }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Param } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Group, User } from "src/typeorm";
@@ -10,15 +10,17 @@ import { UsersService } from "src/users/users.service";
 import { UsersController } from "src/users/users.controller";
 import { group } from "console";
 import { EditMembersDto } from "./dtos/edit-members.dto";
+import Groupuser from "./groupusers/groupuser.entity";
+import { GroupuserService } from "./groupusers/groupuser.service";
+import { CreateGroupuserDto } from "./groupusers/create-groupuser.dto";
 
 @Injectable()
 export class GroupService {
-    // import: [UsersService]
-    // inject: [UsersService]
     constructor(
         @InjectRepository(Group)
         private readonly groupRepository: Repository<Group>,
-        private readonly userService: UsersService
+        private readonly userService: UsersService,
+        private readonly groupuserService: GroupuserService
     ) {}
 
     getAllMessages() {
@@ -63,50 +65,65 @@ export class GroupService {
         const newGroup = this.groupRepository.create();
         newGroup.owner = CreateGroupDto.owner;
         newGroup.users = [];
-        for (var i = 0; i < CreateGroupDto.users.length; i++) {
-            const myUser: User = await this.userService.findUsersById(
-                CreateGroupDto.users[i]
-            );
-            newGroup.users.push(myUser);
-        }
+        // for (var i = 0; i < CreateGroupDto.users.length; i++) {
+        //     let CreateGroupuserDto : CreateGroupuserDto;
+        //     console.log("we good?")
+        //     console.log(CreateGroupDto.users[i]);
+        //     console.log(newGroup.id);
+        //     CreateGroupuserDto.userId = CreateGroupDto.users[i];
+        //     CreateGroupuserDto.groupId = newGroup.id;
+        //     console.log("pre");
+        //     const newGroupuser : Groupuser = await this.groupuserService.createGroupuser(CreateGroupuserDto);
+        //     console.log("post");
+        //     newGroup.users.push(newGroupuser);
+        // }
         return this.groupRepository.save(newGroup);
     }
 
     async addMembers(EditMembersDto: EditMembersDto) {
-        const group = await this.groupRepository
-            .createQueryBuilder("group")
-            .where({ id: EditMembersDto.id })
-            .leftJoinAndSelect("group.users", "user")
-            .getOne();
-
+        const group = await this.findGroupById(EditMembersDto.id);
+        if (!group)
+            console.error();
+        console.log(group.owner);
         for (let i = 0; i < EditMembersDto.users.length; i++) {
-            const userToAdd: User = await this.userService.findUsersById(
-                EditMembersDto.users[i]
-            );
-            if (userToAdd) {
-                group.users.push(userToAdd);
-                console.log("Ik ben er in");
-            }
+            let CreateGroupuserDto : CreateGroupuserDto;
+                console.log("we good?")
+                console.log(EditMembersDto.users[i]);
+                console.log(group.id);
+                CreateGroupuserDto.user = await this.userService.findUsersById(EditMembersDto.users[i]);
+                CreateGroupuserDto.group = await this.findGroupById(EditMembersDto.id);
+                console.log("pre");
+                const newGroupuser : Groupuser = await this.groupuserService.createGroupuser(CreateGroupuserDto);
+                console.log("post");
+                group.users.push(newGroupuser);
         }
         return this.groupRepository.save(group);
     }
 
-    async removeMembers(EditMembersDto: EditMembersDto) {
-        const group = await this.groupRepository
-            .createQueryBuilder("group")
-            .where({ id: EditMembersDto.id })
-            .leftJoinAndSelect("group.users", "user")
-            .getOne();
+    // async removeMembers(EditMembersDto: EditMembersDto) {
+    //     const group = await this.groupRepository
+    //         .createQueryBuilder("group")
+    //         .where({ id: EditMembersDto.id })
+    //         .leftJoinAndSelect("group.users", "user")
+    //         .getOne();
         
-        for (let i = 0; i < EditMembersDto.users.length; i++) {
-            const userToRemove: User = await this.userService.findUsersById(
-                EditMembersDto.users[i]
-            );
-            if (userToRemove) {
-                const userID = (user : User) => user === userToRemove;
-                group.users.splice(group.users.findIndex(userID), 1);
-            }
-        }
-        return this.groupRepository.save(group);
-    }
+    //     for (let i = 0; i < EditMembersDto.users.length; i++) {
+    //         const userToRemove: User = await this.userService.findUsersById(
+    //             EditMembersDto.users[i]
+    //         );
+    //         if (userToRemove) {
+    //             const userID = (user : User) => user === userToRemove;
+    //             group.users.splice(group.users.findIndex(userID), 1);
+    //         }
+    //     }
+    //     return this.groupRepository.save(group);
+    // }
 }
+
+
+
+// const group = await this.groupRepository
+// .createQueryBuilder("group")
+// .where({ id: EditMembersDto.id })
+//  .leftJoinAndSelect("group.users", "user")
+// .getOne();

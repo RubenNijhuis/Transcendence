@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, One
 import { User } from "src/typeorm"
 import { Chat } from 'src/typeorm';
 import { GroupService } from './groups.service';
+import Groupuser from './groupusers/groupuser.entity';
 
 @Entity()
 export class Group {
@@ -18,15 +19,13 @@ export class Group {
 	})
 	password: string
 
-    @ManyToMany((type) => User, (user) => user.groups)
+    @OneToMany((type) => Groupuser, (groupuser) => groupuser.group)
     @JoinTable()
-    users: User[];
+    users: Groupuser[];
 
-    // @ManyToMany((type) => User, (user) => user.groups)
-    // @JoinTable()
-    // admins: User[];
-
-    @OneToMany((type) => Chat, (chat) => chat.group)
+    @OneToMany((type) => Chat, (chat) => chat.group, {
+        nullable: true
+    })
     @JoinTable()
     messages: Chat[];
 

@@ -11,6 +11,7 @@ import { FriendslistModule } from './users/friendlist/friendlist.module';
 import { BlockListModule } from './users/blocklist/blocklist.module';
 import { FriendRequestModule } from './users/friendrequests/friendrequest.module';
 import { GroupModule } from './groups/groups.module';
+import { GroupuserModule } from './groups/groupusers/groupuser.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { GroupModule } from './groups/groups.module';
   	AuthModule,
     ChatModule,
     GroupModule,
+    GroupuserModule,
     PassportModule.register({ session: true }),
 	],
   controllers: [],

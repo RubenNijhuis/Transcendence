@@ -1,5 +1,6 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Group } from "src/typeorm"
+import Groupuser from 'src/groups/groupusers/groupuser.entity';
 
 @Entity() // need to have a token to search on
 export class User {
@@ -65,9 +66,9 @@ export class User {
   })
   isTwoFactorAuthenticationEnabled: boolean;
 
-
-  @ManyToMany((type) => Group, (group) => group.users)
-  groups: Group[];
+  @OneToMany((type) => Groupuser, (groupuser) => groupuser.user)
+  @JoinTable()
+  groups: Groupuser[];
 
   // @ManyToMany(type => User)
   // @JoinTable({ joinColumn: { name: 'users_id_1' } })

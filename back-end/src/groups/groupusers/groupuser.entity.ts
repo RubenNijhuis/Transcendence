@@ -1,0 +1,24 @@
+import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, Timestamp } from 'typeorm';
+import { Group, User } from "src/typeorm"
+import { Chat } from 'src/typeorm';
+import { group } from 'console';
+
+@Entity()
+export class Groupuser {
+    @PrimaryGeneratedColumn()
+    groupId: number;
+
+	@ManyToOne((type) => Group, (group) => group.users)
+	group: Group
+
+    @Column()
+    userId: number;
+
+	@ManyToOne((type) => User, (user) => user.groups)
+	user: User
+
+	@Column()
+	userType: number;
+}
+
+export default Groupuser;

@@ -11,5 +11,5 @@ export class CreateChatDto {
     content_type: number;
 
     @IsNotEmpty()
-    sender: string;
+    sender: number;
 }

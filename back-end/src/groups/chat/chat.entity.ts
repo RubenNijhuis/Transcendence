@@ -9,10 +9,10 @@ export class Chat {
     type: 'bigint'
   })
   id: number;
-
-  @Column()
-  group_id: number;
  
+  @ManyToOne((type) => Group, (group) => group.messages)
+  group: Group
+
   @CreateDateColumn({
     nullable: true
   })
@@ -25,15 +25,12 @@ export class Chat {
   content_type: number;
 
   @Column()
-  sender: string;
+  sender: number;
   
   @Column({
     nullable: true
   })
   read_by: string;
-
-  @ManyToOne((type) => Group, (group) => group.messages)
-  group: Group
 }
  
 export default Chat;

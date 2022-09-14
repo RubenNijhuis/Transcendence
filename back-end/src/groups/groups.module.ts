@@ -5,9 +5,10 @@ import { GroupService } from './groups.service';
 import {GroupController} from './groups.controller'
 import { UsersService } from 'src/users/users.service';
 import { UsersModule } from 'src/users/users.module';
+import { GroupuserModule } from './groupusers/groupuser.module';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([Group]), UsersModule],
+	imports: [TypeOrmModule.forFeature([Group]), UsersModule, GroupuserModule],
 	controllers: [GroupController],
 	providers: [GroupService],
 	exports: [GroupService]
