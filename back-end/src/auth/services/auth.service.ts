@@ -7,6 +7,11 @@ import { twofadto } from "../dto/2fa.dto";
 import { toDataURL } from "qrcode";
 import { UsernameDto } from "../dto/username.dto";
 import { User } from "src/typeorm";
+import jwt_decode, { JwtPayload } from 'jwt-decode'
+
+type PayloadType = {
+  username: string;
+}
 
 @Injectable()
 export class AuthService {
@@ -20,11 +25,11 @@ export class AuthService {
   // { creatAccount: authToken, jwt: string}
   // return await this.createUser(userDto);
   // new user in table zetten (uninit)
-  async validateUser(intraId: string): Promise<any> {
+  async validateUser(intraId: string, authtoken: string): Promise<any> {
     const res: any = {
       shouldCreateUser: false,
       profile: null,
-      authToken: "sock yer dads"
+      authToken: authtoken
     };
 
     const user: User = await this.usersService.findUsersByintraId(intraId);
@@ -52,6 +57,13 @@ export class AuthService {
 
   signin() {
     return { msg: "I have signed in" };
+  }
+
+  
+  jwtDecodeUsername(jwt: string)
+  {
+    const decodedJwt = this.jwtService.decode(jwt) as PayloadType;
+    return decodedJwt.username;
   }
 
   async addjwttoken(usernameDto: UsernameDto, token: string) {

@@ -25,6 +25,7 @@ import { MailDto } from "../dto/mail.dto";
 import { twofadto } from "../dto/2fa.dto";
 import { UsernameDto } from "../dto/username.dto";
 import { CreateUserDto } from "src/users/dtos/create-users.dto";
+import { JwtService } from "@nestjs/jwt";
 
 @Controller("auth")
 export class AuthController {
@@ -32,7 +33,8 @@ export class AuthController {
   constructor(
     private readonly usersService: UsersService,
     private authService: AuthService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly jwtService: JwtService,
   ) {}
 
   @Get("login")
@@ -100,13 +102,25 @@ export class AuthController {
         }
       }
     );
+  
     const intraID = userData.data.id;
     const username = userData.data.login;
     console.log(intraID);
     console.log(username);
-      const CreateUserDto = { intraID, username };
-      
-    return this.authService.validateUser(intraID);
+    // const CreateUserDto = { intraID, username };
+    
+    const payload = {
+      username: username
+    };
+    console.log("test");
+    const ret = this.jwtService.sign(payload);
+    console.log("authtoken:");
+    console.log(ret);
+    // this.addjwttoken(usernameDto, ret);
+    // const decodedJwtAccessToken = this.authService.jwtDecodeUsername(ret);
+    // console.log(decodedJwtAccessToken);
+
+    return this.authService.validateUser(intraID, ret);
   }
 
   @Get("status")
