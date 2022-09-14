@@ -4,7 +4,7 @@ import { Fragment } from "react";
 import Asset from "../Asset";
 import Button from "../Button";
 
-import Axios from "axios";
+import axios from "axios";
 
 // Styling
 import { Container, ProfileIconContainer } from "./NavBar.style";
@@ -20,7 +20,7 @@ import { locations } from "./NavBar.config";
 
 const CTAButton = ({ authStatus }: { authStatus: boolean }) => {
     const startLogin = () => {
-        Axios.get("/api/auth/login").then((res) =>
+        axios.get("/api/auth/login").then((res) =>
             window.location.assign(res.data)
         );
     };
@@ -58,7 +58,7 @@ const NavLinks = ({ authStatus }: { authStatus: boolean }) => (
 );
 
 const ProfileIcon = ({ url }: { url: string }) => (
-    <Link to={"/profile"}>
+    <Link to={"/profile/me"}>
         <ProfileIconContainer>
             <Asset url={url} alt={"profile"} />
         </ProfileIconContainer>

@@ -1,6 +1,3 @@
-// Requests
-import Axios from "axios";
-
 // React
 import { useEffect, useState } from "react";
 
@@ -16,7 +13,10 @@ import Layout from "../components/Layout";
 // Auth
 import { useAuth } from "../utils/AuthContext";
 import { useNavigate } from "react-router-dom";
+import createUser from "../proxys/user/createUser";
+import { Profile } from "../utils/GlobalTypes";
 
+// TODO: put styling in different folder
 const StyledInput = styled.div`
     margin-bottom: 36px;
 
@@ -47,46 +47,42 @@ const CreateForm = styled.div`
     }
 `;
 
-interface AccountData {
-    username: string;
-    color: string;
-    description: string;
-}
-
+// TODO: make component check input data before sending
 const CreateAccount = () => {
+    // Form input state
     const [username, setusername] = useState<string>("");
     const [color, setColor] = useState<string>("");
     const [description, setDescription] = useState<string>("");
 
-    const { authToken, user, setUser, setLoggedIn } = useAuth();
+    // Authentication utils
+    const { authToken, setUser, setLoggedIn } = useAuth();
+
+    // Navigating to profile page after creation
     const navigate = useNavigate();
 
-    const handleCreation = () => {
-        if (user !== null) {
-            const accountData: AccountData = {
-                username,
-                color,
-                description
-            };
+    const handleAccountCreation = () => {
+        const providedDetails = {
+            username,
+            color,
+            description
+        };
 
-            const jwtConfig = {
-                headers: { Authorization: `Bearer ${authToken}` }
-            };
-
-            Axios.post("/api/users/create", accountData, jwtConfig).then(
-                (res) => {
-                    console.log(res);
-                    setTimeout(() => {
-                        setUser(res.data);
-                        setLoggedIn(true);
-
-                        navigate("/profile/me");
-                    }, 10000);
-                }
-            );
-        }
+        /* Redirects the user to the profile page 
+         * upon account creation
+        */
+        createUser(providedDetails, authToken)
+            .then((returnedUserProfile) => {
+                setUser(returnedUserProfile as Profile);
+                setLoggedIn(true);
+                navigate("/profile/me");
+            })
+            .catch((err) => {
+                // TODO: handle error messages
+                console.log(err.response.data.message);
+            });
     };
 
+    // TODO: add a guard like login guard and remove this useEffect
     useEffect(() => {
         // If the user hasn't tried to log in redirect to home
         if (authToken === null) {
@@ -122,7 +118,7 @@ const CreateAccount = () => {
                         onChange={(e) => setDescription(e.target.value)}
                     />
                 </StyledInput>
-                <Button theme="dark" onClick={handleCreation}>
+                <Button theme="dark" onClick={handleAccountCreation}>
                     Ja doe maar
                 </Button>
             </CreateForm>

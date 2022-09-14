@@ -26,11 +26,22 @@ import { largeRadius, mainColor } from "../utils/StylingConstants";
 import { useDataDebug } from "../utils/DebugDataContext";
 
 const ProfilePage = () => {
-    const [userData, setUserData] = useState<Profile | null>(null!);
+    // Profile to be displayed
+    const [userData, setUserData] = useState<Profile>(null!);
+
+    // Temp debug profiles
     const { profiles, matchHistory } = useDataDebug();
+
+    // Local profile
     const { user } = useAuth();
+
+    /**
+     * The id in the url '/profile/:id` if not
+     * specified will default to undefined
+     */
     const { id } = useParams();
 
+    // TODO: unused userdata request -> use getUser proxy
     const getUserData = (id: number) => {
         const reqPromise = new Promise((resolve, reject) => {
             setTimeout(() => {
@@ -40,14 +51,14 @@ const ProfilePage = () => {
         return reqPromise;
     };
 
+    // TODO: get user data on page load use getUser if id is not set proxy
     useEffect(() => {
-        console.log(user);
         if (id !== undefined) {
             getUserData(parseInt(id)).then((res) => {
                 setUserData(res as Profile);
             });
         } else {
-            setUserData(user);
+            if (user) setUserData(user);
         }
     });
 

@@ -5,6 +5,7 @@ import Layout from "../components/Layout";
 // Styling
 import { magicNum } from "../utils/StylingConstants";
 
+// TODO: generate based on config data
 const Play = () => {
     return (
         <Layout>

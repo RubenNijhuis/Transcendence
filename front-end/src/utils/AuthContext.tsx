@@ -4,7 +4,7 @@ import { Profile } from "./GlobalTypes";
 import { generateProfile } from "./randomData";
 
 // Requests
-import Axios from "axios";
+import axios from "axios";
 
 // Define what the auth context contains
 interface AuthContextType {
@@ -49,7 +49,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 authToken: string;
             }
 
-            Axios.get(url).then(({ data }: { data: AuthResponse }) => {
+            axios.get(url).then(({ data }: { data: AuthResponse }) => {
                 setAuthToken(data.authToken);
                 setUser(data.user);
                 resolve(data);
