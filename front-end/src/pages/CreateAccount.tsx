@@ -17,13 +17,6 @@ import Layout from "../components/Layout";
 import { useAuth } from "../utils/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-interface AccountData {
-    userName: string;
-    color: string;
-    description: string;
-    intraId: string;
-}
-
 const StyledInput = styled.div`
     margin-bottom: 36px;
 
@@ -54,19 +47,24 @@ const CreateForm = styled.div`
     }
 `;
 
+interface AccountData {
+    username: string;
+    color: string;
+    description: string;
+}
+
 const CreateAccount = () => {
-    const [userName, setUserName] = useState<string>("");
+    const [username, setusername] = useState<string>("");
     const [color, setColor] = useState<string>("");
     const [description, setDescription] = useState<string>("");
 
-    const { authToken, user } = useAuth();
+    const { authToken, user, setUser, setLoggedIn } = useAuth();
     const navigate = useNavigate();
 
     const handleCreation = () => {
         if (user !== null) {
             const accountData: AccountData = {
-                intraId: user.intraID,
-                userName,
+                username,
                 color,
                 description
             };
@@ -75,7 +73,17 @@ const CreateAccount = () => {
                 headers: { Authorization: `Bearer ${authToken}` }
             };
 
-            Axios.post("/api/users/create", accountData, jwtConfig);
+            Axios.post("/api/users/create", accountData, jwtConfig).then(
+                (res) => {
+                    console.log(res);
+                    setTimeout(() => {
+                        setUser(res.data);
+                        setLoggedIn(true);
+
+                        navigate("/profile/me");
+                    }, 10000);
+                }
+            );
         }
     };
 
@@ -91,11 +99,11 @@ const CreateAccount = () => {
             <CreateForm>
                 <Heading type={1}>Create an account</Heading>
                 <StyledInput>
-                    <label>Username</label>
+                    <label>username</label>
                     <input
                         type="text"
-                        value={userName}
-                        onChange={(e) => setUserName(e.target.value)}
+                        value={username}
+                        onChange={(e) => setusername(e.target.value)}
                     />
                 </StyledInput>
                 <StyledInput>

@@ -64,12 +64,12 @@ export class AuthController {
   //   res.sendStatus(200);
   // }
 
-//   curl -F grant_type=authorization_code \
-// -F client_id=9b36d8c0db59eff5038aea7a417d73e69aea75b41aac771816d2ef1b3109cc2f \
-// -F client_secret=d6ea27703957b69939b8104ed4524595e210cd2e79af587744a7eb6e58f5b3d2 \
-// -F code=fd0847dbb559752d932dd3c1ac34ff98d27b11fe2fea5a864f44740cd7919ad0 \
-// -F redirect_uri=https://myawesomeweb.site/callback \
-// -X POST https://api.intra.42.fr/oauth/token
+  //   curl -F grant_type=authorization_code \
+  // -F client_id=9b36d8c0db59eff5038aea7a417d73e69aea75b41aac771816d2ef1b3109cc2f \
+  // -F client_secret=d6ea27703957b69939b8104ed4524595e210cd2e79af587744a7eb6e58f5b3d2 \
+  // -F code=fd0847dbb559752d932dd3c1ac34ff98d27b11fe2fea5a864f44740cd7919ad0 \
+  // -F redirect_uri=https://myawesomeweb.site/callback \
+  // -X POST https://api.intra.42.fr/oauth/token
 
   @Get("confirm?")
   // @UseGuards(FortyTwoAuthGuard)
@@ -98,15 +98,15 @@ export class AuthController {
         headers: {
           Authorization: `Bearer ${accessTokenResp.data.access_token}`
         }
-      },
+      }
     );
     const intraID = userData.data.id;
     const username = userData.data.login;
     console.log(intraID);
     console.log(username);
-    const CreateUserDto = { intraID, username}
-    await this.authService.validateUser(intraID);
-    return userData.data;
+      const CreateUserDto = { intraID, username };
+      
+    return this.authService.validateUser(intraID);
   }
 
   @Get("status")
@@ -127,48 +127,47 @@ export class AuthController {
 
   //curl --data "username=akramp"  http://localhost:3000/api/auth/jwtsession
   @UseGuards(Jwt2faStrategy)
-  @Post('jwtsession')
+  @Post("jwtsession")
   @UsePipes(ValidationPipe)
   async jwtsession(@Body() userDto: UsernameDto) {
     console.log("jwt test:");
     const ret = await this.authService.login(userDto);
     console.log(ret);
     return ret;
-     //I still need to make sure this then gets saved and used with right guards
+    //I still need to make sure this then gets saved and used with right guards
   }
 
-   //curl --data "username=akramp"  http://localhost:3000/api/users/turnon2fa
+  //curl --data "username=akramp"  http://localhost:3000/api/users/turnon2fa
   //curl --data "username=akramp"  -H "Authorization: Bearer {'jwtsession_token'}" http://localhost:3000/api/auth/google2fa
-  @Post('google2fa')
+  @Post("google2fa")
   @UseGuards(Jwt2faStrategy)
   @UsePipes(ValidationPipe)
-  async google2fa(@Body() userDto: UsernameDto) { 
-      try {
-          const res = await this.authService.generateTwoFactorAuthenticationSecret(userDto);
-          console.log(res);
-      }
-      catch (error) {
-          return error;
-      }
+  async google2fa(@Body() userDto: UsernameDto) {
+    try {
+      const res = await this.authService.generateTwoFactorAuthenticationSecret(
+        userDto
+      );
+      console.log(res);
+    } catch (error) {
+      return error;
+    }
   }
 
   //curl --data "username=akramp&twoFactorAuthenticationCode="  http://localhost:3000/api/auth/google2fa/authenticate
-  @Post('google2fa/authenticate')
+  @Post("google2fa/authenticate")
   @UseGuards(Jwt2faStrategy)
   async authenticate(@Res() res: Response, @Body() twofadto: twofadto) {
-  const isCodeValid = await this.authService.isTwoFactorAuthenticationCodeValid(twofadto);
-  if (isCodeValid === false) {
-      throw new UnauthorizedException('Wrong authentication code');
-   }
-  res.sendStatus(200);
+    const isCodeValid =
+      await this.authService.isTwoFactorAuthenticationCodeValid(twofadto);
+    if (isCodeValid === false) {
+      throw new UnauthorizedException("Wrong authentication code");
+    }
+    res.sendStatus(200);
   }
 
-@Post('Test')
-@UseGuards(Jwt2faStrategy)
-async test(){
-  console.log("UwU!!");
-}
-
-
- 
+  @Post("Test")
+  @UseGuards(Jwt2faStrategy)
+  async test() {
+    console.log("UwU!!");
+  }
 }

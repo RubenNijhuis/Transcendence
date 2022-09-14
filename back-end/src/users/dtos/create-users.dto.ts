@@ -2,14 +2,11 @@ import { IsNotEmpty, MinLength } from "class-validator";
 
 export class CreateUserDto {
   @IsNotEmpty()
-  authToken: string
+  username: string;
 
   @IsNotEmpty()
-  intraId: string
-  
-  @IsNotEmpty()
-  username: string
+  color: string;
 
   @IsNotEmpty()
-  color: string
+  description: string;
 }
