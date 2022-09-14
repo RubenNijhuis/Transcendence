@@ -14,15 +14,13 @@ const SuccesfulLogin = () => {
 
         // Redirect user to create account if no account has been made
         // Otherwise redirect to profile
-        signIn(token).then(
-            ({ shouldCreateAccount }: { shouldCreateAccount: boolean }) => {
-                if (shouldCreateAccount) {
-                    navigate("/create-account");
-                } else {
-                    navigate("/profile/me");
-                }
+        signIn(token).then((res: any) => {
+            if (res.shouldCreateUser === true) {
+                navigate("/create-account");
+            } else {
+                navigate("/profile/me");
             }
-        );
+        });
     };
 
     useEffect(() => {

@@ -9,7 +9,11 @@ import Axios from "axios";
 // Define what the auth context contains
 interface AuthContextType {
     user: Profile | null;
+    setUser: React.Dispatch<React.SetStateAction<Profile | null>>;
+
     isLoggedIn: boolean;
+    setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+
     authToken: string;
     signIn(code: string): any;
 }
@@ -25,7 +29,7 @@ const useAuth = () => useContext(AuthContext);
  * the user data as well as the utility functions like login and logout
  */
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, setUser] = useState<Profile>(null!);
+    const [user, setUser] = useState<Profile | null>(null!);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [authToken, setAuthToken] = useState<string>(null!);
 
@@ -41,36 +45,27 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
             interface AuthResponse {
                 shouldCreateUser: boolean;
-                user: null | object;
+                user: null | Profile;
                 authToken: string;
-                intraId: string;
             }
 
             Axios.get(url).then(({ data }: { data: AuthResponse }) => {
-                const authData = data;
-                const shouldCreateAccount: boolean = authData.shouldCreateUser;
-
-                // If the user doesn't have to create an account we can inmediatly set the data
-                if (shouldCreateAccount) {
-                    resolve(authData);
-                }
-
-                // TODO: set user profile to res data
-                const newUserData: Profile = generateProfile(1)[0];
-                newUserData.intraID = "rnijhuis";
-                newUserData.username = "LowerRes";
-                newUserData.img_url =
-                    "https://images.ctfassets.net/vf2eiv36rew2/6vLLgPp8PvG9hfReO0dCIS/1b576d6080c255d6a5e6e884a11741ea/a.jpg?w=4000&h=2666&q=50&fm=webp";
-                newUserData.banner_url =
-                    "https://images.unsplash.com/photo-1621687578668-aa1b449c7b29?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2970&q=80";
-                setUser(newUserData);
-                setLoggedIn(true);
-                resolve(authData);
+                setAuthToken(data.authToken);
+                setUser(data.user);
+                resolve(data);
             });
         });
     };
 
-    const value = { user, signIn, isLoggedIn, authToken, setAuthToken };
+    const value = {
+        user,
+        signIn,
+        setUser,
+        setLoggedIn,
+        isLoggedIn,
+        authToken,
+        setAuthToken
+    };
 
     return (
         <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

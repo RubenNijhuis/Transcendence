@@ -41,6 +41,7 @@ const ProfilePage = () => {
     };
 
     useEffect(() => {
+        console.log(user);
         if (id !== undefined) {
             getUserData(parseInt(id)).then((res) => {
                 setUserData(res as Profile);
@@ -60,7 +61,7 @@ const ProfilePage = () => {
                     }}
                 >
                     <ProfileDisplay user={userData} />
-                    <ProfileStats player={userData} matches={matchHistory} />
+                    {/* <ProfileStats player={userData} matches={matchHistory} /> */}
                     {userData.username !== user.username && (
                         <ProfileActions profile={userData} />
                     )}
