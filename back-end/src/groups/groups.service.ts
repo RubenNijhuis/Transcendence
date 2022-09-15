@@ -4,23 +4,20 @@ import { Repository } from "typeorm";
 import { Group, User } from "src/typeorm";
 import { CreateGroupDto } from "./dtos/create-group.dto";
 import { CreatePasswordDto } from "./dtos/create-password.dto";
-import { UserNameOptions } from "@ngneat/falso/lib/user-name";
 import { EditPasswordDto } from "./dtos/edit-password.dto";
 import { UsersService } from "src/users/users.service";
-import { UsersController } from "src/users/users.controller";
-import { group } from "console";
 import { EditMembersDto } from "./dtos/edit-members.dto";
 import Groupuser from "./groupusers/groupuser.entity";
-import { GroupuserService } from "./groupusers/groupuser.service";
-import { CreateGroupuserDto } from "./groupusers/create-groupuser.dto";
+import { MakeAdminDto } from "./dtos/make-admin.dto";
 
 @Injectable()
 export class GroupService {
     constructor(
         @InjectRepository(Group)
         private readonly groupRepository: Repository<Group>,
+        @InjectRepository(Groupuser)
+        private readonly groupuserRepository: Repository<Groupuser>,
         private readonly userService: UsersService,
-        private readonly groupuserService: GroupuserService
     ) {}
 
     getAllMessages() {
@@ -33,7 +30,7 @@ export class GroupService {
 
     async createPassword(CreatePasswordDto: CreatePasswordDto) {
         const group = this.findGroupById(CreatePasswordDto.id);
-        if (!group) return console.error(); //error lmao
+        if (!group) return console.error("group doesn't exist");
         const owner = (await group).owner;
         if (owner === CreatePasswordDto.owner)
             await this.groupRepository.update(
@@ -44,7 +41,7 @@ export class GroupService {
 
     async updatePassword(EditPasswordDto: EditPasswordDto) {
         const group = await this.findGroupById(EditPasswordDto.id);
-        if (!group) return console.error(); //error lmao
+        if (!group) return console.error("group doesn't exist"); //error lmao
         const owner = group.owner;
         const oldPassword = group.password;
         if (
@@ -65,65 +62,63 @@ export class GroupService {
         const newGroup = this.groupRepository.create();
         newGroup.owner = CreateGroupDto.owner;
         newGroup.users = [];
-        // for (var i = 0; i < CreateGroupDto.users.length; i++) {
-        //     let CreateGroupuserDto : CreateGroupuserDto;
-        //     console.log("we good?")
-        //     console.log(CreateGroupDto.users[i]);
-        //     console.log(newGroup.id);
-        //     CreateGroupuserDto.userId = CreateGroupDto.users[i];
-        //     CreateGroupuserDto.groupId = newGroup.id;
-        //     console.log("pre");
-        //     const newGroupuser : Groupuser = await this.groupuserService.createGroupuser(CreateGroupuserDto);
-        //     console.log("post");
-        //     newGroup.users.push(newGroupuser);
-        // }
         return this.groupRepository.save(newGroup);
     }
 
     async addMembers(EditMembersDto: EditMembersDto) {
-        const group = await this.findGroupById(EditMembersDto.id);
-        if (!group)
-            console.error();
-        console.log(group.owner);
         for (let i = 0; i < EditMembersDto.users.length; i++) {
-            let CreateGroupuserDto : CreateGroupuserDto;
-                console.log("we good?")
-                console.log(EditMembersDto.users[i]);
-                console.log(group.id);
-                CreateGroupuserDto.user = await this.userService.findUsersById(EditMembersDto.users[i]);
-                CreateGroupuserDto.group = await this.findGroupById(EditMembersDto.id);
-                console.log("pre");
-                const newGroupuser : Groupuser = await this.groupuserService.createGroupuser(CreateGroupuserDto);
-                console.log("post");
-                group.users.push(newGroupuser);
+            const groupuser = this.groupuserRepository.create();
+            groupuser.group = await this.findGroupById(EditMembersDto.groupId);
+            groupuser.user = await this.userService.findUsersById(EditMembersDto.users[i]);
+            groupuser.groupId = EditMembersDto.groupId;
+            groupuser.userId = EditMembersDto.users[i];
+            groupuser.userType = 0;
+            this.groupuserRepository.save(groupuser);
         }
-        return this.groupRepository.save(group);
+        return ;
     }
 
-    // async removeMembers(EditMembersDto: EditMembersDto) {
-    //     const group = await this.groupRepository
-    //         .createQueryBuilder("group")
-    //         .where({ id: EditMembersDto.id })
-    //         .leftJoinAndSelect("group.users", "user")
-    //         .getOne();
-        
-    //     for (let i = 0; i < EditMembersDto.users.length; i++) {
-    //         const userToRemove: User = await this.userService.findUsersById(
-    //             EditMembersDto.users[i]
-    //         );
-    //         if (userToRemove) {
-    //             const userID = (user : User) => user === userToRemove;
-    //             group.users.splice(group.users.findIndex(userID), 1);
-    //         }
-    //     }
-    //     return this.groupRepository.save(group);
-    // }
+    async removeMembers(EditMembersDto: EditMembersDto) {
+        for (let i = 0; i < EditMembersDto.users.length; i++) {
+            const userToRemove: Groupuser = await this.groupuserRepository
+                .createQueryBuilder("groupuser")
+                .where({ groupId: EditMembersDto.groupId })
+                .andWhere({ userId: EditMembersDto.users[i] })
+                .getOne();
+            if (userToRemove) {
+                this.groupuserRepository.delete(userToRemove);
+            }
+        }
+        return ;
+    }
+
+    async makeAdmin(MakeAdminDto: MakeAdminDto) {
+        const groupuser: Groupuser =  await this.groupuserRepository
+        .createQueryBuilder("groupuser")
+        .where({ groupId: MakeAdminDto.group })
+        .andWhere({ userId: MakeAdminDto.user })
+        .getOne();
+        const group: Group = await this.findGroupById(MakeAdminDto.group);
+        console.log(groupuser.userId);
+        console.log(groupuser.groupId);
+        if (groupuser && group.owner === MakeAdminDto.owner) {
+                console.log("Bingo");
+                groupuser.userType = 1;
+        }
+        console.log("2");
+        return this.groupuserRepository.save(groupuser);
+    }
+
+    async unMakeAdmin(MakeAdminDto: MakeAdminDto) {
+        const groupuser: Groupuser =  await this.groupuserRepository
+        .createQueryBuilder("groupuser")
+        .where({ groupId: MakeAdminDto.group })
+        .andWhere({ userId: MakeAdminDto.user })
+        .getOne();
+        const group: Group = await this.findGroupById(MakeAdminDto.group);
+        if (groupuser && group.owner === MakeAdminDto.owner) {
+                groupuser.userType = 0;
+        }
+        return this.groupuserRepository.save(groupuser);
+    }
 }
-
-
-
-// const group = await this.groupRepository
-// .createQueryBuilder("group")
-// .where({ id: EditMembersDto.id })
-//  .leftJoinAndSelect("group.users", "user")
-// .getOne();
