@@ -13,7 +13,7 @@ import Layout from "../components/Layout";
 // Auth
 import { useAuth } from "../utils/AuthContext";
 import { useNavigate } from "react-router-dom";
-import createUser from "../proxys/user/createUser";
+import createUser from "../proxies/user/createUser";
 import { Profile } from "../utils/GlobalTypes";
 
 // TODO: put styling in different folder
@@ -67,13 +67,15 @@ const CreateAccount = () => {
             description
         };
 
-        /* Redirects the user to the profile page 
-         * upon account creation
-        */
+        /**
+         * Redirects the user to the profile page
+         * upon account creation.
+         */
         createUser(providedDetails, authToken)
             .then((returnedUserProfile) => {
                 setUser(returnedUserProfile as Profile);
                 setLoggedIn(true);
+
                 navigate("/profile/me");
             })
             .catch((err) => {

@@ -5,11 +5,13 @@ import { Navigate, useLocation, Outlet } from "react-router-dom";
 import { useAuth } from "../../utils/AuthContext";
 
 const Guard = () => {
-    const auth = useAuth();
+    const { isLoggedIn } = useAuth();
     const location = useLocation();
 
-    // If the user isn't logged in we reroute them to the login page
-    if (!auth.isLoggedIn)
+    console.log("Guard called");
+
+    // If the user isn't logged in we reroute them to the home page
+    if (!isLoggedIn)
         return <Navigate to="/" state={{ from: location }} replace />;
 
     return <Outlet />;

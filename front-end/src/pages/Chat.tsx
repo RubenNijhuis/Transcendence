@@ -1,3 +1,4 @@
+// React
 import { useEffect, useState } from "react";
 
 // Components
@@ -7,30 +8,41 @@ import ChatInterface from "../containers/ChatInterface";
 import DirectMessageList from "../containers/DirectMessageList";
 import ChatBox from "../containers/ChatBox";
 
-// Data
+// Types
 import { GroupChat } from "../utils/GlobalTypes";
-import { useDataDebug } from "../utils/DebugDataContext";
+
+// Requests
+import getChats from "../proxies/chat/getChats";
+
+// Auth
+import { useAuth } from "../utils/AuthContext";
 
 const Chat = () => {
-    const [messages, setMessages] = useState<GroupChat[]>(null!);
+    const [groupChats, setGroupChats] = useState<GroupChat[]>(null!);
     const [selectedChat, setSelectedChat] = useState<number>(0);
 
-    const { chats } = useDataDebug();
+    const { user, authToken } = useAuth();
 
     useEffect(() => {
-        if (chats) setMessages(chats);
-    }, [chats]);
+        if (user !== null) {
+            getChats(user.username, authToken)
+                .then((returnedChats) => {
+                    setGroupChats(returnedChats as GroupChat[]);
+                })
+                .catch((err) => console.log(err));
+        }
+    }, [authToken, user]);
 
     return (
         <Layout>
-            {messages !== null ? (
+            {groupChats !== null ? (
                 <ChatInterface>
                     <DirectMessageList
-                        directMessages={messages}
+                        directMessages={groupChats}
                         selectedChat={selectedChat}
                         setSelectedChat={setSelectedChat}
                     />
-                    <ChatBox chat={messages[selectedChat]} />
+                    <ChatBox chat={groupChats[selectedChat]} />
                 </ChatInterface>
             ) : (
                 <Loader />

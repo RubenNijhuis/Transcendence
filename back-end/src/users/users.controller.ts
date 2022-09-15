@@ -3,12 +3,16 @@ import {
   Body,
   Controller,
   Get,
+  Header,
+  Headers,
   Post,
+  Req,
   Res,
   UsePipes,
   ValidationPipe
 } from "@nestjs/common";
 import { UsernameDto } from "src/auth/dto/username.dto";
+import { AuthService } from "src/auth/services/auth.service";
 import { seederConfig } from "src/configs/seeder.config";
 import { UserSeeder } from "src/database/seeds/user-create.seed";
 import { CreateUserDto } from "src/users/dtos/create-users.dto";
@@ -16,7 +20,10 @@ import { UsersService } from "src/users/users.service";
 
 @Controller("users")
 export class UsersController {
-  constructor(private readonly userService: UsersService) {}
+  constructor(
+    private readonly userService: UsersService,
+    private readonly authService: AuthService
+  ) {}
 
   @Get()
   getUsers() {
@@ -34,9 +41,18 @@ export class UsersController {
 
   @Post("create")
   @UsePipes(ValidationPipe)
-  async createUsers(@Body() createUserDto: CreateUserDto) {
+  async createUsers(
+    @Headers("authorization") authorization: string,
+    @Body() createUserDto: CreateUserDto
+  ) {
     try {
-      const user = await this.userService.createUser(createUserDto);
+      const intraIdFromJwt: string = this.authService.jwtDecodeUsername(
+        authorization.replace("Bearer ", "")
+      );
+      const user = await this.userService.createUser(
+        intraIdFromJwt,
+        createUserDto
+      );
       const ret = user;
       return ret;
     } catch (error) {

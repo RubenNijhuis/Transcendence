@@ -34,7 +34,7 @@ export class AuthController {
     private readonly usersService: UsersService,
     private authService: AuthService,
     private readonly configService: ConfigService,
-    private readonly jwtService: JwtService,
+    private readonly jwtService: JwtService
   ) {}
 
   @Get("login")
@@ -48,7 +48,6 @@ export class AuthController {
       response_type: "code"
     };
     const redirectUrl: string = Axios.getUri({ url, params });
-    console.log(redirectUrl);
 
     return redirectUrl;
   }
@@ -77,7 +76,6 @@ export class AuthController {
   // @UseGuards(FortyTwoAuthGuard)
   async confirm(@Query("token") token: string) {
     // Turns the token from redirect into a token
-    console.log(token);
     const accessTokenResp: any = await Axios.post(
       this.configService.get<string>("INTRA_TOKEN_URL"),
       null,
@@ -92,8 +90,6 @@ export class AuthController {
       }
     );
 
-    console.log("token: ", accessTokenResp.data.access_token);
-
     const userData = await Axios.get(
       this.configService.get("INTRA_GET_ME_URL"),
       {
@@ -102,25 +98,22 @@ export class AuthController {
         }
       }
     );
-  
-    const intraID = userData.data.id;
+
     const username = userData.data.login;
-    console.log(intraID);
-    console.log(username);
+    console.log("INTRA ID: ", username);
+
     // const CreateUserDto = { intraID, username };
-    
+
     const payload = {
       username: username
     };
-    console.log("test");
+
     const ret = this.jwtService.sign(payload);
-    console.log("authtoken:");
-    console.log(ret);
     // this.addjwttoken(usernameDto, ret);
     // const decodedJwtAccessToken = this.authService.jwtDecodeUsername(ret);
     // console.log(decodedJwtAccessToken);
 
-    return this.authService.validateUser(intraID, ret);
+    return this.authService.validateUser(username, ret);
   }
 
   @Get("status")

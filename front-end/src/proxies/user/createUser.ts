@@ -2,13 +2,13 @@
 import axios from "axios";
 
 // Types
-import { Profile } from "../../utils/GlobalTypes";
+import { Profile, RequestError } from "../../utils/GlobalTypes";
 
 // Auth
 import { getAuthHeader } from "../utils/authToken";
 
 // Api Routes
-import ApiRoutes from "../utils/routes";
+import ApiRoutes from "../utils/ApiRoutes";
 
 interface createUserProps {
     username: string;
@@ -19,7 +19,7 @@ interface createUserProps {
 const createUser = (
     userData: createUserProps,
     authToken: string
-): Promise<any> => {
+): Promise<Profile | RequestError> => {
     return axios
         .post(ApiRoutes.createUser(), userData, {
             headers: getAuthHeader(authToken)

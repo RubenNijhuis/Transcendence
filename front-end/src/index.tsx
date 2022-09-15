@@ -10,8 +10,16 @@ const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
 );
 
+const renderWithStrict = false;
+
 root.render(
-    <React.StrictMode>
-        <App />
-    </React.StrictMode>
+    <>
+        {renderWithStrict ? (
+            <React.StrictMode>
+                <App />
+            </React.StrictMode>
+        ) : (
+            <App />
+        )}
+    </>
 );

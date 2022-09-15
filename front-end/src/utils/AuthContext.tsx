@@ -1,15 +1,16 @@
 // A lot of this was taken from https://stackblitz.com/github/remix-run/react-router/tree/main/examples/auth?file=src%2FApp.tsx
 import { createContext, useContext, useState } from "react";
-import { Profile } from "./GlobalTypes";
-import { generateProfile } from "./randomData";
+
+// Types
+import { LoginConfirmResponse, Profile } from "./GlobalTypes";
 
 // Requests
-import axios from "axios";
+import loginConfirm from "../proxies/auth/loginConfirm";
 
 // Define what the auth context contains
 interface AuthContextType {
-    user: Profile | null;
-    setUser: React.Dispatch<React.SetStateAction<Profile | null>>;
+    user: Profile;
+    setUser: React.Dispatch<React.SetStateAction<Profile>>;
 
     isLoggedIn: boolean;
     setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,7 +30,7 @@ const useAuth = () => useContext(AuthContext);
  * the user data as well as the utility functions like login and logout
  */
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, setUser] = useState<Profile | null>(null!);
+    const [user, setUser] = useState<Profile>(null!);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [authToken, setAuthToken] = useState<string>(null!);
 
@@ -38,22 +39,23 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
      * return value is a user as well as a bool indicating whether to
      * create a user or not.
      */
-    const signIn = (code: string) => {
+    const signIn = (code: string): Promise<boolean> => {
         return new Promise((resolve, reject) => {
-            // TODO: use .env for url
-            const url = `/api/auth/confirm?token=${code}`;
-
-            interface AuthResponse {
-                shouldCreateUser: boolean;
-                user: null | Profile;
-                authToken: string;
-            }
-
-            axios.get(url).then(({ data }: { data: AuthResponse }) => {
-                setAuthToken(data.authToken);
-                setUser(data.user);
-                resolve(data);
-            });
+            return loginConfirm(code)
+                .then((res) => {
+                    const transformedRes: LoginConfirmResponse =
+                        res as LoginConfirmResponse;
+                    console.log(res);
+                    setAuthToken(transformedRes.authToken);
+                    if (transformedRes.profile !== null) {
+                        setUser(transformedRes.profile);
+                        setLoggedIn(true);
+                    }
+                    resolve(transformedRes.shouldCreateUser);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         });
     };
 

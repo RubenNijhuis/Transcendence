@@ -2,15 +2,18 @@
 import axios from "axios";
 
 // Types
-import { Profile } from "../../utils/GlobalTypes";
+import { Profile, RequestError } from "../../utils/GlobalTypes";
 
 // Auth
 import { getAuthHeader } from "../utils/authToken";
 
 // Api Routes
-import ApiRoutes from "../utils/routes";
+import ApiRoutes from "../utils/ApiRoutes";
 
-const getUser = (id: string, authToken: string) => {
+const getUser = (
+    id: string,
+    authToken: string
+): Promise<Profile | RequestError> => {
     return axios
         .get(ApiRoutes.getUser(id), {
             headers: getAuthHeader(authToken)
