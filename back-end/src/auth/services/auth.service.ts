@@ -15,11 +15,6 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  // returnen of de eerste keer inloggen
-  // jwt token aanmaken
-  // { creatAccount: authToken, jwt: string}
-  // return await this.createUser(userDto);
-  // new user in table zetten (uninit)
   async validateUser(intraId: string): Promise<any> {
     const res: any = {
       shouldCreateUser: false,
@@ -34,7 +29,7 @@ export class AuthService {
     } else {
       res.shouldCreateUser = true;
     }
-
+    console.log(JSON.stringify(user))
     return res;
   }
 

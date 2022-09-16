@@ -1,4 +1,3 @@
-import { HttpService } from "@nestjs/axios";
 import {
     Body,
     Controller,
@@ -19,6 +18,7 @@ import { UserSeeder } from "src/database/seeds/user-create.seed";
 import { CreateUserDto } from "src/users/dtos/create-users.dto";
 import { UsersService } from "src/users/users.service";
 import { uploadImgDto } from "./dtos/upload-img.dto";
+import User from "./user.entity";
 const multer  = require('multer')
 
 @Controller("users")
@@ -41,10 +41,11 @@ export class UsersController {
 
   @Post("create")
   @UsePipes(ValidationPipe)
-  async createUsers(@Body() createUserDto: CreateUserDto) {
+  async createUsers(@Body() createUserDto: CreateUserDto): Promise<any> {
     try {
-      const user = await this.userService.createUser(createUserDto);
+      const user: User = await this.userService.createUser(createUserDto);
       const ret = user;
+      console.log("user obj:", user);
       return ret;
     } catch (error) {
       return error;

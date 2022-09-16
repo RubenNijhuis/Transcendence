@@ -75,7 +75,7 @@ export class AuthController {
   // @UseGuards(FortyTwoAuthGuard)
   async confirm(@Query("token") token: string) {
     // Turns the token from redirect into a token
-    console.log(token);
+    console.log("first token:", token);
     const accessTokenResp: any = await Axios.post(
       this.configService.get<string>("INTRA_TOKEN_URL"),
       null,
@@ -101,11 +101,7 @@ export class AuthController {
       }
     );
     const intraID = userData.data.id;
-    const username = userData.data.login;
     console.log(intraID);
-    console.log(username);
-      const CreateUserDto = { intraID, username };
-      
     return this.authService.validateUser(intraID);
   }
 
