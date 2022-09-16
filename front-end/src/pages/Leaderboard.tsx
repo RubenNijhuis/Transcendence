@@ -15,6 +15,7 @@ import { useAuth } from "../utils/AuthContext";
 
 // Types
 import { Profile } from "../utils/GlobalTypes";
+import Logger from "../utils/Logger";
 
 const Leaderboard = () => {
     const [leaderboard, setLeaderboard] = useState<Profile[]>(null!);
@@ -27,7 +28,7 @@ const Leaderboard = () => {
                 setLeaderboard(returnedLeaderboard as Profile[]);
             })
             .catch((err) => {
-                console.log(err);
+                Logger("ERROR", "Leaderboard", "leaderboad data", err);
             });
     });
 

@@ -15,6 +15,7 @@ import { useAuth } from "../utils/AuthContext";
 import { useNavigate } from "react-router-dom";
 import createUser from "../proxies/user/createUser";
 import { Profile } from "../utils/GlobalTypes";
+import Logger from "../utils/Logger";
 
 // TODO: put styling in different folder
 const StyledInput = styled.div`
@@ -80,7 +81,12 @@ const CreateAccount = () => {
             })
             .catch((err) => {
                 // TODO: handle error messages
-                console.log(err.response.data.message);
+                Logger(
+                    "ERROR",
+                    "Create account",
+                    "returned profile request",
+                    err
+                );
             });
     };
 

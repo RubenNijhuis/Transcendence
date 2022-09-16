@@ -8,14 +8,14 @@ import { GroupChat, RequestError } from "../../utils/GlobalTypes";
 import { getAuthHeader } from "../utils/authToken";
 
 // Api Routes
-import ApiRoutes from "../utils/ApiRoutes";
+import { ApiRoutes } from "../../config";
 
-const getChats = (
+const getChatByUserId = (
     id: string,
     authToken: string
 ): Promise<GroupChat[] | RequestError> => {
     return axios
-        .get(ApiRoutes.getChats(id), {
+        .get(ApiRoutes.getChatByUserId(id), {
             headers: getAuthHeader(authToken)
         })
         .then((res) => {
@@ -27,4 +27,4 @@ const getChats = (
         });
 };
 
-export default getChats;
+export default getChatByUserId;

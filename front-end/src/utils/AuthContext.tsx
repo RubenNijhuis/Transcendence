@@ -2,10 +2,10 @@
 import { createContext, useContext, useState } from "react";
 
 // Types
-import { LoginConfirmResponse, Profile } from "./GlobalTypes";
+import { LoginConfirmResponse, Profile, RequestError } from "./GlobalTypes";
 
 // Requests
-import loginConfirm from "../proxies/auth/loginConfirm";
+import loginConfirm from "../proxies/auth/confirmLogin";
 
 // Define what the auth context contains
 interface AuthContextType {
@@ -39,24 +39,23 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
      * return value is a user as well as a bool indicating whether to
      * create a user or not.
      */
-    const signIn = (code: string): Promise<boolean> => {
-        return new Promise((resolve, reject) => {
-            return loginConfirm(code)
-                .then((res) => {
-                    const transformedRes: LoginConfirmResponse =
-                        res as LoginConfirmResponse;
-                    console.log(res);
-                    setAuthToken(transformedRes.authToken);
-                    if (transformedRes.profile !== null) {
-                        setUser(transformedRes.profile);
-                        setLoggedIn(true);
-                    }
-                    resolve(transformedRes.shouldCreateUser);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        });
+    const signIn = async (
+        code: string
+    ): Promise<LoginConfirmResponse | RequestError> => {
+        try {
+            const res = (await loginConfirm(code)) as LoginConfirmResponse;
+
+            setAuthToken(res.authToken);
+
+            if (res.profile !== null) {
+                setUser(res.profile);
+                setLoggedIn(true);
+            }
+
+            return res;
+        } catch (err) {
+            return err as RequestError;
+        }
     };
 
     const value = {

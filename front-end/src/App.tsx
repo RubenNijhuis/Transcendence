@@ -10,6 +10,7 @@ import DataDebugProvider from "./utils/DebugDataContext";
 
 const App = () => (
     <AuthProvider>
+        {/* TODO: remove data debug provider */}
         <DataDebugProvider>
             {/* Global Styling */}
             <GlobalStyle />

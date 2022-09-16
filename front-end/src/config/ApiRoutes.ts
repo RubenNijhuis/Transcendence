@@ -12,13 +12,14 @@ const ApiRoutes = {
     getUser: (id: string) => `/api/id/${id}`,
 
     // Chat
-    getChats: (id: string) => `/api/chats/${id}`,
+    getChatByUserId: (id: string) => `/api/chats/${id}`,
 
     // Leaderboard
     getLeaderboard: () => `/api/leaderboard`,
 
     // Auth
-    loginConfirm: (code: string) => `/api/auth/confirm?token=${code}`
+    confirmLogin: (code: string) => `/api/auth/confirm?token=${code}`,
+    loginRoute: () => `/api/auth/login`
 };
 
 export default ApiRoutes;

@@ -8,7 +8,7 @@ import { Profile, RequestError } from "../../utils/GlobalTypes";
 import { getAuthHeader } from "../utils/authToken";
 
 // Api Routes
-import ApiRoutes from "../utils/ApiRoutes";
+import { ApiRoutes } from "../../config";
 
 const getUser = (
     id: string,

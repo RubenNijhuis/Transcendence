@@ -110,7 +110,7 @@ export class UsersService {
 
   async generateTwoFactorAuthenticationSecret(user: User) {
     const secret = authenticator.generateSecret();
-    console.log(secret);
+    console.log("Generate tfa secret :", secret);
 
     const otpauthUrl = authenticator.keyuri(
       "mehj177@gmail.com",
@@ -118,7 +118,8 @@ export class UsersService {
       secret
     );
 
-    console.log(otpauthUrl);
+    console.log("otpauthurl: ", otpauthUrl);
+
     return toDataURL(otpauthUrl);
     // await this.setTwoFactorAuthenticationSecret(secret, user.id);
     // console.log(user.twoFactorAuthenticationSecret);

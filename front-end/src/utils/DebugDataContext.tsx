@@ -41,10 +41,10 @@ const useDataDebug = () => useContext(DataDebugContext);
 // Setup data storage and update functions
 const DataDebugProvider = ({ children }: { children: React.ReactNode }) => {
     const [fakeUser, setFakeUser] = useState<Profile>(null!);
-    const [profiles, setProfiles] = useState<Profile[]>([]);
-    const [chats, setChats] = useState<GroupChat[]>([]);
-    const [leaderBoard, setLeaderBoard] = useState<Profile[]>([]);
-    const [matchHistory, setMatchHistory] = useState<MatchRecord[]>([]);
+    const [profiles, setProfiles] = useState<Profile[]>(null!);
+    const [chats, setChats] = useState<GroupChat[]>(null!);
+    const [leaderBoard, setLeaderBoard] = useState<Profile[]>(null!);
+    const [matchHistory, setMatchHistory] = useState<MatchRecord[]>(null!);
 
     const { user } = useAuth();
 

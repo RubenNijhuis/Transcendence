@@ -1,27 +1,29 @@
+import { PageRoutes } from "../../config";
+
 export const locations = [
     {
         name: "About",
-        url: "/about",
+        url: PageRoutes.about,
         onlyWhenLoggedin: false
     },
     {
         name: "Chat",
-        url: "/chat",
+        url: PageRoutes.chat,
         onlyWhenLoggedin: true
     },
     {
         name: "PongTestPage",
-        url: "/pong",
+        url: PageRoutes.pong,
         onlyWhenLoggedin: false
     },
     {
         name: "Leaderboard",
-        url: "/leaderboard",
+        url: PageRoutes.leaderBoard,
         onlyWhenLoggedin: true
     },
     {
         name: "Profile",
-        url: "/profile",
+        url: PageRoutes.profile,
         onlyWhenLoggedin: true
     }
 ];
