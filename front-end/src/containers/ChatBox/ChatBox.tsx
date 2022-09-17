@@ -1,7 +1,5 @@
-import { Fragment } from "react";
-
 // Types
-import { GroupChat } from "../../utils/GlobalTypes";
+import { GroupChat } from "../../types/GlobalTypes";
 
 // Components
 import ChatElement from "../../components/ChatElements";

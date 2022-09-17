@@ -14,7 +14,7 @@ import getLeaderboard from "../proxies/leaderboard/getLeaderboard";
 import { useAuth } from "../contexts/AuthContext";
 
 // Types
-import { Profile } from "../utils/GlobalTypes";
+import { Profile } from "../types/GlobalTypes";
 
 // Debug
 import Logger from "../utils/Logger";

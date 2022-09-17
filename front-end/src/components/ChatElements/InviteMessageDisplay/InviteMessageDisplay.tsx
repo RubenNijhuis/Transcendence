@@ -1,5 +1,5 @@
 // Types
-import { InvitePlayMessage } from "../../../utils/GlobalTypes";
+import { InvitePlayMessage } from "../../../types/GlobalTypes";
 
 // Styling
 import styled from "styled-components";
@@ -7,7 +7,7 @@ import {
     lightTextColor,
     mainColor,
     smallRadius
-} from "../../../utils/StylingConstants";
+} from "../../../styles/StylingConstants";
 
 // Components
 import Button from "../../Button";

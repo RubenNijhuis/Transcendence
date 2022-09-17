@@ -2,7 +2,7 @@
 import { createContext, useContext, useState } from "react";
 
 // Types
-import { LoginConfirmResponse, Profile } from "../../utils/GlobalTypes";
+import { LoginConfirmResponse, Profile } from "../../types/GlobalTypes";
 
 // Requests
 import loginConfirm from "../../proxies/auth/confirmLogin";

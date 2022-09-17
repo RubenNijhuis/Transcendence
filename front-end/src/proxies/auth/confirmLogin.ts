@@ -5,7 +5,7 @@ import ApiRoutes from "../../config/ApiRoutes";
 import axios from "axios";
 
 // Types
-import { LoginConfirmResponse } from "../../utils/GlobalTypes";
+import { LoginConfirmResponse } from "../../types/GlobalTypes";
 import transformToRequestError from "../utils/transformToRequestError";
 
 const confirmLogin = async (

@@ -1,5 +1,5 @@
 // Types
-import { MatchRecord, Profile } from "../../../utils/GlobalTypes";
+import { MatchRecord, Profile } from "../../../types/GlobalTypes";
 
 // Components
 import GameHistory from "../../GameHistory";

@@ -20,7 +20,7 @@ import NewPongGame from "../../pages/NewPongGame";
 import NotFound from "../../pages/NotFound";
 
 // Authentication
-import Guard from "../../containers/Guard";
+import Guard from "../Guard";
 import SuccesfulLogin from "../../pages/SuccesfulLogin";
 import CreateAccount from "../../pages/CreateAccount";
 

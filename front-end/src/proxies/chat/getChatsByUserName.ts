@@ -2,7 +2,7 @@
 import axios from "axios";
 
 // Types
-import { GroupChat } from "../../utils/GlobalTypes";
+import { GroupChat } from "../../types/GlobalTypes";
 
 // Auth
 import { getAuthHeader } from "../utils/authToken";

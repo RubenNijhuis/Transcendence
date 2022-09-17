@@ -2,10 +2,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Get the user
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../AuthContext"
 
 // Types
-import { GroupChat, MatchRecord, Profile } from "./GlobalTypes";
+import { GroupChat, MatchRecord, Profile } from "../../types/GlobalTypes";
 
 // Data generation
 import {

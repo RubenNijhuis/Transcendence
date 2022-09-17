@@ -6,7 +6,7 @@ import Heading from "../../components/Heading";
 import { useAuth } from "../../contexts/AuthContext";
 
 // Types
-import { GroupChat, Profile } from "../../utils/GlobalTypes";
+import { GroupChat, Profile } from "../../types/GlobalTypes";
 
 // Stylinh
 import { Container, DirectMessageEntry } from "./DirectMessageList.style";

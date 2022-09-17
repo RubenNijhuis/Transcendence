@@ -2,7 +2,7 @@
 import axios from "axios";
 
 // Types
-import { Profile, RequestError } from "../../utils/GlobalTypes";
+import { Profile } from "../../types/GlobalTypes";
 
 // Auth
 import { getAuthHeader } from "../utils/authToken";
@@ -22,10 +22,9 @@ const createUser = async (
     authToken: string
 ): Promise<Profile> => {
     try {
-        const res = await axios
-            .post(ApiRoutes.createUser(), userData, {
-                headers: getAuthHeader(authToken)
-            });
+        const res = await axios.post(ApiRoutes.createUser(), userData, {
+            headers: getAuthHeader(authToken)
+        });
         const returnedProfile: Profile = res.data;
         return returnedProfile;
     } catch (err: any) {

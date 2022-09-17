@@ -2,7 +2,7 @@
 import axios from "axios";
 
 // Types
-import { Profile } from "../../utils/GlobalTypes";
+import { Profile } from "../../types/GlobalTypes";
 
 // Auth
 import { getAuthHeader } from "../utils/authToken";

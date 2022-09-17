@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 // Styling
 import styled from "styled-components";
-import { magicNum, smallRadius } from "../utils/StylingConstants";
+import { magicNum, smallRadius } from "../styles/StylingConstants";
 
 // UI
 import Button from "../components/Button";
@@ -14,7 +14,7 @@ import Layout from "../components/Layout";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import createUser from "../proxies/user/createUser";
-import { Profile } from "../utils/GlobalTypes";
+import { Profile } from "../types/GlobalTypes";
 import Logger from "../utils/Logger";
 
 // TODO: put styling in different folder

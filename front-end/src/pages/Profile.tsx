@@ -18,13 +18,13 @@ import ProfileActions from "../components/Profile/ProfileActions";
 import { useAuth } from "../contexts/AuthContext";
 
 // Types
-import { Profile } from "../utils/GlobalTypes";
+import { Profile } from "../types/GlobalTypes";
 
 // Styling constants
-import { largeRadius, mainColor } from "../utils/StylingConstants";
+import { largeRadius, mainColor } from "../styles/StylingConstants";
 
 // Debug data
-import { useDataDebug } from "../utils/DebugDataContext";
+import { useDataDebug } from "../contexts/DebugDataContext";
 
 // API
 import getUserByUsername from "../proxies/user/getProfileByUsername";
@@ -48,6 +48,10 @@ const ProfilePage = () => {
      */
     const { userName } = useParams();
 
+    /**
+     * If the userName is undefined set profile to local user
+     * Otherwise get user from db and set them as profile
+     */
     useEffect(() => {
         if (userName === undefined) setSelectedProfile(user);
         else {

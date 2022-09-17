@@ -12,7 +12,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 // Types
-import { LoginConfirmResponse } from "../utils/GlobalTypes";
+import { LoginConfirmResponse } from "../types/GlobalTypes";
 
 // Page routes
 import PageRoutes from "../config/PageRoutes";

@@ -9,17 +9,17 @@ import DirectMessageList from "../containers/DirectMessageList";
 import ChatBox from "../containers/ChatBox";
 
 // Types
-import { GroupChat } from "../utils/GlobalTypes";
+import { GroupChat } from "../types/GlobalTypes";
 
 // Requests
-import getChatByUserName from "../proxies/chat/getChatsByUserId";
+import getChatByUserName from "../proxies/chat/getChatsByUserName";
 
 // Auth
 import { useAuth } from "../contexts/AuthContext";
 import Logger from "../utils/Logger";
 
 // Temp data
-import { useDataDebug } from "../utils/DebugDataContext";
+import { useDataDebug } from "../contexts/DebugDataContext";
 
 const Chat = () => {
     const [groupChats, setGroupChats] = useState<GroupChat[]>(null!);

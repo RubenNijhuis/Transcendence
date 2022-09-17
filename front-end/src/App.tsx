@@ -2,11 +2,11 @@
 import AuthProvider from "./contexts/AuthContext";
 
 // Misc
-import GlobalStyle from "./utils/GlobalStyle";
-import Router from "./containers/Routes/Routes";
+import GlobalStyle from "./styles/GlobalStyle";
+import Router from "./containers/Router";
 
 // Only for debug purposes
-import DataDebugProvider from "./utils/DebugDataContext";
+import DataDebugProvider from "./contexts/DebugDataContext";
 
 const App = () => (
     <AuthProvider>

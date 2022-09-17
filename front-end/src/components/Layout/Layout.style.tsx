@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { magicNum, secondaryColor } from "../../utils/StylingConstants";
+import { magicNum, secondaryColor } from "../../styles/StylingConstants";
 
 const Container = styled.div`
     background: ${secondaryColor};

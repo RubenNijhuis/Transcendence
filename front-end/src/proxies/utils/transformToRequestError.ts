@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { RequestError } from "../../utils/GlobalTypes";
+import { RequestError } from "../../types/GlobalTypes";
 
 const transformToRequestError = (err: AxiosError): RequestError => {
     const returnedError: RequestError = {

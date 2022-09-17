@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { backgroundColor, magicNum, mainColor } from "../../utils/StylingConstants";
+import { backgroundColor, magicNum, mainColor } from "../../styles/StylingConstants";
 
 const LoaderContainer = styled.div`
     width: 100%;
