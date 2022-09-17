@@ -1,6 +1,5 @@
 // Global profile interface
 interface Profile {
-    intraID: string;
     username: string;
     img_url: string;
     banner_url: string;
@@ -75,7 +74,8 @@ interface GroupChat {
 }
 
 interface RequestError {
-    message: string[];
+    error: any;
+    type: string;
 }
 
 interface LoginConfirmResponse {

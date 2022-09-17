@@ -71,7 +71,6 @@ const generateProfile = (amount: number): Profile[] => {
     for (let i = 0; i < amount; i++) {
         const username: string =
             names[randomIntFromInterval(0, names.length - 1)];
-        const intraID: string = username;
         const rank: number = i + 1;
 
         const color: string = "#1e1e1e";
@@ -96,7 +95,6 @@ const generateProfile = (amount: number): Profile[] => {
         const losses: number = randomIntFromInterval(1, 100);
 
         const newProfile: Profile = {
-            intraID,
             username,
             banner_url,
             color,

@@ -1,4 +1,4 @@
-import { PageRoutes } from "../../config";
+import PageRoutes from "../../config/PageRoutes";
 
 export const locations = [
     {

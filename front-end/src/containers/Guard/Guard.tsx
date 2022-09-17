@@ -1,9 +1,9 @@
 // Router
 import { Navigate, useLocation, Outlet } from "react-router-dom";
-import { PageRoutes } from "../../config";
+import PageRoutes from "../../config/PageRoutes";
 
 // Auth check
-import { useAuth } from "../../utils/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 /**
  * Checks if certain conditions are met when a guarded

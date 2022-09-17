@@ -1,29 +1,28 @@
 // Request
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import transformToRequestError from "../utils/transformToRequestError";
 
-// Types
-import { Profile, RequestError } from "../../utils/GlobalTypes";
+// Api Routes
+import ApiRoutes from "../../config/ApiRoutes";
 
 // Auth
 import { getAuthHeader } from "../utils/authToken";
 
-// Api Routes
-import { ApiRoutes } from "../../config";
+// Types
+import { Profile } from "../../utils/GlobalTypes";
 
-const getLeaderboard = (
+const getLeaderboard = async (
     authToken: string
-): Promise<Profile[] | RequestError> => {
-    return axios
-        .get(ApiRoutes.getLeaderboard(), {
+): Promise<Profile[]> => {
+    try {
+        const res = await axios.get<Profile[]>(ApiRoutes.getLeaderboard(), {
             headers: getAuthHeader(authToken)
-        })
-        .then((res) => {
-            const returnedLeaderboard: Profile[] = res.data;
-            return returnedLeaderboard;
-        })
-        .catch((err) => {
-            return err;
         });
+        const returnedLeaderboard: Profile[] = res.data;
+        return Promise.resolve(returnedLeaderboard);
+    } catch (err: any) {
+        return Promise.reject(transformToRequestError(err));
+    }
 };
 
 export default getLeaderboard;

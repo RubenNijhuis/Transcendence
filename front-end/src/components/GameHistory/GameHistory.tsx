@@ -73,7 +73,7 @@ const GameHistory = ({ player, matches }: Props) => {
                                             alt="opponent"
                                         />
                                         <Link
-                                            to={`/profile/${opponent.intraID}`}
+                                            to={`/profile/${opponent.username}`}
                                         >
                                             <span>{opponent.username}</span>
                                         </Link>

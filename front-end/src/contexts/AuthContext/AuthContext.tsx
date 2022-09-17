@@ -2,10 +2,11 @@
 import { createContext, useContext, useState } from "react";
 
 // Types
-import { LoginConfirmResponse, Profile, RequestError } from "./GlobalTypes";
+import { LoginConfirmResponse, Profile } from "../../utils/GlobalTypes";
 
 // Requests
-import loginConfirm from "../proxies/auth/confirmLogin";
+import loginConfirm from "../../proxies/auth/confirmLogin";
+import transformToRequestError from "../../proxies/utils/transformToRequestError";
 
 // Define what the auth context contains
 interface AuthContextType {
@@ -39,11 +40,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
      * return value is a user as well as a bool indicating whether to
      * create a user or not.
      */
-    const signIn = async (
-        code: string
-    ): Promise<LoginConfirmResponse | RequestError> => {
+    const signIn = async (code: string): Promise<LoginConfirmResponse> => {
         try {
-            const res = (await loginConfirm(code)) as LoginConfirmResponse;
+            const res: LoginConfirmResponse = await loginConfirm(code);
 
             setAuthToken(res.authToken);
 
@@ -52,9 +51,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 setLoggedIn(true);
             }
 
-            return res;
-        } catch (err) {
-            return err as RequestError;
+            return Promise.resolve(res);
+        } catch (err: any) {
+            return Promise.reject(transformToRequestError(err));
         }
     };
 

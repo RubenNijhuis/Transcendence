@@ -6,7 +6,7 @@ import Heading from "../components/Heading";
 import Layout from "../components/Layout";
 
 // Auth
-import { useAuth } from "../utils/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
 // Routing
 import { useNavigate } from "react-router-dom";
@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { LoginConfirmResponse } from "../utils/GlobalTypes";
 
 // Page routes
-import { PageRoutes } from "../config";
+import PageRoutes from "../config/PageRoutes";
 
 const SuccesfulLogin = () => {
     const { signIn } = useAuth();
@@ -23,8 +23,8 @@ const SuccesfulLogin = () => {
 
     /**
      * TODO: Check if this should be in the proxies folder
-     * 
-     * Sign's in using the provided code in the url. And reroutes 
+     *
+     * Sign's in using the provided code in the url. And reroutes
      * to `create-account` or `profile` based on response
      */
     const userRequestProcess = () => {

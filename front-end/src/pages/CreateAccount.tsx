@@ -11,7 +11,7 @@ import Heading from "../components/Heading";
 import Layout from "../components/Layout";
 
 // Auth
-import { useAuth } from "../utils/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import createUser from "../proxies/user/createUser";
 import { Profile } from "../utils/GlobalTypes";

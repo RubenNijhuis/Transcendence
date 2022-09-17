@@ -1,5 +1,5 @@
 // Authentication
-import AuthProvider from "./utils/AuthContext";
+import AuthProvider from "./contexts/AuthContext";
 
 // Misc
 import GlobalStyle from "./utils/GlobalStyle";

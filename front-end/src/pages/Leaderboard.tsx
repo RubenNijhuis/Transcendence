@@ -11,10 +11,12 @@ import RankingList from "../containers/RankingList";
 import getLeaderboard from "../proxies/leaderboard/getLeaderboard";
 
 // Auth
-import { useAuth } from "../utils/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
 // Types
 import { Profile } from "../utils/GlobalTypes";
+
+// Debug
 import Logger from "../utils/Logger";
 
 const Leaderboard = () => {
@@ -30,7 +32,7 @@ const Leaderboard = () => {
             .catch((err) => {
                 Logger("ERROR", "Leaderboard", "leaderboad data", err);
             });
-    });
+    }, [authToken]);
 
     return (
         <Layout>

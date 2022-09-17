@@ -4,8 +4,6 @@ import { Fragment } from "react";
 import Asset from "../Asset";
 import Button from "../Button";
 
-import axios from "axios";
-
 // Styling
 import { Container, ProfileIconContainer } from "./NavBar.style";
 
@@ -13,11 +11,11 @@ import { Container, ProfileIconContainer } from "./NavBar.style";
 import { Link } from "react-router-dom";
 
 // Authentication hook
-import { useAuth } from "../../utils/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 // Links
 import { locations } from "./NavBar.config";
-import { PageRoutes } from "../../config";
+import PageRoutes from "../../config/PageRoutes";
 import startLogin from "../../proxies/auth/startLogin";
 import Logger from "../../utils/Logger";
 

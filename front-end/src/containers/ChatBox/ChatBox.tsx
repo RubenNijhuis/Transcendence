@@ -9,7 +9,7 @@ import ChatInput from "../ChatInput";
 
 // Styling
 import { Container } from "./ChatBox.style";
-import { useAuth } from "../../utils/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import Heading from "../../components/Heading";
 
 interface Props {

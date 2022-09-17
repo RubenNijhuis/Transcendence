@@ -2,7 +2,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Get the user
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
 // Types
 import { GroupChat, MatchRecord, Profile } from "./GlobalTypes";
@@ -52,7 +52,7 @@ const DataDebugProvider = ({ children }: { children: React.ReactNode }) => {
         if (user) {
             const tempProfiles: Profile[] = generateProfile(20);
             setProfiles(tempProfiles);
-            setChats(generateGroupChats(user, 3, 2, tempProfiles));
+            setChats(generateGroupChats(user, 4, 2, tempProfiles));
             setLeaderBoard(tempProfiles);
             setMatchHistory(generateGameResult(user, 50));
         }

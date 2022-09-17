@@ -1,21 +1,22 @@
 // Api Routes
-import { ApiRoutes } from "../../config";
+import ApiRoutes from "../../config/ApiRoutes";
 
 // Requests
 import axios from "axios";
 
 // Types
-import { LoginConfirmResponse, RequestError } from "../../utils/GlobalTypes";
+import { LoginConfirmResponse } from "../../utils/GlobalTypes";
+import transformToRequestError from "../utils/transformToRequestError";
 
 const confirmLogin = async (
     code: string
-): Promise<LoginConfirmResponse | RequestError> => {
+): Promise<LoginConfirmResponse> => {
     try {
         const loginConfirmResp = await axios.get(ApiRoutes.confirmLogin(code));
         const returnedData: LoginConfirmResponse = loginConfirmResp.data;
-        return returnedData;
-    } catch (err) {
-        return err as RequestError;
+        return Promise.resolve(returnedData);
+    } catch (err: any) {
+        return Promise.reject(transformToRequestError(err));
     }
 };
 

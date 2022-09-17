@@ -38,7 +38,7 @@ const ProfileStats = ({ player, matches }: Props) => {
                 </div>
                 <div className="item">
                     <Heading type={3}>Friends</Heading>
-                    <span>{player.friends.length}</span>
+                    {/* <span>{player.friends.length}</span> */}
                 </div>
             </div>
         </Container>

@@ -1,7 +1,8 @@
 // Routing
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
-import { PageRoutes as Pages } from "../../config";
+// Route names config
+import PageRoutes from "../../config/PageRoutes";
 
 // Public Pages
 import Home from "../../pages/Home";
@@ -27,30 +28,39 @@ const Router = () => (
     <BrowserRouter>
         <Routes>
             {/* Public routes */}
-            <Route path={Pages.home} element={<Home />} />
-            <Route path={Pages.about} element={<About />} />
+            <Route path={PageRoutes.home} element={<Home />} />
+            <Route path={PageRoutes.about} element={<About />} />
 
             {/* Pong debugging */}
-            <Route path={Pages.pong} element={<Pong />} />
-            <Route path={Pages.newPong} element={<NewPongGame />} />
+            <Route path={PageRoutes.pong} element={<Pong />} />
+            <Route path={PageRoutes.newPong} element={<NewPongGame />} />
 
             {/* Callback route after login */}
-            <Route path={Pages.authRedirect} element={<SuccesfulLogin />} />
+            <Route
+                path={PageRoutes.authRedirect}
+                element={<SuccesfulLogin />}
+            />
 
             {/* TODO: only allow to go to this page if user has jwt */}
-            <Route path={Pages.createAccount} element={<CreateAccount />} />
+            <Route
+                path={PageRoutes.createAccount}
+                element={<CreateAccount />}
+            />
 
             {/* Routes that have to pass through authentication to be loaded */}
             <Route element={<Guard />}>
                 {/* Profile page is rendered in two different ways but same component */}
-                <Route path={Pages.profile} element={<ProfilePage />}>
-                    <Route path=":id" element={<ProfilePage />} />
+                <Route path={PageRoutes.profile} element={<ProfilePage />}>
+                    <Route path=":userName" element={<ProfilePage />} />
                 </Route>
 
                 {/* Regular private routes */}
-                <Route path={Pages.play} element={<Play />} />
-                <Route path={Pages.chat} element={<Chat />} />
-                <Route path={Pages.leaderBoard} element={<Leaderboard />} />
+                <Route path={PageRoutes.play} element={<Play />} />
+                <Route path={PageRoutes.chat} element={<Chat />} />
+                <Route
+                    path={PageRoutes.leaderBoard}
+                    element={<Leaderboard />}
+                />
             </Route>
 
             {/* 404 route */}

@@ -8,7 +8,8 @@ import { Profile, RequestError } from "../../utils/GlobalTypes";
 import { getAuthHeader } from "../utils/authToken";
 
 // Api Routes
-import { ApiRoutes } from "../../config";
+import ApiRoutes from "../../config/ApiRoutes";
+import transformToRequestError from "../utils/transformToRequestError";
 
 interface createUserProps {
     username: string;
@@ -16,21 +17,20 @@ interface createUserProps {
     description: string;
 }
 
-const createUser = (
+const createUser = async (
     userData: createUserProps,
     authToken: string
-): Promise<Profile | RequestError> => {
-    return axios
-        .post(ApiRoutes.createUser(), userData, {
-            headers: getAuthHeader(authToken)
-        })
-        .then((res) => {
-            const returnedProfile: Profile = res.data;
-            return returnedProfile;
-        })
-        .catch((err) => {
-            return err;
-        });
+): Promise<Profile> => {
+    try {
+        const res = await axios
+            .post(ApiRoutes.createUser(), userData, {
+                headers: getAuthHeader(authToken)
+            });
+        const returnedProfile: Profile = res.data;
+        return returnedProfile;
+    } catch (err: any) {
+        return Promise.reject(transformToRequestError(err));
+    }
 };
 
 export default createUser;

@@ -1,3 +1,4 @@
+// React
 import { useEffect, useState } from "react";
 
 // Optional url params
@@ -14,7 +15,7 @@ import ProfileStats from "../components/Profile/ProfileStats";
 import ProfileActions from "../components/Profile/ProfileActions";
 
 // Authentication
-import { useAuth } from "../utils/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
 // Types
 import { Profile } from "../utils/GlobalTypes";
@@ -25,58 +26,62 @@ import { largeRadius, mainColor } from "../utils/StylingConstants";
 // Debug data
 import { useDataDebug } from "../utils/DebugDataContext";
 
+// API
+import getUserByUsername from "../proxies/user/getProfileByUsername";
+
+// Debugging
+import Logger from "../utils/Logger";
+
 const ProfilePage = () => {
     // Profile to be displayed
-    const [userData, setUserData] = useState<Profile>(null!);
+    const [selectedProfile, setSelectedProfile] = useState<Profile>(null!);
 
-    // Temp debug profiles
-    const { profiles, matchHistory } = useDataDebug();
+    // Temp debug data
+    const { matchHistory } = useDataDebug();
 
     // Local profile
-    const { user } = useAuth();
+    const { user, authToken } = useAuth();
 
     /**
-     * The id in the url '/profile/:id` if not
+     * The `userName` in the url '/profile/:userName' if not
      * specified will default to undefined
      */
-    const { id } = useParams();
+    const { userName } = useParams();
 
-    // TODO: unused userdata request -> use getUser proxy
-    const getUserData = (id: number) => {
-        const reqPromise = new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve(profiles[id - 1]);
-            }, 1000);
-        });
-        return reqPromise;
-    };
-
-    // TODO: get user data on page load use getUser if id is not set proxy
     useEffect(() => {
-        if (id !== undefined) {
-            getUserData(parseInt(id)).then((res) => {
-                setUserData(res as Profile);
-            });
-        } else {
-            if (user) setUserData(user);
+        if (userName === undefined) setSelectedProfile(user);
+        else {
+            getUserByUsername(userName, authToken)
+                .then((res) => {
+                    setSelectedProfile(res as Profile);
+                })
+                .catch((err) =>
+                    Logger("ERROR", "Profile", "Loading user by username", err)
+                );
         }
-    });
+    }, [userName, user, authToken]);
 
     return (
         <Layout>
-            {userData && user ? (
+            {selectedProfile && user ? (
                 <div
                     style={{
                         borderRadius: largeRadius,
                         backgroundColor: mainColor
                     }}
                 >
-                    <ProfileDisplay user={userData} />
-                    {/* <ProfileStats player={userData} matches={matchHistory} /> */}
-                    {userData.username !== user.username && (
-                        <ProfileActions profile={userData} />
+                    <ProfileDisplay user={selectedProfile} />
+                    <ProfileStats
+                        player={selectedProfile}
+                        matches={matchHistory}
+                    />
+                    {selectedProfile.username !== user.username && (
+                        <ProfileActions profile={selectedProfile} />
                     )}
-                    <GameHistory player={userData} matches={matchHistory} />
+                    <GameHistory
+                        player={selectedProfile}
+                        matches={matchHistory}
+                    />
                 </div>
             ) : (
                 <Loader />

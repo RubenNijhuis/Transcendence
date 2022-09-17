@@ -12,11 +12,14 @@ import ChatBox from "../containers/ChatBox";
 import { GroupChat } from "../utils/GlobalTypes";
 
 // Requests
-import getChatByUserId from "../proxies/chat/getChatsByUserId";
+import getChatByUserName from "../proxies/chat/getChatsByUserId";
 
 // Auth
-import { useAuth } from "../utils/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import Logger from "../utils/Logger";
+
+// Temp data
+import { useDataDebug } from "../utils/DebugDataContext";
 
 const Chat = () => {
     const [groupChats, setGroupChats] = useState<GroupChat[]>(null!);
@@ -24,15 +27,18 @@ const Chat = () => {
 
     const { user, authToken } = useAuth();
 
+    const { chats } = useDataDebug();
+
     useEffect(() => {
         if (user !== null) {
-            getChatByUserId(user.username, authToken)
-                .then((returnedChats) => {
-                    setGroupChats(returnedChats as GroupChat[]);
-                })
-                .catch((err) =>
-                    Logger("ERROR", "Chat page", "Retrieved chats request", err)
-                );
+            setGroupChats(chats);
+            // getChatByUserName(user.username, authToken)
+            //     .then((returnedChats) => {
+            //         setGroupChats(returnedChats as GroupChat[]);
+            //     })
+            //     .catch((err) =>
+            //         Logger("ERROR", "Chat page", "Retrieved chats request", err)
+            //     );
         }
     }, [authToken, user]);
 
