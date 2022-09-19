@@ -6,6 +6,15 @@ interface Loggable {
     };
 }
 
+/**
+ * Logs a stylized console message
+ * 
+ * Types: AUTH GAME DEBUG ERROR
+ * @param type Error type
+ * @param from Function of origin
+ * @param message Anything extra
+ * @param obj The data to be displayed
+ */
 const Logger = (type: string, from: string, message: string, obj: any) => {
     // Format the obj into a string and remove double qoutes
     const formattedObj: string = JSON.stringify(obj, null, 4).replace(/"/g, "");

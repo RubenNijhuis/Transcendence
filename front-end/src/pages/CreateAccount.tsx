@@ -14,8 +14,16 @@ import Layout from "../components/Layout";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import createUser from "../proxies/user/createUser";
-import { Profile } from "../types/GlobalTypes";
-import Logger from "../utils/Logger";
+
+// Types
+import { RequestError } from "../types/request";
+import { Profile } from "../types/profile";
+
+// Page routes
+import PageRoutes from "../config/PageRoutes";
+
+// Error modal
+import { useModal } from "../contexts/ModalContext";
 
 // TODO: put styling in different folder
 const StyledInput = styled.div`
@@ -58,10 +66,12 @@ const CreateAccount = () => {
     // Authentication utils
     const { authToken, setUser, setLoggedIn } = useAuth();
 
+    const { setError, setIsModalOpen } = useModal();
+
     // Navigating to profile page after creation
     const navigate = useNavigate();
 
-    const handleAccountCreation = () => {
+    const handleAccountCreation = (): void => {
         const providedDetails = {
             username,
             color,
@@ -73,20 +83,14 @@ const CreateAccount = () => {
          * upon account creation.
          */
         createUser(providedDetails, authToken)
-            .then((returnedUserProfile) => {
-                setUser(returnedUserProfile as Profile);
+            .then((returnedUserProfile: Profile) => {
+                setUser(returnedUserProfile);
                 setLoggedIn(true);
-
-                navigate("/profile/me");
+                navigate(PageRoutes.profile);
             })
-            .catch((err) => {
-                // TODO: handle error messages
-                Logger(
-                    "ERROR",
-                    "Create account",
-                    "returned profile request",
-                    err
-                );
+            .catch((err: RequestError) => {
+                setError(err);
+                setIsModalOpen(true);
             });
     };
 

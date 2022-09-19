@@ -12,7 +12,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 // Types
-import { LoginConfirmResponse } from "../types/GlobalTypes";
+import { LoginConfirmResponse } from "../types/request";
 
 // Page routes
 import PageRoutes from "../config/PageRoutes";
@@ -22,17 +22,15 @@ const SuccesfulLogin = () => {
     const navigate = useNavigate();
 
     /**
-     * TODO: Check if this should be in the proxies folder
+     * Send the token to the back-end to get the user data.
      *
-     * Sign's in using the provided code in the url. And reroutes
-     * to `create-account` or `profile` based on response
+     * Response will decide if the user needs to be routed
+     * to the create-profile page or just the profile page
      */
     const userRequestProcess = () => {
         const href = window.location.href;
         const token = href.split("?code=")[1];
 
-        // Redirect user to create account if no account has been made
-        // Otherwise redirect to profile
         signIn(token).then((res: LoginConfirmResponse) => {
             if (res.shouldCreateUser === true) {
                 navigate(PageRoutes.createAccount);
@@ -42,9 +40,8 @@ const SuccesfulLogin = () => {
         });
     };
 
-    useEffect(() => {
-        userRequestProcess();
-    });
+    // Inmediatly set up the request
+    useEffect(() => userRequestProcess());
 
     return (
         <Layout>

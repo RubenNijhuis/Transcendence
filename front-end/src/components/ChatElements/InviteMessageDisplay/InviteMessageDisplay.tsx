@@ -1,5 +1,5 @@
 // Types
-import { InvitePlayMessage } from "../../../types/GlobalTypes";
+import { InvitePlayMessage } from "../../../types/chat";
 
 // Styling
 import styled from "styled-components";

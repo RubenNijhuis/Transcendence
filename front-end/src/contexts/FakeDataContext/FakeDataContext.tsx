@@ -2,20 +2,22 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Get the user
-import { useAuth } from "../AuthContext"
+import { useAuth } from "../AuthContext";
 
 // Types
-import { GroupChat, MatchRecord, Profile } from "../../types/GlobalTypes";
+import { GroupChat } from "../../types/chat";
+import { Profile } from "../../types/profile";
+import { MatchRecord } from "../../types/game";
 
 // Data generation
 import {
     generateGameResult,
     generateGroupChats,
     generateProfile
-} from "./randomData";
+} from "./fakeDataGenerators";
 
 // What kind of data and functions the context consists of
-interface DataDebugContextType {
+interface FakeDataContextType {
     profiles: Profile[];
     setProfiles: React.Dispatch<React.SetStateAction<Profile[]>>;
 
@@ -33,13 +35,13 @@ interface DataDebugContextType {
 }
 
 // Create context
-const DataDebugContext = createContext<DataDebugContextType>(null!);
+const FakeDataContext = createContext<FakeDataContextType>(null!);
 
 // Create an alias
-const useDataDebug = () => useContext(DataDebugContext);
+const useFakeData = () => useContext(FakeDataContext);
 
 // Setup data storage and update functions
-const DataDebugProvider = ({ children }: { children: React.ReactNode }) => {
+const FakeDataProvider = ({ children }: { children: React.ReactNode }) => {
     const [fakeUser, setFakeUser] = useState<Profile>(null!);
     const [profiles, setProfiles] = useState<Profile[]>(null!);
     const [chats, setChats] = useState<GroupChat[]>(null!);
@@ -72,11 +74,11 @@ const DataDebugProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     return (
-        <DataDebugContext.Provider value={value}>
+        <FakeDataContext.Provider value={value}>
             {children}
-        </DataDebugContext.Provider>
+        </FakeDataContext.Provider>
     );
 };
 
-export { useDataDebug };
-export default DataDebugProvider;
+export { useFakeData };
+export default FakeDataProvider;

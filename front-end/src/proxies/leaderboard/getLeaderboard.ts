@@ -9,7 +9,7 @@ import ApiRoutes from "../../config/ApiRoutes";
 import { getAuthHeader } from "../utils/authToken";
 
 // Types
-import { Profile } from "../../types/GlobalTypes";
+import { Profile } from "../../types/profile";
 
 const getLeaderboard = async (authToken: string): Promise<Profile[]> => {
     try {

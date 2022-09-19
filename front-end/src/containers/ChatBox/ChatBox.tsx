@@ -1,14 +1,16 @@
 // Types
-import { GroupChat } from "../../types/GlobalTypes";
+import { GroupChat } from "../../types/chat";
 
-// Components
+// UI
 import ChatElement from "../../components/ChatElements";
 import ChatInput from "../ChatInput";
+import Heading from "../../components/Heading";
 
 // Styling
 import { Container } from "./ChatBox.style";
+
+// Auth
 import { useAuth } from "../../contexts/AuthContext";
-import Heading from "../../components/Heading";
 
 interface Props {
     chat: GroupChat;

@@ -14,25 +14,25 @@ import getLeaderboard from "../proxies/leaderboard/getLeaderboard";
 import { useAuth } from "../contexts/AuthContext";
 
 // Types
-import { Profile } from "../types/GlobalTypes";
+import { Profile } from "../types/profile";
+import { RequestError } from "../types/request";
 
 // Debug
-import Logger from "../utils/Logger";
+import { useModal } from "../contexts/ModalContext";
 
 const Leaderboard = () => {
     const [leaderboard, setLeaderboard] = useState<Profile[]>(null!);
-
     const { authToken } = useAuth();
+    const { setIsModalOpen, setError } = useModal();
 
     useEffect(() => {
         getLeaderboard(authToken)
-            .then((returnedLeaderboard) => {
-                setLeaderboard(returnedLeaderboard as Profile[]);
-            })
-            .catch((err) => {
-                Logger("ERROR", "Leaderboard", "leaderboad data", err);
+            .then(setLeaderboard)
+            .catch((err: RequestError) => {
+                setError(err);
+                setIsModalOpen(true);
             });
-    }, [authToken]);
+    }, [authToken, setError, setIsModalOpen]);
 
     return (
         <Layout>

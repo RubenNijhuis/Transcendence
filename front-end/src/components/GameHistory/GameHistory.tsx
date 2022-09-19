@@ -13,7 +13,8 @@ import {
 import { Link } from "react-router-dom";
 
 // Types
-import type { Profile, MatchRecord } from "../../types/GlobalTypes";
+import { MatchRecord } from "../../types/game";
+import { Profile } from "../../types/profile";
 
 // Components
 import Heading from "../Heading";

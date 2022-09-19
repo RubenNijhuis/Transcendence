@@ -1,33 +1,6 @@
-// Global profile interface
-interface Profile {
-    username: string;
-    img_url: string;
-    banner_url: string;
-    color: string;
-    rank: number;
-    wins: number;
-    losses: number;
-    friends: string[];
-    blocked: string[];
-}
+import { GameType } from "./game";
+import { Profile } from "./profile";
 
-// How we define match data
-interface MatchRecord {
-    opponent: Profile;
-    player: Profile;
-    score: {
-        opponent: number;
-        self: number;
-    };
-}
-
-// Game types
-const enum GameType {
-    Classic,
-    Powered
-}
-
-// Content types
 const enum MessageContentType {
     Simple,
     Picture,
@@ -73,28 +46,13 @@ interface GroupChat {
     messages: Message[];
 }
 
-interface RequestError {
-    error: any;
-    type: string;
-}
-
-interface LoginConfirmResponse {
-    shouldCreateUser: boolean;
-    profile: null | Profile;
-    authToken: string;
-}
-
 export type {
-    Profile,
-    MatchRecord,
-    Message,
-    GroupChat,
-    InvitePlayMessage,
     PictureMessage,
+    InvitePlayMessage,
     SimpleMessage,
+    Message,
     AllMessageTypes,
-    RequestError,
-    LoginConfirmResponse
+    GroupChat,
 };
 
-export { GameType, MessageContentType };
+export { MessageContentType };

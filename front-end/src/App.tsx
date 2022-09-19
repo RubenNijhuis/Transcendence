@@ -6,18 +6,22 @@ import GlobalStyle from "./styles/GlobalStyle";
 import Router from "./containers/Router";
 
 // Only for debug purposes
-import DataDebugProvider from "./contexts/DebugDataContext";
+import FakeDataProvider from "./contexts/FakeDataContext";
+import ModalProvider from "./contexts/ModalContext";
 
 const App = () => (
     <AuthProvider>
-        {/* TODO: remove data debug provider */}
-        <DataDebugProvider>
-            {/* Global Styling */}
-            <GlobalStyle />
+        {/* TODO: wrapper for providers? */}
+        <ModalProvider>
+            {/* TODO: remove data debug provider */}
+            <FakeDataProvider>
+                {/* Global Styling */}
+                <GlobalStyle />
 
-            {/* Page routing */}
-            <Router />
-        </DataDebugProvider>
+                {/* Page routing */}
+                <Router />
+            </FakeDataProvider>
+        </ModalProvider>
     </AuthProvider>
 );
 

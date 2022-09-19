@@ -4,15 +4,14 @@ import {
     Message,
     MessageContentType,
     PictureMessage,
-    Profile,
     SimpleMessage
-} from "../../types/GlobalTypes";
+} from "../../types/chat";
+import { Profile } from "../../types/profile";
 
 // Components
 import SimpleMessageDisplay from "./SimpleMessageDisplay";
 import PictureMessageDisplay from "./PictureMessageDisplay";
 import InviteMessageDisplay from "./InviteMessageDisplay";
-import Logger from "../../utils/Logger";
 
 interface Props {
     receiver: Profile;

@@ -2,7 +2,8 @@
 import { createContext, useContext, useState } from "react";
 
 // Types
-import { LoginConfirmResponse, Profile } from "../../types/GlobalTypes";
+import { LoginConfirmResponse } from "../../types/request";
+import { Profile } from "../../types/profile";
 
 // Requests
 import loginConfirm from "../../proxies/auth/confirmLogin";
@@ -17,6 +18,8 @@ interface AuthContextType {
     setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 
     authToken: string;
+    setAuthToken: React.Dispatch<React.SetStateAction<string>>;
+
     signIn(code: string): any;
 }
 
@@ -57,7 +60,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
-    const value = {
+    const value: AuthContextType = {
         user,
         signIn,
         setUser,

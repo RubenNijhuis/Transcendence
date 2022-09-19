@@ -9,17 +9,17 @@ import DirectMessageList from "../containers/DirectMessageList";
 import ChatBox from "../containers/ChatBox";
 
 // Types
-import { GroupChat } from "../types/GlobalTypes";
+import { GroupChat } from "../types/chat";
 
 // Requests
-import getChatByUserName from "../proxies/chat/getChatsByUserName";
+// import getChatByUserName from "../proxies/chat/getChatsByUserName";
 
 // Auth
 import { useAuth } from "../contexts/AuthContext";
-import Logger from "../utils/Logger";
+// import Logger from "../utils/Logger";
 
 // Temp data
-import { useDataDebug } from "../contexts/DebugDataContext";
+import { useFakeData } from "../contexts/FakeDataContext";
 
 const Chat = () => {
     const [groupChats, setGroupChats] = useState<GroupChat[]>(null!);
@@ -27,7 +27,7 @@ const Chat = () => {
 
     const { user, authToken } = useAuth();
 
-    const { chats } = useDataDebug();
+    const { chats } = useFakeData();
 
     useEffect(() => {
         if (user !== null) {
@@ -40,7 +40,7 @@ const Chat = () => {
             //         Logger("ERROR", "Chat page", "Retrieved chats request", err)
             //     );
         }
-    }, [authToken, user]);
+    }, [authToken, chats, user]);
 
     return (
         <Layout>

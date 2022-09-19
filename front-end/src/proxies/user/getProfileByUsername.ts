@@ -2,13 +2,15 @@
 import axios from "axios";
 
 // Types
-import { Profile } from "../../types/GlobalTypes";
+import { Profile } from "../../types/profile";
 
 // Auth
 import { getAuthHeader } from "../utils/authToken";
 
 // Api Routes
 import ApiRoutes from "../../config/ApiRoutes";
+
+// Transform error
 import transformToRequestError from "../utils/transformToRequestError";
 
 const getUserByUsername = async (

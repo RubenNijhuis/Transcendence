@@ -1,5 +1,5 @@
 // Types
-import { PictureMessage } from "../../../types/GlobalTypes";
+import { PictureMessage } from "../../../types/chat";
 
 // Components
 import Asset from "../../Asset";

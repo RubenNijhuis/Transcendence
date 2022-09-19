@@ -18,26 +18,30 @@ import ProfileActions from "../components/Profile/ProfileActions";
 import { useAuth } from "../contexts/AuthContext";
 
 // Types
-import { Profile } from "../types/GlobalTypes";
+import { Profile } from "../types/profile";
+import { RequestError } from "../types/request";
 
 // Styling constants
 import { largeRadius, mainColor } from "../styles/StylingConstants";
 
 // Debug data
-import { useDataDebug } from "../contexts/DebugDataContext";
+import { useFakeData } from "../contexts/FakeDataContext";
 
 // API
 import getUserByUsername from "../proxies/user/getProfileByUsername";
 
 // Debugging
-import Logger from "../utils/Logger";
+import { useModal } from "../contexts/ModalContext";
 
 const ProfilePage = () => {
     // Profile to be displayed
     const [selectedProfile, setSelectedProfile] = useState<Profile>(null!);
 
+    // Modal
+    const { setIsModalOpen, setError } = useModal();
+
     // Temp debug data
-    const { matchHistory } = useDataDebug();
+    const { matchHistory } = useFakeData();
 
     // Local profile
     const { user, authToken } = useAuth();
@@ -48,22 +52,17 @@ const ProfilePage = () => {
      */
     const { userName } = useParams();
 
-    /**
-     * If the userName is undefined set profile to local user
-     * Otherwise get user from db and set them as profile
-     */
     useEffect(() => {
         if (userName === undefined) setSelectedProfile(user);
         else {
             getUserByUsername(userName, authToken)
-                .then((res) => {
-                    setSelectedProfile(res as Profile);
-                })
-                .catch((err) =>
-                    Logger("ERROR", "Profile", "Loading user by username", err)
-                );
+                .then(setSelectedProfile)
+                .catch((err: RequestError) => {
+                    setError(err);
+                    setIsModalOpen(true);
+                });
         }
-    }, [userName, user, authToken]);
+    }, [userName, user, authToken, setError, setIsModalOpen]);
 
     return (
         <Layout>
