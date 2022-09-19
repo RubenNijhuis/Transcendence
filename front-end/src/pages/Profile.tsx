@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 // Optional url params
 import { useParams } from "react-router-dom";
 
-// Components
+// UI
 import Layout from "../components/Layout";
 import Loader from "../components/Loader";
 import GameHistory from "../components/GameHistory";

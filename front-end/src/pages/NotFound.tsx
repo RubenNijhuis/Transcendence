@@ -3,7 +3,7 @@ import styled from "styled-components";
 // Styling constants
 import { magicNum, smallRadius } from "../styles/StylingConstants";
 
-// Components
+// UI
 import Layout from "../components/Layout";
 import Heading from "../components/Heading";
 

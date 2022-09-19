@@ -13,11 +13,13 @@ import { Profile } from "../../types/profile";
 
 const getLeaderboard = async (authToken: string): Promise<Profile[]> => {
     try {
-        const res = await axios.get<Profile[]>(ApiRoutes.getLeaderboard(), {
-            headers: getAuthHeader(authToken)
-        });
-        const returnedLeaderboard: Profile[] = res.data;
-        return Promise.resolve(returnedLeaderboard);
+        const { data } = await axios.get<Profile[]>(
+            ApiRoutes.getLeaderboard(),
+            {
+                headers: getAuthHeader(authToken)
+            }
+        );
+        return Promise.resolve(data);
     } catch (err: any) {
         return Promise.reject(transformToRequestError(err));
     }

@@ -12,7 +12,7 @@ import {
     AllMessageTypes
 } from "../../types/chat";
 
-// Components
+// UI
 import { Container, SelectTypeIcon, SelectionBox } from "./ChatInput.style";
 
 // Debug

@@ -1,7 +1,7 @@
 // React
 import { useEffect, useState } from "react";
 
-// Components
+// UI
 import Heading from "../components/Heading";
 import Layout from "../components/Layout";
 import Loader from "../components/Loader";

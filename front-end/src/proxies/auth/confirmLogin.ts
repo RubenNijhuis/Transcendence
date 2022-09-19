@@ -14,9 +14,8 @@ const confirmLogin = async (
     code: string
 ): Promise<LoginConfirmResponse> => {
     try {
-        const loginConfirmResp = await axios.get(ApiRoutes.confirmLogin(code));
-        const returnedData: LoginConfirmResponse = loginConfirmResp.data;
-        return Promise.resolve(returnedData);
+        const { data } = await axios.get(ApiRoutes.confirmLogin(code));
+        return Promise.resolve(data);
     } catch (err: any) {
         return Promise.reject(transformToRequestError(err));
     }

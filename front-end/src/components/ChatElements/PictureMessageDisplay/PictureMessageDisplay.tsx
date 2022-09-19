@@ -1,7 +1,7 @@
 // Types
 import { PictureMessage } from "../../../types/chat";
 
-// Components
+// UI
 import Asset from "../../Asset";
 
 // Styling

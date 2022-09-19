@@ -9,6 +9,9 @@ import { magicNum, smallRadius } from "../styles/StylingConstants";
 import Button from "../components/Button";
 import Heading from "../components/Heading";
 import Layout from "../components/Layout";
+// Box slider
+import BoxSlider from "../components/BoxSlider";
+import Slide from "../components/BoxSlider/Slide/Slide";
 
 // Auth
 import { useAuth } from "../contexts/AuthContext";
@@ -97,23 +100,27 @@ const CreateAccount = () => {
     // TODO: add a guard like login guard and remove this useEffect
     useEffect(() => {
         // If the user hasn't tried to log in redirect to home
-        if (authToken === null) {
-            navigate("/");
-        }
+        // if (authToken === null) {
+        //     navigate("/");
+        // }
     }, [authToken, navigate]);
 
     return (
         <Layout>
             <CreateForm>
                 <Heading type={1}>Create an account</Heading>
-                <StyledInput>
-                    <label>username</label>
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setusername(e.target.value)}
-                    />
-                </StyledInput>
+                <BoxSlider>
+                    <Slide>
+                        <StyledInput>
+                            <label>username</label>
+                            <input
+                                type="text"
+                                value={username}
+                                onChange={(e) => setusername(e.target.value)}
+                            />
+                        </StyledInput>
+                    </Slide>
+                </BoxSlider>
                 <StyledInput>
                     <label>Color</label>
                     <input

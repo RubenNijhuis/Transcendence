@@ -18,11 +18,13 @@ const getUserByUsername = async (
     authToken: string
 ): Promise<Profile> => {
     try {
-        const res = await axios.get(ApiRoutes.getUserByUserName(userName), {
-            headers: getAuthHeader(authToken)
-        });
-        const returnedProfile: Profile = res.data;
-        return returnedProfile;
+        const { data } = await axios.get(
+            ApiRoutes.getUserByUserName(userName),
+            {
+                headers: getAuthHeader(authToken)
+            }
+        );
+        return Promise.resolve(data);
     } catch (err: any) {
         return Promise.reject(transformToRequestError(err));
     }

@@ -1,4 +1,4 @@
-// Components
+// UI
 import Asset from "../../components/Asset";
 import Heading from "../../components/Heading";
 

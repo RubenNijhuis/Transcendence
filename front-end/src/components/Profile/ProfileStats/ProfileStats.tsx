@@ -2,7 +2,7 @@
 import { Profile } from "../../../types/profile";
 import { MatchRecord } from "../../../types/game";
 
-// Components
+// UI
 import GameHistory from "../../GameHistory";
 import Heading from "../../Heading";
 

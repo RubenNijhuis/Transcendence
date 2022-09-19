@@ -1,4 +1,4 @@
-// Components
+// UI
 import GameCard from "../components/GameCard";
 import Layout from "../components/Layout";
 

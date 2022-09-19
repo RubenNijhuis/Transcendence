@@ -6,6 +6,7 @@ const Container = styled.div`
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.45);
     position: absolute;
+    z-index: 9999;
     top: 0;
     left: 0;
 `;

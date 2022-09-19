@@ -9,7 +9,7 @@ import {
     smallRadius
 } from "../../../styles/StylingConstants";
 
-// Components
+// UI
 import Button from "../../Button";
 
 interface Props {

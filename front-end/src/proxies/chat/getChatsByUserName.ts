@@ -18,11 +18,13 @@ const getChatByUserName = async (
     authToken: string
 ): Promise<GroupChat[]> => {
     try {
-        const res = await axios.get(ApiRoutes.getChatByUserName(userName), {
-            headers: getAuthHeader(authToken)
-        });
-        const returnedChats: GroupChat[] = res.data;
-        return returnedChats;
+        const { data } = await axios.get(
+            ApiRoutes.getChatByUserName(userName),
+            {
+                headers: getAuthHeader(authToken)
+            }
+        );
+        return Promise.resolve(data);
     } catch (err: any) {
         return Promise.reject(transformToRequestError(err));
     }

@@ -1,7 +1,7 @@
 // React
 import { useEffect, useState } from "react";
 
-// Components
+// UI
 import Layout from "../components/Layout";
 import Loader from "../components/Loader";
 import ChatInterface from "../containers/ChatInterface";

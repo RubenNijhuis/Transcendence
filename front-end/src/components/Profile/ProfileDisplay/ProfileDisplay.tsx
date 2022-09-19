@@ -1,16 +1,17 @@
-// Components
+// UI
 import Heading from "../../Heading";
+import Asset from "../../Asset";
 
-import GoldCrown from "../../../assets/icons/gold-crown.svg";
-import SilverCrown from "../../../assets/icons/silver-crown.svg";
-import BronzeCrown from "../../../assets/icons/bronze-crown.svg";
+// Crowns
+import GoldCrown from "../../../assets/accesoires/gold-crown.svg";
+import SilverCrown from "../../../assets/accesoires/silver-crown.svg";
+import BronzeCrown from "../../../assets/accesoires/bronze-crown.svg";
 
 // Styling
 import { Container } from "./ProfileDisplay.style";
 
 // Types
 import { Profile } from "../../../types/profile";
-import Asset from "../../Asset";
 
 interface Props {
     user: Profile;

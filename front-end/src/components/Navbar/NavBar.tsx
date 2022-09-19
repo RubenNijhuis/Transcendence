@@ -1,4 +1,4 @@
-// Components
+// UI
 import Asset from "../Asset";
 import Button from "../Button";
 

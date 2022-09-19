@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 import { MatchRecord } from "../../types/game";
 import { Profile } from "../../types/profile";
 
-// Components
+// UI
 import Heading from "../Heading";
 import Asset from "../Asset";
 import Button from "../Button";
