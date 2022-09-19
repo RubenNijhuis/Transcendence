@@ -19,7 +19,7 @@ import { seederConfig } from "src/configs/seeder.config";
 import { UserSeeder } from "src/database/seeds/user-create.seed";
 import { CreateUserDto } from "src/users/dtos/create-users.dto";
 import { UsersService } from "src/users/users.service";
-import { UploadImgDto } from "./dtos/upload-img.dto";
+import { uploadImgDto } from "./dtos/upload-img.dto";
 import User from "./user.entity";
 const multer  = require('multer')
 
@@ -74,7 +74,7 @@ export class UsersController {
   }
 
     @Post('upload-img')
-    async uploadImg(@Body() upload: UploadImgDto,
+    async uploadImg(@Body() upload: uploadImgDto,
         @UploadedFile( new ParseFilePipe({
                 validators: [
                     new MaxFileSizeValidator({
