@@ -3,8 +3,9 @@ import GameCard from "../components/GameCard";
 import Layout from "../components/Layout";
 
 // Styling
-import { magicNum } from "../utils/StylingConstants";
+import { magicNum } from "../styles/StylingConstants";
 
+// TODO: generate based on config data
 const Play = () => {
     return (
         <Layout>

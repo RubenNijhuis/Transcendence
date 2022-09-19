@@ -1,14 +1,12 @@
 import styled from "styled-components";
 import {
-    backgroundColor,
-    darkTextColor,
     largeRadius,
     lightTextColor,
     magicNum,
     mainColor,
     mediumRadius,
     smallRadius
-} from "../../../utils/StylingConstants";
+} from "../../../styles/StylingConstants";
 
 const Container = styled.div`
     background-color: ${mainColor};

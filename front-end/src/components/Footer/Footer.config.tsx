@@ -1,17 +1,14 @@
+import PageRoutes from "../../config/PageRoutes";
+
 export const InboundLinks = [
     {
         name: "Home",
-        url: "/",
+        url: PageRoutes.home,
         onlyWhenLoggedin: false
     },
     {
         name: "About",
-        url: "/about",
-        onlyWhenLoggedin: false
-    },
-    {
-        name: "Login",
-        url: "/login",
+        url: PageRoutes.about,
         onlyWhenLoggedin: false
     }
 ];

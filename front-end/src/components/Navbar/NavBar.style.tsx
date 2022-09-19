@@ -5,7 +5,7 @@ import {
     mainColor,
     mediumRadius,
     smallRadius
-} from "../../utils/StylingConstants";
+} from "../../styles/StylingConstants";
 
 const Container = styled.div`
     padding-top: calc(${magicNum} / 2);

@@ -4,10 +4,9 @@ import {
     magicNum,
     smallRadius,
     mainColor,
-    backgroundColor,
     darkTextColor,
     lightTextColor
-} from "../../utils/StylingConstants";
+} from "../../styles/StylingConstants";
 
 const StyledButton = styled.button`
     display: inline-flex;

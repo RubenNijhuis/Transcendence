@@ -3,6 +3,7 @@ import {
     Controller,
     FileTypeValidator,
     Get,
+    Headers,
     MaxFileSizeValidator,
     ParseFilePipe,
     Post,
@@ -13,6 +14,7 @@ import {
 } from "@nestjs/common";
 import { MulterModule } from "@nestjs/platform-express";
 import { UsernameDto } from "src/auth/dto/username.dto";
+import { AuthService } from "src/auth/services/auth.service";
 import { seederConfig } from "src/configs/seeder.config";
 import { UserSeeder } from "src/database/seeds/user-create.seed";
 import { CreateUserDto } from "src/users/dtos/create-users.dto";
@@ -23,7 +25,10 @@ const multer  = require('multer')
 
 @Controller("users")
 export class UsersController {
-  constructor(private readonly userService: UsersService) {}
+  constructor(
+    private readonly userService: UsersService,
+    private readonly authService: AuthService
+  ) {}
 
   @Get()
   getUsers() {
@@ -41,9 +46,18 @@ export class UsersController {
 
   @Post("create")
   @UsePipes(ValidationPipe)
-  async createUsers(@Body() createUserDto: CreateUserDto): Promise<any> {
+  async createUsers(
+    @Headers("authorization") authorization: string,
+    @Body() createUserDto: CreateUserDto
+  ) {
     try {
-      const user: User = await this.userService.createUser(createUserDto);
+      const intraIdFromJwt: string = this.authService.jwtDecodeUsername(
+        authorization.replace("Bearer ", "")
+      );
+      const user = await this.userService.createUser(
+        intraIdFromJwt,
+        createUserDto
+      );
       const ret = user;
       console.log("user obj:", user);
       return ret;

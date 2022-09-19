@@ -35,11 +35,14 @@ export class UsersService {
     return this.userRepository.findOne({ where: { username } });
   }
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
-    if (! await this.findUserByUsername(createUserDto.username))
-      return;
-    const newUser = this.userRepository.create(createUserDto);
-    return await this.userRepository.save(newUser);
+  createUser(intraId: string, createUserDto: CreateUserDto) {
+    // should this be async? yes xo xo ruben
+    if (!this.findUserByUsername(createUserDto.username)) return;
+    const newUser = this.userRepository.create({
+      intraId,
+      ...createUserDto
+    });
+    return this.userRepository.save(newUser);
   }
 
   async addsessiontoken(userDto: UsernameDto, token: string): Promise<UpdateResult> {
@@ -88,24 +91,19 @@ export class UsersService {
   //   this.setTwoFactorAuthSecret(userId, secret);
   // }
 
-  async seedCustom(amount: number): Promise<HttpStatus> {
-    try {
-      for (let i = 1; i <= amount; i++) {
-        await this.createUser({
-          username: randFullName(),
-          color: randColor().toString(),
-          description: randParagraph()
-        });
-      }
-      return (HttpStatus.OK)
-    } catch (error) {
-      return HttpStatus.INTERNAL_SERVER_ERROR;
+  async seedCustom(amount: number) {
+    for (let i = 1; i <= amount; i++) {
+      await this.createUser("aaa", {
+        username: randFullName(),
+        color: randColor().toString(),
+        description: randParagraph()
+      });
     }
   }
   // WE NEED TO SPECIFY WHAT THIS RETURNS
   generateTwoFactorAuthenticationSecret(user: User): string {
     const secret = authenticator.generateSecret();
-    console.log(secret);
+    console.log("Generate tfa secret :", secret);
 
     const otpauthUrl = authenticator.keyuri(
       "mehj177@gmail.com",
@@ -113,7 +111,8 @@ export class UsersService {
       secret
     );
 
-    console.log(otpauthUrl);
+    console.log("otpauthurl: ", otpauthUrl);
+
     return toDataURL(otpauthUrl);
     // await this.setTwoFactorAuthenticationSecret(secret, user.id);
     // console.log(user.twoFactorAuthenticationSecret);

@@ -3,10 +3,10 @@ import Asset from "../../components/Asset";
 import Heading from "../../components/Heading";
 
 // Auth
-import { useAuth } from "../../utils/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 // Types
-import { GroupChat, Profile } from "../../utils/GlobalTypes";
+import { GroupChat, Profile } from "../../types/GlobalTypes";
 
 // Stylinh
 import { Container, DirectMessageEntry } from "./DirectMessageList.style";
@@ -32,7 +32,7 @@ const DirectMessageList = ({
             <ul className="list">
                 {directMessages.map(({ members, messages }, count) => {
                     const otherMembers: Profile[] = members.filter(
-                        (member) => member.intraID !== user!.intraID
+                        (member) => member.username !== user!.username
                     );
 
                     return (

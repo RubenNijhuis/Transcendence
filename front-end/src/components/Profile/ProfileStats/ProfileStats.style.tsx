@@ -1,12 +1,10 @@
 import styled from "styled-components";
 import {
-    backgroundColor,
     largeRadius,
     lightTextColor,
     magicNum,
-    mainColor,
     mainColorMono
-} from "../../../utils/StylingConstants";
+} from "../../../styles/StylingConstants";
 
 const Container = styled.div`
     .stats {

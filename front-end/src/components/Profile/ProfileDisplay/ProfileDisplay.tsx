@@ -9,7 +9,7 @@ import BronzeCrown from "../../../assets/icons/bronze-crown.svg";
 import { Container } from "./ProfileDisplay.style";
 
 // Types
-import { Profile } from "../../../utils/GlobalTypes";
+import { Profile } from "../../../types/GlobalTypes";
 import Asset from "../../Asset";
 
 interface Props {

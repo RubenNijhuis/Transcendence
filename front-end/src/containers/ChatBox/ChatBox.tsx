@@ -1,7 +1,5 @@
-import { Fragment } from "react";
-
 // Types
-import { GroupChat } from "../../utils/GlobalTypes";
+import { GroupChat } from "../../types/GlobalTypes";
 
 // Components
 import ChatElement from "../../components/ChatElements";
@@ -9,7 +7,7 @@ import ChatInput from "../ChatInput";
 
 // Styling
 import { Container } from "./ChatBox.style";
-import { useAuth } from "../../utils/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import Heading from "../../components/Heading";
 
 interface Props {
