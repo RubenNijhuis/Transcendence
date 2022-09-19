@@ -13,7 +13,6 @@ import {
 } from "@nestjs/common";
 import { ADDRCONFIG } from "dns";
 import { Response } from "express";
-import { FortyTwoAuthGuard } from "src/auth/guard";
 import { User } from "src/typeorm";
 import { ConfirmDto } from "../dto/confirm.dto";
 import { AuthService } from "../services/auth.service";
@@ -22,7 +21,7 @@ import { ConfigService } from "@nestjs/config";
 import { UsersService } from "src/users/users.service";
 import { Jwt2faStrategy } from "../strategies/jwt.strategy";
 import { MailDto } from "../dto/mail.dto";
-import { twofadto } from "../dto/2fa.dto";
+import { twoFaDto } from "../dto/2fa.dto";
 import { UsernameDto } from "../dto/username.dto";
 import { CreateUserDto } from "src/users/dtos/create-users.dto";
 
@@ -152,9 +151,9 @@ export class AuthController {
   //curl --data "username=akramp&twoFactorAuthenticationCode="  http://localhost:3000/api/auth/google2fa/authenticate
   @Post("google2fa/authenticate")
   @UseGuards(Jwt2faStrategy)
-  async authenticate(@Res() res: Response, @Body() twofadto: twofadto) {
+  async authenticate(@Res() res: Response, @Body() twoFaDto: twoFaDto) {
     const isCodeValid =
-      await this.authService.isTwoFactorAuthenticationCodeValid(twofadto);
+      await this.authService.isTwoFactorAuthenticationCodeValid(twoFaDto);
     if (isCodeValid === false) {
       throw new UnauthorizedException("Wrong authentication code");
     }

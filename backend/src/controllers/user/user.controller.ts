@@ -12,12 +12,12 @@ import {
     ValidationPipe
 } from "@nestjs/common";
 import { MulterModule } from "@nestjs/platform-express";
-import { UsernameDto } from "src/auth/dto/username.dto";
+import { UsernameDto } from "src/dtos/auth/username.dto";
 import { seederConfig } from "src/configs/seeder/seeder.config";
 import { UserSeeder } from "src/database/seeds/user-create.seed";
 import { CreateUserDto } from "src/dtos/user/create-user.dto";
 import { UserService } from "src/services/user/user.service";
-import { uploadImgDto } from "../../dtos/database/upload-img.dto";
+import { UploadImgDto } from "../../dtos/database/upload-img.dto";
 import User from "../../entities/user/user.entity";
 const multer  = require('multer')
 
@@ -60,7 +60,7 @@ export class UsersController {
   }
 
     @Post('upload-img')
-    async uploadImg(@Body() upload: uploadImgDto,
+    async uploadImg(@Body() upload: UploadImgDto,
         @UploadedFile( new ParseFilePipe({
                 validators: [
                     new MaxFileSizeValidator({
@@ -90,7 +90,7 @@ export class UsersController {
   @Post("turnon2fa")
   @UsePipes(ValidationPipe) //what does this do
   async turnon2fa(@Body() usernameDto: UsernameDto) {
-    // const isCodeValid = this.userService.isTwoFactorAuthenticationCodeValid(Twofadto);
+    // const isCodeValid = this.userService.isTwoFactorAuthenticationCodeValid(twoFaDto);
     // if (!isCodeValid) {
     //     throw new UnauthorizedException('Wrong authentication code');
     // }

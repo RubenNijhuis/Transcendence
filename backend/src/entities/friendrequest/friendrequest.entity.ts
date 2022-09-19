@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class FriendRequests {
+export class FriendRequest {
     @PrimaryGeneratedColumn({
         type: 'bigint',
         name: 'id'
@@ -20,4 +20,4 @@ export class FriendRequests {
     })
     requested: string;
 }
-export default FriendRequests;
+export default FriendRequest;

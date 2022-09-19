@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { FriendList } from 'src/bootstrap/typeorm';
+import { FriendList } from 'src/entities';
 import { CreateFriensdDto } from "../../dtos/friendlist/create-friend.dto";
 
 @Injectable()
@@ -11,7 +11,6 @@ export class FriendlistService {
         private readonly friendlistRepository: Repository<FriendList>
     ) {}
 
-    //getfriends
     async getFriends(username: string): Promise<FriendList[]> {
         const friends = await this.friendlistRepository
             .createQueryBuilder('friend_list')
@@ -20,7 +19,6 @@ export class FriendlistService {
         return friends;
     }
 
-    //getfriend
     async getFriend(username: string, friendname: string): Promise<FriendList> {
         const friend = await this.friendlistRepository
             .createQueryBuilder('friend_list')
@@ -35,14 +33,12 @@ export class FriendlistService {
             || !(await this.getFriend(friendname, username) === null))
     }
 
-    //addfriend
     async addFriend(createfriendsDto: CreateFriensdDto) {
         const newEntry = this.friendlistRepository.create(createfriendsDto);
 
         return this.friendlistRepository.save(newEntry);
     }
 
-    //removefriend
     async removeFriend(username: string, friendname: string) {
         return this.friendlistRepository
             .createQueryBuilder('friend_list')

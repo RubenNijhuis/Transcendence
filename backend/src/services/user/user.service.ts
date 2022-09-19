@@ -5,12 +5,12 @@ import {
 } from "@ngneat/falso";
 import { HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { User } from "src/bootstrap/typeorm";
+import { User } from "src/entities";
 import { DeleteResult, Repository, UpdateResult } from "typeorm";
 import { CreateUserDto } from "src/dtos/user/create-user.dto";
 import { authenticator } from "otplib";
 import { toDataURL } from "qrcode";
-import { UsernameDto } from "src/auth/dto/username.dto";
+import { UsernameDto } from "src/dtos/auth/username.dto";
 
 @Injectable()
 export class UserService {

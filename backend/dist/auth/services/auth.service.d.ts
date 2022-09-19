@@ -1,6 +1,6 @@
 import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "src/users/users.service";
-import { twofadto } from "../dto/2fa.dto";
+import { twoFaDto } from "../dto/2fa.dto";
 import { UsernameDto } from "../dto/username.dto";
 export declare class AuthService {
     private readonly usersService;
@@ -17,6 +17,6 @@ export declare class AuthService {
     };
     addjwttoken(usernameDto: UsernameDto, token: string): Promise<void>;
     login(usernameDto: UsernameDto): Promise<string>;
-    isTwoFactorAuthenticationCodeValid(Twofadto: twofadto): Promise<boolean>;
+    isTwoFactorAuthenticationCodeValid(twoFaDto: twoFaDto): Promise<boolean>;
     generateTwoFactorAuthenticationSecret(usernameDto: UsernameDto): Promise<any>;
 }

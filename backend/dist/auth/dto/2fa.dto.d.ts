@@ -1,4 +1,4 @@
-export declare class twofadto {
+export declare class twoFaDto {
     username: string;
     twoFactorAuthenticationCode: string;
 }

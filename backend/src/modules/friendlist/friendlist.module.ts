@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { FriendList } from 'src/bootstrap/typeorm';
+import { FriendList } from 'src/entities';
 import { FriendlistController } from "../../controllers/friendlist/friendlist.controller";
 import { FriendlistService } from "../../services/friendlist/friendlist.service";
 
@@ -10,4 +10,4 @@ import { FriendlistService } from "../../services/friendlist/friendlist.service"
     providers: [FriendlistService],
     exports: [FriendlistService]
 })
-export class FriendslistModule {}
+export class FriendlistModule {}

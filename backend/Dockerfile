@@ -5,7 +5,7 @@ WORKDIR /app
 ENV NODE_ENV=development
 
 # Bundle app source
-COPY ../ .
+COPY . .
 
 RUN npm install
 

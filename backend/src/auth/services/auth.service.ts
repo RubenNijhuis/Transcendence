@@ -2,16 +2,16 @@ import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { authenticator } from "otplib";
 import { CreateUserDto } from "src/dtos/user/create-user.dto";
-import { UsersService } from "src/services/user/user.service";
-import { twofadto } from "../dto/2fa.dto";
+import { UserService } from "src/services/user/user.service";
+import { twoFaDto } from "../../dtos/auth/2fa.dto";
 import { toDataURL } from "qrcode";
-import { UsernameDto } from "../dto/username.dto";
-import { User } from "src/bootstrap/typeorm";
+import { UsernameDto } from "../../dtos/auth/username.dto";
+import { User } from "src/entities";
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly usersService: UsersService,
+    private readonly usersService: UserService,
     private readonly jwtService: JwtService
   ) {}
 
@@ -74,13 +74,13 @@ export class AuthService {
     return ret;
   }
 
-  async isTwoFactorAuthenticationCodeValid(Twofadto: twofadto) {
-    const ret = await this.usersService.findUserByUsername(Twofadto.username);
-    console.log(Twofadto.twoFactorAuthenticationCode);
+  async isTwoFactorAuthenticationCodeValid(twoFaDto: twoFaDto) {
+    const ret = await this.usersService.findUserByUsername(twoFaDto.username);
+    console.log(twoFaDto.twoFactorAuthenticationCode);
     console.log(ret.twoFactorAuthenticationSecret);
 
     const res = authenticator.check(
-      Twofadto.twoFactorAuthenticationCode,
+      twoFaDto.twoFactorAuthenticationCode,
       ret.twoFactorAuthenticationSecret
     );
     console.log(res);

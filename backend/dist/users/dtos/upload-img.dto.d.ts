@@ -1,4 +1,4 @@
-export declare class uploadImgDto {
+export declare class UploadImgDto {
     intraId: string;
     type: string;
 }

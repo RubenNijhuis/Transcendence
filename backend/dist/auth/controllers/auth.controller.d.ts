@@ -2,7 +2,7 @@ import { Response } from "express";
 import { AuthService } from "../services/auth.service";
 import { ConfigService } from "@nestjs/config";
 import { UsersService } from "src/users/users.service";
-import { twofadto } from "../dto/2fa.dto";
+import { twoFaDto } from "../dto/2fa.dto";
 import { UsernameDto } from "../dto/username.dto";
 export declare class AuthController {
     private readonly usersService;
@@ -22,6 +22,6 @@ export declare class AuthController {
     };
     jwtsession(userDto: UsernameDto): Promise<string>;
     google2fa(userDto: UsernameDto): Promise<any>;
-    authenticate(res: Response, twofadto: twofadto): Promise<void>;
+    authenticate(res: Response, twoFaDto: twoFaDto): Promise<void>;
     test(): Promise<void>;
 }

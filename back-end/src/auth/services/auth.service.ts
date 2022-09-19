@@ -3,7 +3,7 @@ import { JwtService } from "@nestjs/jwt";
 import { authenticator } from "otplib";
 import { CreateUserDto } from "src/users/dtos/create-users.dto";
 import { UsersService } from "src/users/users.service";
-import { twofadto } from "../dto/2fa.dto";
+import { twoFaDto } from "../dto/2fa.dto";
 import { toDataURL } from "qrcode";
 import { UsernameDto } from "../dto/username.dto";
 import { User } from "src/typeorm";
@@ -74,13 +74,13 @@ export class AuthService {
     return ret;
   }
 
-  async isTwoFactorAuthenticationCodeValid(Twofadto: twofadto) {
-    const ret = await this.usersService.findUserByUsername(Twofadto.username);
-    console.log(Twofadto.twoFactorAuthenticationCode);
+  async isTwoFactorAuthenticationCodeValid(twoFaDto: twoFaDto) {
+    const ret = await this.usersService.findUserByUsername(twoFaDto.username);
+    console.log(twoFaDto.twoFactorAuthenticationCode);
     console.log(ret.twoFactorAuthenticationSecret);
 
     const res = authenticator.check(
-      Twofadto.twoFactorAuthenticationCode,
+      twoFaDto.twoFactorAuthenticationCode,
       ret.twoFactorAuthenticationSecret
     );
     console.log(res);

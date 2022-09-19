@@ -16,8 +16,8 @@ import Axios from "axios";
 import { ConfigService } from "@nestjs/config";
 import { UserService } from "src/services/user/user.service";
 import { Jwt2faStrategy } from "../strategies/jwt.strategy";
-import { twofadto } from "../dto/2fa.dto";
-import { UsernameDto } from "../dto/username.dto";
+import { twoFaDto } from "../../dtos/auth/2fa.dto";
+import { UsernameDto } from "../../dtos/auth/username.dto";
 
 @Controller("auth")
 export class AuthController {
@@ -29,7 +29,6 @@ export class AuthController {
   ) {}
 
   @Get("login")
-  //   @UseGuards(FortyTwoAuthGuard)
   login() {
     const url: string = this.configService.get<string>("INTRA_AUTH_URL");
     const params: any = {
@@ -65,7 +64,6 @@ export class AuthController {
   // -X POST https://api.intra.42.fr/oauth/token
 
   @Get("confirm?")
-  // @UseGuards(FortyTwoAuthGuard)
   async confirm(@Query("token") token: string) {
     // Turns the token from redirect into a token
     console.log("first token:", token);
@@ -145,9 +143,9 @@ export class AuthController {
   //curl --data "username=akramp&twoFactorAuthenticationCode="  http://localhost:3000/api/auth/google2fa/authenticate
   @Post("google2fa/authenticate")
   @UseGuards(Jwt2faStrategy)
-  async authenticate(@Res() res: Response, @Body() twofadto: twofadto) {
+  async authenticate(@Res() res: Response, @Body() twoFaDto: twoFaDto) {
     const isCodeValid =
-      await this.authService.isTwoFactorAuthenticationCodeValid(twofadto);
+      await this.authService.isTwoFactorAuthenticationCodeValid(twoFaDto);
     if (isCodeValid === false) {
       throw new UnauthorizedException("Wrong authentication code");
     }

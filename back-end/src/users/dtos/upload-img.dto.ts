@@ -1,6 +1,6 @@
 import { IsNotEmpty } from "class-validator";
 
-export class uploadImgDto {
+export class UploadImgDto {
     @IsNotEmpty()
     intraId: string
     
