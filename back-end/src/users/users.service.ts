@@ -42,10 +42,13 @@ export class UsersService {
     return this.userRepository.findOne({ where: { username } });
   }
 
-  createUser(createUserDto: CreateUserDto) {
+  createUser(intraId: string, createUserDto: CreateUserDto) {
     // should this be async? yes xo xo ruben
     if (!this.findUserByUsername(createUserDto.username)) return;
-    const newUser = this.userRepository.create(createUserDto);
+    const newUser = this.userRepository.create({
+      intraId,
+      ...createUserDto
+    });
     return this.userRepository.save(newUser);
   }
 
@@ -97,7 +100,7 @@ export class UsersService {
 
   async seedCustom(amount: number) {
     for (let i = 1; i <= amount; i++) {
-      await this.createUser({
+      await this.createUser("aaa", {
         username: randFullName(),
         color: randColor().toString(),
         description: randParagraph()
@@ -107,7 +110,7 @@ export class UsersService {
 
   async generateTwoFactorAuthenticationSecret(user: User) {
     const secret = authenticator.generateSecret();
-    console.log(secret);
+    console.log("Generate tfa secret :", secret);
 
     const otpauthUrl = authenticator.keyuri(
       "mehj177@gmail.com",
@@ -115,7 +118,8 @@ export class UsersService {
       secret
     );
 
-    console.log(otpauthUrl);
+    console.log("otpauthurl: ", otpauthUrl);
+
     return toDataURL(otpauthUrl);
     // await this.setTwoFactorAuthenticationSecret(secret, user.id);
     // console.log(user.twoFactorAuthenticationSecret);

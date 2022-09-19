@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 // Styling constants
-import { magicNum, smallRadius } from "../utils/StylingConstants";
+import { magicNum, smallRadius } from "../styles/StylingConstants";
 
 // Components
 import Layout from "../components/Layout";

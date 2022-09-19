@@ -4,8 +4,6 @@ import { Fragment } from "react";
 import Asset from "../Asset";
 import Button from "../Button";
 
-import Axios from "axios";
-
 // Styling
 import { Container, ProfileIconContainer } from "./NavBar.style";
 
@@ -13,29 +11,36 @@ import { Container, ProfileIconContainer } from "./NavBar.style";
 import { Link } from "react-router-dom";
 
 // Authentication hook
-import { useAuth } from "../../utils/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 // Links
 import { locations } from "./NavBar.config";
+import PageRoutes from "../../config/PageRoutes";
+import startLogin from "../../proxies/auth/startLogin";
+import Logger from "../../utils/Logger";
 
 const CTAButton = ({ authStatus }: { authStatus: boolean }) => {
-    const startLogin = () => {
-        Axios.get("/api/auth/login").then((res) =>
-            window.location.assign(res.data)
-        );
+    const toLoginPage = () => {
+        startLogin()
+            .then((url) => {
+                window.location.assign(url as string);
+            })
+            .catch((err) =>
+                Logger("ERROR", "Navbar", "Req login page url", err)
+            );
     };
 
     return (
         <Fragment>
             {authStatus ? (
-                <Link className="play-button" to={"/play"}>
+                <Link className="play-button" to={PageRoutes.play}>
                     <Button theme={"light"}>Play Pong</Button>
                 </Link>
             ) : (
                 <Button
                     className="login-button"
                     theme={"light"}
-                    onClick={startLogin}
+                    onClick={toLoginPage}
                 >
                     Login
                 </Button>
@@ -58,7 +63,7 @@ const NavLinks = ({ authStatus }: { authStatus: boolean }) => (
 );
 
 const ProfileIcon = ({ url }: { url: string }) => (
-    <Link to={"/profile"}>
+    <Link to={PageRoutes.profile}>
         <ProfileIconContainer>
             <Asset url={url} alt={"profile"} />
         </ProfileIconContainer>
@@ -72,7 +77,7 @@ const NavBar = () => {
         <Container>
             <div className="bar">
                 <div className="content">
-                    <Link to={"/"} className="logo">
+                    <Link to={PageRoutes.home} className="logo">
                         <div className="logo">PongHub</div>
                     </Link>
                     <NavLinks authStatus={isLoggedIn} />

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { darkTextColor, magicNum } from "../../utils/StylingConstants";
+import { darkTextColor, magicNum } from "../../styles/StylingConstants";
 
 const StyledH1 = styled.h1`
     font-size: 54.93px;

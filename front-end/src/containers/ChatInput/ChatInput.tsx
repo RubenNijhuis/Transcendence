@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 // Types
 import {
@@ -10,7 +10,7 @@ import {
     InvitePlayMessage,
     GameType,
     AllMessageTypes
-} from "../../utils/GlobalTypes";
+} from "../../types/GlobalTypes";
 
 // Components
 import { Container, SelectTypeIcon, SelectionBox } from "./ChatInput.style";
@@ -175,13 +175,10 @@ const ChatInput = ({ user, groupchat }: Props) => {
         content: ""
     });
 
-    useEffect(() => {
-        Logger("DEBUG", "Chat Input", "Message content", messageContent);
-    }, [messageContent]);
-
     const handleMessageSend = () => {
         setMessageType(MessageContentType.Simple);
         setMessageContent({ content: "" });
+        Logger("DEBUG", "Chat Input", "Message content", messageContent);
     };
 
     return (

@@ -1,5 +1,5 @@
-import { ReactElement, useEffect, useState } from "react";
-import { Profile } from "../../../utils/GlobalTypes";
+import { ReactElement, useState } from "react";
+import { Profile } from "../../../types/GlobalTypes";
 import randomIntFromInterval from "../../../utils/randomNumFromInterval";
 import Button from "../../Button";
 import Heading from "../../Heading";

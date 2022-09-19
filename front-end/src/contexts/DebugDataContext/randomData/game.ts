@@ -1,5 +1,5 @@
-import { MatchRecord, Profile } from "../GlobalTypes";
-import randomIntFromInterval from "../randomNumFromInterval";
+import { MatchRecord, Profile } from "../../../types/GlobalTypes";
+import randomIntFromInterval from "../../../utils/randomNumFromInterval";
 import { generateProfile } from "./profile";
 
 const generateGameResult = (player: Profile, amount: number): MatchRecord[] => {

@@ -1,12 +1,12 @@
 // Types
-import { PictureMessage } from "../../../utils/GlobalTypes";
+import { PictureMessage } from "../../../types/GlobalTypes";
 
 // Components
 import Asset from "../../Asset";
 
 // Styling
 import styled from "styled-components";
-import { smallRadius } from "../../../utils/StylingConstants";
+import { smallRadius } from "../../../styles/StylingConstants";
 
 interface Props {
     content: PictureMessage;

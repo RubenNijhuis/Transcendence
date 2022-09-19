@@ -1,8 +1,8 @@
+// Nestjs stuff
 import {
   Body,
   Controller,
   Get,
-  Param,
   Post,
   Query,
   Res,
@@ -11,20 +11,25 @@ import {
   UsePipes,
   ValidationPipe
 } from "@nestjs/common";
-import { ADDRCONFIG } from "dns";
+
+// Types
 import { Response } from "express";
-import { FortyTwoAuthGuard } from "src/auth/guard";
-import { User } from "src/typeorm";
-import { ConfirmDto } from "../dto/confirm.dto";
+
+// Services
 import { AuthService } from "../services/auth.service";
-import Axios from "axios";
 import { ConfigService } from "@nestjs/config";
 import { UsersService } from "src/users/users.service";
-import { Jwt2faStrategy } from "../strategies/jwt.strategy";
-import { MailDto } from "../dto/mail.dto";
-import { twofadto } from "../dto/2fa.dto";
+
+// Input checks
 import { UsernameDto } from "../dto/username.dto";
-import { CreateUserDto } from "src/users/dtos/create-users.dto";
+import { twofadto } from "../dto/2fa.dto";
+
+// Tokens
+import { Jwt2faStrategy } from "../strategies/jwt.strategy";
+import { JwtService } from "@nestjs/jwt";
+
+// Requests
+import Axios from "axios";
 
 @Controller("auth")
 export class AuthController {
@@ -32,7 +37,8 @@ export class AuthController {
   constructor(
     private readonly usersService: UsersService,
     private authService: AuthService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly jwtService: JwtService
   ) {}
 
   @Get("login")
@@ -46,7 +52,6 @@ export class AuthController {
       response_type: "code"
     };
     const redirectUrl: string = Axios.getUri({ url, params });
-    console.log(redirectUrl);
 
     return redirectUrl;
   }
@@ -74,8 +79,10 @@ export class AuthController {
   @Get("confirm?")
   // @UseGuards(FortyTwoAuthGuard)
   async confirm(@Query("token") token: string) {
-    // Turns the token from redirect into a token
-    console.log(token);
+    /**
+     * TODO: put requests into proxy functions to decouple
+     * 3rd party authentication with app logic
+     */
     const accessTokenResp: any = await Axios.post(
       this.configService.get<string>("INTRA_TOKEN_URL"),
       null,
@@ -90,8 +97,6 @@ export class AuthController {
       }
     );
 
-    console.log("token: ", accessTokenResp.data.access_token);
-
     const userData = await Axios.get(
       this.configService.get("INTRA_GET_ME_URL"),
       {
@@ -100,21 +105,32 @@ export class AuthController {
         }
       }
     );
-    const intraID = userData.data.id;
+
     const username = userData.data.login;
-    console.log(intraID);
-    console.log(username);
-      const CreateUserDto = { intraID, username };
-      
-    return this.authService.validateUser(intraID);
+
+    // const CreateUserDto = { intraID, username };
+
+    const jwtPayload = {
+      username: username
+    };
+
+    const jwtResp = this.jwtService.sign(jwtPayload);
+    // this.addjwttoken(usernameDto, ret);
+    // const decodedJwtAccessToken = this.authService.jwtDecodeUsername(ret);
+    // console.log(decodedJwtAccessToken);
+
+    return this.authService.validateUser(username, jwtResp);
   }
 
+  // TODO: how are we going to store status?
   @Get("status")
   status() {}
 
+  // TODO: logout probably not required with jwt
   @Get("logout")
   logout() {}
 
+  // TODO: remove -> signup done through create account user controller
   @Post("singup")
   signup() {
     return this.authService.signup;
@@ -130,9 +146,8 @@ export class AuthController {
   @Post("jwtsession")
   @UsePipes(ValidationPipe)
   async jwtsession(@Body() userDto: UsernameDto) {
-    console.log("jwt test:");
     const ret = await this.authService.login(userDto);
-    console.log(ret);
+    console.log("jwt test: ", ret);
     return ret;
     //I still need to make sure this then gets saved and used with right guards
   }
@@ -147,7 +162,7 @@ export class AuthController {
       const res = await this.authService.generateTwoFactorAuthenticationSecret(
         userDto
       );
-      console.log(res);
+      console.log("POST google2fa res: ", res);
     } catch (error) {
       return error;
     }

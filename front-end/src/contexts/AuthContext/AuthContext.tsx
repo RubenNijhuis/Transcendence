@@ -1,15 +1,17 @@
 // A lot of this was taken from https://stackblitz.com/github/remix-run/react-router/tree/main/examples/auth?file=src%2FApp.tsx
 import { createContext, useContext, useState } from "react";
-import { Profile } from "./GlobalTypes";
-import { generateProfile } from "./randomData";
+
+// Types
+import { LoginConfirmResponse, Profile } from "../../types/GlobalTypes";
 
 // Requests
-import Axios from "axios";
+import loginConfirm from "../../proxies/auth/confirmLogin";
+import transformToRequestError from "../../proxies/utils/transformToRequestError";
 
 // Define what the auth context contains
 interface AuthContextType {
-    user: Profile | null;
-    setUser: React.Dispatch<React.SetStateAction<Profile | null>>;
+    user: Profile;
+    setUser: React.Dispatch<React.SetStateAction<Profile>>;
 
     isLoggedIn: boolean;
     setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,7 +31,7 @@ const useAuth = () => useContext(AuthContext);
  * the user data as well as the utility functions like login and logout
  */
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, setUser] = useState<Profile | null>(null!);
+    const [user, setUser] = useState<Profile>(null!);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [authToken, setAuthToken] = useState<string>(null!);
 
@@ -38,23 +40,21 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
      * return value is a user as well as a bool indicating whether to
      * create a user or not.
      */
-    const signIn = (code: string) => {
-        return new Promise((resolve, reject) => {
-            // TODO: use .env for url
-            const url = `/api/auth/confirm?token=${code}`;
+    const signIn = async (code: string): Promise<LoginConfirmResponse> => {
+        try {
+            const res: LoginConfirmResponse = await loginConfirm(code);
 
-            interface AuthResponse {
-                shouldCreateUser: boolean;
-                user: null | Profile;
-                authToken: string;
+            setAuthToken(res.authToken);
+
+            if (res.profile !== null) {
+                setUser(res.profile);
+                setLoggedIn(true);
             }
 
-            Axios.get(url).then(({ data }: { data: AuthResponse }) => {
-                setAuthToken(data.authToken);
-                setUser(data.user);
-                resolve(data);
-            });
-        });
+            return Promise.resolve(res);
+        } catch (err: any) {
+            return Promise.reject(transformToRequestError(err));
+        }
     };
 
     const value = {

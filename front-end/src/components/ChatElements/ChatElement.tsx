@@ -6,7 +6,7 @@ import {
     PictureMessage,
     Profile,
     SimpleMessage
-} from "../../utils/GlobalTypes";
+} from "../../types/GlobalTypes";
 
 // Components
 import SimpleMessageDisplay from "./SimpleMessageDisplay";

@@ -8,7 +8,7 @@ import {
 } from "./RankingList.style";
 
 // Types
-import type { Profile } from "../../utils/GlobalTypes";
+import type { Profile } from "../../types/GlobalTypes";
 
 // Routing
 import { Link } from "react-router-dom";
@@ -19,28 +19,32 @@ interface Props {
 
 const RankingList = ({ rankings }: Props) => (
     <EntryList>
-        {rankings.map(
-            (
-                { username, rank, img_url, intraID, wins }: Profile,
-                count: number
-            ) => (
-                <Entry key={count}>
-                    <ProfileData>
-                        <span>{rank}</span>
-                        <ImageContainer>
-                            <img src={img_url} alt={`profile of ${username}`} />
-                        </ImageContainer>
-                    </ProfileData>
-                    <GameData>
-                        <Link to={`/profile/${intraID}`}>
-                            <h3>{username}</h3>
-                        </Link>
-                        <span>Games won: {wins}</span>
-                        <span>Elo: 100</span>
-                    </GameData>
-                </Entry>
-            )
-        )}
+        {rankings.length > 0 &&
+            rankings.map(
+                (
+                    { username, rank, img_url, wins }: Profile,
+                    count: number
+                ) => (
+                    <Entry key={count}>
+                        <ProfileData>
+                            <span>{rank}</span>
+                            <ImageContainer>
+                                <img
+                                    src={img_url}
+                                    alt={`profile of ${username}`}
+                                />
+                            </ImageContainer>
+                        </ProfileData>
+                        <GameData>
+                            <Link to={`/profile/${username}`}>
+                                <h3>{username}</h3>
+                            </Link>
+                            <span>Games won: {wins}</span>
+                            <span>Elo: 100</span>
+                        </GameData>
+                    </Entry>
+                )
+            )}
     </EntryList>
 );
 

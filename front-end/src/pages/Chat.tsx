@@ -1,3 +1,4 @@
+// React
 import { useEffect, useState } from "react";
 
 // Components
@@ -7,30 +8,50 @@ import ChatInterface from "../containers/ChatInterface";
 import DirectMessageList from "../containers/DirectMessageList";
 import ChatBox from "../containers/ChatBox";
 
-// Data
-import { GroupChat } from "../utils/GlobalTypes";
-import { useDataDebug } from "../utils/DebugDataContext";
+// Types
+import { GroupChat } from "../types/GlobalTypes";
+
+// Requests
+import getChatByUserName from "../proxies/chat/getChatsByUserName";
+
+// Auth
+import { useAuth } from "../contexts/AuthContext";
+import Logger from "../utils/Logger";
+
+// Temp data
+import { useDataDebug } from "../contexts/DebugDataContext";
 
 const Chat = () => {
-    const [messages, setMessages] = useState<GroupChat[]>(null!);
+    const [groupChats, setGroupChats] = useState<GroupChat[]>(null!);
     const [selectedChat, setSelectedChat] = useState<number>(0);
+
+    const { user, authToken } = useAuth();
 
     const { chats } = useDataDebug();
 
     useEffect(() => {
-        if (chats) setMessages(chats);
-    }, [chats]);
+        if (user !== null) {
+            setGroupChats(chats);
+            // getChatByUserName(user.username, authToken)
+            //     .then((returnedChats) => {
+            //         setGroupChats(returnedChats as GroupChat[]);
+            //     })
+            //     .catch((err) =>
+            //         Logger("ERROR", "Chat page", "Retrieved chats request", err)
+            //     );
+        }
+    }, [authToken, user]);
 
     return (
         <Layout>
-            {messages !== null ? (
+            {groupChats !== null ? (
                 <ChatInterface>
                     <DirectMessageList
-                        directMessages={messages}
+                        directMessages={groupChats}
                         selectedChat={selectedChat}
                         setSelectedChat={setSelectedChat}
                     />
-                    <ChatBox chat={messages[selectedChat]} />
+                    <ChatBox chat={groupChats[selectedChat]} />
                 </ChatInterface>
             ) : (
                 <Loader />

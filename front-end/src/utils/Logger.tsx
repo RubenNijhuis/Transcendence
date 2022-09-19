@@ -1,41 +1,52 @@
-const Logger = (type: string, from: string, message: string, obj: any) => {
-    // Turning on/off certain types
-    const settings = {
-        AUTH: false,
-        GAME: true,
-        DEBUG: true
+interface Loggable {
+    [key: string]: {
+        emoij: string;
+        color: string;
+        allowed: boolean;
     };
+}
 
-    // Formatting for in the console
-    let typeEmoij: string = "";
-    let color: string = "#fff";
-
+const Logger = (type: string, from: string, message: string, obj: any) => {
     // Format the obj into a string and remove double qoutes
     const formattedObj: string = JSON.stringify(obj, null, 4).replace(/"/g, "");
 
-    // Change icon and color based on message type
-    if (type === "AUTH") {
-        if (!settings.AUTH) return;
-        typeEmoij = "💂‍♂️";
-        color = "#374f6b";
-    } else if (type === "GAME") {
-        if (!settings.GAME) return;
-        typeEmoij = "🏓";
-        color = "#fb21ff";
-    } else if (type === "DEBUG") {
-        if (!settings.DEBUG) return;
-        typeEmoij = "🕷";
-        color = "#fff536";
-    }
+    // All types and their settings
+    const logTypes: Loggable = {
+        AUTH: {
+            emoij: "💂‍♂️",
+            color: "#374f6b",
+            allowed: false
+        },
+        GAME: {
+            emoij: "🏓",
+            color: "#fb21ff",
+            allowed: true
+        },
+        DEBUG: {
+            emoij: "🕷",
+            color: "#fff536",
+            allowed: true
+        },
+        ERROR: {
+            emoij: "💥",
+            color: "#ff8282",
+            allowed: true
+        }
+    };
 
-    // Output the message
-    console.log(
-        `%c${typeEmoij}%c ${message}\n%cFrom: ${from}\n%c${formattedObj}`,
-        /* Emoij   */ `background-color: ${color}; font-size: 18px; border-radius: 2px; padding: 0 2px;`,
-        /* Message */ `color: white; margin-bottom: 6px`,
-        /* From    */ `color: rgba(255,255,255,0.25); margin-bottom: 6px`,
-        /* Object  */ `color: rgb(230,230,230);`
-    );
+    // Get the log type based on type input
+    if (logTypes[type].allowed !== false) {
+        const { emoij, color } = logTypes[type];
+
+        // Output the message
+        console.log(
+            `%c${emoij}%c ${message}\n%cFrom: ${from}\n%c${formattedObj}`,
+            /* Emoij   */ `background-color: ${color}; font-size: 18px; border-radius: 2px; padding: 0 2px;`,
+            /* Message */ `color: white; margin-bottom: 6px`,
+            /* From    */ `color: rgba(255,255,255,0.25); margin-bottom: 6px`,
+            /* Object  */ `color: rgb(230,230,230);`
+        );
+    }
 };
 
 export default Logger;

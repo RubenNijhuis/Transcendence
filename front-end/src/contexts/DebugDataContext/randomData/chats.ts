@@ -1,4 +1,4 @@
-import { get_img_url } from ".";
+import { get_img_url } from "./index";
 import {
     Profile,
     Message,
@@ -9,10 +9,9 @@ import {
     GameType,
     MessageContentType,
     AllMessageTypes
-} from "../GlobalTypes";
+} from "../../../types/GlobalTypes";
 
-import randomIntFromInterval from "../randomNumFromInterval";
-import { generateProfile } from "./profile";
+import randomIntFromInterval from "../../../utils/randomNumFromInterval";
 
 const generateInvite = (
     user: Profile,
@@ -35,8 +34,6 @@ const generateSimpleMessage = () => {
 
     return simpleMessage;
 };
-
-const image_url = "";
 
 const generatePictureMessage = () => {
     const randomWidth: number =

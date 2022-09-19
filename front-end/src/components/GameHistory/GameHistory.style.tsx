@@ -1,11 +1,10 @@
 import styled from "styled-components";
 import {
-    backgroundColor,
     darkTextColor,
     lightTextColor,
     magicNum,
     smallRadius
-} from "../../utils/StylingConstants";
+} from "../../styles/StylingConstants";
 
 const Container = styled.div`
     border-radius: ${smallRadius};

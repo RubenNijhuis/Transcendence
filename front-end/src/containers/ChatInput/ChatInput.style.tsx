@@ -5,7 +5,7 @@ import {
     magicNum,
     mainColor,
     smallRadius
-} from "../../utils/StylingConstants";
+} from "../../styles/StylingConstants";
 
 const Container = styled.div`
     position: relative;

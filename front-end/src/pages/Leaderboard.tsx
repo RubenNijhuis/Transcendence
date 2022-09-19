@@ -1,3 +1,4 @@
+// React
 import { useEffect, useState } from "react";
 
 // Components
@@ -6,33 +7,41 @@ import Layout from "../components/Layout";
 import Loader from "../components/Loader";
 import RankingList from "../containers/RankingList";
 
-// Data temp
-import { useDataDebug } from "../utils/DebugDataContext";
+// Proxy
+import getLeaderboard from "../proxies/leaderboard/getLeaderboard";
+
+// Auth
+import { useAuth } from "../contexts/AuthContext";
 
 // Types
-import { Profile } from "../utils/GlobalTypes";
+import { Profile } from "../types/GlobalTypes";
+
+// Debug
+import Logger from "../utils/Logger";
 
 const Leaderboard = () => {
-    const [rankings, setRankings] = useState<Profile[]>(null!);
-    const { leaderBoard } = useDataDebug();
+    const [leaderboard, setLeaderboard] = useState<Profile[]>(null!);
 
-    const getRankingList = () => {
-        return new Promise((resolve, reject) => resolve(leaderBoard));
-    };
+    const { authToken } = useAuth();
 
     useEffect(() => {
-        // Set the ranking list after request
-        getRankingList().then((res) => setRankings(res as Profile[]));
-    });
+        getLeaderboard(authToken)
+            .then((returnedLeaderboard) => {
+                setLeaderboard(returnedLeaderboard as Profile[]);
+            })
+            .catch((err) => {
+                Logger("ERROR", "Leaderboard", "leaderboad data", err);
+            });
+    }, [authToken]);
 
     return (
         <Layout>
-                <Heading type={1}>Leaderboard</Heading>
-                {rankings !== null ? (
-                    <RankingList rankings={rankings} />
-                ) : (
-                    <Loader />
-                )}
+            <Heading type={1}>Leaderboard</Heading>
+            {leaderboard !== null ? (
+                <RankingList rankings={leaderboard} />
+            ) : (
+                <Loader />
+            )}
         </Layout>
     );
 };

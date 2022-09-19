@@ -4,7 +4,7 @@ import {
     lightTextColor,
     magicNum,
     mainColor
-} from "../../utils/StylingConstants";
+} from "../../styles/StylingConstants";
 
 const AdvancedCard = styled.div`
     display: flex;
