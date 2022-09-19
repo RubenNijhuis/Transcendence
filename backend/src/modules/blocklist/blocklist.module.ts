@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { BlocklistService } from "src/services/blocklist/blocklist.service";
 import { BlockListController } from "../../controllers/blocklist/blocklist.controller";
 import BlockList from "../../entities/blocklist/blocklist.entity";
-import { BlocklistService } from "../../models/user/services/index";
 
 @Module({
     imports: [TypeOrmModule.forFeature([BlockList])],

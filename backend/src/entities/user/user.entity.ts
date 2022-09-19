@@ -1,4 +1,5 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import GroupUser from '../groupuser/groupuser.entity';
 
 @Entity() // need to have a token to search on
 export class User {
@@ -51,18 +52,18 @@ export class User {
   losses: number;
   
   @Column({
-	  name: 'twoFactorAuthenticationSecret',
+	  name: 'tfaSecret',
     nullable: false,
     default: '',
   })
-  twoFactorAuthenticationSecret: string;
+  tfaSecret: string;
 
   @Column({
-	  name: 'isTwoFactorAuthenticationEnabled',
+	  name: 'isTfaEnabled',
     nullable: false,
     default: false,
   })
-  isTwoFactorAuthenticationEnabled: boolean;
+  isTfaEnabled: boolean;
 
   @Column({
 	  name: 'jwtsession_token',
@@ -70,6 +71,10 @@ export class User {
     default: "",
   })
   jwtsession_token: string;
+
+  @OneToMany((type) => GroupUser, (groupuser) => groupuser.user)
+  @JoinTable()
+  groups: GroupUser[];
 
   // @ManyToMany(type => User)
   // @JoinTable({ joinColumn: { name: 'users_id_1' } })

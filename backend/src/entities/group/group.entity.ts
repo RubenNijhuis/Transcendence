@@ -1,8 +1,6 @@
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, Timestamp } from 'typeorm';
-import { User } from "src/typeorm"
-import { Chat } from 'src/typeorm';
-import { GroupService } from '../../services/group/groups.service';
+import { Column, Entity, JoinTable, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import Groupuser from '../groupuser/groupuser.entity';
+import Message from '../message/message.entity';
 
 @Entity()
 export class Group {
@@ -23,11 +21,11 @@ export class Group {
     @JoinTable()
     users: Groupuser[];
 
-    @OneToMany((type) => Chat, (chat) => chat.group, {
+    @OneToMany((type) => Message, (message) => message.group, {
         nullable: true
     })
     @JoinTable()
-    messages: Chat[];
+    messages: Message[];
 
 }
 export default Group;

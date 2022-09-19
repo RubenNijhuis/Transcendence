@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Chat } from "src/typeorm";
+import { CreateMessageDto } from "src/dtos/chat";
+import Message from "src/entities/message/message.entity";
 import { Repository } from "typeorm";
-import { CreateChatDto } from "../../dtos/chat/create-message.dto";
 import { GroupService } from "../group/groups.service";
 
 @Injectable()
@@ -10,8 +10,8 @@ export class MessageService {
 //     import: [GroupService]
 // inject: [GroupService]
     constructor(
-        @InjectRepository(Chat)
-        private readonly chatRepository: Repository<Chat>,
+        @InjectRepository(Message)
+        private readonly chatRepository: Repository<Message>,
         private readonly groupService: GroupService
     ) {}
 
@@ -19,7 +19,7 @@ export class MessageService {
         return this.chatRepository.find();
     }
 
-    async getAllMessagesByGroupId(group_id: number): Promise<Chat[]> {
+    async getAllMessagesByGroupId(group_id: number): Promise<Message[]> {
         const allMessages = await this.chatRepository
             .createQueryBuilder('chat')
             .where("group_id = :group_id", { group_id })
@@ -27,11 +27,11 @@ export class MessageService {
         return allMessages;
     }
     
-    async createChat(CreateChatDto: CreateChatDto) {
-        const group = await this.groupService.findGroupById(CreateChatDto.group_id);
+    async createChat(createMessageDto: CreateMessageDto) {
+        const group = await this.groupService.findGroupById(createMessageDto.group_id);
         // if (!group)
         //     return console.error();
-        const newChat = this.chatRepository.create(CreateChatDto);
+        const newChat = this.chatRepository.create(createMessageDto);
 
         newChat.group = group;
         return this.chatRepository.save(newChat);

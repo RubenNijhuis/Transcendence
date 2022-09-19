@@ -1,11 +1,11 @@
-import { IntraDto } from "..";
 import { ConfirmDto } from "./confirm.dto";
+import { IntraDto } from "./intra.dto";
 import { MailDto } from "./mail.dto";
-import { TwoFaDto } from "./twofa.dto";
+import { TfaDto } from "./tfa.dto";
 import { UsernameDto } from "./username.dto";
 
 const authDtos = [
-    TwoFaDto,
+    TfaDto,
     ConfirmDto,
     IntraDto,
     MailDto,
@@ -13,7 +13,7 @@ const authDtos = [
 ];
 
 export {
-    TwoFaDto,
+    TfaDto,
     ConfirmDto,
     IntraDto,
     MailDto,

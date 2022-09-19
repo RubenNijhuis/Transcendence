@@ -64,8 +64,8 @@ export class UserService {
     return ret;
   }
 
-  setTwoFactorAuthSecret(id: number, twoFactorAuthenticationSecret: string): Promise<any> {
-    return this.userRepository.update(id, { twoFactorAuthenticationSecret });
+  setTwoFactorAuthSecret(id: number, tfaSecret: string): Promise<any> {
+    return this.userRepository.update(id, { tfaSecret });
   }
 
   async update2fasecret(userDto: UsernameDto, secret: string): Promise<UpdateResult> {
@@ -74,7 +74,7 @@ export class UserService {
     return this.userRepository
       .createQueryBuilder()
       .update(ret)
-      .set({ twoFactorAuthenticationSecret: secret })
+      .set({ tfaSecret: secret })
       .where({ id: ret.id })
       .returning("*")
       .execute();
@@ -129,7 +129,7 @@ export class UserService {
     return this.userRepository
       .createQueryBuilder()
       .update(ret)
-      .set({ isTwoFactorAuthenticationEnabled: true })
+      .set({ isTfaEnabled: true })
       .where({ id: ret.id })
       .returning("*")
       .execute();

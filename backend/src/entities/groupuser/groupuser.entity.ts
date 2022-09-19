@@ -1,7 +1,6 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from 'typeorm';
-import { Group, User } from "src/typeorm"
-import { Chat } from 'src/typeorm';
-import { group } from 'console';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import Group from '../group/group.entity';
+import User from '../user/user.entity';
 
 @Entity()
 export class GroupUser {

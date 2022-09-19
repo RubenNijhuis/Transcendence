@@ -1,26 +1,24 @@
 import { Module } from '@nestjs/common';
-import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
-import { typeOrmAsyncConfig } from './typeorm/typeorm.config';
-import { envConfig } from './configs/env.config';
-import { ChatModule } from './groups/chat/chat.module';
-import { FriendslistModule } from './users/friendlist/friendlist.module';
-import { BlockListModule } from './users/blocklist/blocklist.module';
-import { FriendRequestModule } from './users/friendrequests/friendrequest.module';
-import { GroupModule } from './groups/groups.module';
+import { envConfig, typeOrmAsyncConfig } from 'src/configs';
+import { UserModule } from 'src/modules/user/user.module';
+import { FriendlistModule } from 'src/modules/friendlist/friendlist.module';
+import { FriendRequestModule } from 'src/modules/friendrequest/friendrequest.module';
+import { AuthModule } from 'src/modules/authentication/auth.module';
+import { MessageModule } from 'src/modules/message/message.module';
+import { GroupModule } from 'src/modules/group/groups.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(envConfig),
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
-  	UsersModule,
-    FriendslistModule,
+  	UserModule,
+    FriendlistModule,
     FriendRequestModule,
   	AuthModule,
-    ChatModule,
+    MessageModule,
     GroupModule,
     PassportModule.register({ session: true }),
 	],

@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Query } from "@nestjs/common";
-import { BlocklistService } from "../../models/user/services/index";
+import { BlocklistService } from "src/services/blocklist/blocklist.service";
 import { CreateBlockDto } from "../../dtos/blocklist/create-blocklist.dto";
 
 @Controller('block')

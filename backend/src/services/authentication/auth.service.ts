@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import Axios from "axios";
 import { User } from "src/entities";
-import { UserService } from "src/models/user/services";
+import { UserService } from "../user/user.service";
 
 @Injectable()
 export class AuthService {

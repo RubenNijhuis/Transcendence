@@ -3,34 +3,29 @@ import {
     Controller,
     UsePipes,
     ValidationPipe,
-    Delete,
     Get,
-    Query,
-    Param,
     Post,
-    Put
 } from "@nestjs/common";
-import { GroupService } from "src/groups/groups.service";
+import { CreateAdminDto, EditGroupDto } from "src/dtos/chat";
+import { GroupService } from "src/services/group/groups.service";
 import { CreateGroupDto } from "../../dtos/chat/create-group.dto";
 import { CreatePasswordDto } from "../../dtos/chat/create-password.dto";
 import { EditPasswordDto } from "../../dtos/chat/edit-password.dto";
-import { EditMembersDto } from "../../dtos/chat/edit-group.dto";
-import { MakeAdminDto } from "../../dtos/chat/create-admin.dto";
 
 @Controller("group")
 export class GroupController {
-    constructor(private readonly GroupService: GroupService) {}
+    constructor(private readonly groupService: GroupService) {}
 
     @Get()
     getAllMessages() {
-        return this.GroupService.getAllMessages();
+        return this.groupService.getAllMessages();
     }
 
     @Post("createPassword")
     @UsePipes(ValidationPipe)
     async createPassword(@Body() CreatePasswordDto: CreatePasswordDto) {
         try {
-            await this.GroupService.createPassword(CreatePasswordDto);
+            await this.groupService.createPassword(CreatePasswordDto);
             const ret = { message: "Password set! :D" };
             return ret;
         } catch (error) {
@@ -40,9 +35,9 @@ export class GroupController {
 
     @Post("updatePassword")
     @UsePipes(ValidationPipe)
-    async updatePassword(@Body() EditPasswordDto: EditPasswordDto) {
+    async updatePassword(@Body() editPasswordDto: EditPasswordDto) {
         try {
-            await this.GroupService.updatePassword(EditPasswordDto);
+            await this.groupService.updatePassword(editPasswordDto);
             const ret = { message: "Password updated! :D" };
             return ret;
         } catch (error) {
@@ -51,13 +46,13 @@ export class GroupController {
     }
 
     @Post("createGroup")
-    async createGroup(@Body() CreateGroupDto: CreateGroupDto) {
+    async createGroup(@Body() createGroupDto: CreateGroupDto) {
         try {
-            const group = await this.GroupService.createGroup(CreateGroupDto);
+            const group = await this.groupService.createGroup(createGroupDto);
             const groupId = group.id;
-            const users = CreateGroupDto.users;
+            const users = createGroupDto.users;
             const EditMembersDto = { groupId, users };
-            await this.GroupService.addMembers(EditMembersDto);
+            await this.groupService.addMembers(EditMembersDto);
             const ret = { message: "Group created with id: " + group.id };
             return ret;
         } catch (error) {
@@ -66,9 +61,9 @@ export class GroupController {
     }
 
     @Post("addMembers")
-    async addMembers(@Body() EditMembersDto: EditMembersDto) {
+    async addMembers(@Body() editGroupDto: EditGroupDto) {
         try {
-            await this.GroupService.addMembers(EditMembersDto);
+            await this.groupService.addMembers(editGroupDto);
             const ret = { message: "members added " };
             return ret;
         } catch (error) {
@@ -77,9 +72,9 @@ export class GroupController {
     }
 
     @Post("removeMembers")
-    async removeMembers(@Body() EditMembersDto: EditMembersDto) {
+    async removeMembers(@Body() editGroupDto: EditGroupDto) {
         try {
-            await this.GroupService.removeMembers(EditMembersDto);
+            await this.groupService.removeMembers(editGroupDto);
             const ret = { message: "members removed " };
             return ret;
         } catch (error) {
@@ -88,9 +83,9 @@ export class GroupController {
     }
 
     @Post("makeAdmin")
-    async makeAdmin(@Body() MakeAdminDto: MakeAdminDto) {
+    async makeAdmin(@Body() createAdminDto: CreateAdminDto) {
         try {
-            const admin = await this.GroupService.makeAdmin(MakeAdminDto);
+            const admin = await this.groupService.makeAdmin(createAdminDto);
             const ret = { message: "user " +  admin.userId + " is now admin"};
             return ret;
         } catch (error) {
@@ -99,9 +94,9 @@ export class GroupController {
     }
 
     @Post("unMakeAdmin")
-    async unMakeAdmin(@Body() MakeAdminDto: MakeAdminDto) {
+    async unMakeAdmin(@Body() createAdminDto: CreateAdminDto) {
         try {
-            const admin = await this.GroupService.unMakeAdmin(MakeAdminDto);
+            const admin = await this.groupService.unMakeAdmin(createAdminDto);
             const ret = { message: "user " +  admin.userId + " is no longer admin"};
             return ret;
         } catch (error) {
