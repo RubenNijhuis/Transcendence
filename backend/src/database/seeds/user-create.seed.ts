@@ -1,5 +1,5 @@
 import { Factory, Seeder } from '@concepta/typeorm-seeding';
-import { User } from 'src/typeorm';
+import { User } from 'src/bootstrap/typeorm';
 import { useFactory } from '../factories/user.factory';
 
 export class UserSeeder extends Seeder {

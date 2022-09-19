@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  Param,
   Post,
   Query,
   Res,
@@ -11,26 +10,20 @@ import {
   UsePipes,
   ValidationPipe
 } from "@nestjs/common";
-import { ADDRCONFIG } from "dns";
 import { Response } from "express";
-import { FortyTwoAuthGuard } from "src/auth/guard";
-import { User } from "src/typeorm";
-import { ConfirmDto } from "../dto/confirm.dto";
 import { AuthService } from "../services/auth.service";
 import Axios from "axios";
 import { ConfigService } from "@nestjs/config";
-import { UsersService } from "src/services/users.service";
+import { UserService } from "src/services/user/user.service";
 import { Jwt2faStrategy } from "../strategies/jwt.strategy";
-import { MailDto } from "../dto/mail.dto";
 import { twofadto } from "../dto/2fa.dto";
 import { UsernameDto } from "../dto/username.dto";
-import { CreateUserDto } from "src/users/dtos/create-users.dto";
 
 @Controller("auth")
 export class AuthController {
   inject: [ConfigService];
   constructor(
-    private readonly usersService: UsersService,
+    private readonly usersService: UserService,
     private authService: AuthService,
     private readonly configService: ConfigService
   ) {}

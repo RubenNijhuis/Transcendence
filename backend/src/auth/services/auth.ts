@@ -1,4 +1,4 @@
-import { CreateUserDto } from "src/users/dtos/create-users.dto";
+import { CreateUserDto } from "src/dtos/user/create-user.dto";
 import { UserDetails } from "src/utils/types";
 
 export interface AuthenticationProvider {

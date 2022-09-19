@@ -1,12 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { authenticator } from "otplib";
-import { CreateUserDto } from "src/users/dtos/create-users.dto";
-import { UsersService } from "src/services/users.service";
+import { CreateUserDto } from "src/dtos/user/create-user.dto";
+import { UsersService } from "src/services/user/user.service";
 import { twofadto } from "../dto/2fa.dto";
 import { toDataURL } from "qrcode";
 import { UsernameDto } from "../dto/username.dto";
-import { User } from "src/typeorm";
+import { User } from "src/bootstrap/typeorm";
 
 @Injectable()
 export class AuthService {
