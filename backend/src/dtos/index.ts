@@ -1,28 +1,26 @@
-import { twoFaDto } from "./auth/2fa.dto";
-import { IntraDto } from "./auth/intra.dto";
-import { CreateBlockDto } from "./blocklist/create-blocklist.dto";
-import { UploadImgDto } from "./database/upload-img.dto";
-import { CreateFriensdDto } from "./friendlist/create-friend.dto";
-import { CreateRequestDto } from "./friendrequest/create-request.dto";
-import { CreateUserDto } from "./user/create-user.dto";
+import authDtos from "./auth";
+import blocklistDtos from "./blocklist";
+import chatDtos from "./chat";
+import databaseDtos from "./database";
+import friendlistDtos from "./friendlist";
+import friendrequestDtos from "./friendrequest";
 
 const dtos = [
-    IntraDto,
-    twoFaDto,
-    CreateBlockDto,
-    UploadImgDto,
-    CreateFriensdDto,
-    CreateRequestDto,
-    CreateUserDto
+    authDtos,
+    blocklistDtos,
+    databaseDtos,
+    friendlistDtos,
+    friendrequestDtos,
+    chatDtos
 ];
 
 export {
-    IntraDto,
-    CreateBlockDto,
-    UploadImgDto,
-    CreateFriensdDto,
-    CreateRequestDto,
-    CreateUserDto
+    authDtos,
+    blocklistDtos,
+    databaseDtos,
+    friendlistDtos,
+    friendrequestDtos,
+    chatDtos
 };
 
 export default dtos;

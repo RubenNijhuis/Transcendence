@@ -16,7 +16,7 @@ import Axios from "axios";
 import { ConfigService } from "@nestjs/config";
 import { UserService } from "src/services/user/user.service";
 import { Jwt2faStrategy } from "../strategies/jwt.strategy";
-import { twoFaDto } from "../../dtos/auth/2fa.dto";
+import { twoFaDto } from "../../dtos/auth/twofa.dto";
 import { UsernameDto } from "../../dtos/auth/username.dto";
 
 @Controller("auth")

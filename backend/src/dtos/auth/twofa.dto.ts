@@ -1,9 +1,9 @@
 import { IsNotEmpty } from "class-validator";
 
-export class twoFaDto {
+export class TwoFaDto {
     @IsNotEmpty()
     username: string
 
     @IsNotEmpty()
-    twoFactorAuthenticationCode: string
+    TFACode: string
 }

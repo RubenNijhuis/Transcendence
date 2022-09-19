@@ -3,7 +3,7 @@ import { JwtService } from "@nestjs/jwt";
 import { authenticator } from "otplib";
 import { CreateUserDto } from "src/dtos/user/create-user.dto";
 import { UserService } from "src/services/user/user.service";
-import { twoFaDto } from "../../dtos/auth/2fa.dto";
+import { twoFaDto } from "../../dtos/auth/twofa.dto";
 import { toDataURL } from "qrcode";
 import { UsernameDto } from "../../dtos/auth/username.dto";
 import { User } from "src/entities";

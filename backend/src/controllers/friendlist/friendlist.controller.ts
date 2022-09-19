@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Query } from "@nestjs/common";
 import { CreateFriensdDto } from "../../dtos/index";
-import { FriendlistService } from "../../services/index";
+import { FriendlistService } from "../../models/user/services/index";
 
 @Controller('friends')
 export class FriendlistController {

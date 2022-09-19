@@ -1,0 +1,30 @@
+import { Module } from '@nestjs/common';
+import { UsersModule } from './users/users.module';
+import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
+import { PassportModule } from '@nestjs/passport';
+import { typeOrmAsyncConfig } from './typeorm/typeorm.config';
+import { envConfig } from './configs/env.config';
+import { ChatModule } from './groups/chat/chat.module';
+import { FriendslistModule } from './users/friendlist/friendlist.module';
+import { BlockListModule } from './users/blocklist/blocklist.module';
+import { FriendRequestModule } from './users/friendrequests/friendrequest.module';
+import { GroupModule } from './groups/groups.module';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot(envConfig),
+    TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
+  	UsersModule,
+    FriendslistModule,
+    FriendRequestModule,
+  	AuthModule,
+    ChatModule,
+    GroupModule,
+    PassportModule.register({ session: true }),
+	],
+  controllers: [],
+  providers: [],
+})
+export class AppModule {}
