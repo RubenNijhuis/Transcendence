@@ -6,6 +6,7 @@ import { twofadto } from "../dto/2fa.dto";
 import { toDataURL } from "qrcode";
 import { UsernameDto } from "../dto/username.dto";
 import { User } from "src/typeorm";
+import { ConfigService } from "@nestjs/config";
 
 type PayloadType = {
   username: string;
@@ -15,7 +16,8 @@ type PayloadType = {
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService
   ) {}
 
   // returnen of de eerste keer inloggen
@@ -23,11 +25,12 @@ export class AuthService {
   // { creatAccount: authToken, jwt: string}
   // return await this.createUser(userDto);
   // new user in table zetten (uninit)
-  async validateUser(intraId: string, authtoken: string): Promise<any> {
+  async validateUser(intraId: string, authtoken: string, refreshtoken: string): Promise<any> {
     const returnedPayload: any = {
       shouldCreateUser: false,
       profile: null,
-      authToken: authtoken
+      authToken: authtoken,
+      refreshToken: refreshtoken,
     };
 
     const user: User = await this.usersService.findUsersByintraId(intraId);
@@ -131,4 +134,36 @@ export class AuthService {
 
     return toDataURL(otpauthUrl);
   }
+
+  async getTokens(username: string) {
+    const [accessToken, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(
+        {
+          username,
+        },
+        {
+          secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
+          expiresIn: '15m',
+        },
+      ),
+      this.jwtService.signAsync(
+        {
+          username,
+        },
+        {
+          secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
+          expiresIn: '7d',
+        },
+      ),
+    ]);
+
+    return {
+      accessToken,
+      refreshToken,
+    };
+  }
 }
+
+/**
+ * Save refresh token in backend
+ */

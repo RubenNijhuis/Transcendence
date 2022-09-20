@@ -110,16 +110,18 @@ export class AuthController {
 
     // const CreateUserDto = { intraID, username };
 
-    const jwtPayload = {
-      username: username
-    };
+    // const jwtPayload = {
+    //   username: username
+    // };
 
-    const jwtResp = this.jwtService.sign(jwtPayload);
+    const tokens = await this.authService.getTokens(username);
+    // const jwtResp = this.jwtService.sign(jwtPayload);
+    console.log("tokens:", tokens);
     // this.addjwttoken(usernameDto, ret);
     // const decodedJwtAccessToken = this.authService.jwtDecodeUsername(ret);
     // console.log(decodedJwtAccessToken);
 
-    return this.authService.validateUser(username, jwtResp);
+    return this.authService.validateUser(username, tokens.accessToken, tokens.refreshToken);
   }
 
   // TODO: how are we going to store status?
@@ -180,9 +182,4 @@ export class AuthController {
     res.sendStatus(200);
   }
 
-  @Post("Test")
-  @UseGuards(Jwt2faStrategy)
-  async test() {
-    console.log("UwU!!");
-  }
 }
