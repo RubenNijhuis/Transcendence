@@ -58,7 +58,10 @@ export class GroupController {
             const users = CreateGroupDto.users;
             const EditMembersDto = { groupId, users };
             await this.GroupService.addMembers(EditMembersDto);
-            const ret = { message: "Group created with id: " + group.id };
+            const owner = CreateGroupDto.owner;
+            const addOwnerDto = { groupId, owner};
+            await this.GroupService.addOwner(addOwnerDto);
+            const ret = { message: `Group created with id: ${group.id}` };
             return ret;
         } catch (error) {
             return error;

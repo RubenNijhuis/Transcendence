@@ -5,7 +5,7 @@ export class CreatePasswordDto {
 	id: number
 
 	@IsNotEmpty()
-	owner: string
+	owner: number
 
 	@IsNotEmpty()
 	password: string
