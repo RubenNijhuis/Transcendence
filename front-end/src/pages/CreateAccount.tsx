@@ -31,6 +31,7 @@ import { useModal } from "../contexts/ModalContext";
 // TODO: put styling in different folder
 const StyledInput = styled.div`
     margin-bottom: 36px;
+    padding: 18px;
 
     label {
         display: block;
@@ -53,6 +54,9 @@ const CreateForm = styled.div`
     width: calc(${magicNum} * 10);
     max-width: calc(${magicNum} * 10);
     margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 
     button {
         width: 100%;
@@ -106,42 +110,46 @@ const CreateAccount = () => {
     }, [authToken, navigate]);
 
     return (
-        <Layout>
-            <CreateForm>
-                <Heading type={1}>Create an account</Heading>
-                <BoxSlider>
-                    <Slide>
-                        <StyledInput>
-                            <label>username</label>
-                            <input
-                                type="text"
-                                value={username}
-                                onChange={(e) => setusername(e.target.value)}
-                            />
-                        </StyledInput>
-                    </Slide>
-                </BoxSlider>
-                <StyledInput>
-                    <label>Color</label>
-                    <input
-                        type="text"
-                        value={color}
-                        onChange={(e) => setColor(e.target.value)}
-                    />
-                </StyledInput>
-                <StyledInput>
-                    <label>Short description</label>
-                    <textarea
-                        rows={4}
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-                </StyledInput>
-                <Button theme="dark" onClick={handleAccountCreation}>
-                    Ja doe maar
-                </Button>
-            </CreateForm>
-        </Layout>
+        <CreateForm>
+            <Heading type={1}>Create an account</Heading>
+            <BoxSlider>
+                <Slide>
+                    <StyledInput>
+                        <label>Set your Username</label>
+                        <input
+                            type="text"
+                            value={username}
+                            onChange={(e) => setusername(e.target.value)}
+                        />
+                    </StyledInput>
+                </Slide>
+                <Slide>
+                    <StyledInput>
+                        <label>
+                            Choose a Color (must be in hex form #1e1e1e)
+                        </label>
+                        <input
+                            type="text"
+                            value={color}
+                            onChange={(e) => setColor(e.target.value)}
+                        />
+                    </StyledInput>
+                </Slide>
+                <Slide>
+                    <StyledInput>
+                        <label>Tell something about yourself</label>
+                        <textarea
+                            rows={4}
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                        />
+                    </StyledInput>
+                    <Button theme="dark" onClick={handleAccountCreation}>
+                        Ja doe maar
+                    </Button>
+                </Slide>
+            </BoxSlider>
+        </CreateForm>
     );
 };
 

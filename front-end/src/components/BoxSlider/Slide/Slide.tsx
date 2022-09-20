@@ -5,7 +5,7 @@ interface Props {
 }
 
 const Slide = ({ children }: Props) => {
-    return <Container>{children}</Container>;
+    return <Container className="slide">{children}</Container>;
 };
 
 export default Slide;
