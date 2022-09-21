@@ -1,1 +1,0 @@
-{"version":3,"file":"session.config.js","sourceRoot":"","sources":["../../../src/configs/app/session.config.ts"],"names":[],"mappings":";;;AAEa,QAAA,aAAa,GAAmB;IACzC,MAAM,EAAE;QACJ,MAAM,EAAE,KAAK,GAAG,EAAE,GAAG,EAAE;KAC1B;IACD,MAAM,EAAE,eAAe;IACvB,MAAM,EAAE,KAAK;IACb,iBAAiB,EAAE,KAAK;CAC3B,CAAC"}
