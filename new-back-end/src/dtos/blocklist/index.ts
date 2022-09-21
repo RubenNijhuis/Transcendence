@@ -1,11 +1,7 @@
 import { CreateBlockDto } from "./create-blocklist.dto";
 
-const blocklistDtos = [
-    CreateBlockDto
-];
+const blocklistDtos = [CreateBlockDto];
 
-export {
-    CreateBlockDto
-};
+export { CreateBlockDto };
 
 export default blocklistDtos;

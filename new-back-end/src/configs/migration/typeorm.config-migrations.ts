@@ -9,13 +9,13 @@ import { CreateTables1661971166323 } from "../../database/migrations/16619711663
 const configService = new ConfigService();
 
 export const typeOrmConfig = new DataSource({
-    type: 'postgres',
-    host: configService.get<string>('DB_HOST'),
-    port: configService.get<number>('DB_PORT'),
-    username: configService.get<string>('DB_USER'),
-    password: configService.get<string>('DB_PASS'),
-    database: configService.get<string>('DB_NAME'),
-    entities: [User, FriendList, BlockList, FriendRequests],
-    migrations: [CreateTables1661971166323],
-    migrationsRun: true
+  type: "postgres",
+  host: configService.get<string>("DB_HOST"),
+  port: configService.get<number>("DB_PORT"),
+  username: configService.get<string>("DB_USER"),
+  password: configService.get<string>("DB_PASS"),
+  database: configService.get<string>("DB_NAME"),
+  entities: [User, FriendList, BlockList, FriendRequests],
+  migrations: [CreateTables1661971166323],
+  migrationsRun: true
 });

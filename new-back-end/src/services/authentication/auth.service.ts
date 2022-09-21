@@ -6,37 +6,30 @@ import { UserService } from "../user/user.service";
 
 @Injectable()
 export class AuthService {
-    inject: [ConfigService];
+  inject: [ConfigService];
   constructor(
     private readonly userService: UserService,
     private readonly configService: ConfigService
-    ) {}
+  ) {}
 
   getBearerToken(token: string): Promise<any> {
-    return Axios.post(
-        this.configService.get<string>("INTRA_TOKEN_URL"),
-        null,
-        {
-          params: {
-            grant_type: "authorization_code",
-            client_id: this.configService.get<string>("FORTYTWO_APP_ID"),
-            client_secret: this.configService.get<string>("FORTYTWO_APP_SECRET"),
-            code: token,
-            redirect_uri: this.configService.get<string>("FORTYTWO_CALLBACK_URL")
-          }
-        }
-      );
+    return Axios.post(this.configService.get<string>("INTRA_TOKEN_URL"), null, {
+      params: {
+        grant_type: "authorization_code",
+        client_id: this.configService.get<string>("FORTYTWO_APP_ID"),
+        client_secret: this.configService.get<string>("FORTYTWO_APP_SECRET"),
+        code: token,
+        redirect_uri: this.configService.get<string>("FORTYTWO_CALLBACK_URL")
+      }
+    });
   }
 
-  getUserData(bearerToken: any): Promise<any> {
-    return Axios.get(
-        this.configService.get("INTRA_GET_ME_URL"),
-        {
-          headers: {
-            Authorization: `Bearer ${bearerToken.data.access_token}`
-          }
-        }
-      );
+  getUserData(bearerToken: string): Promise<any> {
+    return Axios.get(this.configService.get("INTRA_GET_ME_URL"), {
+      headers: {
+        Authorization: `Bearer ${bearerToken}`
+      }
+    });
   }
 
   async validateUser(intraID: string): Promise<any> {
@@ -48,11 +41,11 @@ export class AuthService {
     const user: User = await this.userService.findUsersByintraId(intraID);
 
     if (user) {
-        res.profile = user;
+      res.profile = user;
     } else {
-        res.shouldCreateUser = true;
-      }
-      console.log(JSON.stringify(user))
-      return res;    
+      res.shouldCreateUser = true;
+    }
+    console.log(JSON.stringify(user));
+    return res;
   }
 }

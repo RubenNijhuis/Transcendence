@@ -1,28 +1,28 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { PassportModule } from '@nestjs/passport';
-import { envConfig, typeOrmAsyncConfig } from 'src/configs';
-import { UserModule } from 'src/modules/user/user.module';
-import { FriendlistModule } from 'src/modules/friendlist/friendlist.module';
-import { FriendRequestModule } from 'src/modules/friendrequest/friendrequest.module';
-import { AuthModule } from 'src/modules/authentication/auth.module';
-import { MessageModule } from 'src/modules/message/message.module';
-import { GroupModule } from 'src/modules/group/group.module';
+import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { PassportModule } from "@nestjs/passport";
+import { envConfig, typeOrmAsyncConfig } from "src/configs";
+import { UserModule } from "src/modules/user/user.module";
+import { FriendlistModule } from "src/modules/friendlist/friendlist.module";
+import { FriendRequestModule } from "src/modules/friendrequest/friendrequest.module";
+import { AuthModule } from "src/modules/authentication/auth.module";
+import { MessageModule } from "src/modules/message/message.module";
+import { GroupModule } from "src/modules/group/group.module";
 
 @Module({
   imports: [
     ConfigModule.forRoot(envConfig),
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
-  	UserModule,
+    UserModule,
     FriendlistModule,
     FriendRequestModule,
-  	AuthModule,
+    AuthModule,
     MessageModule,
     GroupModule,
-    PassportModule.register({ session: true }),
-	],
+    PassportModule.register({ session: true })
+  ],
   controllers: [],
-  providers: [],
+  providers: []
 })
 export class AppModule {}

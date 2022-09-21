@@ -1,9 +1,9 @@
 import { IsNotEmpty } from "class-validator";
 
 export class TfaDto {
-    @IsNotEmpty()
-    username: string
+  @IsNotEmpty()
+  username: string;
 
-    @IsNotEmpty()
-    tfaCode: string
+  @IsNotEmpty()
+  tfaCode: string;
 }

@@ -4,13 +4,13 @@ import { User } from "src/entities";
 
 @Injectable()
 export class SessionSerializer extends PassportSerializer {
-    // constructor() {}
+  // constructor() {}
 
-    serializeUser(user: User, done: (err: Error, user: User) => void) {
-        done(null, user);
-    }
+  serializeUser(user: User, done: (err: Error, user: User) => void) {
+    done(null, user);
+  }
 
-    deserializeUser(user: User, done: (err: Error, user: User)  => void) {}
-        // const userDb;
-        // done(null, userDb;
+  deserializeUser(user: User, done: (err: Error, user: User) => void) {}
+  // const userDb;
+  // done(null, userDb;
 }

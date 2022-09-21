@@ -1,4 +1,6 @@
 .DS_Store
 back-end/.env
+new-back-end/env/.env
 node_modules
+dist/
 build/

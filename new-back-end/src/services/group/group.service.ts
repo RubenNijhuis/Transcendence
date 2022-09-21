@@ -13,127 +13,128 @@ import { UserService } from "../user/user.service";
 
 @Injectable()
 export class GroupService {
-    constructor(
-        @InjectRepository(Group)
-        private readonly groupRepository: Repository<Group>,
-        @InjectRepository(Groupuser)
-        private readonly groupuserRepository: Repository<Groupuser>,
-        private readonly userService: UserService,
-    ) {}
+  constructor(
+    @InjectRepository(Group)
+    private readonly groupRepository: Repository<Group>,
+    @InjectRepository(Groupuser)
+    private readonly groupuserRepository: Repository<Groupuser>,
+    private readonly userService: UserService
+  ) {}
 
-    getAllMessages() {
-        return this.groupRepository.find();
+  getAllMessages() {
+    return this.groupRepository.find();
+  }
+
+  findGroupById(id: number) {
+    return this.groupRepository.findOne({ where: { id } });
+  }
+
+  async createPassword(createPasswordDto: CreatePasswordDto) {
+    const group = this.findGroupById(createPasswordDto.id);
+    if (!group) return console.error("group doesn't exist");
+    const owner = (await group).owner;
+    if (owner === createPasswordDto.owner)
+      await this.groupRepository.update(
+        createPasswordDto.id,
+        createPasswordDto
+      );
+  }
+
+  async updatePassword(editPasswordDto: EditPasswordDto) {
+    const group = await this.findGroupById(editPasswordDto.id);
+    if (!group) return console.error("group doesn't exist"); //error lmao
+    const owner = group.owner;
+    const oldPassword = group.password;
+    if (
+      owner === editPasswordDto.owner &&
+      oldPassword === editPasswordDto.oldPassword
+    )
+      return await this.groupRepository
+        .createQueryBuilder()
+        .update()
+        .set({ password: editPasswordDto.newPassword })
+        .where({
+          id: editPasswordDto.id
+        })
+        .execute();
+  }
+
+  async createGroup(createGroupDto: CreateGroupDto) {
+    const newGroup = this.groupRepository.create();
+    newGroup.owner = createGroupDto.owner;
+    newGroup.users = [];
+    return this.groupRepository.save(newGroup);
+  }
+
+  async addMembers(editMembersDto: EditMembersDto) {
+    const group: Group = await this.findGroupById(editMembersDto.groupId);
+    for (let i = 0; i < editMembersDto.users.length; i++) {
+      const groupuser = this.groupuserRepository.create();
+      groupuser.group = group;
+      groupuser.user = await this.userService.findUsersById(
+        editMembersDto.users[i]
+      );
+      groupuser.groupId = editMembersDto.groupId;
+      groupuser.userId = editMembersDto.users[i];
+      groupuser.userType = 0;
+      this.groupuserRepository.save(groupuser);
     }
+    return;
+  }
 
-    findGroupById(id: number) {
-        return this.groupRepository.findOne({ where: { id } });
-    }
+  async addOwner(editOwnerDto: EditOwnerDto) {
+    const group: Group = await this.findGroupById(editOwnerDto.groupId);
+    const groupuser = this.groupuserRepository.create();
+    groupuser.group = group;
+    groupuser.user = await this.userService.findUsersById(editOwnerDto.owner);
+    groupuser.groupId = editOwnerDto.groupId;
+    groupuser.userId = editOwnerDto.owner;
+    groupuser.userType = 2;
+    this.groupuserRepository.save(groupuser);
+    return;
+  }
 
-    async createPassword(createPasswordDto: CreatePasswordDto) {
-        const group = this.findGroupById(createPasswordDto.id);
-        if (!group) return console.error("group doesn't exist");
-        const owner = (await group).owner;
-        if (owner === createPasswordDto.owner)
-            await this.groupRepository.update(
-                createPasswordDto.id,
-                createPasswordDto
-            );
-    }
-
-    async updatePassword(editPasswordDto: EditPasswordDto) {
-        const group = await this.findGroupById(editPasswordDto.id);
-        if (!group) return console.error("group doesn't exist"); //error lmao
-        const owner = group.owner;
-        const oldPassword = group.password;
-        if (
-            owner === editPasswordDto.owner &&
-            oldPassword === editPasswordDto.oldPassword
-        )
-            return await this.groupRepository
-                .createQueryBuilder()
-                .update()
-                .set({ password: editPasswordDto.newPassword })
-                .where({
-                    id: editPasswordDto.id
-                })
-                .execute();
-    }
-
-    async createGroup(createGroupDto: CreateGroupDto) {
-        const newGroup = this.groupRepository.create();
-        newGroup.owner = createGroupDto.owner;
-        newGroup.users = [];
-        return this.groupRepository.save(newGroup);
-    }
-
-    async addMembers(editMembersDto: EditMembersDto) {
-        const group : Group = await this.findGroupById(editMembersDto.groupId);
-        for (let i = 0; i < editMembersDto.users.length; i++) {
-            const groupuser = this.groupuserRepository.create();
-            groupuser.group = group;
-            groupuser.user = await this.userService.findUsersById(editMembersDto.users[i]);
-            groupuser.groupId = editMembersDto.groupId;
-            groupuser.userId = editMembersDto.users[i];
-            groupuser.userType = 0;
-            this.groupuserRepository.save(groupuser);
-        }
-        return ;
-    }
-
-    async addOwner(editOwnerDto: EditOwnerDto)
-    {
-        const group : Group = await this.findGroupById(editOwnerDto.groupId);
-        const groupuser = this.groupuserRepository.create();
-            groupuser.group = group;
-            groupuser.user = await this.userService.findUsersById(editOwnerDto.owner);
-            groupuser.groupId = editOwnerDto.groupId;
-            groupuser.userId = editOwnerDto.owner;
-            groupuser.userType = 2;
-            this.groupuserRepository.save(groupuser);
-            return ;
-    }
-
-    async removeMembers(editMembersDto: EditMembersDto) {
-        for (let i = 0; i < editMembersDto.users.length; i++) {
-            const userToRemove: Groupuser = await this.groupuserRepository
-                .createQueryBuilder("groupuser")
-                .where({ groupId: editMembersDto.groupId })
-                .andWhere({ userId: editMembersDto.users[i] })
-                .getOne();
-            if (userToRemove) {
-                this.groupuserRepository.delete(userToRemove);
-            }
-        }
-        return ;
-    }
-
-    async makeAdmin(MakeAdminDto: MakeAdminDto) {
-        const groupuser: Groupuser =  await this.groupuserRepository
+  async removeMembers(editMembersDto: EditMembersDto) {
+    for (let i = 0; i < editMembersDto.users.length; i++) {
+      const userToRemove: Groupuser = await this.groupuserRepository
         .createQueryBuilder("groupuser")
-        .where({ groupId: MakeAdminDto.group })
-        .andWhere({ userId: MakeAdminDto.user })
+        .where({ groupId: editMembersDto.groupId })
+        .andWhere({ userId: editMembersDto.users[i] })
         .getOne();
-        const group: Group = await this.findGroupById(MakeAdminDto.group);
-        console.log(groupuser.userId);
-        console.log(groupuser.groupId);
-        if (groupuser && group.owner === MakeAdminDto.owner) {
-                console.log("Bingo");
-                groupuser.userType = 1;
-        }
-        console.log("2");
-        return this.groupuserRepository.save(groupuser);
+      if (userToRemove) {
+        this.groupuserRepository.delete(userToRemove);
+      }
     }
+    return;
+  }
 
-    async unMakeAdmin(MakeAdminDto: MakeAdminDto) {
-        const groupuser: Groupuser =  await this.groupuserRepository
-        .createQueryBuilder("groupuser")
-        .where({ groupId: MakeAdminDto.group })
-        .andWhere({ userId: MakeAdminDto.user })
-        .getOne();
-        const group: Group = await this.findGroupById(MakeAdminDto.group);
-        if (groupuser && group.owner === MakeAdminDto.owner) {
-                groupuser.userType = 0;
-        }
-        return this.groupuserRepository.save(groupuser);
+  async makeAdmin(MakeAdminDto: MakeAdminDto) {
+    const groupuser: Groupuser = await this.groupuserRepository
+      .createQueryBuilder("groupuser")
+      .where({ groupId: MakeAdminDto.group })
+      .andWhere({ userId: MakeAdminDto.user })
+      .getOne();
+    const group: Group = await this.findGroupById(MakeAdminDto.group);
+    console.log(groupuser.userId);
+    console.log(groupuser.groupId);
+    if (groupuser && group.owner === MakeAdminDto.owner) {
+      console.log("Bingo");
+      groupuser.userType = 1;
     }
+    console.log("2");
+    return this.groupuserRepository.save(groupuser);
+  }
+
+  async unMakeAdmin(MakeAdminDto: MakeAdminDto) {
+    const groupuser: Groupuser = await this.groupuserRepository
+      .createQueryBuilder("groupuser")
+      .where({ groupId: MakeAdminDto.group })
+      .andWhere({ userId: MakeAdminDto.user })
+      .getOne();
+    const group: Group = await this.findGroupById(MakeAdminDto.group);
+    if (groupuser && group.owner === MakeAdminDto.owner) {
+      groupuser.userType = 0;
+    }
+    return this.groupuserRepository.save(groupuser);
+  }
 }
