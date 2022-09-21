@@ -1,8 +1,4 @@
-import {
-  randColor,
-  randFullName,
-  randParagraph
-} from "@ngneat/falso";
+import { randColor, randFullName, randParagraph } from "@ngneat/falso";
 import { HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/entities";
@@ -36,13 +32,15 @@ export class UserService {
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
-    if (! await this.findUserByUsername(createUserDto.username))
-      return;
+    if (!(await this.findUserByUsername(createUserDto.username))) return;
     const newUser = this.userRepository.create(createUserDto);
     return await this.userRepository.save(newUser);
   }
 
-  async addsessiontoken(userDto: UsernameDto, token: string): Promise<UpdateResult> {
+  async addsessiontoken(
+    userDto: UsernameDto,
+    token: string
+  ): Promise<UpdateResult> {
     const ret = await this.findUserByUsername(userDto.username);
 
     return await this.userRepository
@@ -68,7 +66,10 @@ export class UserService {
     return this.userRepository.update(id, { tfaSecret });
   }
 
-  async update2fasecret(userDto: UsernameDto, secret: string): Promise<UpdateResult> {
+  async update2fasecret(
+    userDto: UsernameDto,
+    secret: string
+  ): Promise<UpdateResult> {
     const ret = await this.findUserByUsername(userDto.username);
 
     return this.userRepository
@@ -97,7 +98,7 @@ export class UserService {
           description: randParagraph()
         });
       }
-      return (HttpStatus.OK)
+      return HttpStatus.OK;
     } catch (error) {
       return HttpStatus.INTERNAL_SERVER_ERROR;
     }

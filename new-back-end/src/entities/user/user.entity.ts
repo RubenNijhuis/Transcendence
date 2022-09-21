@@ -1,74 +1,80 @@
-import { Column, Entity, JoinTable, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import GroupUser from '../groupuser/groupuser.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from "typeorm";
+import GroupUser from "../groupuser/groupuser.entity";
 
 @Entity() // need to have a token to search on
 export class User {
   @PrimaryGeneratedColumn({
-    type: 'bigint',
-    name: 'user_id',
+    type: "bigint",
+    name: "user_id"
   })
   id: number;
 
   @Column({
-    name: 'intra_id',
+    name: "intra_id",
     nullable: true,
     unique: true
   })
   intraId: string;
 
   @Column({
-	  name: 'username',
+    name: "username",
     nullable: true,
     unique: true
   })
   username: string;
 
   @Column({
-    name: 'img_url',
+    name: "img_url",
     nullable: false,
-    default: '',
+    default: ""
   })
   img_url: string;
 
   @Column({
-  	name: 'rank',
+    name: "rank",
     nullable: false,
     default: 0
   })
   rank: number;
 
   @Column({
-	  name: 'wins',
+    name: "wins",
     nullable: false,
     default: 0
   })
   wins: number;
 
   @Column({
-	  name: 'losses',
+    name: "losses",
     nullable: false,
     default: 0
   })
   losses: number;
-  
+
   @Column({
-	  name: 'tfaSecret',
+    name: "tfaSecret",
     nullable: false,
-    default: '',
+    default: ""
   })
   tfaSecret: string;
 
   @Column({
-	  name: 'isTfaEnabled',
+    name: "isTfaEnabled",
     nullable: false,
-    default: false,
+    default: false
   })
   isTfaEnabled: boolean;
 
   @Column({
-	  name: 'jwtsession_token',
+    name: "jwtsession_token",
     nullable: false,
-    default: "",
+    default: ""
   })
   jwtsession_token: string;
 

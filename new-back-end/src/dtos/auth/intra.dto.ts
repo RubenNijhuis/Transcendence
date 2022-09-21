@@ -1,9 +1,9 @@
 import { IsNotEmpty } from "class-validator";
 
 export class IntraDto {
-    @IsNotEmpty()
-    intraID: string
+  @IsNotEmpty()
+  intraID: string;
 
-    @IsNotEmpty()
-    username: string
+  @IsNotEmpty()
+  username: string;
 }

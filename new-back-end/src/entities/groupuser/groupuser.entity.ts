@@ -1,26 +1,26 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import Group from '../group/group.entity';
-import User from '../user/user.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import Group from "../group/group.entity";
+import User from "../user/user.entity";
 
 @Entity()
 export class GroupUser {
-    @PrimaryGeneratedColumn()
-	id: number
-	
-	@Column()
-    groupId: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-	@ManyToOne((type) => Group, (group) => group.users)
-	group: Group
+  @Column()
+  groupId: number;
 
-    @Column()
-    userId: number;
+  @ManyToOne((type) => Group, (group) => group.users)
+  group: Group;
 
-	@ManyToOne((type) => User, (user) => user.groups)
-	user: User
+  @Column()
+  userId: number;
 
-	@Column()
-	userType: number;
+  @ManyToOne((type) => User, (user) => user.groups)
+  user: User;
+
+  @Column()
+  userType: number;
 }
 
 export default GroupUser;

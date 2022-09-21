@@ -1,11 +1,7 @@
 import { UploadImgDto } from "./upload-img.dto";
 
-const databaseDtos = [
-    UploadImgDto
-];
+const databaseDtos = [UploadImgDto];
 
-export {
-    UploadImgDto
-};
+export { UploadImgDto };
 
 export default databaseDtos;

@@ -1,11 +1,7 @@
 import { CreateRequestDto } from "./create-request.dto";
 
-const friendrequestDtos = [
-    CreateRequestDto
-];
+const friendrequestDtos = [CreateRequestDto];
 
-export {
-    CreateRequestDto
-};
+export { CreateRequestDto };
 
 export default friendrequestDtos;
