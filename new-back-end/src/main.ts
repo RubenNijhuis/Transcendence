@@ -1,6 +1,6 @@
 import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
-import { AppModule } from "./app.module";
+import { AppModule } from "./bootstrap/app.module";
 import { env } from "node:process";
 import * as session from "express-session";
 import * as passport from "passport";
