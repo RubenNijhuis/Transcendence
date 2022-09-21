@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 
 // Types
 import { MatchRecord } from "../../types/game";
-import { Profile } from "../../types/profile";
+import { ProfileType } from "../../types/profile";
 
 // UI
 import Heading from "../Heading";
@@ -26,7 +26,7 @@ import { paginateArray } from "../../utils/paginateArray";
 import Logger from "../../utils/Logger";
 
 interface Props {
-    player: Profile;
+    player: ProfileType;
     matches: MatchRecord[];
 }
 

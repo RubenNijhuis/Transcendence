@@ -1,4 +1,4 @@
-import { Profile } from "./profile";
+import { ProfileType } from "./profile";
 
 interface AuthTokenType {
     jsonWebToken: string;
@@ -13,7 +13,7 @@ interface RequestError {
 
 interface LoginConfirmResponse {
     shouldCreateUser: boolean;
-    profile: null | Profile;
+    profile: null | ProfileType;
     authToken: AuthTokenType;
 }
 

@@ -1,5 +1,5 @@
 // Global profile interface
-interface Profile {
+interface ProfileType {
     username: string;
     img_url: string;
     banner_url: string;
@@ -11,4 +11,4 @@ interface Profile {
     blocked: string[];
 }
 
-export type { Profile };
+export type { ProfileType };

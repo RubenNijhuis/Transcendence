@@ -5,7 +5,7 @@ import axios from "axios";
 import { getAuthHeader } from "../utils/authToken";
 
 // Types
-import { Profile } from "../../types/profile";
+import { ProfileType } from "../../types/profile";
 
 // Api Routes
 import ApiRoutes from "../../config/ApiRoutes";
@@ -21,9 +21,9 @@ interface createUserProps {
 const createUser = async (
     userData: createUserProps,
     authToken: AuthTokenType
-): Promise<Profile> => {
+): Promise<ProfileType> => {
     try {
-        const { data } = await axios.post<Profile>(
+        const { data } = await axios.post<ProfileType>(
             ApiRoutes.createUser(),
             userData,
             {

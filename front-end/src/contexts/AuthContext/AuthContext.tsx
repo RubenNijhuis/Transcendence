@@ -3,7 +3,7 @@ import { createContext, useContext, useState } from "react";
 
 // Types
 import { LoginConfirmResponse, AuthTokenType } from "../../types/request";
-import { Profile } from "../../types/profile";
+import { ProfileType } from "../../types/profile";
 
 // Requests
 import loginConfirm from "../../proxies/auth/confirmLogin";
@@ -11,8 +11,8 @@ import transformToRequestError from "../../proxies/utils/transformToRequestError
 
 // Define what the auth context contains
 interface AuthContextType {
-    user: Profile;
-    setUser: React.Dispatch<React.SetStateAction<Profile>>;
+    user: ProfileType;
+    setUser: React.Dispatch<React.SetStateAction<ProfileType>>;
 
     isLoggedIn: boolean;
     setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -34,7 +34,7 @@ const useAuth = () => useContext(AuthContext);
  * the user data as well as the utility functions like login and logout
  */
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, setUser] = useState<Profile>(null!);
+    const [user, setUser] = useState<ProfileType>(null!);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [authToken, setAuthToken] = useState<AuthTokenType>(null!);
 

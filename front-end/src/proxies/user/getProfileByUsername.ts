@@ -2,7 +2,7 @@
 import axios from "axios";
 
 // Types
-import { Profile } from "../../types/profile";
+import { ProfileType } from "../../types/profile";
 import { AuthTokenType } from "../../types/request";
 
 // Auth
@@ -17,7 +17,7 @@ import transformToRequestError from "../utils/transformToRequestError";
 const getUserByUsername = async (
     userName: string,
     authToken: AuthTokenType
-): Promise<Profile> => {
+): Promise<ProfileType> => {
     try {
         const { data } = await axios.get(
             ApiRoutes.getUserByUserName(userName),

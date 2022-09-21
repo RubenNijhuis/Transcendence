@@ -5,7 +5,7 @@ import { get_img_url } from "./utils";
 import randomIntFromInterval from "../../../utils/randomNumFromInterval";
 
 // Types
-import { Profile } from "../../../types/profile";
+import { ProfileType } from "../../../types/profile";
 import { GameType } from "../../../types/game";
 import {
     Message,
@@ -18,8 +18,8 @@ import {
 } from "../../../types/chat";
 
 const generateInvite = (
-    user: Profile,
-    opponent: Profile
+    user: ProfileType,
+    opponent: ProfileType
 ): InvitePlayMessage => {
     const invite: InvitePlayMessage = {
         opponent,
@@ -56,8 +56,8 @@ const generatePictureMessage = () => {
 };
 
 const generateNewMessageContent = (
-    sender: Profile,
-    receiver: Profile,
+    sender: ProfileType,
+    receiver: ProfileType,
     type: MessageContentType
 ): AllMessageTypes => {
     let messageContent: AllMessageTypes = null!;
@@ -74,8 +74,8 @@ const generateNewMessageContent = (
 };
 
 const generateMessage = (
-    sender: Profile,
-    receiver: Profile,
+    sender: ProfileType,
+    receiver: ProfileType,
     group_id: number,
     amount: number
 ): Message[] => {
@@ -101,10 +101,10 @@ const generateMessage = (
 };
 
 const generateGroupChats = (
-    user: Profile,
+    user: ProfileType,
     amount: number,
     amount_people: number,
-    profiles: Profile[]
+    profiles: ProfileType[]
 ): GroupChat[] => {
     const groupChatList: GroupChat[] = [];
 

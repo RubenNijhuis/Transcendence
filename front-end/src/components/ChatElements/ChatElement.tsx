@@ -6,7 +6,7 @@ import {
     PictureMessage,
     SimpleMessage
 } from "../../types/chat";
-import { Profile } from "../../types/profile";
+import { ProfileType } from "../../types/profile";
 
 // UI
 import SimpleMessageDisplay from "./SimpleMessageDisplay";
@@ -14,8 +14,8 @@ import PictureMessageDisplay from "./PictureMessageDisplay";
 import InviteMessageDisplay from "./InviteMessageDisplay";
 
 interface Props {
-    receiver: Profile;
-    sender: Profile;
+    receiver: ProfileType;
+    sender: ProfileType;
     content: Message;
 }
 

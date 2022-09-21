@@ -18,7 +18,7 @@ import ProfileActions from "../components/Profile/ProfileActions";
 import { useAuth } from "../contexts/AuthContext";
 
 // Types
-import { Profile } from "../types/profile";
+import { ProfileType } from "../types/profile";
 import { RequestError } from "../types/request";
 
 // Styling constants
@@ -35,7 +35,7 @@ import { useModal } from "../contexts/ModalContext";
 
 const ProfilePage = () => {
     // Profile to be displayed
-    const [selectedProfile, setSelectedProfile] = useState<Profile>(null!);
+    const [selectedProfile, setSelectedProfile] = useState<ProfileType>(null!);
 
     // Modal
     const { setIsModalOpen, setError } = useModal();

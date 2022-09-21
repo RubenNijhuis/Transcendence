@@ -9,12 +9,12 @@ import ApiRoutes from "../../config/ApiRoutes";
 import { getAuthHeader } from "../utils/authToken";
 
 // Types
-import { Profile } from "../../types/profile";
+import { ProfileType } from "../../types/profile";
 import { AuthTokenType } from "../../types/request";
 
-const getLeaderboard = async (authToken: AuthTokenType): Promise<Profile[]> => {
+const getLeaderboard = async (authToken: AuthTokenType): Promise<ProfileType[]> => {
     try {
-        const { data } = await axios.get<Profile[]>(
+        const { data } = await axios.get<ProfileType[]>(
             ApiRoutes.getLeaderboard(),
             {
                 headers: getAuthHeader(authToken)

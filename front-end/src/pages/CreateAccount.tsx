@@ -20,7 +20,7 @@ import createUser from "../proxies/user/createUser";
 
 // Types
 import { RequestError } from "../types/request";
-import { Profile } from "../types/profile";
+import { ProfileType } from "../types/profile";
 
 // Page routes
 import PageRoutes from "../config/PageRoutes";
@@ -90,7 +90,7 @@ const CreateAccount = () => {
          * upon account creation.
          */
         createUser(providedDetails, authToken)
-            .then((returnedUserProfile: Profile) => {
+            .then((returnedUserProfile: ProfileType) => {
                 setUser(returnedUserProfile);
                 setLoggedIn(true);
                 navigate(PageRoutes.profile);
