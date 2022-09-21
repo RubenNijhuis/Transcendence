@@ -8,7 +8,7 @@ import { FriendlistModule } from 'src/modules/friendlist/friendlist.module';
 import { FriendRequestModule } from 'src/modules/friendrequest/friendrequest.module';
 import { AuthModule } from 'src/modules/authentication/auth.module';
 import { MessageModule } from 'src/modules/message/message.module';
-import { GroupModule } from 'src/modules/group/groups.module';
+import { GroupModule } from 'src/modules/group/group.module';
 
 @Module({
   imports: [

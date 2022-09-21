@@ -10,7 +10,7 @@ export class Group {
     id: number;
 
 	@Column()
-	owner: string;
+	owner: number;
 
 	@Column({
 		nullable: true

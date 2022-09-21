@@ -1,5 +1,5 @@
 import { Body, Controller, UsePipes, ValidationPipe, Delete, Get, Query , Param, Post, Put } from '@nestjs/common';
-import { CreateMessageDto } from 'src/dtos/chat';
+import { CreateMessageDto } from 'src/dtos/group';
 import { MessageService } from 'src/services/message/message.service';
  
 @Controller("message")

@@ -1,9 +1,9 @@
 import { IsNotEmpty, MinLength } from "class-validator";
 
-export class EditGroupDto {
+export class EditOwnerDto {
 	@IsNotEmpty()
 	groupId: number
 
 	@IsNotEmpty()
-	users: number[]
+	owner: number
 }

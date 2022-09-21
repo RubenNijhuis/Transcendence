@@ -1,8 +1,8 @@
 import { IsNotEmpty } from "class-validator";
 
-export class CreateGroupDto {
+export class EditMembersDto {
 	@IsNotEmpty()
-	owner: string
+	groupId: number
 
 	@IsNotEmpty()
 	users: number[]

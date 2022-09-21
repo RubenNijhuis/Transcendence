@@ -1,9 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { CreateMessageDto } from "src/dtos/chat";
+import { CreateMessageDto } from "src/dtos/group";
 import Message from "src/entities/message/message.entity";
 import { Repository } from "typeorm";
-import { GroupService } from "../group/groups.service";
+import { GroupService } from "../group/group.service";
 
 @Injectable()
 export class MessageService {

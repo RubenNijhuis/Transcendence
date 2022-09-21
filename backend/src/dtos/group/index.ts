@@ -1,25 +1,25 @@
-import { CreateAdminDto } from "./create-admin.dto";
+import { MakeAdminDto } from "./make-admin.dto";
 import { CreateGroupDto } from "./create-group.dto";
 import { CreateMessageDto } from "./create-message.dto";
 import { CreatePasswordDto } from "./create-password.dto";
-import { EditGroupDto } from "./edit-group.dto";
+import { EditOwnerDto } from "./edit-owner.dto";
 import { EditPasswordDto } from "./edit-password.dto";
 
 const chatDtos = [
     CreateMessageDto,
     CreateGroupDto,
-    CreateAdminDto,
+    MakeAdminDto,
     CreatePasswordDto,
-    EditGroupDto,
+    EditOwnerDto,
     EditPasswordDto
 ];
 
 export {
     CreateMessageDto,
     CreateGroupDto,
-    CreateAdminDto,
+    MakeAdminDto,
     CreatePasswordDto,
-    EditGroupDto,
+    EditOwnerDto,
     EditPasswordDto
 };
 
