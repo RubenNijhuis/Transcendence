@@ -3,7 +3,7 @@ import { IsNotEmpty, MinLength } from "class-validator";
 
 export class CreateGroupDto {
 	@IsNotEmpty()
-	owner: string
+	owner: number
 
 	@IsNotEmpty()
 	users: number[]

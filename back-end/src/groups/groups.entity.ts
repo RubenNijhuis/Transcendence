@@ -12,12 +12,12 @@ export class Group {
     id: number;
 
 	@Column()
-	owner: string;
+	owner: number;
 
 	@Column({
 		nullable: true
 	})
-	password: string
+	password: string;
 
     @OneToMany((type) => Groupuser, (groupuser) => groupuser.group)
     @JoinTable()
@@ -26,6 +26,7 @@ export class Group {
     @OneToMany((type) => Chat, (chat) => chat.group, {
         nullable: true
     })
+
     @JoinTable()
     messages: Chat[];
 

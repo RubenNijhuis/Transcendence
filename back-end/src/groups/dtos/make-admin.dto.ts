@@ -2,7 +2,7 @@ import { IsNotEmpty, MinLength } from "class-validator";
 
 export class MakeAdminDto {
 	@IsNotEmpty()
-	owner: string;
+	owner: number;
 
 	@IsNotEmpty()
 	user: number;
