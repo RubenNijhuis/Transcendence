@@ -9,7 +9,7 @@ import {
 import { Response } from "express";
 import { TfaDto, UsernameDto } from "src/dtos/auth";
 import { TfaService } from "src/services/tfa/tfa.service";
-import { Jwt2faStrategy } from "src/middleware/jwt/jst.strategy";
+import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
 
 @Controller("tfa")
 export class TfaController {
