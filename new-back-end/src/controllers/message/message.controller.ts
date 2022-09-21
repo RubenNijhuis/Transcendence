@@ -19,9 +19,9 @@ export class MessageController {
 
     @Post('createMessage')
     @UsePipes(ValidationPipe)
-    async createChat(@Body() createMessageDto: CreateMessageDto) {
+    async createMessage(@Body() createMessageDto: CreateMessageDto) {
         try {
-            const chat = await this.messageService.createChat(createMessageDto);
+            const chat = await this.messageService.createMessage(createMessageDto);
             const ret = { message: chat.content };
             return ret;
         } catch (error) {

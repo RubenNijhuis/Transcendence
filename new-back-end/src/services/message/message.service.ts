@@ -27,7 +27,7 @@ export class MessageService {
         return allMessages;
     }
     
-    async createChat(createMessageDto: CreateMessageDto) {
+    async createMessage(createMessageDto: CreateMessageDto) {
         const group = await this.groupService.findGroupById(createMessageDto.group_id);
         // if (!group)
         //     return console.error();
