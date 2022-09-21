@@ -16,12 +16,12 @@ services:
   backend:
     container_name: Transcendence_backend
     build:
-      context: ./backend
+      context: ./new-back-end
     restart: always
     env_file:
-      - ./backend/env/.env
+      - ./new-back-end/env/.env
     volumes:
-      - ./backend:/app
+      - ./new-back-end:/app
     ports:
       - "3000:3000"
     depends_on:
@@ -46,7 +46,7 @@ services:
     image: "postgres:14"
     restart: always
     env_file:
-      - ./backend/env/.env
+      - ./new-back-end/env/.env
     ports:
       - "5432:5432"
     volumes:
@@ -60,7 +60,7 @@ services:
        - ./pgadmin/servers.json:/pgadmin4/servers.json
        - ./pgadmin/pgpass:/pgpass
     env_file:
-      - ./backend/env/.env
+      - ./new-back-end/env/.env
     ports:
       - "5050:80"
     links:
