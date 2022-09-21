@@ -24,10 +24,10 @@ export class AuthService {
     });
   }
 
-  getUserData(bearerToken: any): Promise<any> {
+  getUserData(bearerToken: string): Promise<any> {
     return Axios.get(this.configService.get("INTRA_GET_ME_URL"), {
       headers: {
-        Authorization: `Bearer ${bearerToken.data.access_token}`
+        Authorization: `Bearer ${bearerToken}`
       }
     });
   }
