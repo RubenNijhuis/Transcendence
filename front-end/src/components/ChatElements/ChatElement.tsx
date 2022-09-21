@@ -4,15 +4,14 @@ import {
     Message,
     MessageContentType,
     PictureMessage,
-    Profile,
     SimpleMessage
-} from "../../types/GlobalTypes";
+} from "../../types/chat";
+import { Profile } from "../../types/profile";
 
-// Components
+// UI
 import SimpleMessageDisplay from "./SimpleMessageDisplay";
 import PictureMessageDisplay from "./PictureMessageDisplay";
 import InviteMessageDisplay from "./InviteMessageDisplay";
-import Logger from "../../utils/Logger";
 
 interface Props {
     receiver: Profile;
@@ -22,30 +21,32 @@ interface Props {
 
 const ChatElement = ({ receiver, sender, content }: Props) => {
     const fromUser: boolean = receiver.username === sender.username;
+    const contentType: MessageContentType = content.content_type;
 
-    switch (content.content_type) {
-        case MessageContentType.Simple:
-            return (
-                <SimpleMessageDisplay
-                    fromUser={fromUser}
-                    content={content.content as SimpleMessage}
-                />
-            );
-        case MessageContentType.Picture:
-            return (
-                <PictureMessageDisplay
-                    fromUser={fromUser}
-                    content={content.content as PictureMessage}
-                />
-            );
-        case MessageContentType.InvitePlay:
-            return (
-                <InviteMessageDisplay
-                    fromUser={fromUser}
-                    content={content.content as InvitePlayMessage}
-                />
-            );
-    }
+    /**
+     * IMPORTANT: must be in the same order as the content 
+     * type enum defined in groupchats type file
+     * 
+     * [0] SimpleMessage
+     * [1] PictureMessage
+     * [2] InviteMessage
+     */
+    const messageElements = [
+        <SimpleMessageDisplay
+            fromUser={fromUser}
+            content={content.content as SimpleMessage}
+        />,
+        <PictureMessageDisplay
+            fromUser={fromUser}
+            content={content.content as PictureMessage}
+        />,
+        <InviteMessageDisplay
+            fromUser={fromUser}
+            content={content.content as InvitePlayMessage}
+        />
+    ];
+
+    return messageElements[contentType];
 };
 
 export default ChatElement;

@@ -1,5 +1,5 @@
 // Types
-import { SimpleMessage } from "../../../types/GlobalTypes";
+import { SimpleMessage } from "../../../types/chat";
 
 // Styling
 import styled from "styled-components";

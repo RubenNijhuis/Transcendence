@@ -13,6 +13,7 @@ const PageRoutes = {
     createAccount: `/create-account`,
 
     profile: `/profile`,
+    profileWithUserName: (userName: string) => `/profile/${userName}`,
     chat: `/chat`,
     leaderBoard: `/leaderboard`,
 

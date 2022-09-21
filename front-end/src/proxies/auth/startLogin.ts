@@ -9,10 +9,8 @@ import transformToRequestError from "../utils/transformToRequestError";
 
 const startLogin = async (): Promise<string> => {
     try {
-        const res = await axios
-            .get(ApiRoutes.getLoginRoute());
-        const returnedUrl: string = res.data;
-        return returnedUrl;
+        const { data } = await axios.get(ApiRoutes.getLoginRoute());
+        return Promise.resolve(data);
     } catch (err: any) {
         return Promise.reject(transformToRequestError(err));
     }

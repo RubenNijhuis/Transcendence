@@ -1,6 +1,4 @@
-import { Fragment } from "react";
-
-// Components
+// UI
 import Asset from "../Asset";
 import Button from "../Button";
 
@@ -19,19 +17,20 @@ import PageRoutes from "../../config/PageRoutes";
 import startLogin from "../../proxies/auth/startLogin";
 import Logger from "../../utils/Logger";
 
+// Types
+import { RequestError } from "../../types/request";
+
 const CTAButton = ({ authStatus }: { authStatus: boolean }) => {
     const toLoginPage = () => {
         startLogin()
-            .then((url) => {
-                window.location.assign(url as string);
-            })
-            .catch((err) =>
-                Logger("ERROR", "Navbar", "Req login page url", err)
-            );
+            .then((url: string) => window.location.assign(url))
+            .catch((err: RequestError) => {
+                Logger("ERROR", "Navbar", "Req login page url", err);
+            });
     };
 
     return (
-        <Fragment>
+        <>
             {authStatus ? (
                 <Link className="play-button" to={PageRoutes.play}>
                     <Button theme={"light"}>Play Pong</Button>
@@ -45,7 +44,7 @@ const CTAButton = ({ authStatus }: { authStatus: boolean }) => {
                     Login
                 </Button>
             )}
-        </Fragment>
+        </>
     );
 };
 

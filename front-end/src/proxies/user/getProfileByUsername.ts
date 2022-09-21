@@ -2,13 +2,15 @@
 import axios from "axios";
 
 // Types
-import { Profile } from "../../types/GlobalTypes";
+import { Profile } from "../../types/profile";
 
 // Auth
 import { getAuthHeader } from "../utils/authToken";
 
 // Api Routes
 import ApiRoutes from "../../config/ApiRoutes";
+
+// Transform error
 import transformToRequestError from "../utils/transformToRequestError";
 
 const getUserByUsername = async (
@@ -16,11 +18,13 @@ const getUserByUsername = async (
     authToken: string
 ): Promise<Profile> => {
     try {
-        const res = await axios.get(ApiRoutes.getUserByUserName(userName), {
-            headers: getAuthHeader(authToken)
-        });
-        const returnedProfile: Profile = res.data;
-        return returnedProfile;
+        const { data } = await axios.get(
+            ApiRoutes.getUserByUserName(userName),
+            {
+                headers: getAuthHeader(authToken)
+            }
+        );
+        return Promise.resolve(data);
     } catch (err: any) {
         return Promise.reject(transformToRequestError(err));
     }

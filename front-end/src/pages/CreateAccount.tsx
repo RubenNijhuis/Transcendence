@@ -9,17 +9,29 @@ import { magicNum, smallRadius } from "../styles/StylingConstants";
 import Button from "../components/Button";
 import Heading from "../components/Heading";
 import Layout from "../components/Layout";
+// Box slider
+import BoxSlider from "../components/BoxSlider";
+import Slide from "../components/BoxSlider/Slide/Slide";
 
 // Auth
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import createUser from "../proxies/user/createUser";
-import { Profile } from "../types/GlobalTypes";
-import Logger from "../utils/Logger";
+
+// Types
+import { RequestError } from "../types/request";
+import { Profile } from "../types/profile";
+
+// Page routes
+import PageRoutes from "../config/PageRoutes";
+
+// Error modal
+import { useModal } from "../contexts/ModalContext";
 
 // TODO: put styling in different folder
 const StyledInput = styled.div`
     margin-bottom: 36px;
+    padding: 18px;
 
     label {
         display: block;
@@ -42,6 +54,9 @@ const CreateForm = styled.div`
     width: calc(${magicNum} * 10);
     max-width: calc(${magicNum} * 10);
     margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 
     button {
         width: 100%;
@@ -58,10 +73,12 @@ const CreateAccount = () => {
     // Authentication utils
     const { authToken, setUser, setLoggedIn } = useAuth();
 
+    const { setError, setIsModalOpen } = useModal();
+
     // Navigating to profile page after creation
     const navigate = useNavigate();
 
-    const handleAccountCreation = () => {
+    const handleAccountCreation = (): void => {
         const providedDetails = {
             username,
             color,
@@ -73,64 +90,66 @@ const CreateAccount = () => {
          * upon account creation.
          */
         createUser(providedDetails, authToken)
-            .then((returnedUserProfile) => {
-                setUser(returnedUserProfile as Profile);
+            .then((returnedUserProfile: Profile) => {
+                setUser(returnedUserProfile);
                 setLoggedIn(true);
-
-                navigate("/profile/me");
+                navigate(PageRoutes.profile);
             })
-            .catch((err) => {
-                // TODO: handle error messages
-                Logger(
-                    "ERROR",
-                    "Create account",
-                    "returned profile request",
-                    err
-                );
+            .catch((err: RequestError) => {
+                setError(err);
+                setIsModalOpen(true);
             });
     };
 
     // TODO: add a guard like login guard and remove this useEffect
     useEffect(() => {
         // If the user hasn't tried to log in redirect to home
-        if (authToken === null) {
-            navigate("/");
-        }
+        // if (authToken === null) {
+        //     navigate("/");
+        // }
     }, [authToken, navigate]);
 
     return (
-        <Layout>
-            <CreateForm>
-                <Heading type={1}>Create an account</Heading>
-                <StyledInput>
-                    <label>username</label>
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setusername(e.target.value)}
-                    />
-                </StyledInput>
-                <StyledInput>
-                    <label>Color</label>
-                    <input
-                        type="text"
-                        value={color}
-                        onChange={(e) => setColor(e.target.value)}
-                    />
-                </StyledInput>
-                <StyledInput>
-                    <label>Short description</label>
-                    <textarea
-                        rows={4}
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-                </StyledInput>
-                <Button theme="dark" onClick={handleAccountCreation}>
-                    Ja doe maar
-                </Button>
-            </CreateForm>
-        </Layout>
+        <CreateForm>
+            <Heading type={1}>Create an account</Heading>
+            <BoxSlider>
+                <Slide>
+                    <StyledInput>
+                        <label>Set your Username</label>
+                        <input
+                            type="text"
+                            value={username}
+                            onChange={(e) => setusername(e.target.value)}
+                        />
+                    </StyledInput>
+                </Slide>
+                <Slide>
+                    <StyledInput>
+                        <label>
+                            Choose a Color (must be in hex form #1e1e1e)
+                        </label>
+                        <input
+                            type="text"
+                            value={color}
+                            onChange={(e) => setColor(e.target.value)}
+                        />
+                    </StyledInput>
+                </Slide>
+                <Slide>
+                    <StyledInput>
+                        <label>Tell something about yourself</label>
+                        <textarea
+                            rows={4}
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                        />
+                    </StyledInput>
+                    <Button theme="dark" onClick={handleAccountCreation}>
+                        Ja doe maar
+                    </Button>
+                </Slide>
+            </BoxSlider>
+        </CreateForm>
     );
 };
 

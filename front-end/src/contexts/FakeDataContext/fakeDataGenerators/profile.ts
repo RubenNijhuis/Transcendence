@@ -1,6 +1,10 @@
-import { get_img_url } from "./index";
-import { Profile } from "../../../types/GlobalTypes";
+// Random img
+import { get_img_url } from "./utils";
+// Random int
 import randomIntFromInterval from "../../../utils/randomNumFromInterval";
+
+// Types
+import { Profile } from "../../../types/profile";
 
 const names = [
     "RelaxZest",

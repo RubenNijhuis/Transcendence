@@ -1,17 +1,21 @@
-import { get_img_url } from "./index";
+// Img url
+import { get_img_url } from "./utils";
+
+// Random int
+import randomIntFromInterval from "../../../utils/randomNumFromInterval";
+
+// Types
+import { Profile } from "../../../types/profile";
+import { GameType } from "../../../types/game";
 import {
-    Profile,
     Message,
     PictureMessage,
     GroupChat,
     SimpleMessage,
     InvitePlayMessage,
-    GameType,
     MessageContentType,
     AllMessageTypes
-} from "../../../types/GlobalTypes";
-
-import randomIntFromInterval from "../../../utils/randomNumFromInterval";
+} from "../../../types/chat";
 
 const generateInvite = (
     user: Profile,

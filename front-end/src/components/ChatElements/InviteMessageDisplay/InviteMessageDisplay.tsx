@@ -1,5 +1,5 @@
 // Types
-import { InvitePlayMessage } from "../../../types/GlobalTypes";
+import { InvitePlayMessage } from "../../../types/chat";
 
 // Styling
 import styled from "styled-components";
@@ -9,7 +9,7 @@ import {
     smallRadius
 } from "../../../styles/StylingConstants";
 
-// Components
+// UI
 import Button from "../../Button";
 
 interface Props {

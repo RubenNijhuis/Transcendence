@@ -8,7 +8,7 @@ import {
 } from "./RankingList.style";
 
 // Types
-import type { Profile } from "../../types/GlobalTypes";
+import { Profile } from "../../types/profile";
 
 // Routing
 import { Link } from "react-router-dom";

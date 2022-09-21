@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 
 // Types
+import { Profile } from "../../types/profile";
+import { GameType } from "../../types/game";
 import {
     GroupChat,
     MessageContentType,
-    Profile,
     SimpleMessage,
     PictureMessage,
     InvitePlayMessage,
-    GameType,
     AllMessageTypes
-} from "../../types/GlobalTypes";
+} from "../../types/chat";
 
-// Components
+// UI
 import { Container, SelectTypeIcon, SelectionBox } from "./ChatInput.style";
 
 // Debug
