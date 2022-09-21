@@ -5,8 +5,8 @@ import { BlockListController } from "../../controllers/blocklist/blocklist.contr
 import BlockList from "../../entities/blocklist/blocklist.entity";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([BlockList])],
-    controllers: [BlockListController],
-    providers: [BlocklistService],
+  imports: [TypeOrmModule.forFeature([BlockList])],
+  controllers: [BlockListController],
+  providers: [BlocklistService]
 })
 export class BlockListModule {}

@@ -6,21 +6,21 @@ import { EditOwnerDto } from "./edit-owner.dto";
 import { EditPasswordDto } from "./edit-password.dto";
 
 const chatDtos = [
-    CreateMessageDto,
-    CreateGroupDto,
-    MakeAdminDto,
-    CreatePasswordDto,
-    EditOwnerDto,
-    EditPasswordDto
+  CreateMessageDto,
+  CreateGroupDto,
+  MakeAdminDto,
+  CreatePasswordDto,
+  EditOwnerDto,
+  EditPasswordDto
 ];
 
 export {
-    CreateMessageDto,
-    CreateGroupDto,
-    MakeAdminDto,
-    CreatePasswordDto,
-    EditOwnerDto,
-    EditPasswordDto
+  CreateMessageDto,
+  CreateGroupDto,
+  MakeAdminDto,
+  CreatePasswordDto,
+  EditOwnerDto,
+  EditPasswordDto
 };
 
 export default chatDtos;

@@ -1,11 +1,7 @@
 import { CreateFriensdDto } from "./create-friend.dto";
 
-const friendlistDtos = [
-    CreateFriensdDto
-];
+const friendlistDtos = [CreateFriensdDto];
 
-export {
-    CreateFriensdDto
-};
+export { CreateFriensdDto };
 
 export default friendlistDtos;

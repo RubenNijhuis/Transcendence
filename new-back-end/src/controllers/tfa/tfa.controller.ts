@@ -1,4 +1,11 @@
-import { Body, Controller, Post, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Post,
+  Res,
+  UnauthorizedException,
+  UseGuards
+} from "@nestjs/common";
 import { Response } from "express";
 import { TfaDto, UsernameDto } from "src/dtos/auth";
 import { TfaService } from "src/services/tfa/tfa.service";
@@ -6,17 +13,13 @@ import { Jwt2faStrategy } from "src/middleware/jwt/jst.strategy";
 
 @Controller("tfa")
 export class TfaController {
-    constructor(
-        private readonly tfaService: TfaService
-    ) {}
+  constructor(private readonly tfaService: TfaService) {}
 
-    @Post("google2fa")
+  @Post("google2fa")
   @UseGuards(Jwt2faStrategy)
   async google2fa(@Body() userDto: UsernameDto) {
     try {
-      const res = await this.tfaService.generateTfaSecret(
-        userDto
-      );
+      const res = await this.tfaService.generateTfaSecret(userDto);
       console.log(res);
     } catch (error) {
       return error;

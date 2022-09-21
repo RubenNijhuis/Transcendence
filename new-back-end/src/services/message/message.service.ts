@@ -7,35 +7,37 @@ import { GroupService } from "../group/group.service";
 
 @Injectable()
 export class MessageService {
-//     import: [GroupService]
-// inject: [GroupService]
-    constructor(
-        @InjectRepository(Message)
-        private readonly chatRepository: Repository<Message>,
-        private readonly groupService: GroupService
-    ) {}
+  //     import: [GroupService]
+  // inject: [GroupService]
+  constructor(
+    @InjectRepository(Message)
+    private readonly chatRepository: Repository<Message>,
+    private readonly groupService: GroupService
+  ) {}
 
-    getAllMessages() {
-        return this.chatRepository.find();
-    }
+  getAllMessages() {
+    return this.chatRepository.find();
+  }
 
-    async getAllMessagesByGroupId(group_id: number): Promise<Message[]> {
-        const allMessages = await this.chatRepository
-            .createQueryBuilder('chat')
-            .where("group_id = :group_id", { group_id })
-            .getMany();
-        return allMessages;
-    }
-    
-    async createMessage(createMessageDto: CreateMessageDto) {
-        const group = await this.groupService.findGroupById(createMessageDto.group_id);
-        // if (!group)
-        //     return console.error();
-        const newChat = this.chatRepository.create(createMessageDto);
+  async getAllMessagesByGroupId(group_id: number): Promise<Message[]> {
+    const allMessages = await this.chatRepository
+      .createQueryBuilder("chat")
+      .where("group_id = :group_id", { group_id })
+      .getMany();
+    return allMessages;
+  }
 
-        newChat.group = group;
-        return this.chatRepository.save(newChat);
-    }
+  async createMessage(createMessageDto: CreateMessageDto) {
+    const group = await this.groupService.findGroupById(
+      createMessageDto.group_id
+    );
+    // if (!group)
+    //     return console.error();
+    const newChat = this.chatRepository.create(createMessageDto);
+
+    newChat.group = group;
+    return this.chatRepository.save(newChat);
+  }
 }
 
 //  getPostById(id: number) {

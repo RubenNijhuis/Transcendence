@@ -13,10 +13,7 @@ export class TfaService {
     console.log(tfaDto.tfaCode);
     console.log(ret.tfaSecret);
 
-    const res = authenticator.check(
-      tfaDto.tfaCode,
-      ret.tfaSecret
-    );
+    const res = authenticator.check(tfaDto.tfaCode, ret.tfaSecret);
     console.log(res);
     return res;
   }
