@@ -1,21 +1,15 @@
 import {
-  randAmount,
   randColor,
-  randEmail,
   randFullName,
-  randParagraph,
-  randPassword,
-  randSkill
+  randParagraph
 } from "@ngneat/falso";
-import { HttpException, Injectable } from "@nestjs/common";
+import { HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/typeorm";
-import { Repository } from "typeorm";
+import { DeleteResult, Repository, UpdateResult } from "typeorm";
 import { CreateUserDto } from "src/users/dtos/create-users.dto";
 import { authenticator } from "otplib";
 import { toDataURL } from "qrcode";
-import { intraDto } from "./dtos/intra.dto";
-import { MailDto } from "src/auth/dto/mail.dto";
 import { UsernameDto } from "src/auth/dto/username.dto";
 
 @Injectable()
@@ -25,20 +19,19 @@ export class UsersService {
     private readonly userRepository: Repository<User>
   ) {}
 
-  getUsers() {
-    // debugging purposes lol
+  getUsers(): Promise<User[]> {
     return this.userRepository.find();
   }
 
-  findUsersById(id: number) {
+  findUsersById(id: number): Promise<User> {
     return this.userRepository.findOne({ where: { id } });
   }
 
-  findUsersByintraId(intraId: string) {
+  findUsersByintraId(intraId: string): Promise<User> {
     return this.userRepository.findOne({ where: { intraId } });
   }
 
-  findUserByUsername(username: string) {
+  findUserByUsername(username: string): Promise<User> {
     return this.userRepository.findOne({ where: { username } });
   }
 
@@ -52,7 +45,7 @@ export class UsersService {
     return this.userRepository.save(newUser);
   }
 
-  async addsessiontoken(userDto: UsernameDto, token: string) {
+  async addsessiontoken(userDto: UsernameDto, token: string): Promise<UpdateResult> {
     const ret = await this.findUserByUsername(userDto.username);
 
     return await this.userRepository
@@ -64,7 +57,7 @@ export class UsersService {
       .execute();
   }
 
-  removeUser(username: string) {
+  removeUser(username: string): Promise<DeleteResult> {
     const ret = this.userRepository
       .createQueryBuilder("Users")
       .delete()
@@ -74,14 +67,14 @@ export class UsersService {
     return ret;
   }
 
-  setTwoFactorAuthSecret(id: number, twoFactorAuthenticationSecret: string) {
+  setTwoFactorAuthSecret(id: number, twoFactorAuthenticationSecret: string): Promise<any> {
     return this.userRepository.update(id, { twoFactorAuthenticationSecret });
   }
 
-  async update2fasecret(userDto: UsernameDto, secret: string) {
+  async update2fasecret(userDto: UsernameDto, secret: string): Promise<UpdateResult> {
     const ret = await this.findUserByUsername(userDto.username);
 
-    return await this.userRepository
+    return this.userRepository
       .createQueryBuilder()
       .update(ret)
       .set({ twoFactorAuthenticationSecret: secret })
@@ -107,8 +100,8 @@ export class UsersService {
       });
     }
   }
-
-  async generateTwoFactorAuthenticationSecret(user: User) {
+  // WE NEED TO SPECIFY WHAT THIS RETURNS
+  generateTwoFactorAuthenticationSecret(user: User): string {
     const secret = authenticator.generateSecret();
     console.log("Generate tfa secret :", secret);
 
@@ -129,10 +122,10 @@ export class UsersService {
     // }
   }
 
-  async turnOn2fa(usernameDto: UsernameDto) {
+  async turnOn2fa(usernameDto: UsernameDto): Promise<UpdateResult> {
     const ret = await this.findUserByUsername(usernameDto.username);
 
-    return await this.userRepository
+    return this.userRepository
       .createQueryBuilder()
       .update(ret)
       .set({ isTwoFactorAuthenticationEnabled: true })

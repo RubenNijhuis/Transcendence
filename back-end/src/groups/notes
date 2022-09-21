@@ -1,0 +1,12 @@
+Groups chat:
+
+database of chatmessages with same group_id
+list of users as admins or participant and an user id owner
+
+has to do:
+create/edit/remove password(check for owner_id)
+set/remove admins(check for admin_id)
+check for ban/mute(check records table)
+
+chat:
+has sender and content

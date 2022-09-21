@@ -1,6 +1,6 @@
 import { IsNotEmpty } from "class-validator";
 
-export class intraDto {
+export class IntraDto {
     @IsNotEmpty()
     intra_id: string
 

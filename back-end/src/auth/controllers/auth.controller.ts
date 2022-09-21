@@ -171,9 +171,9 @@ export class AuthController {
   //curl --data "username=akramp&twoFactorAuthenticationCode="  http://localhost:3000/api/auth/google2fa/authenticate
   @Post("google2fa/authenticate")
   @UseGuards(Jwt2faStrategy)
-  async authenticate(@Res() res: Response, @Body() twofadto: twofadto) {
+  async authenticate(@Res() res: Response, @Body() twoFaDto: twofadto) {
     const isCodeValid =
-      await this.authService.isTwoFactorAuthenticationCodeValid(twofadto);
+      await this.authService.isTwoFactorAuthenticationCodeValid(twoFaDto);
     if (isCodeValid === false) {
       throw new UnauthorizedException("Wrong authentication code");
     }

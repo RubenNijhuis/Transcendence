@@ -1,4 +1,3 @@
-import { HttpService } from "@nestjs/axios";
 import {
     Body,
     Controller,
@@ -21,6 +20,7 @@ import { UserSeeder } from "src/database/seeds/user-create.seed";
 import { CreateUserDto } from "src/users/dtos/create-users.dto";
 import { UsersService } from "src/users/users.service";
 import { uploadImgDto } from "./dtos/upload-img.dto";
+import User from "./user.entity";
 const multer  = require('multer')
 
 @Controller("users")
@@ -59,6 +59,7 @@ export class UsersController {
         createUserDto
       );
       const ret = user;
+      console.log("user obj:", user);
       return ret;
     } catch (error) {
       return error;
@@ -103,7 +104,7 @@ export class UsersController {
   @Post("turnon2fa")
   @UsePipes(ValidationPipe) //what does this do
   async turnon2fa(@Body() usernameDto: UsernameDto) {
-    // const isCodeValid = this.userService.isTwoFactorAuthenticationCodeValid(Twofadto);
+    // const isCodeValid = this.userService.isTwoFactorAuthenticationCodeValid(twoFaDto);
     // if (!isCodeValid) {
     //     throw new UnauthorizedException('Wrong authentication code');
     // }
