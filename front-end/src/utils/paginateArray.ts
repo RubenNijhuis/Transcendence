@@ -4,12 +4,13 @@
  * @param amountPerPage
  * @returns
  */
-const PaginateArray = (items: any[], amountPerPage: number): any[][] => {
-    const pageCollection: any[][] = [];
+const paginateArray = <T>(items: Array<T>, amountPerPage: number): T[][] => {
+    const pageCollection: T[][] = [];
 
-    let page: any[] = [];
+    let page: T[] = [];
 
     for (let i = 0; i < items.length; i++) {
+        // If a page is full push it to the collection
         if (i % amountPerPage === 0 && i !== 0) {
             pageCollection.push(page);
             page = [];
@@ -18,10 +19,10 @@ const PaginateArray = (items: any[], amountPerPage: number): any[][] => {
         page.push(items[i]);
     }
 
+    // Any leftovers can be added now
     if (page.length !== 0) pageCollection.push(page);
-    page = [];
 
     return pageCollection;
 };
 
-export { PaginateArray };
+export { paginateArray };

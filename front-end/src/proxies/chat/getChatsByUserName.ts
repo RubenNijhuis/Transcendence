@@ -1,9 +1,6 @@
 // Request
 import axios from "axios";
 
-// Types
-import { GroupChat } from "../../types/chat";
-
 // Auth
 import { getAuthHeader } from "../utils/authToken";
 
@@ -13,12 +10,16 @@ import ApiRoutes from "../../config/ApiRoutes";
 // Error transformer
 import transformToRequestError from "../utils/transformToRequestError";
 
+// Types
+import { AuthTokenType } from "../../types/request";
+import { GroupChat } from "../../types/chat";
+
 const getChatByUserName = async (
     userName: string,
-    authToken: string
+    authToken: AuthTokenType
 ): Promise<GroupChat[]> => {
     try {
-        const { data } = await axios.get(
+        const { data } = await axios.get<GroupChat[]>(
             ApiRoutes.getChatByUserName(userName),
             {
                 headers: getAuthHeader(authToken)

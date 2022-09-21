@@ -2,7 +2,7 @@
 import { createContext, useContext, useState } from "react";
 
 // Types
-import { LoginConfirmResponse } from "../../types/request";
+import { LoginConfirmResponse, AuthTokenType } from "../../types/request";
 import { Profile } from "../../types/profile";
 
 // Requests
@@ -17,10 +17,10 @@ interface AuthContextType {
     isLoggedIn: boolean;
     setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 
-    authToken: string;
-    setAuthToken: React.Dispatch<React.SetStateAction<string>>;
+    authToken: AuthTokenType;
+    setAuthToken: React.Dispatch<React.SetStateAction<AuthTokenType>>;
 
-    signIn(code: string): any;
+    signIn(code: string): Promise<LoginConfirmResponse>;
 }
 
 // Create the context
@@ -36,7 +36,7 @@ const useAuth = () => useContext(AuthContext);
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<Profile>(null!);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
-    const [authToken, setAuthToken] = useState<string>(null!);
+    const [authToken, setAuthToken] = useState<AuthTokenType>(null!);
 
     /**
      * Makes a request to the back-end using the intra code. The expected
@@ -45,12 +45,14 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
      */
     const signIn = async (code: string): Promise<LoginConfirmResponse> => {
         try {
-            const res: LoginConfirmResponse = await loginConfirm(code);
+            const res = await loginConfirm(code);
 
-            setAuthToken(res.authToken);
+            const { authToken, profile } = res;
 
-            if (res.profile !== null) {
-                setUser(res.profile);
+            setAuthToken(authToken);
+
+            if (profile !== null) {
+                setUser(profile);
                 setLoggedIn(true);
             }
 

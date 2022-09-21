@@ -1,5 +1,10 @@
 import { Profile } from "./profile";
 
+interface AuthTokenType {
+    jsonWebToken: string;
+    refreshToken: string;
+}
+
 interface RequestError {
     error: string;
     requestUrl: string;
@@ -9,7 +14,7 @@ interface RequestError {
 interface LoginConfirmResponse {
     shouldCreateUser: boolean;
     profile: null | Profile;
-    authToken: string;
+    authToken: AuthTokenType;
 }
 
-export type { RequestError, LoginConfirmResponse };
+export type { RequestError, LoginConfirmResponse, AuthTokenType };
