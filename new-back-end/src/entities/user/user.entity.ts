@@ -72,11 +72,11 @@ export class User {
   isTfaEnabled: boolean;
 
   @Column({
-    name: "jwtsession_token",
+    name: "refreshToken",
     nullable: false,
     default: ""
   })
-  jwtsession_token: string;
+  refreshToken: string;
 
   @OneToMany((type) => GroupUser, (groupuser) => groupuser.user)
   @JoinTable()

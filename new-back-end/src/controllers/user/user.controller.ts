@@ -3,6 +3,7 @@ import {
   Controller,
   FileTypeValidator,
   Get,
+  HttpStatus,
   MaxFileSizeValidator,
   ParseFilePipe,
   Post,
@@ -20,6 +21,7 @@ import { UserService } from "src/services/user/user.service";
 import { UploadImgDto } from "../../dtos/database/upload-img.dto";
 import User from "../../entities/user/user.entity";
 const multer = require("multer");
+import { Response } from "express";
 
 @Controller("users")
 export class UsersController {
@@ -103,4 +105,5 @@ export class UsersController {
       return error;
     }
   }
+
 }

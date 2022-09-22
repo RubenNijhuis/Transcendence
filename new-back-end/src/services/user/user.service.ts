@@ -37,7 +37,7 @@ export class UserService {
     return await this.userRepository.save(newUser);
   }
 
-  async addsessiontoken(
+  async addRefreshToken(
     userDto: UsernameDto,
     token: string
   ): Promise<UpdateResult> {
@@ -46,7 +46,7 @@ export class UserService {
     return await this.userRepository
       .createQueryBuilder()
       .update(ret)
-      .set({ jwtsession_token: token })
+      .set({ refreshToken: token })
       .where({ id: ret.id })
       .returning("*")
       .execute();
@@ -102,26 +102,6 @@ export class UserService {
     } catch (error) {
       return HttpStatus.INTERNAL_SERVER_ERROR;
     }
-  }
-  // WE NEED TO SPECIFY WHAT THIS RETURNS
-  generateTwoFactorAuthenticationSecret(user: User): string {
-    const secret = authenticator.generateSecret();
-    console.log(secret);
-
-    const otpauthUrl = authenticator.keyuri(
-      "mehj177@gmail.com",
-      "AUTH_APP_NAME",
-      secret
-    );
-
-    console.log(otpauthUrl);
-    return toDataURL(otpauthUrl);
-    // await this.setTwoFactorAuthenticationSecret(secret, user.id);
-    // console.log(user.twoFactorAuthenticationSecret);
-    // return {
-    //   secret,
-    //   otpauthUrl
-    // }
   }
 
   async turnOn2fa(usernameDto: UsernameDto): Promise<UpdateResult> {
