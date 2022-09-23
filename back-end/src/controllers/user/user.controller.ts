@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   Post,
+  Req,
   Res,
   UploadedFile,
   UseInterceptors,
@@ -37,6 +38,8 @@ import { bannerStorage, imgFilter, profileStorage } from "src/middleware/imgUplo
 
 // file upload library
 import { FileInterceptor } from "@nestjs/platform-express";
+import { Request } from "express";
+import { MyNewFileInterceptor } from "src/middleware/imgUpload/file-interceptor";
 
 /**
  * The user controller will act as the first entry point for user related api calls.
@@ -111,12 +114,29 @@ export class UsersController {
     }
   }
 
+  // @Post(UserRoutes.uploadBannerPic)
+  // @UseInterceptors(FileInterceptor('image', {
+  //   storage: bannerStorage("username taken from jwt"),
+  //   fileFilter: imgFilter
+  // }))
+  // async uploadBanner(@UploadedFile() file) {
+  //   const response = {
+  //     originalname: file.originalname,
+  //     filename: file.filename,
+  //   };
+  //   return response;
+  // }
+
   @Post(UserRoutes.uploadBannerPic)
-  @UseInterceptors(FileInterceptor('image', {
-    storage: bannerStorage("username taken from jwt"),
-    fileFilter: imgFilter
+  @UseInterceptors(MyNewFileInterceptor('image', ctx => {
+    const jwt: string = ctx.switchToHttp().getRequest().headers.bearer_token;
+
+    return {
+        storage: bannerStorage(jwt),
+        fileFilter: imgFilter
+      }
   }))
-  async uploadBanner(@UploadedFile() file) {
+  async uploadProfileTest(@UploadedFile() file) {
     const response = {
       originalname: file.originalname,
       filename: file.filename,
@@ -124,18 +144,18 @@ export class UsersController {
     return response;
   }
 
-  @Post(UserRoutes.uploadProfilePic)
-  @UseInterceptors(FileInterceptor('image', {
-    storage: profileStorage("username taken from jwt"),
-    fileFilter: imgFilter
-  }))
-  async uploadProfile(@UploadedFile() file) {
-    const response = {
-      originalname: file.originalname,
-      filename: file.filename,
-    };
-    return response;
-  }
+  // @Post(UserRoutes.uploadProfilePic)
+  // @UseInterceptors(FileInterceptor('image', {
+  //   storage: profileStorage("tmp"),
+  //   fileFilter: imgFilter
+  // }))
+  // async uploadProfile(@UploadedFile() file) {
+  //   const response = {
+  //     originalname: file.originalname,
+  //     filename: file.filename,
+  //   };
+  //   return response;
+  // }
 
   @Get(UserRoutes.seed)
   async seedUsers() {

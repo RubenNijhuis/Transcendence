@@ -1,4 +1,3 @@
-import { FileTypeValidator, MaxFileSizeValidator, ParseFilePipe } from "@nestjs/common";
 const multer = require("multer");
 
 export const imgFilter = (req, file, cb) => {
