@@ -35,6 +35,7 @@ import User from "../../entities/user/user.entity";
 // file upload library
 import { MulterModule } from "@nestjs/platform-express";
 import UserRoutes from "src/configs/routes/globalRoutes.config";
+import { SeederAmountDto } from "src/dtos/seeder/custom-seeder.dto";
 const multer = require("multer");
 
 /**
@@ -49,6 +50,8 @@ const multer = require("multer");
  */
 
 /**
+ * ATTENTION
+ * - upload route is wip
  * TO DO
  * - standarize uploading images
  */
@@ -102,7 +105,7 @@ export class UsersController {
     //     throw new UnauthorizedException('Wrong authentication code');
     // }
     try {
-      await this.userService.setTfa(dto, true);
+      await this.userService.setTfa(dto.username, dto.option);
     } catch (error) {
       return error;
     }
@@ -141,8 +144,12 @@ export class UsersController {
 
   @Get(UserRoutes.seed)
   async seedUsers() {
-    // Creates 200 users
     const seed = new UserSeeder({ seedingSource: seederConfig });
     await seed.run();
+  }
+
+  @Post(UserRoutes.seedAmount)
+  async seedUsersAmount(@Body() dto: SeederAmountDto) {
+    return await this.userService.seedCustom(dto.amount);
   }
 }

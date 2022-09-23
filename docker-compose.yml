@@ -16,7 +16,7 @@ services:
   backend:
     container_name: Transcendence_backend
     build:
-      context: ./new-back-end
+      context: ./back-end
     restart: always
     env_file:
       - ./back-end/env/.env
