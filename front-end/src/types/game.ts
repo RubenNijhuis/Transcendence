@@ -1,9 +1,9 @@
-import { Profile } from "./profile";
+import { ProfileType } from "./profile";
 
 // How we define match data
 interface MatchRecord {
-    opponent: Profile;
-    player: Profile;
+    opponent: ProfileType;
+    player: ProfileType;
     score: {
         opponent: number;
         self: number;

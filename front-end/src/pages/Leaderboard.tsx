@@ -14,14 +14,14 @@ import getLeaderboard from "../proxies/leaderboard/getLeaderboard";
 import { useAuth } from "../contexts/AuthContext";
 
 // Types
-import { Profile } from "../types/profile";
+import { ProfileType } from "../types/profile";
 import { RequestError } from "../types/request";
 
 // Debug
 import { useModal } from "../contexts/ModalContext";
 
 const Leaderboard = () => {
-    const [leaderboard, setLeaderboard] = useState<Profile[]>(null!);
+    const [leaderboard, setLeaderboard] = useState<ProfileType[]>(null!);
     const { authToken } = useAuth();
     const { setIsModalOpen, setError } = useModal();
 

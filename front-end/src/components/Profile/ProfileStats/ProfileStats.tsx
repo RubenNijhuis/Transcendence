@@ -1,5 +1,5 @@
 // Types
-import { Profile } from "../../../types/profile";
+import { ProfileType } from "../../../types/profile";
 import { MatchRecord } from "../../../types/game";
 
 // UI
@@ -10,7 +10,7 @@ import Heading from "../../Heading";
 import { Container } from "./ProfileStats.style";
 
 interface Props {
-    player: Profile;
+    player: ProfileType;
     matches: MatchRecord[];
 }
 

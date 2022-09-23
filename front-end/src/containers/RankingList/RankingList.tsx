@@ -8,13 +8,13 @@ import {
 } from "./RankingList.style";
 
 // Types
-import { Profile } from "../../types/profile";
+import { ProfileType } from "../../types/profile";
 
 // Routing
 import { Link } from "react-router-dom";
 
 interface Props {
-    rankings: Profile[];
+    rankings: ProfileType[];
 }
 
 const RankingList = ({ rankings }: Props) => (
@@ -22,7 +22,7 @@ const RankingList = ({ rankings }: Props) => (
         {rankings.length > 0 &&
             rankings.map(
                 (
-                    { username, rank, img_url, wins }: Profile,
+                    { username, rank, img_url, wins }: ProfileType,
                     count: number
                 ) => (
                     <Entry key={count}>

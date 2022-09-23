@@ -12,7 +12,7 @@ import ChatBox from "../containers/ChatBox";
 import { GroupChat } from "../types/chat";
 
 // Requests
-// import getChatByUserName from "../proxies/chat/getChatsByUserName";
+import getChatByUserName from "../proxies/chat/getChatsByUserName";
 
 // Auth
 import { useAuth } from "../contexts/AuthContext";
@@ -32,7 +32,7 @@ const Chat = () => {
     useEffect(() => {
         if (user !== null) {
             setGroupChats(chats);
-            // getChatByUserName(user.username, authToken)
+            // getChatByUserName<GroupChat[]>(user.username, authToken)
             //     .then((returnedChats) => {
             //         setGroupChats(returnedChats as GroupChat[]);
             //     })

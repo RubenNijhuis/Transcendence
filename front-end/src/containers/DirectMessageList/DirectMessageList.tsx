@@ -6,7 +6,7 @@ import Heading from "../../components/Heading";
 import { useAuth } from "../../contexts/AuthContext";
 
 // Types
-import { Profile } from "../../types/profile";
+import { ProfileType } from "../../types/profile";
 import { GroupChat } from "../../types/chat";
 
 // Stylinh
@@ -32,7 +32,7 @@ const DirectMessageList = ({
             </div>
             <ul className="list">
                 {directMessages.map(({ members, messages }, count) => {
-                    const otherMembers: Profile[] = members.filter(
+                    const otherMembers: ProfileType[] = members.filter(
                         (member) => member.username !== user!.username
                     );
 

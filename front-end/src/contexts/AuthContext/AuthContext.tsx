@@ -2,8 +2,8 @@
 import { createContext, useContext, useState } from "react";
 
 // Types
-import { LoginConfirmResponse } from "../../types/request";
-import { Profile } from "../../types/profile";
+import { LoginConfirmResponse, AuthTokenType } from "../../types/request";
+import { ProfileType } from "../../types/profile";
 
 // Requests
 import loginConfirm from "../../proxies/auth/confirmLogin";
@@ -11,16 +11,16 @@ import transformToRequestError from "../../proxies/utils/transformToRequestError
 
 // Define what the auth context contains
 interface AuthContextType {
-    user: Profile;
-    setUser: React.Dispatch<React.SetStateAction<Profile>>;
+    user: ProfileType;
+    setUser: React.Dispatch<React.SetStateAction<ProfileType>>;
 
     isLoggedIn: boolean;
     setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 
-    authToken: string;
-    setAuthToken: React.Dispatch<React.SetStateAction<string>>;
+    authToken: AuthTokenType;
+    setAuthToken: React.Dispatch<React.SetStateAction<AuthTokenType>>;
 
-    signIn(code: string): any;
+    signIn(code: string): Promise<LoginConfirmResponse>;
 }
 
 // Create the context
@@ -34,9 +34,9 @@ const useAuth = () => useContext(AuthContext);
  * the user data as well as the utility functions like login and logout
  */
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, setUser] = useState<Profile>(null!);
+    const [user, setUser] = useState<ProfileType>(null!);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
-    const [authToken, setAuthToken] = useState<string>(null!);
+    const [authToken, setAuthToken] = useState<AuthTokenType>(null!);
 
     /**
      * Makes a request to the back-end using the intra code. The expected
@@ -45,12 +45,14 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
      */
     const signIn = async (code: string): Promise<LoginConfirmResponse> => {
         try {
-            const res: LoginConfirmResponse = await loginConfirm(code);
+            const res = await loginConfirm(code);
 
-            setAuthToken(res.authToken);
+            const { authToken, profile } = res;
 
-            if (res.profile !== null) {
-                setUser(res.profile);
+            setAuthToken(authToken);
+
+            if (profile !== null) {
+                setUser(profile);
                 setLoggedIn(true);
             }
 

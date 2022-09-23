@@ -1,12 +1,12 @@
 import { ReactElement, useState } from "react";
-import { Profile } from "../../../types/profile";
+import { ProfileType } from "../../../types/profile";
 import randomIntFromInterval from "../../../utils/randomNumFromInterval";
 import Button from "../../Button";
 import Heading from "../../Heading";
 import { Container, UserStatusDisplay } from "./ProfileActions.style";
 
 interface Props {
-    profile: Profile;
+    profile: ProfileType;
 }
 
 const UserStatus = () => {
