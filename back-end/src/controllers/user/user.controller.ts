@@ -1,3 +1,4 @@
+// basic nest functionallity
 import {
   Body,
   Controller,
@@ -11,17 +12,51 @@ import {
   UsePipes,
   ValidationPipe
 } from "@nestjs/common";
-import { MulterModule } from "@nestjs/platform-express";
+
+
+// dto for non-empty username
 import { UsernameDto } from "src/dtos/auth/username.dto";
-import { seederConfig } from "src/configs/seeder/seeder.config";
-import { UserSeeder } from "src/database/seeds/user-create.seed";
+
+// dto for creating user
 import { CreateUserDto } from "src/dtos/user/create-user.dto";
-import { UserService } from "src/services/user/user.service";
+
+// dto for image upload
 import { UploadImgDto } from "../../dtos/database/upload-img.dto";
+
+// user functionalities
+import { UserService } from "src/services/user/user.service";
+
+// seeding config
+import { seederConfig } from "src/configs/seeder/seeder.config";
+
+// seeding entity
+import { UserSeeder } from "src/database/seeds/user-create.seed";
+
+// user entity
 import User from "../../entities/user/user.entity";
+
+// file upload library
+import { MulterModule } from "@nestjs/platform-express";
+import UserRoutes from "src/configs/routes/globalRoutes.config";
 const multer = require("multer");
 
-@Controller("users")
+/**
+ * The user controller will act as the first entry point for user related api calls.
+ * 
+ * The user api functionality contains:
+ * - getting all users or a specified user
+ * - creating and removing a specified user
+ * - enabling 2fa
+ * - setting the banner/profile picture
+ * - seeding the database with random users
+ */
+
+/**
+ * TO DO
+ * - standarize uploading images
+ */
+
+@Controller(UserRoutes.prefix)
 export class UsersController {
   constructor(private readonly userService: UserService) {}
 
@@ -30,7 +65,7 @@ export class UsersController {
     return this.userService.getUsers();
   }
 
-  @Get("id/:username")
+  @Get(UserRoutes.getUserOnName)
   findUsersById(@Res() res: Response, username: string) {
     try {
       return this.userService.findUserByUsername(username);
@@ -39,9 +74,9 @@ export class UsersController {
     }
   }
 
-  @Post("create")
+  @Post(UserRoutes.create)
   @UsePipes(ValidationPipe)
-  async createUsers(@Body() createUserDto: CreateUserDto): Promise<any> {
+  async createUser(@Body() createUserDto: CreateUserDto): Promise<any> {
     try {
       const user: User = await this.userService.createUser(createUserDto);
       const ret = user;
@@ -52,11 +87,28 @@ export class UsersController {
     }
   }
 
-  @Get("seeder")
-  async seedUsers() {
-    // Creates 200 users
-    const seed = new UserSeeder({ seedingSource: seederConfig });
-    await seed.run();
+  @Post(UserRoutes.remove)
+  @UsePipes(ValidationPipe)
+  async removeUser(@Body() dto: UsernameDto) {
+    try {
+      const ret = await this.userService.removeUser(dto.username);
+    } catch (error) {
+      return error;
+    }
+  }
+
+  @Post(UserRoutes.enableTfa)
+  @UsePipes(ValidationPipe) //what does this do
+  async turnon2fa(@Body() dto: UsernameDto) {
+    // const isCodeValid = this.userService.isTwoFactorAuthenticationCodeValid(twoFaDto);
+    // if (!isCodeValid) {
+    //     throw new UnauthorizedException('Wrong authentication code');
+    // }
+    try {
+      await this.userService.setTfa(dto, true);
+    } catch (error) {
+      return error;
+    }
   }
 
   @Post("upload-img")
@@ -90,17 +142,10 @@ export class UsersController {
     });
   }
 
-  @Post("turnon2fa")
-  @UsePipes(ValidationPipe) //what does this do
-  async turnon2fa(@Body() usernameDto: UsernameDto) {
-    // const isCodeValid = this.userService.isTwoFactorAuthenticationCodeValid(twoFaDto);
-    // if (!isCodeValid) {
-    //     throw new UnauthorizedException('Wrong authentication code');
-    // }
-    try {
-      await this.userService.turnOn2fa(usernameDto);
-    } catch (error) {
-      return error;
-    }
+  @Get(UserRoutes.seed)
+  async seedUsers() {
+    // Creates 200 users
+    const seed = new UserSeeder({ seedingSource: seederConfig });
+    await seed.run();
   }
 }

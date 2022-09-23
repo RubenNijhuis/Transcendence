@@ -1,11 +1,22 @@
+// random generators for seeding
 import { randColor, randFullName, randParagraph } from "@ngneat/falso";
+
+// status and basic injectable
 import { HttpStatus, Injectable } from "@nestjs/common";
+
+// typeorm sql injection library
 import { InjectRepository } from "@nestjs/typeorm";
+
+// user entity
 import { User } from "src/entities";
+
+// typeorm repository manipulation
 import { DeleteResult, Repository, UpdateResult } from "typeorm";
+
+// user dto
 import { CreateUserDto } from "src/dtos/user/create-user.dto";
-import { authenticator } from "otplib";
-import { toDataURL } from "qrcode";
+
+// dto to check for non empty username
 import { UsernameDto } from "src/dtos/auth/username.dto";
 
 @Injectable()
@@ -81,14 +92,6 @@ export class UserService {
       .execute();
   }
 
-  // setTwoFactorAuthSecret(id: number, twoFactorAuthenticationSecret: string) {
-  //   return this.userRepository.update( id, {twoFactorAuthenticationSecret,} );
-  // }
-
-  // async setTwoFactorAuthenticationSecret(secret: string, userId: number) {
-  //   this.setTwoFactorAuthSecret(userId, secret);
-  // }
-
   async seedCustom(amount: number): Promise<HttpStatus> {
     try {
       for (let i = 1; i <= amount; i++) {
@@ -103,34 +106,14 @@ export class UserService {
       return HttpStatus.INTERNAL_SERVER_ERROR;
     }
   }
-  // WE NEED TO SPECIFY WHAT THIS RETURNS
-  generateTwoFactorAuthenticationSecret(user: User): string {
-    const secret = authenticator.generateSecret();
-    console.log(secret);
 
-    const otpauthUrl = authenticator.keyuri(
-      "mehj177@gmail.com",
-      "AUTH_APP_NAME",
-      secret
-    );
-
-    console.log(otpauthUrl);
-    return toDataURL(otpauthUrl);
-    // await this.setTwoFactorAuthenticationSecret(secret, user.id);
-    // console.log(user.twoFactorAuthenticationSecret);
-    // return {
-    //   secret,
-    //   otpauthUrl
-    // }
-  }
-
-  async turnOn2fa(usernameDto: UsernameDto): Promise<UpdateResult> {
+  async setTfa(usernameDto: UsernameDto, option: boolean): Promise<UpdateResult> {
     const ret = await this.findUserByUsername(usernameDto.username);
 
     return this.userRepository
       .createQueryBuilder()
       .update(ret)
-      .set({ isTfaEnabled: true })
+      .set({ isTfaEnabled: option })
       .where({ id: ret.id })
       .returning("*")
       .execute();
