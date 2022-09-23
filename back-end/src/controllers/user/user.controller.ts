@@ -37,7 +37,7 @@ export class UsersController {
     try {
       return this.userService.findUserByUsername(username);
     } catch (error) {
-      res.status;
+      return error;
     }
   }
 
