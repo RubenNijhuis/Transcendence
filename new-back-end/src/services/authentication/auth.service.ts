@@ -4,6 +4,9 @@ import Axios from "axios";
 import { User } from "src/entities";
 import { UserService } from "../user/user.service";
 import { JwtService } from "@nestjs/jwt";
+import { bcrypt } from "bcrypt"
+
+const jwt = require("jsonwebtoken");
 
 type PayloadType = {
   username: string;
@@ -98,14 +101,25 @@ export class AuthService {
     };
   }
 
-  async refreshTokens(username: string, refreshToken: string) {
-    const user = await this.userService.findUserByUsername(username);
+  async refreshTokens(refreshToken: string) {
+    const secret = this.configService.get<string>('JWT_REFRESH_SECRET')
+    const isValidRefToken = jwt.verify(
+      refreshToken, secret
+    );
+    if (!isValidRefToken)
+      throw new ForbiddenException('Access Denied');
+
+    const decoded = this.jwtService.decode(refreshToken) as PayloadType;
+    if (!decoded)
+      throw new ForbiddenException('Access Denied');
+    const user = await this.userService.findUserByUsername(decoded.username);
     if (!user || !user.refreshToken)
       throw new ForbiddenException('Access Denied');
-      if (user.refreshToken != refreshToken)
-        throw new ForbiddenException('Access Denied');
+    if (refreshToken != user.refreshToken)
+      throw new ForbiddenException('Access Denied');
     const tokens = await this.getTokens(user.username);
-    const CreateUserDto = { username: username };
+
+    const CreateUserDto = { username: decoded.username };
     await this.userService.addRefreshToken(CreateUserDto, tokens.refreshToken);
     return tokens;
   }
