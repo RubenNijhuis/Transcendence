@@ -6,7 +6,7 @@ import {
   Get,
   Post
 } from "@nestjs/common";
-import { MakeAdminDto } from "src/dtos/group";
+import { MakeAdminDto } from "src/dtos/group/make-admin.dto";
 import { EditMembersDto } from "src/dtos/group/edit-members.dto";
 import { GroupService } from "src/services/group/group.service";
 import { CreateGroupDto } from "../../dtos/group/create-group.dto";

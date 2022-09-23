@@ -2,23 +2,23 @@
 import {
   Body,
   Controller,
-  FileTypeValidator,
   Get,
-  MaxFileSizeValidator,
-  ParseFilePipe,
   Post,
   Res,
   UploadedFile,
+  UseInterceptors,
   UsePipes,
   ValidationPipe
 } from "@nestjs/common";
 
+// route config
+import UserRoutes from "src/configs/routes/globalRoutes.config";
 
 // dtos
 import { UsernameDto } from "src/dtos/auth/username.dto";
 import { SetTfaDto } from "src/dtos/auth/setTfa.dto";
 import { CreateUserDto } from "src/dtos/user/create-user.dto";
-import { UploadImgDto } from "../../dtos/database/upload-img.dto";
+import { SeederAmountDto } from "src/dtos/seeder/custom-seeder.dto";
 
 // user functionalities
 import { UserService } from "src/services/user/user.service";
@@ -32,11 +32,11 @@ import { UserSeeder } from "src/database/seeds/user-create.seed";
 // user entity
 import User from "../../entities/user/user.entity";
 
+// image upload pipe config
+import { bannerStorage, imgFilter, profileStorage } from "src/middleware/imgUpload/imgUpload";
+
 // file upload library
-import { MulterModule } from "@nestjs/platform-express";
-import UserRoutes from "src/configs/routes/globalRoutes.config";
-import { SeederAmountDto } from "src/dtos/seeder/custom-seeder.dto";
-const multer = require("multer");
+import { FileInterceptor } from "@nestjs/platform-express";
 
 /**
  * The user controller will act as the first entry point for user related api calls.
@@ -111,35 +111,30 @@ export class UsersController {
     }
   }
 
-  @Post("upload-img")
-  async uploadImg(
-    @Body() upload: UploadImgDto,
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [
-          new MaxFileSizeValidator({
-            maxSize: 1000
-          }),
-          new FileTypeValidator({
-            fileType: "jpeg"
-          })
-        ]
-      })
-    )
-    file: Express.Multer.File
-  ) {
-    const storage = multer.diskStorage({
-      destination: function (req, file, cb) {
-        cb(null, "/src/uploads");
-      },
-      filename: function (req, file, cb) {
-        const uniqueSuffix = upload.intraId; // get this from jwt
-        cb(null, file.fieldname + "-" + uniqueSuffix);
-      }
-    });
-    const ret = MulterModule.register({
-      dest: "src/uploads" + upload.type
-    });
+  @Post(UserRoutes.uploadBannerPic)
+  @UseInterceptors(FileInterceptor('image', {
+    storage: bannerStorage("username taken from jwt"),
+    fileFilter: imgFilter
+  }))
+  async uploadBanner(@UploadedFile() file) {
+    const response = {
+      originalname: file.originalname,
+      filename: file.filename,
+    };
+    return response;
+  }
+
+  @Post(UserRoutes.uploadProfilePic)
+  @UseInterceptors(FileInterceptor('image', {
+    storage: profileStorage("username taken from jwt"),
+    fileFilter: imgFilter
+  }))
+  async uploadProfile(@UploadedFile() file) {
+    const response = {
+      originalname: file.originalname,
+      filename: file.filename,
+    };
+    return response;
   }
 
   @Get(UserRoutes.seed)

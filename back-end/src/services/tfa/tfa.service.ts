@@ -1,7 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { authenticator } from "otplib";
 import { toDataURL } from "qrcode";
-import { TfaDto, UsernameDto } from "src/dtos/auth";
+import { TfaDto } from "src/dtos/auth/tfa.dto";
+import { UsernameDto } from "src/dtos/auth/username.dto";
 import { UserService } from "../user/user.service";
 
 @Injectable()

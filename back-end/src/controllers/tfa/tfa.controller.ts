@@ -7,9 +7,10 @@ import {
   UseGuards
 } from "@nestjs/common";
 import { Response } from "express";
-import { TfaDto, UsernameDto } from "src/dtos/auth";
 import { TfaService } from "src/services/tfa/tfa.service";
 import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
+import { UsernameDto } from "src/dtos/auth/username.dto";
+import { TfaDto } from "src/dtos/auth/tfa.dto";
 
 @Controller("tfa")
 export class TfaController {

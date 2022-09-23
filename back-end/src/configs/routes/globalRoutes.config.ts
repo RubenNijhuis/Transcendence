@@ -28,7 +28,7 @@ const UserRoutes = {
     enableTfa: "enable2fa",
 
     // uploading banner pic
-    uploadBanner: "upload-banner",
+    uploadBannerPic: "upload-banner-pic",
 
     // uploading profile pic
     uploadProfilePic: "upload-profile-pic",
