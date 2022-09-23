@@ -1,9 +1,0 @@
-node_modules
-dist
-npm-debug.log
-.dockerignore
-.env
-.tsconfig.build.json
-nest-cli.json
-README.md
-docker
