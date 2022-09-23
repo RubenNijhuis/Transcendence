@@ -6,3 +6,4 @@ npm-debug.log
 .tsconfig.build.json
 nest-cli.json
 README.md
+docker
