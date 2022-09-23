@@ -14,13 +14,10 @@ import {
 } from "@nestjs/common";
 
 
-// dto for non-empty username
+// dtos
 import { UsernameDto } from "src/dtos/auth/username.dto";
-
-// dto for creating user
+import { SetTfaDto } from "src/dtos/auth/setTfa.dto";
 import { CreateUserDto } from "src/dtos/user/create-user.dto";
-
-// dto for image upload
 import { UploadImgDto } from "../../dtos/database/upload-img.dto";
 
 // user functionalities
@@ -99,7 +96,7 @@ export class UsersController {
 
   @Post(UserRoutes.enableTfa)
   @UsePipes(ValidationPipe) //what does this do
-  async turnon2fa(@Body() dto: UsernameDto) {
+  async turnon2fa(@Body() dto: SetTfaDto) {
     // const isCodeValid = this.userService.isTwoFactorAuthenticationCodeValid(twoFaDto);
     // if (!isCodeValid) {
     //     throw new UnauthorizedException('Wrong authentication code');
