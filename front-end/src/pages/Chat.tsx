@@ -44,18 +44,20 @@ const Chat = () => {
 
     return (
         <Layout>
-            {groupChats !== null ? (
-                <ChatInterface>
-                    <DirectMessageList
-                        directMessages={groupChats}
-                        selectedChat={selectedChat}
-                        setSelectedChat={setSelectedChat}
-                    />
-                    <ChatBox chat={groupChats[selectedChat]} />
-                </ChatInterface>
-            ) : (
-                <Loader />
-            )}
+            <ChatInterface>
+                {groupChats !== null ? (
+                    <>
+                        <DirectMessageList
+                            directMessages={groupChats}
+                            selectedChat={selectedChat}
+                            setSelectedChat={setSelectedChat}
+                        />
+                        <ChatBox chat={groupChats[selectedChat]} />
+                    </>
+                ) : (
+                    <Loader />
+                )}
+            </ChatInterface>
         </Layout>
     );
 };

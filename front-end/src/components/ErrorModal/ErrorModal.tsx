@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 
 // Types
-import { RequestError } from "../../types/request";
+import { RequestErrorType } from "../../types/request";
 
 // Loggeer
 import Logger from "../../utils/Logger";
@@ -14,7 +14,7 @@ import Heading from "../Heading";
 import { Container, Modal } from "./ErrorModal.style";
 
 interface Props {
-    error: RequestError;
+    error: RequestErrorType;
     setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

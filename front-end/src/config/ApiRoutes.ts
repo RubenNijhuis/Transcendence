@@ -2,24 +2,24 @@
  * All routes the front-end uses to interact with the api/backend
  *
  * Every path is a function as sometimes a parameter might
- * be required to create a full path. To keep it simple every 
+ * be required to create a full path. To keep it simple every
  * route is a function
  */
-
 const ApiRoutes = {
     // User
-    createUser: () => `/api/users/create`,
-    getUserByUserName: (userName: string) => `/api/user/${userName}`,
+    createUser: () => `/users/create`,
+    getUserByUserName: (userName: string) => `/user/${userName}`,
 
     // Chat
-    getChatByUserName: (userName: string) => `/api/chats/${userName}`,
+    getChatByUserName: (userName: string) => `/chats/${userName}`,
 
     // Leaderboard
-    getLeaderboard: () => `/api/leaderboard`,
+    getLeaderboard: () => `/leaderboard`,
 
     // Auth
-    confirmLogin: (code: string) => `/api/auth/confirm?token=${code}`,
-    getLoginRoute: () => `/api/auth/login`
+    confirmLogin: (code: string) => `/auth/confirm?token=${code}`,
+    getLoginRoute: () => `/auth/login`,
+    validateCredentials: () => `/auth/noCRED`
 };
 
 export default ApiRoutes;

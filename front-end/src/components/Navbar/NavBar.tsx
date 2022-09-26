@@ -18,13 +18,13 @@ import startLogin from "../../proxies/auth/startLogin";
 import Logger from "../../utils/Logger";
 
 // Types
-import { RequestError } from "../../types/request";
+import { RequestErrorType } from "../../types/request";
 
 const CTAButton = ({ authStatus }: { authStatus: boolean }) => {
     const toLoginPage = () => {
         startLogin()
             .then((url: string) => window.location.assign(url))
-            .catch((err: RequestError) => {
+            .catch((err: RequestErrorType) => {
                 Logger("ERROR", "Navbar", "Req login page url", err);
             });
     };

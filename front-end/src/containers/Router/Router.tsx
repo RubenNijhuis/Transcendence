@@ -16,13 +16,13 @@ import Leaderboard from "../../pages/Leaderboard";
 import Pong from "../../pages/Pong";
 import NewPongGame from "../../pages/NewPongGame";
 
-// 404
-import NotFound from "../../pages/NotFound";
-
 // Authentication
 import Guard from "../Guard";
 import SuccesfulLogin from "../../pages/SuccesfulLogin";
 import CreateAccount from "../../pages/CreateAccount";
+
+// 404
+import NotFound from "../../pages/NotFound";
 
 const Router = () => (
     <BrowserRouter>

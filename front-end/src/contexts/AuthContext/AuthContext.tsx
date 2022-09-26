@@ -1,13 +1,25 @@
 // A lot of this was taken from https://stackblitz.com/github/remix-run/react-router/tree/main/examples/auth?file=src%2FApp.tsx
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 // Types
-import { LoginConfirmResponse, AuthTokenType } from "../../types/request";
+import {
+    LoginConfirmResponse,
+    AuthTokenType,
+    AuthStatusType
+} from "../../types/request";
 import { ProfileType } from "../../types/profile";
 
 // Requests
 import loginConfirm from "../../proxies/auth/confirmLogin";
 import transformToRequestError from "../../proxies/utils/transformToRequestError";
+
+import { getItem } from "../../modules/LocalStore";
+<<<<<<< Updated upstream
+import LocalStoreIdentifiers from "../../config/LocalStoreIdentifiers";
+=======
+import CredentialIdentifiers from "../../config/CredentialIdentifiers";
+>>>>>>> Stashed changes
+// import confirmCredentials from "../../proxies/auth/confirmCredentials";
 
 // Define what the auth context contains
 interface AuthContextType {
@@ -38,6 +50,33 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [authToken, setAuthToken] = useState<AuthTokenType>(null!);
 
+    // useEffect(() => {
+    //     const savedCredentials = getItem<AuthTokenType>(
+<<<<<<< Updated upstream
+    //         LocalStoreIdentifiers.authToken
+=======
+    //         CredentialIdentifiers.authToken
+>>>>>>> Stashed changes
+    //     );
+
+    //     if (savedCredentials !== null) {
+    //         confirmCredentials(savedCredentials).then(
+    //             (state: AuthStatusType) => {
+    //                 if (state === AuthStatusType.Valid) {
+    //                     setAuthToken(savedCredentials);
+    //                     setLoggedIn(true);
+    //                 } else if (state === AuthStatusType.Invalid) {
+    //                     // get new token
+    //                 } else if (state === AuthStatusType.Revoked) {
+    //                     // account has been blocked forever
+    //                 }
+    //             }
+    //         );
+    //     } else {
+    //         console.log(" no tokens set ");
+    //     }
+    // }, []);
+
     /**
      * Makes a request to the back-end using the intra code. The expected
      * return value is a user as well as a bool indicating whether to
@@ -45,9 +84,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
      */
     const signIn = async (code: string): Promise<LoginConfirmResponse> => {
         try {
-            const res = await loginConfirm(code);
+            const data = await loginConfirm(code);
 
-            const { authToken, profile } = res;
+            const { authToken, profile } = data;
 
             setAuthToken(authToken);
 
@@ -56,7 +95,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 setLoggedIn(true);
             }
 
-            return Promise.resolve(res);
+            return Promise.resolve(data);
         } catch (err: any) {
             return Promise.reject(transformToRequestError(err));
         }

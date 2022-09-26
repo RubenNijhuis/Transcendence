@@ -20,31 +20,23 @@ interface Props {
 const RankingList = ({ rankings }: Props) => (
     <EntryList>
         {rankings.length > 0 &&
-            rankings.map(
-                (
-                    { username, rank, img_url, wins }: ProfileType,
-                    count: number
-                ) => (
-                    <Entry key={count}>
-                        <ProfileData>
-                            <span>{rank}</span>
-                            <ImageContainer>
-                                <img
-                                    src={img_url}
-                                    alt={`profile of ${username}`}
-                                />
-                            </ImageContainer>
-                        </ProfileData>
-                        <GameData>
-                            <Link to={`/profile/${username}`}>
-                                <h3>{username}</h3>
-                            </Link>
-                            <span>Games won: {wins}</span>
-                            <span>Elo: 100</span>
-                        </GameData>
-                    </Entry>
-                )
-            )}
+            rankings.map(({ username, rank, img_url, wins }, count) => (
+                <Entry key={count}>
+                    <ProfileData>
+                        <span>{rank}</span>
+                        <ImageContainer>
+                            <img src={img_url} alt={`profile of ${username}`} />
+                        </ImageContainer>
+                    </ProfileData>
+                    <GameData>
+                        <Link to={`/profile/${username}`}>
+                            <h3>{username}</h3>
+                        </Link>
+                        <span>Games won: {wins}</span>
+                        <span>Elo: 100</span>
+                    </GameData>
+                </Entry>
+            ))}
     </EntryList>
 );
 

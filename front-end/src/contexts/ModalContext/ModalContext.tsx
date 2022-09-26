@@ -5,13 +5,13 @@ import React, { createContext, useContext, useState } from "react";
 import ErrorModal from "../../components/ErrorModal";
 
 // Types
-import { RequestError } from "../../types/request";
+import { RequestErrorType } from "../../types/request";
 
 interface ModalContextType {
     isModalOpen: boolean;
     setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
-    error: RequestError;
+    error: RequestErrorType;
     setError: React.Dispatch<React.SetStateAction<any>>;
 }
 

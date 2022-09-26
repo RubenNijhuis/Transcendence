@@ -15,7 +15,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 // Types
 import { ProfileType } from "../types/profile";
-import { RequestError } from "../types/request";
+import { RequestErrorType } from "../types/request";
 
 // Debug
 import { useModal } from "../contexts/ModalContext";
@@ -28,7 +28,7 @@ const Leaderboard = () => {
     useEffect(() => {
         getLeaderboard(authToken)
             .then(setLeaderboard)
-            .catch((err: RequestError) => {
+            .catch((err: RequestErrorType) => {
                 setError(err);
                 setIsModalOpen(true);
             });

@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 import createUser from "../proxies/user/createUser";
 
 // Types
-import { RequestError } from "../types/request";
+import { RequestErrorType } from "../types/request";
 import { ProfileType } from "../types/profile";
 
 // Page routes
@@ -95,7 +95,7 @@ const CreateAccount = () => {
                 setLoggedIn(true);
                 navigate(PageRoutes.profile);
             })
-            .catch((err: RequestError) => {
+            .catch((err: RequestErrorType) => {
                 setError(err);
                 setIsModalOpen(true);
             });

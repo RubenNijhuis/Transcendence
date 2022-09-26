@@ -19,7 +19,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 // Types
 import { ProfileType } from "../types/profile";
-import { RequestError } from "../types/request";
+import { RequestErrorType } from "../types/request";
 
 // Styling constants
 import { largeRadius, mainColor } from "../styles/StylingConstants";
@@ -57,7 +57,7 @@ const ProfilePage = () => {
         else {
             getUserByUsername(userName, authToken)
                 .then(setSelectedProfile)
-                .catch((err: RequestError) => {
+                .catch((err: RequestErrorType) => {
                     setError(err);
                     setIsModalOpen(true);
                 });

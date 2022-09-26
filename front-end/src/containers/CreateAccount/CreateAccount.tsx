@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 import createUser from "../../proxies/user/createUser";
 
 // Types
-import { RequestError } from "../../types/request";
+import { RequestErrorType } from "../../types/request";
 import { ProfileType } from "../../types/profile";
 
 // Page routes
@@ -93,9 +93,10 @@ const CreateAccount = () => {
             .then((returnedUserProfile: ProfileType) => {
                 setUser(returnedUserProfile);
                 setLoggedIn(true);
+                console.log("REROUTED AFTER CREATION");
                 navigate(PageRoutes.profile);
             })
-            .catch((err: RequestError) => {
+            .catch((err: RequestErrorType) => {
                 setError(err);
                 setIsModalOpen(true);
             });

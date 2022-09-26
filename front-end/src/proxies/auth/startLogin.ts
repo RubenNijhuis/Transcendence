@@ -1,15 +1,13 @@
-// Api Routes
+// API Request config
 import ApiRoutes from "../../config/ApiRoutes";
-
-// Requests
-import axios from "axios";
+import { API } from "../instances/apiInstance";
 
 // Types
 import transformToRequestError from "../utils/transformToRequestError";
 
 const startLogin = async (): Promise<string> => {
     try {
-        const { data } = await axios.get(ApiRoutes.getLoginRoute());
+        const { data } = await API.get(ApiRoutes.getLoginRoute());
         return Promise.resolve(data);
     } catch (err: any) {
         return Promise.reject(transformToRequestError(err));

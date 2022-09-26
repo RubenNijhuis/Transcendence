@@ -1,11 +1,18 @@
 import { ProfileType } from "./profile";
 
+// Game types
+const enum AuthStatusType {
+    Valid,
+    Invalid,
+    Revoked
+}
+
 interface AuthTokenType {
     jsonWebToken: string;
     refreshToken: string;
 }
 
-interface RequestError {
+interface RequestErrorType {
     error: string;
     requestUrl: string;
     type: string;
@@ -17,4 +24,6 @@ interface LoginConfirmResponse {
     authToken: AuthTokenType;
 }
 
-export type { RequestError, LoginConfirmResponse, AuthTokenType };
+export type { RequestErrorType, LoginConfirmResponse, AuthTokenType };
+
+export { AuthStatusType };

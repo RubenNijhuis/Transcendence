@@ -1,13 +1,13 @@
 import { AxiosError } from "axios";
-import { RequestError } from "../../types/request";
+import { RequestErrorType } from "../../types/request";
 
 /**
- * Transforms an Axios request error into a RequestError type
+ * Transforms an Axios request error into a RequestErrorType type
  * @param err The request error
- * @returns RequestError
+ * @returns RequestErrorType
  */
-const transformToRequestError = (err: AxiosError): RequestError => {
-    const returnedError: RequestError = {
+const transformToRequestError = (err: AxiosError): RequestErrorType => {
+    const returnedError: RequestErrorType = {
         error: JSON.stringify(err, null, 4).replace(/"/g, ""),
         type: "",
         requestUrl: err.request.responseURL
