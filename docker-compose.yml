@@ -22,6 +22,7 @@ services:
       - ./back-end/env/.env
     volumes:
       - ./back-end:/app
+      - /app/node_modules/bcrypt/
     ports:
       - "3000:3000"
     depends_on:

@@ -11,10 +11,10 @@ import BronzeCrown from "../../../assets/accesoires/bronze-crown.svg";
 import { Container } from "./ProfileDisplay.style";
 
 // Types
-import { Profile } from "../../../types/profile";
+import { ProfileType } from "../../../types/profile";
 
 interface Props {
-    user: Profile;
+    user: ProfileType;
 }
 
 const RankDisplay = ({ rank }: { rank: number }) => {

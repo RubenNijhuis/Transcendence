@@ -1,15 +1,16 @@
 // Request
 import axios from "axios";
 
-// Types
-import { Profile } from "../../types/profile";
-
 // Auth
 import { getAuthHeader } from "../utils/authToken";
+
+// Types
+import { ProfileType } from "../../types/profile";
 
 // Api Routes
 import ApiRoutes from "../../config/ApiRoutes";
 import transformToRequestError from "../utils/transformToRequestError";
+import { AuthTokenType } from "../../types/request";
 
 interface createUserProps {
     username: string;
@@ -19,12 +20,16 @@ interface createUserProps {
 
 const createUser = async (
     userData: createUserProps,
-    authToken: string
-): Promise<Profile> => {
+    authToken: AuthTokenType
+): Promise<ProfileType> => {
     try {
-        const { data } = await axios.post(ApiRoutes.createUser(), userData, {
-            headers: getAuthHeader(authToken)
-        });
+        const { data } = await axios.post<ProfileType>(
+            ApiRoutes.createUser(),
+            userData,
+            {
+                headers: getAuthHeader(authToken)
+            }
+        );
         return Promise.resolve(data);
     } catch (err: any) {
         return Promise.reject(transformToRequestError(err));

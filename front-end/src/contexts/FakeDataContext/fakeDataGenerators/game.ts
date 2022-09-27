@@ -1,6 +1,6 @@
 // Types
 import { MatchRecord } from "../../../types/game";
-import { Profile } from "../../../types/profile";
+import { ProfileType } from "../../../types/profile";
 
 // Random int
 import randomIntFromInterval from "../../../utils/randomNumFromInterval";
@@ -8,10 +8,10 @@ import randomIntFromInterval from "../../../utils/randomNumFromInterval";
 // Random player
 import { generateProfile } from "./profile";
 
-const generateGameResult = (player: Profile, amount: number): MatchRecord[] => {
+const generateGameResult = (player: ProfileType, amount: number): MatchRecord[] => {
     const matchRecordList: MatchRecord[] = [];
 
-    const opponents: Profile[] = generateProfile(amount);
+    const opponents: ProfileType[] = generateProfile(amount);
 
     for (let i = 0; i < amount; i++) {
         const winOrLose: number = randomIntFromInterval(0, 1);

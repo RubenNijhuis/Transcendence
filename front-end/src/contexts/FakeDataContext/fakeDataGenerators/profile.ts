@@ -4,7 +4,7 @@ import { get_img_url } from "./utils";
 import randomIntFromInterval from "../../../utils/randomNumFromInterval";
 
 // Types
-import { Profile } from "../../../types/profile";
+import { ProfileType } from "../../../types/profile";
 
 const names = [
     "RelaxZest",
@@ -69,8 +69,8 @@ const names = [
     "Toughpetr"
 ];
 
-const generateProfile = (amount: number): Profile[] => {
-    const profileList: Profile[] = [];
+const generateProfile = (amount: number): ProfileType[] => {
+    const profileList: ProfileType[] = [];
 
     for (let i = 0; i < amount; i++) {
         const username: string =
@@ -98,7 +98,7 @@ const generateProfile = (amount: number): Profile[] => {
         const wins: number = randomIntFromInterval(1, 100);
         const losses: number = randomIntFromInterval(1, 100);
 
-        const newProfile: Profile = {
+        const newProfile: ProfileType = {
             username,
             banner_url,
             color,

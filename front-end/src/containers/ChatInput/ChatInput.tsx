@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 // Types
-import { Profile } from "../../types/profile";
+import { ProfileType } from "../../types/profile";
 import { GameType } from "../../types/game";
 import {
     GroupChat,
@@ -19,12 +19,12 @@ import { Container, SelectTypeIcon, SelectionBox } from "./ChatInput.style";
 import Logger from "../../utils/Logger";
 
 interface Props {
-    user: Profile;
+    user: ProfileType;
     groupchat: GroupChat;
 }
 
 interface MessageTypeSelectProps {
-    sender: Profile;
+    sender: ProfileType;
     groupchat: GroupChat;
     messageType: MessageContentType;
     setMessageType: React.Dispatch<React.SetStateAction<MessageContentType>>;

@@ -13,10 +13,11 @@ import { User } from "src/entities";
 // typeorm repository manipulation
 import { DeleteResult, Repository, TypeORMError, UpdateResult } from "typeorm";
 
-// user dto
-import { CreateUserDto } from "src/dtos/user/create-user.dto";
+// idk, angi wat is deze
+import * as bcrypt from 'bcrypt';
 
-// dto to check for non empty username
+// dtos
+import { CreateUserDto } from "src/dtos/user/create-user.dto";
 import { UsernameDto } from "src/dtos/auth/username.dto";
 
 /**
@@ -96,27 +97,28 @@ export class UserService {
     }
   }
 
-  // FUNTION IS NOT YET USED
-  async setJwt(
-    username: string,
-    jwt: string
+  async setRefreshToken(
+    userDto: UsernameDto,
+    token: string
   ): Promise<UpdateResult> {
     try {
-      const user = await this.findUserByUsername(username);
-      const ret = await this.userRepository
+      const user = await this.findUserByUsername(userDto.username);
+      const saltOrRounds = 10;
+      const hash = await bcrypt.hash(token, saltOrRounds);
+
+      return await this.userRepository
       .createQueryBuilder()
       .update(user)
-      .set({ jwtsession_token: jwt })
+      .set({ refreshToken: hash })
       .where({ id: user.id })
       .returning("*")
-      .execute();
-      return Promise.resolve(ret);
+      .execute();      
     } catch (err: any) {
-      return Promise.reject(TypeORMError)
+      return Promise.reject(err) // idk what type of error this could be
     }
   }
 
-  async setTwoFactorAuthSecret(id: number, tfaSecret: string): Promise<any> {
+  async set2faSecret(id: number, tfaSecret: string): Promise<any> {
     try {
       const ret = await this.userRepository.update(id, { tfaSecret });
       return Promise.resolve(ret);
@@ -143,6 +145,14 @@ export class UserService {
       return Promise.reject(TypeORMError)
     }
   }
+
+  // setTwoFactorAuthSecret(id: number, twoFactorAuthenticationSecret: string) {
+  //   return this.userRepository.update( id, {twoFactorAuthenticationSecret,} );
+  // }
+
+  // async setTwoFactorAuthenticationSecret(secret: string, userId: number) {
+  //   this.setTwoFactorAuthSecret(userId, secret);
+  // }
 
   async setTfa(username: string, option: boolean): Promise<UpdateResult> {
     try {

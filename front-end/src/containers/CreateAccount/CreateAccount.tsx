@@ -3,30 +3,30 @@ import { useEffect, useState } from "react";
 
 // Styling
 import styled from "styled-components";
-import { magicNum, smallRadius } from "../styles/StylingConstants";
+import { magicNum, smallRadius } from "../../styles/StylingConstants";
 
 // UI
-import Button from "../components/Button";
-import Heading from "../components/Heading";
-import Layout from "../components/Layout";
+import Button from "../../components/Button";
+import Heading from "../../components/Heading";
+
 // Box slider
-import BoxSlider from "../components/BoxSlider";
-import Slide from "../components/BoxSlider/Slide/Slide";
+import BoxSlider from "../../components/BoxSlider";
+import Slide from "../../components/BoxSlider/Slide/Slide";
 
 // Auth
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import createUser from "../proxies/user/createUser";
+import createUser from "../../proxies/user/createUser";
 
 // Types
-import { RequestError } from "../types/request";
-import { ProfileType } from "../types/profile";
+import { RequestError } from "../../types/request";
+import { ProfileType } from "../../types/profile";
 
 // Page routes
-import PageRoutes from "../config/PageRoutes";
+import PageRoutes from "../../config/PageRoutes";
 
 // Error modal
-import { useModal } from "../contexts/ModalContext";
+import { useModal } from "../../contexts/ModalContext";
 
 // TODO: put styling in different folder
 const StyledInput = styled.div`

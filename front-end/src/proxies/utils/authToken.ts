@@ -1,10 +1,12 @@
+import { AuthTokenType } from "../../types/request";
+
 /**
  * Returns a formatted authorization header.
- * Uses 
+ * Uses
  */
-const getAuthHeader = (authToken: string) => {
+const getAuthHeader = (authToken: AuthTokenType) => {
     const header = {
-        Authorization: `Bearer ${authToken}`
+        Authorization: `Bearer ${authToken.jsonWebToken}`
     };
 
     return header;

@@ -34,11 +34,9 @@ import { UserSeeder } from "src/database/seeds/user-create.seed";
 import User from "../../entities/user/user.entity";
 
 // image upload pipe config
-import { bannerStorage, imgFilter, profileStorage } from "src/middleware/imgUpload/imgUpload";
+import { bannerStorage, imgFilter } from "src/middleware/imgUpload/imgUpload";
 
 // file upload library
-import { FileInterceptor } from "@nestjs/platform-express";
-import { Request } from "express";
 import { MyNewFileInterceptor } from "src/middleware/imgUpload/file-interceptor";
 
 /**
@@ -127,6 +125,19 @@ export class UsersController {
   //   return response;
   // }
 
+    // @Post(UserRoutes.uploadProfilePic)
+  // @UseInterceptors(FileInterceptor('image', {
+  //   storage: profileStorage("tmp"),
+  //   fileFilter: imgFilter
+  // }))
+  // async uploadProfile(@UploadedFile() file) {
+  //   const response = {
+  //     originalname: file.originalname,
+  //     filename: file.filename,
+  //   };
+  //   return response;
+  // }
+
   @Post(UserRoutes.uploadBannerPic)
   @UseInterceptors(MyNewFileInterceptor('image', ctx => {
     const jwt: string = ctx.switchToHttp().getRequest().headers.bearer_token;
@@ -143,19 +154,6 @@ export class UsersController {
     };
     return response;
   }
-
-  // @Post(UserRoutes.uploadProfilePic)
-  // @UseInterceptors(FileInterceptor('image', {
-  //   storage: profileStorage("tmp"),
-  //   fileFilter: imgFilter
-  // }))
-  // async uploadProfile(@UploadedFile() file) {
-  //   const response = {
-  //     originalname: file.originalname,
-  //     filename: file.filename,
-  //   };
-  //   return response;
-  // }
 
   @Get(UserRoutes.seed)
   async seedUsers() {

@@ -1,7 +1,9 @@
-import { Controller, Get, Query } from "@nestjs/common";
+import { Controller, Get, Query, Req, UseGuards } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import Axios from "axios";
+import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
 import { AuthService } from "../../services/authentication/auth.service";
+import { Request } from 'express';
 
 @Controller("Auth")
 export class AuthController {
@@ -35,7 +37,23 @@ export class AuthController {
 
     const userData = await this.authService.getUserData(res.data.access_token);
     const intraID = userData.data.id;
-    console.log(intraID);
-    return this.authService.validateUser(intraID);
+    const username = userData.data.login;
+    console.log("intraID",intraID);
+
+    const tokens = await this.authService.getTokens(username);
+    console.log("tokens:", tokens);
+
+    const CreateUserDto = { username: username };
+    this.authService.addReftoken(CreateUserDto, tokens.refreshToken);
+    return this.authService.validateUser(intraID, tokens.accessToken, tokens.refreshToken);
   }
+
+  @UseGuards(RefreshTokenGuard)
+  @Get("refresh")
+  refreshTokens(@Req() req: Request) {
+  const refreshToken = req.user['refreshToken'];
+  console.log(refreshToken)
+  return this.authService.refreshTokens(refreshToken);
+}
+
 }

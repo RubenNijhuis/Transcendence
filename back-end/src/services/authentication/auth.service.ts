@@ -1,15 +1,31 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, ForbiddenException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import Axios from "axios";
 import { User } from "src/entities";
 import { UserService } from "../user/user.service";
+import { JwtService } from "@nestjs/jwt";
+import * as bcrypt from 'bcrypt';
+import { UsernameDto } from "src/dtos/auth";
+
+const jwt = require("jsonwebtoken");
+
+type PayloadType = {
+  username: string;
+};
+
+interface AuthTokenType {
+  jsonWebToken: string;
+  refreshToken: string;
+}
+
 
 @Injectable()
 export class AuthService {
   inject: [ConfigService];
   constructor(
     private readonly userService: UserService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly jwtService: JwtService
   ) {}
 
   getBearerToken(token: string): Promise<any> {
@@ -32,12 +48,16 @@ export class AuthService {
     });
   }
 
-  async validateUser(intraID: string): Promise<any> {
+  async validateUser(intraID: string, authtoken: string, refreshtoken: string): Promise<any> {
     const res: any = {
       shouldCreateUser: false,
       profile: null,
-      authToken: "sock yer dads"
+      AuthTokenType: {
+        jsonWebToken: authtoken,
+        refeshToken: refreshtoken
+      }
     };
+
     const user: User = await this.userService.findUsersByintraId(intraID);
 
     if (user) {
@@ -45,7 +65,71 @@ export class AuthService {
     } else {
       res.shouldCreateUser = true;
     }
-    console.log(JSON.stringify(user));
+    console.log("stringify:", JSON.stringify(user)); //this returns null?
     return res;
+  }
+
+  jwtDecodeUsername(jwt: string): string {
+    const decodedJwt = this.jwtService.decode(jwt) as PayloadType;
+    return decodedJwt.username;
+  }
+
+  async getTokens(username: string) {
+    const [accessToken, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(
+        {
+          username,
+        },
+        {
+          secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
+          expiresIn: '15m',
+        },
+      ),
+      this.jwtService.signAsync(
+        {
+          username,
+        },
+        {
+          secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
+          expiresIn: '7d',
+        },
+      ),
+    ]);
+
+    return {
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  async refreshTokens(refreshToken: string) {
+    const secret = this.configService.get<string>('JWT_REFRESH_SECRET')
+    const isValidRefToken = jwt.verify(
+      refreshToken, secret
+    );
+    if (!isValidRefToken)
+      throw new ForbiddenException('Access Denied');
+
+    const decoded = this.jwtService.decode(refreshToken) as PayloadType;
+    if (!decoded)
+      throw new ForbiddenException('Access Denied');
+    const user = await this.userService.findUserByUsername(decoded.username);
+    if (!user || !user.refreshToken)
+      throw new ForbiddenException('Access Denied');
+
+    const isMatch = await bcrypt.compare(refreshToken, user.refreshToken);
+
+    if (!isMatch)
+      throw new ForbiddenException('Access Denied');
+    const tokens = await this.getTokens(user.username);
+
+    const CreateUserDto = { username: decoded.username };
+    await this.userService.setRefreshToken(CreateUserDto, tokens.refreshToken);
+    return tokens;
+  }
+
+  addReftoken(userDto: UsernameDto, token: string)
+  {
+    this.userService.setRefreshToken(userDto, token);
   }
 }

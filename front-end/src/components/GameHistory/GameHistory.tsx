@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 
 // Types
 import { MatchRecord } from "../../types/game";
-import { Profile } from "../../types/profile";
+import { ProfileType } from "../../types/profile";
 
 // UI
 import Heading from "../Heading";
@@ -22,23 +22,28 @@ import Asset from "../Asset";
 import Button from "../Button";
 
 // Utils
-import { PaginateArray } from "../../utils/paginateArray";
+import { paginateArray } from "../../utils/paginateArray";
+import Logger from "../../utils/Logger";
 
 interface Props {
-    player: Profile;
+    player: ProfileType;
     matches: MatchRecord[];
 }
 
 const GameHistory = ({ player, matches }: Props) => {
-    const [selectedPage, setSelectedPage] = useState(0);
-    const paginatedMatches: MatchRecord[][] = PaginateArray(matches, 8);
+    const [selectedPage, setSelectedPage] = useState<number>(0);
+    const paginatedMatches = paginateArray<MatchRecord>(matches, 8);
 
-    const changePage = (number: number) => {
+    const changePage = (amountPageChange: number) => {
         if (
-            selectedPage + number !== -1 &&
-            selectedPage + number <= paginatedMatches.length - 1
+            selectedPage + amountPageChange !== -1 &&
+            selectedPage + amountPageChange <= paginatedMatches.length - 1
         ) {
-            setSelectedPage((prev) => prev + number);
+            setSelectedPage((prev) => prev + amountPageChange);
+        } else {
+            Logger("ERROR", "Game History", "Page changing in match records", {
+                error: "Page change would result in position outside of array size"
+            });
         }
     };
 
