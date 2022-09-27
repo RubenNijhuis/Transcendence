@@ -123,13 +123,7 @@ export class AuthService {
       throw new ForbiddenException('Access Denied');
     const tokens = await this.getTokens(user.username);
 
-<<<<<<< HEAD
-    const CreateUserDto = { username: decoded.username };
-    await this.userService.setRefreshToken(CreateUserDto, tokens.refreshToken);
-=======
     const CreateUserDto = { username: decoded.intraID };
-    await this.userService.addRefreshToken(CreateUserDto, tokens.refreshToken);
->>>>>>> origin/angi_jwt
     return tokens;
   }
 
