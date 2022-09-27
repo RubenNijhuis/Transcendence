@@ -4,6 +4,7 @@ import Axios from "axios";
 import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
 import { AuthService } from "../../services/authentication/auth.service";
 import { Request } from 'express';
+import { AccessTokenGuard } from "src/guards/accessToken.guard";
 
 @Controller("Auth")
 export class AuthController {
@@ -40,20 +41,28 @@ export class AuthController {
     const username = userData.data.login;
     console.log("intraID",intraID);
 
-    const tokens = await this.authService.getTokens(username);
+    const tokens = await this.authService.getTokens(intraID);
     console.log("tokens:", tokens);
 
     const CreateUserDto = { username: username };
-    this.authService.addReftoken(CreateUserDto, tokens.refreshToken);
+    //TO DO: check if exists first before adding
+    // this.authService.addReftoken(CreateUserDto, tokens.refreshToken);
     return this.authService.validateUser(intraID, tokens.accessToken, tokens.refreshToken);
   }
-
+//TODO: DOESNT WORK ATM UWU
   @UseGuards(RefreshTokenGuard)
   @Get("refresh")
   refreshTokens(@Req() req: Request) {
   const refreshToken = req.user['refreshToken'];
   console.log(refreshToken)
   return this.authService.refreshTokens(refreshToken);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get("test")
+  acessTokens(@Req() req: Request) {
+  const intraID = req.user['intraID'];
+  console.log("IntraID:", intraID);
 }
 
 }

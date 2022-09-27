@@ -10,7 +10,7 @@ import { UsernameDto } from "src/dtos/auth";
 const jwt = require("jsonwebtoken");
 
 type PayloadType = {
-  username: string;
+  intraID: string;
 };
 
 interface AuthTokenType {
@@ -71,14 +71,14 @@ export class AuthService {
 
   jwtDecodeUsername(jwt: string): string {
     const decodedJwt = this.jwtService.decode(jwt) as PayloadType;
-    return decodedJwt.username;
+    return decodedJwt.intraID;
   }
 
-  async getTokens(username: string) {
+  async getTokens(intraID: string) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         {
-          username,
+          intraID,
         },
         {
           secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
@@ -87,7 +87,7 @@ export class AuthService {
       ),
       this.jwtService.signAsync(
         {
-          username,
+          intraID,
         },
         {
           secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
@@ -113,7 +113,7 @@ export class AuthService {
     const decoded = this.jwtService.decode(refreshToken) as PayloadType;
     if (!decoded)
       throw new ForbiddenException('Access Denied');
-    const user = await this.userService.findUserByUsername(decoded.username);
+    const user = await this.userService.findUserByUsername(decoded.intraID);
     if (!user || !user.refreshToken)
       throw new ForbiddenException('Access Denied');
 
@@ -123,7 +123,7 @@ export class AuthService {
       throw new ForbiddenException('Access Denied');
     const tokens = await this.getTokens(user.username);
 
-    const CreateUserDto = { username: decoded.username };
+    const CreateUserDto = { username: decoded.intraID };
     await this.userService.addRefreshToken(CreateUserDto, tokens.refreshToken);
     return tokens;
   }
