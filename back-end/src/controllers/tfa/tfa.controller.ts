@@ -1,16 +1,17 @@
 import {
   Body,
   Controller,
+  HttpStatus,
   Post,
   Res,
   UnauthorizedException,
   UseGuards
 } from "@nestjs/common";
-import { Response } from "express";
 import { TfaService } from "src/services/tfa/tfa.service";
 import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
 import { UsernameDto } from "src/dtos/auth/username.dto";
 import { TfaDto } from "src/dtos/auth/tfa.dto";
+import { Response } from "express";
 
 @Controller("tfa")
 export class TfaController {
@@ -34,6 +35,6 @@ export class TfaController {
     if (isCodeValid === false) {
       throw new UnauthorizedException("Wrong authentication code");
     }
-    res.sendStatus(200);
+    return res.status(HttpStatus.OK).send();
   }
 }
