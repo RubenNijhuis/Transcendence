@@ -32,7 +32,7 @@ export class TfaService {
       secret = authenticator.generateSecret();
       console.log("secret:");
       console.log(secret);
-      this.usersService.update2fasecret(usernameDto, secret);
+      this.usersService.update2faSecret(usernameDto, secret);
     } else {
       secret = ret.tfaSecret;
     }

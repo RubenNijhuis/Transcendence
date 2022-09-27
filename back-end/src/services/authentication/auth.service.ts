@@ -58,7 +58,7 @@ export class AuthService {
       }
     };
 
-    const user: User = await this.userService.findUsersByintraId(intraID);
+    const user: User = await this.userService.findUserByintraId(intraID);
 
     if (user) {
       res.profile = user;

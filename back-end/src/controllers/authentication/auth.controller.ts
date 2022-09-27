@@ -44,7 +44,7 @@ export class AuthController {
     console.log("tokens:", tokens);
 
     const CreateUserDto = { username: username };
-    this.authService.addReftoken(CreateUserDto, tokens.refreshToken);
+    // this.authService.addReftoken(CreateUserDto, tokens.refreshToken);
     return this.authService.validateUser(intraID, tokens.accessToken, tokens.refreshToken);
   }
 

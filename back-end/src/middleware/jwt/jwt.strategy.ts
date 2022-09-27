@@ -4,6 +4,7 @@ import { Injectable } from "@nestjs/common";
 import { UserService } from "src/services/user/user.service";
 import { MailDto } from "../../dtos/auth/mail.dto";
 import { ConfigService } from "@nestjs/config";
+import { User } from "src/entities";
 
 @Injectable()
 export class Jwt2faStrategy extends PassportStrategy(Strategy, "jwt-2fa") {
@@ -19,11 +20,12 @@ export class Jwt2faStrategy extends PassportStrategy(Strategy, "jwt-2fa") {
   }
 
   async validate(payload: MailDto) {
-    const user = await this.userService.findUserByUsername(payload.username);
+    const user: User = await this.userService.findUserByUsername(payload.username);
 
     if (user) {
-      return user;
+      return { userId: user.intraId};
     }
+    return { userId: "niks" };
   }
 
   // async validate(payload: any) {

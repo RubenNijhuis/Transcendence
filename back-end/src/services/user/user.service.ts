@@ -1,5 +1,5 @@
 // random generators for seeding
-import { randColor, randFullName, randParagraph } from "@ngneat/falso";
+import { randColor, randFullName, randNumber, randParagraph, randUserName } from "@ngneat/falso";
 
 // status and basic injectable
 import { HttpStatus, Injectable } from "@nestjs/common";
@@ -17,7 +17,7 @@ import { DeleteResult, Repository, TypeORMError, UpdateResult } from "typeorm";
 import * as bcrypt from 'bcrypt';
 
 // dtos
-import { CreateUserDto } from "src/dtos/user/create-user.dto";
+import { SetUserDto } from "src/dtos/user/set-user.dto";
 import { UsernameDto } from "src/dtos/auth/username.dto";
 
 /**
@@ -25,8 +25,8 @@ import { UsernameDto } from "src/dtos/auth/username.dto";
  * 
  * Contains all typeorm sql injections.
  * Some functions that not yet used:
- * - setJwt
- * - seedCustom
+ * - set2faSecret
+ * - update2faSecret is being used in tfa.service
  */
 @Injectable()
 export class UserService {
@@ -53,7 +53,7 @@ export class UserService {
     }
   }
 
-  async findUsersByintraId(intraId: string): Promise<User> {
+  async findUserByintraId(intraId: string): Promise<User> {
     try {
       const ret = await this.userRepository.findOne({ where: { intraId } });
       return Promise.resolve(ret);
@@ -71,11 +71,11 @@ export class UserService {
     }
   }
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
+  async createUser(intraID: string): Promise<User> {
     try {
-      if (!(await this.findUserByUsername(createUserDto.username)))
+      if (!(await this.findUserByintraId(intraID)))
         return null;
-      const newUser = this.userRepository.create(createUserDto);
+      const newUser = this.userRepository.create({ intraId: intraID });
       const ret = await this.userRepository.save(newUser);
       return Promise.resolve(ret);
     } catch (err: any) {
@@ -83,15 +83,34 @@ export class UserService {
     }
   }
 
+  async setUser(intraID: string, SetUserDto: SetUserDto): Promise<UpdateResult> {
+    try {
+      const user: User = await this.findUserByintraId(intraID)
+
+      if (user.isInitialized)
+        return null;
+      
+      return await this.userRepository
+        .createQueryBuilder()
+        .update(user)
+        .set(SetUserDto)
+        .where({ id: user.id })
+        .returning("*")
+        .execute();
+    } catch (err: any) {
+      return Promise.reject(TypeORMError)
+    }
+  }
+
   async removeUser(username: string): Promise<DeleteResult> {
     try {
-      const ret = await this.userRepository
+      const user = await this.userRepository
       .createQueryBuilder("Users")
       .delete()
       .from("users")
       .where("username =:username", { username })
       .execute();
-      return Promise.resolve(ret);
+      return Promise.resolve(user);
     } catch (err: any) {
       return Promise.reject(TypeORMError)
     }
@@ -104,7 +123,7 @@ export class UserService {
     try {
       const user = await this.findUserByUsername(userDto.username);
       const saltOrRounds = 10;
-      const hash = await bcrypt.hash(token, saltOrRounds);
+      const hash = await bcrypt.hash(token, saltOrRounds); // <- deze
 
       return await this.userRepository
       .createQueryBuilder()
@@ -112,7 +131,7 @@ export class UserService {
       .set({ refreshToken: hash })
       .where({ id: user.id })
       .returning("*")
-      .execute();      
+      .execute();
     } catch (err: any) {
       return Promise.reject(err) // idk what type of error this could be
     }
@@ -127,7 +146,7 @@ export class UserService {
     }
   }
 
-  async update2fasecret(
+  async update2faSecret(
     userDto: UsernameDto,
     secret: string
   ): Promise<UpdateResult> {
@@ -175,11 +194,13 @@ export class UserService {
   async seedCustom(amount: number): Promise<User[]> {
     try {
       for (let i = 1; i <= amount; i++) {
-        await this.createUser({
+        let genIntraId = randUserName();
+        await this.createUser(genIntraId);
+        await this.setUser(genIntraId, {
           username: randFullName(),
           color: randColor().toString(),
           description: randParagraph()
-        });
+        })
       }
       return this.getUsers();
     } catch (err: any) {
