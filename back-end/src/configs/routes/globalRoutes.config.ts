@@ -21,6 +21,9 @@ const UserRoutes = {
     // create user
     create: "create",
 
+    // set user
+    setUser: "setUser",
+
     // remove user
     remove: "remove",
 
