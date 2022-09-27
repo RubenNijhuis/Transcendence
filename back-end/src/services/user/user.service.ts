@@ -86,6 +86,12 @@ export class UserService {
   async setUser(intraID: string, SetUserDto: SetUserDto): Promise<UpdateResult> {
     try {
       const user: User = await this.findUserByintraId(intraID)
+      const query = {
+        isInitialized: true,
+        username: SetUserDto.username,
+        color: SetUserDto.color,
+        description: SetUserDto.description
+      }
 
       if (user.isInitialized)
         return null;
@@ -93,7 +99,7 @@ export class UserService {
       return await this.userRepository
         .createQueryBuilder()
         .update(user)
-        .set(SetUserDto)
+        .set(query)
         .where({ id: user.id })
         .returning("*")
         .execute();
