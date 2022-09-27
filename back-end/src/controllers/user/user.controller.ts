@@ -96,9 +96,9 @@ export class UsersController {
   @UsePipes(ValidationPipe)
   async setUser(@Req() req: Request, @Body() SetUserDto: SetUserDto): Promise<any> {
     try {
-      const intraID = 
+      const intraID = req.user['intraId']
 
-      return await this.userService.setUser(jwtRet.intraId , SetUserDto);
+      return await this.userService.setUser(intraID , SetUserDto);
     } catch (error) {
       return error;
     }
