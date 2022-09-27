@@ -92,7 +92,7 @@ export class UsersController {
     }
   }
 
-  @Post(UserRoutes.create)
+  @Post(UserRoutes.setUser)
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
   async setUser(@Req() req: Request, @Body() SetUserDto: SetUserDto): Promise<any> {
