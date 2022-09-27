@@ -40,7 +40,7 @@ export class User {
     name: "discription",
     nullable: true
   })
-  discription: string;
+  description: string;
   @Column({
     name: "rank",
     nullable: false,
