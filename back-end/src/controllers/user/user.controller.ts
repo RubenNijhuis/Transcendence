@@ -94,11 +94,12 @@ export class UsersController {
 
   @Post(UserRoutes.create)
   @UsePipes(ValidationPipe)
+  @UseGuards(AccessTokenGuard)
   async setUser(@Req() req: Request, @Body() SetUserDto: SetUserDto): Promise<any> {
     try {
-      const intraID = 
+      const intraID = req.user['intraID'];
 
-      return await this.userService.setUser(jwtRet.intraId , SetUserDto);
+      return await this.userService.setUser(intraID , SetUserDto);
     } catch (error) {
       return error;
     }
