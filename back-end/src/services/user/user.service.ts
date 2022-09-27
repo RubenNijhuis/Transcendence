@@ -1,5 +1,11 @@
 // random generators for seeding
-import { randColor, randFullName, randNumber, randParagraph, randUserName } from "@ngneat/falso";
+import {
+  randColor,
+  randFullName,
+  randNumber,
+  randParagraph,
+  randUserName
+} from "@ngneat/falso";
 
 // status and basic injectable
 import { HttpStatus, Injectable } from "@nestjs/common";
@@ -14,7 +20,7 @@ import { User } from "src/entities";
 import { DeleteResult, Repository, TypeORMError, UpdateResult } from "typeorm";
 
 // idk, angi wat is deze
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from "bcrypt";
 
 // dtos
 import { SetUserDto } from "src/dtos/user/set-user.dto";
@@ -22,7 +28,7 @@ import { UsernameDto } from "src/dtos/auth/username.dto";
 
 /**
  * User services
- * 
+ *
  * Contains all typeorm sql injections.
  * Some functions that not yet used:
  * - set2faSecret
@@ -40,7 +46,7 @@ export class UserService {
       const ret = await this.userRepository.find();
       return Promise.resolve(ret);
     } catch (err: any) {
-      return Promise.reject(TypeORMError)
+      return Promise.reject(err);
     }
   }
 
@@ -49,7 +55,7 @@ export class UserService {
       const ret = await this.userRepository.findOne({ where: { id } });
       return Promise.resolve(ret);
     } catch (err: any) {
-      return Promise.reject(TypeORMError)
+      return Promise.reject(err);
     }
   }
 
@@ -58,7 +64,7 @@ export class UserService {
       const ret = await this.userRepository.findOne({ where: { intraId } });
       return Promise.resolve(ret);
     } catch (err: any) {
-      return Promise.reject(TypeORMError)
+      return Promise.reject(err);
     }
   }
 
@@ -67,35 +73,36 @@ export class UserService {
       const ret = await this.userRepository.findOne({ where: { username } });
       return Promise.resolve(ret);
     } catch (err: any) {
-      return Promise.reject(TypeORMError)
+      return Promise.reject(err);
     }
   }
 
   async createUser(intraID: string): Promise<User> {
     try {
-      if (!(await this.findUserByintraId(intraID)))
-        return null;
+      if (await this.findUserByintraId(intraID)) return null;
       const newUser = this.userRepository.create({ intraId: intraID });
       const ret = await this.userRepository.save(newUser);
       return Promise.resolve(ret);
     } catch (err: any) {
-      return Promise.reject(TypeORMError)
+      return Promise.reject(err);
     }
   }
 
-  async setUser(intraID: string, SetUserDto: SetUserDto): Promise<UpdateResult> {
+  async setUser(
+    intraID: string,
+    SetUserDto: SetUserDto
+  ): Promise<UpdateResult> {
     try {
-      const user: User = await this.findUserByintraId(intraID)
+      const user: User = await this.findUserByintraId(intraID);
       const query = {
         isInitialized: true,
         username: SetUserDto.username,
         color: SetUserDto.color,
         description: SetUserDto.description
-      }
+      };
 
-      if (user.isInitialized)
-        return null;
-      
+      if (user.isInitialized) return null;
+
       return await this.userRepository
         .createQueryBuilder()
         .update(user)
@@ -104,21 +111,21 @@ export class UserService {
         .returning("*")
         .execute();
     } catch (err: any) {
-      return Promise.reject(TypeORMError)
+      return Promise.reject(err);
     }
   }
 
   async removeUser(username: string): Promise<DeleteResult> {
     try {
       const user = await this.userRepository
-      .createQueryBuilder("Users")
-      .delete()
-      .from("users")
-      .where("username =:username", { username })
-      .execute();
+        .createQueryBuilder("Users")
+        .delete()
+        .from("users")
+        .where("username =:username", { username })
+        .execute();
       return Promise.resolve(user);
     } catch (err: any) {
-      return Promise.reject(TypeORMError)
+      return Promise.reject(err);
     }
   }
 
@@ -132,14 +139,14 @@ export class UserService {
       const hash = await bcrypt.hash(token, saltOrRounds); // <- deze
 
       return await this.userRepository
-      .createQueryBuilder()
-      .update(user)
-      .set({ refreshToken: hash })
-      .where({ id: user.id })
-      .returning("*")
-      .execute();
+        .createQueryBuilder()
+        .update(user)
+        .set({ refreshToken: hash })
+        .where({ id: user.id })
+        .returning("*")
+        .execute();
     } catch (err: any) {
-      return Promise.reject(err) // idk what type of error this could be
+      return Promise.reject(err); // idk what type of error this could be
     }
   }
 
@@ -148,7 +155,7 @@ export class UserService {
       const ret = await this.userRepository.update(id, { tfaSecret });
       return Promise.resolve(ret);
     } catch (err: any) {
-      return Promise.reject(TypeORMError)
+      return Promise.reject(err);
     }
   }
 
@@ -159,15 +166,15 @@ export class UserService {
     try {
       const user = await this.findUserByUsername(userDto.username);
       const ret = await this.userRepository
-      .createQueryBuilder()
-      .update(user)
-      .set({ tfaSecret: secret })
-      .where({ id: user.id })
-      .returning("*")
-      .execute();
+        .createQueryBuilder()
+        .update(user)
+        .set({ tfaSecret: secret })
+        .where({ id: user.id })
+        .returning("*")
+        .execute();
       return Promise.resolve(ret);
     } catch (err: any) {
-      return Promise.reject(TypeORMError)
+      return Promise.reject(err);
     }
   }
 
@@ -184,15 +191,15 @@ export class UserService {
       const user = await this.findUserByUsername(username);
 
       const ret = await this.userRepository
-      .createQueryBuilder()
-      .update(user)
-      .set({ isTfaEnabled: option })
-      .where({ id: user.id })
-      .returning("*")
-      .execute();
+        .createQueryBuilder()
+        .update(user)
+        .set({ isTfaEnabled: option })
+        .where({ id: user.id })
+        .returning("*")
+        .execute();
       return Promise.resolve(ret);
     } catch (err: any) {
-      return Promise.reject(TypeORMError)
+      return Promise.reject(err);
     }
   }
 
@@ -206,11 +213,11 @@ export class UserService {
           username: randFullName(),
           color: randColor().toString(),
           description: randParagraph()
-        })
+        });
       }
       return this.getUsers();
     } catch (err: any) {
-      return Promise.reject(TypeORMError)
+      return Promise.reject(err);
     }
   }
 }

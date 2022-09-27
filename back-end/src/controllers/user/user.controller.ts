@@ -45,7 +45,7 @@ import { AccessTokenGuard } from "src/guards/accessToken.guard";
 
 /**
  * The user controller will act as the first entry point for user related api calls.
- * 
+ *
  * The user api functionality contains:
  * - getting all users or a specified user
  * - creating and removing a specified user
@@ -95,11 +95,14 @@ export class UsersController {
   @Post(UserRoutes.setUser)
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
-  async setUser(@Req() req: Request, @Body() SetUserDto: SetUserDto): Promise<any> {
+  async setUser(
+    @Req() req: Request,
+    @Body() SetUserDto: SetUserDto
+  ): Promise<any> {
     try {
-      const intraID = req.user['intraID'];
+      const intraID = req.user["intraID"];
 
-      return await this.userService.setUser(intraID , SetUserDto);
+      return await this.userService.setUser(intraID, SetUserDto);
     } catch (error) {
       return error;
     }
@@ -145,7 +148,7 @@ export class UsersController {
   //   return response;
   // }
 
-    // @Post(UserRoutes.uploadProfilePic)
+  // @Post(UserRoutes.uploadProfilePic)
   // @UseInterceptors(FileInterceptor('image', {
   //   storage: profileStorage("tmp"),
   //   fileFilter: imgFilter
@@ -159,18 +162,20 @@ export class UsersController {
   // }
 
   @Post(UserRoutes.uploadBannerPic)
-  @UseInterceptors(MyNewFileInterceptor('image', ctx => {
-    const jwt: string = ctx.switchToHttp().getRequest().headers.bearer_token;
+  @UseInterceptors(
+    MyNewFileInterceptor("image", (ctx) => {
+      const jwt: string = ctx.switchToHttp().getRequest().headers.bearer_token;
 
-    return {
+      return {
         storage: bannerStorage(jwt),
         fileFilter: imgFilter
-      }
-  }))
+      };
+    })
+  )
   async uploadProfileTest(@UploadedFile() file) {
     const response = {
       originalname: file.originalname,
-      filename: file.filename,
+      filename: file.filename
     };
     return response;
   }

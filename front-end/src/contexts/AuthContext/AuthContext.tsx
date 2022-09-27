@@ -15,6 +15,7 @@ import transformToRequestError from "../../proxies/utils/transformToRequestError
 
 import { getItem, setItem } from "../../modules/Store";
 import StoreIdentifiers from "../../config/StoreIdentifiers";
+import { API } from "../../proxies/instances/apiInstance";
 // import confirmCredentials from "../../proxies/auth/confirmCredentials";
 
 // Define what the auth context contains
@@ -81,6 +82,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             const { authToken, profile } = data;
 
             setItem(StoreIdentifiers.authToken, authToken);
+            API.defaults.headers.common[
+                "Authorization"
+            ] = `Bearer ${authToken.jsonWebToken}`;
 
             if (profile !== null) {
                 setUser(profile);

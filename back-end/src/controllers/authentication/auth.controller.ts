@@ -3,15 +3,17 @@ import { ConfigService } from "@nestjs/config";
 import Axios from "axios";
 import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
 import { AuthService } from "../../services/authentication/auth.service";
-import { Request } from 'express';
+import { Request } from "express";
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
+import { UserService } from "src/services/user/user.service";
 
 @Controller("Auth")
 export class AuthController {
-  inject: [ConfigService];
+  inject: [ConfigService, UserService];
   constructor(
     private readonly authService: AuthService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly userService: UserService
   ) {}
 
   @Get("login")
@@ -31,38 +33,52 @@ export class AuthController {
 
   @Get("confirm?")
   async confirm(@Query("token") token: string) {
-    // Turns the token from redirect into a token
-    console.log("first token:", token);
-    const res: any = await this.authService.getBearerToken(token);
-    console.log("token: ", res.data.access_token);
+    try {
+      // Turns the token from redirect into a token
+      // console.log("first token:", token);
+      const res = await this.authService.getBearerToken(token);
+      // console.log("token: ", res.data.access_token);
 
-    const userData = await this.authService.getUserData(res.data.access_token);
-    const intraID = userData.data.id;
-    const username = userData.data.login;
-    console.log("intraID",intraID);
+      const userData = await this.authService.getUserData(
+        res.data.access_token
+      );
+      const intraID = userData.data.id;
+      const username = userData.data.login;
+      // console.log("intraID", intraID);
 
-    const tokens = await this.authService.getTokens(intraID);
-    console.log("tokens:", tokens);
+      const tokens = await this.authService.getTokens(intraID);
+      // console.log("tokens:", tokens);
 
-    const CreateUserDto = { username: username };
-    //TO DO: check if exists first before adding
-    // this.authService.addReftoken(CreateUserDto, tokens.refreshToken);
-    return this.authService.validateUser(intraID, tokens.accessToken, tokens.refreshToken);
+      const CreateUserDto = { username: username };
+      this.userService
+        .createUser(intraID)
+        .then((res) => console.log("Entry creation db return val:", res))
+        .catch((err) => console.log("DB PARTIAL ERROR", err));
+
+      //TO DO: check if exists first before adding
+      // this.authService.addReftoken(CreateUserDto, tokens.refreshToken);
+      return this.authService.validateUser(
+        intraID,
+        tokens.accessToken,
+        tokens.refreshToken
+      );
+    } catch (err) {
+      return err;
+    }
   }
-//TODO: DOESNT WORK ATM UWU
+  //TODO: DOESNT WORK ATM UWU
   @UseGuards(RefreshTokenGuard)
   @Get("refresh")
   refreshTokens(@Req() req: Request) {
-  const refreshToken = req.user['refreshToken'];
-  console.log(refreshToken)
-  return this.authService.refreshTokens(refreshToken);
+    const refreshToken = req.user["refreshToken"];
+    console.log(refreshToken);
+    return this.authService.refreshTokens(refreshToken);
   }
 
   @UseGuards(AccessTokenGuard)
   @Get("test")
   acessTokens(@Req() req: Request) {
-  const intraID = req.user['intraID'];
-  console.log("IntraID:", intraID);
-}
-
+    const intraID = req.user["intraID"];
+    console.log("IntraID:", intraID);
+  }
 }

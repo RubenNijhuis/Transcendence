@@ -4,7 +4,7 @@ import Axios from "axios";
 import { User } from "src/entities";
 import { UserService } from "../user/user.service";
 import { JwtService } from "@nestjs/jwt";
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from "bcrypt";
 import { UsernameDto } from "src/dtos/auth";
 
 const jwt = require("jsonwebtoken");
@@ -17,7 +17,6 @@ interface AuthTokenType {
   jsonWebToken: string;
   refreshToken: string;
 }
-
 
 @Injectable()
 export class AuthService {
@@ -48,25 +47,33 @@ export class AuthService {
     });
   }
 
-  async validateUser(intraID: string, authtoken: string, refreshtoken: string): Promise<any> {
-    const res: any = {
-      shouldCreateUser: false,
-      profile: null,
-      AuthTokenType: {
-        jsonWebToken: authtoken,
-        refeshToken: refreshtoken
+  async validateUser(
+    intraID: string,
+    authtoken: string,
+    refreshtoken: string
+  ): Promise<any> {
+    try {
+      const res: any = {
+        shouldCreateUser: false,
+        profile: null,
+        authToken: {
+          jsonWebToken: authtoken,
+          refeshToken: refreshtoken
+        }
+      };
+
+      const user: User = await this.userService.findUserByintraId(intraID);
+
+      if (user.isInitialized) {
+        res.profile = user;
+      } else {
+        res.shouldCreateUser = true;
       }
-    };
-
-    const user: User = await this.userService.findUserByintraId(intraID);
-
-    if (user) {
-      res.profile = user;
-    } else {
-      res.shouldCreateUser = true;
+      console.log("stringify:", JSON.stringify(user)); //this returns null?
+      return res;
+    } catch (err) {
+      return err;
     }
-    console.log("stringify:", JSON.stringify(user)); //this returns null?
-    return res;
   }
 
   jwtDecodeUsername(jwt: string): string {
@@ -78,57 +85,51 @@ export class AuthService {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         {
-          intraID,
+          intraID
         },
         {
-          secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
-          expiresIn: '15m',
-        },
+          secret: this.configService.get<string>("JWT_ACCESS_SECRET"),
+          expiresIn: "15m"
+        }
       ),
       this.jwtService.signAsync(
         {
-          intraID,
+          intraID
         },
         {
-          secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
-          expiresIn: '7d',
-        },
-      ),
+          secret: this.configService.get<string>("JWT_REFRESH_SECRET"),
+          expiresIn: "7d"
+        }
+      )
     ]);
 
     return {
       accessToken,
-      refreshToken,
+      refreshToken
     };
   }
 
   async refreshTokens(refreshToken: string) {
-    const secret = this.configService.get<string>('JWT_REFRESH_SECRET')
-    const isValidRefToken = jwt.verify(
-      refreshToken, secret
-    );
-    if (!isValidRefToken)
-      throw new ForbiddenException('Access Denied');
+    const secret = this.configService.get<string>("JWT_REFRESH_SECRET");
+    const isValidRefToken = jwt.verify(refreshToken, secret);
+    if (!isValidRefToken) throw new ForbiddenException("Access Denied");
 
     const decoded = this.jwtService.decode(refreshToken) as PayloadType;
-    if (!decoded)
-      throw new ForbiddenException('Access Denied');
+    if (!decoded) throw new ForbiddenException("Access Denied");
     const user = await this.userService.findUserByUsername(decoded.intraID);
     if (!user || !user.refreshToken)
-      throw new ForbiddenException('Access Denied');
+      throw new ForbiddenException("Access Denied");
 
     const isMatch = await bcrypt.compare(refreshToken, user.refreshToken);
 
-    if (!isMatch)
-      throw new ForbiddenException('Access Denied');
+    if (!isMatch) throw new ForbiddenException("Access Denied");
     const tokens = await this.getTokens(user.username);
 
     const CreateUserDto = { username: decoded.intraID };
     return tokens;
   }
 
-  addReftoken(userDto: UsernameDto, token: string)
-  {
+  addReftoken(userDto: UsernameDto, token: string) {
     this.userService.setRefreshToken(userDto, token);
   }
 }

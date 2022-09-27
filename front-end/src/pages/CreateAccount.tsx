@@ -91,6 +91,7 @@ const CreateAccount = () => {
          */
         createUser(providedDetails)
             .then((returnedUserProfile: ProfileType) => {
+                console.log("CREATE USER RESP:", returnedUserProfile);
                 setUser(returnedUserProfile);
                 setLoggedIn(true);
                 navigate(PageRoutes.profile);

@@ -7,7 +7,7 @@
  */
 const ApiRoutes = {
     // User
-    createUser: () => `/user/create`,
+    createUser: () => `/user/setUser`,
     getUserByUserName: (userName: string) => `/user/${userName}`,
 
     // Chat
