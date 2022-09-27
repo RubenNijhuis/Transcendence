@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import Logger from "../../utils/Logger";
-import { getAuthToken } from "../utils/authToken";
+import { getAuthToken, refreshToken } from "../utils/authToken";
 
 // Instance
 const API = axios.create({
@@ -14,25 +14,28 @@ const API = axios.create({
 const setDefaultAuthHeader = () => {
     const token = getAuthToken();
 
-    if (token === null) return;
-
     if (token !== null) {
+        console.log("YES");
         API.defaults.headers.common[
             "Authorization"
         ] = `Bearer ${token.jsonWebToken}`;
+    } else {
+        console.log("NEIN");
+        refreshToken();
     }
 };
 
-setDefaultAuthHeader();
+// Iffe because no other way to run it i think
+(() => setDefaultAuthHeader())();
 
 // Request interceptor for auth credentials
-const AuthSuccesResponseInterceptor = (response: AxiosResponse) => {
+const SuccesResponseInterceptor = (response: AxiosResponse) => {
     console.log("✅ AUTH SUCCES", response);
     return response;
 };
 
 // Request interceptor for auth credentials
-const AuthErrorResponseInterceptor = (err: AxiosError) => {
+const ErrorResponseInterceptor = (err: AxiosError) => {
     if (err.response) {
         if (err.response.status === 401) {
             Logger(
@@ -41,6 +44,7 @@ const AuthErrorResponseInterceptor = (err: AxiosError) => {
                 "Resetting credentials",
                 err.response.status
             );
+            refreshToken();
         }
     }
     return err;
@@ -48,8 +52,8 @@ const AuthErrorResponseInterceptor = (err: AxiosError) => {
 
 // Setup AuthInterceptor to be used
 API.interceptors.response.use(
-    AuthSuccesResponseInterceptor,
-    AuthErrorResponseInterceptor
+    SuccesResponseInterceptor,
+    ErrorResponseInterceptor
 );
 
 export { API };

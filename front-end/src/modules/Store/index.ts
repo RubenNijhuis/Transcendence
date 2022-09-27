@@ -4,6 +4,6 @@ import {
     removeItem,
     clearAll,
     amountKeys
-} from "./LocalStore";
+} from "./Store";
 
 export { setItem, getItem, removeItem, clearAll, amountKeys };

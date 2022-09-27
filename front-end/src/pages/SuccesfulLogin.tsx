@@ -32,6 +32,7 @@ const SuccesfulLogin = () => {
         const token = href.split("?code=")[1];
 
         signIn(token).then((res: LoginConfirmResponse) => {
+            console.log(res);
             if (res.shouldCreateUser === true) {
                 navigate(PageRoutes.createAccount);
             } else {

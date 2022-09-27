@@ -1,29 +1,63 @@
+// basic nest functionallity
 import {
   Body,
   Controller,
-  FileTypeValidator,
   Get,
-  HttpStatus,
-  MaxFileSizeValidator,
-  ParseFilePipe,
   Post,
+  Req,
   Res,
   UploadedFile,
+  UseInterceptors,
   UsePipes,
   ValidationPipe
 } from "@nestjs/common";
-import { MulterModule } from "@nestjs/platform-express";
-import { UsernameDto } from "src/dtos/auth/username.dto";
-import { seederConfig } from "src/configs/seeder/seeder.config";
-import { UserSeeder } from "src/database/seeds/user-create.seed";
-import { CreateUserDto } from "src/dtos/user/create-user.dto";
-import { UserService } from "src/services/user/user.service";
-import { UploadImgDto } from "../../dtos/database/upload-img.dto";
-import User from "../../entities/user/user.entity";
-const multer = require("multer");
-import { Response } from "express";
 
-@Controller("users")
+// route config
+import UserRoutes from "src/configs/routes/globalRoutes.config";
+
+// dtos
+import { UsernameDto } from "src/dtos/auth/username.dto";
+import { SetTfaDto } from "src/dtos/auth/setTfa.dto";
+import { CreateUserDto } from "src/dtos/user/create-user.dto";
+import { SeederAmountDto } from "src/dtos/seeder/custom-seeder.dto";
+
+// user functionalities
+import { UserService } from "src/services/user/user.service";
+
+// seeding config
+import { seederConfig } from "src/configs/seeder/seeder.config";
+
+// seeding entity
+import { UserSeeder } from "src/database/seeds/user-create.seed";
+
+// user entity
+import User from "../../entities/user/user.entity";
+
+// image upload pipe config
+import { bannerStorage, imgFilter } from "src/middleware/imgUpload/imgUpload";
+
+// file upload library
+import { MyNewFileInterceptor } from "src/middleware/imgUpload/file-interceptor";
+
+/**
+ * The user controller will act as the first entry point for user related api calls.
+ * 
+ * The user api functionality contains:
+ * - getting all users or a specified user
+ * - creating and removing a specified user
+ * - enabling 2fa
+ * - setting the banner/profile picture
+ * - seeding the database with random users
+ */
+
+/**
+ * ATTENTION
+ * - upload route is wip
+ * TO DO
+ * - standarize uploading images
+ */
+
+@Controller(UserRoutes.prefix)
 export class UsersController {
   constructor(private readonly userService: UserService) {}
 
@@ -32,18 +66,18 @@ export class UsersController {
     return this.userService.getUsers();
   }
 
-  @Get("id/:username")
+  @Get(UserRoutes.getUserOnName)
   findUsersById(@Res() res: Response, username: string) {
     try {
       return this.userService.findUserByUsername(username);
     } catch (error) {
-      return error;
+      res.status;
     }
   }
 
-  @Post("create")
+  @Post(UserRoutes.create)
   @UsePipes(ValidationPipe)
-  async createUsers(@Body() createUserDto: CreateUserDto): Promise<any> {
+  async createUser(@Body() createUserDto: CreateUserDto): Promise<any> {
     try {
       const user: User = await this.userService.createUser(createUserDto);
       const ret = user;
@@ -54,56 +88,81 @@ export class UsersController {
     }
   }
 
-  @Get("seeder")
-  async seedUsers() {
-    // Creates 200 users
-    const seed = new UserSeeder({ seedingSource: seederConfig });
-    await seed.run();
-  }
-
-  @Post("upload-img")
-  async uploadImg(
-    @Body() upload: UploadImgDto,
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [
-          new MaxFileSizeValidator({
-            maxSize: 1000
-          }),
-          new FileTypeValidator({
-            fileType: "jpeg"
-          })
-        ]
-      })
-    )
-    file: Express.Multer.File
-  ) {
-    const storage = multer.diskStorage({
-      destination: function (req, file, cb) {
-        cb(null, "/src/uploads");
-      },
-      filename: function (req, file, cb) {
-        const uniqueSuffix = upload.intraId; // get this from jwt
-        cb(null, file.fieldname + "-" + uniqueSuffix);
-      }
-    });
-    const ret = MulterModule.register({
-      dest: "src/uploads" + upload.type
-    });
-  }
-
-  @Post("turnon2fa")
-  @UsePipes(ValidationPipe) //what does this do
-  async turnon2fa(@Body() usernameDto: UsernameDto) {
-    // const isCodeValid = this.userService.isTwoFactorAuthenticationCodeValid(twoFaDto);
-    // if (!isCodeValid) {
-    //     throw new UnauthorizedException('Wrong authentication code');
-    // }
+  @Post(UserRoutes.remove)
+  @UsePipes(ValidationPipe)
+  async removeUser(@Body() dto: UsernameDto) {
     try {
-      await this.userService.turnOn2fa(usernameDto);
+      const ret = await this.userService.removeUser(dto.username);
     } catch (error) {
       return error;
     }
   }
 
+  @Post(UserRoutes.enableTfa)
+  @UsePipes(ValidationPipe) //what does this do
+  async turnon2fa(@Body() dto: SetTfaDto) {
+    // const isCodeValid = this.userService.isTwoFactorAuthenticationCodeValid(twoFaDto);
+    // if (!isCodeValid) {
+    //     throw new UnauthorizedException('Wrong authentication code');
+    // }
+    try {
+      await this.userService.setTfa(dto.username, dto.option);
+    } catch (error) {
+      return error;
+    }
+  }
+
+  // @Post(UserRoutes.uploadBannerPic)
+  // @UseInterceptors(FileInterceptor('image', {
+  //   storage: bannerStorage("username taken from jwt"),
+  //   fileFilter: imgFilter
+  // }))
+  // async uploadBanner(@UploadedFile() file) {
+  //   const response = {
+  //     originalname: file.originalname,
+  //     filename: file.filename,
+  //   };
+  //   return response;
+  // }
+
+    // @Post(UserRoutes.uploadProfilePic)
+  // @UseInterceptors(FileInterceptor('image', {
+  //   storage: profileStorage("tmp"),
+  //   fileFilter: imgFilter
+  // }))
+  // async uploadProfile(@UploadedFile() file) {
+  //   const response = {
+  //     originalname: file.originalname,
+  //     filename: file.filename,
+  //   };
+  //   return response;
+  // }
+
+  @Post(UserRoutes.uploadBannerPic)
+  @UseInterceptors(MyNewFileInterceptor('image', ctx => {
+    const jwt: string = ctx.switchToHttp().getRequest().headers.bearer_token;
+
+    return {
+        storage: bannerStorage(jwt),
+        fileFilter: imgFilter
+      }
+  }))
+  async uploadProfileTest(@UploadedFile() file) {
+    const response = {
+      originalname: file.originalname,
+      filename: file.filename,
+    };
+    return response;
+  }
+
+  @Get(UserRoutes.seed)
+  async seedUsers() {
+    const seed = new UserSeeder({ seedingSource: seederConfig });
+    await seed.run();
+  }
+
+  @Post(UserRoutes.seedAmount)
+  async seedUsersAmount(@Body() dto: SeederAmountDto) {
+    return await this.userService.seedCustom(dto.amount);
+  }
 }

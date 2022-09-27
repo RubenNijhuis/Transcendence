@@ -23,7 +23,10 @@ import { RequestErrorType } from "../../types/request";
 const CTAButton = ({ authStatus }: { authStatus: boolean }) => {
     const toLoginPage = () => {
         startLogin()
-            .then((url: string) => window.location.assign(url))
+            .then((url: string) => {
+                console.log(url);
+                window.location.assign(url)
+            })
             .catch((err: RequestErrorType) => {
                 Logger("ERROR", "Navbar", "Req login page url", err);
             });

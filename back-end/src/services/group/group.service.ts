@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { MakeAdminDto } from "src/dtos/group";
+import { MakeAdminDto } from "src/dtos/group/make-admin.dto";
 import { EditMembersDto } from "src/dtos/group/edit-members.dto";
 import { EditOwnerDto } from "src/dtos/group/edit-owner.dto";
 import Group from "src/entities/group/group.entity";

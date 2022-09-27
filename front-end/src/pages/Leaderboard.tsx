@@ -26,7 +26,7 @@ const Leaderboard = () => {
     const { setIsModalOpen, setError } = useModal();
 
     useEffect(() => {
-        getLeaderboard(authToken)
+        getLeaderboard()
             .then(setLeaderboard)
             .catch((err: RequestErrorType) => {
                 setError(err);

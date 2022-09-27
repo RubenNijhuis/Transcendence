@@ -89,7 +89,7 @@ const CreateAccount = () => {
          * Redirects the user to the profile page
          * upon account creation.
          */
-        createUser(providedDetails, authToken)
+        createUser(providedDetails)
             .then((returnedUserProfile: ProfileType) => {
                 setUser(returnedUserProfile);
                 setLoggedIn(true);

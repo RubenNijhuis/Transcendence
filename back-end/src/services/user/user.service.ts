@@ -1,14 +1,33 @@
+// random generators for seeding
 import { randColor, randFullName, randParagraph } from "@ngneat/falso";
+
+// status and basic injectable
 import { HttpStatus, Injectable } from "@nestjs/common";
+
+// typeorm sql injection library
 import { InjectRepository } from "@nestjs/typeorm";
+
+// user entity
 import { User } from "src/entities";
-import { DeleteResult, Repository, UpdateResult } from "typeorm";
-import { CreateUserDto } from "src/dtos/user/create-user.dto";
-import { authenticator } from "otplib";
-import { toDataURL } from "qrcode";
-import { UsernameDto } from "src/dtos/auth/username.dto";
+
+// typeorm repository manipulation
+import { DeleteResult, Repository, TypeORMError, UpdateResult } from "typeorm";
+
+// idk, angi wat is deze
 import * as bcrypt from 'bcrypt';
 
+// dtos
+import { CreateUserDto } from "src/dtos/user/create-user.dto";
+import { UsernameDto } from "src/dtos/auth/username.dto";
+
+/**
+ * User services
+ * 
+ * Contains all typeorm sql injections.
+ * Some functions that not yet used:
+ * - setJwt
+ * - seedCustom
+ */
 @Injectable()
 export class UserService {
   constructor(
@@ -16,73 +35,115 @@ export class UserService {
     private readonly userRepository: Repository<User>
   ) {}
 
-  getUsers(): Promise<User[]> {
-    return this.userRepository.find();
+  async getUsers(): Promise<User[]> {
+    try {
+      const ret = await this.userRepository.find();
+      return Promise.resolve(ret);
+    } catch (err: any) {
+      return Promise.reject(TypeORMError)
+    }
   }
 
-  findUsersById(id: number): Promise<User> {
-    return this.userRepository.findOne({ where: { id } });
+  async findUsersById(id: number): Promise<User> {
+    try {
+      const ret = await this.userRepository.findOne({ where: { id } });
+      return Promise.resolve(ret);
+    } catch (err: any) {
+      return Promise.reject(TypeORMError)
+    }
   }
 
-  findUsersByintraId(intraId: string): Promise<User> {
-    return this.userRepository.findOne({ where: { intraId } });
+  async findUsersByintraId(intraId: string): Promise<User> {
+    try {
+      const ret = await this.userRepository.findOne({ where: { intraId } });
+      return Promise.resolve(ret);
+    } catch (err: any) {
+      return Promise.reject(TypeORMError)
+    }
   }
 
-  findUserByUsername(username: string): Promise<User> {
-    return this.userRepository.findOne({ where: { username } });
+  async findUserByUsername(username: string): Promise<User> {
+    try {
+      const ret = await this.userRepository.findOne({ where: { username } });
+      return Promise.resolve(ret);
+    } catch (err: any) {
+      return Promise.reject(TypeORMError)
+    }
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
-    if (!(await this.findUserByUsername(createUserDto.username))) return;
-    const newUser = this.userRepository.create(createUserDto);
-    return await this.userRepository.save(newUser);
+    try {
+      if (!(await this.findUserByUsername(createUserDto.username)))
+        return null;
+      const newUser = this.userRepository.create(createUserDto);
+      const ret = await this.userRepository.save(newUser);
+      return Promise.resolve(ret);
+    } catch (err: any) {
+      return Promise.reject(TypeORMError)
+    }
   }
 
-  async addRefreshToken(
-    userDto: UsernameDto,
-    token: string
-  ): Promise<UpdateResult> {
-    const ret = await this.findUserByUsername(userDto.username);
-
-    const saltOrRounds = 10;
-    const hash = await bcrypt.hash(token, saltOrRounds);
-
-    return await this.userRepository
-      .createQueryBuilder()
-      .update(ret)
-      .set({ refreshToken: hash })
-      .where({ id: ret.id })
-      .returning("*")
-      .execute();
-  }
-
-  removeUser(username: string): Promise<DeleteResult> {
-    const ret = this.userRepository
+  async removeUser(username: string): Promise<DeleteResult> {
+    try {
+      const ret = await this.userRepository
       .createQueryBuilder("Users")
       .delete()
       .from("users")
       .where("username =:username", { username })
       .execute();
-    return ret;
+      return Promise.resolve(ret);
+    } catch (err: any) {
+      return Promise.reject(TypeORMError)
+    }
   }
 
-  setTwoFactorAuthSecret(id: number, tfaSecret: string): Promise<any> {
-    return this.userRepository.update(id, { tfaSecret });
+  async setRefreshToken(
+    userDto: UsernameDto,
+    token: string
+  ): Promise<UpdateResult> {
+    try {
+      const user = await this.findUserByUsername(userDto.username);
+      const saltOrRounds = 10;
+      const hash = await bcrypt.hash(token, saltOrRounds);
+
+      return await this.userRepository
+      .createQueryBuilder()
+      .update(user)
+      .set({ refreshToken: hash })
+      .where({ id: user.id })
+      .returning("*")
+      .execute();      
+    } catch (err: any) {
+      return Promise.reject(err) // idk what type of error this could be
+    }
+  }
+
+  async set2faSecret(id: number, tfaSecret: string): Promise<any> {
+    try {
+      const ret = await this.userRepository.update(id, { tfaSecret });
+      return Promise.resolve(ret);
+    } catch (err: any) {
+      return Promise.reject(TypeORMError)
+    }
   }
 
   async update2fasecret(
     userDto: UsernameDto,
     secret: string
   ): Promise<UpdateResult> {
-    const ret = await this.findUserByUsername(userDto.username);
-
-    return this.userRepository
+    try {
+      const user = await this.findUserByUsername(userDto.username);
+      const ret = await this.userRepository
       .createQueryBuilder()
-      .update(ret)
+      .update(user)
       .set({ tfaSecret: secret })
-      .where({ id: ret.id })
+      .where({ id: user.id })
       .returning("*")
       .execute();
+      return Promise.resolve(ret);
+    } catch (err: any) {
+      return Promise.reject(TypeORMError)
+    }
   }
 
   // setTwoFactorAuthSecret(id: number, twoFactorAuthenticationSecret: string) {
@@ -93,7 +154,25 @@ export class UserService {
   //   this.setTwoFactorAuthSecret(userId, secret);
   // }
 
-  async seedCustom(amount: number): Promise<HttpStatus> {
+  async setTfa(username: string, option: boolean): Promise<UpdateResult> {
+    try {
+      const user = await this.findUserByUsername(username);
+
+      const ret = await this.userRepository
+      .createQueryBuilder()
+      .update(user)
+      .set({ isTfaEnabled: option })
+      .where({ id: user.id })
+      .returning("*")
+      .execute();
+      return Promise.resolve(ret);
+    } catch (err: any) {
+      return Promise.reject(TypeORMError)
+    }
+  }
+
+  // FUNTION IS NOT YET USED
+  async seedCustom(amount: number): Promise<User[]> {
     try {
       for (let i = 1; i <= amount; i++) {
         await this.createUser({
@@ -102,21 +181,9 @@ export class UserService {
           description: randParagraph()
         });
       }
-      return HttpStatus.OK;
-    } catch (error) {
-      return HttpStatus.INTERNAL_SERVER_ERROR;
+      return this.getUsers();
+    } catch (err: any) {
+      return Promise.reject(TypeORMError)
     }
-  }
-
-  async turnOn2fa(usernameDto: UsernameDto): Promise<UpdateResult> {
-    const ret = await this.findUserByUsername(usernameDto.username);
-
-    return this.userRepository
-      .createQueryBuilder()
-      .update(ret)
-      .set({ isTfaEnabled: true })
-      .where({ id: ret.id })
-      .returning("*")
-      .execute();
   }
 }

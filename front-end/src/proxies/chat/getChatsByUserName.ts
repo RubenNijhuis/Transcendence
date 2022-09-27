@@ -11,18 +11,14 @@ import ApiRoutes from "../../config/ApiRoutes";
 import transformToRequestError from "../utils/transformToRequestError";
 
 // Types
-import { AuthTokenType } from "../../types/request";
 import { GroupChat } from "../../types/chat";
 
-const getChatByUserName = async (
-    userName: string,
-    authToken: AuthTokenType
-): Promise<GroupChat[]> => {
+const getChatByUserName = async (userName: string): Promise<GroupChat[]> => {
     try {
         const { data } = await axios.get<GroupChat[]>(
             ApiRoutes.getChatByUserName(userName),
             {
-                headers: getAuthHeader(authToken)
+                headers: getAuthHeader()
             }
         );
         return Promise.resolve(data);

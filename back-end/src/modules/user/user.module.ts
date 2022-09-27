@@ -5,7 +5,7 @@ import { User } from "src/entities";
 import { ConfigModule } from "@nestjs/config";
 import { PassportModule } from "@nestjs/passport";
 import { JwtModule } from "@nestjs/jwt";
-import { UsersController } from "../../controllers/user/user.controller";
+import { UsersController } from "src/controllers/user/user.controller";
 
 @Module({
   imports: [

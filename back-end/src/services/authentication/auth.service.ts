@@ -124,12 +124,12 @@ export class AuthService {
     const tokens = await this.getTokens(user.username);
 
     const CreateUserDto = { username: decoded.username };
-    await this.userService.addRefreshToken(CreateUserDto, tokens.refreshToken);
+    await this.userService.setRefreshToken(CreateUserDto, tokens.refreshToken);
     return tokens;
   }
 
   addReftoken(userDto: UsernameDto, token: string)
   {
-    this.userService.addRefreshToken(userDto, token);
+    this.userService.setRefreshToken(userDto, token);
   }
 }

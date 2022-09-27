@@ -55,7 +55,7 @@ const ProfilePage = () => {
     useEffect(() => {
         if (userName === undefined) setSelectedProfile(user);
         else {
-            getUserByUsername(userName, authToken)
+            getUserByUsername(userName)
                 .then(setSelectedProfile)
                 .catch((err: RequestErrorType) => {
                     setError(err);
@@ -73,7 +73,7 @@ const ProfilePage = () => {
                         backgroundColor: mainColor
                     }}
                 >
-                    <ProfileDisplay user={selectedProfile} />
+                    {/* <ProfileDisplay user={selectedProfile} />
                     <ProfileStats
                         player={selectedProfile}
                         matches={matchHistory}
@@ -84,7 +84,7 @@ const ProfilePage = () => {
                     <GameHistory
                         player={selectedProfile}
                         matches={matchHistory}
-                    />
+                    /> */}
                 </div>
             ) : (
                 <Loader />

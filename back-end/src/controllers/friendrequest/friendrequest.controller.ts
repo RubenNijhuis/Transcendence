@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Query } from "@nestjs/common";
-import { CreateRequestDto } from "src/dtos/friendrequest";
+import { CreateRequestDto } from "src/dtos/friendrequest/create-request.dto";
 import { FriendrequestService } from "src/services/friendrequest/friendrequest.service";
 
 @Controller("friendrequest")

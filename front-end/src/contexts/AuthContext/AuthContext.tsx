@@ -13,12 +13,8 @@ import { ProfileType } from "../../types/profile";
 import loginConfirm from "../../proxies/auth/confirmLogin";
 import transformToRequestError from "../../proxies/utils/transformToRequestError";
 
-import { getItem } from "../../modules/LocalStore";
-<<<<<<< Updated upstream
-import LocalStoreIdentifiers from "../../config/LocalStoreIdentifiers";
-=======
-import CredentialIdentifiers from "../../config/CredentialIdentifiers";
->>>>>>> Stashed changes
+import { getItem, setItem } from "../../modules/Store";
+import StoreIdentifiers from "../../config/StoreIdentifiers";
 // import confirmCredentials from "../../proxies/auth/confirmCredentials";
 
 // Define what the auth context contains
@@ -52,11 +48,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     // useEffect(() => {
     //     const savedCredentials = getItem<AuthTokenType>(
-<<<<<<< Updated upstream
-    //         LocalStoreIdentifiers.authToken
-=======
     //         CredentialIdentifiers.authToken
->>>>>>> Stashed changes
     //     );
 
     //     if (savedCredentials !== null) {
@@ -88,7 +80,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
             const { authToken, profile } = data;
 
-            setAuthToken(authToken);
+            setItem(StoreIdentifiers.authToken, authToken);
 
             if (profile !== null) {
                 setUser(profile);

@@ -8,6 +8,7 @@ import transformToRequestError from "../utils/transformToRequestError";
 const startLogin = async (): Promise<string> => {
     try {
         const { data } = await API.get(ApiRoutes.getLoginRoute());
+        console.log(data);
         return Promise.resolve(data);
     } catch (err: any) {
         return Promise.reject(transformToRequestError(err));

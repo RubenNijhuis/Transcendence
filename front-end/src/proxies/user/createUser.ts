@@ -3,12 +3,8 @@ import { API } from "../instances/apiInstance";
 import ApiRoutes from "../../config/ApiRoutes";
 import transformToRequestError from "../utils/transformToRequestError";
 
-// Auth
-import { getAuthHeader } from "../utils/authToken";
-
 // Types
 import { ProfileType } from "../../types/profile";
-import { AuthTokenType } from "../../types/request";
 
 interface createUserProps {
     username: string;
@@ -16,20 +12,15 @@ interface createUserProps {
     description: string;
 }
 
-const createUser = async (
-    userData: createUserProps,
-    authToken: AuthTokenType
-): Promise<ProfileType> => {
+const createUser = async (userData: createUserProps): Promise<ProfileType> => {
     try {
         const { data } = await API.post<ProfileType>(
             ApiRoutes.createUser(),
-            userData,
-            {
-                headers: getAuthHeader(authToken)
-            }
+            userData
         );
         return Promise.resolve(data);
     } catch (err: any) {
+        console.log(err);
         return Promise.reject(transformToRequestError(err));
     }
 };
