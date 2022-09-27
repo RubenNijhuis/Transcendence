@@ -7,6 +7,7 @@ import {
   Req,
   Res,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe
@@ -18,7 +19,7 @@ import UserRoutes from "src/configs/routes/globalRoutes.config";
 // dtos
 import { UsernameDto } from "src/dtos/auth/username.dto";
 import { SetTfaDto } from "src/dtos/auth/setTfa.dto";
-import { CreateUserDto } from "src/dtos/user/create-user.dto";
+import { SetUserDto } from "src/dtos/user/set-user.dto";
 import { SeederAmountDto } from "src/dtos/seeder/custom-seeder.dto";
 
 // user functionalities
@@ -38,6 +39,9 @@ import { bannerStorage, imgFilter } from "src/middleware/imgUpload/imgUpload";
 
 // file upload library
 import { MyNewFileInterceptor } from "src/middleware/imgUpload/file-interceptor";
+import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
+import { Request } from "express";
+import { AccessTokenGuard } from "src/guards/accessToken.guard";
 
 /**
  * The user controller will act as the first entry point for user related api calls.
@@ -45,7 +49,7 @@ import { MyNewFileInterceptor } from "src/middleware/imgUpload/file-interceptor"
  * The user api functionality contains:
  * - getting all users or a specified user
  * - creating and removing a specified user
- * - enabling 2fa
+ * - enabling 2fa                               <--- should be moved to the 2fa controller?
  * - setting the banner/profile picture
  * - seeding the database with random users
  */
@@ -77,9 +81,9 @@ export class UsersController {
 
   @Post(UserRoutes.create)
   @UsePipes(ValidationPipe)
-  async createUser(@Body() createUserDto: CreateUserDto): Promise<any> {
+  async createUser(intraId: string): Promise<any> {
     try {
-      const user: User = await this.userService.createUser(createUserDto);
+      const user: User = await this.userService.createUser(intraId);
       const ret = user;
       console.log("user obj:", user);
       return ret;
@@ -88,10 +92,25 @@ export class UsersController {
     }
   }
 
+  @Post(UserRoutes.create)
+  @UsePipes(ValidationPipe)
+  async setUser(@Req() req: Request, @Body() SetUserDto: SetUserDto): Promise<any> {
+    try {
+      const intraID = 
+
+      return await this.userService.setUser(jwtRet.intraId , SetUserDto);
+    } catch (error) {
+      return error;
+    }
+  }
+
   @Post(UserRoutes.remove)
   @UsePipes(ValidationPipe)
-  async removeUser(@Body() dto: UsernameDto) {
+  @UseGuards(Jwt2faStrategy)
+  async removeUser(@Req() req: Request, @Body() dto: UsernameDto) {
     try {
+      const username = req.user;
+      console.log("CHECK RETURN OF USER JWT: ", username);
       const ret = await this.userService.removeUser(dto.username);
     } catch (error) {
       return error;

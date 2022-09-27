@@ -23,6 +23,13 @@ export class User {
   intraId: string;
 
   @Column({
+    name: "isInitialized",
+    nullable: false,
+    default: false
+  })
+  isInitialized: boolean;
+
+  @Column({
     name: "username",
     nullable: true,
     unique: true
