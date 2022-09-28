@@ -1,6 +1,18 @@
+// Requests
 import axios, { AxiosError, AxiosResponse } from "axios";
+
+// Store
+import StoreIdentifiers from "../../config/StoreIdentifiers";
+import { getItem } from "../../modules/Store";
+
+// Types
+import { AuthTokenType } from "../../types/request";
+
+// Auth
+import { refreshToken } from "../utils/authToken";
+
+// Debug
 import Logger from "../../utils/Logger";
-import { getAuthToken, refreshToken } from "../utils/authToken";
 
 // Instance
 const API = axios.create({
@@ -11,22 +23,11 @@ const API = axios.create({
  * Set the default authorization header. If the user can't
  * refresh their token or has never logged in it won't be set.
  */
-const setDefaultAuthHeader = () => {
-    const token = getAuthToken();
-
-    if (token !== null) {
-        console.log("YES");
-        API.defaults.headers.common[
-            "Authorization"
-        ] = `Bearer ${token.jsonWebToken}`;
-    } else {
-        console.log("NEIN");
-        refreshToken();
-    }
+const setDefaultAuthHeader = (token: AuthTokenType) => {
+    API.defaults.headers.common[
+        "Authorization"
+    ] = `Bearer ${token.jsonWebToken}`;
 };
-
-// Iffe because no other way to run it i think
-(() => setDefaultAuthHeader())();
 
 // Request interceptor for auth credentials
 const SuccesResponseInterceptor = (response: AxiosResponse) => {
@@ -36,6 +37,8 @@ const SuccesResponseInterceptor = (response: AxiosResponse) => {
 
 // Request interceptor for auth credentials
 const ErrorResponseInterceptor = (err: AxiosError) => {
+    const token = getItem<AuthTokenType>(StoreIdentifiers.authToken);
+
     if (err.response) {
         if (err.response.status === 401) {
             Logger(
@@ -44,7 +47,7 @@ const ErrorResponseInterceptor = (err: AxiosError) => {
                 "Resetting credentials",
                 err.response.status
             );
-            refreshToken();
+            if (token) refreshToken(token);
         }
     }
     return err;
@@ -56,4 +59,4 @@ API.interceptors.response.use(
     ErrorResponseInterceptor
 );
 
-export { API };
+export { API, setDefaultAuthHeader };

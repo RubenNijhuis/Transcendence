@@ -93,7 +93,6 @@ const CreateAccount = () => {
             .then((returnedUserProfile: ProfileType) => {
                 setUser(returnedUserProfile);
                 setLoggedIn(true);
-                console.log("REROUTED AFTER CREATION");
                 navigate(PageRoutes.profile);
             })
             .catch((err: RequestErrorType) => {

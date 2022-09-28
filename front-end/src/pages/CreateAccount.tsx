@@ -8,7 +8,7 @@ import { magicNum, smallRadius } from "../styles/StylingConstants";
 // UI
 import Button from "../components/Button";
 import Heading from "../components/Heading";
-import Layout from "../components/Layout";
+
 // Box slider
 import BoxSlider from "../components/BoxSlider";
 import Slide from "../components/BoxSlider/Slide/Slide";
@@ -91,7 +91,6 @@ const CreateAccount = () => {
          */
         createUser(providedDetails)
             .then((returnedUserProfile: ProfileType) => {
-                console.log("CREATE USER RESP:", returnedUserProfile);
                 setUser(returnedUserProfile);
                 setLoggedIn(true);
                 navigate(PageRoutes.profile);

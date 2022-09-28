@@ -14,10 +14,7 @@ import { ProfileType } from "../../types/profile";
 const getLeaderboard = async (): Promise<ProfileType[]> => {
     try {
         const { data } = await axios.get<ProfileType[]>(
-            ApiRoutes.getLeaderboard(),
-            {
-                headers: getAuthHeader()
-            }
+            ApiRoutes.getLeaderboard()
         );
         return Promise.resolve(data);
     } catch (err: any) {

@@ -24,8 +24,9 @@ const CTAButton = ({ authStatus }: { authStatus: boolean }) => {
     const toLoginPage = () => {
         startLogin()
             .then((url: string) => {
-                console.log(url);
-                window.location.assign(url)
+                if (url !== undefined) {
+                    window.location.assign(url);
+                }
             })
             .catch((err: RequestErrorType) => {
                 Logger("ERROR", "Navbar", "Req login page url", err);

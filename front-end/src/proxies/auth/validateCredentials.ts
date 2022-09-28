@@ -1,6 +1,5 @@
 // API Request config
 import ApiRoutes from "../../config/ApiRoutes";
-import StoreIdentifiers from "../../config/StoreIdentifiers";
 
 import { AuthTokenType } from "../../types/request";
 import { API } from "../instances/apiInstance";

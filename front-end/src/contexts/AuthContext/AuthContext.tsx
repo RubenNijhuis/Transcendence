@@ -2,21 +2,24 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Types
-import {
-    LoginConfirmResponse,
-    AuthTokenType,
-    AuthStatusType
-} from "../../types/request";
+import { LoginConfirmResponse, AuthTokenType } from "../../types/request";
 import { ProfileType } from "../../types/profile";
 
 // Requests
 import loginConfirm from "../../proxies/auth/confirmLogin";
 import transformToRequestError from "../../proxies/utils/transformToRequestError";
 
+// Store
 import { getItem, setItem } from "../../modules/Store";
 import StoreIdentifiers from "../../config/StoreIdentifiers";
-import { API } from "../../proxies/instances/apiInstance";
-// import confirmCredentials from "../../proxies/auth/confirmCredentials";
+
+// Auth
+import { setDefaultAuthHeader } from "../../proxies/instances/apiInstance";
+import { refreshToken } from "../../proxies/utils/authToken";
+
+// Debug
+import { generateProfile } from "../FakeDataContext/fakeDataGenerators";
+import Logger from "../../utils/Logger";
 
 // Define what the auth context contains
 interface AuthContextType {
@@ -47,55 +50,51 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [authToken, setAuthToken] = useState<AuthTokenType>(null!);
 
-    // useEffect(() => {
-    //     const savedCredentials = getItem<AuthTokenType>(
-    //         CredentialIdentifiers.authToken
-    //     );
-
-    //     if (savedCredentials !== null) {
-    //         confirmCredentials(savedCredentials).then(
-    //             (state: AuthStatusType) => {
-    //                 if (state === AuthStatusType.Valid) {
-    //                     setAuthToken(savedCredentials);
-    //                     setLoggedIn(true);
-    //                 } else if (state === AuthStatusType.Invalid) {
-    //                     // get new token
-    //                 } else if (state === AuthStatusType.Revoked) {
-    //                     // account has been blocked forever
-    //                 }
-    //             }
-    //         );
-    //     } else {
-    //         console.log(" no tokens set ");
-    //     }
-    // }, []);
-
     /**
-     * Makes a request to the back-end using the intra code. The expected
-     * return value is a user as well as a bool indicating whether to
-     * create a user or not.
+     * Makes a request to the back-end using the third party provided
+     * code. The expected return value is a user as well as a bool
+     * indicating whether to create a user or not.
      */
     const signIn = async (code: string): Promise<LoginConfirmResponse> => {
         try {
-            const data = await loginConfirm(code);
+            const loginConfirmResp = await loginConfirm(code);
 
-            const { authToken, profile } = data;
+            const { authToken, profile } = loginConfirmResp;
 
             setItem(StoreIdentifiers.authToken, authToken);
-            API.defaults.headers.common[
-                "Authorization"
-            ] = `Bearer ${authToken.jsonWebToken}`;
+            setDefaultAuthHeader(authToken);
 
             if (profile !== null) {
                 setUser(profile);
                 setLoggedIn(true);
             }
 
-            return Promise.resolve(data);
+            return Promise.resolve(loginConfirmResp);
         } catch (err: any) {
             return Promise.reject(transformToRequestError(err));
         }
     };
+
+    useEffect(() => {
+        const setToken = async () => {
+            const token = getItem<AuthTokenType>(StoreIdentifiers.authToken);
+            if (token) {
+                try {
+                    const newJWT = await refreshToken(token);
+
+                    Logger("AUTH", "Auth context", "Newly generated jwt", null);
+
+                    setUser(generateProfile(1)[0]);
+                    setItem(StoreIdentifiers.authToken, newJWT);
+                    setDefaultAuthHeader(token);
+                    setLoggedIn(true);
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+        };
+        setToken();
+    }, []);
 
     const value: AuthContextType = {
         user,

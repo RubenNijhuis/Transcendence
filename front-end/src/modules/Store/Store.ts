@@ -1,8 +1,10 @@
-const setItem = (name: string, value: any) =>
-    localStorage.setItem(name, JSON.stringify(value));
+const setItem = (name: string, value: any) => {
+    if (value !== undefined) localStorage.setItem(name, JSON.stringify(value));
+};
 
 const getItem = <T>(name: string): T | null => {
-    const value: string | null = localStorage.getItem(name);
+    const itemExists = localStorage.getItem(name) !== undefined;
+    const value: string | null = itemExists ? localStorage.getItem(name) : null;
 
     if (value !== null) {
         const transformedValue: T = JSON.parse(value);
