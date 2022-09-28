@@ -50,19 +50,16 @@ export class AuthController {
       // console.log("tokens:", tokens);
 
       const CreateUserDto = { username: username };
-      this.userService
-        .createUser(intraID)
-        .then((res) => console.log("Entry creation db return val:", res))
-        .catch((err) => console.log("DB PARTIAL ERROR", err));
+      await this.userService.createUser(intraID);
 
       //TO DO: check if exists first before adding
       // this.authService.addReftoken(CreateUserDto, tokens.refreshToken);
-      return this.authService.validateUser(
+      return await this.authService.validateUser(
         intraID,
         tokens.accessToken,
         tokens.refreshToken
       );
-    } catch (err) {
+    } catch (err: any) {
       return err;
     }
   }

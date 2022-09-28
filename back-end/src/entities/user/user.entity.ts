@@ -37,7 +37,7 @@ export class User {
   })
   color: string;
   @Column({
-    name: "discription",
+    name: "description",
     nullable: true
   })
   description: string;
