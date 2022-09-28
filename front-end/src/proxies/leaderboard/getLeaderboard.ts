@@ -5,9 +5,6 @@ import transformToRequestError from "../utils/transformToRequestError";
 // Api Routes
 import ApiRoutes from "../../config/ApiRoutes";
 
-// Auth
-import { getAuthHeader } from "../utils/authToken";
-
 // Types
 import { ProfileType } from "../../types/profile";
 
