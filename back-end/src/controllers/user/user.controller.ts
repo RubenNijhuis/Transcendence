@@ -79,18 +79,18 @@ export class UsersController {
     }
   }
 
-  @Post(UserRoutes.create)
-  @UsePipes(ValidationPipe)
-  async createUser(intraId: string): Promise<any> {
-    try {
-      const user: User = await this.userService.createUser(intraId);
-      const ret = user;
-      console.log("user obj:", user);
-      return ret;
-    } catch (error) {
-      return error;
-    }
-  }
+  // @Post(UserRoutes.create)
+  // @UsePipes(ValidationPipe)
+  // async createUser(intraId: string): Promise<any> {
+  //   try {
+  //     console.log("enters creat user in controller");
+  //     const ret: User = await this.userService.createUser(intraId);
+  //     return ret;
+  //   } catch (err: any) {
+  //     console.log("controller, createUser(): ", err);
+  //     return err;
+  //   }
+  // }
 
   @Post(UserRoutes.setUser)
   @UsePipes(ValidationPipe)
@@ -103,8 +103,9 @@ export class UsersController {
       const intraID = req.user["intraID"];
 
       return await this.userService.setUser(intraID, SetUserDto);
-    } catch (error) {
-      return error;
+    } catch (err) {
+      console.log("controller, setUser(): ", err);
+      return err;
     }
   }
 

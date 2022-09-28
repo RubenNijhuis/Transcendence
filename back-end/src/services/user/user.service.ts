@@ -34,6 +34,11 @@ import { UsernameDto } from "src/dtos/auth/username.dto";
  * - set2faSecret
  * - update2faSecret is being used in tfa.service
  */
+
+/**
+ * IMPORTANT: createUser wordt niet aangeroepen in de frontend
+ * dus ik heb de path verwijderd.
+ */
 @Injectable()
 export class UserService {
   constructor(
@@ -46,7 +51,7 @@ export class UserService {
       const ret = await this.userRepository.find();
       return Promise.resolve(ret);
     } catch (err: any) {
-      return Promise.reject(err);
+      throw err;
     }
   }
 
@@ -55,7 +60,7 @@ export class UserService {
       const ret = await this.userRepository.findOne({ where: { id } });
       return Promise.resolve(ret);
     } catch (err: any) {
-      return Promise.reject(err);
+      throw err;
     }
   }
 
@@ -64,7 +69,7 @@ export class UserService {
       const ret = await this.userRepository.findOne({ where: { intraId } });
       return Promise.resolve(ret);
     } catch (err: any) {
-      return Promise.reject(err);
+      throw err;
     }
   }
 
@@ -73,25 +78,31 @@ export class UserService {
       const ret = await this.userRepository.findOne({ where: { username } });
       return Promise.resolve(ret);
     } catch (err: any) {
-      return Promise.reject(err);
+      throw err;
     }
   }
 
-  async createUser(intraID: string): Promise<User> {
+  async createUser(intraID: string, refreshToken: string): Promise<User> {
     try {
       if (await this.findUserByintraId(intraID)) return null;
-      const newUser = this.userRepository.create({ intraId: intraID });
+      const query = {
+        intraId: intraID,
+        refreshToken: refreshToken
+      };
+
+      const newUser = this.userRepository.create(query);
       const ret = await this.userRepository.save(newUser);
+
       return Promise.resolve(ret);
     } catch (err: any) {
-      return Promise.reject(err);
+      throw err;
     }
   }
 
   async setUser(
     intraID: string,
     SetUserDto: SetUserDto
-  ): Promise<UpdateResult> {
+  ): Promise<any> {
     try {
       const user: User = await this.findUserByintraId(intraID);
       const query = {
@@ -111,7 +122,7 @@ export class UserService {
         .returning("*")
         .execute();
     } catch (err: any) {
-      return Promise.reject(err);
+      throw err;
     }
   }
 
@@ -125,7 +136,7 @@ export class UserService {
         .execute();
       return Promise.resolve(user);
     } catch (err: any) {
-      return Promise.reject(err);
+      throw err;
     }
   }
 
@@ -146,16 +157,16 @@ export class UserService {
         .returning("*")
         .execute();
     } catch (err: any) {
-      return Promise.reject(err); // idk what type of error this could be
+      throw err;
     }
   }
 
-  async set2faSecret(id: number, tfaSecret: string): Promise<any> {
+  async set2faSecret(id: number, tfaSecret: string): Promise<UpdateResult> {
     try {
       const ret = await this.userRepository.update(id, { tfaSecret });
       return Promise.resolve(ret);
     } catch (err: any) {
-      return Promise.reject(err);
+      throw err;
     }
   }
 
@@ -174,7 +185,7 @@ export class UserService {
         .execute();
       return Promise.resolve(ret);
     } catch (err: any) {
-      return Promise.reject(err);
+      throw err;
     }
   }
 
@@ -199,16 +210,15 @@ export class UserService {
         .execute();
       return Promise.resolve(ret);
     } catch (err: any) {
-      return Promise.reject(err);
+      throw err;
     }
   }
 
-  // FUNTION IS NOT YET USED
   async seedCustom(amount: number): Promise<User[]> {
     try {
       for (let i = 1; i <= amount; i++) {
         let genIntraId = randUserName();
-        await this.createUser(genIntraId);
+        await this.createUser(genIntraId, "lolo");
         await this.setUser(genIntraId, {
           username: randFullName(),
           color: randColor().toString(),
@@ -217,7 +227,7 @@ export class UserService {
       }
       return this.getUsers();
     } catch (err: any) {
-      return Promise.reject(err);
+      throw err;
     }
   }
 }
