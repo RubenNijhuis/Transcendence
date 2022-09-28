@@ -19,12 +19,15 @@ import { User } from "src/entities";
 // typeorm repository manipulation
 import { DeleteResult, Repository, TypeORMError, UpdateResult } from "typeorm";
 
-// idk, angi wat is deze
+// idk, angi wat is deze.
+// Angi -> Is better practise om shit gehashed op te slaan en er staat ook op de pfd all passwords should be saved hashed
 import * as bcrypt from "bcrypt";
+import { createHash } from 'crypto';
 
 // dtos
 import { SetUserDto } from "src/dtos/user/set-user.dto";
 import { UsernameDto } from "src/dtos/auth/username.dto";
+import { intraIDDto } from "src/dtos/auth/intraID.dto";
 
 /**
  * User services
@@ -141,13 +144,14 @@ export class UserService {
   }
 
   async setRefreshToken(
-    userDto: UsernameDto,
+    intraID: intraIDDto,
     token: string
   ): Promise<UpdateResult> {
     try {
-      const user = await this.findUserByUsername(userDto.username);
+      const user = await this.findUserByintraId(intraID.intraID);
+      const hash1 = createHash('sha256').update(token).digest('hex');
       const saltOrRounds = 10;
-      const hash = await bcrypt.hash(token, saltOrRounds); // <- deze
+      const hash = await bcrypt.hash(hash1, saltOrRounds); // <- deze
 
       return await this.userRepository
         .createQueryBuilder()

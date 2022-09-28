@@ -5,7 +5,9 @@ import { User } from "src/entities";
 import { UserService } from "../user/user.service";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
-import { UsernameDto } from "src/dtos/auth";
+import { UpdateResult } from "typeorm";
+import { intraIDDto } from "src/dtos/auth/intraID.dto";
+import { createHash } from "crypto";
 
 const jwt = require("jsonwebtoken");
 
@@ -82,54 +84,74 @@ export class AuthService {
   }
 
   async getTokens(intraID: string) {
-    const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.signAsync(
-        {
-          intraID
-        },
-        {
-          secret: this.configService.get<string>("JWT_ACCESS_SECRET"),
-          expiresIn: "15m"
-        }
-      ),
-      this.jwtService.signAsync(
-        {
-          intraID
-        },
-        {
-          secret: this.configService.get<string>("JWT_REFRESH_SECRET"),
-          expiresIn: "7d"
-        }
-      )
-    ]);
+    try {
+      const [accessToken, refreshToken] = await Promise.all([
+        this.jwtService.signAsync(
+          {
+            intraID
+          },
+          {
+            secret: this.configService.get<string>("JWT_ACCESS_SECRET"),
+            expiresIn: "15m"
+          }
+        ),
+        this.jwtService.signAsync(
+          {
+            intraID
+          },
+          {
+            secret: this.configService.get<string>("JWT_REFRESH_SECRET"),
+            expiresIn: "7d"
+          }
+        )
+      ]);
 
-    return {
-      accessToken,
-      refreshToken
-    };
+      return {
+        accessToken,
+        refreshToken
+      };
+    }
+    catch (e)
+    {
+      // console.error(e);
+      return e;
+    }
   }
 
+  //TODO ? TO DO: remove all extra info after access denied in the throw errors. Could be used to figure out how the program works
   async refreshTokens(refreshToken: string) {
-    const secret = this.configService.get<string>("JWT_REFRESH_SECRET");
-    const isValidRefToken = jwt.verify(refreshToken, secret);
-    if (!isValidRefToken) throw new ForbiddenException("Access Denied");
+    const secret: string = this.configService.get<string>("JWT_REFRESH_SECRET");
+    const isValidRefToken: string = jwt.verify(refreshToken, secret);
+    if (!isValidRefToken) throw new ForbiddenException("Access Denied: Not a valid Token");
 
-    const decoded = this.jwtService.decode(refreshToken) as PayloadType;
-    if (!decoded) throw new ForbiddenException("Access Denied");
-    const user = await this.userService.findUserByUsername(decoded.intraID);
-    if (!user || !user.refreshToken)
-      throw new ForbiddenException("Access Denied");
+    const decoded: PayloadType = this.jwtService.decode(refreshToken) as PayloadType;
+    if (!decoded) throw new ForbiddenException("Access Denied: Cannot decode");
 
-    const isMatch = await bcrypt.compare(refreshToken, user.refreshToken);
-
-    if (!isMatch) throw new ForbiddenException("Access Denied");
-    const tokens = await this.getTokens(user.username);
-
-    const CreateUserDto = { username: decoded.intraID };
-    return tokens;
+    try {
+      const user: User = await this.userService.findUserByintraId(decoded.intraID);
+      if (!user || !user.refreshToken)
+        throw new ForbiddenException("Access Denied: No user in database");
+      console.log("test1:", user.refreshToken);
+      const hash = createHash('sha256').update(refreshToken).digest('hex');
+      const isMatch: boolean = await bcrypt.compare(hash, user.refreshToken);
+      if (isMatch == false)
+        throw new ForbiddenException("Access Denied: Not a match");
+      const tokens: { accessToken: string; refreshToken: string; } = await this.getTokens(decoded.intraID);
+      console.log("test:\n", refreshToken, "\n", tokens.refreshToken);
+      const intraIDDto = { intraID: decoded.intraID };
+      const addUser: UpdateResult = await this.userService.setRefreshToken(intraIDDto, tokens.refreshToken);
+      if (!addUser)
+        throw new ForbiddenException("Access Denied: Failed to add token");
+      return tokens;
+    }
+    catch (e)
+    {
+      // console.error(e);
+      return e;
+    }
   }
 
-  addReftoken(userDto: UsernameDto, token: string) {
+  addReftoken(userDto: intraIDDto, token: string) {
     this.userService.setRefreshToken(userDto, token);
   }
 }

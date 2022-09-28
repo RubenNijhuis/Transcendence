@@ -6,6 +6,8 @@ import { AuthService } from "../../services/authentication/auth.service";
 import { Request } from "express";
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
 import { UserService } from "src/services/user/user.service";
+import * as bcrypt from "bcrypt";
+import { createHash } from "crypto";
 
 @Controller("Auth")
 export class AuthController {
@@ -47,13 +49,17 @@ export class AuthController {
       // console.log("intraID", intraID);
 
       const tokens = await this.authService.getTokens(intraID);
+      const hash1 = createHash('sha256').update(tokens.refreshToken).digest('hex');
+      const saltOrRounds = 10;
+      const hash = await bcrypt.hash(hash1, saltOrRounds);
       // console.log("tokens:", tokens);
 
       const CreateUserDto = { username: username };
-      await this.userService.createUser(intraID, tokens.refreshToken);
+      await this.userService.createUser(intraID, hash);
 
       //TO DO: check if exists first before adding
       // this.authService.addReftoken(CreateUserDto, tokens.refreshToken);
+      console.log("refreshtoken for testing:", tokens.refreshToken);
       return await this.authService.validateUser(
         intraID,
         tokens.accessToken,
@@ -63,12 +69,11 @@ export class AuthController {
       return err;
     }
   }
-  //TODO: DOESNT WORK ATM UWU
+
   @UseGuards(RefreshTokenGuard)
   @Get("refresh")
   refreshTokens(@Req() req: Request) {
     const refreshToken = req.user["refreshToken"];
-    console.log(refreshToken);
     return this.authService.refreshTokens(refreshToken);
   }
 
