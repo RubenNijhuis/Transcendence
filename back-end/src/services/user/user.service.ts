@@ -34,6 +34,11 @@ import { UsernameDto } from "src/dtos/auth/username.dto";
  * - set2faSecret
  * - update2faSecret is being used in tfa.service
  */
+
+/**
+ * IMPORTANT: createUser wordt niet aangeroepen in de frontend
+ * dus ik heb de path verwijderd.
+ */
 @Injectable()
 export class UserService {
   constructor(
@@ -77,10 +82,15 @@ export class UserService {
     }
   }
 
-  async createUser(intraID: string): Promise<User> {
+  async createUser(intraID: string, refreshToken: string): Promise<User> {
     try {
       if (await this.findUserByintraId(intraID)) return null;
-      const newUser = this.userRepository.create({ intraId: intraID });
+      const query = {
+        intraId: intraID,
+        refreshToken: refreshToken
+      };
+
+      const newUser = this.userRepository.create(query);
       const ret = await this.userRepository.save(newUser);
 
       return Promise.resolve(ret);
@@ -208,7 +218,7 @@ export class UserService {
     try {
       for (let i = 1; i <= amount; i++) {
         let genIntraId = randUserName();
-        await this.createUser(genIntraId);
+        await this.createUser(genIntraId, "lolo");
         await this.setUser(genIntraId, {
           username: randFullName(),
           color: randColor().toString(),

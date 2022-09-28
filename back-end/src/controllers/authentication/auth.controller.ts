@@ -50,7 +50,7 @@ export class AuthController {
       // console.log("tokens:", tokens);
 
       const CreateUserDto = { username: username };
-      await this.userService.createUser(intraID);
+      await this.userService.createUser(intraID, tokens.refreshToken);
 
       //TO DO: check if exists first before adding
       // this.authService.addReftoken(CreateUserDto, tokens.refreshToken);
