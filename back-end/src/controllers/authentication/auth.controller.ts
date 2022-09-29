@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Req, UseGuards } from "@nestjs/common";
+import { Controller, Get, Query, Req, UseGuards,ForbiddenException  } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import Axios from "axios";
 import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
@@ -8,6 +8,11 @@ import { AccessTokenGuard } from "src/guards/accessToken.guard";
 import { UserService } from "src/services/user/user.service";
 import * as bcrypt from "bcrypt";
 import { createHash } from "crypto";
+import { JwtService } from "@nestjs/jwt";
+
+type PayloadType = {
+	intraID: string;
+  };
 
 @Controller("Auth")
 export class AuthController {
@@ -15,7 +20,8 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+	private readonly jwtService: JwtService
   ) {}
 
   @Get("login")
@@ -82,5 +88,15 @@ export class AuthController {
   acessTokens(@Req() req: Request) {
     const intraID = req.user["intraID"];
     console.log("IntraID:", intraID);
+  }
+
+  @UseGuards(RefreshTokenGuard)
+  @Get("getUserByID")
+  getUserByID(@Req() req: Request) {
+	const refreshToken = req.user["refreshToken"];
+    const decodedJwt = this.jwtService.decode(refreshToken) as PayloadType;
+    const intraID = decodedJwt.intraID;
+    const user = this.userService.findUserByintraId(intraID);
+    return user;
   }
 }
