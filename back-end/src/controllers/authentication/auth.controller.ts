@@ -10,6 +10,11 @@ import * as bcrypt from "bcrypt";
 import { createHash } from "crypto";
 import { JwtService } from "@nestjs/jwt";
 
+interface AuthTokenType {
+	jsonWebToken: string;
+	refreshToken: string;
+}
+
 type PayloadType = {
 	intraID: string;
   };
@@ -83,19 +88,17 @@ export class AuthController {
     return this.authService.refreshTokens(refreshToken);
   }
 
-  @UseGuards(AccessTokenGuard)
-  @Get("test")
-  acessTokens(@Req() req: Request) {
-    const intraID = req.user["intraID"];
-    console.log("IntraID:", intraID);
-  }
+//   @UseGuards(AccessTokenGuard)
+//   @Get("test")
+//   acessTokens(@Req() req: Request) {
+//     const intraID = req.user["intraID"];
+//     console.log("IntraID:", intraID);
+//   }
 
-  @UseGuards(RefreshTokenGuard)
-  @Get("getUserByID")
+  @UseGuards(AccessTokenGuard)
+  @Get("getUserFromAcessToken")
   getUserByID(@Req() req: Request) {
-	const refreshToken = req.user["refreshToken"];
-    const decodedJwt = this.jwtService.decode(refreshToken) as PayloadType;
-    const intraID = decodedJwt.intraID;
+	const intraID = req.user["intraID"];
     const user = this.userService.findUserByintraId(intraID);
     return user;
   }
