@@ -1,18 +1,18 @@
 // Requests
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios from "axios";
 
-// Store
-import StoreIdentifiers from "../../config/StoreIdentifiers";
-import { getItem } from "../../modules/Store";
+// Request/Response Interceptors
+import {
+    SuccesRequestInterceptor,
+    ErrorRequestInterceptor,
+    SuccesResponseInterceptor,
+    ErrorResponseInterceptor
+} from "./interceptors";
 
 // Types
 import { AuthTokenType } from "../../types/request";
 
-// Auth
-import { refreshToken } from "../utils/authToken";
-
-// Debug
-import Logger from "../../utils/Logger";
+// TODO: put api instance in a folder with its parts
 
 // Instance
 const API = axios.create({
@@ -29,34 +29,13 @@ const setDefaultAuthHeader = (token: AuthTokenType) => {
     ] = `Bearer ${token.jsonWebToken}`;
 };
 
-// Request interceptor for auth credentials
-const SuccesResponseInterceptor = (response: AxiosResponse) => {
-    console.log("✅ AUTH SUCCES", response);
-    return response;
-};
+// // Setup request interceptors
+// API.interceptors.request.use(SuccesRequestInterceptor, ErrorRequestInterceptor);
 
-// Request interceptor for auth credentials
-const ErrorResponseInterceptor = (err: AxiosError) => {
-    const token = getItem<AuthTokenType>(StoreIdentifiers.authToken);
-
-    if (err.response) {
-        if (err.response.status === 401) {
-            Logger(
-                "AUTH",
-                "Err response interceptor",
-                "Resetting credentials",
-                err.response.status
-            );
-            if (token) refreshToken(token);
-        }
-    }
-    return err;
-};
-
-// Setup AuthInterceptor to be used
-API.interceptors.response.use(
-    SuccesResponseInterceptor,
-    ErrorResponseInterceptor
-);
+// // Setup AuthInterceptor to be used
+// API.interceptors.response.use(
+//     SuccesResponseInterceptor,
+//     ErrorResponseInterceptor
+// );
 
 export { API, setDefaultAuthHeader };

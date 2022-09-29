@@ -18,7 +18,7 @@ import NewPongGame from "../../pages/NewPongGame";
 
 // Authentication
 import Guard from "../Guard";
-import SuccesfulLogin from "../../pages/SuccesfulLogin";
+import SuccesfulLoginPage from "../../pages/SuccesfulLogin";
 import CreateAccount from "../../pages/CreateAccount";
 
 // 404
@@ -38,7 +38,7 @@ const Router = () => (
             {/* Callback route after login */}
             <Route
                 path={PageRoutes.authRedirect}
-                element={<SuccesfulLogin />}
+                element={<SuccesfulLoginPage />}
             />
 
             {/* TODO: only allow to go to this page if user has jwt */}

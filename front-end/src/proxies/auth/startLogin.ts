@@ -2,15 +2,12 @@
 import ApiRoutes from "../../config/ApiRoutes";
 import { API } from "../instances/apiInstance";
 
-// Types
-import transformToRequestError from "../utils/transformToRequestError";
-
 const startLogin = async (): Promise<string> => {
     try {
-        const { data } = await API.get(ApiRoutes.getLoginRoute());
+        const { data } = await API.get<string>(ApiRoutes.getLoginRoute());
         return Promise.resolve(data);
     } catch (err: any) {
-        return Promise.reject(transformToRequestError(err));
+        return Promise.reject(err);
     }
 };
 

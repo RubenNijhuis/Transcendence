@@ -2,8 +2,8 @@
 import { useEffect } from "react";
 
 // UI
-import Heading from "../components/Heading";
 import Layout from "../components/Layout";
+import SuccesfulLogin from "../containers/SuccesfulLogin/SuccesfulLogin";
 
 // Auth
 import { useAuth } from "../contexts/AuthContext";
@@ -12,12 +12,16 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 // Types
-import { LoginConfirmResponse } from "../types/request";
+import { LoginConfirmResponse, RequestErrorType } from "../types/request";
 
 // Page routes
 import PageRoutes from "../config/PageRoutes";
 
-const SuccesfulLogin = () => {
+// Utils
+import { getValueFromUrl } from "../utils/getValueFromUrl";
+import Logger from "../utils/Logger";
+
+const SuccesfulLoginPage = () => {
     const { signIn } = useAuth();
     const navigate = useNavigate();
 
@@ -27,35 +31,29 @@ const SuccesfulLogin = () => {
      * Response will decide if the user needs to be routed
      * to the create-profile page or just the profile page
      */
-    const userRequestProcess = () => {
+    useEffect(() => {
         const href = window.location.href;
-        const token = href.split("?code=")[1];
+        // TODO: put "code" in a config file
+        const token = getValueFromUrl(href, "code");
 
-        signIn(token).then((res: LoginConfirmResponse) => {
-            console.log(res);
-            if (res.shouldCreateUser === true) {
-                navigate(PageRoutes.createAccount);
-            } else {
-                navigate(PageRoutes.profile);
-            }
-        });
-    };
-
-    // Inmediatly set up the request
-    useEffect(() => userRequestProcess());
+        signIn(token)
+            .then((res: LoginConfirmResponse) => {
+                if (res.shouldCreateUser === true) {
+                    navigate(PageRoutes.createAccount);
+                } else {
+                    navigate(PageRoutes.profile);
+                }
+            })
+            .catch((err: RequestErrorType) => {
+                Logger("AUTH", "Succesful login", "Sign in issue", err);
+            });
+    });
 
     return (
         <Layout>
-            <Heading type={1}>
-                Succesfully logged in through the intra API!
-            </Heading>
-            <p>You will be redirected to your account shortly</p>
-            <img
-                src="https://media4.giphy.com/media/s2qXK8wAvkHTO/giphy.webp?cid=ecf05e47z3xi18eq8hka0sms71o4o3xkhbhb7i85eo2zkdob&rid=giphy.webp&ct=g"
-                alt="celabration"
-            />
+            <SuccesfulLogin />
         </Layout>
     );
 };
 
-export default SuccesfulLogin;
+export default SuccesfulLoginPage;

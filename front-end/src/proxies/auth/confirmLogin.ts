@@ -1,19 +1,20 @@
 // API request setup
 import ApiRoutes from "../../config/ApiRoutes";
 import { API } from "../instances/apiInstance";
-import transformToRequestError from "../utils/transformToRequestError";
 
 // Types
 import { LoginConfirmResponse } from "../../types/request";
 
-const confirmLogin = async (
-    code: string
-): Promise<LoginConfirmResponse> => {
+const confirmLogin = async (code: string): Promise<LoginConfirmResponse> => {
     try {
-        const { data } = await API.get(ApiRoutes.confirmLogin(code));
-        return Promise.resolve(data);
+        const res = await API.get<LoginConfirmResponse>(
+            ApiRoutes.confirmLogin(code)
+        );
+
+        console.log(res)
+        return Promise.resolve(res.data);
     } catch (err: any) {
-        return Promise.reject(transformToRequestError(err));
+        return Promise.reject(err);
     }
 };
 

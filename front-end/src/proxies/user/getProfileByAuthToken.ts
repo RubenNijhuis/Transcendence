@@ -1,22 +1,22 @@
-// Requests
-import axios from "axios";
+// Api config
+import ApiRoutes from "../../config/ApiRoutes";
+import { API } from "../instances/apiInstance";
 
 // Types
 import { ProfileType } from "../../types/profile";
+import { AuthTokenType } from "../../types/request";
 
-// Api Routes
-import ApiRoutes from "../../config/ApiRoutes";
-
-// Transform error
-import transformToRequestError from "../utils/transformToRequestError";
-
-const getUserByUsername = async (userName: string): Promise<ProfileType> => {
+const getUserByUserAuthToken = async (
+    token: AuthTokenType
+): Promise<ProfileType> => {
     try {
-        const { data } = await axios.get(ApiRoutes.getUserByUserName(userName));
+        const { data } = await API.get(ApiRoutes.getUserByToken(), {
+            headers: { Authorization: `Bearer ${token.jsonWebToken}` }
+        });
         return Promise.resolve(data);
     } catch (err: any) {
-        return Promise.reject(transformToRequestError(err));
+        return Promise.reject(err);
     }
 };
 
-export default getUserByUsername;
+export default getUserByUserAuthToken;

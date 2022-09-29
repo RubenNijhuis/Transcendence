@@ -1,23 +1,18 @@
-// Request
-import axios from "axios";
-
-// Api Routes
+// Api config
+import { API } from "../instances/apiInstance";
 import ApiRoutes from "../../config/ApiRoutes";
-
-// Error transformer
-import transformToRequestError from "../utils/transformToRequestError";
 
 // Types
 import { GroupChat } from "../../types/chat";
 
 const getChatByUserName = async (userName: string): Promise<GroupChat[]> => {
     try {
-        const { data } = await axios.get<GroupChat[]>(
+        const { data } = await API.get<GroupChat[]>(
             ApiRoutes.getChatByUserName(userName)
         );
         return Promise.resolve(data);
     } catch (err: any) {
-        return Promise.reject(transformToRequestError(err));
+        return Promise.reject(err);
     }
 };
 

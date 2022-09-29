@@ -1,4 +1,3 @@
-// A lot of this was taken from https://stackblitz.com/github/remix-run/react-router/tree/main/examples/auth?file=src%2FApp.tsx
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Types
@@ -7,7 +6,6 @@ import { ProfileType } from "../../types/profile";
 
 // Requests
 import loginConfirm from "../../proxies/auth/confirmLogin";
-import transformToRequestError from "../../proxies/utils/transformToRequestError";
 
 // Store
 import { getItem, setItem } from "../../modules/Store";
@@ -15,10 +13,10 @@ import StoreIdentifiers from "../../config/StoreIdentifiers";
 
 // Auth
 import { setDefaultAuthHeader } from "../../proxies/instances/apiInstance";
-import { refreshToken } from "../../proxies/utils/authToken";
+import { refreshAuthToken } from "../../proxies/auth/refreshToken";
+import getUserByUserAuthToken from "../../proxies/user/getProfileByAuthToken";
 
 // Debug
-import { generateProfile } from "../FakeDataContext/fakeDataGenerators";
 import Logger from "../../utils/Logger";
 
 // Define what the auth context contains
@@ -61,6 +59,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
             const { authToken, profile } = loginConfirmResp;
 
+            Logger(
+                "AUTH",
+                "Auth context",
+                "login confirm resp",
+                loginConfirmResp
+            );
+
             setItem(StoreIdentifiers.authToken, authToken);
             setDefaultAuthHeader(authToken);
 
@@ -71,25 +76,38 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
             return Promise.resolve(loginConfirmResp);
         } catch (err: any) {
-            return Promise.reject(transformToRequestError(err));
+            Logger("AUTH", "Auth context", "Error in singIn", err);
+            return Promise.reject(err);
         }
     };
 
+    /**
+     * Checks if there is still an auth token in the store.
+     * If there is still one we check it's validity and change
+     * the auth state accordingly
+     */
     useEffect(() => {
         const setToken = async () => {
             const token = getItem<AuthTokenType>(StoreIdentifiers.authToken);
+
             if (token) {
                 try {
-                    const newJWT = await refreshToken(token);
-
+                    const newJWT = await refreshAuthToken(token);
                     Logger("AUTH", "Auth context", "Newly generated jwt", null);
+                    const userFromJWT = await getUserByUserAuthToken(newJWT);
 
-                    setUser(generateProfile(1)[0]);
                     setItem(StoreIdentifiers.authToken, newJWT);
                     setDefaultAuthHeader(token);
+
+                    setUser(userFromJWT);
                     setLoggedIn(true);
-                } catch (err) {
-                    console.log(err);
+                } catch (err: any) {
+                    Logger(
+                        "AUTH",
+                        "Auth context",
+                        "Refresh token issue or get user",
+                        err
+                    );
                 }
             }
         };

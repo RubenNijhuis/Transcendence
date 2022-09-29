@@ -9,6 +9,7 @@ const ApiRoutes = {
     // User
     createUser: () => `/user/setUser`,
     getUserByUserName: (userName: string) => `/user/${userName}`,
+    getUserByToken: () => `/user/getUserFromAccessToken`,
 
     // Chat
     getChatByUserName: (userName: string) => `/chats/${userName}`,
@@ -19,7 +20,7 @@ const ApiRoutes = {
     // Auth
     confirmLogin: (code: string) => `/auth/confirm?token=${code}`,
     getLoginRoute: () => `/auth/login`,
-    validateCredentials: () => `/auth/noCRED`
+    refreshAuthToken: () => `/auth/refresh`
 };
 
 export default ApiRoutes;

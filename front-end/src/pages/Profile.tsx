@@ -73,7 +73,7 @@ const ProfilePage = () => {
                         backgroundColor: mainColor
                     }}
                 >
-                    {/* <ProfileDisplay user={selectedProfile} />
+                    <ProfileDisplay user={selectedProfile} />
                     <ProfileStats
                         player={selectedProfile}
                         matches={matchHistory}
@@ -81,7 +81,7 @@ const ProfilePage = () => {
                     {selectedProfile.username !== user.username && (
                         <ProfileActions profile={selectedProfile} />
                     )}
-                    <GameHistory
+                    {/* <GameHistory
                         player={selectedProfile}
                         matches={matchHistory}
                     /> */}
