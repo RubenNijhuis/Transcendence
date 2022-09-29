@@ -19,8 +19,7 @@ import { User } from "src/entities";
 // typeorm repository manipulation
 import { DeleteResult, Repository, TypeORMError, UpdateResult } from "typeorm";
 
-// idk, angi wat is deze.
-// Angi -> Is better practise om shit gehashed op te slaan en er staat ook op de pfd all passwords should be saved hashed
+// hashing libraries - thanks angi
 import * as bcrypt from "bcrypt";
 import { createHash } from 'crypto';
 
@@ -193,6 +192,7 @@ export class UserService {
     }
   }
 
+  // @angi, kunnen deze weg?
   // setTwoFactorAuthSecret(id: number, twoFactorAuthenticationSecret: string) {
   //   return this.userRepository.update( id, {twoFactorAuthenticationSecret,} );
   // }
