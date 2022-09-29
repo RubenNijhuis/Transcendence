@@ -117,7 +117,7 @@ export class UsersController {
     //     throw new UnauthorizedException('Wrong authentication code');
     // }
     try {
-      await this.userService.setTfa(dto.username, dto.option);
+      await this.userService.setTfaOption(dto.username, dto.option);
     } catch (error) {
       return error;
     }
