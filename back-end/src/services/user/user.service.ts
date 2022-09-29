@@ -27,6 +27,7 @@ import { createHash } from 'crypto';
 import { SetUserDto } from "src/dtos/user/set-user.dto";
 import { UsernameDto } from "src/dtos/auth/username.dto";
 import { intraIDDto } from "src/dtos/auth/intraID.dto";
+import { errorHandler } from "src/utils/errorhandler/errorHandler";
 
 /**
  * User services
@@ -60,6 +61,7 @@ export class UserService {
   async findUsersById(id: number): Promise<User> {
     try {
       const ret = await this.userRepository.findOne({ where: { id } });
+      delete ret.intraId; // remove intraId field before passing user back
       return Promise.resolve(ret);
     } catch (err: any) {
       throw err;
@@ -68,7 +70,8 @@ export class UserService {
 
   async findUserByintraId(intraId: string): Promise<User> {
     try {
-      const ret = await this.userRepository.findOne({ where: { intraId } });
+      const ret: User = await this.userRepository.findOne({ where: { intraId } });
+      delete ret.intraId; // remove intraId field before passing user back
       return Promise.resolve(ret);
     } catch (err: any) {
       throw err;
@@ -78,6 +81,8 @@ export class UserService {
   async findUserByUsername(username: string): Promise<User> {
     try {
       const ret = await this.userRepository.findOne({ where: { username } });
+      delete ret.intraId; // remove intraId field before passing user back
+
       return Promise.resolve(ret);
     } catch (err: any) {
       throw err;
@@ -93,11 +98,13 @@ export class UserService {
       };
 
       const newUser = this.userRepository.create(query);
+      // var testUser: User;
+      // const ret = await this.userRepository.save(testUser);
       const ret = await this.userRepository.save(newUser);
-
+      delete ret.intraId; // remove intraId field before passing user back
       return Promise.resolve(ret);
     } catch (err: any) {
-      throw err;
+      throw errorHandler(err, "Failed to create new user", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -124,7 +131,7 @@ export class UserService {
         .returning("*")
         .execute();
     } catch (err: any) {
-      throw err;
+      throw errorHandler(err, "Failed to update user", HttpStatus.INTERNAL_SERVER_ERROR);;
     }
   }
 
@@ -138,7 +145,7 @@ export class UserService {
         .execute();
       return Promise.resolve(user);
     } catch (err: any) {
-      throw err;
+      throw errorHandler(err, "Failed to remove user", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -160,7 +167,7 @@ export class UserService {
         .returning("*")
         .execute();
     } catch (err: any) {
-      throw err;
+      throw errorHandler(err, "Failed to set user refresh token", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -169,10 +176,13 @@ export class UserService {
       const ret = await this.userRepository.update(id, { tfaSecret });
       return Promise.resolve(ret);
     } catch (err: any) {
-      throw err;
+      throw errorHandler(err, "Failed to set user 2fa secret", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
+  // is deze functie niet hetzelde als set2faSecret? je update in beiden de 2fa
+  // als ze iets anders doen, graag vermelden in de functie naam, anders eentje deleten
+  // thanks :) - zeno
   async update2faSecret(
     userDto: UsernameDto,
     secret: string
@@ -188,7 +198,7 @@ export class UserService {
         .execute();
       return Promise.resolve(ret);
     } catch (err: any) {
-      throw err;
+      throw errorHandler(err, "Failed to set user 2fa secret", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -201,7 +211,8 @@ export class UserService {
   //   this.setTwoFactorAuthSecret(userId, secret);
   // }
 
-  async setTfa(username: string, option: boolean): Promise<UpdateResult> {
+  // FUNCTION IS NOT YET USED
+  async setTfaOption(username: string, option: boolean): Promise<UpdateResult> {
     try {
       const user = await this.findUserByUsername(username);
 
@@ -214,7 +225,7 @@ export class UserService {
         .execute();
       return Promise.resolve(ret);
     } catch (err: any) {
-      throw err;
+      throw errorHandler(err, "Failed to set user tfa option", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -231,7 +242,7 @@ export class UserService {
       }
       return this.getUsers();
     } catch (err: any) {
-      throw err;
+      throw errorHandler(err, "Failed to seed database", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

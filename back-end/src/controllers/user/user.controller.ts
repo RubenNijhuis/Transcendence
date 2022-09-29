@@ -79,19 +79,6 @@ export class UsersController {
     }
   }
 
-  // @Post(UserRoutes.create)
-  // @UsePipes(ValidationPipe)
-  // async createUser(intraId: string): Promise<any> {
-  //   try {
-  //     console.log("enters creat user in controller");
-  //     const ret: User = await this.userService.createUser(intraId);
-  //     return ret;
-  //   } catch (err: any) {
-  //     console.log("controller, createUser(): ", err);
-  //     return err;
-  //   }
-  // }
-
   @Post(UserRoutes.setUser)
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)

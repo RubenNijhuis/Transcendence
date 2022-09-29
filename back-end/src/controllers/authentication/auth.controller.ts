@@ -66,6 +66,7 @@ export class AuthController {
         tokens.refreshToken
       );
     } catch (err: any) {
+      console.log(err);
       return err;
     }
   }
