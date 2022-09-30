@@ -69,11 +69,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setItem(StoreIdentifiers.authToken, authToken);
             setDefaultAuthHeader(authToken);
 
-            console.log(
-                "HEY WAHT IS THISH",
-                API.defaults.headers.common["Authorization"]
-            );
-
             if (profile !== null) {
                 setUser(profile);
                 setLoggedIn(true);

@@ -1,38 +1,48 @@
 // Requst package
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
-// Debug
-import Logger from "../../utils/Logger";
+// Error transformer
 import transformToRequestError from "../utils/transformToRequestError";
 
+// Debug
+import Logger from "../../utils/Logger";
+
+/**
+ * This interceptor handles requests that went succesfully
+ * @param request
+ * @returns
+ */
 const SuccesRequestInterceptor = (
     request: AxiosRequestConfig
 ): AxiosRequestConfig => {
-    Logger(
-        "AUTH",
-        "Err response interceptor",
-        "Resetting credentials",
-        request
-    );
     return request;
 };
 
+/**
+ * This interceptor handles the case where a request was not sent properly
+ * @param request
+ * @returns
+ */
 const ErrorRequestInterceptor = (request: AxiosError): AxiosError => {
-    Logger(
-        "AUTH",
-        "Err response interceptor",
-        "Resetting credentials",
-        request
-    );
     return request;
 };
 
-// Request interceptor for auth credentials
+/**
+ * This interceptor get triggered if a response is succesful (status-code: 2xx)
+ * @param response A succesful response
+ * @returns the initial response
+ */
 const SuccesResponseInterceptor = (response: AxiosResponse) => {
     return response;
 };
 
-// Request interceptor for auth credentials
+/**
+ * This interceptor takes a request error and transforms it
+ * to the one we have standardized. Also handles certain
+ * specific errors regarding auth.
+ * @param err request error
+ * @returns a transformed request error
+ */
 const ErrorResponseInterceptor = (err: AxiosError) => {
     // const token = getItem<AuthTokenType>(StoreIdentifiers.authToken);
 

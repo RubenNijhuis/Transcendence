@@ -29,13 +29,13 @@ const setDefaultAuthHeader = (token: AuthTokenType) => {
     ] = `Bearer ${token.jsonWebToken}`;
 };
 
-// // Setup request interceptors
-// API.interceptors.request.use(SuccesRequestInterceptor, ErrorRequestInterceptor);
+// Setup request interceptors
+API.interceptors.request.use(SuccesRequestInterceptor, ErrorRequestInterceptor);
 
-// // Setup AuthInterceptor to be used
-// API.interceptors.response.use(
-//     SuccesResponseInterceptor,
-//     ErrorResponseInterceptor
-// );
+// Setup response interceptors
+API.interceptors.response.use(
+    SuccesResponseInterceptor,
+    ErrorResponseInterceptor
+);
 
 export { API, setDefaultAuthHeader };
