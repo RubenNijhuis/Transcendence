@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Req, UseGuards,ForbiddenException  } from "@nestjs/common";
+import { Controller, Get, Query, Req, UseGuards } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import Axios from "axios";
 import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
@@ -10,15 +10,11 @@ import * as bcrypt from "bcrypt";
 import { createHash } from "crypto";
 import { JwtService } from "@nestjs/jwt";
 
-interface AuthTokenType {
-	jsonWebToken: string;
-	refreshToken: string;
-}
-
-type PayloadType = {
-	intraID: string;
-  };
-
+/**
+ * The auth controller handles everything related to
+ * the login process and the handling of authentication
+ * tokens
+ */
 @Controller("Auth")
 export class AuthController {
   inject: [ConfigService, UserService];
@@ -26,9 +22,14 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
     private readonly userService: UserService,
-	private readonly jwtService: JwtService
+    private readonly jwtService: JwtService
   ) {}
 
+  /**
+   * Creates a url that gets sent to the front-end. On that page
+   * the user can log in using the third party authentication system.
+   * @returns the 3d party login url
+   */
   @Get("login")
   login() {
     const url: string = this.configService.get<string>("INTRA_AUTH_URL");
@@ -39,11 +40,16 @@ export class AuthController {
       response_type: "code"
     };
     const redirectUrl: string = Axios.getUri({ url, params });
-    console.log(redirectUrl);
 
     return redirectUrl;
   }
 
+  /**
+   * Takes a third party authentication token that can be
+   * used to setup an account
+   * @param token identifier from a third party auth system
+   * @returns a payload describing what the front-end should do
+   */
   @Get("confirm?")
   async confirm(@Query("token") token: string) {
     try {
@@ -60,7 +66,9 @@ export class AuthController {
       // console.log("intraID", intraID);
 
       const tokens = await this.authService.getTokens(intraID);
-      const hash1 = createHash('sha256').update(tokens.refreshToken).digest('hex');
+      const hash1 = createHash("sha256")
+        .update(tokens.refreshToken)
+        .digest("hex");
       const saltOrRounds = 10;
       const hash = await bcrypt.hash(hash1, saltOrRounds);
       // console.log("tokens:", tokens);
@@ -82,6 +90,11 @@ export class AuthController {
     }
   }
 
+  /**
+   * Will refresh an authentication token
+   * @param req
+   * @returns
+   */
   @UseGuards(RefreshTokenGuard)
   @Get("refresh")
   refreshTokens(@Req() req: Request) {
@@ -89,17 +102,22 @@ export class AuthController {
     return this.authService.refreshTokens(refreshToken);
   }
 
-//   @UseGuards(AccessTokenGuard)
-//   @Get("test")
-//   acessTokens(@Req() req: Request) {
-//     const intraID = req.user["intraID"];
-//     console.log("IntraID:", intraID);
-//   }
+  //   @UseGuards(AccessTokenGuard)
+  //   @Get("test")
+  //   acessTokens(@Req() req: Request) {
+  //     const intraID = req.user["intraID"];
+  //     console.log("IntraID:", intraID);
+  //   }
 
+  /**
+   * Returns a user from the database using the authentication token
+   * @param req
+   * @returns
+   */
   @UseGuards(AccessTokenGuard)
   @Get("getUserFromAcessToken")
   getUserByID(@Req() req: Request) {
-	const intraID = req.user["intraID"];
+    const intraID = req.user["intraID"];
     const user = this.userService.findUserByintraId(intraID);
     return user;
   }
