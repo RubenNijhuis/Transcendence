@@ -7,12 +7,22 @@
 const getValueFromUrl = (inputString: string, valueName: string): string => {
     let returnVal: string = "";
 
-    const splitInputString: string[] = inputString.split("?");
+    const delimiters = {
+        query: "?",
+        nameToValue: "="
+    };
 
-    for (let i = 1; i < splitInputString.length; i++) {
-        const splitValue: string[] = splitInputString[i].split("=");
+    const splitInput: string[] = inputString.split(delimiters.query);
+    splitInput.shift();
 
-        if (splitValue[0] === valueName) returnVal = splitValue[1];
+    for (let i = 0; i < splitInput.length; i++) {
+        const splitValue: string[] = splitInput[i].split(
+            delimiters.nameToValue
+        );
+
+        if (splitValue[0] === valueName) {
+            returnVal = splitValue[1];
+        }
     }
 
     return returnVal;

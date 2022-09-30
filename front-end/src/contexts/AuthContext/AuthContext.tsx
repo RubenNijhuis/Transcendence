@@ -12,7 +12,7 @@ import { getItem, setItem } from "../../modules/Store";
 import StoreIdentifiers from "../../config/StoreIdentifiers";
 
 // Auth
-import { setDefaultAuthHeader } from "../../proxies/instances/apiInstance";
+import { API, setDefaultAuthHeader } from "../../proxies/instances/apiInstance";
 import { refreshAuthToken } from "../../proxies/auth/refreshToken";
 import getUserByUserAuthToken from "../../proxies/user/getProfileByAuthToken";
 
@@ -69,13 +69,18 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setItem(StoreIdentifiers.authToken, authToken);
             setDefaultAuthHeader(authToken);
 
+            console.log(
+                "HEY WAHT IS THISH",
+                API.defaults.headers.common["Authorization"]
+            );
+
             if (profile !== null) {
                 setUser(profile);
                 setLoggedIn(true);
             }
 
             return Promise.resolve(loginConfirmResp);
-        } catch (err: any) {
+        } catch (err) {
             Logger("AUTH", "Auth context", "Error in singIn", err);
             return Promise.reject(err);
         }

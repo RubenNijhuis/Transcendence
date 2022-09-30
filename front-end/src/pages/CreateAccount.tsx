@@ -71,7 +71,7 @@ const CreateAccount = () => {
     const [description, setDescription] = useState<string>("");
 
     // Authentication utils
-    const { authToken, setUser, setLoggedIn } = useAuth();
+    const { setUser, setLoggedIn } = useAuth();
 
     const { setError, setIsModalOpen } = useModal();
 
@@ -90,24 +90,16 @@ const CreateAccount = () => {
          * upon account creation.
          */
         createUser(providedDetails)
-            .then((returnedUserProfile: ProfileType) => {
+            .then((returnedUserProfile) => {
                 setUser(returnedUserProfile);
                 setLoggedIn(true);
                 navigate(PageRoutes.profile);
             })
-            .catch((err: RequestErrorType) => {
+            .catch((err) => {
                 setError(err);
                 setIsModalOpen(true);
             });
     };
-
-    // TODO: add a guard like login guard and remove this useEffect
-    useEffect(() => {
-        // If the user hasn't tried to log in redirect to home
-        // if (authToken === null) {
-        //     navigate("/");
-        // }
-    }, [authToken, navigate]);
 
     return (
         <CreateForm>

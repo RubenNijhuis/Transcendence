@@ -19,14 +19,14 @@ interface Props {
     content: Message;
 }
 
-const ChatElement = ({ receiver, sender, content }: Props) => {
+const ChatElement = ({ receiver, sender, content }: Props): JSX.Element => {
     const fromUser: boolean = receiver.username === sender.username;
     const contentType: MessageContentType = content.content_type;
 
     /**
-     * IMPORTANT: must be in the same order as the content 
+     * IMPORTANT: must be in the same order as the content
      * type enum defined in groupchats type file
-     * 
+     *
      * [0] SimpleMessage
      * [1] PictureMessage
      * [2] InviteMessage

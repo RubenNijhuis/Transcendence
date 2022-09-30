@@ -13,7 +13,10 @@ interface createUserProps {
 
 const createUser = async (userData: createUserProps): Promise<ProfileType> => {
     try {
-        const { data } = await API.post<ProfileType>(ApiRoutes.createUser());
+        const { data } = await API.post<ProfileType>(
+            ApiRoutes.createUser(),
+            userData
+        );
         return Promise.resolve(data);
     } catch (err: any) {
         return Promise.reject(err);
