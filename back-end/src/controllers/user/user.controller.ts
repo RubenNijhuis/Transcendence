@@ -92,7 +92,7 @@ export class UsersController {
       return await this.userService.setUser(intraID, SetUserDto);
     } catch (err) {
       console.log("controller, setUser(): ", err);
-      return err;
+      throw err;
     }
   }
 
@@ -104,8 +104,9 @@ export class UsersController {
       const username = req.user;
       console.log("CHECK RETURN OF USER JWT: ", username);
       const ret = await this.userService.removeUser(dto.username);
+      return ret;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -119,7 +120,7 @@ export class UsersController {
     try {
       await this.userService.setTfaOption(dto.username, dto.option);
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 

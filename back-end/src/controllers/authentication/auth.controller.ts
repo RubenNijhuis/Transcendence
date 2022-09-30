@@ -78,7 +78,7 @@ export class AuthController {
       );
     } catch (err: any) {
       console.log(err);
-      return err;
+      throw err;
     }
   }
 
