@@ -51,7 +51,7 @@ export class UserService {
 
   async getUsers(): Promise<User[]> {
     try {
-      const ret = await this.userRepository.find();
+      const ret: User[] = await this.userRepository.find();
       return Promise.resolve(ret);
     } catch (err: any) {
       throw err;
@@ -60,8 +60,9 @@ export class UserService {
 
   async findUsersById(id: number): Promise<User> {
     try {
-      const ret = await this.userRepository.findOne({ where: { id } });
-      delete ret.intraId; // remove intraId field before passing user back
+      const ret: User = await this.userRepository.findOne({ where: { id } });
+      if (ret)
+        delete ret.intraId; // remove intraId field before passing user back
       return Promise.resolve(ret);
     } catch (err: any) {
       throw err;
@@ -71,17 +72,20 @@ export class UserService {
   async findUserByintraId(intraId: string): Promise<User> {
     try {
       const ret: User = await this.userRepository.findOne({ where: { intraId } });
-      delete ret.intraId; // remove intraId field before passing user back
+      if (ret)
+        delete ret.intraId; // remove intraId field before passing user back
       return Promise.resolve(ret);
     } catch (err: any) {
+      console.log("error: ", err);
       throw err;
     }
   }
 
   async findUserByUsername(username: string): Promise<User> {
     try {
-      const ret = await this.userRepository.findOne({ where: { username } });
-      delete ret.intraId; // remove intraId field before passing user back
+      const ret: User = await this.userRepository.findOne({ where: { username } });
+      if (ret)
+        delete ret.intraId; // remove intraId field before passing user back
 
       return Promise.resolve(ret);
     } catch (err: any) {
@@ -97,13 +101,15 @@ export class UserService {
         refreshToken: refreshToken
       };
 
-      const newUser = this.userRepository.create(query);
+      const newUser: User = this.userRepository.create(query);
       // var testUser: User;
       // const ret = await this.userRepository.save(testUser);
-      const ret = await this.userRepository.save(newUser);
-      delete ret.intraId; // remove intraId field before passing user back
+      const ret: User = await this.userRepository.save(newUser);
+      if (ret)
+        delete ret.intraId; // remove intraId field before passing user back
       return Promise.resolve(ret);
     } catch (err: any) {
+      console.log("error: ", err);
       throw errorHandler(err, "Failed to create new user", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
