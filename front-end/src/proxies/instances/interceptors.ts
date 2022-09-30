@@ -24,7 +24,7 @@ const SuccesRequestInterceptor = (
  * @returns
  */
 const ErrorRequestInterceptor = (request: AxiosError): AxiosError => {
-    return request;
+    throw request;
 };
 
 /**
@@ -33,6 +33,9 @@ const ErrorRequestInterceptor = (request: AxiosError): AxiosError => {
  * @returns the initial response
  */
 const SuccesResponseInterceptor = (response: AxiosResponse) => {
+    if (response.data.status >= 400 && response.data.status <= 499) {
+        throw response;
+    }
     return response;
 };
 
@@ -44,21 +47,19 @@ const SuccesResponseInterceptor = (response: AxiosResponse) => {
  * @returns a transformed request error
  */
 const ErrorResponseInterceptor = (err: AxiosError) => {
-    // const token = getItem<AuthTokenType>(StoreIdentifiers.authToken);
+    // if (err.response) {
+    //     if (err.response.status === 401) {
+    //         // Logger(
+    //         //     "AUTH",
+    //         //     "Error Response Interceptor",
+    //         //     "Credentials invalid ...resetting",
+    //         //     err.response.status
+    //         // );
+    //         // if (token) refreshAuthTokentoken);
+    //     }
+    // }
 
-    if (err.response) {
-        if (err.response.status === 401) {
-            Logger(
-                "AUTH",
-                "Err response interceptor",
-                "Resetting credentials",
-                err.response.status
-            );
-            // if (token) refreshAuthTokentoken);
-        }
-    }
-
-    return transformToRequestError(err);
+    throw transformToRequestError(err);
 };
 
 export {

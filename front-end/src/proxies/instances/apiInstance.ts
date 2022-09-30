@@ -26,7 +26,7 @@ const API = axios.create({
 const setDefaultAuthHeader = (token: AuthTokenType) => {
     API.defaults.headers.common[
         "Authorization"
-    ] = `Bearer ${token.jsonWebToken}`;
+    ] = `Bearer ${token.accessToken}`;
 };
 
 // Setup request interceptors

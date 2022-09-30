@@ -8,7 +8,7 @@ const enum AuthStatusType {
 }
 
 interface AuthTokenType {
-    jsonWebToken: string;
+    accessToken: string;
     refreshToken: string;
 }
 

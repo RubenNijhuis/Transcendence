@@ -7,12 +7,10 @@ import { LoginConfirmResponse } from "../../types/request";
 
 const confirmLogin = async (code: string): Promise<LoginConfirmResponse> => {
     try {
-        const res = await API.get<LoginConfirmResponse>(
+        const { data } = await API.get<LoginConfirmResponse>(
             ApiRoutes.confirmLogin(code)
         );
-
-        console.log(res)
-        return Promise.resolve(res.data);
+        return Promise.resolve(data);
     } catch (err: any) {
         return Promise.reject(err);
     }

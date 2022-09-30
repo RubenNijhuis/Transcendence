@@ -1,34 +1,32 @@
+// React stuff
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Types
 import { LoginConfirmResponse, AuthTokenType } from "../../types/request";
 import { ProfileType } from "../../types/profile";
 
-// Requests
+// API
 import loginConfirm from "../../proxies/auth/confirmLogin";
+import getUserByAuthToken from "../../proxies/user/getUserByAuthToken";
+
+// Auth
+import { setDefaultAuthHeader } from "../../proxies/instances/apiInstance";
+import { refreshAuthToken } from "../../proxies/auth/refreshToken";
 
 // Store
 import { getItem, setItem } from "../../modules/Store";
 import StoreIdentifiers from "../../config/StoreIdentifiers";
 
-// Auth
-import { API, setDefaultAuthHeader } from "../../proxies/instances/apiInstance";
-import { refreshAuthToken } from "../../proxies/auth/refreshToken";
-import getUserByUserAuthToken from "../../proxies/user/getProfileByAuthToken";
-
 // Debug
 import Logger from "../../utils/Logger";
+import { generateProfile } from "../FakeDataContext/fakeDataGenerators";
 
-// Define what the auth context contains
 interface AuthContextType {
     user: ProfileType;
     setUser: React.Dispatch<React.SetStateAction<ProfileType>>;
 
     isLoggedIn: boolean;
     setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-
-    authToken: AuthTokenType;
-    setAuthToken: React.Dispatch<React.SetStateAction<AuthTokenType>>;
 
     signIn(code: string): Promise<LoginConfirmResponse>;
 }
@@ -46,7 +44,6 @@ const useAuth = () => useContext(AuthContext);
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<ProfileType>(null!);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
-    const [authToken, setAuthToken] = useState<AuthTokenType>(null!);
 
     /**
      * Makes a request to the back-end using the third party provided
@@ -90,18 +87,19 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const setToken = async () => {
             const token = getItem<AuthTokenType>(StoreIdentifiers.authToken);
 
-            if (token) {
+            if (token !== null) {
                 try {
                     const newJWT = await refreshAuthToken(token);
-                    Logger("AUTH", "Auth context", "Newly generated jwt", null);
-                    const userFromJWT = await getUserByUserAuthToken(newJWT);
-
                     setItem(StoreIdentifiers.authToken, newJWT);
                     setDefaultAuthHeader(token);
 
+                    
+                    const userFromJWT = await getUserByAuthToken(newJWT);
                     setUser(userFromJWT);
                     setLoggedIn(true);
-                } catch (err: any) {
+                    console.log(userFromJWT);
+                } catch (err) {
+                    // TODO: setup faulty refresh token case
                     Logger(
                         "AUTH",
                         "Auth context",
@@ -112,16 +110,14 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }
         };
         setToken();
-    }, []);
+    });
 
     const value: AuthContextType = {
         user,
         signIn,
         setUser,
         setLoggedIn,
-        isLoggedIn,
-        authToken,
-        setAuthToken
+        isLoggedIn
     };
 
     return (

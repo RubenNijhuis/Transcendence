@@ -10,9 +10,6 @@ import RankingList from "../containers/RankingList";
 // Proxy
 import getLeaderboard from "../proxies/leaderboard/getLeaderboard";
 
-// Auth
-import { useAuth } from "../contexts/AuthContext";
-
 // Types
 import { ProfileType } from "../types/profile";
 import { RequestErrorType } from "../types/request";
@@ -22,7 +19,6 @@ import { useModal } from "../contexts/ModalContext";
 
 const Leaderboard = () => {
     const [leaderboard, setLeaderboard] = useState<ProfileType[]>(null!);
-    const { authToken } = useAuth();
     const { setIsModalOpen, setError } = useModal();
 
     useEffect(() => {
@@ -32,7 +28,7 @@ const Leaderboard = () => {
                 setError(err);
                 setIsModalOpen(true);
             });
-    }, [authToken, setError, setIsModalOpen]);
+    }, [setError, setIsModalOpen]);
 
     return (
         <Layout>

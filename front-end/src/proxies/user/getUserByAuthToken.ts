@@ -6,12 +6,12 @@ import { API } from "../instances/apiInstance";
 import { ProfileType } from "../../types/profile";
 import { AuthTokenType } from "../../types/request";
 
-const getUserByUserAuthToken = async (
+const getUserByAuthToken = async (
     token: AuthTokenType
 ): Promise<ProfileType> => {
     try {
-        const { data } = await API.get(ApiRoutes.getUserByToken(), {
-            headers: { Authorization: `Bearer ${token.jsonWebToken}` }
+        const { data } = await API.get(ApiRoutes.getUserByAuthToken(), {
+            headers: { Authorization: `Bearer ${token.accessToken}` }
         });
         return Promise.resolve(data);
     } catch (err: any) {
@@ -19,4 +19,4 @@ const getUserByUserAuthToken = async (
     }
 };
 
-export default getUserByUserAuthToken;
+export default getUserByAuthToken;

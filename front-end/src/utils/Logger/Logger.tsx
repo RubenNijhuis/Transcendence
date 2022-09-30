@@ -17,6 +17,7 @@ const Logger = (
     // If the type isn't allowed to output don't output
     if (logTypes[type].allowed === false) return;
 
+    // If the type doesn't exist in the config throw a warning
     if (logTypes.hasOwnProperty(type) === false) {
         console.warn(formatConfig.typeError(type));
         return;

@@ -1,4 +1,11 @@
-import { Controller, Get, Query, Req, UseGuards } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  HttpException,
+  Query,
+  Req,
+  UseGuards
+} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import Axios from "axios";
 import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
@@ -115,7 +122,7 @@ export class AuthController {
    * @returns
    */
   @UseGuards(AccessTokenGuard)
-  @Get("getUserFromAcessToken")
+  @Get("getUserFromAccessToken")
   getUserByID(@Req() req: Request) {
     const intraID = req.user["intraID"];
     const user = this.userService.findUserByintraId(intraID);

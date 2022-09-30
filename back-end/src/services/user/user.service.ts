@@ -21,7 +21,7 @@ import { DeleteResult, Repository, TypeORMError, UpdateResult } from "typeorm";
 
 // hashing libraries - thanks angi
 import * as bcrypt from "bcrypt";
-import { createHash } from 'crypto';
+import { createHash } from "crypto";
 
 // dtos
 import { SetUserDto } from "src/dtos/user/set-user.dto";
@@ -61,8 +61,7 @@ export class UserService {
   async findUsersById(id: number): Promise<User> {
     try {
       const ret: User = await this.userRepository.findOne({ where: { id } });
-      if (ret)
-        delete ret.intraId; // remove intraId field before passing user back
+      if (ret) delete ret.intraId; // remove intraId field before passing user back
       return Promise.resolve(ret);
     } catch (err: any) {
       throw err;
@@ -71,9 +70,10 @@ export class UserService {
 
   async findUserByintraId(intraId: string): Promise<User> {
     try {
-      const ret: User = await this.userRepository.findOne({ where: { intraId } });
-      if (ret)
-        delete ret.intraId; // remove intraId field before passing user back
+      const ret: User = await this.userRepository.findOne({
+        where: { intraId }
+      });
+      if (ret) delete ret.intraId; // remove intraId field before passing user back
       return Promise.resolve(ret);
     } catch (err: any) {
       console.log("error: ", err);
@@ -83,9 +83,10 @@ export class UserService {
 
   async findUserByUsername(username: string): Promise<User> {
     try {
-      const ret: User = await this.userRepository.findOne({ where: { username } });
-      if (ret)
-        delete ret.intraId; // remove intraId field before passing user back
+      const ret: User = await this.userRepository.findOne({
+        where: { username }
+      });
+      if (ret) delete ret.intraId; // remove intraId field before passing user back
 
       return Promise.resolve(ret);
     } catch (err: any) {
@@ -105,19 +106,19 @@ export class UserService {
       // var testUser: User;
       // const ret = await this.userRepository.save(testUser);
       const ret: User = await this.userRepository.save(newUser);
-      if (ret)
-        delete ret.intraId; // remove intraId field before passing user back
+      if (ret) delete ret.intraId; // remove intraId field before passing user back
       return Promise.resolve(ret);
     } catch (err: any) {
       console.log("error: ", err);
-      throw errorHandler(err, "Failed to create new user", HttpStatus.INTERNAL_SERVER_ERROR);
+      throw errorHandler(
+        err,
+        "Failed to create new user",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
-  async setUser(
-    intraID: string,
-    SetUserDto: SetUserDto
-  ): Promise<any> {
+  async setUser(intraID: string, SetUserDto: SetUserDto): Promise<any> {
     try {
       const user: User = await this.findUserByintraId(intraID);
       const query = {
@@ -137,7 +138,11 @@ export class UserService {
         .returning("*")
         .execute();
     } catch (err: any) {
-      throw errorHandler(err, "Failed to update user", HttpStatus.INTERNAL_SERVER_ERROR);;
+      throw errorHandler(
+        err,
+        "Failed to update user",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
@@ -151,7 +156,11 @@ export class UserService {
         .execute();
       return Promise.resolve(user);
     } catch (err: any) {
-      throw errorHandler(err, "Failed to remove user", HttpStatus.INTERNAL_SERVER_ERROR);
+      throw errorHandler(
+        err,
+        "Failed to remove user",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
@@ -161,7 +170,7 @@ export class UserService {
   ): Promise<UpdateResult> {
     try {
       const user = await this.findUserByintraId(intraID.intraID);
-      const hash1 = createHash('sha256').update(token).digest('hex');
+      const hash1 = createHash("sha256").update(token).digest("hex");
       const saltOrRounds = 10;
       const hash = await bcrypt.hash(hash1, saltOrRounds); // <- deze
 
@@ -173,7 +182,11 @@ export class UserService {
         .returning("*")
         .execute();
     } catch (err: any) {
-      throw errorHandler(err, "Failed to set user refresh token", HttpStatus.INTERNAL_SERVER_ERROR);
+      throw errorHandler(
+        err,
+        "Failed to set user refresh token",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
@@ -182,7 +195,11 @@ export class UserService {
       const ret = await this.userRepository.update(id, { tfaSecret });
       return Promise.resolve(ret);
     } catch (err: any) {
-      throw errorHandler(err, "Failed to set user 2fa secret", HttpStatus.INTERNAL_SERVER_ERROR);
+      throw errorHandler(
+        err,
+        "Failed to set user 2fa secret",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
@@ -204,7 +221,11 @@ export class UserService {
         .execute();
       return Promise.resolve(ret);
     } catch (err: any) {
-      throw errorHandler(err, "Failed to set user 2fa secret", HttpStatus.INTERNAL_SERVER_ERROR);
+      throw errorHandler(
+        err,
+        "Failed to set user 2fa secret",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
@@ -231,7 +252,11 @@ export class UserService {
         .execute();
       return Promise.resolve(ret);
     } catch (err: any) {
-      throw errorHandler(err, "Failed to set user tfa option", HttpStatus.INTERNAL_SERVER_ERROR);
+      throw errorHandler(
+        err,
+        "Failed to set user tfa option",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
@@ -248,7 +273,11 @@ export class UserService {
       }
       return this.getUsers();
     } catch (err: any) {
-      throw errorHandler(err, "Failed to seed database", HttpStatus.INTERNAL_SERVER_ERROR);
+      throw errorHandler(
+        err,
+        "Failed to seed database",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 }

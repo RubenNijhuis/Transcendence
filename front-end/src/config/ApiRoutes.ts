@@ -9,7 +9,7 @@ const ApiRoutes = {
     // User
     createUser: () => `/user/setUser`,
     getUserByUserName: (userName: string) => `/user/${userName}`,
-    getUserByToken: () => `/user/getUserFromAccessToken`,
+    getUserByAuthToken: () => `/user/getUserFromAccessToken`,
 
     // Chat
     getChatByUserName: (userName: string) => `/chats/${userName}`,

@@ -12,7 +12,7 @@ import ChatBox from "../containers/ChatBox";
 import { GroupChat } from "../types/chat";
 
 // Requests
-import getChatByUserName from "../proxies/chat/getChatsByUserName";
+// import getChatByUserName from "../proxies/chat/getChatsByUserName";
 
 // Auth
 import { useAuth } from "../contexts/AuthContext";
@@ -25,7 +25,7 @@ const Chat = () => {
     const [groupChats, setGroupChats] = useState<GroupChat[]>(null!);
     const [selectedChat, setSelectedChat] = useState<number>(0);
 
-    const { user, authToken } = useAuth();
+    const { user } = useAuth();
 
     const { chats } = useFakeData();
 
@@ -40,7 +40,7 @@ const Chat = () => {
             //         Logger("ERROR", "Chat page", "Retrieved chats request", err)
             //     );
         }
-    }, [authToken, chats, user]);
+    }, [chats, user]);
 
     return (
         <Layout>

@@ -1,5 +1,5 @@
 // React
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 // Styling
 import styled from "styled-components";
@@ -17,10 +17,6 @@ import Slide from "../components/BoxSlider/Slide/Slide";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import createUser from "../proxies/user/createUser";
-
-// Types
-import { RequestErrorType } from "../types/request";
-import { ProfileType } from "../types/profile";
 
 // Page routes
 import PageRoutes from "../config/PageRoutes";
@@ -78,7 +74,7 @@ const CreateAccount = () => {
     // Navigating to profile page after creation
     const navigate = useNavigate();
 
-    const handleAccountCreation = (): void => {
+    const handleAccountCreation = () => {
         const providedDetails = {
             username,
             color,

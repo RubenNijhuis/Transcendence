@@ -44,7 +44,7 @@ const ProfilePage = () => {
     const { matchHistory } = useFakeData();
 
     // Local profile
-    const { user, authToken } = useAuth();
+    const { user } = useAuth();
 
     /**
      * The `userName` in the url '/profile/:userName' if not
@@ -62,7 +62,7 @@ const ProfilePage = () => {
                     setIsModalOpen(true);
                 });
         }
-    }, [userName, user, authToken, setError, setIsModalOpen]);
+    }, [userName, user, setError, setIsModalOpen]);
 
     return (
         <Layout>

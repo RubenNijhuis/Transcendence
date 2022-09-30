@@ -11,21 +11,21 @@ import { RequestErrorType } from "../../types/request";
  */
 const transformToRequestError = (err: AxiosError): RequestErrorType => {
     const returnedError: RequestErrorType = {
-        error: JSON.stringify(err, null, 4).replace(/"/g, ""),
+        error: err.message,
         type: "",
-        requestUrl: err.request.responseURL
+        requestUrl: err.config.url as string
     };
 
-    // if (err.response) {
-    //     // The client was given an error response (5xx, 4xx)
-    //     returnedError.type = "response-error";
-    // } else if (err.request) {
-    //     // The client never received a response, and the request was never left
-    //     returnedError.type = "request-error";
-    // } else {
-    //     // Some other kind of error was found
-    //     returnedError.type = "undefine-error";
-    // }
+    if (err.response) {
+        // The client was given an error response (5xx, 4xx)
+        returnedError.type = "response-error";
+    } else if (err.request) {
+        // The client never received a response, and the request was never left
+        returnedError.type = "request-error";
+    } else {
+        // Some other kind of error was found
+        returnedError.type = "undefine-error";
+    }
 
     return returnedError;
 };

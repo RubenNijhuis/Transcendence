@@ -60,7 +60,7 @@ export class AuthService {
         profile: null,
         authToken: {
           jsonWebToken: authtoken,
-          refeshToken: refreshtoken
+          refreshToken: refreshtoken
         }
       };
 
@@ -110,9 +110,7 @@ export class AuthService {
         accessToken,
         refreshToken
       };
-    }
-    catch (e)
-    {
+    } catch (e) {
       // console.error(e);
       return e;
     }
@@ -122,30 +120,46 @@ export class AuthService {
   async refreshTokens(refreshToken: string) {
     const secret: string = this.configService.get<string>("JWT_REFRESH_SECRET");
     const isValidRefToken: string = jwt.verify(refreshToken, secret);
-    if (!isValidRefToken) throw new ForbiddenException("Access Denied: Not a valid Token");
 
-    const decoded: PayloadType = this.jwtService.decode(refreshToken) as PayloadType;
+    if (!isValidRefToken)
+      throw new ForbiddenException("Access Denied: Not a valid Token");
+
+    const decoded: PayloadType = this.jwtService.decode(
+      refreshToken
+    ) as PayloadType;
+
     if (!decoded) throw new ForbiddenException("Access Denied: Cannot decode");
 
     try {
-      const user: User = await this.userService.findUserByintraId(decoded.intraID);
+      const user: User = await this.userService.findUserByintraId(
+        decoded.intraID
+      );
+
       if (!user || !user.refreshToken)
         throw new ForbiddenException("Access Denied: No user in database");
       console.log("test1:", user.refreshToken);
-      const hash = createHash('sha256').update(refreshToken).digest('hex');
+
+      console.log("le refresh token:", refreshToken);
+
+      const hash = createHash("sha256").update(refreshToken).digest("hex");
       const isMatch: boolean = await bcrypt.compare(hash, user.refreshToken);
+
       if (isMatch == false)
         throw new ForbiddenException("Access Denied: Not a match");
-      const tokens: { accessToken: string; refreshToken: string; } = await this.getTokens(decoded.intraID);
+
+      const tokens: { accessToken: string; refreshToken: string } =
+        await this.getTokens(decoded.intraID);
       console.log("test:\n", refreshToken, "\n", tokens.refreshToken);
+
       const intraIDDto = { intraID: decoded.intraID };
-      const addUser: UpdateResult = await this.userService.setRefreshToken(intraIDDto, tokens.refreshToken);
+      const addUser: UpdateResult = await this.userService.setRefreshToken(
+        intraIDDto,
+        tokens.refreshToken
+      );
       if (!addUser)
         throw new ForbiddenException("Access Denied: Failed to add token");
       return tokens;
-    }
-    catch (e)
-    {
+    } catch (e) {
       // console.error(e);
       return e;
     }
