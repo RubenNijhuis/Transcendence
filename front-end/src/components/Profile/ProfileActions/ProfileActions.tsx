@@ -3,13 +3,13 @@ import { ProfileType } from "../../../types/profile";
 import randomIntFromInterval from "../../../utils/randomNumFromInterval";
 import Button from "../../Button";
 import Heading from "../../Heading";
-import { Container, UserStatusDisplay } from "./ProfileActions.style";
+import { Container, ProfileStatusDisplay } from "./ProfileActions.style";
 
 interface Props {
     profile: ProfileType;
 }
 
-const UserStatus = () => {
+const ProfileActivityStatus = () => {
     const rand = randomIntFromInterval(0, 2);
 
     let activityElement: ReactElement = <></>;
@@ -23,9 +23,9 @@ const UserStatus = () => {
     }
 
     return (
-        <UserStatusDisplay activity={rand}>
+        <ProfileStatusDisplay activity={rand}>
             <div>{activityElement}</div>
-        </UserStatusDisplay>
+        </ProfileStatusDisplay>
     );
 };
 
@@ -45,7 +45,7 @@ const ProfileActions = ({ profile }: Props) => {
                 <div className="header">
                     <Heading type={3}>Status</Heading>
                 </div>
-                <UserStatus />
+                <ProfileActivityStatus />
             </div>
         </Container>
     );

@@ -37,8 +37,8 @@ const SuccesfulLoginPage = () => {
         const token = getValueFromUrl(href, "code");
 
         signIn(token)
-            .then((res: LoginConfirmResponse) => {
-                if (res.shouldCreateUser === true) {
+            .then((shouldCreateUser: boolean) => {
+                if (shouldCreateUser === true) {
                     navigate(PageRoutes.createAccount);
                 } else {
                     navigate(PageRoutes.profile);

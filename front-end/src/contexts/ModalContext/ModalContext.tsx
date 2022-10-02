@@ -12,7 +12,7 @@ interface ModalContextType {
     setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
     error: RequestErrorType;
-    setError: React.Dispatch<React.SetStateAction<any>>;
+    setModalError: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const ModalContext = createContext<ModalContextType>(null!);
@@ -21,13 +21,13 @@ const useModal = () => useContext(ModalContext);
 
 const ModalProvider = ({ children }: { children: React.ReactNode }) => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    const [error, setError] = useState<any>("");
+    const [error, setModalError] = useState<any>("");
 
     const value: ModalContextType = {
         isModalOpen,
         setIsModalOpen,
         error,
-        setError
+        setModalError
     };
 
     return (

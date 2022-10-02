@@ -51,7 +51,7 @@ const Router = () => (
             <Route element={<Guard />}>
                 {/* Profile page is rendered in two different ways but same component */}
                 <Route path={PageRoutes.profile} element={<ProfilePage />}>
-                    <Route path=":userName" element={<ProfilePage />} />
+                    <Route path=":profileName" element={<ProfilePage />} />
                 </Route>
 
                 {/* Regular private routes */}

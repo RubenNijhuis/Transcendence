@@ -71,7 +71,7 @@ const Container = styled.div<{ followsProfile: boolean }>`
     }}
 `;
 
-const UserStatusDisplay = styled.div<{ activity: number }>`
+const ProfileStatusDisplay = styled.div<{ activity: number }>`
     height: 100%;
     width: calc(${magicNum} * 3);
 
@@ -104,4 +104,4 @@ const UserStatusDisplay = styled.div<{ activity: number }>`
     }
 `;
 
-export { Container, UserStatusDisplay };
+export { Container, ProfileStatusDisplay };

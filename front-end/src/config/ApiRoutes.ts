@@ -8,8 +8,10 @@
 const ApiRoutes = {
     // User
     createUser: () => `/user/setUser`,
-    getUserByUserName: (userName: string) => `/user/${userName}`,
     getUserByAuthToken: () => `/user/getUserFromAccessToken`,
+
+    // Profiles
+    getProfileByUserName: (userName: string) => `/user/${userName}`,
 
     // Chat
     getChatByUserName: (userName: string) => `/chats/${userName}`,
@@ -18,8 +20,8 @@ const ApiRoutes = {
     getLeaderboard: () => `/leaderboard`,
 
     // Auth
-    confirmLogin: (code: string) => `/auth/confirm?token=${code}`,
     getLoginRoute: () => `/auth/login`,
+    confirmLogin: (code: string) => `/auth/confirm?token=${code}`,
     refreshAuthToken: () => `/auth/refresh`
 };
 

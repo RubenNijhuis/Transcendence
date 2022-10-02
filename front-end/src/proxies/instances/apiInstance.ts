@@ -9,9 +9,6 @@ import {
     ErrorResponseInterceptor
 } from "./interceptors";
 
-// Types
-import { AuthTokenType } from "../../types/request";
-
 // TODO: put api instance in a folder with its parts
 
 // Instance
@@ -23,10 +20,10 @@ const API = axios.create({
  * Set the default authorization header. If the user can't
  * refresh their token or has never logged in it won't be set.
  */
-const setDefaultAuthHeader = (token: AuthTokenType) => {
+const setDefaultAuthHeader = (accessToken: string) => {
     API.defaults.headers.common[
         "Authorization"
-    ] = `Bearer ${token.accessToken}`;
+    ] = `Bearer ${accessToken}`;
 };
 
 // Setup request interceptors

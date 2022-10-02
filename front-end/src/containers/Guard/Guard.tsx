@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { Navigate, useLocation, Outlet, useNavigate } from "react-router-dom";
 import PageRoutes from "../../config/PageRoutes";
-import StoreIdentifiers from "../../config/StoreIdentifiers";
+import StoreId from "../../config/StoreId";
 
 // Auth check
 import { useAuth } from "../../contexts/AuthContext";
@@ -20,7 +20,7 @@ const Guard = () => {
 
     useEffect(() => {
         if (isLoggedIn === false) {
-            const token = getItem<AuthTokenType>(StoreIdentifiers.authToken);
+            const token = getItem<AuthTokenType>(StoreId.accessToken);
             if (token === undefined || token === null) {
                 navigate(PageRoutes.home);
             } else {

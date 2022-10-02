@@ -69,7 +69,7 @@ const CreateAccount = () => {
     // Authentication utils
     const { setUser, setLoggedIn } = useAuth();
 
-    const { setError, setIsModalOpen } = useModal();
+    const { setModalError, setIsModalOpen } = useModal();
 
     // Navigating to profile page after creation
     const navigate = useNavigate();
@@ -92,7 +92,7 @@ const CreateAccount = () => {
                 navigate(PageRoutes.profile);
             })
             .catch((err) => {
-                setError(err);
+                setModalError(err);
                 setIsModalOpen(true);
             });
     };

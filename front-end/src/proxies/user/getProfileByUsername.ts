@@ -5,13 +5,13 @@ import { API } from "../instances/apiInstance";
 // Types
 import { ProfileType } from "../../types/profile";
 
-const getUserByUsername = async (userName: string): Promise<ProfileType> => {
+const getProfileByUserName = async (userName: string): Promise<ProfileType> => {
     try {
-        const { data } = await API.get(ApiRoutes.getUserByUserName(userName));
+        const { data } = await API.get(ApiRoutes.getProfileByUserName(userName));
         return Promise.resolve(data);
     } catch (err: any) {
         return Promise.reject(err);
     }
 };
 
-export default getUserByUsername;
+export default getProfileByUserName;

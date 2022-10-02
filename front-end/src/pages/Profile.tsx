@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 // UI
 import Layout from "../components/Layout";
 import Loader from "../components/Loader";
-import GameHistory from "../components/GameHistory";
+// import GameHistory from "../components/GameHistory";
 
 // Profile components
 import ProfileDisplay from "../components/Profile/ProfileDisplay";
@@ -28,7 +28,7 @@ import { largeRadius, mainColor } from "../styles/StylingConstants";
 import { useFakeData } from "../contexts/FakeDataContext";
 
 // API
-import getUserByUsername from "../proxies/user/getProfileByUsername";
+import getProfileByUserName from "../proxies/user/getProfileByUsername";
 
 // Debugging
 import { useModal } from "../contexts/ModalContext";
@@ -36,9 +36,10 @@ import { useModal } from "../contexts/ModalContext";
 const ProfilePage = () => {
     // Profile to be displayed
     const [selectedProfile, setSelectedProfile] = useState<ProfileType>(null!);
+    const [isUserProfile, setIsUserProfile] = useState<boolean>(false);
 
     // Modal
-    const { setIsModalOpen, setError } = useModal();
+    const { setIsModalOpen, setModalError } = useModal();
 
     // Temp debug data
     const { matchHistory } = useFakeData();
@@ -50,19 +51,27 @@ const ProfilePage = () => {
      * The `userName` in the url '/profile/:userName' if not
      * specified will default to undefined
      */
-    const { userName } = useParams();
+    const { profileName } = useParams();
 
     useEffect(() => {
-        if (userName === undefined) setSelectedProfile(user);
-        else {
-            getUserByUsername(userName)
-                .then(setSelectedProfile)
-                .catch((err: RequestErrorType) => {
-                    setError(err);
-                    setIsModalOpen(true);
-                });
+        /**
+         * If there is no profile name in the url we set the
+         * user as the current profile. Meaning we are on
+         * the user's own profile page
+         */
+        if (profileName === undefined) {
+            setSelectedProfile(user);
+            setIsUserProfile(true);
+            return;
         }
-    }, [userName, user, setError, setIsModalOpen]);
+
+        getProfileByUserName(profileName)
+            .then(setSelectedProfile)
+            .catch((err: RequestErrorType) => {
+                setModalError(err);
+                setIsModalOpen(true);
+            });
+    }, [profileName, user, setModalError, setIsModalOpen]);
 
     return (
         <Layout>
@@ -78,7 +87,7 @@ const ProfilePage = () => {
                         player={selectedProfile}
                         matches={matchHistory}
                     />
-                    {selectedProfile.username !== user.username && (
+                    {!isUserProfile && (
                         <ProfileActions profile={selectedProfile} />
                     )}
                     {/* <GameHistory
