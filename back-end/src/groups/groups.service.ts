@@ -34,7 +34,7 @@ export class GroupService {
         if (!group) return console.error("group doesn't exist");
         const owner = group.owner;
         if (owner === CreatePasswordDto.owner)
-            await this.groupRepository.update(
+            this.groupRepository.update(
                 CreatePasswordDto.id,
                 CreatePasswordDto
             );
@@ -49,7 +49,7 @@ export class GroupService {
             owner == EditPasswordDto.owner &&
             oldPassword === EditPasswordDto.oldPassword
         )
-            return await this.groupRepository
+            return this.groupRepository
                 .createQueryBuilder()
                 .update()
                 .set({ password: EditPasswordDto.newPassword })
@@ -119,7 +119,6 @@ export class GroupService {
         if (groupuser && group.owner === MakeAdminDto.owner) {
                 groupuser.userType = 1;
         }
-        console.log("2");
         return this.groupuserRepository.save(groupuser);
     }
 
