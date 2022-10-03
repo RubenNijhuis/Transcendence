@@ -42,6 +42,7 @@ import { MyNewFileInterceptor } from "src/middleware/imgUpload/file-interceptor"
 import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
 import { Request } from "express";
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
+import { FileInterceptor } from "@nestjs/platform-express";
 
 /**
  * The user controller will act as the first entry point for user related api calls.
@@ -124,6 +125,12 @@ export class UsersController {
     }
   }
 
+  @Post(UserRoutes.uploadBannerPic)
+  @UseInterceptors(FileInterceptor('file', bannerStorage))
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
+  }
+
   // @Post(UserRoutes.uploadBannerPic)
   // @UseInterceptors(FileInterceptor('image', {
   //   storage: bannerStorage("username taken from jwt"),
@@ -150,24 +157,25 @@ export class UsersController {
   //   return response;
   // }
 
-  @Post(UserRoutes.uploadBannerPic)
-  @UseInterceptors(
-    MyNewFileInterceptor("image", (ctx) => {
-      const jwt: string = ctx.switchToHttp().getRequest().headers.bearer_token;
+  // @Post(UserRoutes.uploadBannerPic)
+  // @UseInterceptors(
+  //   MyNewFileInterceptor("picture", (ctx) => {
+  //     const jwt: string = ctx.switchToHttp().getRequest().headers.bearer_token;
 
-      return {
-        storage: bannerStorage(jwt),
-        fileFilter: imgFilter
-      };
-    })
-  )
-  async uploadProfileTest(@UploadedFile() file) {
-    const response = {
-      originalname: file.originalname,
-      filename: file.filename
-    };
-    return response;
-  }
+  //     return {
+  //       storage: bannerStorage(jwt),
+  //       fileFilter: imgFilter
+  //     };
+  //   })
+  // )
+  // async uploadProfileTest(@UploadedFile() file: Express.Multer.File) {
+  //   console.log(file);
+  //   const response = {
+  //     // originalname: file.originalname,
+  //     // filename: file.filename
+  //   };
+  //   return response;
+  // }
 
   @Get(UserRoutes.seed)
   async seedUsers() {

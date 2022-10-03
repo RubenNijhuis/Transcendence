@@ -9,7 +9,7 @@ export const imgFilter = (req, file, cb) => {
 
 export const bannerStorage = (username: string) => {
     return multer.diskStorage({
-        destination: "/src/uploads/banner/",
+        destination: "/uploads/banner/",
         filename: function (req, file, cb) {
         const uniqueSuffix = username; // get this from jwt
         cb(null, file.fieldname + "-" + uniqueSuffix);
@@ -19,7 +19,7 @@ export const bannerStorage = (username: string) => {
 
 export const profileStorage = (username: string) => {
     return multer.diskStorage({
-        destination: "/src/uploads/profile/",
+        destination: "/uploads/profile/",
         filename: function (req, file, cb) {
         const uniqueSuffix = username; // get this from jwt
         cb(null, file.fieldname + "-" + uniqueSuffix);
