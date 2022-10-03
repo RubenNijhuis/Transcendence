@@ -177,6 +177,7 @@ export class UsersController {
 
   @Post(UserRoutes.seedAmount)
   async seedUsersAmount(@Body() dto: SeederAmountDto) {
+    console.log("YEEY I AM BEING CALLED");
     return await this.userService.seedCustom(dto.amount);
   }
 }
