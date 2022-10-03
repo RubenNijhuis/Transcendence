@@ -86,6 +86,8 @@ export class AuthController {
       //TO DO: check if exists first before adding
       // this.authService.addReftoken(CreateUserDto, tokens.refreshToken);
       console.log("refreshtoken for testing:", tokens.refreshToken);
+      console.log("bearer for testing:", tokens.accessToken);
+
       return await this.authService.validateUser(
         intraID,
         tokens.accessToken,
