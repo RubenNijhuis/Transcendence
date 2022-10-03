@@ -1,5 +1,5 @@
 // React
-import { useState } from "react";
+import { ChangeEventHandler, useState } from "react";
 
 // Styling
 import styled from "styled-components";
@@ -16,13 +16,18 @@ import Slide from "../components/BoxSlider/Slide/Slide";
 // Auth
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+
+// Proxies
 import createUser from "../proxies/user/createUser";
+import uploadImage from "../proxies/user/uploadImage";
 
 // Page routes
 import PageRoutes from "../config/PageRoutes";
 
 // Error modal
 import { useModal } from "../contexts/ModalContext";
+import ApiRoutes from "../config/ApiRoutes";
+import Logger from "../utils/Logger";
 
 // TODO: put styling in different folder
 const StyledInput = styled.div`
@@ -59,6 +64,14 @@ const CreateForm = styled.div`
     }
 `;
 
+/**
+ * Interface copied from https://stackoverflow.com/questions/43176560/property-files-does-not-exist-on-type-eventtarget-error-in-typescript
+ * TODO: look it this can be simplified or not be dependent upon
+ */
+interface HTMLInputEvent extends Event {
+    target: HTMLInputElement & EventTarget;
+}
+
 // TODO: make component check input data before sending
 const CreateAccount = () => {
     // Form input state
@@ -66,13 +79,42 @@ const CreateAccount = () => {
     const [color, setColor] = useState<string>("");
     const [description, setDescription] = useState<string>("");
 
-    // Authentication utils
+    const navigate = useNavigate();
     const { setUser, setLoggedIn } = useAuth();
-
     const { setModalError, setIsModalOpen } = useModal();
 
-    // Navigating to profile page after creation
-    const navigate = useNavigate();
+    const retrieveFileFromInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const target = e.target as HTMLInputElement;
+        // Select the file
+        const file: File = (target.files as FileList)[0];
+        const fileName: string = file.name;
+
+        return { file, fileName };
+    };
+
+    const handleProfileImageUpload = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const { file, fileName } = retrieveFileFromInput(e);
+        const fd = new FormData();
+        fd.append("bannerImage", file, fileName);
+
+        uploadImage(ApiRoutes.uploadBannerImage(), fd)
+            .then(console.log)
+            .catch(console.error);
+    };
+
+    const handleBannerImageUpload = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const { file, fileName } = retrieveFileFromInput(e);
+        const fd = new FormData();
+        fd.append("bannerImage", file, fileName);
+
+        uploadImage(ApiRoutes.uploadBannerImage(), fd)
+            .then(console.log)
+            .catch(console.error);
+    };
 
     const handleAccountCreation = () => {
         const providedDetails = {
@@ -82,8 +124,8 @@ const CreateAccount = () => {
         };
 
         /**
-         * Redirects the user to the profile page
-         * upon account creation.
+         * Redirects the user to the profile
+         * page upon account creation.
          */
         createUser(providedDetails)
             .then((returnedUserProfile) => {
@@ -108,6 +150,26 @@ const CreateAccount = () => {
                             type="text"
                             value={username}
                             onChange={(e) => setusername(e.target.value)}
+                        />
+                    </StyledInput>
+                </Slide>
+                <Slide>
+                    <StyledInput>
+                        <label>Upload a profile picture</label>
+                        <input
+                            type="file"
+                            alt="user profile"
+                            onChange={handleProfileImageUpload}
+                        />
+                    </StyledInput>
+                </Slide>
+                <Slide>
+                    <StyledInput>
+                        <label>Upload a banner picture</label>
+                        <input
+                            type="file"
+                            alt="user banner"
+                            onChange={handleBannerImageUpload}
                         />
                     </StyledInput>
                 </Slide>

@@ -13,6 +13,10 @@ const ApiRoutes = {
     // Profiles
     getProfileByUserName: (userName: string) => `/user/${userName}`,
 
+    // Account setup
+    uploadProfileImage: () => `/user/upload-banner-pic`,
+    uploadBannerImage: () => `/user/upload-banner-pic`,
+
     // Chat
     getChatByUserName: (userName: string) => `/chats/${userName}`,
 

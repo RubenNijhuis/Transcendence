@@ -29,14 +29,15 @@ const Guard = () => {
         }
     }, [isLoggedIn, navigate]);
 
-    return <Outlet />
-    // ) : (
-    //     <Navigate
-    //         to={PageRoutes.whenNotLoggedIn}
-    //         state={{ from: location }}
-    //         replace
-    //     />
-    // );
+    return isLoggedIn ? (
+        <Outlet />
+    ) : (
+        <Navigate
+            to={PageRoutes.whenNotLoggedIn}
+            state={{ from: location }}
+            replace
+        />
+    );
 };
 
 export default Guard;
