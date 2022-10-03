@@ -16,7 +16,7 @@ type PayloadType = {
 };
 
 interface AuthTokenType {
-  jsonWebToken: string;
+  accesToken: string;
   refreshToken: string;
 }
 
@@ -51,7 +51,7 @@ export class AuthService {
 
   async validateUser(
     intraID: string,
-    authtoken: string,
+    accessToken: string,
     refreshtoken: string
   ): Promise<any> {
     try {
@@ -59,7 +59,7 @@ export class AuthService {
         shouldCreateUser: false,
         profile: null,
         authToken: {
-          jsonWebToken: authtoken,
+          accessToken: accessToken,
           refreshToken: refreshtoken
         }
       };

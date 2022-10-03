@@ -57,7 +57,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
             // Destructuring the return value
             const { accessToken, refreshToken } = authToken;
-
+            console.log(authToken);
             // Reset the store and update the API instance
             setItem(StoreId.accessToken, accessToken);
             setItem(StoreId.refreshToken, refreshToken);
@@ -92,6 +92,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     const { accessToken, refreshToken } =
                         await refreshAuthToken(storeRefreshToken);
 
+                    console.log("YO");
                     // Reset tokens and API instance
                     setItem(StoreId.accessToken, accessToken);
                     setItem(StoreId.refreshToken, refreshToken);
@@ -99,11 +100,14 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
                     // Reset state to the new user data
                     const userFromToken = await getUserByAuthToken(accessToken);
+                    console.log("HELLO");
                     setUser(userFromToken);
                     setLoggedIn(true);
                 } catch (err) {
                     // Reroute the user to a page where they can manually log in
-                    window.location.assign(PageRoutes.home);
+                    if (window.location.pathname !== PageRoutes.home) {
+                        window.location.assign(PageRoutes.home);
+                    }
 
                     Logger(
                         "AUTH",

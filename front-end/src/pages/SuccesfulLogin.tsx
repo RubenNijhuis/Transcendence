@@ -12,7 +12,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 // Types
-import { LoginConfirmResponse, RequestErrorType } from "../types/request";
+import { RequestErrorType } from "../types/request";
 
 // Page routes
 import PageRoutes from "../config/PageRoutes";
