@@ -71,7 +71,7 @@ export class AuthService {
       } else {
         res.shouldCreateUser = true;
       }
-      console.log("stringify:", JSON.stringify(user)); //this returns null?
+      console.log("stringify:", JSON.stringify(user)); //this returns null? because user is probably null :)
       return res;
     } catch (err) {
       return err;
@@ -137,9 +137,6 @@ export class AuthService {
 
       if (!user || !user.refreshToken)
         throw new ForbiddenException("Access Denied: No user in database");
-      console.log("test1:", user.refreshToken);
-
-      console.log("le refresh token:", refreshToken);
 
       const hash = createHash("sha256").update(refreshToken).digest("hex");
       const isMatch: boolean = await bcrypt.compare(hash, user.refreshToken);
@@ -149,7 +146,6 @@ export class AuthService {
 
       const tokens: { accessToken: string; refreshToken: string } =
         await this.getTokens(decoded.intraID);
-      console.log("test:\n", refreshToken, "\n", tokens.refreshToken);
 
       const intraIDDto = { intraID: decoded.intraID };
       const addUser: UpdateResult = await this.userService.setRefreshToken(

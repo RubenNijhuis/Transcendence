@@ -60,30 +60,34 @@ export class AuthController {
   @Get("confirm?")
   async confirm(@Query("token") token: string) {
     try {
-      // Turns the token from redirect into a token
-      // console.log("first token:", token);
-      const res = await this.authService.getBearerToken(token);
-      // console.log("token: ", res.data.access_token);
+      /*
+       * Takes the given code and uses it too give a token we
+       * can use to get the third party profile data
+       */
+      const { data } = await this.authService.getBearerToken(token);
+      const userData = await this.authService.getUserData(data.access_token);
 
-      const userData = await this.authService.getUserData(
-        res.data.access_token
-      );
+      // The third party UID
       const intraID = userData.data.id;
       const username = userData.data.login;
-      // console.log("intraID", intraID);
 
+      // Create the tokens to be used for authentication
       const tokens = await this.authService.getTokens(intraID);
+      // TODO: rename variable hash1 isn't very discriptive
       const hash1 = createHash("sha256")
         .update(tokens.refreshToken)
         .digest("hex");
+      // TODO: should be an env variable
       const saltOrRounds = 10;
+      // TODO: should be party of a custom library
       const hash = await bcrypt.hash(hash1, saltOrRounds);
-      // console.log("tokens:", tokens);
 
+      // TODO: is this variable still being used?
       const CreateUserDto = { username: username };
       await this.userService.createUser(intraID, hash);
 
-      //TO DO: check if exists first before adding
+      // console.log("refreshtoken for testing:", tokens.refreshToken);
+      // TO DO: check if exists first before adding
       // this.authService.addReftoken(CreateUserDto, tokens.refreshToken);
       console.log("refreshtoken for testing:", tokens.refreshToken);
       console.log("bearer for testing:", tokens.accessToken);
@@ -111,13 +115,7 @@ export class AuthController {
     return this.authService.refreshTokens(refreshToken);
   }
 
-  //   @UseGuards(AccessTokenGuard)
-  //   @Get("test")
-  //   acessTokens(@Req() req: Request) {
-  //     const intraID = req.user["intraID"];
-  //     console.log("IntraID:", intraID);
-  //   }
-
+  // TODO: this should be in the user controller
   /**
    * Returns a user from the database using the authentication token
    * @param req

@@ -3,10 +3,12 @@ import {
   Body,
   Controller,
   Get,
+  HttpStatus,
   Post,
   Req,
   Res,
   UploadedFile,
+  UploadedFiles,
   UseGuards,
   UseInterceptors,
   UsePipes,
@@ -35,7 +37,7 @@ import { UserSeeder } from "src/database/seeds/user-create.seed";
 import User from "../../entities/user/user.entity";
 
 // image upload pipe config
-import { bannerStorage, imgFilter } from "src/middleware/imgUpload/imgUpload";
+import { bannerStorage, imgFilter, profileStorage } from "src/middleware/imgUpload/imgUpload";
 
 // file upload library
 import { MyNewFileInterceptor } from "src/middleware/imgUpload/file-interceptor";
@@ -43,6 +45,7 @@ import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
 import { Request } from "express";
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { diskStorage } from "multer";
 
 /**
  * The user controller will act as the first entry point for user related api calls.
@@ -126,56 +129,30 @@ export class UsersController {
   }
 
   @Post(UserRoutes.uploadBannerPic)
-  @UseInterceptors(FileInterceptor('file', bannerStorage))
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
+  @UseGuards(AccessTokenGuard)
+  @UseInterceptors(
+    FileInterceptor('file', {
+      fileFilter: imgFilter,
+      storage: bannerStorage,
+    }),
+  )
+  async uploadBannerFile(@UploadedFile() file: Express.Multer.File) {
+    console.log(file.filename);
+    return HttpStatus.OK;
   }
 
-  // @Post(UserRoutes.uploadBannerPic)
-  // @UseInterceptors(FileInterceptor('image', {
-  //   storage: bannerStorage("username taken from jwt"),
-  //   fileFilter: imgFilter
-  // }))
-  // async uploadBanner(@UploadedFile() file) {
-  //   const response = {
-  //     originalname: file.originalname,
-  //     filename: file.filename,
-  //   };
-  //   return response;
-  // }
-
-  // @Post(UserRoutes.uploadProfilePic)
-  // @UseInterceptors(FileInterceptor('image', {
-  //   storage: profileStorage("tmp"),
-  //   fileFilter: imgFilter
-  // }))
-  // async uploadProfile(@UploadedFile() file) {
-  //   const response = {
-  //     originalname: file.originalname,
-  //     filename: file.filename,
-  //   };
-  //   return response;
-  // }
-
-  // @Post(UserRoutes.uploadBannerPic)
-  // @UseInterceptors(
-  //   MyNewFileInterceptor("picture", (ctx) => {
-  //     const jwt: string = ctx.switchToHttp().getRequest().headers.bearer_token;
-
-  //     return {
-  //       storage: bannerStorage(jwt),
-  //       fileFilter: imgFilter
-  //     };
-  //   })
-  // )
-  // async uploadProfileTest(@UploadedFile() file: Express.Multer.File) {
-  //   console.log(file);
-  //   const response = {
-  //     // originalname: file.originalname,
-  //     // filename: file.filename
-  //   };
-  //   return response;
-  // }
+  @Post(UserRoutes.uploadProfilePic)
+  @UseGuards(AccessTokenGuard)
+  @UseInterceptors(
+    FileInterceptor('file', {
+      fileFilter: imgFilter,
+      storage: profileStorage,
+    }),
+  )
+  async uploadProfileFile(@UploadedFile() file: Express.Multer.File) {
+    console.log(file.filename);
+    return HttpStatus.OK;
+  }
 
   @Get(UserRoutes.seed)
   async seedUsers() {
@@ -185,6 +162,7 @@ export class UsersController {
 
   @Post(UserRoutes.seedAmount)
   async seedUsersAmount(@Body() dto: SeederAmountDto) {
+    console.log("YEEY I AM BEING CALLED");
     return await this.userService.seedCustom(dto.amount);
   }
 }

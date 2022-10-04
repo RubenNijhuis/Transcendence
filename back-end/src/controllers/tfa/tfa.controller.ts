@@ -22,7 +22,7 @@ export class TfaController {
   async google2fa(@Body() userDto: UsernameDto) {
     try {
       const res = await this.tfaService.generateTfaSecret(userDto);
-      console.log(res);
+      console.log("Google 2FA: ", res);
     } catch (error) {
       return error;
     }

@@ -60,9 +60,17 @@ export class GroupController {
       const ret = { message: "Group created with id: " + group.id };
       return ret;
     } catch (error) {
-      return error;
+      console.log(error);
+      const message = "unable to create group\n";
+      return message;
     }
   }
+
+  // @Post("removeGroup")
+  // async removeGroup(@Body() removeGroupDto: removeGroupDto)
+  //   try {
+
+  //   }
 
   @Post("addMembers")
   async addMembers(@Body() EditMembersDto: EditMembersDto) {
@@ -97,7 +105,7 @@ export class GroupController {
     }
   }
 
-  @Post("unMakeAdmin")
+  @Post("removeAdmin")
   async unMakeAdmin(@Body() MakeAdminDto: MakeAdminDto) {
     try {
       const admin = await this.groupService.unMakeAdmin(MakeAdminDto);

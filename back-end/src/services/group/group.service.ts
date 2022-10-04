@@ -5,6 +5,8 @@ import { EditMembersDto } from "src/dtos/group/edit-members.dto";
 import { EditOwnerDto } from "src/dtos/group/edit-owner.dto";
 import Group from "src/entities/group/group.entity";
 import { Repository } from "typeorm";
+import * as bcrypt from "bcrypt";
+import { createHash } from "crypto";
 import { CreateGroupDto } from "../../dtos/group/create-group.dto";
 import { CreatePasswordDto } from "../../dtos/group/create-password.dto";
 import { EditPasswordDto } from "../../dtos/group/edit-password.dto";
@@ -30,19 +32,29 @@ export class GroupService {
   }
 
   async createPassword(createPasswordDto: CreatePasswordDto) {
-    const group = this.findGroupById(createPasswordDto.id);
-    if (!group) return console.error("group doesn't exist");
-    const owner = (await group).owner;
-    if (owner === createPasswordDto.owner)
-      await this.groupRepository.update(
-        createPasswordDto.id,
-        createPasswordDto
-      );
+    const group = await this.findGroupById(createPasswordDto.id);
+    if (!group) return console.error("group doesn't exist"); //error lol
+    const owner = group.owner;
+    console.log(owner);
+    if (owner == createPasswordDto.owner)
+    {
+      const hash1 = createHash("sha256").update(createPasswordDto.password).digest("hex");
+      const saltOrRounds = 10;
+      const password = await bcrypt.hash(hash1, saltOrRounds);
+      await this.groupRepository
+      .createQueryBuilder()
+      .update()
+      .set({ password: password })
+      .where({
+        id: createPasswordDto.id
+      })
+      .execute();
+    }
   }
 
   async updatePassword(editPasswordDto: EditPasswordDto) {
     const group = await this.findGroupById(editPasswordDto.id);
-    if (!group) return console.error("group doesn't exist"); //error lmao
+    if (!group) return console.error("group doesn't exist"); //error lol
     const owner = group.owner;
     const oldPassword = group.password;
     if (
@@ -69,6 +81,8 @@ export class GroupService {
   async addMembers(editMembersDto: EditMembersDto) {
     const group: Group = await this.findGroupById(editMembersDto.groupId);
     for (let i = 0; i < editMembersDto.users.length; i++) {
+      if (editMembersDto.users[i] == group.owner)
+        continue ;
       const groupuser = this.groupuserRepository.create();
       groupuser.group = group;
       groupuser.user = await this.userService.findUsersById(
@@ -118,10 +132,8 @@ export class GroupService {
     console.log(groupuser.userId);
     console.log(groupuser.groupId);
     if (groupuser && group.owner === MakeAdminDto.owner) {
-      console.log("Bingo");
       groupuser.userType = 1;
     }
-    console.log("2");
     return this.groupuserRepository.save(groupuser);
   }
 

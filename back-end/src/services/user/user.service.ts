@@ -20,7 +20,7 @@ import { User } from "src/entities";
 import { DeleteResult, Repository, TypeORMError, UpdateResult } from "typeorm";
 
 // hashing libraries - thanks angi
-import * as bcrypt from "bcrypt";
+import * as bcrypt from "bcrypt"; 
 import { createHash } from "crypto";
 
 // dtos
@@ -263,6 +263,7 @@ export class UserService {
   async seedCustom(amount: number): Promise<User[]> {
     try {
       for (let i = 1; i <= amount; i++) {
+        console.log("yoyo");
         let genIntraId = randUserName();
         await this.createUser(genIntraId, "lolo");
         await this.setUser(genIntraId, {
