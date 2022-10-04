@@ -17,7 +17,7 @@ import Pong from "../../pages/Pong";
 import NewPongGame from "../../pages/NewPongGame";
 
 // Authentication
-import Guard from "../Guard";
+import { AuthGuard, AccessTokenGuard } from "../RouteGuards";
 import SuccesfulLoginPage from "../../pages/SuccesfulLogin";
 import CreateAccount from "../../pages/CreateAccount";
 
@@ -41,14 +41,17 @@ const Router = () => (
                 element={<SuccesfulLoginPage />}
             />
 
-            {/* TODO: only allow to go to this page if user has jwt */}
-            <Route
-                path={PageRoutes.createAccount}
-                element={<CreateAccount />}
-            />
+            {/* This route may only be accesed if the user
+              * is still in the process of creating an accoun*/}
+            <Route element={<AccessTokenGuard />}>
+                <Route
+                    path={PageRoutes.createAccount}
+                    element={<CreateAccount />}
+                />
+            </Route>
 
             {/* Routes that have to pass through authentication to be loaded */}
-            <Route element={<Guard />}>
+            <Route element={<AuthGuard />}>
                 {/* Profile page is rendered in two different ways but same component */}
                 <Route path={PageRoutes.profile} element={<ProfilePage />}>
                     <Route path=":profileName" element={<ProfilePage />} />

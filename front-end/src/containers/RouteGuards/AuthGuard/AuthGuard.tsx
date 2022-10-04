@@ -1,19 +1,19 @@
 // Router
 import { useEffect } from "react";
 import { Navigate, useLocation, Outlet, useNavigate } from "react-router-dom";
-import PageRoutes from "../../config/PageRoutes";
-import StoreId from "../../config/StoreId";
+import PageRoutes from "../../../config/PageRoutes";
+import StoreId from "../../../config/StoreId";
 
 // Auth check
-import { useAuth } from "../../contexts/AuthContext";
-import { getItem } from "../../modules/Store";
-import { AuthTokenType } from "../../types/request";
+import { useAuth } from "../../../contexts/AuthContext";
+import { getItem } from "../../../modules/Store";
+import { AuthTokenType } from "../../../types/request";
 
 /**
- * Checks if certain conditions are met when a guarded
+ * Checks if certain conditions are met when a AuthGuarded
  * page is accesed. Otherwise reroute to another page
  */
-const Guard = () => {
+const AuthGuard = () => {
     const { isLoggedIn } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
@@ -40,4 +40,4 @@ const Guard = () => {
     );
 };
 
-export default Guard;
+export default AuthGuard;

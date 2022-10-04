@@ -60,7 +60,6 @@ const ProfilePage = () => {
          * the user's own profile page
          */
         if (profileName === undefined) {
-            console.log(user);
             setSelectedProfile(user);
             setIsUserProfile(true);
             return;
