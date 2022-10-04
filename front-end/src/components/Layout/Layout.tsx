@@ -1,4 +1,5 @@
 // UI
+import DebugDevBox from "../../containers/DebugDevBox";
 import Footer from "../Footer";
 import NavBar from "../Navbar";
 
@@ -7,7 +8,7 @@ import { Container, Content } from "./Layout.style";
 
 interface Props {
     children: React.ReactNode;
-};
+}
 
 const Layout = ({ children }: Props) => {
     return (
@@ -15,6 +16,7 @@ const Layout = ({ children }: Props) => {
             <NavBar />
             <Content>{children}</Content>
             <Footer />
+            <DebugDevBox />
         </Container>
     );
 };

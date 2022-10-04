@@ -36,39 +36,48 @@ export class GroupService {
     if (!group) return console.error("group doesn't exist"); //error lol
     const owner = group.owner;
     console.log(owner);
-    if (owner == createPasswordDto.owner)
-    {
-      const hash1 = createHash("sha256").update(createPasswordDto.password).digest("hex");
+    if (owner == createPasswordDto.owner) {
+      const hash1 = createHash("sha256")
+        .update(createPasswordDto.password)
+        .digest("hex");
       const saltOrRounds = 10;
       const password = await bcrypt.hash(hash1, saltOrRounds);
       await this.groupRepository
-      .createQueryBuilder()
-      .update()
-      .set({ password: password })
-      .where({
-        id: createPasswordDto.id
-      })
-      .execute();
+        .createQueryBuilder()
+        .update()
+        .set({ password: password })
+        .where({
+          id: createPasswordDto.id
+        })
+        .execute();
     }
   }
 
   async updatePassword(editPasswordDto: EditPasswordDto) {
     const group = await this.findGroupById(editPasswordDto.id);
     if (!group) return console.error("group doesn't exist"); //error lol
-    const owner = group.owner;
-    const oldPassword = group.password;
-    if (
-      owner === editPasswordDto.owner &&
-      oldPassword === editPasswordDto.oldPassword
-    )
+    const hash = createHash("sha256")
+      .update(editPasswordDto.oldPassword)
+      .digest("hex");
+    const isMatch: boolean = await bcrypt.compare(hash, group.password);
+    if (isMatch && group.owner == editPasswordDto.owner) {
+      const hash1 = createHash("sha256")
+        .update(editPasswordDto.newPassword)
+        .digest("hex");
+      const saltOrRounds = 10;
+      const password = await bcrypt.hash(hash1, saltOrRounds);
+      console.log("password:", password);
       return await this.groupRepository
         .createQueryBuilder()
         .update()
-        .set({ password: editPasswordDto.newPassword })
+        .set({ password: password })
         .where({
           id: editPasswordDto.id
         })
         .execute();
+    } else {
+      return console.error("error lol"); //moet kijken hoe ik errors return
+    }
   }
 
   async createGroup(createGroupDto: CreateGroupDto) {
@@ -81,8 +90,7 @@ export class GroupService {
   async addMembers(editMembersDto: EditMembersDto) {
     const group: Group = await this.findGroupById(editMembersDto.groupId);
     for (let i = 0; i < editMembersDto.users.length; i++) {
-      if (editMembersDto.users[i] == group.owner)
-        continue ;
+      if (editMembersDto.users[i] == group.owner) continue;
       const groupuser = this.groupuserRepository.create();
       groupuser.group = group;
       groupuser.user = await this.userService.findUsersById(

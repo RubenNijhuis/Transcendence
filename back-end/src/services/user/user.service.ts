@@ -28,7 +28,7 @@ import { SetUserDto } from "src/dtos/user/set-user.dto";
 import { UsernameDto } from "src/dtos/auth/username.dto";
 import { intraIDDto } from "src/dtos/auth/intraID.dto";
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
-
+import { ConfigService } from "@nestjs/config";
 /**
  * User services
  *
@@ -46,7 +46,8 @@ import { errorHandler } from "src/utils/errorhandler/errorHandler";
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    private readonly userRepository: Repository<User>,
+    private readonly configService: ConfigService
   ) {}
 
   async getUsers(): Promise<User[]> {
@@ -171,8 +172,9 @@ export class UserService {
     try {
       const user = await this.findUserByintraId(intraID.intraID);
       const hash1 = createHash("sha256").update(token).digest("hex");
-      const saltOrRounds = 10;
-      const hash = await bcrypt.hash(hash1, saltOrRounds); // <- deze
+      const saltorounds: string = this.configService.get<string>("SALT_OR_ROUNDS");
+      const numsalt: number = +saltorounds;
+      const hash = await bcrypt.hash(hash1, numsalt); // <- deze
 
       return await this.userRepository
         .createQueryBuilder()

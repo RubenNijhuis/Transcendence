@@ -80,6 +80,7 @@ export class AuthController {
       const numsalt: number = +saltorounds;
       const encryted_token = await bcrypt.hash(hash, numsalt);
 
+      console.log(tokens.refreshToken);
       const user = await this.userService.findUserByintraId(intraID);
       if (user)
         throw new ForbiddenException("Access Denied: user already exists"); //TODO: this does not yet work on frontend
@@ -106,6 +107,13 @@ export class AuthController {
   refreshTokens(@Req() req: Request) {
     const refreshToken = req.user["refreshToken"];
     return this.authService.refreshTokens(refreshToken);
+  }
+
+  @UseGuards(RefreshTokenGuard)
+  @Get("createRefresh")
+  createNewRefreshTokens(@Req() req: Request) {
+    const refreshToken = req.user["refreshToken"];
+    return this.authService.createNewRefreshTokens(refreshToken);
   }
 
   // TODO: this should be in the user controller

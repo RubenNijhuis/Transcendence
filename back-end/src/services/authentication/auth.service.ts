@@ -116,6 +116,53 @@ export class AuthService {
     }
   }
 
+  async createNewRefreshTokens(refreshToken: string) {
+
+    //****    verify if it's a valid refresh token
+    const secret: string = this.configService.get<string>("JWT_REFRESH_SECRET");
+    const isValidRefToken: string = jwt.verify(refreshToken, secret);
+
+    if (!isValidRefToken)
+      throw new ForbiddenException("Access Denied: Not a valid Token");
+
+    //****    decode token to get intraID
+    const decoded: PayloadType = this.jwtService.decode(
+      refreshToken
+    ) as PayloadType;
+
+    if (!decoded) throw new ForbiddenException("Access Denied: Cannot decode");
+
+    try {
+      //****  get user by intraid to see if person exists
+      const user: User = await this.userService.findUserByintraId(
+        decoded.intraID
+      );
+
+      if (!user || !user.refreshToken) //this??
+        throw new ForbiddenException("Access Denied: No user in database");
+
+        //****  hash the token to be able to compare and validate it to the hashed token in the database
+      const hash = createHash("sha256").update(refreshToken).digest("hex");
+
+      //****  update token in the backend
+      const tokens: { accessToken: string; refreshToken: string } =
+        await this.getTokens(decoded.intraID);
+
+      const intraIDDto = { intraID: decoded.intraID };
+      const addUser: UpdateResult = await this.userService.setRefreshToken(
+        intraIDDto,
+        tokens.refreshToken
+      );
+      if (!addUser)
+        throw new ForbiddenException("Access Denied: Failed to add token");
+      return tokens;
+    } catch (e) {
+      // console.error(e);
+      return e;
+    }
+  }
+
+
   //TODO: remove all extra info after access denied in the throw errors. Could be used to figure out how the program works
   async refreshTokens(refreshToken: string) {
 
