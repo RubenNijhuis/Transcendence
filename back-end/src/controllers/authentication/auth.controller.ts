@@ -1,7 +1,7 @@
 import {
   Controller,
   Get,
-  HttpException,
+  ForbiddenException,
   Query,
   Req,
   UseGuards
@@ -69,26 +69,22 @@ export class AuthController {
 
       // The third party UID
       const intraID = userData.data.id;
-      const username = userData.data.login;
 
       // Create the tokens to be used for authentication
       const tokens = await this.authService.getTokens(intraID);
-      // TODO: rename variable hash1 isn't very discriptive
-      const hash1 = createHash("sha256")
+      const hash = createHash("sha256")
         .update(tokens.refreshToken)
         .digest("hex");
-      // TODO: should be an env variable
-      const saltOrRounds = 10;
-      // TODO: should be party of a custom library
-      const hash = await bcrypt.hash(hash1, saltOrRounds);
+      // TODO: should be party of a custom library. angi: what do you mean???
+      const saltorounds: string = this.configService.get<string>("SALT_OR_ROUNDS");
+      const numsalt: number = +saltorounds;
+      const encryted_token = await bcrypt.hash(hash, numsalt);
 
-      // TODO: is this variable still being used?
-      const CreateUserDto = { username: username };
-      await this.userService.createUser(intraID, hash);
+      const user = await this.userService.findUserByintraId(intraID);
+      if (user)
+        throw new ForbiddenException("Access Denied: user already exists"); //TODO: this does not yet work on frontend
+      await this.userService.createUser(intraID, encryted_token);
 
-      // console.log("refreshtoken for testing:", tokens.refreshToken);
-      // TO DO: check if exists first before adding
-      // this.authService.addReftoken(CreateUserDto, tokens.refreshToken);
       return await this.authService.validateUser(
         intraID,
         tokens.accessToken,
@@ -121,7 +117,7 @@ export class AuthController {
   @UseGuards(AccessTokenGuard)
   @Get("getUserFromAccessToken")
   getUserByID(@Req() req: Request) {
-    const intraID = req.user["intraID"];
+    const intraID: string = req.user["intraID"];
     const user = this.userService.findUserByintraId(intraID);
     return user;
   }

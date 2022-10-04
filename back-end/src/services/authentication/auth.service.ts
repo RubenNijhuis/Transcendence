@@ -116,14 +116,17 @@ export class AuthService {
     }
   }
 
-  //TODO ? TO DO: remove all extra info after access denied in the throw errors. Could be used to figure out how the program works
+  //TODO: remove all extra info after access denied in the throw errors. Could be used to figure out how the program works
   async refreshTokens(refreshToken: string) {
+
+    //****    verify if it's a valid refresh token
     const secret: string = this.configService.get<string>("JWT_REFRESH_SECRET");
     const isValidRefToken: string = jwt.verify(refreshToken, secret);
 
     if (!isValidRefToken)
       throw new ForbiddenException("Access Denied: Not a valid Token");
 
+    //****    decode token to get intraID
     const decoded: PayloadType = this.jwtService.decode(
       refreshToken
     ) as PayloadType;
@@ -131,6 +134,7 @@ export class AuthService {
     if (!decoded) throw new ForbiddenException("Access Denied: Cannot decode");
 
     try {
+      //****  get user by intraid to see if person exists
       const user: User = await this.userService.findUserByintraId(
         decoded.intraID
       );
@@ -138,12 +142,14 @@ export class AuthService {
       if (!user || !user.refreshToken)
         throw new ForbiddenException("Access Denied: No user in database");
 
+        //****  hash the token to be able to compare and validate it to the hashed token in the database
       const hash = createHash("sha256").update(refreshToken).digest("hex");
       const isMatch: boolean = await bcrypt.compare(hash, user.refreshToken);
 
       if (isMatch == false)
         throw new ForbiddenException("Access Denied: Not a match");
 
+      //****  update token in the backend
       const tokens: { accessToken: string; refreshToken: string } =
         await this.getTokens(decoded.intraID);
 
