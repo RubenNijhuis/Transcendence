@@ -97,7 +97,7 @@ const CreateAccount = () => {
     ) => {
         const { file, fileName } = retrieveFileFromInput(e);
         const fd = new FormData();
-        fd.append("bannerImage", file, fileName);
+        fd.append("file", file, fileName);
 
         uploadImage(ApiRoutes.uploadBannerImage(), fd)
             .then(console.log)
@@ -109,7 +109,7 @@ const CreateAccount = () => {
     ) => {
         const { file, fileName } = retrieveFileFromInput(e);
         const fd = new FormData();
-        fd.append("bannerImage", file, fileName);
+        fd.append("file", file, fileName);
 
         uploadImage(ApiRoutes.uploadBannerImage(), fd)
             .then(console.log)
