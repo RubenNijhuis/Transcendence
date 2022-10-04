@@ -16,6 +16,7 @@ import { UserService } from "src/services/user/user.service";
 import * as bcrypt from "bcrypt";
 import { createHash } from "crypto";
 import { JwtService } from "@nestjs/jwt";
+import User from "src/entities/user/user.entity";
 
 /**
  * The auth controller handles everything related to
@@ -60,6 +61,15 @@ export class AuthController {
   @Get("confirm?")
   async confirm(@Query("token") token: string) {
     try {
+      const returnedPayload: any = {
+        shouldCreateUser: false,
+        profile: null,
+        authToken: {
+          accessToken: '',
+          refreshToken: ''
+        }
+      };
+
       /*
        * Takes the given code and uses it too give a token we
        * can use to get the third party profile data
@@ -78,19 +88,23 @@ export class AuthController {
       // TODO: should be party of a custom library. angi: what do you mean???
       const saltorounds: string = this.configService.get<string>("SALT_OR_ROUNDS");
       const numsalt: number = +saltorounds;
-      const encryted_token = await bcrypt.hash(hash, numsalt);
+      const encrypted_token = await bcrypt.hash(hash, numsalt);
 
-      console.log(tokens.refreshToken);
-      const user = await this.userService.findUserByintraId(intraID);
-      if (user)
-        throw new ForbiddenException("Access Denied: user already exists"); //TODO: this does not yet work on frontend
-      await this.userService.createUser(intraID, encryted_token);
+      // Check if the user already exists
+      const user: User = await this.userService.findUserByintraId(intraID);
+      if (!user) {
+        await this.userService.createUser(intraID, encrypted_token);
+      }
 
-      return await this.authService.validateUser(
-        intraID,
-        tokens.accessToken,
-        tokens.refreshToken
-      );
+      if (user.isInitialized) {
+        const intraIDDto = { intraID: intraID };
+        this.userService.setRefreshToken(intraIDDto, encrypted_token);
+        returnedPayload.profile = user;
+      } else {
+        returnedPayload.shouldCreateUser = true;
+      }
+
+      return returnedPayload;
     } catch (err: any) {
       console.log(err);
       throw err;

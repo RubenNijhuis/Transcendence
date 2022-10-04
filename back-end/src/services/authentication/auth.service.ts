@@ -49,35 +49,6 @@ export class AuthService {
     });
   }
 
-  async validateUser(
-    intraID: string,
-    accessToken: string,
-    refreshtoken: string
-  ): Promise<any> {
-    try {
-      const res: any = {
-        shouldCreateUser: false,
-        profile: null,
-        authToken: {
-          accessToken: accessToken,
-          refreshToken: refreshtoken
-        }
-      };
-
-      const user: User = await this.userService.findUserByintraId(intraID);
-
-      if (user.isInitialized) {
-        res.profile = user;
-      } else {
-        res.shouldCreateUser = true;
-      }
-      console.log("stringify:", JSON.stringify(user)); //this returns null? because user is probably null :)
-      return res;
-    } catch (err) {
-      return err;
-    }
-  }
-
   jwtDecodeUsername(jwt: string): string {
     const decodedJwt = this.jwtService.decode(jwt) as PayloadType;
     return decodedJwt.intraID;
