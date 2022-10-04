@@ -12,6 +12,7 @@ import { GroupService } from "src/services/group/group.service";
 import { CreateGroupDto } from "../../dtos/group/create-group.dto";
 import { CreatePasswordDto } from "../../dtos/group/create-password.dto";
 import { EditPasswordDto } from "../../dtos/group/edit-password.dto";
+import { errorHandler } from "src/utils/errorhandler/errorHandler";
 
 @Controller("group")
 export class GroupController {
