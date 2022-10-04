@@ -65,8 +65,8 @@ export class AuthController {
         shouldCreateUser: false,
         profile: null,
         authToken: {
-          accessToken: '',
-          refreshToken: ''
+          accessToken: null,
+          refreshToken: null
         }
       };
 
@@ -82,26 +82,29 @@ export class AuthController {
 
       // Create the tokens to be used for authentication
       const tokens = await this.authService.getTokens(intraID);
-      const hash = createHash("sha256")
-        .update(tokens.refreshToken)
-        .digest("hex");
-      // TODO: should be party of a custom library. angi: what do you mean???
-      const saltorounds: string = this.configService.get<string>("SALT_OR_ROUNDS");
-      const numsalt: number = +saltorounds;
-      const encrypted_token = await bcrypt.hash(hash, numsalt);
+      returnedPayload.authToken = tokens;
 
       // Check if the user already exists
       const user: User = await this.userService.findUserByintraId(intraID);
+
       if (!user) {
+        const hash = createHash("sha256")
+          .update(tokens.refreshToken)
+          .digest("hex");
+        // TODO: should be party of a custom library. angi: what do you mean???
+        const saltorounds: string =
+          this.configService.get<string>("SALT_OR_ROUNDS");
+        const numsalt: number = +saltorounds;
+        const encrypted_token = await bcrypt.hash(hash, numsalt);
         await this.userService.createUser(intraID, encrypted_token);
+
+        returnedPayload.shouldCreateUser = true;
       }
 
-      if (user.isInitialized) {
+      if (user && user.isInitialized) {
         const intraIDDto = { intraID: intraID };
-        this.userService.setRefreshToken(intraIDDto, encrypted_token);
+        await this.userService.setRefreshToken(intraIDDto, tokens.refreshToken);
         returnedPayload.profile = user;
-      } else {
-        returnedPayload.shouldCreateUser = true;
       }
 
       return returnedPayload;

@@ -15,6 +15,7 @@ import Logger from "../../utils/Logger";
 const SuccesRequestInterceptor = (
     request: AxiosRequestConfig
 ): AxiosRequestConfig => {
+    console.log("GREAT SUCCESS", request);
     return request;
 };
 

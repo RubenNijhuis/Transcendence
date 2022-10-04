@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import {
+    largeRadius,
     lightTextColor,
     magicNum,
     mainColor,
@@ -30,7 +31,7 @@ const Container = styled.div`
 
         color: ${lightTextColor};
         background: ${mainColor};
-        border-radius: ${mediumRadius};
+        border-radius: ${largeRadius};
 
         .heading {
             grid-area: heading;

@@ -20,7 +20,7 @@ import { User } from "src/entities";
 import { DeleteResult, Repository, TypeORMError, UpdateResult } from "typeorm";
 
 // hashing libraries - thanks angi
-import * as bcrypt from "bcrypt"; 
+import * as bcrypt from "bcrypt";
 import { createHash } from "crypto";
 
 // dtos
@@ -172,7 +172,8 @@ export class UserService {
     try {
       const user = await this.findUserByintraId(intraID.intraID);
       const hash1 = createHash("sha256").update(token).digest("hex");
-      const saltorounds: string = this.configService.get<string>("SALT_OR_ROUNDS");
+      const saltorounds: string =
+        this.configService.get<string>("SALT_OR_ROUNDS");
       const numsalt: number = +saltorounds;
       const hash = await bcrypt.hash(hash1, numsalt); // <- deze
 

@@ -1,21 +1,21 @@
 // React stuff
 import { createContext, useContext, useEffect, useState } from "react";
 
-// Types
-import { ProfileType } from "../../types/profile";
-
 // API
 import loginConfirm from "../../proxies/auth/confirmLogin";
-import getUserByAuthToken from "../../proxies/user/getUserByAuthToken";
-
-// Auth
-import PageRoutes from "../../config/PageRoutes";
-import { setDefaultAuthHeader } from "../../proxies/instances/apiInstance";
+import getUserByAccessToken from "../../proxies/user/getUserByAccessToken";
 import { refreshAuthToken } from "../../proxies/auth/refreshToken";
+import { setDefaultAuthHeader } from "../../proxies/instances/apiInstance";
+
+// Routing
+import PageRoutes from "../../config/PageRoutes";
 
 // Store
 import { getItem, setItem } from "../../modules/Store";
+
 import StoreId from "../../config/StoreId";
+// Types
+import { ProfileType } from "../../types/profile";
 
 // Debug
 import Logger from "../../utils/Logger";
@@ -98,21 +98,21 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     setDefaultAuthHeader(accessToken);
 
                     // Reset state to the new user data
-                    const userFromToken = await getUserByAuthToken(accessToken);
+                    const userFromToken = await getUserByAccessToken(accessToken);
                     setUser(userFromToken);
                     setLoggedIn(true);
                 } catch (err) {
                     // Reroute the user to a page where they can manually log in
-                    if (window.location.pathname !== PageRoutes.home) {
-                        window.location.assign(PageRoutes.home);
-                    }
+                    // if (window.location.pathname !== PageRoutes.home) {
+                    //     window.location.assign(PageRoutes.home);
+                    // }
 
-                    Logger(
-                        "AUTH",
-                        "Auth context",
-                        "Refresh token issue or get user",
-                        err
-                    );
+                    // Logger(
+                    //     "AUTH",
+                    //     "Auth context",
+                    //     "Refresh token issue or get user",
+                    //     err
+                    // );
                 }
             }
         };
