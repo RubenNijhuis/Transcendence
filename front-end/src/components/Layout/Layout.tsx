@@ -16,7 +16,7 @@ const Layout = ({ children }: Props) => {
             <NavBar />
             <Content>{children}</Content>
             <Footer />
-            <DebugDevBox />
+            {false && <DebugDevBox />}
         </Container>
     );
 };

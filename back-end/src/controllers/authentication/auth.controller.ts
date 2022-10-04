@@ -17,6 +17,15 @@ import * as bcrypt from "bcrypt";
 import { createHash } from "crypto";
 import { JwtService } from "@nestjs/jwt";
 import User from "src/entities/user/user.entity";
+import { boolean } from "joi";
+import { AuthTokenType } from "src/types/auth";
+
+// TODO: add this to a types file
+interface LoginConfirmPayload {
+  shouldCreateUser: boolean;
+  profile: null | User;
+  authToken: AuthTokenType;
+}
 
 /**
  * The auth controller handles everything related to
@@ -40,8 +49,15 @@ export class AuthController {
    */
   @Get("login")
   login() {
+    interface AuthServiceParams {
+      client_id: string;
+      redirect_uri: string;
+      state: string;
+      response_type: string;
+    }
+
     const url: string = this.configService.get<string>("INTRA_AUTH_URL");
-    const params: any = {
+    const params: AuthServiceParams = {
       client_id: this.configService.get<string>("FORTYTWO_APP_ID"),
       redirect_uri: this.configService.get<string>("FORTYTWO_CALLBACK_URL"),
       state: this.configService.get<string>("FORTYTWO_STATE"),
@@ -59,9 +75,9 @@ export class AuthController {
    * @returns a payload describing what the front-end should do
    */
   @Get("confirm?")
-  async confirm(@Query("token") token: string) {
+  async confirm(@Query("token") token: string): Promise<LoginConfirmPayload> {
     try {
-      const returnedPayload: any = {
+      const returnedPayload: LoginConfirmPayload = {
         shouldCreateUser: false,
         profile: null,
         authToken: {

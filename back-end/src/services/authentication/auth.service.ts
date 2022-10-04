@@ -6,19 +6,10 @@ import { UserService } from "../user/user.service";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 import { UpdateResult } from "typeorm";
-import { intraIDDto } from "src/dtos/auth/intraID.dto";
 import { createHash } from "crypto";
+import { AuthTokenType, PayloadType } from "src/types/auth";
 
-const jwt = require("jsonwebtoken");
-
-type PayloadType = {
-  intraID: string;
-};
-
-interface AuthTokenType {
-  accesToken: string;
-  refreshToken: string;
-}
+import jwt from "jsonwebtoken";
 
 @Injectable()
 export class AuthService {
@@ -41,6 +32,8 @@ export class AuthService {
     });
   }
 
+  // TODO: abstract axios into a proxy library
+  // And also should this be async
   getUserData(bearerToken: string): Promise<any> {
     return Axios.get(this.configService.get("INTRA_GET_ME_URL"), {
       headers: {
@@ -50,48 +43,55 @@ export class AuthService {
   }
 
   jwtDecodeUsername(jwt: string): string {
-    const decodedJwt = this.jwtService.decode(jwt) as PayloadType;
-    return decodedJwt.intraID;
+    const { intraID } = this.jwtService.decode(jwt) as PayloadType;
+    return intraID;
   }
 
+  /**
+   * NOTE: refreshtoken shouldn't be refreshed right? because now it gets
+   * refreshed everytime the website is reloaded. You could theoretically
+   * steal the token and use it forever?
+   */
   async getTokens(intraID: string) {
     try {
-      const [accessToken, refreshToken] = await Promise.all([
-        this.jwtService.signAsync(
-          {
-            intraID
-          },
-          {
-            secret: this.configService.get<string>("JWT_ACCESS_SECRET"),
-            expiresIn: "15m"
-          }
-        ),
-        this.jwtService.signAsync(
-          {
-            intraID
-          },
-          {
-            secret: this.configService.get<string>("JWT_REFRESH_SECRET"),
-            expiresIn: "7d"
-          }
-        )
-      ]);
-
-      return {
-        accessToken,
-        refreshToken
+      const returnedPayload: AuthTokenType = {
+        accessToken: "",
+        refreshToken: ""
       };
-    } catch (e) {
-      // console.error(e);
-      return e;
+
+      const tokenPayload = { intraID };
+
+      const jwtAccessSecret =
+        this.configService.get<string>("JWT_ACCESS_SECRET");
+      const jwtRefreshSecret =
+        this.configService.get<string>("JWT_REFRESH_SECRET");
+
+      returnedPayload.accessToken = await this.jwtService.signAsync(
+        tokenPayload,
+        {
+          secret: jwtAccessSecret,
+          expiresIn: "15m"
+        }
+      );
+
+      returnedPayload.refreshToken = await this.jwtService.signAsync(
+        tokenPayload,
+        {
+          secret: jwtRefreshSecret,
+          expiresIn: "7d"
+        }
+      );
+
+      return returnedPayload;
+    } catch (err) {
+      return err;
     }
   }
 
   async createNewRefreshTokens(refreshToken: string) {
-
     //****    verify if it's a valid refresh token
     const secret: string = this.configService.get<string>("JWT_REFRESH_SECRET");
-    const isValidRefToken: string = jwt.verify(refreshToken, secret);
+    const isValidRefToken: string = jwt.verify(refreshToken, secret) as string;
 
     if (!isValidRefToken)
       throw new ForbiddenException("Access Denied: Not a valid Token");
@@ -109,10 +109,11 @@ export class AuthService {
         decoded.intraID
       );
 
-      if (!user || !user.refreshToken) //this??
+      if (!user || !user.refreshToken)
+        //this??
         throw new ForbiddenException("Access Denied: No user in database");
 
-        //****  hash the token to be able to compare and validate it to the hashed token in the database
+      //****  hash the token to be able to compare and validate it to the hashed token in the database
       const hash = createHash("sha256").update(refreshToken).digest("hex");
 
       //****  update token in the backend
@@ -133,10 +134,8 @@ export class AuthService {
     }
   }
 
-
   //TODO: remove all extra info after access denied in the throw errors. Could be used to figure out how the program works
   async refreshTokens(refreshToken: string) {
-
     //****    verify if it's a valid refresh token
     const secret: string = this.configService.get<string>("JWT_REFRESH_SECRET");
     const isValidRefToken: string = jwt.verify(refreshToken, secret);
@@ -160,7 +159,7 @@ export class AuthService {
       if (!user || !user.refreshToken)
         throw new ForbiddenException("Access Denied: No user in database");
 
-        //****  hash the token to be able to compare and validate it to the hashed token in the database
+      //****  hash the token to be able to compare and validate it to the hashed token in the database
       const hash = createHash("sha256").update(refreshToken).digest("hex");
       const isMatch: boolean = await bcrypt.compare(hash, user.refreshToken);
 
@@ -179,13 +178,9 @@ export class AuthService {
       if (!addUser)
         throw new ForbiddenException("Access Denied: Failed to add token");
       return tokens;
-    } catch (e) {
+    } catch (err) {
       // console.error(e);
-      return e;
+      return err;
     }
-  }
-
-  addReftoken(userDto: intraIDDto, token: string) {
-    this.userService.setRefreshToken(userDto, token);
   }
 }

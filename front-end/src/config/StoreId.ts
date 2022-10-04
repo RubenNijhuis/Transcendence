@@ -1,6 +1,6 @@
 const StoreId = {
-    refreshToken: "REFR",
-    accessToken: "ACES"
+    refreshToken: "refresh",
+    accessToken: "access"
 };
 
 export default StoreId;

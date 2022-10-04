@@ -1,11 +1,10 @@
 // Requst package
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import StoreId from "../../config/StoreId";
+import { getItem } from "../../modules/Store";
 
 // Error transformer
 import transformToRequestError from "../utils/transformToRequestError";
-
-// Debug
-import Logger from "../../utils/Logger";
 
 /**
  * This interceptor handles requests that went succesfully
@@ -15,7 +14,6 @@ import Logger from "../../utils/Logger";
 const SuccesRequestInterceptor = (
     request: AxiosRequestConfig
 ): AxiosRequestConfig => {
-    console.log("GREAT SUCCESS", request);
     return request;
 };
 
@@ -34,6 +32,9 @@ const ErrorRequestInterceptor = (request: AxiosError): AxiosError => {
  * @returns the initial response
  */
 const SuccesResponseInterceptor = (response: AxiosResponse) => {
+    /**
+     * Authentication errors should als be returned as errors, therefore
+     */
     if (response.data.status >= 400 && response.data.status <= 499) {
         throw response;
     }
@@ -48,17 +49,28 @@ const SuccesResponseInterceptor = (response: AxiosResponse) => {
  * @returns a transformed request error
  */
 const ErrorResponseInterceptor = (err: AxiosError) => {
-    // if (err.response) {
-    //     if (err.response.status === 401) {
-    //         // Logger(
-    //         //     "AUTH",
-    //         //     "Error Response Interceptor",
-    //         //     "Credentials invalid ...resetting",
-    //         //     err.response.status
-    //         // );
-    //         // if (token) refreshAuthTokentoken);
-    //     }
-    // }
+    const refreshToken = getItem<string>(StoreId.refreshToken);
+
+    if (err.response) {
+        if (err.response.status === 401) {
+            // const { config, message } = err;
+
+            // if (!config || !config?.retry) {
+            //     return Promise.reject(err);
+            // }
+
+            // config.retry -= 1;
+
+            // const delayRetryRequest = new Promise((resolve) => {
+            //     setTimeout(() => {
+            //         console.log("retry the request", config.url);
+            //         resolve();
+            //     }, config.retryDelay || 1000);
+            // });
+
+            // return delayRetryRequest.then(() => axios(config));
+        }
+    }
 
     throw transformToRequestError(err);
 };
