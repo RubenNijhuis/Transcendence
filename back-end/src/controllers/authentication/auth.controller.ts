@@ -86,9 +86,9 @@ export class AuthController {
       const CreateUserDto = { username: username };
       await this.userService.createUser(intraID, hash);
 
-      //TO DO: check if exists first before adding
+      // console.log("refreshtoken for testing:", tokens.refreshToken);
+      // TO DO: check if exists first before adding
       // this.authService.addReftoken(CreateUserDto, tokens.refreshToken);
-      console.log("refreshtoken for testing:", tokens.refreshToken);
       return await this.authService.validateUser(
         intraID,
         tokens.accessToken,
@@ -111,14 +111,6 @@ export class AuthController {
     const refreshToken = req.user["refreshToken"];
     return this.authService.refreshTokens(refreshToken);
   }
-
-  // TODO: cleanup? is this still required?
-  //   @UseGuards(AccessTokenGuard)
-  //   @Get("test")
-  //   accessTokens(@Req() req: Request) {
-  //     const intraID = req.user["intraID"];
-  //     console.log("IntraID:", intraID);
-  //   }
 
   // TODO: this should be in the user controller
   /**
