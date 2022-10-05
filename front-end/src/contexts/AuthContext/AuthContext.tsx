@@ -92,21 +92,25 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     const { accessToken, refreshToken } =
                         await refreshAuthToken(storeRefreshToken);
 
+                    console.log("YES");
+
                     // Reset tokens and API instance
                     setItem(StoreId.accessToken, accessToken);
                     setItem(StoreId.refreshToken, refreshToken);
                     setDefaultAuthHeader(accessToken);
 
                     // Reset state to the new user data
-                    const userFromToken = await getUserByAccessToken(accessToken);
+                    const userFromToken = await getUserByAccessToken(
+                        accessToken
+                    );
                     setUser(userFromToken);
                     setLoggedIn(true);
                 } catch (err) {
+                    console.log(err);
                     // Reroute the user to a page where they can manually log in
                     // if (window.location.pathname !== PageRoutes.home) {
                     //     window.location.assign(PageRoutes.home);
                     // }
-
                     // Logger(
                     //     "AUTH",
                     //     "Auth context",

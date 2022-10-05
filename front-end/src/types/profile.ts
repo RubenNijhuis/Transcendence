@@ -1,3 +1,6 @@
+// Just for semantics
+type ProfileID = number;
+
 // Global profile interface
 interface ProfileType {
     username: string;
@@ -7,8 +10,8 @@ interface ProfileType {
     rank: number;
     wins: number;
     losses: number;
-    friends: string[];
-    blocked: string[];
+    friends: ProfileID[];
+    blocked: ProfileID[];
 }
 
-export type { ProfileType };
+export type { ProfileType, ProfileID };
