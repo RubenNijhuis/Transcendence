@@ -88,12 +88,12 @@ export class UserService {
         where: { username }
       });
 
-      if (ret) {
-        delete ret.intraId; // remove intraId field before passing user back
-        delete ret.isInitialized; // remove intraId field before passing user back
-        delete ret.isTfaEnabled; // remove intraId field before passing user back
-        delete ret.refreshToken; // remove intraId field before passing user back
-      }
+    //   if (ret) {
+    //     delete ret.intraId; // remove intraId field before passing user back
+    //     delete ret.isInitialized; // remove intraId field before passing user back
+    //     delete ret.isTfaEnabled; // remove intraId field before passing user back
+    //     delete ret.refreshToken; // remove intraId field before passing user back
+    //   }
 
       return Promise.resolve(ret);
     } catch (err: any) {

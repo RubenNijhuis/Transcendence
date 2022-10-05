@@ -9,7 +9,7 @@ import { UpdateResult } from "typeorm";
 import { createHash } from "crypto";
 import { AuthTokenType, PayloadType } from "src/types/auth";
 
-import jwt from "jsonwebtoken";
+const jwt = require("jsonwebtoken");
 
 @Injectable()
 export class AuthService {
@@ -90,7 +90,7 @@ export class AuthService {
 
   async createNewRefreshTokens(refreshToken: string) {
     //****    verify if it's a valid refresh token
-    const secret: string = this.configService.get<string>("JWT_REFRESH_SECRET");
+      const secret: string = this.configService.get<string>("JWT_REFRESH_SECRET");
     const isValidRefToken: string = jwt.verify(refreshToken, secret) as string;
 
     if (!isValidRefToken)
@@ -138,7 +138,7 @@ export class AuthService {
   async refreshTokens(refreshToken: string) {
     //****    verify if it's a valid refresh token
     const secret: string = this.configService.get<string>("JWT_REFRESH_SECRET");
-    const isValidRefToken: string = jwt.verify(refreshToken, secret);
+    const isValidRefToken: string = jwt.verify(refreshToken, secret) as string;
 
     if (!isValidRefToken)
       throw new ForbiddenException("Access Denied: Not a valid Token");

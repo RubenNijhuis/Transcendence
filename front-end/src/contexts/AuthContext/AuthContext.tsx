@@ -12,8 +12,8 @@ import PageRoutes from "../../config/PageRoutes";
 
 // Store
 import { getItem, setItem } from "../../modules/Store";
-
 import StoreId from "../../config/StoreId";
+
 // Types
 import { ProfileType } from "../../types/profile";
 
@@ -101,6 +101,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                         const userFromToken = await getUserByAccessToken(
                             accessToken
                         );
+                        console.log(userFromToken);
                         setUser(userFromToken);
                     }
 
@@ -108,15 +109,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 } catch (err) {
                     console.error(err);
                     // Reroute the user to a page where they can manually log in
-                    // if (window.location.pathname !== PageRoutes.home) {
-                    //     window.location.assign(PageRoutes.home);
-                    // }
-                    // Logger(
-                    //     "AUTH",
-                    //     "Auth context",
-                    //     "Refresh token issue or get user",
-                    //     err
-                    // );
+                    if (window.location.pathname !== PageRoutes.home) {
+                        window.location.assign(PageRoutes.home);
+                    }
                 }
             }
         };
