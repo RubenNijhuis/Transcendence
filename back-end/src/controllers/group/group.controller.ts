@@ -19,8 +19,8 @@ export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
   @Get()
-  getAllMessages() {
-    return this.groupService.getAllMessages();
+  async getAllMessages() {
+    return await this.groupService.getAllMessages();
   }
 
   @Post("createPassword")

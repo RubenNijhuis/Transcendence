@@ -1,5 +1,5 @@
 import { GameType } from "./game";
-import { ProfileType, ProfileID } from "./profile";
+import { ProfileType } from "./profile";
 
 const enum MessageContentType {
     Simple,
@@ -23,8 +23,8 @@ interface PictureMessage {
 
 // Game invite
 interface InvitePlayMessage {
-    opponent: ProfileID;
-    user: ProfileID;
+    opponent: ProfileType;
+    user: ProfileType;
     game_type: GameType;
     accepted: boolean;
 }
@@ -37,12 +37,12 @@ interface Message {
     sender: ProfileType;
     id: number;
     group_id: number;
-    read_by: ProfileID[];
+    read_by: ProfileType[];
 }
 
 interface GroupChat {
     group_id: number;
-    members: ProfileID[];
+    members: ProfileType[];
     messages: Message[];
 }
 

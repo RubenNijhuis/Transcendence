@@ -1,3 +1,5 @@
+import User from "src/entities/user/user.entity";
+
 type JwtPayload = {
   sub: string;
   username: string;
@@ -12,4 +14,10 @@ interface AuthTokenType {
   refreshToken: string;
 }
 
-export { AuthTokenType, PayloadType, JwtPayload };
+interface LoginConfirmPayload {
+  shouldCreateUser: boolean;
+  profile: null | User;
+  authToken: AuthTokenType;
+}
+
+export { AuthTokenType, PayloadType, JwtPayload, LoginConfirmPayload };

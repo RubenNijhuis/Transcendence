@@ -6,9 +6,11 @@
  * route is a function
  */
 const ApiRoutes = {
+    baseUrl: () => `http://127.0.0.1:8080/api/`,
+
     // User
     createUser: () => `/user/setUser`,
-    getUserByAccessToken: () => `/user/getUserFromAccessToken`,
+    getUserByAccessToken: () => `/auth/getUserFromAccessToken`,
 
     // Profiles
     getProfileByUserName: (userName: string) => `/user/${userName}`,

@@ -1,11 +1,6 @@
-import {
-  Controller,
-  Get,
-  ForbiddenException,
-  Query,
-  Req,
-  UseGuards
-} from "@nestjs/common";
+// TODO: categorize the imports
+// TODO: abstract Axios into a proxy library
+import { Controller, Get, Query, Req, UseGuards } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import Axios from "axios";
 import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
@@ -17,15 +12,7 @@ import * as bcrypt from "bcrypt";
 import { createHash } from "crypto";
 import { JwtService } from "@nestjs/jwt";
 import User from "src/entities/user/user.entity";
-import { boolean } from "joi";
-import { AuthTokenType } from "src/types/auth";
-
-// TODO: add this to a types file
-interface LoginConfirmPayload {
-  shouldCreateUser: boolean;
-  profile: null | User;
-  authToken: AuthTokenType;
-}
+import { LoginConfirmPayload } from "src/types/auth";
 
 /**
  * The auth controller handles everything related to
@@ -118,7 +105,7 @@ export class AuthController {
       }
 
       if (user && user.isInitialized) {
-        const intraIDDto = { intraID: intraID };
+        const intraIDDto = { intraID };
         await this.userService.setRefreshToken(intraIDDto, tokens.refreshToken);
         returnedPayload.profile = user;
       }
@@ -137,16 +124,22 @@ export class AuthController {
    */
   @UseGuards(RefreshTokenGuard)
   @Get("refresh")
-  refreshTokens(@Req() req: Request) {
+  async refreshTokens(@Req() req: Request) {
     const refreshToken = req.user["refreshToken"];
-    return this.authService.refreshTokens(refreshToken);
+    const refreshTokenRes = await this.authService.refreshTokens(refreshToken);
+
+    return refreshTokenRes;
   }
 
   @UseGuards(RefreshTokenGuard)
   @Get("createRefresh")
-  createNewRefreshTokens(@Req() req: Request) {
+  async createNewRefreshTokens(@Req() req: Request) {
     const refreshToken = req.user["refreshToken"];
-    return this.authService.createNewRefreshTokens(refreshToken);
+    const newTokenResp = await this.authService.createNewRefreshTokens(
+      refreshToken
+    );
+
+    return newTokenResp;
   }
 
   // TODO: this should be in the user controller
@@ -157,9 +150,10 @@ export class AuthController {
    */
   @UseGuards(AccessTokenGuard)
   @Get("getUserFromAccessToken")
-  getUserByID(@Req() req: Request) {
+  async getUserByID(@Req() req: Request) {
     const intraID: string = req.user["intraID"];
-    const user = this.userService.findUserByintraId(intraID);
+    const user = await this.userService.findUserByintraId(intraID);
+
     return user;
   }
 }

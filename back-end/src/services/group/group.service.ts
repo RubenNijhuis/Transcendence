@@ -69,18 +69,30 @@ export class GroupService {
     try {
       const group = await this.findGroupById(editPasswordDto.id);
       if (!group) return console.error("group doesn't exist"); //error lol
+
+      // TOOD: password hashind should be a seperate function -- DRY code
       const hash = createHash("sha256")
         .update(editPasswordDto.oldPassword)
         .digest("hex");
+
       const isMatch: boolean = await bcrypt.compare(hash, group.password);
+
+      /**
+       * TODO: turn if statement into an early return
+       * and put the rest of the outside the if statement
+       * like at the beginning of this function
+       */
       if (isMatch && group.owner == editPasswordDto.owner) {
+        // TODO: password hashing should be a seperate function -- DRY code
         const hash1 = createHash("sha256")
           .update(editPasswordDto.newPassword)
           .digest("hex");
         const saltOrRounds = 10;
         const password = await bcrypt.hash(hash1, saltOrRounds);
+
         console.log("password:", password);
-        return await this.groupRepository
+
+        await this.groupRepository
           .createQueryBuilder()
           .update()
           .set({ password: password })
@@ -104,14 +116,18 @@ export class GroupService {
     const newGroup = this.groupRepository.create();
     newGroup.owner = createGroupDto.owner;
     newGroup.users = [];
-    return this.groupRepository.save(newGroup);
+
+    const newGroupResp = this.groupRepository.save(newGroup);
+    return newGroupResp;
   }
 
   async addMembers(editMembersDto: EditMembersDto) {
     try {
       const group: Group = await this.findGroupById(editMembersDto.groupId);
+
       for (let i = 0; i < editMembersDto.users.length; i++) {
         if (editMembersDto.users[i] == group.owner) continue;
+
         const groupuser = this.groupuserRepository.create();
         groupuser.group = group;
         groupuser.user = await this.userService.findUsersById(
@@ -120,6 +136,7 @@ export class GroupService {
         groupuser.groupId = editMembersDto.groupId;
         groupuser.userId = editMembersDto.users[i];
         groupuser.userType = 0;
+
         this.groupuserRepository.save(groupuser);
       }
     } catch (err: any) {
@@ -134,13 +151,16 @@ export class GroupService {
   async addOwner(editOwnerDto: EditOwnerDto) {
     try {
       const group: Group = await this.findGroupById(editOwnerDto.groupId);
+
       const groupuser = this.groupuserRepository.create();
       groupuser.group = group;
       groupuser.user = await this.userService.findUsersById(editOwnerDto.owner);
       groupuser.groupId = editOwnerDto.groupId;
       groupuser.userId = editOwnerDto.owner;
       groupuser.userType = 2;
+
       this.groupuserRepository.save(groupuser);
+
       return;
     } catch (err: any) {
       throw errorHandler(

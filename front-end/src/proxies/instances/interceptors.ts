@@ -1,10 +1,8 @@
 // Requst package
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
-import StoreId from "../../config/StoreId";
-import { getItem } from "../../modules/Store";
 
-// Error transformer
-import transformToRequestError from "../utils/transformToRequestError";
+// import StoreId from "../../config/StoreId";
+// import { getItem } from "../../modules/Store";
 
 /**
  * This interceptor handles requests that went succesfully
@@ -45,18 +43,20 @@ const SuccesResponseInterceptor = (response: AxiosResponse) => {
  * This interceptor takes a request error and transforms it
  * to the one we have standardized. Also handles certain
  * specific errors regarding auth.
+ *
+ * TODO: if a response is because a token is invalid try
+ * once to refresh otherwise redirect to the login page
+ *
  * @param err request error
  * @returns a transformed request error
  */
 const ErrorResponseInterceptor = (err: AxiosError) => {
-    const refreshToken = getItem<string>(StoreId.refreshToken);
-
     if (err.response) {
         if (err.response.status === 401) {
         }
     }
 
-    throw transformToRequestError(err);
+    throw err;
 };
 
 export {

@@ -18,8 +18,8 @@ export class MessageController {
   constructor(private readonly messageService: MessageService) {}
 
   @Get()
-  getAllMessages() {
-    return this.messageService.getAllMessages();
+  async getAllMessages() {
+    return await this.messageService.getAllMessages();
   }
 
   @Get("id/group_id?")
