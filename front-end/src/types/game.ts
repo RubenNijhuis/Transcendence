@@ -1,4 +1,4 @@
-import { ProfileType } from "./profile";
+import { ProfileID, ProfileType } from "./profile";
 
 // How we define match data
 interface MatchRecord {

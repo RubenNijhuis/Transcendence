@@ -31,7 +31,7 @@ const Chat = () => {
 
     useEffect(() => {
         if (user !== null) {
-            setGroupChats(chats);
+            setGroupChats(chats);;
             // getChatByUserName<GroupChat[]>(user.username)
             //     .then((returnedChats) => {
             //         setGroupChats(returnedChats as GroupChat[]);

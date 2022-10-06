@@ -8,24 +8,23 @@ import { AuthTokenType } from "../../types/request";
 import { API } from "../instances/apiInstance";
 
 /**
- * Checks auth token validity and upates if required, otherwise reroutes the user to the home page to re-login
+ * Checks auth token validity and upates if required, otherwise
+ * reroutes the user to the home page to re-login
  */
 const refreshAuthToken = async (
     refreshToken: string
 ): Promise<AuthTokenType> => {
     try {
+        const headers = {
+            Authorization: `Bearer ${refreshToken}`
+        };
+
         const { data } = await API.get<AuthTokenType>(
             ApiRoutes.refreshAuthToken(),
-            {
-                headers: {
-                    Authorization: `Bearer ${refreshToken}`
-                }
-            }
+            { headers }
         );
-        console.log("Refresh auth token success ✅");
         return Promise.resolve(data);
     } catch (err: any) {
-        console.log("Refresh auth token fail ❌");
         return Promise.reject(err);
     }
 };

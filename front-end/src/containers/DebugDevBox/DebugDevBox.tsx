@@ -1,54 +1,39 @@
-import React from "react";
+// UI
 import Button from "../../components/Button";
-import StoreId from "../../config/StoreId";
-import { clearAll, getItem, setItem } from "../../modules/Store";
-import { refreshAuthToken } from "../../proxies/auth/refreshToken";
-import { setDefaultAuthHeader } from "../../proxies/instances/apiInstance";
+import { Container } from "../ChatInterface/ChatInterface.style";
+import { Box } from "./DebugDevBox.style";
+
+// Business logic
+import {
+    handleClearStorage,
+    handleTokenRefresh,
+    fillDBwithChats,
+    fillDBwithUsers
+} from "./DebugDevBox.bl";
+import { useAuth } from "../../contexts/AuthContext";
 
 const DebugDevBox = () => {
-    const handleClearStorage = () => clearAll();
-
-    const handleTokenRefresh = () => {
-        const storeRefreshToken = getItem<string>(StoreId.refreshToken);
-
-        if (storeRefreshToken) {
-            refreshAuthToken(storeRefreshToken)
-                .then((newTokens) => {
-                    const { accessToken, refreshToken } = newTokens;
-
-                    // Reset tokens and API instance
-                    setItem(StoreId.accessToken, accessToken);
-                    setItem(StoreId.refreshToken, refreshToken);
-                    setDefaultAuthHeader(accessToken);
-                })
-                .catch((err) => console.error(err));
-        } else {
-            console.error(
-                `\nRefresh access token failed\nNo refresh in the store`
-            );
-        }
-    };
+    const { user } = useAuth();
 
     return (
-        <div
-            style={{
-                position: "fixed",
-                top: 18,
-                left: 18,
-                padding: 18,
-                minHeight: 200,
-                background: "rgb(230,230,230)",
-                boxShadow: "0px 5px 5px rgba(30, 30, 30, 0.23)",
-                borderRadius: 6,
-                display: "flex",
-                flexDirection: "column",
-                gap: 18,
-                maxWidth: 216
-            }}
-        >
-            <Button onClick={handleClearStorage}>Clear store</Button>
-            <Button onClick={handleTokenRefresh}>Refresh access token</Button>
-        </div>
+        <Container>
+            <Box>
+                <Button onClick={handleClearStorage}>Clear store</Button>
+                <Button onClick={handleTokenRefresh}>
+                    Refresh access token
+                </Button>
+                <hr />
+                <Button onClick={() => fillDBwithChats(user)}>
+                    Generate chats for user
+                </Button>
+                <Button onClick={fillDBwithUsers}>Generate profiles</Button>
+                <hr />
+                <Button onClick={() => fillDBwithChats(user)}>
+                    Generate chats for user
+                </Button>
+                <Button onClick={fillDBwithUsers}>Generate profiles</Button>
+            </Box>
+        </Container>
     );
 };
 

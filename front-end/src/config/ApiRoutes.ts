@@ -6,15 +6,17 @@
  * route is a function
  */
 const ApiRoutes = {
+    baseUrl: () => `http://127.0.0.1:8080/api/`,
+
     // User
     createUser: () => `/user/setUser`,
-    getUserByAuthToken: () => `/user/getUserFromAccessToken`,
+    getUserByAccessToken: () => `/auth/getUserFromAccessToken`,
 
     // Profiles
     getProfileByUserName: (userName: string) => `/user/${userName}`,
 
     // Account setup
-    uploadProfileImage: () => `/user/upload-banner-pic`,
+    uploadProfileImage: () => `/user/upload-profile-pic`,
     uploadBannerImage: () => `/user/upload-banner-pic`,
 
     // Chat
@@ -26,6 +28,7 @@ const ApiRoutes = {
     // Auth
     getLoginRoute: () => `/auth/login`,
     confirmLogin: (code: string) => `/auth/confirm?token=${code}`,
+    createRefreshToken: () => `/auth/createRefresh`,
     refreshAuthToken: () => `/auth/refresh`
 };
 

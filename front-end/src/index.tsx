@@ -4,13 +4,12 @@ import ReactDOM from "react-dom/client";
 
 // Rendered tsx app
 import App from "./App";
+import { renderWithStrict } from "./config/DevEnv";
 
 // App will attach to this node in the dom
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
 );
-
-const renderWithStrict = false;
 
 root.render(
     <>

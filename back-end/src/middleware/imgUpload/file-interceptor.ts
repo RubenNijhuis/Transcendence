@@ -1,7 +1,7 @@
-import { FileInterceptor, MulterModuleOptions } from '@nestjs/platform-express';
-import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
-import { MULTER_MODULE_OPTIONS } from '@nestjs/platform-express/multer/files.constants';
-import * as multer from 'multer';
+import { FileInterceptor, MulterModuleOptions } from "@nestjs/platform-express";
+import { MulterOptions } from "@nestjs/platform-express/multer/interfaces/multer-options.interface";
+import { MULTER_MODULE_OPTIONS } from "@nestjs/platform-express/multer/files.constants";
+import * as multer from "multer";
 import {
   ExecutionContext,
   Optional,
@@ -9,12 +9,12 @@ import {
   CallHandler,
   mixin,
   Type,
-  NestInterceptor,
-} from '@nestjs/common';
+  NestInterceptor
+} from "@nestjs/common";
 
 export const MyNewFileInterceptor = (
   fieldName: string,
-  localOptions?: (context: ExecutionContext) => MulterOptions,
+  localOptions?: (context: ExecutionContext) => MulterOptions
 ) => {
   const FileInterceptorInstance = FileInterceptor(fieldName);
 
@@ -25,7 +25,7 @@ export const MyNewFileInterceptor = (
     constructor(
       @Optional()
       @Inject(MULTER_MODULE_OPTIONS)
-      options: MulterModuleOptions = {},
+      options: MulterModuleOptions = {}
     ) {
       super();
       this.moduleOptions = options;
@@ -34,7 +34,7 @@ export const MyNewFileInterceptor = (
     intercept(context: ExecutionContext, next: CallHandler<any>): any {
       this.multer = (multer as any)({
         ...this.moduleOptions,
-        ...localOptions(context),
+        ...localOptions(context)
       });
       return super.intercept(context, next);
     }

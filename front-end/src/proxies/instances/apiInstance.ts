@@ -1,5 +1,6 @@
 // Requests
 import axios from "axios";
+import ApiRoutes from "../../config/ApiRoutes";
 
 // Request/Response Interceptors
 import {
@@ -9,11 +10,9 @@ import {
     ErrorResponseInterceptor
 } from "./interceptors";
 
-// TODO: put api instance in a folder with its parts
-
 // Instance
 const API = axios.create({
-    baseURL: "http://127.0.0.1:8080/api/"
+    baseURL: ApiRoutes.baseUrl()
 });
 
 /**
@@ -21,9 +20,7 @@ const API = axios.create({
  * refresh their token or has never logged in it won't be set.
  */
 const setDefaultAuthHeader = (accessToken: string) => {
-    API.defaults.headers.common[
-        "Authorization"
-    ] = `Bearer ${accessToken}`;
+    API.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 };
 
 // Setup request interceptors

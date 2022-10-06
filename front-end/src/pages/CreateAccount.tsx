@@ -64,14 +64,6 @@ const CreateForm = styled.div`
     }
 `;
 
-/**
- * Interface copied from https://stackoverflow.com/questions/43176560/property-files-does-not-exist-on-type-eventtarget-error-in-typescript
- * TODO: look it this can be simplified or not be dependent upon
- */
-interface HTMLInputEvent extends Event {
-    target: HTMLInputElement & EventTarget;
-}
-
 // TODO: make component check input data before sending
 const CreateAccount = () => {
     // Form input state
@@ -97,7 +89,7 @@ const CreateAccount = () => {
     ) => {
         const { file, fileName } = retrieveFileFromInput(e);
         const fd = new FormData();
-        fd.append("bannerImage", file, fileName);
+        fd.append("file", file, fileName);
 
         uploadImage(ApiRoutes.uploadBannerImage(), fd)
             .then(console.log)
@@ -109,7 +101,7 @@ const CreateAccount = () => {
     ) => {
         const { file, fileName } = retrieveFileFromInput(e);
         const fd = new FormData();
-        fd.append("bannerImage", file, fileName);
+        fd.append("file", file, fileName);
 
         uploadImage(ApiRoutes.uploadBannerImage(), fd)
             .then(console.log)

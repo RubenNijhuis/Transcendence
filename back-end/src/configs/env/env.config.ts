@@ -17,6 +17,6 @@ const configSchema = Joi.object({
 });
 
 export const envConfig: ConfigModuleOptions = {
-  envFilePath: [".env"],
+  envFilePath: ["env/.env"],
   validationSchema: configSchema
 };

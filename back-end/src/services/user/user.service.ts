@@ -20,7 +20,7 @@ import { User } from "src/entities";
 import { DeleteResult, Repository, TypeORMError, UpdateResult } from "typeorm";
 
 // hashing libraries - thanks angi
-import * as bcrypt from "bcrypt"; 
+import * as bcrypt from "bcrypt";
 import { createHash } from "crypto";
 
 // dtos
@@ -28,7 +28,7 @@ import { SetUserDto } from "src/dtos/user/set-user.dto";
 import { UsernameDto } from "src/dtos/auth/username.dto";
 import { intraIDDto } from "src/dtos/auth/intraID.dto";
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
-
+import { ConfigService } from "@nestjs/config";
 /**
  * User services
  *
@@ -46,7 +46,8 @@ import { errorHandler } from "src/utils/errorhandler/errorHandler";
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    private readonly userRepository: Repository<User>,
+    private readonly configService: ConfigService
   ) {}
 
   async getUsers(): Promise<User[]> {
@@ -86,7 +87,13 @@ export class UserService {
       const ret: User = await this.userRepository.findOne({
         where: { username }
       });
-      if (ret) delete ret.intraId; // remove intraId field before passing user back
+
+    //   if (ret) {
+    //     delete ret.intraId; // remove intraId field before passing user back
+    //     delete ret.isInitialized; // remove intraId field before passing user back
+    //     delete ret.isTfaEnabled; // remove intraId field before passing user back
+    //     delete ret.refreshToken; // remove intraId field before passing user back
+    //   }
 
       return Promise.resolve(ret);
     } catch (err: any) {
@@ -171,8 +178,10 @@ export class UserService {
     try {
       const user = await this.findUserByintraId(intraID.intraID);
       const hash1 = createHash("sha256").update(token).digest("hex");
-      const saltOrRounds = 10;
-      const hash = await bcrypt.hash(hash1, saltOrRounds); // <- deze
+      const saltorounds: string =
+        this.configService.get<string>("SALT_OR_ROUNDS");
+      const numsalt: number = +saltorounds;
+      const hash = await bcrypt.hash(hash1, numsalt); // <- deze
 
       return await this.userRepository
         .createQueryBuilder()

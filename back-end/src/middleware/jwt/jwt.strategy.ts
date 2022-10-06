@@ -20,10 +20,12 @@ export class Jwt2faStrategy extends PassportStrategy(Strategy, "jwt-2fa") {
   }
 
   async validate(payload: MailDto) {
-    const user: User = await this.userService.findUserByUsername(payload.username);
+    const user: User = await this.userService.findUserByUsername(
+      payload.username
+    );
 
     if (user) {
-      return { userId: user.intraId};
+      return { userId: user.intraId };
     }
     return { userId: "niks" };
   }

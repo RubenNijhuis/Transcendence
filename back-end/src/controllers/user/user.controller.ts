@@ -21,7 +21,7 @@ import UserRoutes from "src/configs/routes/globalRoutes.config";
 // dtos
 import { UsernameDto } from "src/dtos/auth/username.dto";
 import { SetTfaDto } from "src/dtos/auth/setTfa.dto";
-import { SetUserDto } from "src/dtos/user/set-user.dto";
+import { SetUserDto } from "src/dtos/user/set-user.dto"; // TODO: is this one still used?
 import { SeederAmountDto } from "src/dtos/seeder/custom-seeder.dto";
 
 // user functionalities
@@ -37,15 +37,21 @@ import { UserSeeder } from "src/database/seeds/user-create.seed";
 import User from "../../entities/user/user.entity";
 
 // image upload pipe config
-import { bannerStorage, imgFilter, profileStorage } from "src/middleware/imgUpload/imgUpload";
+import {
+  bannerStorage,
+  imgFilter,
+  profileStorage
+} from "src/middleware/imgUpload/imgUpload";
+
+// TODO: check if these are being used
+import { MyNewFileInterceptor } from "src/middleware/imgUpload/file-interceptor";
+import { diskStorage } from "multer";
 
 // file upload library
-import { MyNewFileInterceptor } from "src/middleware/imgUpload/file-interceptor";
 import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
 import { Request } from "express";
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { diskStorage } from "multer";
 
 /**
  * The user controller will act as the first entry point for user related api calls.
@@ -70,14 +76,15 @@ export class UsersController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  getUsers() {
-    return this.userService.getUsers();
+  async getUsers() {
+    return await this.userService.getUsers();
   }
 
   @Get(UserRoutes.getUserOnName)
-  findUsersById(@Res() res: Response, username: string) {
+  async findUsersById(@Res() res: Response, username: string) {
     try {
-      return this.userService.findUserByUsername(username);
+      const user: User = await this.userService.findUserByUsername(username);
+      return user;
     } catch (error) {
       res.status;
     }
@@ -92,8 +99,9 @@ export class UsersController {
   ): Promise<any> {
     try {
       const intraID = req.user["intraID"];
+      const setUserResp = await this.userService.setUser(intraID, SetUserDto);
 
-      return await this.userService.setUser(intraID, SetUserDto);
+      return setUserResp;
     } catch (err) {
       console.log("controller, setUser(): ", err);
       throw err;
@@ -105,10 +113,9 @@ export class UsersController {
   @UseGuards(Jwt2faStrategy)
   async removeUser(@Req() req: Request, @Body() dto: UsernameDto) {
     try {
-      const username = req.user;
-      console.log("CHECK RETURN OF USER JWT: ", username);
-      const ret = await this.userService.removeUser(dto.username);
-      return ret;
+      const removeUserResp = await this.userService.removeUser(dto.username);
+
+      return removeUserResp;
     } catch (error) {
       throw error;
     }
@@ -131,23 +138,23 @@ export class UsersController {
   @Post(UserRoutes.uploadBannerPic)
   @UseGuards(AccessTokenGuard)
   @UseInterceptors(
-    FileInterceptor('file', {
+    FileInterceptor("file", {
       fileFilter: imgFilter,
-      storage: bannerStorage,
-    }),
+      storage: bannerStorage
+    })
   )
   async uploadBannerFile(@UploadedFile() file: Express.Multer.File) {
-    console.log(file.filename);
+    console.log("Upload banner file: ", file.filename);
     return HttpStatus.OK;
   }
 
   @Post(UserRoutes.uploadProfilePic)
   @UseGuards(AccessTokenGuard)
   @UseInterceptors(
-    FileInterceptor('file', {
+    FileInterceptor("file", {
       fileFilter: imgFilter,
-      storage: profileStorage,
-    }),
+      storage: profileStorage
+    })
   )
   async uploadProfileFile(@UploadedFile() file: Express.Multer.File) {
     console.log(file.filename);
@@ -162,7 +169,7 @@ export class UsersController {
 
   @Post(UserRoutes.seedAmount)
   async seedUsersAmount(@Body() dto: SeederAmountDto) {
-    console.log("YEEY I AM BEING CALLED");
-    return await this.userService.seedCustom(dto.amount);
+    const seedResp = await this.userService.seedCustom(dto.amount);
+    return seedResp;
   }
 }

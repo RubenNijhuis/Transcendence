@@ -1,11 +1,6 @@
-import {
-  Controller,
-  Get,
-  HttpException,
-  Query,
-  Req,
-  UseGuards
-} from "@nestjs/common";
+// TODO: categorize the imports
+// TODO: abstract Axios into a proxy library
+import { Controller, Get, Query, Req, UseGuards } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import Axios from "axios";
 import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
@@ -16,6 +11,8 @@ import { UserService } from "src/services/user/user.service";
 import * as bcrypt from "bcrypt";
 import { createHash } from "crypto";
 import { JwtService } from "@nestjs/jwt";
+import User from "src/entities/user/user.entity";
+import { LoginConfirmPayload } from "src/types/auth";
 
 /**
  * The auth controller handles everything related to
@@ -39,8 +36,15 @@ export class AuthController {
    */
   @Get("login")
   login() {
+    interface AuthServiceParams {
+      client_id: string;
+      redirect_uri: string;
+      state: string;
+      response_type: string;
+    }
+
     const url: string = this.configService.get<string>("INTRA_AUTH_URL");
-    const params: any = {
+    const params: AuthServiceParams = {
       client_id: this.configService.get<string>("FORTYTWO_APP_ID"),
       redirect_uri: this.configService.get<string>("FORTYTWO_CALLBACK_URL"),
       state: this.configService.get<string>("FORTYTWO_STATE"),
@@ -58,8 +62,17 @@ export class AuthController {
    * @returns a payload describing what the front-end should do
    */
   @Get("confirm?")
-  async confirm(@Query("token") token: string) {
+  async confirm(@Query("token") token: string): Promise<LoginConfirmPayload> {
     try {
+      const returnedPayload: LoginConfirmPayload = {
+        shouldCreateUser: false,
+        profile: null,
+        authToken: {
+          accessToken: null,
+          refreshToken: null
+        }
+      };
+
       /*
        * Takes the given code and uses it too give a token we
        * can use to get the third party profile data
@@ -69,34 +82,35 @@ export class AuthController {
 
       // The third party UID
       const intraID = userData.data.id;
-      const username = userData.data.login;
 
       // Create the tokens to be used for authentication
       const tokens = await this.authService.getTokens(intraID);
-      // TODO: rename variable hash1 isn't very discriptive
-      const hash1 = createHash("sha256")
-        .update(tokens.refreshToken)
-        .digest("hex");
-      // TODO: should be an env variable
-      const saltOrRounds = 10;
-      // TODO: should be party of a custom library
-      const hash = await bcrypt.hash(hash1, saltOrRounds);
+      returnedPayload.authToken = tokens;
 
-      // TODO: is this variable still being used?
-      const CreateUserDto = { username: username };
-      await this.userService.createUser(intraID, hash);
+      // Check if the user already exists
+      const user: User = await this.userService.findUserByintraId(intraID);
 
-      // console.log("refreshtoken for testing:", tokens.refreshToken);
-      // TO DO: check if exists first before adding
-      // this.authService.addReftoken(CreateUserDto, tokens.refreshToken);
-      console.log("refreshtoken for testing:", tokens.refreshToken);
-      console.log("bearer for testing:", tokens.accessToken);
+      if (!user) {
+        const hash = createHash("sha256")
+          .update(tokens.refreshToken)
+          .digest("hex");
+        // TODO: should be party of a custom library. angi: what do you mean???
+        const saltorounds: string =
+          this.configService.get<string>("SALT_OR_ROUNDS");
+        const numsalt: number = +saltorounds;
+        const encrypted_token = await bcrypt.hash(hash, numsalt);
+        await this.userService.createUser(intraID, encrypted_token);
 
-      return await this.authService.validateUser(
-        intraID,
-        tokens.accessToken,
-        tokens.refreshToken
-      );
+        returnedPayload.shouldCreateUser = true;
+      }
+
+      if (user && user.isInitialized) {
+        const intraIDDto = { intraID };
+        await this.userService.setRefreshToken(intraIDDto, tokens.refreshToken);
+        returnedPayload.profile = user;
+      }
+
+      return returnedPayload;
     } catch (err: any) {
       console.log(err);
       throw err;
@@ -110,9 +124,22 @@ export class AuthController {
    */
   @UseGuards(RefreshTokenGuard)
   @Get("refresh")
-  refreshTokens(@Req() req: Request) {
+  async refreshTokens(@Req() req: Request) {
     const refreshToken = req.user["refreshToken"];
-    return this.authService.refreshTokens(refreshToken);
+    const refreshTokenRes = await this.authService.refreshTokens(refreshToken);
+
+    return refreshTokenRes;
+  }
+
+  @UseGuards(RefreshTokenGuard)
+  @Get("createRefresh")
+  async createNewRefreshTokens(@Req() req: Request) {
+    const refreshToken = req.user["refreshToken"];
+    const newTokenResp = await this.authService.createNewRefreshTokens(
+      refreshToken
+    );
+
+    return newTokenResp;
   }
 
   // TODO: this should be in the user controller
@@ -123,9 +150,10 @@ export class AuthController {
    */
   @UseGuards(AccessTokenGuard)
   @Get("getUserFromAccessToken")
-  getUserByID(@Req() req: Request) {
-    const intraID = req.user["intraID"];
-    const user = this.userService.findUserByintraId(intraID);
+  async getUserByID(@Req() req: Request) {
+    const intraID: string = req.user["intraID"];
+    const user = await this.userService.findUserByintraId(intraID);
+
     return user;
   }
 }

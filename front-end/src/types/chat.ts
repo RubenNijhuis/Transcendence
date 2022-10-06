@@ -52,7 +52,7 @@ export type {
     SimpleMessage,
     Message,
     AllMessageTypes,
-    GroupChat,
+    GroupChat
 };
 
 export { MessageContentType };

@@ -19,8 +19,8 @@ export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
   @Get()
-  getAllMessages() {
-    return this.groupService.getAllMessages();
+  async getAllMessages() {
+    return await this.groupService.getAllMessages();
   }
 
   @Post("createPassword")
@@ -31,7 +31,7 @@ export class GroupController {
       const ret = { message: "Password set! :D" };
       return ret;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -43,7 +43,7 @@ export class GroupController {
       const ret = { message: "Password updated! :D" };
       return ret;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -61,9 +61,7 @@ export class GroupController {
       const ret = { message: "Group created with id: " + group.id };
       return ret;
     } catch (error) {
-      console.log(error);
-      const message = "unable to create group\n";
-      return message;
+      throw error;
     }
   }
 
@@ -80,7 +78,7 @@ export class GroupController {
       const ret = { message: "members added " };
       return ret;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -91,7 +89,7 @@ export class GroupController {
       const ret = { message: "members removed " };
       return ret;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -102,7 +100,7 @@ export class GroupController {
       const ret = { message: "user " + admin.userId + " is now admin" };
       return ret;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -113,7 +111,7 @@ export class GroupController {
       const ret = { message: "user " + admin.userId + " is no longer admin" };
       return ret;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 }
