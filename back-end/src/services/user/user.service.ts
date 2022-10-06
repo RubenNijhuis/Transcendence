@@ -50,6 +50,20 @@ export class UserService {
     private readonly configService: ConfigService
   ) {}
 
+  static filterUser(user: User): User {
+    const newUser: User = user;
+
+    if (!newUser)
+      return null;
+    delete newUser.intraId;
+    delete newUser.isInitialized;
+    delete newUser.isTfaEnabled;
+    delete newUser.refreshToken;
+    delete newUser.tfaSecret;
+    return newUser;
+  }
+
+  // only used for debug purposes
   async getUsers(): Promise<User[]> {
     try {
       const ret: User[] = await this.userRepository.find();
@@ -62,8 +76,7 @@ export class UserService {
   async findUsersById(id: number): Promise<User> {
     try {
       const ret: User = await this.userRepository.findOne({ where: { id } });
-      if (ret) delete ret.intraId; // remove intraId field before passing user back
-      return Promise.resolve(ret);
+      return UserService.filterUser(ret);
     } catch (err: any) {
       throw err;
     }
@@ -74,8 +87,7 @@ export class UserService {
       const ret: User = await this.userRepository.findOne({
         where: { intraId }
       });
-      if (ret) delete ret.intraId; // remove intraId field before passing user back
-      return Promise.resolve(ret);
+      return UserService.filterUser(ret);
     } catch (err: any) {
       console.log("error: ", err);
       throw err;
@@ -87,15 +99,7 @@ export class UserService {
       const ret: User = await this.userRepository.findOne({
         where: { username }
       });
-
-    //   if (ret) {
-    //     delete ret.intraId; // remove intraId field before passing user back
-    //     delete ret.isInitialized; // remove intraId field before passing user back
-    //     delete ret.isTfaEnabled; // remove intraId field before passing user back
-    //     delete ret.refreshToken; // remove intraId field before passing user back
-    //   }
-
-      return Promise.resolve(ret);
+      return UserService.filterUser(ret);
     } catch (err: any) {
       throw err;
     }
@@ -113,8 +117,7 @@ export class UserService {
       // var testUser: User;
       // const ret = await this.userRepository.save(testUser);
       const ret: User = await this.userRepository.save(newUser);
-      if (ret) delete ret.intraId; // remove intraId field before passing user back
-      return Promise.resolve(ret);
+      return UserService.filterUser(ret);
     } catch (err: any) {
       console.log("error: ", err);
       throw errorHandler(
