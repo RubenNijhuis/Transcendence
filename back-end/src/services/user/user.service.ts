@@ -21,7 +21,7 @@ import { DeleteResult, Repository, TypeORMError, UpdateResult } from "typeorm";
 
 // hashing libraries - thanks angi
 import * as bcrypt from "bcrypt";
-import { createHash } from "crypto";
+import { createHash, Hash } from "crypto";
 
 // dtos
 import { SetUserDto } from "src/dtos/user/set-user.dto";
@@ -158,13 +158,13 @@ export class UserService {
 
   async removeUser(username: string): Promise<DeleteResult> {
     try {
-      const user = await this.userRepository
+      const result: DeleteResult = await this.userRepository
         .createQueryBuilder("Users")
         .delete()
         .from("users")
         .where("username =:username", { username })
         .execute();
-      return Promise.resolve(user);
+      return result;
     } catch (err: any) {
       throw errorHandler(
         err,
@@ -179,17 +179,17 @@ export class UserService {
     token: string
   ): Promise<UpdateResult> {
     try {
-      const user = await this.findUserByintraId(intraID.intraID);
-      const hash1 = createHash("sha256").update(token).digest("hex");
+      const user: User = await this.findUserByintraId(intraID.intraID);
+      const hashedToken: string = createHash("sha256").update(token).digest("hex");
       const saltorounds: string =
         this.configService.get<string>("SALT_OR_ROUNDS");
       const numsalt: number = +saltorounds;
-      const hash = await bcrypt.hash(hash1, numsalt); // <- deze
+      const superHashedToken: string = await bcrypt.hash(hashedToken, numsalt);
 
       return await this.userRepository
         .createQueryBuilder()
         .update(user)
-        .set({ refreshToken: hash })
+        .set({ refreshToken: superHashedToken })
         .where({ id: user.id })
         .returning("*")
         .execute();
@@ -204,8 +204,7 @@ export class UserService {
 
   async set2faSecret(id: number, tfaSecret: string): Promise<UpdateResult> {
     try {
-      const ret = await this.userRepository.update(id, { tfaSecret });
-      return Promise.resolve(ret);
+      return await this.userRepository.update(id, { tfaSecret });
     } catch (err: any) {
       throw errorHandler(
         err,
@@ -223,15 +222,15 @@ export class UserService {
     secret: string
   ): Promise<UpdateResult> {
     try {
-      const user = await this.findUserByUsername(userDto.username);
-      const ret = await this.userRepository
+      const user: User = await this.findUserByUsername(userDto.username);
+
+      return await this.userRepository
         .createQueryBuilder()
         .update(user)
         .set({ tfaSecret: secret })
         .where({ id: user.id })
         .returning("*")
         .execute();
-      return Promise.resolve(ret);
     } catch (err: any) {
       throw errorHandler(
         err,
@@ -253,16 +252,15 @@ export class UserService {
   // FUNCTION IS NOT YET USED
   async setTfaOption(username: string, option: boolean): Promise<UpdateResult> {
     try {
-      const user = await this.findUserByUsername(username);
-
-      const ret = await this.userRepository
+      const user: User = await this.findUserByUsername(username);
+      
+      return await this.userRepository
         .createQueryBuilder()
         .update(user)
         .set({ isTfaEnabled: option })
         .where({ id: user.id })
         .returning("*")
         .execute();
-      return Promise.resolve(ret);
     } catch (err: any) {
       throw errorHandler(
         err,

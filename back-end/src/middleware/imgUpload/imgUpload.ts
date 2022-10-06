@@ -18,6 +18,6 @@ export const bannerStorage: multer.StorageEngine = diskStorage({
 });
 
 export const profileStorage: multer.StorageEngine = diskStorage({
-    destination: './upload/banner',
+    destination: './upload/profile',
     filename: getFileName,
 });
