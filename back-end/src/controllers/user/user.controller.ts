@@ -84,7 +84,7 @@ export class UsersController {
   async findUsersById(@Res() res: Response, username: string) {
     try {
       const user: User = await this.userService.findUserByUsername(username);
-      return user;
+      return this.userService.filterUser(user);
     } catch (error) {
       res.status;
     }

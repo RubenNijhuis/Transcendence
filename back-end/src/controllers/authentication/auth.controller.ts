@@ -107,7 +107,7 @@ export class AuthController {
       if (user && user.isInitialized) {
         const intraIDDto = { intraID };
         await this.userService.setRefreshToken(intraIDDto, tokens.refreshToken);
-        returnedPayload.profile = user;
+        returnedPayload.profile = this.userService.filterUser(user);
       }
 
       return returnedPayload;
@@ -154,6 +154,8 @@ export class AuthController {
     const intraID: string = req.user["intraID"];
     const user = await this.userService.findUserByintraId(intraID);
 
-    return user;
+    const newUser = this.userService.filterUser(user);
+    console.log("FILTERED USER", newUser);
+    return newUser;
   }
 }

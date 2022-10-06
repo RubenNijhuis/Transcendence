@@ -90,7 +90,7 @@ export class AuthService {
 
   async createNewRefreshTokens(refreshToken: string) {
     //****    verify if it's a valid refresh token
-      const secret: string = this.configService.get<string>("JWT_REFRESH_SECRET");
+    const secret: string = this.configService.get<string>("JWT_REFRESH_SECRET");
     const isValidRefToken: string = jwt.verify(refreshToken, secret) as string;
 
     if (!isValidRefToken)
@@ -108,6 +108,8 @@ export class AuthService {
       const user: User = await this.userService.findUserByintraId(
         decoded.intraID
       );
+
+      console.log("USER:", user);
 
       if (!user || !user.refreshToken)
         //this??

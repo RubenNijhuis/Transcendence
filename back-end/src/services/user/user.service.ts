@@ -50,11 +50,10 @@ export class UserService {
     private readonly configService: ConfigService
   ) {}
 
-  static filterUser(user: User): User {
+  filterUser(user: User): User {
     const newUser: User = user;
 
-    if (!newUser)
-      return null;
+    if (!newUser) return null;
     delete newUser.intraId;
     delete newUser.isInitialized;
     delete newUser.isTfaEnabled;
@@ -66,8 +65,8 @@ export class UserService {
   // only used for debug purposes
   async getUsers(): Promise<User[]> {
     try {
-      const ret: User[] = await this.userRepository.find();
-      return Promise.resolve(ret);
+      const returnedUser: User[] = await this.userRepository.find();
+      return Promise.resolve(returnedUser);
     } catch (err: any) {
       throw err;
     }
@@ -76,7 +75,7 @@ export class UserService {
   async findUsersById(id: number): Promise<User> {
     try {
       const ret: User = await this.userRepository.findOne({ where: { id } });
-      return UserService.filterUser(ret);
+      return this.filterUser(ret);
     } catch (err: any) {
       throw err;
     }
@@ -84,22 +83,21 @@ export class UserService {
 
   async findUserByintraId(intraId: string): Promise<User> {
     try {
-      const ret: User = await this.userRepository.findOne({
+      const returnedUser: User = await this.userRepository.findOne({
         where: { intraId }
       });
-      return UserService.filterUser(ret);
+      return returnedUser;
     } catch (err: any) {
-      console.log("error: ", err);
       throw err;
     }
   }
 
   async findUserByUsername(username: string): Promise<User> {
     try {
-      const ret: User = await this.userRepository.findOne({
+      const returnedUser: User = await this.userRepository.findOne({
         where: { username }
       });
-      return UserService.filterUser(ret);
+      return returnedUser;
     } catch (err: any) {
       throw err;
     }
@@ -116,8 +114,8 @@ export class UserService {
       const newUser: User = this.userRepository.create(query);
       // var testUser: User;
       // const ret = await this.userRepository.save(testUser);
-      const ret: User = await this.userRepository.save(newUser);
-      return UserService.filterUser(ret);
+      const savedUser: User = await this.userRepository.save(newUser);
+      return savedUser;
     } catch (err: any) {
       console.log("error: ", err);
       throw errorHandler(
@@ -180,7 +178,9 @@ export class UserService {
   ): Promise<UpdateResult> {
     try {
       const user: User = await this.findUserByintraId(intraID.intraID);
-      const hashedToken: string = createHash("sha256").update(token).digest("hex");
+      const hashedToken: string = createHash("sha256")
+        .update(token)
+        .digest("hex");
       const saltorounds: string =
         this.configService.get<string>("SALT_OR_ROUNDS");
       const numsalt: number = +saltorounds;
@@ -253,7 +253,7 @@ export class UserService {
   async setTfaOption(username: string, option: boolean): Promise<UpdateResult> {
     try {
       const user: User = await this.findUserByUsername(username);
-      
+
       return await this.userRepository
         .createQueryBuilder()
         .update(user)
