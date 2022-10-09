@@ -19,13 +19,13 @@ const AuthGuard = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (isLoggedIn === false) {
-            const token = getItem<AuthTokenType>(StoreId.accessToken);
-            if (token === undefined || token === null) {
-                navigate(PageRoutes.home);
-            } else {
-                // checkTokenValidity
-            }
+        if (isLoggedIn) return;
+
+        const token = getItem<AuthTokenType>(StoreId.accessToken);
+        if (token === undefined || token === null) {
+            navigate(PageRoutes.home);
+        } else {
+            // checkTokenValidity
         }
     }, [isLoggedIn, navigate]);
 

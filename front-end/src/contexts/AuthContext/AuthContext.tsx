@@ -64,6 +64,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setDefaultAuthHeader(accessToken);
 
             if (profile !== null) {
+                profile.uid = 0;
                 setUser(profile);
                 setLoggedIn(true);
             }
@@ -72,6 +73,12 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } catch (err) {
             Logger("AUTH", "Auth context", "Error in singIn", err);
             return Promise.reject(err);
+        }
+    };
+
+    const redirectToHome = () => {
+        if (window.location.pathname !== PageRoutes.home) {
+            window.location.assign(PageRoutes.home);
         }
     };
 
@@ -87,32 +94,33 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const setToken = async () => {
             const storeRefreshToken = getItem<string>(StoreId.refreshToken);
 
-            if (storeRefreshToken !== null) {
-                try {
-                    const { accessToken, refreshToken } =
-                        await refreshAuthToken(storeRefreshToken);
+            if (storeRefreshToken === null) {
+                redirectToHome();
+                return;
+            }
 
-                    // Reset tokens and API instance
-                    setItem(StoreId.accessToken, accessToken);
-                    setItem(StoreId.refreshToken, refreshToken);
-                    setDefaultAuthHeader(accessToken);
+            try {
+                const { accessToken, refreshToken } = await refreshAuthToken(
+                    storeRefreshToken
+                );
 
-                    if (user === null) {
-                        const userFromToken = await getUserByAccessToken(
-                            accessToken
-                        );
-                        console.log(userFromToken);
-                        setUser(userFromToken);
-                    }
+                // Reset tokens and API instance
+                setItem(StoreId.accessToken, accessToken);
+                setItem(StoreId.refreshToken, refreshToken);
+                setDefaultAuthHeader(accessToken);
 
-                    setLoggedIn(true);
-                } catch (err) {
-                    console.error(err);
-                    // Reroute the user to a page where they can manually log in
-                    if (window.location.pathname !== PageRoutes.home) {
-                        window.location.assign(PageRoutes.home);
-                    }
+                if (user === null) {
+                    const userFromToken = await getUserByAccessToken(
+                        accessToken
+                    );
+                    userFromToken.uid = 0;
+                    setUser(userFromToken);
                 }
+
+                setLoggedIn(true);
+            } catch (err) {
+                console.error(err);
+                redirectToHome();
             }
         };
         setToken();

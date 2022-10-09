@@ -1,5 +1,5 @@
 // Types
-import { SimpleMessage } from "../../../types/chat";
+import { SimpleMessage, Message } from "../../../types/chat";
 
 // Styling
 import styled from "styled-components";
@@ -10,17 +10,17 @@ import {
 } from "../../../styles/StylingConstants";
 
 interface Props {
-    content: SimpleMessage;
+    message: Message;
     fromUser: boolean;
 }
 
 const Container = styled.div<{ fromUser: boolean }>`
     display: flex;
+    flex-direction: column;
 
-    justify-content: ${({ fromUser }) => (fromUser ? `end` : `start`)};
+    align-items: ${({ fromUser }) => (fromUser ? `end` : `start`)};
 
     div {
-        margin-bottom: 18px;
         background: ${mainColor};
         padding: 9px 18px;
         border-radius: ${smallRadius};
@@ -29,10 +29,15 @@ const Container = styled.div<{ fromUser: boolean }>`
     }
 `;
 
-const SimpleMessageDisplay = ({ fromUser, content }: Props) => (
-    <Container fromUser={fromUser}>
-        <div>{content.content}</div>
-    </Container>
-);
+const SimpleMessageDisplay = ({ fromUser, message }: Props) => {
+    const formattedContent: SimpleMessage = message.content as SimpleMessage;
+
+    return (
+        <Container fromUser={fromUser}>
+            <div>{formattedContent.content}</div>
+            <span>{message.sender?.username}</span>
+        </Container>
+    );
+};
 
 export default SimpleMessageDisplay;

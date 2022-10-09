@@ -32,7 +32,6 @@ import getProfileByUserName from "../proxies/user/getProfileByUsername";
 
 // Debugging
 import { useModal } from "../contexts/ModalContext";
-import getUserByAccessToken from "../proxies/user/getUserByAccessToken";
 
 const ProfilePage = () => {
     // Profile to be displayed
@@ -46,7 +45,7 @@ const ProfilePage = () => {
     const { matchHistory } = useFakeData();
 
     // Local profile
-    const { user, setUser } = useAuth();
+    const { user } = useAuth();
 
     /**
      * The `userName` in the url '/profile/:userName' if not
@@ -61,11 +60,6 @@ const ProfilePage = () => {
          * the user's own profile page
          */
         if (profileName === undefined) {
-
-            // if (user === null) {
-            //     getUserByAccessToken()
-            // }
-                
             setSelectedProfile(user);
             setIsUserProfile(true);
             return;

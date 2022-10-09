@@ -9,7 +9,7 @@ import {
     SimpleMessage,
     PictureMessage,
     InvitePlayMessage,
-    AllMessageTypes
+    MessageTypes
 } from "../../types/chat";
 
 // UI
@@ -28,7 +28,7 @@ interface MessageTypeSelectProps {
     groupchat: GroupChat;
     messageType: MessageContentType;
     setMessageType: React.Dispatch<React.SetStateAction<MessageContentType>>;
-    setMessageContent: React.Dispatch<React.SetStateAction<AllMessageTypes>>;
+    setMessageContent: React.Dispatch<React.SetStateAction<MessageTypes>>;
 }
 
 const MessageTypeSelect = ({
@@ -42,20 +42,20 @@ const MessageTypeSelect = ({
         useState<boolean>(false);
 
     const handleChatTypeChange = (type: MessageContentType) => {
-        if (type !== messageType) {
-            setMessageType(type);
-            if (type === MessageContentType.Simple)
-                setMessageContent({ content: "" });
-            else if (type === MessageContentType.Picture)
-                setMessageContent({ alt: "", url: "" });
-            else if (type === MessageContentType.InvitePlay)
-                setMessageContent({
-                    opponent: groupchat.members[0],
-                    user: sender,
-                    accepted: false,
-                    game_type: GameType.Classic
-                });
-        }
+        if (type === messageType) return;
+
+        setMessageType(type);
+        if (type === MessageContentType.Simple)
+            setMessageContent({ content: "" });
+        else if (type === MessageContentType.Picture)
+            setMessageContent({ alt: "", url: "" });
+        else if (type === MessageContentType.InvitePlay)
+            setMessageContent({
+                opponent: groupchat.members[0],
+                user: sender,
+                accepted: false,
+                game_type: GameType.Classic
+            });
     };
 
     return (
@@ -171,7 +171,7 @@ const ChatInput = ({ user, groupchat }: Props) => {
         MessageContentType.Simple
     );
 
-    const [messageContent, setMessageContent] = useState<AllMessageTypes>({
+    const [messageContent, setMessageContent] = useState<MessageTypes>({
         content: ""
     });
 

@@ -22,13 +22,13 @@ const Canvas = ({ canvasRef }: Props) => {
     const canvasContainerRef = useRef(null!);
 
     useEffect(() => {
-        if (canvasRef.current !== null) {
-            const canvasContainer: HTMLElement = canvasContainerRef.current;
+        if (canvasRef.current === null) return;
 
-            // Set canvas width and height to container
-            canvasRef.current.width = canvasContainer.offsetWidth;
-            canvasRef.current.height = canvasContainer.offsetHeight;
-        }
+        const canvasContainer: HTMLElement = canvasContainerRef.current;
+
+        // Set canvas width and height to container
+        canvasRef.current.width = canvasContainer.offsetWidth;
+        canvasRef.current.height = canvasContainer.offsetHeight;
     }, [canvasRef]);
 
     return (

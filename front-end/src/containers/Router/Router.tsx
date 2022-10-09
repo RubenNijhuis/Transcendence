@@ -11,7 +11,7 @@ import About from "../../pages/About";
 // Private pages
 import ProfilePage from "../../pages/Profile";
 import Play from "../../pages/Play";
-import Chat from "../../pages/Chat";
+import ChatPage from "../../pages/Chat";
 import Leaderboard from "../../pages/Leaderboard";
 import Pong from "../../pages/Pong";
 import NewPongGame from "../../pages/NewPongGame";
@@ -42,7 +42,7 @@ const Router = () => (
             />
 
             {/* This route may only be accesed if the user
-              * is still in the process of creating an accoun*/}
+             * is still in the process of creating an accoun*/}
             <Route element={<AccessTokenGuard />}>
                 <Route
                     path={PageRoutes.createAccount}
@@ -59,7 +59,7 @@ const Router = () => (
 
                 {/* Regular private routes */}
                 <Route path={PageRoutes.play} element={<Play />} />
-                <Route path={PageRoutes.chat} element={<Chat />} />
+                <Route path={PageRoutes.chat} element={<ChatPage />} />
                 <Route
                     path={PageRoutes.leaderBoard}
                     element={<Leaderboard />}

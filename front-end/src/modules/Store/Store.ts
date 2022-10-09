@@ -6,12 +6,10 @@ const getItem = <T>(name: string): T | null => {
     const itemExists = localStorage.getItem(name) !== undefined;
     const value: string | null = itemExists ? localStorage.getItem(name) : null;
 
-    if (value !== null) {
-        const transformedValue: T = JSON.parse(value);
-        return transformedValue;
-    }
+    if (value === null) return value as null;
 
-    return value as null;
+    const transformedValue: T = JSON.parse(value);
+    return transformedValue;
 };
 
 const removeItem = (name: string) => localStorage.removeItem(name);

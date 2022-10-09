@@ -5,16 +5,11 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "../AuthContext";
 
 // Types
-import { GroupChat } from "../../types/chat";
 import { ProfileType } from "../../types/profile";
 import { MatchRecord } from "../../types/game";
 
 // Data generation
-import {
-    generateGameResult,
-    generateGroupChats,
-    generateProfile
-} from "./fakeDataGenerators";
+import { generateGameResult, generateProfile } from "./fakeDataGenerators";
 
 // What kind of data and functions the context consists of
 interface FakeDataContextType {
@@ -23,9 +18,6 @@ interface FakeDataContextType {
 
     leaderBoard: ProfileType[];
     setLeaderBoard: React.Dispatch<React.SetStateAction<ProfileType[]>>;
-
-    chats: GroupChat[];
-    setChats: React.Dispatch<React.SetStateAction<GroupChat[]>>;
 
     matchHistory: MatchRecord[];
     setMatchHistory: React.Dispatch<React.SetStateAction<MatchRecord[]>>;
@@ -44,20 +36,18 @@ const useFakeData = () => useContext(FakeDataContext);
 const FakeDataProvider = ({ children }: { children: React.ReactNode }) => {
     const [fakeUser, setFakeUser] = useState<ProfileType>(null!);
     const [profiles, setProfiles] = useState<ProfileType[]>(null!);
-    const [chats, setChats] = useState<GroupChat[]>(null!);
     const [leaderBoard, setLeaderBoard] = useState<ProfileType[]>(null!);
     const [matchHistory, setMatchHistory] = useState<MatchRecord[]>(null!);
 
     const { user } = useAuth();
 
     useEffect(() => {
-        if (user) {
-            const tempProfiles: ProfileType[] = generateProfile(20);
-            setProfiles(tempProfiles);
-            setChats(generateGroupChats(user, 4, 2, tempProfiles));
-            setLeaderBoard(tempProfiles);
-            setMatchHistory(generateGameResult(user, 50));
-        }
+        if (!user) return;
+
+        const tempProfiles: ProfileType[] = generateProfile(20);
+        setProfiles(tempProfiles);
+        setLeaderBoard(tempProfiles);
+        setMatchHistory(generateGameResult(user, 50));
     }, [user]);
 
     const value = {
@@ -65,8 +55,6 @@ const FakeDataProvider = ({ children }: { children: React.ReactNode }) => {
         setFakeUser,
         profiles,
         setProfiles,
-        chats,
-        setChats,
         leaderBoard,
         setLeaderBoard,
         matchHistory,

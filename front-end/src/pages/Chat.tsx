@@ -1,5 +1,5 @@
 // React
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 // UI
 import Layout from "../components/Layout";
@@ -19,40 +19,22 @@ import { useAuth } from "../contexts/AuthContext";
 // import Logger from "../utils/Logger";
 
 // Temp data
-import { useFakeData } from "../contexts/FakeDataContext";
+import { useChat } from "../contexts/ChatContext";
 
-const Chat = () => {
-    const [groupChats, setGroupChats] = useState<GroupChat[]>(null!);
-    const [selectedChat, setSelectedChat] = useState<number>(0);
-
-    const { user } = useAuth();
-
-    const { chats } = useFakeData();
-
-    useEffect(() => {
-        if (user !== null) {
-            setGroupChats(chats);;
-            // getChatByUserName<GroupChat[]>(user.username)
-            //     .then((returnedChats) => {
-            //         setGroupChats(returnedChats as GroupChat[]);
-            //     })
-            //     .catch((err) =>
-            //         Logger("ERROR", "Chat page", "Retrieved chats request", err)
-            //     );
-        }
-    }, [chats, user]);
+const ChatPage = () => {
+    const { allChats, activeChatID, setActiveChatID } = useChat();
 
     return (
         <Layout>
             <ChatInterface>
-                {groupChats !== null ? (
+                {allChats !== null ? (
                     <>
                         <DirectMessageList
-                            directMessages={groupChats}
-                            selectedChat={selectedChat}
-                            setSelectedChat={setSelectedChat}
+                            directMessages={allChats}
+                            selectedChat={activeChatID}
+                            setSelectedChat={setActiveChatID}
                         />
-                        <ChatBox chat={groupChats[selectedChat]} />
+                        <ChatBox chat={allChats[activeChatID]} />
                     </>
                 ) : (
                     <Loader />
@@ -62,4 +44,4 @@ const Chat = () => {
     );
 };
 
-export default Chat;
+export default ChatPage;

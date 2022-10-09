@@ -62,7 +62,12 @@ const drawGame = (
     // Setup components to be drawn on the canvas
     const PongBall = new Ball(context, canvas);
     const PongBallPower = new Ball(context, canvas);
-    const Player1 = new Bat(canvas.clientWidth * 0.01, canvas.clientHeight / 2, context, canvas);
+    const Player1 = new Bat(
+        canvas.clientWidth * 0.01,
+        canvas.clientHeight / 2,
+        context,
+        canvas
+    );
     const Player2 = new Bat(
         canvas.clientWidth * 0.99,
         canvas.clientHeight / 2,
@@ -86,10 +91,10 @@ const drawGame = (
     const animate = () => {
         requestAnimationFrame(animate);
         context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
-        
+
         // PowerUps
-        Power.getRandomPower (Player1, Player2, PongBall, PongBallPower);
-       
+        Power.getRandomPower(Player1, Player2, PongBall, PongBallPower);
+
         // Draw the elements
         if (
             GameManagement.player1Score !== GameManagement.maxScore &&
@@ -105,7 +110,7 @@ const drawGame = (
             PongBallPower.draw();
             GameManagement.checkGame(PongBallPower);
         }
-        
+
         GameManagement.displayText();
 
         // Check game
@@ -125,10 +130,10 @@ const PongGame = () => {
     useEffect(() => {
         const context = canvasRef.current.getContext("2d");
 
+        if (context === null) return;
+
         // Start drawing the game
-        if (context !== null) {
-            drawGame(canvasRef.current, context);
-        }
+        drawGame(canvasRef.current, context);
     }, []);
 
     return <Canvas canvasRef={canvasRef} />;

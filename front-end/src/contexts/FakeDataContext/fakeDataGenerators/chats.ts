@@ -5,7 +5,7 @@ import { get_img_url } from "./utils";
 import randomIntFromInterval from "../../../utils/randomNumFromInterval";
 
 // Types
-import { ProfileType } from "../../../types/profile";
+import { ProfileType, ProfileID } from "../../../types/profile";
 import { GameType } from "../../../types/game";
 import {
     Message,
@@ -14,7 +14,7 @@ import {
     SimpleMessage,
     InvitePlayMessage,
     MessageContentType,
-    AllMessageTypes
+    MessageTypes
 } from "../../../types/chat";
 
 const generateInvite = (
@@ -59,8 +59,8 @@ const generateNewMessageContent = (
     sender: ProfileType,
     receiver: ProfileType,
     type: MessageContentType
-): AllMessageTypes => {
-    let messageContent: AllMessageTypes = null!;
+): MessageTypes => {
+    let messageContent: MessageTypes = null!;
 
     if (type === MessageContentType.Simple) {
         messageContent = generateSimpleMessage();
@@ -84,12 +84,16 @@ const generateMessage = (
     for (let i = 0; i < amount; i++) {
         const rand: number = randomIntFromInterval(0, 2);
 
+        // DEBUG
+        if (sender.uid === undefined) console.log(sender);
+
         const newMessage: Message = {
             content: generateNewMessageContent(sender, receiver, rand),
             content_type: rand,
             timestamp: new Date().toString(),
-            sender,
-            id: i,
+            sender: null,
+            senderID: sender.uid,
+            uid: i,
             group_id,
             read_by: []
         };
@@ -100,52 +104,71 @@ const generateMessage = (
     return messages;
 };
 
+// Function to generate random number
+function randomNumberInRange(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min) + min);
+}
+
+const randomSliceOfArray = <T>(items: Array<T>, size: number) => {
+    let randomSlice: T[] = [];
+
+    const arrayLen: number = items.length;
+    const startPos: number = randomNumberInRange(0, arrayLen - size - 1);
+    const endPos: number = startPos + size;
+
+    randomSlice = items.slice(startPos, endPos);
+    return randomSlice;
+};
+
+const getMemberUID = (profiles: ProfileType[]): ProfileID[] => {
+    let UID: ProfileID[] = [];
+
+    for (let i = 0; i < profiles.length; i++) {
+        UID.push(profiles[i].uid);
+    }
+
+    return UID;
+};
+
 const generateGroupChats = (
     user: ProfileType,
     amount: number,
-    amount_people: number,
+    memberRange: [number, number],
     profiles: ProfileType[]
 ): GroupChat[] => {
     const groupChatList: GroupChat[] = [];
 
     for (let i = 0; i < amount; i++) {
+        const randomNum: number = randomNumberInRange(
+            memberRange[0],
+            memberRange[1]
+        );
+
+        const members: ProfileType[] = [
+            ...randomSliceOfArray<ProfileType>(profiles, randomNum),
+            user
+        ];
+
         const newGroup: GroupChat = {
             group_id: i,
-            members: [],
+            members: members,
             messages: []
         };
 
-        newGroup.members.push(profiles[i]);
-        newGroup.members.push(user);
-
         newGroup.messages.push(
-            ...generateMessage(
-                profiles[i],
-                user,
-                i,
-                randomIntFromInterval(2, 3)
-            )
+            ...generateMessage(members[i], user, i, randomIntFromInterval(2, 3))
         );
 
         newGroup.messages.push(
-            ...generateMessage(
-                user,
-                profiles[i],
-                i,
-                randomIntFromInterval(2, 3)
-            )
+            ...generateMessage(user, members[i], i, randomIntFromInterval(2, 3))
         );
 
         newGroup.messages.push(
-            ...generateMessage(
-                profiles[i],
-                user,
-                i,
-                randomIntFromInterval(2, 3)
-            )
+            ...generateMessage(members[i], user, i, randomIntFromInterval(2, 3))
         );
         groupChatList.push(newGroup);
     }
+
     return groupChatList;
 };
 

@@ -6,22 +6,22 @@ import {
     PictureMessage,
     SimpleMessage
 } from "../../types/chat";
-import { ProfileType } from "../../types/profile";
 
 // UI
 import SimpleMessageDisplay from "./SimpleMessageDisplay";
 import PictureMessageDisplay from "./PictureMessageDisplay";
 import InviteMessageDisplay from "./InviteMessageDisplay";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface Props {
-    receiver: ProfileType;
-    sender: ProfileType;
-    content: Message;
+    message: Message;
+    fromUser: boolean;
 }
 
-const ChatElement = ({ receiver, sender, content }: Props): JSX.Element => {
-    const fromUser: boolean = receiver.username === sender.username;
-    const contentType: MessageContentType = content.content_type;
+const ChatElement = ({ fromUser, message }: Props): JSX.Element => {
+    const { user } = useAuth();
+
+    const contentType: MessageContentType = message.content_type;
 
     /**
      * IMPORTANT: must be in the same order as the content
@@ -32,18 +32,9 @@ const ChatElement = ({ receiver, sender, content }: Props): JSX.Element => {
      * [2] InviteMessage
      */
     const messageElements = [
-        <SimpleMessageDisplay
-            fromUser={fromUser}
-            content={content.content as SimpleMessage}
-        />,
-        <PictureMessageDisplay
-            fromUser={fromUser}
-            content={content.content as PictureMessage}
-        />,
-        <InviteMessageDisplay
-            fromUser={fromUser}
-            content={content.content as InvitePlayMessage}
-        />
+        <SimpleMessageDisplay fromUser={fromUser} message={message} />,
+        <PictureMessageDisplay fromUser={fromUser} message={message} />,
+        <InviteMessageDisplay fromUser={fromUser} message={message} />
     ];
 
     return messageElements[contentType];

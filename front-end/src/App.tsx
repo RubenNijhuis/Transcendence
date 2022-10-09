@@ -8,6 +8,7 @@ import Router from "./containers/Router";
 // Only for debug purposes
 import FakeDataProvider from "./contexts/FakeDataContext";
 import ModalProvider from "./contexts/ModalContext";
+import ChatProvider from "./contexts/ChatContext";
 
 const App = () => (
     <AuthProvider>
@@ -15,11 +16,13 @@ const App = () => (
         <ModalProvider>
             {/* TODO: remove data debug provider */}
             <FakeDataProvider>
-                {/* Global Styling */}
-                <GlobalStyle />
+                <ChatProvider>
+                    {/* Global Styling */}
+                    <GlobalStyle />
 
-                {/* Page routing */}
-                <Router />
+                    {/* Page routing */}
+                    <Router />
+                </ChatProvider>
             </FakeDataProvider>
         </ModalProvider>
     </AuthProvider>

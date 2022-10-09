@@ -60,14 +60,13 @@ const Container = styled.div<{ followsProfile: boolean }>`
     }
 
     ${({ followsProfile }) => {
-        if (followsProfile) {
-            return `button {
+        if (!followsProfile) return;
+        return `button {
                         background: none;
                         background-color: rgb(60,60,60);
                         border: solid rgb(100,100,100) white;
                         box-shadow: none;
                     }`;
-        }
     }}
 `;
 

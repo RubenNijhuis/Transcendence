@@ -10,22 +10,25 @@ const fillDBwithUsers = () => {};
 
 const fillDBwithChats = (user: ProfileType) => {};
 
-const handleTokenRefresh = () => {
+const handleTokenRefresh = async () => {
     const storeRefreshToken = getItem<string>(StoreId.refreshToken);
 
-    if (storeRefreshToken) {
-        refreshAuthToken(storeRefreshToken)
-            .then((newTokens) => {
-                const { accessToken, refreshToken } = newTokens;
-
-                // Reset tokens and API instance
-                setItem(StoreId.accessToken, accessToken);
-                setItem(StoreId.refreshToken, refreshToken);
-                setDefaultAuthHeader(accessToken);
-            })
-            .catch((err) => console.error(err));
-    } else {
+    if (!storeRefreshToken) {
         console.error(`\nRefresh access token failed\nNo refresh in the store`);
+        return;
+    }
+
+    try {
+        const newTokens = await refreshAuthToken(storeRefreshToken);
+
+        const { accessToken, refreshToken } = newTokens;
+
+        // Reset tokens and API instance
+        setItem(StoreId.accessToken, accessToken);
+        setItem(StoreId.refreshToken, refreshToken);
+        setDefaultAuthHeader(accessToken);
+    } catch (err) {
+        console.log(err);
     }
 };
 

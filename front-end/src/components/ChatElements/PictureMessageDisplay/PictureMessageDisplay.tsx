@@ -1,5 +1,5 @@
 // Types
-import { PictureMessage } from "../../../types/chat";
+import { PictureMessage, Message } from "../../../types/chat";
 
 // UI
 import Asset from "../../Asset";
@@ -9,14 +9,15 @@ import styled from "styled-components";
 import { smallRadius } from "../../../styles/StylingConstants";
 
 interface Props {
-    content: PictureMessage;
+    message: Message;
     fromUser: boolean;
 }
 
 const Container = styled.div<{ fromUser: boolean }>`
     display: flex;
+    flex-direction: column;
 
-    justify-content: ${({ fromUser }) => (fromUser ? `end` : `start`)};
+    align-items: ${({ fromUser }) => (fromUser ? `end` : `start`)};
     margin-bottom: 18px;
 
     .asset {
@@ -29,10 +30,15 @@ const Container = styled.div<{ fromUser: boolean }>`
     }
 `;
 
-const PictureMessageDisplay = ({ fromUser, content }: Props) => (
-    <Container fromUser={fromUser}>
-        <Asset url={content.url} alt={content.alt} />
-    </Container>
-);
+const PictureMessageDisplay = ({ fromUser, message }: Props) => {
+    const formattedMessage: PictureMessage = message.content as PictureMessage;
+
+    return (
+        <Container fromUser={fromUser}>
+            <Asset url={formattedMessage.url} alt={formattedMessage.alt} />
+            <span>{message.sender?.username}</span>
+        </Container>
+    );
+};
 
 export default PictureMessageDisplay;
