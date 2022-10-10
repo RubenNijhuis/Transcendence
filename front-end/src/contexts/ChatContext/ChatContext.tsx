@@ -105,7 +105,7 @@ const ChatProvider = ({ children }: { children: React.ReactNode }) => {
      * ✅ Step 2: Split data into members and messages
      * ✅ Step 3: Assign member objects to messages
      * ✅ Step 4: Place all data in state
-     * ❌ Step 5: Select default chat and display in UI
+     * ✅ Step 5: Select default chat and display in UI
      *
      * Done
      */
@@ -117,8 +117,8 @@ const ChatProvider = ({ children }: { children: React.ReactNode }) => {
             const tempProfiles: ProfileType[] = generateProfile(30);
             const retrievedGroupChats: GroupChat[] = generateGroupChats(
                 user,
-                2,
-                [2, 4],
+                10,
+                [1, 4],
                 tempProfiles
             );
 

@@ -1,24 +1,11 @@
-// React
-import { useEffect } from "react";
-
 // UI
 import Layout from "../components/Layout";
 import Loader from "../components/Loader";
 import ChatInterface from "../containers/ChatInterface";
-import DirectMessageList from "../containers/DirectMessageList";
+import ChatSelector from "../containers/ChatSelector";
 import ChatBox from "../containers/ChatBox";
 
-// Types
-import { GroupChat } from "../types/chat";
-
-// Requests
-// import getChatByUserName from "../proxies/chat/getChatsByUserName";
-
-// Auth
-import { useAuth } from "../contexts/AuthContext";
-// import Logger from "../utils/Logger";
-
-// Temp data
+// Context
 import { useChat } from "../contexts/ChatContext";
 
 const ChatPage = () => {
@@ -29,7 +16,7 @@ const ChatPage = () => {
             <ChatInterface>
                 {allChats !== null ? (
                     <>
-                        <DirectMessageList
+                        <ChatSelector
                             directMessages={allChats}
                             selectedChat={activeChatID}
                             setSelectedChat={setActiveChatID}

@@ -121,6 +121,7 @@ const CreateAccount = () => {
          */
         createUser(providedDetails)
             .then((returnedUserProfile) => {
+                console.log(returnedUserProfile);
                 setUser(returnedUserProfile);
                 setLoggedIn(true);
                 navigate(PageRoutes.profile);
