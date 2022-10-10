@@ -14,7 +14,7 @@ export class GroupUser {
   group: Group;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @ManyToOne((type) => User, (user) => user.groups)
   user: User;

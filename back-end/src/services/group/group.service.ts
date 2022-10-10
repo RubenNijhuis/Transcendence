@@ -84,7 +84,7 @@ export class GroupService {
        * and put the rest of the outside the if statement
        * like at the beginning of this function
        */
-      if (isMatch && group.owner == editPasswordDto.owner) {
+      if (isMatch && group.owner === editPasswordDto.owner) {
         // TODO: password hashing should be a seperate function -- DRY code
         const hash1 = createHash("sha256")
           .update(editPasswordDto.newPassword)

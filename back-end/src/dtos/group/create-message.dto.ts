@@ -2,7 +2,7 @@ import { IsNotEmpty } from "class-validator";
 
 export class CreateMessageDto {
   @IsNotEmpty()
-  group_id: number;
+  group_id: number; //TODO: hoe slaan we groupID op in de frontend? (via user?)
 
   @IsNotEmpty()
   content: string;
@@ -11,5 +11,5 @@ export class CreateMessageDto {
   content_type: number;
 
   @IsNotEmpty()
-  sender: number;
+  senderID: string;
 }
