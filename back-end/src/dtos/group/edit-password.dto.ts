@@ -5,7 +5,7 @@ export class EditPasswordDto {
   id: number;
 
   @IsNotEmpty()
-  owner: number;
+  owner: string;
 
   @IsNotEmpty()
   oldPassword: string;

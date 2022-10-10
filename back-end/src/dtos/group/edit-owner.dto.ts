@@ -5,5 +5,5 @@ export class EditOwnerDto {
   groupId: number;
 
   @IsNotEmpty()
-  owner: number;
+  owner: string;
 }

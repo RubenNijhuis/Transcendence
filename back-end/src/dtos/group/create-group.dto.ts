@@ -2,8 +2,8 @@ import { IsNotEmpty } from "class-validator";
 
 export class CreateGroupDto {
   @IsNotEmpty()
-  owner: number;
+  owner: string;
 
   @IsNotEmpty()
-  users: number[];
+  users: string[];
 }

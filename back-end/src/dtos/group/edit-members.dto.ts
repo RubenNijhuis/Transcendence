@@ -5,5 +5,5 @@ export class EditMembersDto {
   groupId: number;
 
   @IsNotEmpty()
-  users: number[];
+  users: string[];
 }

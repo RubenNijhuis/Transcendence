@@ -5,6 +5,6 @@ export class MuteUserDto {
 	id: number
 
 	@IsNotEmpty()
-	user: number
+	user: string
 
 }

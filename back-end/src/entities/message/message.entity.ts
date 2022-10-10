@@ -32,7 +32,10 @@ export class Message {
   content_type: number;
 
   @Column()
-  sender: number;
+  sender: string;
+
+  @Column()
+  senderID: string;
 
   @Column({
     nullable: true

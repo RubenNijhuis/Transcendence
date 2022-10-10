@@ -8,7 +8,6 @@ import {
   Req,
   Res,
   UploadedFile,
-  UploadedFiles,
   UseGuards,
   UseInterceptors,
   UsePipes,
@@ -43,10 +42,6 @@ import {
   profileStorage
 } from "src/middleware/imgUpload/imgUpload";
 
-// TODO: check if these are being used
-import { MyNewFileInterceptor } from "src/middleware/imgUpload/file-interceptor";
-import { diskStorage } from "multer";
-
 // file upload library
 import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
 import { Request } from "express";
@@ -59,16 +54,9 @@ import { FileInterceptor } from "@nestjs/platform-express";
  * The user api functionality contains:
  * - getting all users or a specified user
  * - creating and removing a specified user
- * - enabling 2fa                               <--- should be moved to the 2fa controller?
+ * - setting 2fa
  * - setting the banner/profile picture
  * - seeding the database with random users
- */
-
-/**
- * ATTENTION
- * - upload route is wip
- * TO DO
- * - standarize uploading images
  */
 
 @Controller(UserRoutes.prefix)

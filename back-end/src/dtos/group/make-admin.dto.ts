@@ -2,10 +2,10 @@ import { IsNotEmpty, MinLength } from "class-validator";
 
 export class MakeAdminDto {
   @IsNotEmpty()
-  owner: number;
+  owner: string;
 
   @IsNotEmpty()
-  user: number;
+  user: string;
 
   @IsNotEmpty()
   group: number;

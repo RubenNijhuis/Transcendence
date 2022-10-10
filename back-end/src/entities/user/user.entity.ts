@@ -3,16 +3,15 @@ import {
   Entity,
   JoinTable,
   OneToMany,
+  PrimaryColumn,
   PrimaryGeneratedColumn
 } from "typeorm";
 import GroupUser from "../groupuser/groupuser.entity";
 @Entity() // need to have a token to search on
 export class User {
-  @PrimaryGeneratedColumn({
-    type: "bigint",
-    name: "user_id"
-  })
-  id: number;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
+  
   @Column({
     name: "intra_id",
     nullable: true,
