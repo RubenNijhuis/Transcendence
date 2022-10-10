@@ -16,6 +16,7 @@ import {
     MessageContentType,
     MessageTypes
 } from "../../../types/chat";
+import { generateProfile } from "./profile";
 
 const generateInvite = (
     user: ProfileType,
@@ -84,14 +85,11 @@ const generateMessage = (
     for (let i = 0; i < amount; i++) {
         const rand: number = randomIntFromInterval(0, 2);
 
-        // DEBUG
-        if (sender.uid === undefined) console.log(sender);
-
         const newMessage: Message = {
             content: generateNewMessageContent(sender, receiver, rand),
             content_type: rand,
             timestamp: new Date().toString(),
-            sender: null,
+            sender: generateProfile(1)[0],
             senderID: sender.uid,
             uid: i,
             group_id,
@@ -156,15 +154,30 @@ const generateGroupChats = (
         };
 
         newGroup.messages.push(
-            ...generateMessage(members[i], user, i, randomIntFromInterval(2, 3))
+            ...generateMessage(
+                members[randomNumberInRange(0, randomNum)],
+                user,
+                i,
+                randomIntFromInterval(2, 3)
+            )
         );
 
         newGroup.messages.push(
-            ...generateMessage(user, members[i], i, randomIntFromInterval(2, 3))
+            ...generateMessage(
+                user,
+                members[randomNumberInRange(0, randomNum)],
+                i,
+                randomIntFromInterval(2, 3)
+            )
         );
 
         newGroup.messages.push(
-            ...generateMessage(members[i], user, i, randomIntFromInterval(2, 3))
+            ...generateMessage(
+                members[randomNumberInRange(0, randomNum)],
+                user,
+                i,
+                randomIntFromInterval(2, 3)
+            )
         );
         groupChatList.push(newGroup);
     }

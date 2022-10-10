@@ -1,3 +1,4 @@
+// TODO: order and label imports
 import { Injectable, ForbiddenException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import Axios from "axios";
@@ -7,6 +8,8 @@ import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 import { UpdateResult } from "typeorm";
 import { createHash } from "crypto";
+
+// Types
 import { AuthTokenType, PayloadType } from "src/types/auth";
 
 const jwt = require("jsonwebtoken");
@@ -26,14 +29,15 @@ export class AuthService {
         grant_type: "authorization_code",
         client_id: this.configService.get<string>("FORTYTWO_APP_ID"),
         client_secret: this.configService.get<string>("FORTYTWO_APP_SECRET"),
-        code: token,
-        redirect_uri: this.configService.get<string>("FORTYTWO_CALLBACK_URL")
+        redirect_uri: this.configService.get<string>("FORTYTWO_CALLBACK_URL"),
+        code: token
       }
     });
   }
 
   // TODO: abstract axios into a proxy library
   // And also should this be async
+  // TODO: dont return any type
   getUserData(bearerToken: string): Promise<any> {
     return Axios.get(this.configService.get("INTRA_GET_ME_URL"), {
       headers: {
@@ -52,7 +56,7 @@ export class AuthService {
    * refreshed everytime the website is reloaded. You could theoretically
    * steal the token and use it forever?
    */
-  async getTokens(intraID: string) {
+  async getTokens(intraID: string): Promise<AuthTokenType> {
     try {
       const returnedPayload: AuthTokenType = {
         accessToken: "",
@@ -88,7 +92,7 @@ export class AuthService {
     }
   }
 
-  async createNewRefreshTokens(refreshToken: string) {
+  async createNewRefreshTokens(refreshToken: string): Promise<AuthTokenType> {
     //****    verify if it's a valid refresh token
     const secret: string = this.configService.get<string>("JWT_REFRESH_SECRET");
     const isValidRefToken: string = jwt.verify(refreshToken, secret) as string;
@@ -109,8 +113,6 @@ export class AuthService {
         decoded.intraID
       );
 
-      console.log("USER:", user);
-
       if (!user || !user.refreshToken)
         //this??
         throw new ForbiddenException("Access Denied: No user in database");
@@ -119,8 +121,7 @@ export class AuthService {
       const hash = createHash("sha256").update(refreshToken).digest("hex");
 
       //****  update token in the backend
-      const tokens: { accessToken: string; refreshToken: string } =
-        await this.getTokens(decoded.intraID);
+      const tokens: AuthTokenType = await this.getTokens(decoded.intraID);
 
       const intraIDDto = { intraID: decoded.intraID };
       const addUser: UpdateResult = await this.userService.setRefreshToken(
@@ -137,9 +138,11 @@ export class AuthService {
   }
 
   //TODO: remove all extra info after access denied in the throw errors. Could be used to figure out how the program works
-  async refreshTokens(refreshToken: string) {
+  async refreshTokens(refreshToken: string): Promise<AuthTokenType> {
     //****    verify if it's a valid refresh token
     const secret: string = this.configService.get<string>("JWT_REFRESH_SECRET");
+    console.log(refreshToken, secret);
+
     const isValidRefToken: string = jwt.verify(refreshToken, secret) as string;
 
     if (!isValidRefToken)
@@ -169,8 +172,7 @@ export class AuthService {
         throw new ForbiddenException("Access Denied: Not a match");
 
       //****  update token in the backend
-      const tokens: { accessToken: string; refreshToken: string } =
-        await this.getTokens(decoded.intraID);
+      const tokens: AuthTokenType = await this.getTokens(decoded.intraID);
 
       const intraIDDto = { intraID: decoded.intraID };
       const addUser: UpdateResult = await this.userService.setRefreshToken(

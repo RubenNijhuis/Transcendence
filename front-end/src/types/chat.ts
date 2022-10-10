@@ -35,10 +35,10 @@ interface Message {
     content_type: MessageContentType;
     timestamp: string;
     senderID: ProfileID;
-    sender: ProfileType | null;
+    sender: ProfileType;
     uid: number;
     group_id: number;
-    read_by: ProfileType[] | null;
+    read_by: ProfileType[];
 }
 
 interface GroupChat {

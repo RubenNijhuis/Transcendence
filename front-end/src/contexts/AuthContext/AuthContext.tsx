@@ -11,7 +11,7 @@ import { setDefaultAuthHeader } from "../../proxies/instances/apiInstance";
 import PageRoutes from "../../config/PageRoutes";
 
 // Store
-import { getItem, setItem } from "../../modules/Store";
+import { getItem, removeItem, setItem } from "../../modules/Store";
 import StoreId from "../../config/StoreId";
 
 // Types
@@ -28,6 +28,7 @@ interface AuthContextType {
     setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 
     signIn(code: string): Promise<boolean>;
+    signOut(): any;
 }
 
 // Create the context
@@ -55,6 +56,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 code
             );
 
+            console.log(shouldCreateUser);
+
             // Destructuring the return value
             const { accessToken, refreshToken } = authToken;
 
@@ -71,15 +74,15 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
             return Promise.resolve(shouldCreateUser);
         } catch (err) {
+            console.log(err);
             Logger("AUTH", "Auth context", "Error in singIn", err);
             return Promise.reject(err);
         }
     };
 
-    const redirectToHome = () => {
-        if (window.location.pathname !== PageRoutes.home) {
-            window.location.assign(PageRoutes.home);
-        }
+    const signOut = () => {
+        removeItem(StoreId.accessToken);
+        removeItem(StoreId.refreshToken);
     };
 
     /**
@@ -94,33 +97,34 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const setToken = async () => {
             const storeRefreshToken = getItem<string>(StoreId.refreshToken);
 
-            if (storeRefreshToken === null) {
-                redirectToHome();
-                return;
-            }
+            if (storeRefreshToken !== null) {
+                try {
+                    const { accessToken, refreshToken } =
+                        await refreshAuthToken(storeRefreshToken);
 
-            try {
-                const { accessToken, refreshToken } = await refreshAuthToken(
-                    storeRefreshToken
-                );
+                    // Reset tokens and API instance
+                    setItem(StoreId.accessToken, accessToken);
+                    setItem(StoreId.refreshToken, refreshToken);
+                    setDefaultAuthHeader(accessToken);
 
-                // Reset tokens and API instance
-                setItem(StoreId.accessToken, accessToken);
-                setItem(StoreId.refreshToken, refreshToken);
-                setDefaultAuthHeader(accessToken);
+                    if (user === null) {
+                        const userFromToken = await getUserByAccessToken(
+                            accessToken
+                        );
+                        console.log(userFromToken);
+                        setUser(userFromToken);
+                    }
 
-                if (user === null) {
-                    const userFromToken = await getUserByAccessToken(
-                        accessToken
-                    );
-                    userFromToken.uid = 0;
-                    setUser(userFromToken);
+                    console.log("IT WORKY");
+
+                    setLoggedIn(true);
+                } catch (err) {
+                    console.error(err);
+                    // Reroute the user to a page where they can manually log in
+                    // if (window.location.pathname !== PageRoutes.home) {
+                    //     window.location.assign(PageRoutes.home);
+                    // }
                 }
-
-                setLoggedIn(true);
-            } catch (err) {
-                console.error(err);
-                redirectToHome();
             }
         };
         setToken();
@@ -128,10 +132,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const value: AuthContextType = {
         user,
-        signIn,
         setUser,
-        setLoggedIn,
-        isLoggedIn
+
+        signIn,
+        signOut,
+
+        isLoggedIn,
+        setLoggedIn
     };
 
     return (

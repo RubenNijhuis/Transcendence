@@ -39,23 +39,25 @@ export class GroupService {
     try {
       const group = await this.findGroupById(createPasswordDto.id);
       if (!group) return console.error("group doesn't exist"); //error lol
+
       const owner = group.owner;
       console.log(owner);
-      if (owner == createPasswordDto.owner) {
-        const hash1 = createHash("sha256")
-          .update(createPasswordDto.password)
-          .digest("hex");
-        const saltOrRounds = 10;
-        const password = await bcrypt.hash(hash1, saltOrRounds);
-        await this.groupRepository
-          .createQueryBuilder()
-          .update()
-          .set({ password: password })
-          .where({
-            id: createPasswordDto.id
-          })
-          .execute();
-      }
+
+      if (owner !== createPasswordDto.owner) return;
+
+      const hash1 = createHash("sha256")
+        .update(createPasswordDto.password)
+        .digest("hex");
+      const saltOrRounds = 10;
+      const password = await bcrypt.hash(hash1, saltOrRounds);
+      await this.groupRepository
+        .createQueryBuilder()
+        .update()
+        .set({ password: password })
+        .where({
+          id: createPasswordDto.id
+        })
+        .execute();
     } catch (err: any) {
       throw errorHandler(
         err,

@@ -8,6 +8,7 @@ import {
     mainColor,
     smallRadius
 } from "../../../styles/StylingConstants";
+import SenderAnnotation from "../SenderAnnotation";
 
 interface Props {
     message: Message;
@@ -35,7 +36,7 @@ const SimpleMessageDisplay = ({ fromUser, message }: Props) => {
     return (
         <Container fromUser={fromUser}>
             <div>{formattedContent.content}</div>
-            <span>{message.sender?.username}</span>
+            <SenderAnnotation sender={message.sender} />
         </Container>
     );
 };

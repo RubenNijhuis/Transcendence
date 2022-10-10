@@ -1,8 +1,8 @@
 // TODO: categorize the imports
 // TODO: abstract Axios into a proxy library
+import Axios from "axios";
 import { Controller, Get, Query, Req, UseGuards } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import Axios from "axios";
 import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
 import { AuthService } from "../../services/authentication/auth.service";
 import { Request } from "express";
@@ -155,7 +155,6 @@ export class AuthController {
     const user = await this.userService.findUserByintraId(intraID);
 
     const newUser = this.userService.filterUser(user);
-    console.log("FILTERED USER", newUser);
     return newUser;
   }
 }
