@@ -8,7 +8,7 @@ import {
 } from "@ngneat/falso";
 
 // status and basic injectable
-import { HttpStatus, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 
 // typeorm sql injection library
 import { InjectRepository } from "@nestjs/typeorm";
@@ -72,7 +72,7 @@ export class UserService {
     }
   }
 
-  async findUsersById(id: number): Promise<User> {
+  async findUsersById(id: string): Promise<User> {
     try {
       const ret: User = await this.userRepository.findOne({ where: { id } });
       return this.filterUser(ret);
@@ -126,7 +126,7 @@ export class UserService {
     }
   }
 
-  async setUser(intraID: string, SetUserDto: SetUserDto): Promise<any> {
+  async setUser(intraID: string, SetUserDto: SetUserDto): Promise<User | HttpException> {
     try {
       const user: User = await this.findUserByintraId(intraID);
       const query = {
@@ -138,13 +138,15 @@ export class UserService {
 
       if (user.isInitialized) return null;
 
-      return await this.userRepository
+      await this.userRepository
         .createQueryBuilder()
         .update(user)
         .set(query)
         .where({ id: user.id })
         .returning("*")
         .execute();
+      
+        return await this.findUserByintraId(intraID);
     } catch (err: any) {
       throw errorHandler(
         err,

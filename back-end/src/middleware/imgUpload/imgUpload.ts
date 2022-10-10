@@ -2,6 +2,7 @@ import multer, { diskStorage } from "multer";
 
 export const getFileName = (req, file, cb) => {
     const extention: string = file.originalname.split('.').reverse()[0];
+    const userID: string = "";
     cb(null, req.user.intraID + '.' + extention);
 };
 
