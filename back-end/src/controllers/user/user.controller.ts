@@ -43,9 +43,10 @@ import {
 
 // file upload library
 import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
-import { Request } from "express";
+import { Request, Response } from "express";
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { GetImgDto } from "src/dtos/user/get-img.dto";
 
 /**
  * The user controller will act as the first entry point for user related api calls.
@@ -75,6 +76,22 @@ export class UsersController {
     } catch (error) {
       res.status;
     }
+  }
+
+  @Get('get-img')
+  @UseGuards(AccessTokenGuard)
+  getImg(
+    @Body() imgDto: GetImgDto,
+    @Req() req: Request,
+    @Res() res: Response) {
+      var type = "";
+
+      if (imgDto.type === "banner")
+        type = "banner";
+      if (imgDto.type === "profile")
+        type = "profile";
+      
+      return res.sendFile("src/upload/" + type + "/" + req.user["intraID"]);
   }
 
   @Post(UserRoutes.setUser)
