@@ -38,8 +38,7 @@ const MessageTypeSelect = ({
     setMessageType,
     setMessageContent
 }: MessageTypeSelectProps) => {
-    const [chatTypeBoxSelected, setChatTypeBoxSelected] =
-        useState<boolean>(false);
+    const [chatTypeSelected, setChatTypeSelected] = useState<boolean>(false);
 
     const handleChatTypeChange = (type: MessageContentType) => {
         if (type === messageType) return;
@@ -61,15 +60,15 @@ const MessageTypeSelect = ({
     return (
         <div
             className="message-type-select"
-            onClick={() => setChatTypeBoxSelected(!chatTypeBoxSelected)}
+            onClick={() => setChatTypeSelected(!chatTypeSelected)}
         >
-            <SelectTypeIcon selected={chatTypeBoxSelected}>
+            <SelectTypeIcon selected={chatTypeSelected}>
                 <img
                     src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.iconsdb.com%2Ficons%2Fdownload%2Fwhite%2Fplus-5-512.png&f=1&nofb=1"
                     alt="message options"
                 />
             </SelectTypeIcon>
-            <SelectionBox selected={chatTypeBoxSelected}>
+            <SelectionBox selected={chatTypeSelected}>
                 <span
                     onClick={() =>
                         handleChatTypeChange(MessageContentType.Simple)

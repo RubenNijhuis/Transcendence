@@ -13,6 +13,8 @@ const Container = styled.div`
     overflow: hidden;
 
     .title {
+        display: flex;
+        justify-content: space-between;
         padding: 18px 36px;
         background-color: ${mainColor};
         margin-bottom: 36px;
@@ -23,6 +25,12 @@ const Container = styled.div`
             font-weight: 500;
             margin-bottom: 0;
         }
+    }
+
+    .divider {
+        height: 100%;
+        background: black;
+        width: 2px;
     }
 
     .list {

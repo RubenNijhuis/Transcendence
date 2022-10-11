@@ -17,9 +17,6 @@ import StoreId from "../../config/StoreId";
 // Types
 import { ProfileType } from "../../types/profile";
 
-// Debug
-import Logger from "../../utils/Logger";
-
 interface AuthContextType {
     user: ProfileType;
     setUser: React.Dispatch<React.SetStateAction<ProfileType>>;
@@ -56,8 +53,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 code
             );
 
-            console.log(shouldCreateUser);
-
             // Destructuring the return value
             const { accessToken, refreshToken } = authToken;
 
@@ -75,14 +70,23 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             return Promise.resolve(shouldCreateUser);
         } catch (err) {
             console.log(err);
-            Logger("AUTH", "Auth context", "Error in singIn", err);
             return Promise.reject(err);
         }
     };
 
+    /**
+     * Signs the user off, removing auth tokens and
+     * redirecting to the home page
+     */
     const signOut = () => {
         removeItem(StoreId.accessToken);
         removeItem(StoreId.refreshToken);
+    };
+
+    const redirectToHome = () => {
+        if (window.location.pathname !== PageRoutes.home) {
+            window.location.assign(PageRoutes.home);
+        }
     };
 
     /**
@@ -111,19 +115,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                         const userFromToken = await getUserByAccessToken(
                             accessToken
                         );
-                        console.log(userFromToken);
                         setUser(userFromToken);
                     }
-
-                    console.log("IT WORKY");
 
                     setLoggedIn(true);
                 } catch (err) {
                     console.error(err);
-                    // Reroute the user to a page where they can manually log in
-                    // if (window.location.pathname !== PageRoutes.home) {
-                    //     window.location.assign(PageRoutes.home);
-                    // }
+                    // redirectToHome();
                 }
             }
         };
