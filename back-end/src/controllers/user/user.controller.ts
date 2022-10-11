@@ -37,9 +37,8 @@ import User from "../../entities/user/user.entity";
 
 // image upload pipe config
 import {
-  bannerStorage,
-  imgFilter,
-  profileStorage
+  bannerOptions,
+  profileOptions,
 } from "src/middleware/imgUpload/imgUpload";
 
 // file upload library
@@ -126,10 +125,7 @@ export class UsersController {
   @Post(UserRoutes.uploadBannerPic)
   @UseGuards(AccessTokenGuard)
   @UseInterceptors(
-    FileInterceptor("file", {
-      fileFilter: imgFilter,
-      storage: bannerStorage
-    })
+    FileInterceptor("file", bannerOptions)
   )
   async uploadBannerFile(@UploadedFile() file: Express.Multer.File) {
     console.log("Upload banner file: ", file.filename);
@@ -139,10 +135,7 @@ export class UsersController {
   @Post(UserRoutes.uploadProfilePic)
   @UseGuards(AccessTokenGuard)
   @UseInterceptors(
-    FileInterceptor("file", {
-      fileFilter: imgFilter,
-      storage: profileStorage
-    })
+    FileInterceptor("file", profileOptions)
   )
   async uploadProfileFile(@UploadedFile() file: Express.Multer.File) {
     console.log(file.filename);

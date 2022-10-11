@@ -23,6 +23,6 @@ export class AccessTokenStrategy extends PassportStrategy(
     const accessToken = req.get("Authorization").replace("Bearer", "").trim();
     const decodedJwt = this.jwtService.decode(accessToken) as PayloadType;
     const intraID: string = decodedJwt.intraID;
-    return { ...payload, intraID };
+    return { ...payload, intraID};
   }
 }

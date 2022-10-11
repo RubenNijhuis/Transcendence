@@ -103,6 +103,17 @@ export class UserService {
     }
   }
 
+  async getUserIdFromIntraId(intraId: string): Promise<string> {
+    try {
+      const returnedUser: User = await this.userRepository.findOne({
+        where: { intraId }
+      });
+      return returnedUser.id;
+    } catch (err: any) {
+      throw err;
+    }
+  }
+
   async createUser(intraID: string, refreshToken: string): Promise<User> {
     try {
       if (await this.findUserByintraId(intraID)) return null;
