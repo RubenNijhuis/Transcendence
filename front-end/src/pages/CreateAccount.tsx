@@ -64,12 +64,21 @@ const CreateForm = styled.div`
     }
 `;
 
+const ErrorPopup = styled.div`
+    border: solid 2px red;
+    border-radius: 3px;
+    background-color: #ff8686;
+
+    padding: 6px;
+`;
+
 // TODO: make component check input data before sending
 const CreateAccount = () => {
     // Form input state
     const [username, setusername] = useState<string>("");
     const [color, setColor] = useState<string>("");
     const [description, setDescription] = useState<string>("");
+    const [errorMessage, setErrorMessage] = useState<string>();
 
     const navigate = useNavigate();
     const { setUser, setLoggedIn } = useAuth();
@@ -91,9 +100,11 @@ const CreateAccount = () => {
         const fd = new FormData();
         fd.append("file", file, fileName);
 
-        uploadImage(ApiRoutes.uploadBannerImage(), fd)
+        uploadImage(ApiRoutes.uploadProfileImage(), fd)
             .then(console.log)
-            .catch(console.error);
+            .catch(() => {
+                setModalError("Image upload went wrong");
+            });
     };
 
     const handleBannerImageUpload = (
@@ -105,7 +116,9 @@ const CreateAccount = () => {
 
         uploadImage(ApiRoutes.uploadBannerImage(), fd)
             .then(console.log)
-            .catch(console.error);
+            .catch(() => {
+                setModalError("Image upload went wrong");
+            });
     };
 
     const handleAccountCreation = () => {
@@ -149,6 +162,9 @@ const CreateAccount = () => {
                 <Slide>
                     <StyledInput>
                         <label>Upload a profile picture</label>
+                        {errorMessage && (
+                            <ErrorPopup>{errorMessage}</ErrorPopup>
+                        )}
                         <input
                             type="file"
                             alt="user profile"
@@ -159,6 +175,9 @@ const CreateAccount = () => {
                 <Slide>
                     <StyledInput>
                         <label>Upload a banner picture</label>
+                        {errorMessage && (
+                            <ErrorPopup>{errorMessage}</ErrorPopup>
+                        )}
                         <input
                             type="file"
                             alt="user banner"

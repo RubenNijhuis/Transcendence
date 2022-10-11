@@ -12,7 +12,6 @@ const Container = styled.div`
         z-index: 100;
         width: fit-content;
         margin: auto;
-        margin-bottom: calc(${magicNum} * -0.5);
         min-height: calc(${magicNum} * 2);
         display: flex;
         gap: 72px;
