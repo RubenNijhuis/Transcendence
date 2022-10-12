@@ -16,6 +16,8 @@ import StoreId from "../../config/StoreId";
 
 // Types
 import { ProfileType } from "../../types/profile";
+import getProfileBannerByUserName from "../../proxies/user/getProfileBannerByUsername";
+import getProfileImageByUserName from "../../proxies/user/getProfileImageByUsername";
 
 interface AuthContextType {
     user: ProfileType;
@@ -62,7 +64,12 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setDefaultAuthHeader(accessToken);
 
             if (profile !== null) {
-                profile.uid = 0;
+                profile.banner_url = await getProfileBannerByUserName(
+                    profile.username
+                );
+                profile.img_url = await getProfileImageByUserName(
+                    profile.username
+                );
                 setUser(profile);
                 setLoggedIn(true);
             }
@@ -114,6 +121,14 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     if (user === null) {
                         const userFromToken = await getUserByAccessToken(
                             accessToken
+                        );
+
+                        userFromToken.banner_url =
+                            await getProfileBannerByUserName(
+                                userFromToken.username
+                            );
+                        userFromToken.img_url = await getProfileImageByUserName(
+                            userFromToken.username
                         );
                         setUser(userFromToken);
                     }

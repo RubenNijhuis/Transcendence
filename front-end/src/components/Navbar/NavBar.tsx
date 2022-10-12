@@ -2,8 +2,6 @@
 import Asset from "../Asset";
 import Button from "../Button";
 
-import { Buffer } from "buffer";
-
 // Styling
 import { Container, ProfileIconContainer } from "./NavBar.style";
 
@@ -68,26 +66,13 @@ const NavLinks = ({ authStatus }: { authStatus: boolean }) => (
 );
 
 const ProfileIcon = ({ url }: { url: string }) => {
-    const [imgUrl, setImgUrl] = useState<string>("");
-
-    const reqimg = API.post("/user/get-img", {
-        type: "profile",
-        username: "z"
-    }).then((res) => {
-        setImgUrl(Buffer.from(res.data, "binary").toString("base64"));
-        console.log(imgUrl, res);
-    });
-
     return (
         <Link to={PageRoutes.profile}>
             <ProfileIconContainer>
-                <img
-                    src={`data:image/jpeg;base64${imgUrl}`}
-                    alt="what"
-                    width={100}
-                    height={100}
+                <Asset
+                    url={url}
+                    alt={"profile"}
                 />
-                <Asset url={url} alt={"profile"} />
             </ProfileIconContainer>
         </Link>
     );

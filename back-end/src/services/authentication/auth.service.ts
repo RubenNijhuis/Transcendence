@@ -141,7 +141,6 @@ export class AuthService {
   async refreshTokens(refreshToken: string): Promise<AuthTokenType> {
     //****    verify if it's a valid refresh token
     const secret: string = this.configService.get<string>("JWT_REFRESH_SECRET");
-    console.log(refreshToken, secret);
 
     const isValidRefToken: string = jwt.verify(refreshToken, secret) as string;
 

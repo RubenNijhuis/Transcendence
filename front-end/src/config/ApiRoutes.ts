@@ -12,6 +12,11 @@ const ApiRoutes = {
     createUser: () => `/user/setUser`,
     getUserByAccessToken: () => `/auth/getUserFromAccessToken`,
 
+    getProfileImageByUsername: (username: string) =>
+        `/user/get-img/profile/${username}`,
+    getProfileBannerByUsername: (username: string) =>
+        `/user/get-img/banner/${username}`,
+
     // Profiles
     getProfileByUserName: (userName: string) => `/user/${userName}`,
 
