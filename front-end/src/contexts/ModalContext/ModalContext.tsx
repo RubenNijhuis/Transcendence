@@ -1,18 +1,12 @@
 // React stuffs
 import React, { createContext, useContext, useState } from "react";
-
-// Modal
-import ErrorModal from "../../components/ErrorModal";
-
-// Types
-import { RequestErrorType } from "../../types/request";
+import Modal from "../../components/Modal";
 
 interface ModalContextType {
-    isModalOpen: boolean;
-    setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    modalOpen: boolean;
+    setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
-    error: RequestErrorType;
-    setModalError: React.Dispatch<React.SetStateAction<any>>;
+    setModalElement: React.Dispatch<React.SetStateAction<React.ReactNode>>;
 }
 
 const ModalContext = createContext<ModalContextType>(null!);
@@ -20,20 +14,19 @@ const ModalContext = createContext<ModalContextType>(null!);
 const useModal = () => useContext(ModalContext);
 
 const ModalProvider = ({ children }: { children: React.ReactNode }) => {
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    const [error, setModalError] = useState<any>("");
+    const [modalOpen, setModalOpen] = useState<boolean>(false);
+    const [modalElement, setModalElement] = useState<React.ReactNode>(null!);
 
     const value: ModalContextType = {
-        isModalOpen,
-        setIsModalOpen,
-        error,
-        setModalError
+        modalOpen,
+        setModalOpen,
+        setModalElement
     };
 
     return (
         <ModalContext.Provider value={value}>
             {children}
-            {isModalOpen && <ErrorModal error={error} setIsModalOpen={setIsModalOpen} />}
+            {modalOpen && <Modal element={modalElement} />}
         </ModalContext.Provider>
     );
 };

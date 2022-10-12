@@ -1,9 +1,11 @@
 import { Module } from "@nestjs/common";
+import { GameSocketGateway } from "src/gateways/game.gateway";
+import { GameSocketService } from "src/services/gateway/game/game.service";
 
 @Module({
   imports: [],
-  controllers: [FriendlistController],
-  providers: [FriendlistService],
-  exports: [FriendlistService]
+  controllers: [],
+  providers: [GameSocketGateway],
+  exports: [GameSocketService]
 })
 export class FriendlistModule {}

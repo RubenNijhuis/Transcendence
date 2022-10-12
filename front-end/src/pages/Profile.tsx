@@ -38,9 +38,6 @@ const ProfilePage = () => {
     const [selectedProfile, setSelectedProfile] = useState<ProfileType>(null!);
     const [isUserProfile, setIsUserProfile] = useState<boolean>(false);
 
-    // Modal
-    const { setIsModalOpen, setModalError } = useModal();
-
     // Temp debug data
     const { matchHistory } = useFakeData();
 
@@ -67,11 +64,8 @@ const ProfilePage = () => {
 
         getProfileByUserName(profileName)
             .then(setSelectedProfile)
-            .catch((err: RequestErrorType) => {
-                setModalError(err);
-                setIsModalOpen(true);
-            });
-    }, [profileName, user, setModalError, setIsModalOpen]);
+            .catch(console.log);
+    }, [profileName, user]);
 
     return (
         <Layout>

@@ -82,7 +82,6 @@ const CreateAccount = () => {
 
     const navigate = useNavigate();
     const { setUser, setLoggedIn } = useAuth();
-    const { setModalError, setIsModalOpen } = useModal();
 
     const retrieveFileFromInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const target = e.target as HTMLInputElement;
@@ -102,9 +101,7 @@ const CreateAccount = () => {
 
         uploadImage(ApiRoutes.uploadProfileImage(), fd)
             .then(console.log)
-            .catch(() => {
-                setModalError("Image upload went wrong");
-            });
+            .catch(console.log);
     };
 
     const handleBannerImageUpload = (
@@ -116,9 +113,7 @@ const CreateAccount = () => {
 
         uploadImage(ApiRoutes.uploadBannerImage(), fd)
             .then(console.log)
-            .catch(() => {
-                setModalError("Image upload went wrong");
-            });
+            .catch(console.log);
     };
 
     const handleAccountCreation = () => {
@@ -139,10 +134,7 @@ const CreateAccount = () => {
                 setLoggedIn(true);
                 navigate(PageRoutes.profile);
             })
-            .catch((err) => {
-                setModalError(err);
-                setIsModalOpen(true);
-            });
+            .catch(console.log);
     };
 
     return (

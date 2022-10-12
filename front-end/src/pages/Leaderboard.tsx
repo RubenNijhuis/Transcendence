@@ -19,16 +19,10 @@ import { useModal } from "../contexts/ModalContext";
 
 const Leaderboard = () => {
     const [leaderboard, setLeaderboard] = useState<ProfileType[]>(null!);
-    const { setIsModalOpen, setModalError } = useModal();
 
     useEffect(() => {
-        getLeaderboard()
-            .then(setLeaderboard)
-            .catch((err: RequestErrorType) => {
-                setModalError(err);
-                setIsModalOpen(true);
-            });
-    }, [setModalError, setIsModalOpen]);
+        getLeaderboard().then(setLeaderboard).catch(console.log);
+    }, []);
 
     return (
         <Layout>

@@ -4,7 +4,7 @@ import {
     lightTextColor,
     mainColor,
     smallRadius
-} from "../../styles/StylingConstants";
+} from "../../../styles/StylingConstants";
 
 const Container = styled.div`
     border: solid 2px ${mainColor};

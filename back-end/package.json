@@ -38,6 +38,7 @@
         "@nestjs/passport": "^9.0.0",
         "@nestjs/platform-express": "^9.0.0",
         "@nestjs/typeorm": "^9.0.0",
+        "@nestjs/websockets": "^9.1.4",
         "@ngneat/falso": "^6.1.0",
         "@types/express-session": "^1.17.5",
         "@types/multer": "^1.4.7",
@@ -61,6 +62,7 @@
         "reflect-metadata": "^0.1.13",
         "rimraf": "^3.0.2",
         "rxjs": "^7.2.0",
+        "socket.io": "^4.5.2",
         "typeorm": "^0.3.7"
     },
     "devDependencies": {

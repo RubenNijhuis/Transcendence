@@ -1,18 +1,21 @@
 import { useState } from "react";
 
 // UI
-import Asset from "../../components/Asset";
-import Heading from "../../components/Heading";
+import Asset from "../../../components/Asset";
+import Heading from "../../../components/Heading";
 
 // Auth
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../../contexts/AuthContext";
 
 // Types
-import { ProfileType } from "../../types/profile";
-import { GroupChat, Message } from "../../types/chat";
+import { ProfileType } from "../../../types/profile";
+import { GroupChat, Message } from "../../../types/chat";
 
 // Stylinh
 import { Container, DirectMessageEntry } from "./ChatSelector.style";
+import Button from "../../../components/Button";
+import { useModal } from "../../../contexts/ModalContext";
+import ChatInterface from "../Interface";
 
 interface Props {
     directMessages: GroupChat[];
@@ -20,6 +23,9 @@ interface Props {
     setSelectedChat: React.Dispatch<React.SetStateAction<number>>;
 }
 
+/**
+ * Display the members of a chat in the group list
+ */
 const MemberList = ({ members }: { members: ProfileType[] }) => {
     return (
         <div>
@@ -33,6 +39,7 @@ const MemberList = ({ members }: { members: ProfileType[] }) => {
     );
 };
 
+// Show a recent activity like a chat message
 const RecentActivity = ({ message }: { message: Message }) => {
     return (
         <div className="activity">
@@ -41,6 +48,7 @@ const RecentActivity = ({ message }: { message: Message }) => {
     );
 };
 
+///
 const ChatTypeSelector = ({
     chatTypeSelector
 }: {
@@ -146,6 +154,7 @@ const ChatSelector = ({
     return (
         <Container>
             <ChatTypeSelector chatTypeSelector={setSelectedChatType} />
+            <ChatInterface/>
 
             <ul className="list">
                 {selectedChatType === 0 ? (

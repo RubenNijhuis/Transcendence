@@ -1,6 +1,6 @@
 // UI
 import Button from "../../components/Button";
-import { Container } from "../ChatInterface/ChatInterface.style";
+import { Container } from "./DebugDevBox.style";
 import { Box } from "./DebugDevBox.style";
 
 // Business logic

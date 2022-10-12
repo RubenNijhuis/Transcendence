@@ -6,7 +6,7 @@ import {
     lightTextColor,
     mainColor,
     smallRadius
-} from "../../styles/StylingConstants";
+} from "../../../styles/StylingConstants";
 
 const Container = styled.div`
     border-radius: ${smallRadius};
