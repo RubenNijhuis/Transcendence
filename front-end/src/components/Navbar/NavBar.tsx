@@ -72,7 +72,7 @@ const ProfileIcon = ({ url }: { url: string }) => {
 
     const reqimg = API.post("/user/get-img", {
         type: "profile",
-        username: "LowRes"
+        username: "z"
     }).then((res) => {
         setImgUrl(Buffer.from(res.data, "binary").toString("base64"));
         console.log(imgUrl, res);
@@ -82,7 +82,7 @@ const ProfileIcon = ({ url }: { url: string }) => {
         <Link to={PageRoutes.profile}>
             <ProfileIconContainer>
                 <img
-                    src={`data:image/jpg;base64${imgUrl}`}
+                    src={`data:image/jpeg;base64${imgUrl}`}
                     alt="what"
                     width={100}
                     height={100}

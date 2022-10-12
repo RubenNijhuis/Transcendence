@@ -79,7 +79,8 @@ import {
           throw new Error("Bad boy is not correct type :(");
   
         return res.sendFile(`upload/${dto.type}/${intraId}.jpg`, {
-          root: "/app/"
+          root: "/app/",
+          type: "image/jpeg"
         });
       } catch (err) {
         throw err;
