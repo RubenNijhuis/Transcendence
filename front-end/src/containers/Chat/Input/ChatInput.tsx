@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
 // Types
-import { ProfileType } from "../../types/profile";
-import { GameType } from "../../types/game";
+import { ProfileType } from "../../../types/profile";
+import { GameType } from "../../../types/game";
 import {
     GroupChat,
     MessageContentType,
@@ -10,13 +10,13 @@ import {
     PictureMessage,
     InvitePlayMessage,
     MessageTypes
-} from "../../types/chat";
+} from "../../../types/chat";
 
 // UI
 import { Container, SelectTypeIcon, SelectionBox } from "./ChatInput.style";
 
 // Debug
-import Logger from "../../utils/Logger";
+import Logger from "../../../utils/Logger";
 
 interface Props {
     user: ProfileType;
