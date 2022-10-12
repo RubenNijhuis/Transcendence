@@ -62,7 +62,7 @@ export const getFileName = async (req, file, cb) => {
 };
 
 export const imgFilter = (req, file, cb) => {
-    if (!file.originalname.match(/\.(png|jpg|jpeg|webm)$/)) { 
+    if (!file.originalname.match(/\.(jpg)$/)) { 
         return cb(new Error('Please upload a Image'))
     }
     cb(null, true)

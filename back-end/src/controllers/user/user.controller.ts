@@ -68,30 +68,34 @@ export class UsersController {
     return await this.userService.getUsers();
   }
 
+  @Get('get-img')
+  @UseGuards(AccessTokenGuard)
+  getImg(
+    @Req() req: Request,
+    @Body() dto: GetImgDto,
+    @Res() res: Response
+  ) {
+    try {
+      var type = "";
+
+      if (dto.type === "banner")
+        type = "banner";
+      if (dto.type === "profile")
+        type = "profile";
+      return res.sendFile("upload/" + type + "/" + req.user["intraID"] + ".jpg", { root : "/app/"});
+    } catch (err) {
+      throw err;
+    }
+  }
+
   @Get(UserRoutes.getUserOnName)
   async findUsersById(@Res() res: Response, username: string) {
     try {
       const user: User = await this.userService.findUserByUsername(username);
       return this.userService.filterUser(user);
-    } catch (error) {
-      res.status;
+    } catch (err) {
+      throw err;
     }
-  }
-
-  @Get('get-img')
-  @UseGuards(AccessTokenGuard)
-  getImg(
-    @Body() imgDto: GetImgDto,
-    @Req() req: Request,
-    @Res() res: Response) {
-      var type = "";
-
-      if (imgDto.type === "banner")
-        type = "banner";
-      if (imgDto.type === "profile")
-        type = "profile";
-      
-      return res.sendFile("src/upload/" + type + "/" + req.user["intraID"]);
   }
 
   @Post(UserRoutes.setUser)
