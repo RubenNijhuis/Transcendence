@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@nestjs/common": "^9.1.4",
+    "@nestjs/core": "^9.1.4",
+    "@nestjs/typeorm": "^9.0.1",
+    "@nestjs/websockets": "^9.1.4",
+    "socket.io": "^4.5.2"
+  }
+}
