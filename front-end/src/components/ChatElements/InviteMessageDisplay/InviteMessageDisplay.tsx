@@ -5,12 +5,14 @@ import { InvitePlayMessage, Message } from "../../../types/chat";
 import styled from "styled-components";
 import {
     lightTextColor,
+    magicNum,
     mainColor,
     smallRadius
 } from "../../../styles/StylingConstants";
 
 // UI
 import Button from "../../Button";
+import SenderAnnotation from "../SenderAnnotation";
 
 interface Props {
     message: Message;
@@ -21,10 +23,12 @@ const Container = styled.div<{ fromUser: boolean }>`
     display: flex;
     flex-direction: column;
 
+    gap: calc(${magicNum} / 8);
+
     align-items: ${({ fromUser }) => (fromUser ? `end` : `start`)};
     margin-bottom: 18px;
 
-    div {
+    .content {
         background-color: ${mainColor};
         min-width: 50%;
         max-width: 50%;
@@ -46,12 +50,12 @@ const InviteMessageDisplay = ({ fromUser, message }: Props) => {
 
     return (
         <Container fromUser={fromUser}>
-            <div>
+            <div className="content">
                 <span>{formattedContent.user.username}</span>
                 <p>Is inviting you to play</p>
                 <Button theme="light">Play a game</Button>
             </div>
-            <span>{message.sender?.username}</span>
+            <SenderAnnotation sender={message.sender} />
         </Container>
     );
 };

@@ -12,11 +12,17 @@ import SimpleMessageDisplay from "./SimpleMessageDisplay";
 import PictureMessageDisplay from "./PictureMessageDisplay";
 import InviteMessageDisplay from "./InviteMessageDisplay";
 import { useAuth } from "../../contexts/AuthContext";
+import styled from "styled-components";
+import { magicNum } from "../../styles/StylingConstants";
 
 interface Props {
     message: Message;
     fromUser: boolean;
 }
+
+const ChatElementContainer = styled.div`
+    margin-bottom: calc(${magicNum} / 2);
+`;
 
 const ChatElement = ({ fromUser, message }: Props): JSX.Element => {
     const { user } = useAuth();
@@ -37,7 +43,11 @@ const ChatElement = ({ fromUser, message }: Props): JSX.Element => {
         <InviteMessageDisplay fromUser={fromUser} message={message} />
     ];
 
-    return messageElements[contentType];
+    return (
+        <ChatElementContainer>
+            {messageElements[contentType]}
+        </ChatElementContainer>
+    );
 };
 
 export default ChatElement;

@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Button from "../../../components/Button";
 import Heading from "../../../components/Heading";
 import { useModal } from "../../../contexts/ModalContext";
 import { Container, CreateChatContainer } from "./ChatInterface.style";
@@ -28,7 +29,9 @@ const ChatInterface = () => {
 
     return (
         <Container>
-            <button onClick={() => setModalOpen(true)}>New chat</button>
+            <Button onClick={() => setModalOpen(true)}>
+                <Heading type={4}>Create a new chat +</Heading>
+            </Button>
         </Container>
     );
 };

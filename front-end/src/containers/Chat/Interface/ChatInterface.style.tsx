@@ -1,10 +1,25 @@
 import styled from "styled-components";
-import { magicNum, mainColor } from "../../../styles/StylingConstants";
+import {
+    backgroundColor,
+    magicNum,
+    mainColor
+} from "../../../styles/StylingConstants";
 
 const Container = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-column-gap: ${magicNum};
+    .button {
+        width: 100%;
+        height: calc(${magicNum});
+        border: solid 5px ${mainColor};
+        font-size: 22px;
+
+        .heading {
+            color: white;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+    }
+
+    margin-bottom: calc(${magicNum} / 2);
 `;
 
 const CreateChatContainer = styled.div`

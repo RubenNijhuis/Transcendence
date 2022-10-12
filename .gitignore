@@ -3,4 +3,5 @@ node_modules
 dist/
 build/
 
+back-end/upload
 .env

@@ -6,7 +6,8 @@ import Asset from "../../Asset";
 
 // Styling
 import styled from "styled-components";
-import { smallRadius } from "../../../styles/StylingConstants";
+import { magicNum, smallRadius } from "../../../styles/StylingConstants";
+import SenderAnnotation from "../SenderAnnotation";
 
 interface Props {
     message: Message;
@@ -17,10 +18,12 @@ const Container = styled.div<{ fromUser: boolean }>`
     display: flex;
     flex-direction: column;
 
+    gap: calc(${magicNum} / 8);
+
     align-items: ${({ fromUser }) => (fromUser ? `end` : `start`)};
     margin-bottom: 18px;
 
-    .asset {
+    .picture {
         border: solid 2px black;
         border-radius: ${smallRadius};
         overflow: hidden;
@@ -35,8 +38,12 @@ const PictureMessageDisplay = ({ fromUser, message }: Props) => {
 
     return (
         <Container fromUser={fromUser}>
-            <Asset url={formattedMessage.url} alt={formattedMessage.alt} />
-            <span>{message.sender?.username}</span>
+            <Asset
+                url={formattedMessage.url}
+                alt={formattedMessage.alt}
+                className="picture"
+            />
+            <SenderAnnotation sender={message.sender} />
         </Container>
     );
 };

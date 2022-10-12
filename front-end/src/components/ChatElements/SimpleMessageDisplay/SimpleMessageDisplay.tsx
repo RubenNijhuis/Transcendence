@@ -5,6 +5,7 @@ import { SimpleMessage, Message } from "../../../types/chat";
 import styled from "styled-components";
 import {
     lightTextColor,
+    magicNum,
     mainColor,
     smallRadius
 } from "../../../styles/StylingConstants";
@@ -19,9 +20,11 @@ const Container = styled.div<{ fromUser: boolean }>`
     display: flex;
     flex-direction: column;
 
+    gap: calc(${magicNum} / 8);
+
     align-items: ${({ fromUser }) => (fromUser ? `end` : `start`)};
 
-    div {
+    .content {
         background: ${mainColor};
         padding: 9px 18px;
         border-radius: ${smallRadius};
@@ -35,7 +38,7 @@ const SimpleMessageDisplay = ({ fromUser, message }: Props) => {
 
     return (
         <Container fromUser={fromUser}>
-            <div>{formattedContent.content}</div>
+            <div className="content">{formattedContent.content}</div>
             <SenderAnnotation sender={message.sender} />
         </Container>
     );

@@ -30,7 +30,11 @@ const MemberList = ({ members }: { members: ProfileType[] }) => {
     return (
         <div>
             {members.map(({ img_url, username }, count) => (
-                <div className="profile" key={count}>
+                <div
+                    className="profile"
+                    key={count}
+                    style={{ marginBottom: 8 }}
+                >
                     <Asset url={img_url} alt="profile" />
                     <span>{username}</span>
                 </div>
@@ -154,7 +158,7 @@ const ChatSelector = ({
     return (
         <Container>
             <ChatTypeSelector chatTypeSelector={setSelectedChatType} />
-            <ChatInterface/>
+            <ChatInterface />
 
             <ul className="list">
                 {selectedChatType === 0 ? (

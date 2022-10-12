@@ -2,6 +2,8 @@
 import Asset from "../Asset";
 import Button from "../Button";
 
+import { Buffer } from "buffer";
+
 // Styling
 import { Container, ProfileIconContainer } from "./NavBar.style";
 
@@ -19,6 +21,8 @@ import Logger from "../../utils/Logger";
 
 // Types
 import { RequestErrorType } from "../../types/request";
+import { API } from "../../proxies/instances/apiInstance";
+import { useState } from "react";
 
 const CTAButton = ({ authStatus }: { authStatus: boolean }) => {
     const toLoginPage = () => {
@@ -63,13 +67,31 @@ const NavLinks = ({ authStatus }: { authStatus: boolean }) => (
     </ul>
 );
 
-const ProfileIcon = ({ url }: { url: string }) => (
-    <Link to={PageRoutes.profile}>
-        <ProfileIconContainer>
-            <Asset url={url} alt={"profile"} />
-        </ProfileIconContainer>
-    </Link>
-);
+const ProfileIcon = ({ url }: { url: string }) => {
+    const [imgUrl, setImgUrl] = useState<string>("");
+
+    const reqimg = API.post("/user/get-img", {
+        type: "profile",
+        username: "LowRes"
+    }).then((res) => {
+        setImgUrl(Buffer.from(res.data, "binary").toString("base64"));
+        console.log(imgUrl, res);
+    });
+
+    return (
+        <Link to={PageRoutes.profile}>
+            <ProfileIconContainer>
+                <img
+                    src={`data:image/jpg;base64${imgUrl}`}
+                    alt="what"
+                    width={100}
+                    height={100}
+                />
+                <Asset url={url} alt={"profile"} />
+            </ProfileIconContainer>
+        </Link>
+    );
+};
 
 const NavBar = () => {
     const { isLoggedIn, user } = useAuth();
