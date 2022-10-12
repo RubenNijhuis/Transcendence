@@ -70,6 +70,7 @@ export class UsersController {
     return await this.userService.getUsers();
   }
 
+  @UseGuards(AccessTokenGuard)
   @Get("get-img/:imageType/:username")
   async getImg(
     @Param("imageType") imageType: string,
