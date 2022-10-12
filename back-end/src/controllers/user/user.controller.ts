@@ -69,20 +69,20 @@ export class UsersController {
   }
 
   @Get('get-img')
-  @UseGuards(AccessTokenGuard)
-  getImg(
+  async getImg(
     @Req() req: Request,
     @Body() dto: GetImgDto,
     @Res() res: Response
   ) {
     try {
       var type = "";
+      const name = await (await this.userService.findUserByUsername(dto.username)).intraId;
 
       if (dto.type === "banner")
         type = "banner";
       if (dto.type === "profile")
         type = "profile";
-      return res.sendFile("upload/" + type + "/" + req.user["intraID"] + ".jpg", { root : "/app/"});
+      return res.sendFile("upload/" + type + "/" + name + ".jpg", { root : "/app/"});
     } catch (err) {
       throw err;
     }
