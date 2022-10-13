@@ -34,7 +34,7 @@ const ChatProvider = ({ children }: { children: React.ReactNode }) => {
 
     ////////////////////////////////////////////////////////////
 
-    const getMembersFromGroupChats = (chats: GroupChat[]) => {
+    const getMembersFromGroupChats = (chats: GroupChat[]): ProfileType[][] => {
         let members: ProfileType[][] = [];
 
         for (const chat of chats) {
@@ -44,7 +44,7 @@ const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         return members;
     };
 
-    const getMessagesFromGroupChats = (chats: GroupChat[]) => {
+    const getMessagesFromGroupChats = (chats: GroupChat[]): Message[][] => {
         let messages: Message[][] = [];
 
         for (const chat of chats) {
@@ -85,7 +85,7 @@ const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     const bindMembersToMessages = (
         members: ProfileType[][],
         totalMessages: Message[][]
-    ) => {
+    ): void => {
         for (let i = 0; i < totalMessages.length; i++) {
             const messageList = totalMessages[i];
 

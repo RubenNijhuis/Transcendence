@@ -12,7 +12,9 @@ import {
 } from "./DebugDevBox.bl";
 import { useAuth } from "../../contexts/AuthContext";
 
-const DebugDevBox = () => {
+////////////////////////////////////////////////////////////
+
+const DebugDevBox = (): JSX.Element => {
     const { user } = useAuth();
 
     return (

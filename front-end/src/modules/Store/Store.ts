@@ -3,7 +3,7 @@
  * @param name of the item
  * @param value can be any value
  */
-const setItem = (name: string, value: any) => {
+const setItem = (name: string, value: any): void => {
     if (value !== undefined) localStorage.setItem(name, JSON.stringify(value));
 };
 
@@ -28,13 +28,13 @@ const getItem = <T>(name: string): T | null => {
  * @param name
  * @returns 
  */
-const removeItem = (name: string) => localStorage.removeItem(name);
+const removeItem = (name: string): void => localStorage.removeItem(name);
 
 /**
  * Clears all items from the store
  * @returns nothing
  */
-const clearAll = () => localStorage.clear();
+const clearAll = (): void => localStorage.clear();
 
 /**
  * Returns the amount of keys in the store

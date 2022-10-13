@@ -14,11 +14,13 @@ import { useAuth } from "../../../contexts/AuthContext";
 import { ProfileType } from "../../../types/profile";
 import Asset from "../../../components/Asset";
 
+////////////////////////////////////////////////////////////
+
 interface Props {
     chat: GroupChat;
 }
 
-const ChatTitle = ({ chat }: Props) => {
+const ChatTitle = ({ chat }: Props): JSX.Element => {
     /**
      * If the the amount of members is 2 it means it a DM
      * Therefore we can change the interface from 'Chat' to 'other user name'
@@ -44,7 +46,7 @@ const ChatTitle = ({ chat }: Props) => {
     );
 };
 
-const ChatBox = ({ chat }: Props) => {
+const ChatBox = ({ chat }: Props): JSX.Element => {
     const { user } = useAuth();
 
     return (

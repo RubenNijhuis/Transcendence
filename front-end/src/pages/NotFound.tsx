@@ -23,7 +23,7 @@ const GoodBye = styled.div`
     }
 `;
 
-const NotFound = () => {
+const NotFound = (): JSX.Element => {
     return (
         <Layout>
             <GoodBye>

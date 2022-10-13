@@ -29,16 +29,19 @@ import { useFakeData } from "../contexts/FakeDataContext";
 
 // API
 import getProfileByUserName from "../proxies/user/getProfileByUsername";
-
-import { useModal } from "../contexts/ModalContext";
-import { getItem } from "../modules/Store";
-import StoreId from "../config/StoreId";
 import { getValueFromUrl } from "../utils/getValueFromUrl";
 
+// Store
+import { getItem } from "../modules/Store";
+import StoreId from "../config/StoreId";
+
 // Modal Components
+import { useModal } from "../contexts/ModalContext";
 import CreateAccount from "../containers/CreateAccount/CreateAccount";
 
-const ProfilePage = () => {
+////////////////////////////////////////////////////////////
+
+const ProfilePage = (): JSX.Element => {
     const [selectedProfile, setSelectedProfile] = useState<ProfileType>(null!);
     const [isUserProfile, setIsUserProfile] = useState<boolean>(false);
 

@@ -32,7 +32,7 @@ const generateInvite = (
     return invite;
 };
 
-const generateSimpleMessage = () => {
+const generateSimpleMessage = (): SimpleMessage => {
     const simpleMessage: SimpleMessage = {
         content: "BOOP"
     };
@@ -40,7 +40,7 @@ const generateSimpleMessage = () => {
     return simpleMessage;
 };
 
-const generatePictureMessage = () => {
+const generatePictureMessage = (): PictureMessage => {
     const randomWidth: number =
         Math.ceil(randomIntFromInterval(1000, 2000) / 100) * 100;
     const randomHeight: number =
@@ -107,7 +107,7 @@ function randomNumberInRange(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
-const randomSliceOfArray = <T>(items: Array<T>, size: number) => {
+const randomSliceOfArray = <T>(items: Array<T>, size: number): T[] => {
     let randomSlice: T[] = [];
 
     const arrayLen: number = items.length;

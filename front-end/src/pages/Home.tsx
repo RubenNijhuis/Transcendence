@@ -2,7 +2,7 @@
 import Layout from "../components/Layout";
 import Heading from "../components/Heading";
 
-const Home = () => {
+const Home = (): JSX.Element => {
     return (
         <Layout>
             <Heading type={1}>Home page</Heading>

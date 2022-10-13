@@ -6,15 +6,14 @@ import SimpleMessageDisplay from "./SimpleMessageDisplay";
 import PictureMessageDisplay from "./PictureMessageDisplay";
 import InviteMessageDisplay from "./InviteMessageDisplay";
 
-// Auth
-import { useAuth } from "../../contexts/AuthContext";
-
 // Styling
 import styled from "styled-components";
 
 // Styling constants
 import { magicNum } from "../../styles/StylingConstants";
 import SenderAnnotation from "./SenderAnnotation";
+
+////////////////////////////////////////////////////////////
 
 // TODO: styling file
 const ChatElementContainer = styled.div`
@@ -23,6 +22,8 @@ const ChatElementContainer = styled.div`
     gap: calc(${magicNum} / 8);
     margin-bottom: calc(${magicNum} / 4);
 `;
+
+////////////////////////////////////////////////////////////
 
 interface Props {
     message: Message;

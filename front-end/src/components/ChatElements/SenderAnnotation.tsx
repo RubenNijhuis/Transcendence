@@ -11,6 +11,8 @@ import styled from "styled-components";
 import { magicNum, mainColor } from "../../styles/StylingConstants";
 import { useAuth } from "../../contexts/AuthContext";
 
+////////////////////////////////////////////////////////////
+
 // TODO: in styling file
 const Container = styled.div<{ fromUser: boolean }>`
     display: flex;
@@ -42,6 +44,8 @@ interface Props {
 
 const SenderAnnotation = ({ sender }: Props): JSX.Element => {
     const { user } = useAuth();
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <Container fromUser={sender.uid === user.uid}>

@@ -1,3 +1,4 @@
+// Styling
 import styled from "styled-components";
 
 import {
@@ -6,6 +7,8 @@ import {
     mainColor,
     smallRadius
 } from "../../styles/StylingConstants";
+
+////////////////////////////////////////////////////////////
 
 const AdvancedCard = styled.div`
     display: flex;

@@ -12,12 +12,8 @@ import getLeaderboard from "../proxies/leaderboard/getLeaderboard";
 
 // Types
 import { ProfileType } from "../types/profile";
-import { RequestErrorType } from "../types/request";
 
-// Debug
-import { useModal } from "../contexts/ModalContext";
-
-const Leaderboard = () => {
+const Leaderboard = (): JSX.Element => {
     const [leaderboard, setLeaderboard] = useState<ProfileType[]>(null!);
 
     ////////////////////////////////////////////////////////////

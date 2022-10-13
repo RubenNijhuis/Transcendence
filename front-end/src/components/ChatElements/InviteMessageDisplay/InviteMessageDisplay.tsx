@@ -13,6 +13,8 @@ import {
 // UI
 import Button from "../../Button";
 
+////////////////////////////////////////////////////////////
+
 interface Props {
     message: Message;
     fromUser: boolean;
@@ -39,9 +41,11 @@ const Container = styled.div<{ fromUser: boolean }>`
     }
 `;
 
-const InviteMessageDisplay = ({ fromUser, message }: Props) => {
+const InviteMessageDisplay = ({ fromUser, message }: Props): JSX.Element => {
     const formattedContent: InvitePlayMessage =
         message.content as InvitePlayMessage;
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <Container fromUser={fromUser}>

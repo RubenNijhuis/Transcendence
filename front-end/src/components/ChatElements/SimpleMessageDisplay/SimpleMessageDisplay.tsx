@@ -10,6 +10,8 @@ import {
     smallRadius
 } from "../../../styles/StylingConstants";
 
+////////////////////////////////////////////////////////////
+
 interface Props {
     message: Message;
     fromUser: boolean;

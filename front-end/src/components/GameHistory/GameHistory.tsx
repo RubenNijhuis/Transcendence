@@ -28,18 +28,20 @@ import { paginateArray } from "../../utils/paginateArray";
 // DEBUG
 import Logger from "../../utils/Logger";
 
+////////////////////////////////////////////////////////////
+
 interface Props {
     player: ProfileType;
     matches: MatchRecord[];
 }
 
-const GameHistory = ({ player, matches }: Props) => {
+const GameHistory = ({ player, matches }: Props): JSX.Element => {
     const [selectedPage, setSelectedPage] = useState<number>(0);
     const paginatedMatches = paginateArray<MatchRecord>(matches, 8);
 
     ////////////////////////////////////////////////////////////
 
-    const changePage = (amountPageChange: number) => {
+    const changePage = (amountPageChange: number): void => {
         if (
             selectedPage + amountPageChange !== -1 &&
             selectedPage + amountPageChange <= paginatedMatches.length - 1

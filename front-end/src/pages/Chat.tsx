@@ -17,7 +17,7 @@ const Container = styled.div`
     grid-column-gap: calc(${magicNum} / 2);
 `;
 
-const ChatPage = () => {
+const ChatPage = (): JSX.Element => {
     const { allChats, activeChatID, setActiveChatID } = useChat();
 
     ////////////////////////////////////////////////////////////

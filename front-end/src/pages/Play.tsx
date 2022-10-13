@@ -6,7 +6,7 @@ import Layout from "../components/Layout";
 import { magicNum } from "../styles/StylingConstants";
 
 // TODO: generate based on config data
-const Play = () => {
+const Play = (): JSX.Element => {
     return (
         <Layout>
                 <div

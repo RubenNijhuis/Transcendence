@@ -25,6 +25,8 @@ import Logger from "../../utils/Logger";
 import { setItem } from "../../modules/Store";
 import StoreId from "../../config/StoreId";
 
+////////////////////////////////////////////////////////////
+
 const CTAButton = ({ authStatus }: { authStatus: boolean }): JSX.Element => {
     const toLoginPage = async () => {
         try {

@@ -18,6 +18,8 @@ import { Container, SelectTypeIcon, SelectionBox } from "./ChatInput.style";
 // Debug
 import Logger from "../../../utils/Logger";
 
+////////////////////////////////////////////////////////////
+
 interface Props {
     user: ProfileType;
     groupchat: GroupChat;
@@ -37,10 +39,12 @@ const MessageTypeSelect = ({
     messageType,
     setMessageType,
     setMessageContent
-}: MessageTypeSelectProps) => {
+}: MessageTypeSelectProps): JSX.Element => {
     const [chatTypeSelected, setChatTypeSelected] = useState<boolean>(false);
 
-    const handleChatTypeChange = (type: MessageContentType) => {
+    ////////////////////////////////////////////////////////////
+
+    const handleChatTypeChange = (type: MessageContentType): void => {
         if (type === messageType) return;
 
         setMessageType(type);
@@ -56,6 +60,8 @@ const MessageTypeSelect = ({
                 game_type: GameType.Classic
             });
     };
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <div
@@ -101,7 +107,7 @@ const SimpleMessageInput = ({
 }: {
     content: SimpleMessage;
     setContent: React.Dispatch<React.SetStateAction<SimpleMessage>>;
-}) => {
+}): JSX.Element => {
     return (
         <div className="simple-message-input">
             <input
@@ -118,7 +124,7 @@ const PictureMessageInput = ({
 }: {
     content: PictureMessage;
     setContent: React.Dispatch<React.SetStateAction<PictureMessage>>;
-}) => {
+}): JSX.Element => {
     return (
         <div className="picture-message-input">
             <div
@@ -161,11 +167,11 @@ const InvitePlayMessageInput = ({
 }: {
     content: InvitePlayMessage;
     setContent: React.Dispatch<React.SetStateAction<InvitePlayMessage>>;
-}) => {
+}): JSX.Element => {
     return <div className="invite-message-input"></div>;
 };
 
-const ChatInput = ({ user, groupchat }: Props) => {
+const ChatInput = ({ user, groupchat }: Props): JSX.Element => {
     const [messageType, setMessageType] = useState<MessageContentType>(
         MessageContentType.Simple
     );
@@ -174,7 +180,7 @@ const ChatInput = ({ user, groupchat }: Props) => {
         content: ""
     });
 
-    const handleMessageSend = () => {
+    const handleMessageSend = (): void => {
         setMessageType(MessageContentType.Simple);
         setMessageContent({ content: "" });
         Logger("DEBUG", "Chat Input", "Message content", messageContent);

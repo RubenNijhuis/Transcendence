@@ -1,6 +1,6 @@
 import PongGame from "../containers/PongGame";
 
-const Pong = () => {
+const Pong = (): JSX.Element => {
     return (
         <div style={{ padding: "36px" }}>
             <PongGame />

@@ -87,12 +87,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
      * Signs the user off, removing auth tokens and
      * redirecting to the home page
      */
-    const signOut = () => {
+    const signOut = (): void => {
         removeItem(StoreId.accessToken);
         removeItem(StoreId.refreshToken);
+        redirectToHome();
     };
 
-    const redirectToHome = () => {
+    const redirectToHome = (): void => {
         if (window.location.pathname !== PageRoutes.home) {
             window.location.assign(PageRoutes.home);
         }

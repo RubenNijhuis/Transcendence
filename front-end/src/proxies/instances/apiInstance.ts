@@ -19,7 +19,7 @@ const API = axios.create({
  * Set the default authorization header. If the user can't
  * refresh their token or has never logged in it won't be set.
  */
-const setDefaultAuthHeader = (accessToken: string) => {
+const setDefaultAuthHeader = (accessToken: string): void => {
     API.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 };
 
