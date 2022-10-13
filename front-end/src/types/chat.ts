@@ -45,6 +45,7 @@ interface GroupChat {
     group_id: number;
     members: ProfileType[];
     messages: Message[];
+    internal_id: number;
 }
 
 export type {

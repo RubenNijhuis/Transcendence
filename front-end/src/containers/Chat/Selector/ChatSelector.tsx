@@ -71,60 +71,30 @@ const ChatTypeSelector = ({
     );
 };
 
-const GroupMessageList = ({
-    chats,
-    selectedChat,
-    setSelectedChat
-}: {
-    chats: GroupChat[];
-    selectedChat: number;
-    setSelectedChat: React.Dispatch<React.SetStateAction<number>>;
-}) => {
-    const { user } = useAuth();
-
-    const filteredChats = chats.filter((chat) => chat.members.length > 2);
-
-    return (
-        <>
-            {filteredChats.map(({ members, messages }, count) => {
-                const otherMembers: ProfileType[] = members.filter(
-                    (member) => member.username !== user!.username
-                );
-                return (
-                    <DirectMessageEntry
-                        key={count}
-                        onClick={() => setSelectedChat(count)}
-                        active={count === selectedChat}
-                    >
-                        <div className="content">
-                            <MemberList members={otherMembers} />
-                            <RecentActivity
-                                message={messages[messages.length - 1]}
-                            />
-                        </div>
-                    </DirectMessageEntry>
-                );
-            })}
-        </>
-    );
-};
-
 const DirectMessageList = ({
+    onlyGroups,
     chats,
     selectedChat,
     setSelectedChat
 }: {
+    onlyGroups: boolean;
     chats: GroupChat[];
     selectedChat: number;
     setSelectedChat: React.Dispatch<React.SetStateAction<number>>;
 }) => {
     const { user } = useAuth();
 
-    const filteredChats = chats.filter((chat) => chat.members.length < 3);
+    const filteredChats = chats.filter((chat) => {
+        if (onlyGroups) {
+            if (chat.members.length > 2) return true;
+        } else {
+            if (chat.members.length < 3) return true;
+        }
+    });
 
     return (
         <>
-            {filteredChats.map(({ members, messages }, count) => {
+            {filteredChats.map(({ members, messages, internal_id }, count) => {
                 const otherMembers: ProfileType[] = members.filter(
                     (member) => member.username !== user!.username
                 );
@@ -132,8 +102,8 @@ const DirectMessageList = ({
                 return (
                     <DirectMessageEntry
                         key={count}
-                        onClick={() => setSelectedChat(count)}
-                        active={count === selectedChat}
+                        onClick={() => setSelectedChat(internal_id)}
+                        active={internal_id === selectedChat}
                     >
                         <div className="content">
                             <MemberList members={otherMembers} />
@@ -161,19 +131,12 @@ const ChatSelector = ({
             <ChatInterface />
 
             <ul className="list">
-                {selectedChatType === 0 ? (
-                    <DirectMessageList
-                        chats={directMessages}
-                        selectedChat={selectedChat}
-                        setSelectedChat={setSelectedChat}
-                    />
-                ) : (
-                    <GroupMessageList
-                        chats={directMessages}
-                        selectedChat={selectedChat}
-                        setSelectedChat={setSelectedChat}
-                    />
-                )}
+                <DirectMessageList
+                    onlyGroups={selectedChatType === 1}
+                    chats={directMessages}
+                    selectedChat={selectedChat}
+                    setSelectedChat={setSelectedChat}
+                />
             </ul>
         </Container>
     );

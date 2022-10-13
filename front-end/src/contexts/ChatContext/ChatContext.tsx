@@ -22,7 +22,6 @@ interface ChatContextType {
 }
 
 const ChatContext = createContext<ChatContextType>(null!);
-
 const useChat = () => useContext(ChatContext);
 
 const ChatProvider = ({ children }: { children: React.ReactNode }) => {
@@ -38,8 +37,8 @@ const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     const getMembersFromGroupChats = (chats: GroupChat[]) => {
         let members: ProfileType[][] = [];
 
-        for (let i = 0; i < chats.length; i++) {
-            members.push(chats[i].members);
+        for (const chat of chats) {
+            members.push(chat.members);
         }
 
         return members;
@@ -48,8 +47,8 @@ const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     const getMessagesFromGroupChats = (chats: GroupChat[]) => {
         let messages: Message[][] = [];
 
-        for (let i = 0; i < chats.length; i++) {
-            messages.push(chats[i].messages);
+        for (const chat of chats) {
+            messages.push(chat.messages);
         }
 
         return messages;
@@ -73,9 +72,9 @@ const ChatProvider = ({ children }: { children: React.ReactNode }) => {
             blocked: []
         };
 
-        for (let i = 0; i < members.length; i++) {
-            if (members[i].uid === uid) {
-                profile = members[i];
+        for (const member of members) {
+            if (member.uid === uid) {
+                profile = member;
                 return profile;
             }
         }
@@ -85,30 +84,22 @@ const ChatProvider = ({ children }: { children: React.ReactNode }) => {
 
     const bindMembersToMessages = (
         members: ProfileType[][],
-        messages: Message[][]
+        totalMessages: Message[][]
     ) => {
-        for (let i = 0; i < messages.length; i++) {
-            for (let j = 0; j < messages[i].length; j++) {
-                const { senderID } = messages[i][j];
-                messages[i][j].sender = findMemberByProfileID(
-                    senderID,
-                    members[i]
-                );
+        for (let i = 0; i < totalMessages.length; i++) {
+            const messageList = totalMessages[i];
+
+            for (let j = 0; j < messageList.length; j++) {
+                const message = messageList[j];
+                const { senderID } = message;
+
+                message.sender = findMemberByProfileID(senderID, members[i]);
             }
         }
     };
 
     /////////////////////////////////////////////////////////////
 
-    /**
-     * ✅ Step 1: Get data
-     * ✅ Step 2: Split data into members and messages
-     * ✅ Step 3: Assign member objects to messages
-     * ✅ Step 4: Place all data in state
-     * ✅ Step 5: Select default chat and display in UI
-     *
-     * Done
-     */
     useEffect(() => {
         if (!user) return;
 
@@ -129,6 +120,11 @@ const ChatProvider = ({ children }: { children: React.ReactNode }) => {
 
             bindMembersToMessages(members, messages);
             setAllChats(retrievedGroupChats);
+
+            for (let i = 0; i < retrievedGroupChats.length; i++) {
+                retrievedGroupChats[i].internal_id = i;
+            }
+            
             setActiveChatID(0);
         };
         chatAggregator();

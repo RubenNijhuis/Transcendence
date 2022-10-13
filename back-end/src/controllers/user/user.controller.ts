@@ -1,5 +1,6 @@
 // basic nest functionallity
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -80,12 +81,10 @@ export class UsersController {
     try {
       const { intraId } = await this.userService.findUserByUsername(username);
 
-      console.log(imageType, username);
-      //   if (!intraId) throw new Error("Bad boy is not correct type :(");
-      //   if (imageType !== "banner" && imageType !== "profile") {
-      //     console.log(imageType);
-      //     throw new Error("Bad boy is not correct type :(");
-      //   }``
+      if (!intraId) throw new BadRequestException("Unable to find user");
+      if (imageType !== "banner" && imageType !== "profile") {
+        throw new BadRequestException("Invalid image type");
+      }
 
       return res.sendFile(`upload/${imageType}/${intraId}.jpg`, {
         root: "/app/"

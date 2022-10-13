@@ -149,6 +149,7 @@ const generateGroupChats = (
 
         const newGroup: GroupChat = {
             group_id: i,
+            internal_id: i,
             members: members,
             messages: []
         };
