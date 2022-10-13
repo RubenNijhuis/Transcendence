@@ -115,7 +115,7 @@ export class UsersController {
       const intraID = req.user["intraID"];
       const setUserResp = await this.userService.setUser(intraID, SetUserDto);
 
-      return setUserResp;
+      return this.userService.filterUser(setUserResp);
     } catch (err) {
       console.log("controller, setUser(): ", err);
       throw err;

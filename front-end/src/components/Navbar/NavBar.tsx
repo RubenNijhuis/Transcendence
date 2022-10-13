@@ -21,11 +21,14 @@ import Logger from "../../utils/Logger";
 import { RequestErrorType } from "../../types/request";
 import { API } from "../../proxies/instances/apiInstance";
 import { useState } from "react";
+import { setItem } from "../../modules/Store";
+import StoreId from "../../config/StoreId";
 
 const CTAButton = ({ authStatus }: { authStatus: boolean }) => {
     const toLoginPage = () => {
         startLogin()
             .then((url: string) => {
+                setItem(StoreId.loginProcess, true);
                 window.location.assign(url);
             })
             .catch((err: RequestErrorType) => {
@@ -69,10 +72,7 @@ const ProfileIcon = ({ url }: { url: string }) => {
     return (
         <Link to={PageRoutes.profile}>
             <ProfileIconContainer>
-                <Asset
-                    url={url}
-                    alt={"profile"}
-                />
+                <Asset url={url} alt={"profile"} />
             </ProfileIconContainer>
         </Link>
     );

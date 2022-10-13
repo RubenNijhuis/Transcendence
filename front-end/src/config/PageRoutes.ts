@@ -9,7 +9,7 @@ const PageRoutes = {
     pong: `/pong`,
     newPong: `/new-pong`,
 
-    authRedirect: `/auth/succesful-login`,
+    authRedirect: `/profile`,
     createAccount: `/create-account`,
 
     profile: `/profile`,

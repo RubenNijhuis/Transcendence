@@ -1,9 +1,14 @@
 // React
-import { ChangeEventHandler, useState } from "react";
+import { useState } from "react";
 
 // Styling
 import styled from "styled-components";
-import { magicNum, smallRadius } from "../styles/StylingConstants";
+import {
+    backgroundColor,
+    magicNum,
+    mainColor,
+    smallRadius
+} from "../styles/StylingConstants";
 
 // UI
 import Button from "../components/Button";
@@ -24,10 +29,11 @@ import uploadImage from "../proxies/user/uploadImage";
 // Page routes
 import PageRoutes from "../config/PageRoutes";
 
-// Error modal
-import { useModal } from "../contexts/ModalContext";
 import ApiRoutes from "../config/ApiRoutes";
+import { setItem } from "../modules/Store";
+import StoreId from "../config/StoreId";
 import Logger from "../utils/Logger";
+import getProfileBannerByUserName from "../proxies/user/getProfileBannerByUsername";
 
 // TODO: put styling in different folder
 const StyledInput = styled.div`
@@ -58,6 +64,9 @@ const CreateForm = styled.div`
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    border: solid 2px ${mainColor};
+    border-radius: ${smallRadius};
+    background-color: white;
 
     button {
         width: 100%;
@@ -72,15 +81,18 @@ const ErrorPopup = styled.div`
     padding: 6px;
 `;
 
+interface Props {
+    setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 // TODO: make component check input data before sending
-const CreateAccount = () => {
+const CreateAccount = ({ setModalOpen }: Props) => {
     // Form input state
     const [username, setusername] = useState<string>("");
     const [color, setColor] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>();
 
-    const navigate = useNavigate();
     const { setUser, setLoggedIn } = useAuth();
 
     const retrieveFileFromInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,7 +128,7 @@ const CreateAccount = () => {
             .catch(console.log);
     };
 
-    const handleAccountCreation = () => {
+    const handleAccountCreation = async () => {
         const providedDetails = {
             username,
             color,
@@ -127,14 +139,29 @@ const CreateAccount = () => {
          * Redirects the user to the profile
          * page upon account creation.
          */
-        createUser(providedDetails)
-            .then((returnedUserProfile) => {
-                console.log(returnedUserProfile);
-                setUser(returnedUserProfile);
-                setLoggedIn(true);
-                navigate(PageRoutes.profile);
-            })
-            .catch(console.log);
+        try {
+            const returnedUserProfile = await createUser(providedDetails);
+            Logger(
+                "DEBUG",
+                "Create account modal",
+                "Returned user",
+                returnedUserProfile
+            );
+
+            returnedUserProfile.banner_url = await getProfileBannerByUserName(
+                returnedUserProfile.username
+            );
+            returnedUserProfile.img_url = await getProfileBannerByUserName(
+                returnedUserProfile.username
+            );
+
+            setUser(returnedUserProfile);
+            setLoggedIn(true);
+            setItem(StoreId.loginProcess, false);
+            setModalOpen(false);
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     return (

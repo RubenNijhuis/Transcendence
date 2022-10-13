@@ -25,6 +25,7 @@ const ModalProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         const bodyElement = document.getElementsByTagName("body")[0];
+
         if (modalOpen) {
             bodyElement.style.overflow = "hidden";
         } else {

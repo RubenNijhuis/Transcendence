@@ -4,6 +4,7 @@ import {
     backgroundColor,
     darkTextColor,
     lightTextColor,
+    magicNum,
     mainColor,
     smallRadius
 } from "../../../styles/StylingConstants";
@@ -22,7 +23,9 @@ const Container = styled.div`
         list-style: none;
         border: solid 2px ${mainColor};
         border-radius: ${smallRadius};
-        overflow: hidden;
+        overflow-y: scroll;
+
+        max-height: calc(${magicNum} * 10);
     }
 `;
 

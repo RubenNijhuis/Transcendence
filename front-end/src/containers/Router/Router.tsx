@@ -17,8 +17,7 @@ import Pong from "../../pages/Pong";
 import NewPongGame from "../../pages/NewPongGame";
 
 // Authentication
-import { AuthGuard, AccessTokenGuard } from "../RouteGuards";
-import SuccesfulLoginPage from "../../pages/SuccesfulLogin";
+import { AuthGuard } from "../RouteGuards";
 import CreateAccount from "../../pages/CreateAccount";
 
 // 404
@@ -34,21 +33,6 @@ const Router = () => (
             {/* Pong debugging */}
             <Route path={PageRoutes.pong} element={<Pong />} />
             <Route path={PageRoutes.newPong} element={<NewPongGame />} />
-
-            {/* Callback route after login */}
-            <Route
-                path={PageRoutes.authRedirect}
-                element={<SuccesfulLoginPage />}
-            />
-
-            {/* This route may only be accesed if the user
-             * is still in the process of creating an accoun*/}
-            <Route element={<AccessTokenGuard />}>
-                <Route
-                    path={PageRoutes.createAccount}
-                    element={<CreateAccount />}
-                />
-            </Route>
 
             {/* Routes that have to pass through authentication to be loaded */}
             <Route element={<AuthGuard />}>

@@ -32,17 +32,26 @@ import getProfileByUserName from "../proxies/user/getProfileByUsername";
 
 // Debugging
 import { useModal } from "../contexts/ModalContext";
+import { getItem, setItem } from "../modules/Store";
+import StoreId from "../config/StoreId";
+import { getValueFromUrl } from "../utils/getValueFromUrl";
+import Logger from "../utils/Logger";
+import CreateAccount from "./CreateAccount";
 
 const ProfilePage = () => {
     // Profile to be displayed
     const [selectedProfile, setSelectedProfile] = useState<ProfileType>(null!);
     const [isUserProfile, setIsUserProfile] = useState<boolean>(false);
 
+    const [loadProfile, setLoadProfile] = useState<boolean>(false);
+
     // Temp debug data
     const { matchHistory } = useFakeData();
 
     // Local profile
-    const { user } = useAuth();
+    const { user, signIn } = useAuth();
+
+    const { setModalOpen, setModalElement } = useModal();
 
     /**
      * The `userName` in the url '/profile/:userName' if not
@@ -51,25 +60,49 @@ const ProfilePage = () => {
     const { profileName } = useParams();
 
     useEffect(() => {
-        /**
-         * If there is no profile name in the url we set the
-         * user as the current profile. Meaning we are on
-         * the user's own profile page
-         */
-        if (profileName === undefined) {
-            setSelectedProfile(user);
-            setIsUserProfile(true);
-            return;
-        }
+        const runUserRetrieval = async () => {
+            const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
 
-        getProfileByUserName(profileName)
-            .then(setSelectedProfile)
-            .catch(console.log);
+            if (inLoginProcess) {
+                const href = window.location.href;
+                const token = getValueFromUrl(href, "code"); // TODO: put "code" in a config file
+
+                try {
+                    const shouldCreateUser = await signIn(token);
+
+                    if (shouldCreateUser) {
+                        setModalElement(
+                            <CreateAccount setModalOpen={setModalOpen} />
+                        );
+                        setModalOpen(true);
+                    }
+                } catch (err) {
+                    Logger("AUTH", "Succesful login", "Sign in issue", err);
+                }
+            }
+
+            /**
+             * If there is no profile name in the url we set the
+             * user as the current profile. Meaning we are on
+             * the user's own profile page
+             */
+            if (profileName === undefined) {
+                setSelectedProfile(user);
+                setIsUserProfile(true);
+                return;
+            }
+
+            try {
+                const returnedProfileByUsername = await getProfileByUserName(
+                    profileName
+                );
+                setSelectedProfile(returnedProfileByUsername);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        runUserRetrieval();
     }, [profileName, user]);
-
-    useEffect(() => {
-        
-    }, []);
 
     return (
         <Layout>
@@ -101,3 +134,6 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
+function signIn(token: any) {
+    throw new Error("Function not implemented.");
+}

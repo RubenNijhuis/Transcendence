@@ -4,7 +4,7 @@ import { magicNum, smallRadius } from "../../../styles/StylingConstants";
 const Container = styled.div`
     border-radius: ${smallRadius};
     aspect-ratio: 7/5;
-    background: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.2);
     max-width: 800px;
 
     .slides {
