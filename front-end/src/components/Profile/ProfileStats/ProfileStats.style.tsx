@@ -14,8 +14,8 @@ const Container = styled.div`
         margin: auto;
         min-height: calc(${magicNum} * 2);
         display: flex;
-        gap: 72px;
-        padding: 36px 72px;
+        gap: calc(${magicNum});
+        padding: calc(${magicNum} / 2) calc(${magicNum});
         flex-direction: row;
         justify-content: space-evenly;
         border-radius: ${largeRadius};

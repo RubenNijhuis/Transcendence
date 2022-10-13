@@ -1,8 +1,17 @@
+// React
 import { ReactElement, useState } from "react";
+
+// Types
 import { ProfileType } from "../../../types/profile";
+
+// Utils
 import randomIntFromInterval from "../../../utils/randomNumFromInterval";
+
+// UI
 import Button from "../../Button";
 import Heading from "../../Heading";
+
+// Styling
 import { Container, ProfileStatusDisplay } from "./ProfileActions.style";
 
 interface Props {
@@ -32,9 +41,13 @@ const ProfileActivityStatus = () => {
 const ProfileActions = ({ profile }: Props) => {
     const [follows, setFollow] = useState<boolean>(false);
 
+    ////////////////////////////////////////////////////////////
+
     const changeFollow = () => {
         setFollow((prev) => !prev);
     };
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <Container followsProfile={follows}>

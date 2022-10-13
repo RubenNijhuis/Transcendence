@@ -40,7 +40,7 @@ const Container = styled.div`
         height: 100%;
         input {
             border: none;
-            padding-left: 18px;
+            padding-left: calc(${magicNum} / 4);
             border-radius: 100px 0px 0px 100px;
             width: 100%;
             height: 100%;
@@ -70,7 +70,7 @@ const Container = styled.div`
         }
 
         .picture-input {
-            padding: 18px;
+            padding: calc(${magicNum} / 4);
             position: absolute;
             bottom: 0;
             width: 100%;
@@ -98,7 +98,7 @@ const Container = styled.div`
     .message-type-select {
         background-color: rgba(0, 0, 0, 0.1);
         border-radius: 0px 100px 100px 0px;
-        padding: 6px;
+        padding: calc(${magicNum} / 8);
         color: ${lightTextColor};
 
         span {
@@ -119,8 +119,8 @@ const SelectTypeIcon = styled.div<{ selected: boolean }>`
 
     img {
         transform: translateX(-10%);
-        width: 36px;
-        height: 36px;
+        width: calc(${magicNum} / 2);
+        height: calc(${magicNum} / 2);
     }
 `;
 

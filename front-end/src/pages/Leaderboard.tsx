@@ -20,9 +20,13 @@ import { useModal } from "../contexts/ModalContext";
 const Leaderboard = () => {
     const [leaderboard, setLeaderboard] = useState<ProfileType[]>(null!);
 
+    ////////////////////////////////////////////////////////////
+
     useEffect(() => {
         getLeaderboard().then(setLeaderboard).catch(console.log);
     }, []);
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <Layout>

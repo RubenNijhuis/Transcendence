@@ -44,6 +44,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<ProfileType>(null!);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
 
+    ////////////////////////////////////////////////////////////
+
     /**
      * Makes a request to the back-end using the third party provided
      * code. The expected return value is a user as well as a bool
@@ -96,6 +98,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
+    ////////////////////////////////////////////////////////////
+
     /**
      * Checks if there is still an auth token in the store.
      * If there is still one we check it's validity and change
@@ -110,6 +114,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
             if (storeRefreshToken !== null) {
                 try {
+                    // Reset for login process
+                    setItem(StoreId.loginProcess, false);
+
                     const { accessToken, refreshToken } =
                         await refreshAuthToken(storeRefreshToken);
 
@@ -123,7 +130,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                             accessToken
                         );
 
-                        userFromToken.banner_url =
+                    userFromToken.banner_url =
                             await getProfileBannerByUserName(
                                 userFromToken.username
                             );
@@ -136,12 +143,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     setLoggedIn(true);
                 } catch (err) {
                     console.error(err);
-                    // redirectToHome();
                 }
             }
         };
         setToken();
     });
+
+    ////////////////////////////////////////////////////////////
 
     const value: AuthContextType = {
         user,
@@ -153,6 +161,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         isLoggedIn,
         setLoggedIn
     };
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

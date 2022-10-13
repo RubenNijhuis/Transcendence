@@ -1,85 +1,34 @@
 // React
 import { useState } from "react";
 
-// Styling
-import styled from "styled-components";
-import {
-    backgroundColor,
-    magicNum,
-    mainColor,
-    smallRadius
-} from "../styles/StylingConstants";
-
 // UI
-import Button from "../components/Button";
-import Heading from "../components/Heading";
+import Button from "../../components/Button";
+import Heading from "../../components/Heading";
+
+// Styling
+import { CreateForm, ErrorPopup, StyledInput } from "./CreateAccount.style";
 
 // Box slider
-import BoxSlider from "../components/BoxSlider";
-import Slide from "../components/BoxSlider/Slide/Slide";
+import BoxSlider from "../../components/BoxSlider";
+import Slide from "../../components/BoxSlider/Slide/Slide";
 
 // Auth
-import { useAuth } from "../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 // Proxies
-import createUser from "../proxies/user/createUser";
-import uploadImage from "../proxies/user/uploadImage";
+import createUser from "../../proxies/user/createUser";
+import uploadImage from "../../proxies/user/uploadImage";
+import getProfileBannerByUserName from "../../proxies/user/getProfileBannerByUsername";
 
-// Page routes
-import PageRoutes from "../config/PageRoutes";
+// Routes
+import ApiRoutes from "../../config/ApiRoutes";
 
-import ApiRoutes from "../config/ApiRoutes";
-import { setItem } from "../modules/Store";
-import StoreId from "../config/StoreId";
-import Logger from "../utils/Logger";
-import getProfileBannerByUserName from "../proxies/user/getProfileBannerByUsername";
+// Store
+import { setItem } from "../../modules/Store";
+import StoreId from "../../config/StoreId";
 
-// TODO: put styling in different folder
-const StyledInput = styled.div`
-    margin-bottom: 36px;
-    padding: 18px;
-
-    label {
-        display: block;
-        font-size: 18px;
-        font-weight: 500;
-        margin-bottom: 9px;
-    }
-
-    input,
-    textarea {
-        width: 100%;
-        border: 1px rgb(230, 230, 230);
-        height: 36px;
-        padding: 9px 18px;
-        border-radius: ${smallRadius};
-    }
-`;
-
-const CreateForm = styled.div`
-    width: calc(${magicNum} * 10);
-    max-width: calc(${magicNum} * 10);
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    border: solid 2px ${mainColor};
-    border-radius: ${smallRadius};
-    background-color: white;
-
-    button {
-        width: 100%;
-    }
-`;
-
-const ErrorPopup = styled.div`
-    border: solid 2px red;
-    border-radius: 3px;
-    background-color: #ff8686;
-
-    padding: 6px;
-`;
+// DEBUG
+import Logger from "../../utils/Logger";
 
 interface Props {
     setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -87,13 +36,16 @@ interface Props {
 
 // TODO: make component check input data before sending
 const CreateAccount = ({ setModalOpen }: Props) => {
-    // Form input state
     const [username, setusername] = useState<string>("");
     const [color, setColor] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>();
 
+    ////////////////////////////////////////////////////////////
+
     const { setUser, setLoggedIn } = useAuth();
+
+    ////////////////////////////////////////////////////////////
 
     const retrieveFileFromInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const target = e.target as HTMLInputElement;
@@ -163,6 +115,8 @@ const CreateAccount = ({ setModalOpen }: Props) => {
             console.log(err);
         }
     };
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <CreateForm>

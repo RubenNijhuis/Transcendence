@@ -1,3 +1,4 @@
+// React
 import { useState } from "react";
 
 // Style
@@ -23,6 +24,8 @@ import Button from "../Button";
 
 // Utils
 import { paginateArray } from "../../utils/paginateArray";
+
+// DEBUG
 import Logger from "../../utils/Logger";
 
 interface Props {
@@ -33,6 +36,8 @@ interface Props {
 const GameHistory = ({ player, matches }: Props) => {
     const [selectedPage, setSelectedPage] = useState<number>(0);
     const paginatedMatches = paginateArray<MatchRecord>(matches, 8);
+
+    ////////////////////////////////////////////////////////////
 
     const changePage = (amountPageChange: number) => {
         if (
@@ -46,6 +51,8 @@ const GameHistory = ({ player, matches }: Props) => {
             });
         }
     };
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <Container>

@@ -1,9 +1,9 @@
 import { LoaderContainer, LoaderLine } from "./Loader.style";
 
-const Loader = () => {
+const Loader = (): JSX.Element => {
     return (
         <LoaderContainer>
-            <LoaderLine/>
+            <LoaderLine />
         </LoaderContainer>
     );
 };

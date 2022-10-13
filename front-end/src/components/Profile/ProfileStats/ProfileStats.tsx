@@ -3,7 +3,6 @@ import { ProfileType } from "../../../types/profile";
 import { MatchRecord } from "../../../types/game";
 
 // UI
-import GameHistory from "../../GameHistory";
 import Heading from "../../Heading";
 
 // Styling
@@ -14,7 +13,7 @@ interface Props {
     matches: MatchRecord[];
 }
 
-const ProfileStats = ({ player, matches }: Props) => {
+const ProfileStats = ({ player, matches }: Props): JSX.Element => {
     return (
         <Container>
             <div className="stats">

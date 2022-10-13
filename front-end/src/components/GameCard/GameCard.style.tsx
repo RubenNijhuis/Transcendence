@@ -3,7 +3,8 @@ import styled from "styled-components";
 import {
     lightTextColor,
     magicNum,
-    mainColor
+    mainColor,
+    smallRadius
 } from "../../styles/StylingConstants";
 
 const AdvancedCard = styled.div`
@@ -14,7 +15,7 @@ const AdvancedCard = styled.div`
     height: 100%;
     aspect-ratio: 5 / 7;
 
-    border-radius: 20px;
+    border-radius: ${smallRadius};
     background: ${mainColor};
     overflow: hidden;
 
@@ -67,7 +68,7 @@ const AdvancedCard = styled.div`
         justify-content: center;
         flex-direction: column;
         padding: calc(${magicNum} / 2);
-        border-radius: 20px;
+        border-radius: ${smallRadius};
 
         height: 35%;
 

@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 import {
     lightTextColor,
+    magicNum,
     mainColor,
     smallRadius
 } from "../../../styles/StylingConstants";
@@ -12,7 +13,7 @@ const Container = styled.div`
 
     .title {
         background-color: ${mainColor};
-        padding: 18px;
+        padding: calc(${magicNum} / 4);
 
         h3 {
             color: ${lightTextColor};
@@ -21,9 +22,9 @@ const Container = styled.div`
     }
 
     .chat-content {
-        padding: 18px;
-        min-height: 720px;
-        max-height: 720px;
+        padding: calc(${magicNum} / 4);
+        min-height: calc(${magicNum} * 10);
+        max-height: calc(${magicNum} * 10);
         overflow: scroll;
     }
 `;

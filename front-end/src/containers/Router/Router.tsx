@@ -6,7 +6,6 @@ import PageRoutes from "../../config/PageRoutes";
 
 // Public Pages
 import Home from "../../pages/Home";
-import About from "../../pages/About";
 
 // Private pages
 import ProfilePage from "../../pages/Profile";
@@ -18,7 +17,6 @@ import NewPongGame from "../../pages/NewPongGame";
 
 // Authentication
 import { AuthGuard } from "../RouteGuards";
-import CreateAccount from "../../pages/CreateAccount";
 
 // 404
 import NotFound from "../../pages/NotFound";
@@ -28,7 +26,6 @@ const Router = () => (
         <Routes>
             {/* Public routes */}
             <Route path={PageRoutes.home} element={<Home />} />
-            <Route path={PageRoutes.about} element={<About />} />
 
             {/* Pong debugging */}
             <Route path={PageRoutes.pong} element={<Pong />} />

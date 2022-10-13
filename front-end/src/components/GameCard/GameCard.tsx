@@ -15,19 +15,26 @@ interface Props {
     cta: string;
 }
 
-const GameCard = ({ img_url, title, description, url, cta }: Props) => (
-    <AdvancedCard>
-        <div className="img">
-            <img src={img_url} alt="background" />
-        </div>
-        <div className="content">
-            <div className="content__container">
-                <Heading type={3}>{title}</Heading>
-                <p>{description}</p>
-                <Link to={`/play/${url}`}>{cta}</Link>
+const GameCard = ({
+    img_url,
+    title,
+    description,
+    url,
+    cta
+}: Props): JSX.Element => {
+    return (
+        <AdvancedCard>
+            <div className="img">
+                <img src={img_url} alt="background" />
             </div>
-        </div>
-    </AdvancedCard>
-);
-
+            <div className="content">
+                <div className="content__container">
+                    <Heading type={3}>{title}</Heading>
+                    <p>{description}</p>
+                    <Link to={`/play/${url}`}>{cta}</Link>
+                </div>
+            </div>
+        </AdvancedCard>
+    );
+};
 export default GameCard;

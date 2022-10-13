@@ -4,7 +4,7 @@ interface Props {
     element: React.ReactNode;
 }
 
-const Modal = ({ element }: Props) => {
+const Modal = ({ element }: Props): JSX.Element => {
     return (
         <Container>
             <ElementContainer>{element}</ElementContainer>

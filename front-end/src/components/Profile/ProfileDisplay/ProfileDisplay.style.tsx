@@ -10,7 +10,7 @@ import {
 
 const Container = styled.div`
     background-color: ${mainColor};
-    padding: 36px;
+    padding: calc(${magicNum} / 2);
     padding-bottom: 0;
     border-radius: ${largeRadius};
     position: relative;

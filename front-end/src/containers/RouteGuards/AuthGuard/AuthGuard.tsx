@@ -24,8 +24,9 @@ const AuthGuard = () => {
     const { isLoggedIn } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
-
     let renderOutlet: boolean = true;
+
+    ////////////////////////////////////////////////////////////
 
     useEffect(() => {
         if (isLoggedIn) {
@@ -55,6 +56,8 @@ const AuthGuard = () => {
             // checkTokenValidity
         }
     }, [isLoggedIn, navigate]);
+
+    ////////////////////////////////////////////////////////////
 
     return renderOutlet ? (
         <Outlet />

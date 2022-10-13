@@ -5,7 +5,7 @@ const Container = styled.div`
     border-radius: ${smallRadius};
     aspect-ratio: 7/5;
     background-color: rgba(0, 0, 0, 0.2);
-    max-width: 800px;
+    max-width: calc(${magicNum} * 12);
 
     .slides {
         overflow-x: hidden;
@@ -28,11 +28,9 @@ const ChangeSlideButtons = styled.div`
     display: flex;
     justify-content: space-between;
 
-
     .button {
         width: 35%;
     }
-
 `;
 
 export { Container, ChangeSlideButtons };

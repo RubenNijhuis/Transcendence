@@ -1,9 +1,10 @@
 import styled from "styled-components";
+import { magicNum } from "../../styles/StylingConstants";
 
 const Container = styled.div`
     position: fixed;
-    top: 18px;
-    left: 18px;
+    top: calc(${magicNum} / 4);
+    left: calc(${magicNum} / 4);
     padding: 18;
     min-height: 200;
     background: "rgb(230,230,230)";

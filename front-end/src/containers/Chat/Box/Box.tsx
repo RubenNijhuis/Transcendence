@@ -55,6 +55,7 @@ const ChatBox = ({ chat }: Props) => {
                     <ChatElement
                         key={count}
                         message={message}
+                        isDm={chat.members.length === 2}
                         fromUser={message.sender?.username === user.username}
                     />
                 ))}

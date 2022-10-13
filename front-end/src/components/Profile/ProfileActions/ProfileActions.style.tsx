@@ -13,7 +13,8 @@ const Container = styled.div<{ followsProfile: boolean }>`
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    padding: 18px 36px;
+
+    padding: calc(${magicNum} / 4) calc(${magicNum} / 2);
 
     .status {
         display: flex;
@@ -98,7 +99,7 @@ const ProfileStatusDisplay = styled.div<{ activity: number }>`
     span {
         border-radius: 0px ${smallRadius} ${smallRadius} 0px;
         color: white;
-        padding: 18px;
+        padding: calc(${magicNum} / 4);
         display: block;
     }
 `;

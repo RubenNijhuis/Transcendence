@@ -28,11 +28,11 @@ const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     const [activeChatID, setActiveChatID] = useState<number>(0);
     const [allChats, setAllChats] = useState<GroupChat[]>(null!);
 
-    /////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
 
     const { user } = useAuth();
 
-    /////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
 
     const getMembersFromGroupChats = (chats: GroupChat[]) => {
         let members: ProfileType[][] = [];
@@ -98,7 +98,7 @@ const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
-    /////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
 
     useEffect(() => {
         if (!user) return;
@@ -130,7 +130,7 @@ const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         chatAggregator();
     }, [user]);
 
-    /////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
 
     const value: ChatContextType = {
         activeChatID,
@@ -138,7 +138,7 @@ const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         allChats
     };
 
-    /////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
 
     return (
         <ChatContext.Provider value={value}>{children}</ChatContext.Provider>

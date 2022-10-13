@@ -19,31 +19,30 @@ import { useAuth } from "../contexts/AuthContext";
 
 // Types
 import { ProfileType } from "../types/profile";
-import { RequestErrorType } from "../types/request";
 
 // Styling constants
 import { largeRadius, mainColor } from "../styles/StylingConstants";
 
-// Debug data
+// DEBUG
+import Logger from "../utils/Logger";
 import { useFakeData } from "../contexts/FakeDataContext";
 
 // API
 import getProfileByUserName from "../proxies/user/getProfileByUsername";
 
-// Debugging
 import { useModal } from "../contexts/ModalContext";
-import { getItem, setItem } from "../modules/Store";
+import { getItem } from "../modules/Store";
 import StoreId from "../config/StoreId";
 import { getValueFromUrl } from "../utils/getValueFromUrl";
-import Logger from "../utils/Logger";
-import CreateAccount from "./CreateAccount";
+
+// Modal Components
+import CreateAccount from "../containers/CreateAccount/CreateAccount";
 
 const ProfilePage = () => {
-    // Profile to be displayed
     const [selectedProfile, setSelectedProfile] = useState<ProfileType>(null!);
     const [isUserProfile, setIsUserProfile] = useState<boolean>(false);
 
-    const [loadProfile, setLoadProfile] = useState<boolean>(false);
+    ////////////////////////////////////////////////////////////
 
     // Temp debug data
     const { matchHistory } = useFakeData();
@@ -51,6 +50,7 @@ const ProfilePage = () => {
     // Local profile
     const { user, signIn } = useAuth();
 
+    // Create account modal
     const { setModalOpen, setModalElement } = useModal();
 
     /**
@@ -59,11 +59,18 @@ const ProfilePage = () => {
      */
     const { profileName } = useParams();
 
+    ////////////////////////////////////////////////////////////
+
     useEffect(() => {
         const runUserRetrieval = async () => {
-            const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
 
-            if (inLoginProcess) {
+            /**
+             * If the user is in the login process we
+             * check if they still need to make an
+             * account. If that is the case we display the Create Account Modal
+             */
+            const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
+            if (inLoginProcess && user === null) {
                 const href = window.location.href;
                 const token = getValueFromUrl(href, "code"); // TODO: put "code" in a config file
 
@@ -104,6 +111,8 @@ const ProfilePage = () => {
         runUserRetrieval();
     }, [profileName, user]);
 
+    ////////////////////////////////////////////////////////////
+
     return (
         <Layout>
             {selectedProfile && user ? (
@@ -134,6 +143,3 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
-function signIn(token: any) {
-    throw new Error("Function not implemented.");
-}

@@ -7,21 +7,12 @@ import Asset from "../../Asset";
 // Styling
 import styled from "styled-components";
 import { magicNum, smallRadius } from "../../../styles/StylingConstants";
-import SenderAnnotation from "../SenderAnnotation";
-
-interface Props {
-    message: Message;
-    fromUser: boolean;
-}
 
 const Container = styled.div<{ fromUser: boolean }>`
     display: flex;
     flex-direction: column;
 
-    gap: calc(${magicNum} / 8);
-
     align-items: ${({ fromUser }) => (fromUser ? `end` : `start`)};
-    margin-bottom: 18px;
 
     .picture {
         border: solid 2px black;
@@ -29,11 +20,16 @@ const Container = styled.div<{ fromUser: boolean }>`
         overflow: hidden;
         width: 50%;
         max-width: 50%;
-        height: 300px;
+        height: calc(${magicNum} * 4);
     }
 `;
 
-const PictureMessageDisplay = ({ fromUser, message }: Props) => {
+interface Props {
+    message: Message;
+    fromUser: boolean;
+}
+
+const PictureMessageDisplay = ({ fromUser, message }: Props): JSX.Element => {
     const formattedMessage: PictureMessage = message.content as PictureMessage;
 
     return (
@@ -43,7 +39,6 @@ const PictureMessageDisplay = ({ fromUser, message }: Props) => {
                 alt={formattedMessage.alt}
                 className="picture"
             />
-            <SenderAnnotation sender={message.sender} />
         </Container>
     );
 };
