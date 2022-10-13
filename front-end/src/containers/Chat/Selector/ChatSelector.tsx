@@ -12,9 +12,11 @@ import { ProfileType } from "../../../types/profile";
 import { GroupChat, Message } from "../../../types/chat";
 
 // Stylinh
-import { Container, DirectMessageEntry } from "./ChatSelector.style";
-import Button from "../../../components/Button";
-import { useModal } from "../../../contexts/ModalContext";
+import {
+    ChatTypeSelectorContainer,
+    Container,
+    DirectMessageEntry
+} from "./ChatSelector.style";
 import ChatInterface from "../Interface";
 
 interface Props {
@@ -52,22 +54,29 @@ const RecentActivity = ({ message }: { message: Message }) => {
     );
 };
 
-///
 const ChatTypeSelector = ({
+    activeType,
     chatTypeSelector
 }: {
+    activeType: number;
     chatTypeSelector: React.Dispatch<React.SetStateAction<number>>;
 }) => {
     return (
-        <div className="title">
-            <div className="chat-type" onClick={() => chatTypeSelector(0)}>
+        <ChatTypeSelectorContainer>
+            <div
+                className={`chat-type ${activeType === 0 ? "active" : null}`}
+                onClick={() => chatTypeSelector(0)}
+            >
                 <Heading type={3}>DM</Heading>
             </div>
             <div className="divider" />
-            <div className="chat-type" onClick={() => chatTypeSelector(1)}>
+            <div
+                className={`chat-type ${activeType === 1 ? "active" : null}`}
+                onClick={() => chatTypeSelector(1)}
+            >
                 <Heading type={3}>Groups</Heading>
             </div>
-        </div>
+        </ChatTypeSelectorContainer>
     );
 };
 
@@ -127,7 +136,10 @@ const ChatSelector = ({
 
     return (
         <Container>
-            <ChatTypeSelector chatTypeSelector={setSelectedChatType} />
+            <ChatTypeSelector
+                activeType={selectedChatType}
+                chatTypeSelector={setSelectedChatType}
+            />
             <ChatInterface />
 
             <ul className="list">

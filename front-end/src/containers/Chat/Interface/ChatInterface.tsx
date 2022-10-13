@@ -14,8 +14,10 @@ const CreateChat = ({
             <div className="title">
                 <Heading type={2}>Create a new chat</Heading>
             </div>
-            <div className="chat-interface">Display all friends</div>
-            <button onClick={() => setModalOpen(false)}>Finish</button>
+            <div className="chat-interface">
+                <Heading type={4}>Friends</Heading>
+                <button onClick={() => setModalOpen(false)}>Finish</button>
+            </div>
         </CreateChatContainer>
     );
 };

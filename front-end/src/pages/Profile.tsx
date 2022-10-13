@@ -67,6 +67,10 @@ const ProfilePage = () => {
             .catch(console.log);
     }, [profileName, user]);
 
+    useEffect(() => {
+        
+    }, []);
+
     return (
         <Layout>
             {selectedProfile && user ? (

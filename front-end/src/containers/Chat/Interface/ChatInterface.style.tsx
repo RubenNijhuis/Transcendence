@@ -2,7 +2,8 @@ import styled from "styled-components";
 import {
     backgroundColor,
     magicNum,
-    mainColor
+    mainColor,
+    smallRadius
 } from "../../../styles/StylingConstants";
 
 const Container = styled.div`
@@ -24,8 +25,12 @@ const Container = styled.div`
 
 const CreateChatContainer = styled.div`
     border: solid 2px ${mainColor};
-    border-radius: 2px;
+    border-radius: ${smallRadius};
     background: white;
+    box-shadow: 0px 15px 25px 5px rgba(0, 0, 0, 0.14);
+
+    min-width: calc(${magicNum} * 10);
+    min-height: calc(${magicNum} * 8);
 
     .title {
         border-bottom: solid 2px ${mainColor};
@@ -37,7 +42,7 @@ const CreateChatContainer = styled.div`
     }
 
     .chat-interface {
-        padding: calc(${magicNum});
+        padding: calc(${magicNum} / 4);
     }
 `;
 

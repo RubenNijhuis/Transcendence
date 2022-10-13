@@ -1,5 +1,5 @@
 // React stuffs
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import Modal from "../../components/Modal";
 
 interface ModalContextType {
@@ -22,6 +22,15 @@ const ModalProvider = ({ children }: { children: React.ReactNode }) => {
         setModalOpen,
         setModalElement
     };
+
+    useEffect(() => {
+        const bodyElement = document.getElementsByTagName("body")[0];
+        if (modalOpen) {
+            bodyElement.style.overflow = "hidden";
+        } else {
+            bodyElement.style.overflow = "scroll";
+        }
+    }, [modalOpen]);
 
     return (
         <ModalContext.Provider value={value}>
