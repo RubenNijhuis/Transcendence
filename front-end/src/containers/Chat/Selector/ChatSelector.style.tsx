@@ -24,6 +24,7 @@ const Container = styled.div`
         border: solid 2px ${mainColor};
         border-radius: ${smallRadius};
         overflow-y: scroll;
+        overscroll-behavior: contain;
 
         max-height: calc(${magicNum} * 10);
     }

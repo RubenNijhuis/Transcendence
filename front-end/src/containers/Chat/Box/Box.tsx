@@ -52,6 +52,7 @@ const ChatBox = ({ chat }: Props): JSX.Element => {
     return (
         <Container>
             <ChatTitle chat={chat} />
+
             <div className="chat-content">
                 {chat.messages.map((message, count) => (
                     <ChatElement

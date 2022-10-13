@@ -26,7 +26,7 @@ const Container = styled.div`
 const CreateChatContainer = styled.div`
     border: solid 2px ${mainColor};
     border-radius: ${smallRadius};
-    background: white;
+    background: ${backgroundColor};
     box-shadow: 0px 15px 25px 5px rgba(0, 0, 0, 0.14);
 
     min-width: calc(${magicNum} * 10);

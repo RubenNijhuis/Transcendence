@@ -8,12 +8,38 @@ import {
 } from "../../../styles/StylingConstants";
 
 const Container = styled.div`
-    position: relative;
-    width: calc(100% - 36px);
-    margin: 18px auto;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: calc(${magicNum} / 4);
+
+    &:before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+
+        border-radius: 0px 0px 6px 6px;
+
+        background: rgb(226, 226, 240);
+        background: linear-gradient(
+            180deg,
+            rgba(226, 226, 240, 0) 0%,
+            rgba(226, 226, 240, 1) 10%,
+            rgba(226, 226, 240, 1) 100%
+        );
+    }
 
     .input-wrapper {
+        z-index: 100;
         height: calc(${magicNum});
+        width: 100%;
         border-radius: 1000px;
         display: grid;
         grid-template-columns: 6fr 144px 72px;

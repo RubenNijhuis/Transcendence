@@ -10,6 +10,8 @@ import {
 const Container = styled.div`
     border: solid 2px ${mainColor};
     border-radius: ${smallRadius};
+    position: relative;
+    padding-bottom: calc(${magicNum});
 
     .title {
         background-color: ${mainColor};
@@ -22,6 +24,8 @@ const Container = styled.div`
     }
 
     .chat-content {
+        overscroll-behavior: contain;
+        position: relative;
         padding: calc(${magicNum} / 4);
         min-height: calc(${magicNum} * 10);
         max-height: calc(${magicNum} * 10);
