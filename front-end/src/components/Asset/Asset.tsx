@@ -1,4 +1,7 @@
+// Styling
 import { Container } from "./Asset.style";
+
+////////////////////////////////////////////////////////////
 
 interface Props {
     url: string;
@@ -6,12 +9,16 @@ interface Props {
     className?: string;
 }
 
-const Asset = ({ url, alt, className }: Props) => {
+const Asset = ({ url, alt, className }: Props): JSX.Element => {
     let classTag: string = "asset";
+
+    ////////////////////////////////////////////////////////////
 
     if (className !== undefined) {
         classTag += ` ${className}`;
     }
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <Container className={classTag}>

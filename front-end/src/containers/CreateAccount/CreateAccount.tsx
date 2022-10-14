@@ -1,87 +1,51 @@
 // React
-import { ChangeEventHandler, useState } from "react";
-
-// Styling
-import styled from "styled-components";
-import { magicNum, smallRadius } from "../styles/StylingConstants";
+import { useState } from "react";
 
 // UI
-import Button from "../components/Button";
-import Heading from "../components/Heading";
+import Button from "../../components/Button";
+import Heading from "../../components/Heading";
+
+// Styling
+import { CreateForm, ErrorPopup, StyledInput } from "./CreateAccount.style";
 
 // Box slider
-import BoxSlider from "../components/BoxSlider";
-import Slide from "../components/BoxSlider/Slide/Slide";
+import BoxSlider from "../../components/BoxSlider";
+import Slide from "../../components/BoxSlider/Slide/Slide";
 
 // Auth
-import { useAuth } from "../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 // Proxies
-import createUser from "../proxies/user/createUser";
-import uploadImage from "../proxies/user/uploadImage";
+import createUser from "../../proxies/user/createUser";
+import uploadImage from "../../proxies/user/uploadImage";
+import getProfileBannerByUserName from "../../proxies/user/getProfileBannerByUsername";
 
-// Page routes
-import PageRoutes from "../config/PageRoutes";
+// Routes
+import ApiRoutes from "../../config/ApiRoutes";
 
-// Error modal
-import { useModal } from "../contexts/ModalContext";
-import ApiRoutes from "../config/ApiRoutes";
-import Logger from "../utils/Logger";
+// Store
+import { setItem } from "../../modules/Store";
+import StoreId from "../../config/StoreId";
 
-// TODO: put styling in different folder
-const StyledInput = styled.div`
-    margin-bottom: 36px;
-    padding: 18px;
+// DEBUG
+import Logger from "../../utils/Logger";
 
-    label {
-        display: block;
-        font-size: 18px;
-        font-weight: 500;
-        margin-bottom: 9px;
-    }
-
-    input,
-    textarea {
-        width: 100%;
-        border: 1px rgb(230, 230, 230);
-        height: 36px;
-        padding: 9px 18px;
-        border-radius: ${smallRadius};
-    }
-`;
-
-const CreateForm = styled.div`
-    width: calc(${magicNum} * 10);
-    max-width: calc(${magicNum} * 10);
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-
-    button {
-        width: 100%;
-    }
-`;
-
-const ErrorPopup = styled.div`
-    border: solid 2px red;
-    border-radius: 3px;
-    background-color: #ff8686;
-
-    padding: 6px;
-`;
+interface Props {
+    setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 // TODO: make component check input data before sending
-const CreateAccount = () => {
-    // Form input state
+const CreateAccount = ({ setModalOpen }: Props): JSX.Element => {
     const [username, setusername] = useState<string>("");
     const [color, setColor] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>();
 
-    const navigate = useNavigate();
+    ////////////////////////////////////////////////////////////
+
     const { setUser, setLoggedIn } = useAuth();
+
+    ////////////////////////////////////////////////////////////
 
     const retrieveFileFromInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const target = e.target as HTMLInputElement;
@@ -116,7 +80,7 @@ const CreateAccount = () => {
             .catch(console.log);
     };
 
-    const handleAccountCreation = () => {
+    const handleAccountCreation = async () => {
         const providedDetails = {
             username,
             color,
@@ -127,15 +91,32 @@ const CreateAccount = () => {
          * Redirects the user to the profile
          * page upon account creation.
          */
-        createUser(providedDetails)
-            .then((returnedUserProfile) => {
-                console.log(returnedUserProfile);
-                setUser(returnedUserProfile);
-                setLoggedIn(true);
-                navigate(PageRoutes.profile);
-            })
-            .catch(console.log);
+        try {
+            const returnedUserProfile = await createUser(providedDetails);
+            Logger(
+                "DEBUG",
+                "Create account modal",
+                "Returned user",
+                returnedUserProfile
+            );
+
+            returnedUserProfile.banner_url = await getProfileBannerByUserName(
+                returnedUserProfile.username
+            );
+            returnedUserProfile.img_url = await getProfileBannerByUserName(
+                returnedUserProfile.username
+            );
+
+            setUser(returnedUserProfile);
+            setLoggedIn(true);
+            setItem(StoreId.loginProcess, false);
+            setModalOpen(false);
+        } catch (err) {
+            console.log(err);
+        }
     };
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <CreateForm>

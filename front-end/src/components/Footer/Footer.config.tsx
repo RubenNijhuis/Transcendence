@@ -6,11 +6,6 @@ export const InboundLinks = [
         url: PageRoutes.home,
         onlyWhenLoggedin: false
     },
-    {
-        name: "About",
-        url: PageRoutes.about,
-        onlyWhenLoggedin: false
-    }
 ];
 
 export const GithubLink = "https://github.com/rubennijhuis/transcendence";

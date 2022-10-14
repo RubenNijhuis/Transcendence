@@ -10,14 +10,17 @@ import ChatBox from "../containers/Chat/Box";
 import { useChat } from "../contexts/ChatContext";
 import { magicNum } from "../styles/StylingConstants";
 
+// TODO: have this in a style file
 const Container = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-column-gap: calc(${magicNum} / 2);
 `;
 
-const ChatPage = () => {
+const ChatPage = (): JSX.Element => {
     const { allChats, activeChatID, setActiveChatID } = useChat();
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <Layout>

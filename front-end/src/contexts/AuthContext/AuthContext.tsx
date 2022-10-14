@@ -40,9 +40,11 @@ const useAuth = () => useContext(AuthContext);
  * The authprovider creates a "bucket" in which we can store all
  * the user data as well as the utility functions like login and logout
  */
-const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+const AuthProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
     const [user, setUser] = useState<ProfileType>(null!);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
+
+    ////////////////////////////////////////////////////////////
 
     /**
      * Makes a request to the back-end using the third party provided
@@ -85,16 +87,19 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
      * Signs the user off, removing auth tokens and
      * redirecting to the home page
      */
-    const signOut = () => {
+    const signOut = (): void => {
         removeItem(StoreId.accessToken);
         removeItem(StoreId.refreshToken);
+        redirectToHome();
     };
 
-    const redirectToHome = () => {
+    const redirectToHome = (): void => {
         if (window.location.pathname !== PageRoutes.home) {
             window.location.assign(PageRoutes.home);
         }
     };
+
+    ////////////////////////////////////////////////////////////
 
     /**
      * Checks if there is still an auth token in the store.
@@ -110,6 +115,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
             if (storeRefreshToken !== null) {
                 try {
+                    // Reset for login process
+                    setItem(StoreId.loginProcess, false);
+
                     const { accessToken, refreshToken } =
                         await refreshAuthToken(storeRefreshToken);
 
@@ -123,7 +131,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                             accessToken
                         );
 
-                        userFromToken.banner_url =
+                    userFromToken.banner_url =
                             await getProfileBannerByUserName(
                                 userFromToken.username
                             );
@@ -136,12 +144,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     setLoggedIn(true);
                 } catch (err) {
                     console.error(err);
-                    // redirectToHome();
                 }
             }
         };
         setToken();
     });
+
+    ////////////////////////////////////////////////////////////
 
     const value: AuthContextType = {
         user,
@@ -153,6 +162,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         isLoggedIn,
         setLoggedIn
     };
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

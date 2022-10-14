@@ -8,12 +8,38 @@ import {
 } from "../../../styles/StylingConstants";
 
 const Container = styled.div`
-    position: relative;
-    width: calc(100% - 36px);
-    margin: 18px auto;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: calc(${magicNum} / 4);
+
+    &:before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+
+        border-radius: 0px 0px 6px 6px;
+
+        background: rgb(226, 226, 240);
+        background: linear-gradient(
+            180deg,
+            rgba(226, 226, 240, 0) 0%,
+            rgba(226, 226, 240, 1) 10%,
+            rgba(226, 226, 240, 1) 100%
+        );
+    }
 
     .input-wrapper {
+        z-index: 100;
         height: calc(${magicNum});
+        width: 100%;
         border-radius: 1000px;
         display: grid;
         grid-template-columns: 6fr 144px 72px;
@@ -40,7 +66,7 @@ const Container = styled.div`
         height: 100%;
         input {
             border: none;
-            padding-left: 18px;
+            padding-left: calc(${magicNum} / 4);
             border-radius: 100px 0px 0px 100px;
             width: 100%;
             height: 100%;
@@ -70,7 +96,7 @@ const Container = styled.div`
         }
 
         .picture-input {
-            padding: 18px;
+            padding: calc(${magicNum} / 4);
             position: absolute;
             bottom: 0;
             width: 100%;
@@ -98,7 +124,7 @@ const Container = styled.div`
     .message-type-select {
         background-color: rgba(0, 0, 0, 0.1);
         border-radius: 0px 100px 100px 0px;
-        padding: 6px;
+        padding: calc(${magicNum} / 8);
         color: ${lightTextColor};
 
         span {
@@ -119,8 +145,8 @@ const SelectTypeIcon = styled.div<{ selected: boolean }>`
 
     img {
         transform: translateX(-10%);
-        width: 36px;
-        height: 36px;
+        width: calc(${magicNum} / 2);
+        height: calc(${magicNum} / 2);
     }
 `;
 

@@ -13,7 +13,7 @@ const ModalContext = createContext<ModalContextType>(null!);
 
 const useModal = () => useContext(ModalContext);
 
-const ModalProvider = ({ children }: { children: React.ReactNode }) => {
+const ModalProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [modalElement, setModalElement] = useState<React.ReactNode>(null!);
 
@@ -25,6 +25,7 @@ const ModalProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         const bodyElement = document.getElementsByTagName("body")[0];
+
         if (modalOpen) {
             bodyElement.style.overflow = "hidden";
         } else {

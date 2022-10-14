@@ -14,23 +14,28 @@ import { useAuth } from "../../contexts/AuthContext";
 // Links
 import { locations } from "./NavBar.config";
 import PageRoutes from "../../config/PageRoutes";
+
+// Auth
 import startLogin from "../../proxies/auth/startLogin";
+
+// DEBUG
 import Logger from "../../utils/Logger";
 
-// Types
-import { RequestErrorType } from "../../types/request";
-import { API } from "../../proxies/instances/apiInstance";
-import { useState } from "react";
+// Store
+import { setItem } from "../../modules/Store";
+import StoreId from "../../config/StoreId";
 
-const CTAButton = ({ authStatus }: { authStatus: boolean }) => {
-    const toLoginPage = () => {
-        startLogin()
-            .then((url: string) => {
-                window.location.assign(url);
-            })
-            .catch((err: RequestErrorType) => {
-                Logger("ERROR", "Navbar", "Req login page url", err);
-            });
+////////////////////////////////////////////////////////////
+
+const CTAButton = ({ authStatus }: { authStatus: boolean }): JSX.Element => {
+    const toLoginPage = async () => {
+        try {
+            const url = await startLogin();
+            setItem(StoreId.loginProcess, true);
+            window.location.assign(url);
+        } catch (err) {
+            Logger("ERROR", "Navbar", "Req login page url", err);
+        }
     };
 
     return (
@@ -52,34 +57,35 @@ const CTAButton = ({ authStatus }: { authStatus: boolean }) => {
     );
 };
 
-const NavLinks = ({ authStatus }: { authStatus: boolean }) => (
-    <ul>
-        {locations.map(({ name, url, onlyWhenLoggedin }, count) => {
-            if (onlyWhenLoggedin && !authStatus) return null;
-            return (
-                <li key={count}>
-                    <Link to={url}>{name}</Link>
-                </li>
-            );
-        })}
-    </ul>
-);
+const NavLinks = ({ authStatus }: { authStatus: boolean }): JSX.Element => {
+    return (
+        <ul>
+            {locations.map(({ name, url, onlyWhenLoggedin }, count) => {
+                if (onlyWhenLoggedin && !authStatus) return null;
+                return (
+                    <li key={count}>
+                        <Link to={url}>{name}</Link>
+                    </li>
+                );
+            })}
+        </ul>
+    );
+};
 
-const ProfileIcon = ({ url }: { url: string }) => {
+const ProfileIcon = ({ url }: { url: string }): JSX.Element => {
     return (
         <Link to={PageRoutes.profile}>
             <ProfileIconContainer>
-                <Asset
-                    url={url}
-                    alt={"profile"}
-                />
+                <Asset url={url} alt={"profile"} />
             </ProfileIconContainer>
         </Link>
     );
 };
 
-const NavBar = () => {
+const NavBar = (): JSX.Element => {
     const { isLoggedIn, user } = useAuth();
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <Container>

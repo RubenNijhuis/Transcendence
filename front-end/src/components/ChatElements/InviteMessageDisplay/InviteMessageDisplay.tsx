@@ -12,7 +12,8 @@ import {
 
 // UI
 import Button from "../../Button";
-import SenderAnnotation from "../SenderAnnotation";
+
+////////////////////////////////////////////////////////////
 
 interface Props {
     message: Message;
@@ -22,31 +23,29 @@ interface Props {
 const Container = styled.div<{ fromUser: boolean }>`
     display: flex;
     flex-direction: column;
-
-    gap: calc(${magicNum} / 8);
-
     align-items: ${({ fromUser }) => (fromUser ? `end` : `start`)};
-    margin-bottom: 18px;
 
     .content {
         background-color: ${mainColor};
         min-width: 50%;
         max-width: 50%;
-        padding: 8px 16px;
+        padding: calc(${magicNum} / 8) calc(${magicNum} / 4);
         border: 2px solid ${mainColor};
         border-radius: ${smallRadius};
 
         span,
         p {
             color: ${lightTextColor};
-            margin-bottom: 9px;
+            margin-bottom: calc(${magicNum} / 8);
         }
     }
 `;
 
-const InviteMessageDisplay = ({ fromUser, message }: Props) => {
+const InviteMessageDisplay = ({ fromUser, message }: Props): JSX.Element => {
     const formattedContent: InvitePlayMessage =
         message.content as InvitePlayMessage;
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <Container fromUser={fromUser}>
@@ -55,7 +54,6 @@ const InviteMessageDisplay = ({ fromUser, message }: Props) => {
                 <p>Is inviting you to play</p>
                 <Button theme="light">Play a game</Button>
             </div>
-            <SenderAnnotation sender={message.sender} />
         </Container>
     );
 };

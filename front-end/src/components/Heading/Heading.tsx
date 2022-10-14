@@ -7,12 +7,14 @@ import {
     StyledH6
 } from "./Heading.style";
 
+////////////////////////////////////////////////////////////
+
 interface Props {
     type: Number;
     children: React.ReactNode;
 }
 
-const Heading = ({ type, children }: Props) => {
+const Heading = ({ type, children }: Props): JSX.Element => {
     const classname = "heading";
 
     switch (type) {

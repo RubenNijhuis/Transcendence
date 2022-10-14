@@ -31,9 +31,10 @@ const LoaderLine = styled.div`
         left: 0;
         top: 0;
 
-        height: calc(${magicNum} / 4);
+        height: calc(${magicNum} / 8);
         width: 0%;
         max-width: 100%;
+        border-radius: 100px;
 
         background-color: ${mainColor};
 

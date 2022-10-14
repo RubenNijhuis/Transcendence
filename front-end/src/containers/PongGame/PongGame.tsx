@@ -88,7 +88,7 @@ const drawGame = (
     );
 
     // Draws the canvas in an animationFrame
-    const animate = () => {
+    const animate = (): void => {
         requestAnimationFrame(animate);
         context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 
@@ -124,7 +124,7 @@ const drawGame = (
     animate();
 };
 
-const PongGame = () => {
+const PongGame = (): JSX.Element => {
     const canvasRef = useRef<HTMLCanvasElement>(null!);
 
     useEffect(() => {

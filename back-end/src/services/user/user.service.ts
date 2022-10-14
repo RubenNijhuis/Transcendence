@@ -137,7 +137,7 @@ export class UserService {
     }
   }
 
-  async setUser(intraID: string, SetUserDto: SetUserDto): Promise<User | HttpException> {
+  async setUser(intraID: string, SetUserDto: SetUserDto): Promise<User> {
     try {
       const user: User = await this.findUserByintraId(intraID);
       const query = {
@@ -156,8 +156,8 @@ export class UserService {
         .where({ id: user.id })
         .returning("*")
         .execute();
-      
-        return await this.findUserByintraId(intraID);
+
+      return await this.findUserByintraId(intraID);
     } catch (err: any) {
       throw errorHandler(
         err,

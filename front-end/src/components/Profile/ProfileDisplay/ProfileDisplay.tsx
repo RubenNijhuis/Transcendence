@@ -17,7 +17,7 @@ interface Props {
     user: ProfileType;
 }
 
-const RankDisplay = ({ rank }: { rank: number }) => {
+const RankDisplay = ({ rank }: { rank: number }): JSX.Element => {
     let src: any = GoldCrown;
 
     if (rank === 1) src = GoldCrown;
@@ -27,17 +27,18 @@ const RankDisplay = ({ rank }: { rank: number }) => {
     return <img src={src} alt="crown" className="crown" />;
 };
 
-const ProfileDisplay = ({ user }: Props) => (
-    <Container>
-        <div className="banner">
-            <Asset url={user.banner_url} alt="banner" />
-        </div>
-        <div className="profile">
-            {user.rank < 4 && <RankDisplay rank={user.rank} />}
-            <Asset url={user.img_url} alt="profile" />
-            <Heading type={4}>{user.username}</Heading>
-        </div>
-    </Container>
-);
-
+const ProfileDisplay = ({ user }: Props): JSX.Element => {
+    return (
+        <Container>
+            <div className="banner">
+                <Asset url={user.banner_url} alt="banner" />
+            </div>
+            <div className="profile">
+                {user.rank < 4 && <RankDisplay rank={user.rank} />}
+                <Asset url={user.img_url} alt="profile" />
+                <Heading type={4}>{user.username}</Heading>
+            </div>
+        </Container>
+    );
+};
 export default ProfileDisplay;

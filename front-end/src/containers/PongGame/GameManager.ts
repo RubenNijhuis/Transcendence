@@ -1,9 +1,7 @@
+// Elements
 import Ball from "./Ball";
 import Bat from "./Bat";
 import PowerUps from "./PowerUps";
-import randomIntFromInterval from "../../utils/randomNumFromInterval";
-import { runInThisContext } from "vm";
-import { Match } from "../../components/GameHistory/GameHistory.style";
 
 class GameManager {
     player1Score: number;

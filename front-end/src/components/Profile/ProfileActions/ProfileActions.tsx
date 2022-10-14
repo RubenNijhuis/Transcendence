@@ -1,18 +1,32 @@
+// React
 import { ReactElement, useState } from "react";
+
+// Types
 import { ProfileType } from "../../../types/profile";
-import randomIntFromInterval from "../../../utils/randomNumFromInterval";
+
+// Utils
+import randomNum from "../../../utils/randomNum";
+
+// UI
 import Button from "../../Button";
 import Heading from "../../Heading";
+
+// Styling
 import { Container, ProfileStatusDisplay } from "./ProfileActions.style";
+
+////////////////////////////////////////////////////////////
 
 interface Props {
     profile: ProfileType;
 }
 
-const ProfileActivityStatus = () => {
-    const rand = randomIntFromInterval(0, 2);
-
+const ProfileActivityStatus = (): JSX.Element => {
     let activityElement: ReactElement = <></>;
+
+    ////////////////////////////////////////////////////////////
+
+    const rand = randomNum(0, 2);
+    
 
     if (rand === 0) {
         activityElement = <span className="offline">Offline</span>;
@@ -22,6 +36,8 @@ const ProfileActivityStatus = () => {
         activityElement = <span className="playing">Playing</span>;
     }
 
+    ////////////////////////////////////////////////////////////
+
     return (
         <ProfileStatusDisplay activity={rand}>
             <div>{activityElement}</div>
@@ -29,12 +45,16 @@ const ProfileActivityStatus = () => {
     );
 };
 
-const ProfileActions = ({ profile }: Props) => {
+const ProfileActions = ({ profile }: Props): JSX.Element => {
     const [follows, setFollow] = useState<boolean>(false);
 
-    const changeFollow = () => {
+    ////////////////////////////////////////////////////////////
+
+    const changeFollow = (): void => {
         setFollow((prev) => !prev);
     };
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <Container followsProfile={follows}>

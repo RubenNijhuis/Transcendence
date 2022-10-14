@@ -8,7 +8,7 @@ const CreateChat = ({
     setModalOpen
 }: {
     setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+}): JSX.Element => {
     return (
         <CreateChatContainer>
             <div className="title">
@@ -22,7 +22,7 @@ const CreateChat = ({
     );
 };
 
-const ChatInterface = () => {
+const ChatInterface = (): JSX.Element => {
     const { setModalOpen, modalOpen, setModalElement } = useModal();
 
     useEffect(() => {

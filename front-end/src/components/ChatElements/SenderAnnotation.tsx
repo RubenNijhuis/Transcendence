@@ -1,20 +1,30 @@
+// Types
 import { ProfileType } from "../../types/profile";
-import Asset from "../Asset";
-import styled from "styled-components";
-import { magicNum, mainColor } from "../../styles/StylingConstants";
 
-const Container = styled.div`
+// UI
+import Asset from "../Asset";
+
+// Styled components
+import styled from "styled-components";
+
+// Styling vars
+import { magicNum, mainColor } from "../../styles/StylingConstants";
+import { useAuth } from "../../contexts/AuthContext";
+
+////////////////////////////////////////////////////////////
+
+// TODO: in styling file
+const Container = styled.div<{ fromUser: boolean }>`
     display: flex;
     flex-direction: row;
+    justify-content: ${({ fromUser }) => (fromUser ? `end` : `start`)};
     align-items: center;
-    justify-content: flex-start;
 
     gap: calc(${magicNum} / 8);
-
     padding-left: calc(${magicNum} / 16);
 
     .img {
-        border-radius: 2px;
+        border-radius: 4px;
         overflow: hidden;
 
         border: solid 2px ${mainColor};
@@ -32,9 +42,13 @@ interface Props {
     sender: ProfileType;
 }
 
-const SenderAnnotation = ({ sender }: Props) => {
+const SenderAnnotation = ({ sender }: Props): JSX.Element => {
+    const { user } = useAuth();
+
+    ////////////////////////////////////////////////////////////
+
     return (
-        <Container>
+        <Container fromUser={sender.uid === user.uid}>
             <Asset
                 url={sender.img_url}
                 alt={`${sender.username}`}

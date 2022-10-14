@@ -9,7 +9,8 @@ import {
     mainColor,
     smallRadius
 } from "../../../styles/StylingConstants";
-import SenderAnnotation from "../SenderAnnotation";
+
+////////////////////////////////////////////////////////////
 
 interface Props {
     message: Message;
@@ -20,26 +21,23 @@ const Container = styled.div<{ fromUser: boolean }>`
     display: flex;
     flex-direction: column;
 
-    gap: calc(${magicNum} / 8);
-
     align-items: ${({ fromUser }) => (fromUser ? `end` : `start`)};
 
     .content {
+        min-width: 50%;
         background: ${mainColor};
-        padding: 9px 18px;
+        padding: calc(${magicNum} / 8) calc(${magicNum} / 4);
         border-radius: ${smallRadius};
         color: ${lightTextColor};
-        text-align: ${({ fromUser }) => (fromUser ? `right` : `left`)};
     }
 `;
 
-const SimpleMessageDisplay = ({ fromUser, message }: Props) => {
+const SimpleMessageDisplay = ({ fromUser, message }: Props): JSX.Element => {
     const formattedContent: SimpleMessage = message.content as SimpleMessage;
 
     return (
         <Container fromUser={fromUser}>
             <div className="content">{formattedContent.content}</div>
-            <SenderAnnotation sender={message.sender} />
         </Container>
     );
 };

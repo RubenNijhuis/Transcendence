@@ -28,7 +28,7 @@ interface Props {
 /**
  * Display the members of a chat in the group list
  */
-const MemberList = ({ members }: { members: ProfileType[] }) => {
+const MemberList = ({ members }: { members: ProfileType[] }): JSX.Element => {
     return (
         <div>
             {members.map(({ img_url, username }, count) => (
@@ -46,7 +46,7 @@ const MemberList = ({ members }: { members: ProfileType[] }) => {
 };
 
 // Show a recent activity like a chat message
-const RecentActivity = ({ message }: { message: Message }) => {
+const RecentActivity = ({ message }: { message: Message }): JSX.Element => {
     return (
         <div className="activity">
             <div className="newMessage" />
@@ -60,7 +60,7 @@ const ChatTypeSelector = ({
 }: {
     activeType: number;
     chatTypeSelector: React.Dispatch<React.SetStateAction<number>>;
-}) => {
+}): JSX.Element => {
     return (
         <ChatTypeSelectorContainer>
             <div
@@ -90,8 +90,10 @@ const DirectMessageList = ({
     chats: GroupChat[];
     selectedChat: number;
     setSelectedChat: React.Dispatch<React.SetStateAction<number>>;
-}) => {
+}): JSX.Element => {
     const { user } = useAuth();
+
+    ////////////////////////////////////////////////////////////
 
     const filteredChats = chats.filter((chat) => {
         if (onlyGroups) {
@@ -100,6 +102,8 @@ const DirectMessageList = ({
             if (chat.members.length < 3) return true;
         }
     });
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <>
@@ -131,7 +135,7 @@ const ChatSelector = ({
     directMessages,
     selectedChat,
     setSelectedChat
-}: Props) => {
+}: Props): JSX.Element => {
     const [selectedChatType, setSelectedChatType] = useState<number>(0);
 
     return (

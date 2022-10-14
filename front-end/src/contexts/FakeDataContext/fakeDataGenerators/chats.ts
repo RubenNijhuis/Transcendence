@@ -2,10 +2,10 @@
 import { get_img_url } from "./utils";
 
 // Random int
-import randomIntFromInterval from "../../../utils/randomNumFromInterval";
+import randomNum from "../../../utils/randomNum";
 
 // Types
-import { ProfileType, ProfileID } from "../../../types/profile";
+import { ProfileType } from "../../../types/profile";
 import { GameType } from "../../../types/game";
 import {
     Message,
@@ -16,7 +16,12 @@ import {
     MessageContentType,
     MessageTypes
 } from "../../../types/chat";
+
+// Utils
 import { generateProfile } from "./profile";
+import { randomSliceOfArray } from "../../../utils/arrayManipulation";
+
+///////////////////////////////////////////////////////////
 
 const generateInvite = (
     user: ProfileType,
@@ -32,7 +37,7 @@ const generateInvite = (
     return invite;
 };
 
-const generateSimpleMessage = () => {
+const generateSimpleMessage = (): SimpleMessage => {
     const simpleMessage: SimpleMessage = {
         content: "BOOP"
     };
@@ -40,11 +45,11 @@ const generateSimpleMessage = () => {
     return simpleMessage;
 };
 
-const generatePictureMessage = () => {
+const generatePictureMessage = (): PictureMessage => {
     const randomWidth: number =
-        Math.ceil(randomIntFromInterval(1000, 2000) / 100) * 100;
+        Math.ceil(randomNum(1000, 2000) / 100) * 100;
     const randomHeight: number =
-        Math.ceil(randomIntFromInterval(1000, 2000) / 100) * 100;
+        Math.ceil(randomNum(1000, 2000) / 100) * 100;
 
     const img_url: string = get_img_url(randomWidth, randomHeight);
 
@@ -83,7 +88,7 @@ const generateMessage = (
     const messages: Message[] = [];
 
     for (let i = 0; i < amount; i++) {
-        const rand: number = randomIntFromInterval(0, 2);
+        const rand: number = randomNum(0, 2);
 
         const newMessage: Message = {
             content: generateNewMessageContent(sender, receiver, rand),
@@ -102,31 +107,7 @@ const generateMessage = (
     return messages;
 };
 
-// Function to generate random number
-function randomNumberInRange(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min) + min);
-}
-
-const randomSliceOfArray = <T>(items: Array<T>, size: number) => {
-    let randomSlice: T[] = [];
-
-    const arrayLen: number = items.length;
-    const startPos: number = randomNumberInRange(0, arrayLen - size - 1);
-    const endPos: number = startPos + size;
-
-    randomSlice = items.slice(startPos, endPos);
-    return randomSlice;
-};
-
-const getMemberUID = (profiles: ProfileType[]): ProfileID[] => {
-    let UID: ProfileID[] = [];
-
-    for (let i = 0; i < profiles.length; i++) {
-        UID.push(profiles[i].uid);
-    }
-
-    return UID;
-};
+///////////////////////////////////////////////////////////
 
 const generateGroupChats = (
     user: ProfileType,
@@ -137,13 +118,10 @@ const generateGroupChats = (
     const groupChatList: GroupChat[] = [];
 
     for (let i = 0; i < amount; i++) {
-        const randomNum: number = randomNumberInRange(
-            memberRange[0],
-            memberRange[1]
-        );
+        const randomNum1: number = randomNum(memberRange[0],memberRange[1]);
 
         const members: ProfileType[] = [
-            ...randomSliceOfArray<ProfileType>(profiles, randomNum),
+            ...randomSliceOfArray<ProfileType>(profiles, randomNum1),
             user
         ];
 
@@ -156,28 +134,28 @@ const generateGroupChats = (
 
         newGroup.messages.push(
             ...generateMessage(
-                members[randomNumberInRange(0, randomNum)],
+                members[randomNum(0, randomNum1)],
                 user,
                 i,
-                randomIntFromInterval(2, 3)
+                randomNum(2, 3)
             )
         );
 
         newGroup.messages.push(
             ...generateMessage(
                 user,
-                members[randomNumberInRange(0, randomNum)],
+                members[randomNum(0, randomNum1)],
                 i,
-                randomIntFromInterval(2, 3)
+                randomNum(2, 3)
             )
         );
 
         newGroup.messages.push(
             ...generateMessage(
-                members[randomNumberInRange(0, randomNum)],
+                members[randomNum(0, randomNum1)],
                 user,
                 i,
-                randomIntFromInterval(2, 3)
+                randomNum(2, 3)
             )
         );
         groupChatList.push(newGroup);

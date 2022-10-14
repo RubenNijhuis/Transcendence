@@ -2,11 +2,6 @@ import PageRoutes from "../../config/PageRoutes";
 
 export const locations = [
     {
-        name: "About",
-        url: PageRoutes.about,
-        onlyWhenLoggedin: false
-    },
-    {
         name: "Chat",
         url: PageRoutes.chat,
         onlyWhenLoggedin: true

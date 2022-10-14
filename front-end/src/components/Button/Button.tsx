@@ -1,4 +1,7 @@
+// Styling
 import { StyledButton } from "./Button.style";
+
+////////////////////////////////////////////////////////////
 
 interface Props {
     theme?: string;
@@ -7,10 +10,19 @@ interface Props {
     onClick?: React.MouseEventHandler<HTMLElement>;
 }
 
-const Button = ({ theme, children, className, onClick }: Props) => {
+const Button = ({
+    theme,
+    children,
+    className,
+    onClick
+}: Props): JSX.Element => {
     let fullClassName = "button";
 
+    ////////////////////////////////////////////////////////////
+
     if (className) fullClassName += ` ${className}`;
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <StyledButton theme={theme} onClick={onClick} className={fullClassName}>

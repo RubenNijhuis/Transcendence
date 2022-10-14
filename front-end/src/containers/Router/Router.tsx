@@ -6,7 +6,6 @@ import PageRoutes from "../../config/PageRoutes";
 
 // Public Pages
 import Home from "../../pages/Home";
-import About from "../../pages/About";
 
 // Private pages
 import ProfilePage from "../../pages/Profile";
@@ -17,9 +16,7 @@ import Pong from "../../pages/Pong";
 import NewPongGame from "../../pages/NewPongGame";
 
 // Authentication
-import { AuthGuard, AccessTokenGuard } from "../RouteGuards";
-import SuccesfulLoginPage from "../../pages/SuccesfulLogin";
-import CreateAccount from "../../pages/CreateAccount";
+import { AuthGuard } from "../RouteGuards";
 
 // 404
 import NotFound from "../../pages/NotFound";
@@ -29,26 +26,10 @@ const Router = () => (
         <Routes>
             {/* Public routes */}
             <Route path={PageRoutes.home} element={<Home />} />
-            <Route path={PageRoutes.about} element={<About />} />
 
             {/* Pong debugging */}
             <Route path={PageRoutes.pong} element={<Pong />} />
             <Route path={PageRoutes.newPong} element={<NewPongGame />} />
-
-            {/* Callback route after login */}
-            <Route
-                path={PageRoutes.authRedirect}
-                element={<SuccesfulLoginPage />}
-            />
-
-            {/* This route may only be accesed if the user
-             * is still in the process of creating an accoun*/}
-            <Route element={<AccessTokenGuard />}>
-                <Route
-                    path={PageRoutes.createAccount}
-                    element={<CreateAccount />}
-                />
-            </Route>
 
             {/* Routes that have to pass through authentication to be loaded */}
             <Route element={<AuthGuard />}>

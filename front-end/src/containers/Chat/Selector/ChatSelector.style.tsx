@@ -4,6 +4,7 @@ import {
     backgroundColor,
     darkTextColor,
     lightTextColor,
+    magicNum,
     mainColor,
     smallRadius
 } from "../../../styles/StylingConstants";
@@ -22,12 +23,15 @@ const Container = styled.div`
         list-style: none;
         border: solid 2px ${mainColor};
         border-radius: ${smallRadius};
-        overflow: hidden;
+        overflow-y: scroll;
+        overscroll-behavior: contain;
+
+        max-height: calc(${magicNum} * 10);
     }
 `;
 
 const DirectMessageEntry = styled.li<{ active: boolean }>`
-    padding: 18px 36px;
+    padding: calc(${magicNum} / 4) calc(${magicNum} / 2);
 
     border-bottom: 2px solid ${mainColor};
 
@@ -49,9 +53,9 @@ const DirectMessageEntry = styled.li<{ active: boolean }>`
         }
 
         .asset {
-            margin-right: 18px;
-            width: 56px;
-            height: 56px;
+            margin-right: calc(${magicNum} / 4);
+            width: calc(${magicNum} / 4 * 3);
+            height: calc(${magicNum} / 4 * 3);
             border-radius: 6px;
             overflow: hidden;
         }
@@ -62,13 +66,13 @@ const ChatTypeSelectorContainer = styled.div`
     display: flex;
     justify-content: space-between;
     border: solid 2px ${mainColor};
-    margin-bottom: 36px;
+    margin-bottom: calc(${magicNum} / 2);
     border-radius: ${smallRadius};
 
     // For each one if
     .chat-type {
         width: 50%;
-        padding: 18px;
+        padding: calc(${magicNum} / 4);
         display: flex;
         align-items: center;
         justify-content: center;

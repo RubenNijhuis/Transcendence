@@ -1,7 +1,9 @@
 // UI
-import DebugDevBox from "../../containers/DebugDevBox";
 import Footer from "../Footer";
 import NavBar from "../Navbar";
+
+// DEBUG
+import DebugDevBox from "../../containers/DebugDevBox";
 
 // Styling
 import { Container, Content } from "./Layout.style";
@@ -10,7 +12,7 @@ interface Props {
     children: React.ReactNode;
 }
 
-const Layout = ({ children }: Props) => {
+const Layout = ({ children }: Props): JSX.Element => {
     return (
         <Container>
             <NavBar />
