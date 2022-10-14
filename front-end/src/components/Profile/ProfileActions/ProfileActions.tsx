@@ -5,7 +5,7 @@ import { ReactElement, useState } from "react";
 import { ProfileType } from "../../../types/profile";
 
 // Utils
-import randomIntFromInterval from "../../../utils/randomNumFromInterval";
+import randomNum from "../../../utils/randomNum";
 
 // UI
 import Button from "../../Button";
@@ -25,7 +25,7 @@ const ProfileActivityStatus = (): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
-    const rand = randomIntFromInterval(0, 2);
+    const rand = randomNum(0, 2);
     
 
     if (rand === 0) {

@@ -1,4 +1,4 @@
-import randomNumberInRange from "./randomNum";
+import randomNum from "./randomNum";
 
 const shuffleArray = <T>(array: T[]): T[] => {
     let curId: number = array.length;
@@ -22,7 +22,7 @@ const randomSliceOfArray = <T>(items: Array<T>, size: number): T[] => {
     let randomSlice: T[] = [];
 
     const arrayLen: number = items.length;
-    const startPos: number = randomNumberInRange(0, arrayLen - size - 1);
+    const startPos: number = randomNum(0, arrayLen - size - 1);
     const endPos: number = startPos + size;
 
     randomSlice = items.slice(startPos, endPos);

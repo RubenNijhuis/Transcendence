@@ -1,4 +1,4 @@
-import randomIntFromInterval from "../../utils/randomNumFromInterval";
+import randomNum from "../../utils/randomNum";
 
 class Ball {
     positionX: number;
@@ -26,8 +26,8 @@ class Ball {
         
         this.velocity = this.canvas.width / 300
 
-        this.velocityX = randomIntFromInterval(-(this.velocity), this.velocity);
-        this.velocityY = randomIntFromInterval(-(this.velocity), this.velocity);
+        this.velocityX = randomNum(-(this.velocity), this.velocity);
+        this.velocityY = randomNum(-(this.velocity), this.velocity);
         
         this.color = "#1e1e1e";
     }
@@ -49,14 +49,14 @@ class Ball {
     }
 
     start() {
-        // this.velocityX = randomIntFromInterval(-2.5, 2.5);
-        // this.velocityY = randomIntFromInterval(-2.5, 2.5);
+        // this.velocityX = randomNum(-2.5, 2.5);
+        // this.velocityY = randomNum(-2.5, 2.5);
     }
 
     reset() {
         this.positionX = this.canvas.clientWidth / 2;
         this.positionY = this.canvas.clientHeight / 2;
-        this.velocityX = this.velocityY = randomIntFromInterval(
+        this.velocityX = this.velocityY = randomNum(
             -this.velocity,
             this.velocity
         );
