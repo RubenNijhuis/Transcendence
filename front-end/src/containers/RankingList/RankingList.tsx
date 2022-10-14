@@ -17,7 +17,7 @@ interface Props {
     rankings: ProfileType[];
 }
 
-const RankingList = ({ rankings }: Props) => {
+const RankingList = ({ rankings }: Props): JSX.Element => {
     return (
         <EntryList>
             {rankings.length > 0 &&

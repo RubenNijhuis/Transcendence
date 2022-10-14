@@ -20,7 +20,7 @@ import Logger from "../../../utils/Logger";
  * Checks if certain conditions are met when a AuthGuarded
  * page is accesed. Otherwise reroute to another page
  */
-const AuthGuard = () => {
+const AuthGuard = (): JSX.Element => {
     const { isLoggedIn } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();

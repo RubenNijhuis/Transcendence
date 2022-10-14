@@ -13,7 +13,7 @@ const ModalContext = createContext<ModalContextType>(null!);
 
 const useModal = () => useContext(ModalContext);
 
-const ModalProvider = ({ children }: { children: React.ReactNode }) => {
+const ModalProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [modalElement, setModalElement] = useState<React.ReactNode>(null!);
 

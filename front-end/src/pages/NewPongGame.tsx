@@ -11,7 +11,7 @@ interface BoxProps {
     color: string;
 }
 
-const Box = ({ boxRef, position, args, color }: BoxProps) => {
+const Box = ({ boxRef, position, args, color }: BoxProps): JSX.Element => {
     return (
         <mesh ref={boxRef} position={position} castShadow receiveShadow>
             <boxGeometry args={args} />
@@ -20,7 +20,7 @@ const Box = ({ boxRef, position, args, color }: BoxProps) => {
     );
 };
 
-const BackgroundPlane = () => {
+const BackgroundPlane = (): JSX.Element => {
     const main = useRef<Mesh>(null!);
     const secondary = useRef<Mesh>(null!);
 
@@ -51,7 +51,7 @@ const BackgroundPlane = () => {
     );
 };
 
-const CustomCam = () => {
+const CustomCam = (): JSX.Element => {
     const camRef = useRef<any>(null);
 
     useEffect(() => {
@@ -68,7 +68,7 @@ const CustomCam = () => {
     );
 };
 
-const BatObject = () => {
+const BatObject = (): JSX.Element => {
     const batRef = useRef<Mesh>(null!);
 
     return (
@@ -81,7 +81,7 @@ const BatObject = () => {
     );
 };
 
-const NewPongGame = () => {
+const NewPongGame = (): JSX.Element => {
     return (
         <div id="canvas-container" style={{ height: "100%" }}>
             <Canvas shadows={{ type: BasicShadowMap }}>

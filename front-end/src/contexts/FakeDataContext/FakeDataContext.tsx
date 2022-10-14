@@ -33,7 +33,7 @@ const FakeDataContext = createContext<FakeDataContextType>(null!);
 const useFakeData = () => useContext(FakeDataContext);
 
 // Setup data storage and update functions
-const FakeDataProvider = ({ children }: { children: React.ReactNode }) => {
+const FakeDataProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
     const [fakeUser, setFakeUser] = useState<ProfileType>(null!);
     const [profiles, setProfiles] = useState<ProfileType[]>(null!);
     const [leaderBoard, setLeaderBoard] = useState<ProfileType[]>(null!);

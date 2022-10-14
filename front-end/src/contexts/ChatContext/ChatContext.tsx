@@ -24,7 +24,7 @@ interface ChatContextType {
 const ChatContext = createContext<ChatContextType>(null!);
 const useChat = () => useContext(ChatContext);
 
-const ChatProvider = ({ children }: { children: React.ReactNode }) => {
+const ChatProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
     const [activeChatID, setActiveChatID] = useState<number>(0);
     const [allChats, setAllChats] = useState<GroupChat[]>(null!);
 

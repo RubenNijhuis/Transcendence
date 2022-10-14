@@ -40,7 +40,7 @@ const useAuth = () => useContext(AuthContext);
  * The authprovider creates a "bucket" in which we can store all
  * the user data as well as the utility functions like login and logout
  */
-const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+const AuthProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
     const [user, setUser] = useState<ProfileType>(null!);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
 

@@ -35,7 +35,7 @@ interface Props {
 }
 
 // TODO: make component check input data before sending
-const CreateAccount = ({ setModalOpen }: Props) => {
+const CreateAccount = ({ setModalOpen }: Props): JSX.Element => {
     const [username, setusername] = useState<string>("");
     const [color, setColor] = useState<string>("");
     const [description, setDescription] = useState<string>("");

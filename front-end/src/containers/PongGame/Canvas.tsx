@@ -18,7 +18,7 @@ interface Props {
     canvasRef: React.RefObject<HTMLCanvasElement>;
 }
 
-const Canvas = ({ canvasRef }: Props) => {
+const Canvas = ({ canvasRef }: Props): JSX.Element => {
     const canvasContainerRef = useRef(null!);
 
     useEffect(() => {

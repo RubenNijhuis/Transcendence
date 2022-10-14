@@ -2,10 +2,11 @@
 import { get_img_url } from "./utils";
 
 // Random int
-import randomIntFromInterval from "../../../utils/randomNumFromInterval";
+import randomIntFromInterval from "../../../utils/randomNum";
+import randomNumberInRange from "../../../utils/randomNum";
 
 // Types
-import { ProfileType, ProfileID } from "../../../types/profile";
+import { ProfileType } from "../../../types/profile";
 import { GameType } from "../../../types/game";
 import {
     Message,
@@ -16,7 +17,12 @@ import {
     MessageContentType,
     MessageTypes
 } from "../../../types/chat";
+
+// Utils
 import { generateProfile } from "./profile";
+import { randomSliceOfArray } from "../../../utils/arrayManipulation";
+
+///////////////////////////////////////////////////////////
 
 const generateInvite = (
     user: ProfileType,
@@ -102,31 +108,7 @@ const generateMessage = (
     return messages;
 };
 
-// Function to generate random number
-function randomNumberInRange(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min) + min);
-}
-
-const randomSliceOfArray = <T>(items: Array<T>, size: number): T[] => {
-    let randomSlice: T[] = [];
-
-    const arrayLen: number = items.length;
-    const startPos: number = randomNumberInRange(0, arrayLen - size - 1);
-    const endPos: number = startPos + size;
-
-    randomSlice = items.slice(startPos, endPos);
-    return randomSlice;
-};
-
-const getMemberUID = (profiles: ProfileType[]): ProfileID[] => {
-    let UID: ProfileID[] = [];
-
-    for (let i = 0; i < profiles.length; i++) {
-        UID.push(profiles[i].uid);
-    }
-
-    return UID;
-};
+///////////////////////////////////////////////////////////
 
 const generateGroupChats = (
     user: ProfileType,
