@@ -7,7 +7,6 @@ import {
   HttpStatus,
   Param,
   Post,
-  Query,
   Req,
   Res,
   UploadedFile,
@@ -41,7 +40,8 @@ import User from "../../entities/user/user.entity";
 // image upload pipe config
 import {
   bannerOptions,
-  profileOptions
+  deleteFiles,
+  profileOptions,
 } from "src/middleware/imgUpload/imgUpload";
 
 // file upload library
@@ -49,7 +49,7 @@ import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
 import { Request, Response } from "express";
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { GetImgDto } from "src/dtos/user/get-img.dto";
+import { readdirSync, unlinkSync } from "fs";
 
 /**
  * The user controller will act as the first entry point for user related api calls.
@@ -86,9 +86,15 @@ export class UsersController {
         throw new BadRequestException("Invalid image type");
       }
 
-      return res.sendFile(`upload/${imageType}/${intraId}.jpg`, {
-        root: "/app/"
-      });
+      const dirname : string = `/app/upload/${imageType}/`;
+      let fullPath: string = dirname;
+
+      const files = readdirSync(dirname).filter(file => file.startsWith(`${intraId}.`));
+      if (!files)
+        fullPath += "standard.png"; // in case nothing has been uploaded, if it ever gets optional??
+      else
+        fullPath += files[0]; // always takes the first one since there should only be 1 (one) file per user
+      return res.sendFile(fullPath);
     } catch (err) {
       throw err;
     }
@@ -152,16 +158,28 @@ export class UsersController {
   @Post(UserRoutes.uploadBannerPic)
   @UseGuards(AccessTokenGuard)
   @UseInterceptors(FileInterceptor("file", bannerOptions))
-  async uploadBannerFile(@UploadedFile() file: Express.Multer.File) {
-    console.log("Upload banner file: ", file.filename);
+  async uploadBannerFile(
+    @Req() req: Request,
+    @UploadedFile() file: Express.Multer.File) {
+    const path: string = '/app/upload/banner/';
+    const id: string = req.user["intraID"];
+
+    deleteFiles(path, id, file.filename);
     return HttpStatus.OK;
   }
 
   @Post(UserRoutes.uploadProfilePic)
   @UseGuards(AccessTokenGuard)
   @UseInterceptors(FileInterceptor("file", profileOptions))
-  async uploadProfileFile(@UploadedFile() file: Express.Multer.File) {
-    console.log(file.filename);
+  async uploadProfileFile(
+    @Req() req: Request,
+    @UploadedFile() file: Express.Multer.File
+    ) {
+    // remove left over files if any
+    const path: string = '/app/upload/profile/';
+    const id: string = req.user["intraID"];
+
+    deleteFiles(path, id, file.filename);
     return HttpStatus.OK;
   }
 
