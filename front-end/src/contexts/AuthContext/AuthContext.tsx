@@ -4,6 +4,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 // API
 import loginConfirm from "../../proxies/auth/confirmLogin";
 import getUserByAccessToken from "../../proxies/user/getUserByAccessToken";
+import addImagesToProfile from "../../proxies/user/addImagesToProfile";
+
 import { refreshAuthToken } from "../../proxies/auth/refreshToken";
 import { setDefaultAuthHeader } from "../../proxies/instances/apiInstance";
 
@@ -16,8 +18,6 @@ import StoreId from "../../config/StoreId";
 
 // Types
 import { ProfileType } from "../../types/profile";
-import getProfileBannerByUserName from "../../proxies/user/getProfileBannerByUsername";
-import getProfileImageByUserName from "../../proxies/user/getProfileImageByUsername";
 
 interface AuthContextType {
     user: ProfileType;
@@ -40,7 +40,11 @@ const useAuth = () => useContext(AuthContext);
  * The authprovider creates a "bucket" in which we can store all
  * the user data as well as the utility functions like login and logout
  */
-const AuthProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
+const AuthProvider = ({
+    children
+}: {
+    children: React.ReactNode;
+}): JSX.Element => {
     const [user, setUser] = useState<ProfileType>(null!);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
 
@@ -66,13 +70,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }): JSX.Element 
             setDefaultAuthHeader(accessToken);
 
             if (profile !== null) {
-                profile.banner_url = await getProfileBannerByUserName(
-                    profile.username
-                );
-                profile.img_url = await getProfileImageByUserName(
-                    profile.username
-                );
-                setUser(profile);
+                const returnedUserProfile = await addImagesToProfile(profile);
+                setUser(returnedUserProfile);
                 setLoggedIn(true);
             }
 
@@ -131,13 +130,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }): JSX.Element 
                             accessToken
                         );
 
-                    userFromToken.banner_url =
-                            await getProfileBannerByUserName(
-                                userFromToken.username
-                            );
-                        userFromToken.img_url = await getProfileImageByUserName(
-                            userFromToken.username
-                        );
                         setUser(userFromToken);
                     }
 

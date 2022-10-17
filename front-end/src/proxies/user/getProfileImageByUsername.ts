@@ -2,6 +2,7 @@
 import { API } from "../instances/apiInstance";
 import ApiRoutes from "../../config/ApiRoutes";
 import { Buffer } from "buffer";
+
 const getProfileImageByUsername = async (username: string): Promise<string> => {
     try {
         const { data } = await API.get(

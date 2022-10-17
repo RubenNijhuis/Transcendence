@@ -4,6 +4,7 @@ import { API } from "../instances/apiInstance";
 
 // Types
 import { ProfileType } from "../../types/profile";
+import addImagesToProfile from "./addImagesToProfile";
 
 const getUserByAccessToken = async (
     accessToken: string
@@ -12,7 +13,8 @@ const getUserByAccessToken = async (
         const { data } = await API.get(ApiRoutes.getUserByAccessToken(), {
             headers: { Authorization: `Bearer ${accessToken}` }
         });
-        return Promise.resolve(data);
+        const returnedUser = await addImagesToProfile(data);
+        return Promise.resolve(returnedUser);
     } catch (err: any) {
         return Promise.reject(err);
     }

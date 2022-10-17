@@ -4,6 +4,7 @@ import ApiRoutes from "../../config/ApiRoutes";
 
 // Types
 import { ProfileType } from "../../types/profile";
+import addImagesToProfile from "./addImagesToProfile";
 
 interface createUserProps {
     username: string;
@@ -17,7 +18,8 @@ const createUser = async (userData: createUserProps): Promise<ProfileType> => {
             ApiRoutes.createUser(),
             userData
         );
-        return Promise.resolve(data);
+        const returnedUserProfile = await addImagesToProfile(data);
+        return Promise.resolve(returnedUserProfile);
     } catch (err: any) {
         return Promise.reject(err);
     }
