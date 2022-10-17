@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { FriendList } from "src/entities";
-import { CreateFriensdDto } from "../../dtos/friendlist/create-friend.dto";
+import { CreateFriendsDto } from "../../dtos/friendlist/create-friend.dto";
 
 @Injectable()
 export class FriendlistService {
@@ -35,7 +35,7 @@ export class FriendlistService {
     );
   }
 
-  async addFriend(createfriendsDto: CreateFriensdDto) {
+  async addFriend(createfriendsDto: CreateFriendsDto) {
     const newEntry = this.friendlistRepository.create(createfriendsDto);
 
     return this.friendlistRepository.save(newEntry);

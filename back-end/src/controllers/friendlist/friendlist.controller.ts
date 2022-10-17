@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Query } from "@nestjs/common";
-import { CreateFriensdDto } from "src/dtos/friendlist/create-friend.dto";
+import { CreateFriendsDto } from "src/dtos/friendlist/create-friend.dto";
 import { FriendlistService } from "src/services/friendlist/friendlist.service";
 
 @Controller("friends")
@@ -12,7 +12,7 @@ export class FriendlistController {
   }
 
   @Post("getfriend")
-  async getfriend(@Body() createfriendsDto: CreateFriensdDto) {
+  async getfriend(@Body() createfriendsDto: CreateFriendsDto) {
     return await this.friendlistService.getFriend(
       createfriendsDto.username,
       createfriendsDto.friendname
@@ -20,7 +20,7 @@ export class FriendlistController {
   }
 
   @Post("isfriend")
-  async isfriend(@Body() createfriendsDto: CreateFriensdDto) {
+  async isfriend(@Body() createfriendsDto: CreateFriendsDto) {
     return await this.friendlistService.isFriend(
       createfriendsDto.username,
       createfriendsDto.friendname
@@ -28,12 +28,12 @@ export class FriendlistController {
   }
 
   @Post("addfriend")
-  async addfriend(@Body() createfriendsDto: CreateFriensdDto) {
+  async addfriend(@Body() createfriendsDto: CreateFriendsDto) {
     return await this.friendlistService.addFriend(createfriendsDto);
   }
 
   @Post("removefriend")
-  async removefriend(@Body() createfriendsDto: CreateFriensdDto) {
+  async removefriend(@Body() createfriendsDto: CreateFriendsDto) {
     return await this.friendlistService.removeFriend(
       createfriendsDto.username,
       createfriendsDto.friendname

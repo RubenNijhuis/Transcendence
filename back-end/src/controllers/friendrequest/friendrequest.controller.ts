@@ -12,7 +12,7 @@ export class FriendRequestController {
   }
 
   @Post("sendrequest")
-  async senrequest(@Body() requestDto: CreateRequestDto) {
+  async sendrequest(@Body() requestDto: CreateRequestDto) {
     return await this.friendrequestService.sendRequest(requestDto);
   }
 

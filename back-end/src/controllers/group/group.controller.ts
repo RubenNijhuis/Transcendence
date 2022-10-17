@@ -48,7 +48,8 @@ export class GroupController {
   }
 
   @Post("createGroup")
-  async createGroup(@Body() createGroupDto: CreateGroupDto) {
+  async createGroup(@Body() createGroupDto: CreateGroupDto) { 
+    //TODO: group still gets made when there is a problem with the users
     try {
       const group = await this.groupService.createGroup(createGroupDto);
       const groupId = group.id;
