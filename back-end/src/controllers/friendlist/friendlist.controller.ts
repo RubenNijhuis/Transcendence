@@ -8,35 +8,55 @@ export class FriendlistController {
 
   @Get("getfriends?")
   async getfriends(@Query("username") username) {
-    return await this.friendlistService.getFriends(username);
+    try {
+      return await this.friendlistService.getFriends(username);
+    } catch (error) {
+      throw error;
+    }
   }
 
   @Post("getfriend")
   async getfriend(@Body() createfriendsDto: CreateFriendsDto) {
-    return await this.friendlistService.getFriend(
-      createfriendsDto.username,
-      createfriendsDto.friendname
-    );
+    try {
+      return await this.friendlistService.getFriend(
+        createfriendsDto.username,
+        createfriendsDto.friendname
+      ); 
+    } catch (error) {
+      throw error;
+    }
   }
 
   @Post("isfriend")
   async isfriend(@Body() createfriendsDto: CreateFriendsDto) {
-    return await this.friendlistService.isFriend(
-      createfriendsDto.username,
-      createfriendsDto.friendname
-    );
+    try {
+      return await this.friendlistService.isFriend(
+        createfriendsDto.username,
+        createfriendsDto.friendname
+      );
+    } catch (error) {
+      throw error;
+    }
   }
 
   @Post("addfriend")
   async addfriend(@Body() createfriendsDto: CreateFriendsDto) {
-    return await this.friendlistService.addFriend(createfriendsDto);
+    try {
+      return await this.friendlistService.addFriend(createfriendsDto);
+    } catch (error) {
+      throw error;
+    }
   }
 
   @Post("removefriend")
   async removefriend(@Body() createfriendsDto: CreateFriendsDto) {
-    return await this.friendlistService.removeFriend(
-      createfriendsDto.username,
-      createfriendsDto.friendname
-    );
+    try {
+      return await this.friendlistService.removeFriend(
+        createfriendsDto.username,
+        createfriendsDto.friendname
+      );
+    } catch (error) {
+      throw error;
+    }
   }
 }

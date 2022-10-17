@@ -8,19 +8,31 @@ export class FriendRequestController {
 
   @Get("getrequests?")
   async getrequests(@Query("username") username) {
-    return await this.friendrequestService.getRequests(username);
+    try {
+      return await this.friendrequestService.getRequests(username);
+    } catch (error) {
+      throw error;
+    }
   }
 
   @Post("sendrequest")
   async sendrequest(@Body() requestDto: CreateRequestDto) {
-    return await this.friendrequestService.sendRequest(requestDto);
+    try {
+      return await this.friendrequestService.sendRequest(requestDto);
+    } catch (error) {
+      throw error;
+    }
   }
 
   @Post("removerequest")
   async removerequest(@Body() requestDto: CreateRequestDto) {
-    return await this.friendrequestService.removeRequest(
-      requestDto.username,
-      requestDto.requested
-    );
+    try {
+      return await this.friendrequestService.removeRequest(
+        requestDto.username,
+        requestDto.requested
+      );
+    } catch (error) {
+      throw error;
+    }
   }
 }

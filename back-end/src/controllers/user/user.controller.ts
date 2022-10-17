@@ -15,6 +15,7 @@ import {
   UsePipes,
   ValidationPipe
 } from "@nestjs/common";
+import { Request, Response } from "express";
 
 // route config
 import UserRoutes from "src/configs/routes/globalRoutes.config";
@@ -37,19 +38,19 @@ import { UserSeeder } from "src/database/seeds/user-create.seed";
 // user entity
 import User from "../../entities/user/user.entity";
 
-// image upload pipe config
+// image upload and download
 import {
   bannerOptions,
   deleteFiles,
   profileOptions,
 } from "src/middleware/imgUpload/imgUpload";
-
-// file upload library
-import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
-import { Request, Response } from "express";
-import { AccessTokenGuard } from "src/guards/accessToken.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { readdirSync, unlinkSync } from "fs";
+import { readdirSync } from "fs";
+
+
+// guards
+import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
+import { AccessTokenGuard } from "src/guards/accessToken.guard";
 
 /**
  * The user controller will act as the first entry point for user related api calls.
@@ -72,7 +73,7 @@ export class UsersController {
   }
 
   @UseGuards(AccessTokenGuard)
-  @Get("get-img/:imageType/:username")
+  @Get(UserRoutes.getPic)
   async getImg(
     @Param("imageType") imageType: string,
     @Param("username") username: string,

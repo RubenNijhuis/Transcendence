@@ -30,17 +30,17 @@ import { intraIDDto } from "src/dtos/auth/intraID.dto";
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
 import { ConfigService } from "@nestjs/config";
 /**
+ * IMPORTANT: createUser wordt niet aangeroepen in de frontend
+ * dus ik heb de path verwijderd.
+ */
+
+/**
  * User services
  *
  * Contains all typeorm sql injections.
  * Some functions that not yet used:
  * - set2faSecret
  * - update2faSecret is being used in tfa.service
- */
-
-/**
- * IMPORTANT: createUser wordt niet aangeroepen in de frontend
- * dus ik heb de path verwijderd.
  */
 @Injectable()
 export class UserService {
