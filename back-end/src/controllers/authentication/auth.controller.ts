@@ -131,17 +131,6 @@ export class AuthController {
     return refreshTokenRes;
   }
 
-  @UseGuards(RefreshTokenGuard)
-  @Get("createRefresh")
-  async createNewRefreshTokens(@Req() req: Request) {
-    const refreshToken = req.user["refreshToken"];
-    const newTokenResp = await this.authService.createNewRefreshTokens(
-      refreshToken
-    );
-
-    return newTokenResp;
-  }
-
   // TODO: this should be in the user controller
   /**
    * Returns a user from the database using the authentication token

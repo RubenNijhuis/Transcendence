@@ -23,6 +23,7 @@ export class TfaController {
     try {
       const res = await this.tfaService.generateTfaSecret(userDto);
       console.log("Google 2FA: ", res);
+      return res;
     } catch (error) {
       return error;
     }
