@@ -102,7 +102,7 @@ export class UsersController {
   }
 
   @Get(UserRoutes.getUserOnName)
-  async findUsersById(@Res() res: Response, username: string) {
+  async findUsersById(@Res() res: Response, @Param() username: string) {
     try {
       const user: User = await this.userService.findUserByUsername(username);
       return this.userService.filterUser(user);
@@ -124,7 +124,6 @@ export class UsersController {
 
       return this.userService.filterUser(setUserResp);
     } catch (err) {
-      console.log("controller, setUser(): ", err);
       throw err;
     }
   }
@@ -143,12 +142,8 @@ export class UsersController {
   }
 
   @Post(UserRoutes.enableTfa)
-  @UsePipes(ValidationPipe) //what does this do
+  @UsePipes(ValidationPipe)
   async turnon2fa(@Body() dto: SetTfaDto) {
-    // const isCodeValid = this.userService.isTwoFactorAuthenticationCodeValid(twoFaDto);
-    // if (!isCodeValid) {
-    //     throw new UnauthorizedException('Wrong authentication code');
-    // }
     try {
       await this.userService.setTfaOption(dto.username, dto.option);
     } catch (error) {
