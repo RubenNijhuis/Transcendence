@@ -33,7 +33,6 @@ const ApiRoutes = {
     // Auth
     getLoginRoute: () => `/auth/login`,
     confirmLogin: (code: string) => `/auth/confirm?token=${code}`,
-    createRefreshToken: () => `/auth/createRefresh`,
     refreshAuthToken: () => `/auth/refresh`
 };
 

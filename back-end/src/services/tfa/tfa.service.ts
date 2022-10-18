@@ -11,11 +11,8 @@ export class TfaService {
 
   async isTfaValid(tfaDto: TfaDto) {
     const ret = await this.usersService.findUserByUsername(tfaDto.username);
-    console.log(tfaDto.tfaCode);
-    console.log(ret.tfaSecret);
 
     const res = authenticator.check(tfaDto.tfaCode, ret.tfaSecret);
-    console.log(res);
     return res;
   }
 
@@ -30,8 +27,6 @@ export class TfaService {
     var secret = "";
     if (ret.tfaSecret == "") {
       secret = authenticator.generateSecret();
-      console.log("secret:");
-      console.log(secret);
       this.usersService.update2faSecret(usernameDto, secret);
     } else {
       secret = ret.tfaSecret;
@@ -42,10 +37,6 @@ export class TfaService {
       secret
     );
 
-    console.log("otapathurl:");
-    console.log(otpauthUrl);
-
-    console.log("todataurl:");
     const res = toDataURL(otpauthUrl);
 
     return toDataURL(otpauthUrl);

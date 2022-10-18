@@ -9,6 +9,8 @@ import { FriendRequestModule } from "src/modules/friendrequest/friendrequest.mod
 import { AuthModule } from "src/modules/authentication/auth.module";
 import { MessageModule } from "src/modules/message/message.module";
 import { GroupModule } from "src/modules/group/group.module";
+import { TfaModule } from "src/modules/tfa/tfa.module";
+import { RecordModule } from "src/modules/record/record.module"
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { GroupModule } from "src/modules/group/group.module";
     AuthModule,
     MessageModule,
     GroupModule,
+    TfaModule,
+    RecordModule,
     PassportModule.register({ session: true })
   ],
   controllers: [],

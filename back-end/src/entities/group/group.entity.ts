@@ -7,6 +7,7 @@ import {
 } from "typeorm";
 import Groupuser from "../groupuser/groupuser.entity";
 import Message from "../message/message.entity";
+import Record from "../record/record.entity";
 
 @Entity()
 export class Group {
@@ -23,6 +24,9 @@ export class Group {
   })
   password: string;
 
+  @Column()
+  groupname: string;
+
   @OneToMany((type) => Groupuser, (groupuser) => groupuser.group)
   @JoinTable()
   users: Groupuser[];
@@ -32,5 +36,9 @@ export class Group {
   })
   @JoinTable()
   messages: Message[];
+
+  @OneToMany((type) => Record, (record) => record.group)
+  @JoinTable()
+  records: Record[];
 }
 export default Group;

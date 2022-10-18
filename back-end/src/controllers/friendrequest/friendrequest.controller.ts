@@ -16,7 +16,7 @@ export class FriendRequestController {
   }
 
   @Post("sendrequest")
-  async senrequest(@Body() requestDto: CreateRequestDto) {
+  async sendrequest(@Body() requestDto: CreateRequestDto) {
     try {
       return await this.friendrequestService.sendRequest(requestDto);
     } catch (error) {
