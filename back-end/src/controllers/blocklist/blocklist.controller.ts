@@ -7,7 +7,7 @@ export class BlockListController {
   constructor(private readonly blocklistService: BlocklistService) {}
 
   @Get("getblocked?")
-  async getblocked(@Query("username") username) {
+  async getblocked(@Query("username") username: string) {
     return await this.blocklistService.getBlocked(username);
   }
 

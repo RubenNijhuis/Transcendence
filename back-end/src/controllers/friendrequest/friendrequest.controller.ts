@@ -7,7 +7,7 @@ export class FriendRequestController {
   constructor(private readonly friendrequestService: FriendrequestService) {}
 
   @Get("getrequests?")
-  async getrequests(@Query("username") username) {
+  async getrequests(@Query("username") username: string) {
     try {
       return await this.friendrequestService.getRequests(username);
     } catch (error) {

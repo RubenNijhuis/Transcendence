@@ -7,7 +7,7 @@ export class FriendlistController {
   constructor(private readonly friendlistService: FriendlistService) {}
 
   @Get("getfriends?")
-  async getfriends(@Query("username") username) {
+  async getfriends(@Query("username") username: string) {
     try {
       return await this.friendlistService.getFriends(username);
     } catch (error) {

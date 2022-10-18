@@ -12,7 +12,7 @@ export class FriendlistService {
   ) {}
 
   async getFriends(username: string): Promise<FriendList[]> {
-    const friends = await this.friendlistRepository
+    const friends  = await this.friendlistRepository
       .createQueryBuilder("friend_list")
       .where("users = :username", { username })
       .getMany();

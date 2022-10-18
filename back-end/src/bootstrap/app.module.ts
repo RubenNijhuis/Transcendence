@@ -11,6 +11,8 @@ import { MessageModule } from "src/modules/message/message.module";
 import { GroupModule } from "src/modules/group/group.module";
 import { TfaModule } from "src/modules/tfa/tfa.module";
 import { RecordModule } from "src/modules/record/record.module"
+import { MatchHistoryModule } from "src/modules/matchhistory/matchhistory.module";
+
 
 @Module({
   imports: [
@@ -24,6 +26,7 @@ import { RecordModule } from "src/modules/record/record.module"
     GroupModule,
     TfaModule,
     RecordModule,
+    MatchHistoryModule,
     PassportModule.register({ session: true })
   ],
   controllers: [],
