@@ -24,6 +24,7 @@ import Logger from "../../utils/Logger";
 // Store
 import { setItem } from "../../modules/Store";
 import StoreId from "../../config/StoreId";
+import { useUser } from "../../contexts/UserContext";
 
 ////////////////////////////////////////////////////////////
 
@@ -83,7 +84,8 @@ const ProfileIcon = ({ url }: { url: string }): JSX.Element => {
 };
 
 const NavBar = (): JSX.Element => {
-    const { isLoggedIn, user } = useAuth();
+    const { isLoggedIn } = useAuth();
+    const { user } = useUser();
 
     ////////////////////////////////////////////////////////////
 

@@ -10,12 +10,12 @@ import {
     fillDBwithChats,
     fillDBwithUsers
 } from "./DebugDevBox.bl";
-import { useAuth } from "../../contexts/AuthContext";
+import { useUser } from "../../contexts/UserContext";
 
 ////////////////////////////////////////////////////////////
 
 const DebugDevBox = (): JSX.Element => {
-    const { user } = useAuth();
+    const { user } = useUser();
 
     return (
         <Container>

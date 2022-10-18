@@ -46,6 +46,11 @@ const DirectMessageEntry = styled.li<{ active: boolean }>`
         display: flex;
         flex-direction: row;
         align-items: center;
+        margin-bottom: calc(${magicNum} / 8);
+
+        &:last-child {
+            margin-bottom: 0;
+        }
 
         span {
             color: ${({ active }) =>

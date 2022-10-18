@@ -38,6 +38,7 @@ import StoreId from "../config/StoreId";
 // Modal Components
 import { useModal } from "../contexts/ModalContext";
 import CreateAccount from "../containers/CreateAccount/CreateAccount";
+import { useUser } from "../contexts/UserContext";
 
 ////////////////////////////////////////////////////////////
 
@@ -51,7 +52,8 @@ const ProfilePage = (): JSX.Element => {
     const { matchHistory } = useFakeData();
 
     // Local profile
-    const { user, signIn } = useAuth();
+    const { signIn } = useAuth();
+    const { user } = useUser();
 
     // Create account modal
     const { setModalOpen, setModalElement } = useModal();

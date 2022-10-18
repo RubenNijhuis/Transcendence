@@ -13,6 +13,7 @@ import { Container } from "./Box.style";
 import { useAuth } from "../../../contexts/AuthContext";
 import { ProfileType } from "../../../types/profile";
 import Asset from "../../../components/Asset";
+import { useUser } from "../../../contexts/UserContext";
 
 ////////////////////////////////////////////////////////////
 
@@ -25,7 +26,7 @@ const ChatTitle = ({ chat }: Props): JSX.Element => {
      * If the the amount of members is 2 it means it a DM
      * Therefore we can change the interface from 'Chat' to 'other user name'
      */
-    const { user } = useAuth();
+    const { user } = useUser();
     const isDmChat: boolean = chat.members.length === 2;
     const otherMember: ProfileType = chat.members
         .filter((member) => member.uid !== user.uid)
@@ -47,7 +48,7 @@ const ChatTitle = ({ chat }: Props): JSX.Element => {
 };
 
 const ChatBox = ({ chat }: Props): JSX.Element => {
-    const { user } = useAuth();
+    const { user } = useUser();
 
     return (
         <Container>

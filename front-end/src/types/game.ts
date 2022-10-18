@@ -1,13 +1,9 @@
-import { ProfileID, ProfileType } from "./profile";
+import { ProfileType } from "./profile";
 
-// How we define match data
-interface MatchRecord {
-    opponent: ProfileType;
-    player: ProfileType;
-    score: {
-        opponent: number;
-        self: number;
-    };
+// Score type
+const enum ScoreType {
+    Friendly,
+    Ranked
 }
 
 // Game types
@@ -16,5 +12,26 @@ const enum GameType {
     Powered
 }
 
+// How we define match data
+interface MatchRecord {
+    id: number;
+
+    player1: ProfileType;
+    player2: ProfileType;
+
+    score_type: ScoreType;
+    game_type: GameType;
+
+    elo: {
+        player1: number;
+        player2: number;
+    } | null;
+
+    score: {
+        player1: number;
+        player2: number;
+    };
+}
+
 export type { MatchRecord };
-export { GameType };
+export { GameType, ScoreType };

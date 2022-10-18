@@ -13,7 +13,9 @@ import {
     generateGroupChats,
     generateProfile
 } from "../FakeDataContext/fakeDataGenerators";
+import { useUser } from "../UserContext";
 
+///////////////////////////////////////////////////////////
 interface ChatContextType {
     activeChatID: number;
     setActiveChatID: React.Dispatch<React.SetStateAction<number>>;
@@ -22,35 +24,34 @@ interface ChatContextType {
 }
 
 const ChatContext = createContext<ChatContextType>(null!);
+
 const useChat = () => useContext(ChatContext);
 
-const ChatProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
+///////////////////////////////////////////////////////////
+
+const ChatProvider = ({
+    children
+}: {
+    children: React.ReactNode;
+}): JSX.Element => {
     const [activeChatID, setActiveChatID] = useState<number>(0);
     const [allChats, setAllChats] = useState<GroupChat[]>(null!);
 
     ////////////////////////////////////////////////////////////
 
-    const { user } = useAuth();
+    const { user } = useUser();
 
     ////////////////////////////////////////////////////////////
 
     const getMembersFromGroupChats = (chats: GroupChat[]): ProfileType[][] => {
         let members: ProfileType[][] = [];
-
-        for (const chat of chats) {
-            members.push(chat.members);
-        }
-
+        for (const chat of chats) members.push(chat.members);
         return members;
     };
 
     const getMessagesFromGroupChats = (chats: GroupChat[]): Message[][] => {
         let messages: Message[][] = [];
-
-        for (const chat of chats) {
-            messages.push(chat.messages);
-        }
-
+        for (const chat of chats) messages.push(chat.messages);
         return messages;
     };
 
@@ -58,26 +59,10 @@ const ChatProvider = ({ children }: { children: React.ReactNode }): JSX.Element 
         uid: ProfileID,
         members: ProfileType[]
     ): ProfileType => {
-        // WHY TYPESCRIPT
-        let profile: ProfileType = {
-            uid: 0,
-            username: "",
-            img_url: "",
-            banner_url: "",
-            color: "",
-            rank: 0,
-            wins: 0,
-            losses: 0,
-            friends: [],
-            blocked: []
-        };
-
-        for (const member of members) {
-            if (member.uid === uid) {
-                profile = member;
-                return profile;
-            }
-        }
+        // Could return undefined but should always find it anyway so what gives
+        const profile = members.find(
+            (member) => member.uid === uid
+        ) as ProfileType;
 
         return profile;
     };
@@ -121,10 +106,11 @@ const ChatProvider = ({ children }: { children: React.ReactNode }): JSX.Element 
             bindMembersToMessages(members, messages);
             setAllChats(retrievedGroupChats);
 
+            // Manually set id's for front-end use
             for (let i = 0; i < retrievedGroupChats.length; i++) {
                 retrievedGroupChats[i].internal_id = i;
             }
-            
+
             setActiveChatID(0);
         };
         chatAggregator();

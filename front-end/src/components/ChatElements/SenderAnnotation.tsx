@@ -10,6 +10,7 @@ import styled from "styled-components";
 // Styling vars
 import { magicNum, mainColor } from "../../styles/StylingConstants";
 import { useAuth } from "../../contexts/AuthContext";
+import { useUser } from "../../contexts/UserContext";
 
 ////////////////////////////////////////////////////////////
 
@@ -43,7 +44,7 @@ interface Props {
 }
 
 const SenderAnnotation = ({ sender }: Props): JSX.Element => {
-    const { user } = useAuth();
+    const { user } = useUser();
 
     ////////////////////////////////////////////////////////////
 

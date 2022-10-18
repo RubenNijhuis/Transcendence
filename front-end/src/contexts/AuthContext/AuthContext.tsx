@@ -17,12 +17,11 @@ import { getItem, removeItem, setItem } from "../../modules/Store";
 import StoreId from "../../config/StoreId";
 
 // Types
-import { ProfileType } from "../../types/profile";
+import { useUser } from "../UserContext";
+
+///////////////////////////////////////////////////////////
 
 interface AuthContextType {
-    user: ProfileType;
-    setUser: React.Dispatch<React.SetStateAction<ProfileType>>;
-
     isLoggedIn: boolean;
     setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -36,6 +35,8 @@ const AuthContext = createContext<AuthContextType>(null!);
 // Shorthand to use auth as a hook
 const useAuth = () => useContext(AuthContext);
 
+///////////////////////////////////////////////////////////
+
 /**
  * The authprovider creates a "bucket" in which we can store all
  * the user data as well as the utility functions like login and logout
@@ -45,8 +46,11 @@ const AuthProvider = ({
 }: {
     children: React.ReactNode;
 }): JSX.Element => {
-    const [user, setUser] = useState<ProfileType>(null!);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
+
+    ////////////////////////////////////////////////////////////
+
+    const { user, setUser } = useUser();
 
     ////////////////////////////////////////////////////////////
 
@@ -105,7 +109,7 @@ const AuthProvider = ({
      * If there is still one we check it's validity and change
      * the auth state accordingly.
      * If the refresh token is also expired we ask the user
-     * to manually log in
+     * to manually log in by redirecting them to home
      */
     // TODO: sign in function and this use effect share a lot of code - reduce duplication
     useEffect(() => {
@@ -145,9 +149,6 @@ const AuthProvider = ({
     ////////////////////////////////////////////////////////////
 
     const value: AuthContextType = {
-        user,
-        setUser,
-
         signIn,
         signOut,
 

@@ -18,6 +18,7 @@ import {
     DirectMessageEntry
 } from "./ChatSelector.style";
 import ChatInterface from "../Interface";
+import { useUser } from "../../../contexts/UserContext";
 
 interface Props {
     directMessages: GroupChat[];
@@ -35,7 +36,6 @@ const MemberList = ({ members }: { members: ProfileType[] }): JSX.Element => {
                 <div
                     className="profile"
                     key={count}
-                    style={{ marginBottom: 8 }}
                 >
                     <Asset url={img_url} alt="profile" />
                     <span>{username}</span>
@@ -91,7 +91,7 @@ const DirectMessageList = ({
     selectedChat: number;
     setSelectedChat: React.Dispatch<React.SetStateAction<number>>;
 }): JSX.Element => {
-    const { user } = useAuth();
+    const { user } = useUser();
 
     ////////////////////////////////////////////////////////////
 
