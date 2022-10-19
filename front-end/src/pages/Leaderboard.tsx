@@ -5,7 +5,11 @@ import { useEffect, useState } from "react";
 import Heading from "../components/Heading";
 import Layout from "../components/Layout";
 import Loader from "../components/Loader";
-import RankingList from "../containers/RankingList";
+import Podium from "../containers/Leaderboard/Podium";
+import RankingList from "../containers/Leaderboard/RankingList";
+
+// DEBUG
+import { useFakeData } from "../contexts/FakeDataContext";
 
 // Proxy
 import getLeaderboard from "../proxies/leaderboard/getLeaderboard";
@@ -18,19 +22,28 @@ const Leaderboard = (): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
+    const { leaderBoard } = useFakeData();
+
+    ////////////////////////////////////////////////////////////
+
     useEffect(() => {
-        getLeaderboard().then(setLeaderboard).catch(console.log);
+        setLeaderboard(leaderBoard);
+        // getLeaderboard().then(setLeaderboard).catch(console.log);
     }, []);
 
     ////////////////////////////////////////////////////////////
 
+    if (leaderBoard === null) return <Loader />;
+
     return (
         <Layout>
             <Heading type={1}>Leaderboard</Heading>
-            {leaderboard !== null ? (
-                <RankingList rankings={leaderboard} />
-            ) : (
-                <Loader />
+            {leaderboard === null && <Loader />}
+            {leaderboard && (
+                <>
+                    <Podium rankings={leaderboard} />
+                    <RankingList rankings={leaderboard} />
+                </>
             )}
         </Layout>
     );

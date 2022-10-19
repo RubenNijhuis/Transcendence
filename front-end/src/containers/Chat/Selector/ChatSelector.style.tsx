@@ -73,6 +73,7 @@ const ChatTypeSelectorContainer = styled.div`
     border: solid 2px ${mainColor};
     margin-bottom: calc(${magicNum} / 2);
     border-radius: ${smallRadius};
+    overflow: hidden;
 
     // For each one if
     .chat-type {

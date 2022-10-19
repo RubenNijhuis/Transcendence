@@ -12,6 +12,9 @@ import {
 } from "./DebugDevBox.bl";
 import { useUser } from "../../contexts/UserContext";
 
+// UI
+import Heading from "../../components/Heading";
+
 ////////////////////////////////////////////////////////////
 
 const DebugDevBox = (): JSX.Element => {
@@ -20,20 +23,21 @@ const DebugDevBox = (): JSX.Element => {
     return (
         <Container>
             <Box>
+                <Heading type={4}>Store</Heading>
                 <Button onClick={handleClearStorage}>Clear store</Button>
                 <Button onClick={handleTokenRefresh}>
                     Refresh access token
                 </Button>
-                <hr />
+                <Heading type={4}>Fake data generation</Heading>
                 <Button onClick={() => fillDBwithChats(user)}>
                     Generate chats for user
                 </Button>
                 <Button onClick={fillDBwithUsers}>Generate profiles</Button>
-                <hr />
+                {/* <Heading type={4}>Misc</Heading>
                 <Button onClick={() => fillDBwithChats(user)}>
                     Generate chats for user
                 </Button>
-                <Button onClick={fillDBwithUsers}>Generate profiles</Button>
+                <Button onClick={fillDBwithUsers}>Generate profiles</Button> */}
             </Box>
         </Container>
     );

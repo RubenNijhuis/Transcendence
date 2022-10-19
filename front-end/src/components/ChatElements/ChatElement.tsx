@@ -55,7 +55,7 @@ const ChatElement = ({ fromUser, message, isDm }: Props): JSX.Element => {
     return (
         <ChatElementContainer>
             {messageElements[contentType]}
-            {!isDm && <SenderAnnotation sender={message.sender} />}
+            {!isDm && !fromUser && <SenderAnnotation sender={message.sender} />}
         </ChatElementContainer>
     );
 };

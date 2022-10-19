@@ -30,6 +30,20 @@ const CreateGroupChat = ({ friends }: { friends: ProfileType[] }) => {
 
     ////////////////////////////////////////////////////////////
 
+    const toggleSelected = (friend: ProfileType) => {
+        const isSelected = checkIfProfileIsSelected(friend.uid);
+
+        if (isSelected) removeFriendFromSelected(friend);
+        else addFriendFromSelected(friend);
+    };
+
+    const checkIfProfileIsSelected = (uid: number): boolean => {
+        const isFoundInSelectedFriends =
+            selectedFriends.find((member) => member.uid === uid) !== undefined;
+
+        return isFoundInSelectedFriends;
+    };
+
     const handleSearch = () => {};
 
     const removeFriendFromSelected = (friendID: ProfileType) => {
@@ -39,17 +53,7 @@ const CreateGroupChat = ({ friends }: { friends: ProfileType[] }) => {
     };
 
     const addFriendFromSelected = (friendID: ProfileType) => {
-        setSelectedFriends((prevState) => {
-            // I hate how this looks
-            const isInArray =
-                prevState.find((friend) => {
-                    return friend.uid === friendID.uid;
-                }) !== undefined;
-
-            if (!isInArray) prevState.push(friendID);
-
-            return prevState;
-        });
+        setSelectedFriends((prevState) => [...prevState, friendID]);
     };
 
     ////////////////////////////////////////////////////////////
@@ -75,11 +79,14 @@ const CreateGroupChat = ({ friends }: { friends: ProfileType[] }) => {
                 <ul className="select-friends__list">
                     {friends.map((friend) => {
                         const { uid, img_url, username } = friend;
+                        const isSelected = checkIfProfileIsSelected(friend.uid);
+                        const selectedClass = isSelected ? "selected" : "";
+
                         return (
                             <div
-                                className="item"
+                                className={`item ${selectedClass}`}
                                 key={uid}
-                                onClick={() => addFriendFromSelected(friend)}
+                                onClick={() => toggleSelected(friend)}
                             >
                                 <Asset
                                     url={img_url}

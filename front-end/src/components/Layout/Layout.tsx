@@ -4,6 +4,7 @@ import NavBar from "../Navbar";
 
 // DEBUG
 import DebugDevBox from "../../containers/DebugDevBox";
+import { debugDevBoxActive } from "../../config/DevEnv";
 
 // Styling
 import { Container, Content } from "./Layout.style";
@@ -18,7 +19,7 @@ const Layout = ({ children }: Props): JSX.Element => {
             <NavBar />
             <Content>{children}</Content>
             <Footer />
-            {false && <DebugDevBox />}
+            {debugDevBoxActive && <DebugDevBox />}
         </Container>
     );
 };

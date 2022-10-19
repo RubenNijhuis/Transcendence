@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import {
     backgroundColor,
+    lightTextColor,
     magicNum,
     mainColor,
     smallRadius
@@ -146,10 +147,13 @@ const CreateGroupChatContainer = styled.div`
 
                 padding-right: calc(${magicNum} / 4);
 
-                border-bottom: solid 2px ${mainColor};
-
                 &:last-child {
                     border-bottom: none;
+                }
+
+                &.selected {
+                    background-color: ${mainColor};
+                    color: ${lightTextColor};
                 }
 
                 .asset {

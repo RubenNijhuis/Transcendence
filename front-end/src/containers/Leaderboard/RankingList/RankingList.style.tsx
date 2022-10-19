@@ -6,7 +6,7 @@ import {
     magicNum,
     mainColor,
     smallRadius
-} from "../../styles/StylingConstants";
+} from "../../../styles/StylingConstants";
 
 const Entry = styled.li`
     display: flex;
