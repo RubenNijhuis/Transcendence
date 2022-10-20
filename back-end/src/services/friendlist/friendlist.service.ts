@@ -1,8 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { FriendList } from "src/entities";
 import { CreateFriendsDto } from "../../dtos/friendlist/create-friend.dto";
+import { errorHandler } from "src/utils/errorhandler/errorHandler";
 
 @Injectable()
 export class FriendlistService {
@@ -14,7 +15,7 @@ export class FriendlistService {
   async getFriends(username: string): Promise<FriendList[]> {
     const friends  = await this.friendlistRepository
       .createQueryBuilder("friend_list")
-      .where("users = :username", { username })
+      .where("username = :username", { username })
       .getMany();
     return friends;
   }
@@ -22,7 +23,7 @@ export class FriendlistService {
   async getFriend(username: string, friendname: string): Promise<FriendList> {
     const friend = await this.friendlistRepository
       .createQueryBuilder("friend_list")
-      .where("users = :username", { username })
+      .where("username = :username", { username })
       .andWhere("friends = :friendname", { friendname })
       .getOne();
     return friend;
@@ -46,7 +47,7 @@ export class FriendlistService {
       .createQueryBuilder("friend_list")
       .delete()
       .from("friend_list")
-      .where("users = :username", { username })
+      .where("username = :username", { username })
       .andWhere("friends = :friendname", { friendname })
       .execute();
   }

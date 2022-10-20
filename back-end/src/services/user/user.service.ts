@@ -72,6 +72,15 @@ export class UserService {
     }
   }
 
+  async getUserByIndex(index: number): Promise<User> {
+    try {
+      const ret: User = await this.userRepository.findOne({ where: { index } });
+      return ret;
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async findUsersById(id: string): Promise<User> {
     try {
       const ret: User = await this.userRepository.findOne({ where: { id } });
@@ -159,6 +168,7 @@ export class UserService {
 
       return await this.findUserByintraId(intraID);
     } catch (err: any) {
+      console.log(err);
       throw errorHandler(
         err,
         "Failed to update user",
@@ -283,25 +293,4 @@ export class UserService {
     }
   }
 
-  async seedCustom(amount: number): Promise<User[]> {
-    try {
-      for (let i = 1; i <= amount; i++) {
-        console.log("yoyo");
-        let genIntraId = randUserName();
-        await this.createUser(genIntraId, "lolo");
-        await this.setUser(genIntraId, {
-          username: randFullName(),
-          color: randColor().toString(),
-          description: randParagraph()
-        });
-      }
-      return this.getUsers();
-    } catch (err: any) {
-      throw errorHandler(
-        err,
-        "Failed to seed database",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
-    }
-  }
 }

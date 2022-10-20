@@ -12,6 +12,7 @@ import { GroupModule } from "src/modules/group/group.module";
 import { TfaModule } from "src/modules/tfa/tfa.module";
 import { RecordModule } from "src/modules/record/record.module"
 import { MatchHistoryModule } from "src/modules/matchhistory/matchhistory.module";
+import { SeederModule } from "src/modules/seeder/seeder.module";
 
 
 @Module({
@@ -27,6 +28,7 @@ import { MatchHistoryModule } from "src/modules/matchhistory/matchhistory.module
     TfaModule,
     RecordModule,
     MatchHistoryModule,
+    SeederModule,
     PassportModule.register({ session: true })
   ],
   controllers: [],
