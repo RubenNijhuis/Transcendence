@@ -75,6 +75,20 @@ export class SeederService {
     }
   }
 
+  private async formulateResponse(users: User[]) {
+    const ret = [];
+
+    for (let i = 0; i < users.length; i++) {
+        let user: User = users[i];
+        let entry = {
+            "username": user.username,
+            "friends": await this.friendsServ.getFriends(user.username)
+        }
+        ret.push(entry);
+    }
+    return ret;
+  }
+
   async seedFriends() {
     try {
         const users: User[] = this.filterUsers(await this.userServ.getUsers());
@@ -109,6 +123,7 @@ export class SeederService {
                 }
             }
         }
+        return this.formulateResponse(users);
     } catch (err) {
         console.log(err);
         throw errorHandler(
