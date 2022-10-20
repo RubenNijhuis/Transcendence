@@ -35,6 +35,29 @@ export class GroupService {
     return this.groupRepository.findOne({ where: { id } });
   }
 
+  async getGroupsByUserId(userId: string) {
+    try {
+      const Groupusers: Groupuser[] = await this.groupuserRepository
+        .createQueryBuilder("groupuser")
+        .where(userId)
+        .getMany();
+        let i : number = 0;
+        let groups : Group[] = [];
+        while(i < Groupusers.length)
+        {
+          const group: Group = await this.groupRepository.findOne({ where: { id: Groupusers[i].groupId } });
+          console.log(group.id);
+          groups.push(group);
+          i++;
+        }
+        console.log(groups.length)
+      return (groups);
+    }
+    catch(err: any) {
+      return err;
+    }
+  }
+
   findGroupuserById(userId: string, groupId: number)
   {
     return (this.groupuserRepository
@@ -144,11 +167,11 @@ export class GroupService {
       if (!group) return console.error("group doesn't exist"); //error lol
 
       const oldHash : string = await this.hashPassword(editPasswordDto.oldPassword);
-      const isMatch: boolean = await bcrypt.compare(oldHash, group.password);
+      const isMatch : boolean = await bcrypt.compare(oldHash, group.password);
 
       if ((!isMatch && group.owner === editPasswordDto.owner))
         return console.error("error lol");
-      const newHash = await this.hashPassword(editPasswordDto.oldPassword);
+      const newHash : string = await this.hashPassword(editPasswordDto.oldPassword);
 
       await this.groupRepository
         .createQueryBuilder()
