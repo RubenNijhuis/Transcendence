@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post } from "@nestjs/common";
 import { SeederAmountDto } from "src/dtos/seeder/custom-seeder.dto";
+import { User } from "src/entities";
 import { SeederService } from "src/services/seeder/seeder.service";
 
 @Controller("seeder")
@@ -8,9 +9,10 @@ export class SeederController {
 
   @Post("amount")
   async seedUsersAmount(@Body() dto: SeederAmountDto) {
-    const seedResp = await this.seedService.seedCustom(dto.amount);
-    await this.seedService.seedFriends();
-    return seedResp;
+    const seedResp: User[] = await this.seedService.seedCustom(dto.amount);
+
+    const cleanedRet = await this.seedService.seedFriends();
+    return cleanedRet;
   }
 
   @Get("friends")
