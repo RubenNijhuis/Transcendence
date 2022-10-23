@@ -10,10 +10,15 @@ const getUserByAccessToken = async (
     accessToken: string
 ): Promise<ProfileType> => {
     try {
-        const { data } = await API.get(ApiRoutes.getUserByAccessToken(), {
-            headers: { Authorization: `Bearer ${accessToken}` }
-        });
+        const { data } = await API.get<ProfileType>(
+            ApiRoutes.getUserByAccessToken(),
+            {
+                headers: { Authorization: `Bearer ${accessToken}` }
+            }
+        );
+        
         const returnedUser = await addImagesToProfile(data);
+
         return Promise.resolve(returnedUser);
     } catch (err: any) {
         return Promise.reject(err);

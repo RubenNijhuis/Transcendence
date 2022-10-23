@@ -20,7 +20,7 @@ interface RequestErrorType {
 
 interface LoginConfirmResponse {
     shouldCreateUser: boolean;
-    profile: null | ProfileType;
+    profile: ProfileType;
     authToken: AuthTokenType;
 }
 

@@ -6,9 +6,10 @@
  * route is a function
  */
 const ApiRoutes = {
+    // Config
     baseUrl: () => `http://127.0.0.1:8080/api/`,
 
-    // User
+    // User ////////////////////////////////////////////////////
     createUser: () => `/user/setUser`,
     getUserByAccessToken: () => `/auth/getUserFromAccessToken`,
 
@@ -16,24 +17,37 @@ const ApiRoutes = {
         `/user/get-img/profile/${username}`,
     getProfileBannerByUsername: (username: string) =>
         `/user/get-img/banner/${username}`,
+    // User ////////////////////////////////////////////////////
 
-    // Profiles
+    // Friend //////////////////////////////////////////////////
+    getFriends: (username: string) => `/friends?username=${username}`,
+    addFriend: () => `/friends/addFriend`,
+    isFriend: () => `/friends/isFriend`,
+    // Friend //////////////////////////////////////////////////
+
+    // Profile /////////////////////////////////////////////////
     getProfileByUserName: (userName: string) => `/user/${userName}`,
+    // Profile /////////////////////////////////////////////////
 
-    // Account setup
+    // Account creation ////////////////////////////////////////
     uploadProfileImage: () => `/user/upload-profile-pic`,
     uploadBannerImage: () => `/user/upload-banner-pic`,
+    // Account creation ////////////////////////////////////////
 
-    // Chat
-    getChatByUserName: (userName: string) => `/chats/${userName}`,
+    // Chat ////////////////////////////////////////////////////
+    getChatByUserName: (userName: string) => `/group/${userName}`,
+    createChat: () => `/group/create`,
+    // Chat ////////////////////////////////////////////////////
 
-    // Leaderboard
+    // Leaderboard /////////////////////////////////////////////
     getLeaderboard: () => `/leaderboard`,
+    // Leaderboard /////////////////////////////////////////////
 
-    // Auth
+    // Authentication //////////////////////////////////////////
     getLoginRoute: () => `/auth/login`,
     confirmLogin: (code: string) => `/auth/confirm?token=${code}`,
     refreshAuthToken: () => `/auth/refresh`
+    // Authentication //////////////////////////////////////////
 };
 
 export default ApiRoutes;

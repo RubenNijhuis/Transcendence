@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef, createRef } from "react";
+// React
+import React, { useEffect, useState } from "react";
 
 // Hooks
 import { useFormInput } from "../../../components/Form/hooks";
@@ -18,27 +19,37 @@ import {
 } from "./ChatInterface.style";
 import Asset from "../../../components/Asset";
 
+// Proxies
+import createChat from "../../../proxies/chat/createChat";
+
 // Icons
 import { GrFormSearch, GrFormClose } from "react-icons/gr";
 
 ///////////////////////////////////////////////////////////
 
-const CreateGroupChat = ({ friends }: { friends: ProfileType[] }) => {
+const CreateGroupChat = ({
+    friends
+}: {
+    friends: ProfileType[];
+}): JSX.Element => {
     const [selectedFriends, setSelectedFriends] = useState<ProfileType[]>([]);
     const groupName = useFormInput("");
     const searchList = useFormInput("");
 
     ////////////////////////////////////////////////////////////
 
-    const toggleSelected = (friend: ProfileType) => {
-        const isSelected = checkIfProfileIsSelected(friend.uid);
+    const toggleSelected = (friend: ProfileType): void => {
+        const isSelected: boolean = checkIfProfileIsSelected(friend.uid);
 
-        if (isSelected) removeFriendFromSelected(friend);
-        else addFriendFromSelected(friend);
+        if (isSelected) {
+            removeFriendFromSelected(friend);
+        } else {
+            addFriendFromSelected(friend);
+        }
     };
 
     const checkIfProfileIsSelected = (uid: number): boolean => {
-        const isFoundInSelectedFriends =
+        const isFoundInSelectedFriends: boolean =
             selectedFriends.find((member) => member.uid === uid) !== undefined;
 
         return isFoundInSelectedFriends;
@@ -46,13 +57,16 @@ const CreateGroupChat = ({ friends }: { friends: ProfileType[] }) => {
 
     const handleSearch = () => {};
 
-    const removeFriendFromSelected = (friendID: ProfileType) => {
-        setSelectedFriends((prevState) =>
-            prevState.filter((friend) => friend.uid !== friendID.uid)
-        );
+    const removeFriendFromSelected = (friendID: ProfileType): void => {
+        setSelectedFriends((prevState) => {
+            const filteredState = prevState.filter(
+                (friend) => friend.uid !== friendID.uid
+            );
+            return filteredState;
+        });
     };
 
-    const addFriendFromSelected = (friendID: ProfileType) => {
+    const addFriendFromSelected = (friendID: ProfileType): void => {
         setSelectedFriends((prevState) => [...prevState, friendID]);
     };
 
@@ -122,7 +136,7 @@ const CreateChat = ({
     // WHO BE PATYING WITH ??
     // get friends and select uid's
 
-    const handleCreateGroupChat = () => {
+    const handleCreateGroupChat = (): void => {
         // CreateChat({groupName, members})
     };
 
@@ -153,9 +167,13 @@ const CreateChat = ({
 const ChatInterface = (): JSX.Element => {
     const { setModalOpen, modalOpen, setModalElement } = useModal();
 
+    ////////////////////////////////////////////////////////////
+
     useEffect(() => {
         setModalElement(() => <CreateChat setModalOpen={setModalOpen} />);
     }, [modalOpen]);
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <Container>

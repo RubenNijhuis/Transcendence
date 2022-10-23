@@ -7,13 +7,10 @@ import { ProfileType } from "../../types/profile";
 
 const getProfileByUserName = async (userName: string): Promise<ProfileType> => {
     try {
-        const res = await API.get<ProfileType>(
+        const { data } = await API.get<ProfileType>(
             ApiRoutes.getProfileByUserName(userName)
         );
-
-        console.log(res);
-
-        return Promise.resolve(res.data);
+        return Promise.resolve(data);
     } catch (err: any) {
         return Promise.reject(err);
     }
