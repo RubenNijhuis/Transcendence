@@ -40,9 +40,12 @@ const UserRoutes = {
   uploadProfilePic: "upload-profile-pic",
 
   // seeding database
-  seed: "seeder",
+  // seed: "seeder",
 
   // seeding database with amount
-  seedAmount: "seeder-amount"
+  // seedAmount: "seeder-amount",
+
+  // seeding database based on amount of friends
+  // seedFriendAmount: "seeder-amount"
 };
 export default UserRoutes;

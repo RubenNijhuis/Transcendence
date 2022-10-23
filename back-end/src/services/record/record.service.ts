@@ -46,12 +46,13 @@ export class RecordService {
     }
   }
 
-  async checkUser(userId : string, groupId : number) {
+  async isUserBanned(userId : string, groupId : number) {
     try {
       const userRecord : Record = await this.getRecordByUserId(userId, groupId);
       const timeUntilUnban : number = userRecord.createdTime.valueOf() + (userRecord.timeToBan * 1000);
       const timeOfDay : number = new Date().getTime() //TODO: leak?
-      if (timeUntilUnban <= timeOfDay)
+      console.log("timetounban ", timeUntilUnban, "timern ", timeOfDay);
+      if (timeUntilUnban >= timeOfDay)
         return true ;
       return false ;
     }

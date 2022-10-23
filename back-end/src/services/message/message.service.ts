@@ -32,7 +32,7 @@ export class MessageService {
     const group : Group = await this.groupService.findGroupById(
       createMessageDto.group_id
     );
-    if (!(this.recordService.checkUser(createMessageDto.senderID, createMessageDto.group_id)))
+    if (this.recordService.isUserBanned(createMessageDto.senderID, createMessageDto.group_id))
       throw console.error("This user is Banned/Muted");
     const newChat = this.chatRepository.create(createMessageDto);
     newChat.sender = null;
