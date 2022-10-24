@@ -80,9 +80,11 @@ export class SeederService {
 
     for (let i = 0; i < users.length; i++) {
         let user: User = users[i];
+        let friends: FriendList[] = await this.friendsServ.getFriends(user.username);
         let entry = {
             "username": user.username,
-            "friends": await this.friendsServ.getFriends(user.username)
+            "amount": friends.length,
+            "friends": friends
         }
         ret.push(entry);
     }
