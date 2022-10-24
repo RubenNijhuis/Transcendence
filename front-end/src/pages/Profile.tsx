@@ -68,13 +68,13 @@ const ProfilePage = (): JSX.Element => {
 
     useEffect(() => {
         const runUserRetrieval = async () => {
-
             /**
-             * If the user is in the login process we
-             * check if they still need to make an
-             * account. If that is the case we display the Create Account Modal
+             * If the user is in the login process we check if
+             * they still need to make an account. If that is
+             * the case we display the Create Account Modal
              */
             const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
+
             if (inLoginProcess && user === null) {
                 const href = window.location.href;
                 const token = getValueFromUrl(href, "code"); // TODO: put "code" in a config file
@@ -94,9 +94,9 @@ const ProfilePage = (): JSX.Element => {
             }
 
             /**
-             * If there is no profile name in the url we set the
-             * user as the current profile. Meaning we are on
-             * the user's own profile page
+             * If there is no profile name in the url we set
+             * the user as the current profile. Meaning we
+             * are on the user's own profile page
              */
             if (profileName === undefined) {
                 setSelectedProfile(user);

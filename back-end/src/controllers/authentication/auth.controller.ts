@@ -55,6 +55,7 @@ export class AuthController {
     return redirectUrl;
   }
 
+  // TODO: checking if the user should be created needs to be a seperate function
   /**
    * Takes a third party authentication token that can be
    * used to setup an account
@@ -100,9 +101,10 @@ export class AuthController {
         const numsalt: number = +saltorounds;
         const encrypted_token = await bcrypt.hash(hash, numsalt);
         await this.userService.createUser(intraID, encrypted_token);
-
         returnedPayload.shouldCreateUser = true;
       }
+
+      if (user.isInitialized === false) returnedPayload.shouldCreateUser = true;
 
       if (user && user.isInitialized) {
         const intraIDDto = { intraID };

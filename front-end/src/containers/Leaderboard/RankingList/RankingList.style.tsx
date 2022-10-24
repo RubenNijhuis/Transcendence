@@ -9,26 +9,27 @@ import {
 } from "../../../styles/StylingConstants";
 
 const Entry = styled.li`
+    position: relative;
+    padding: calc(${magicNum} / 2) calc(${magicNum} / 2);
+
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
     gap: calc(${magicNum} / 2);
 
-    position: relative;
-
-    padding: calc(${magicNum} / 2) calc(${magicNum} / 2);
-
     background: ${backgroundColor};
 
     &:after {
         content: "";
+        position: absolute;
+        left: 50%;
+        bottom: -2px;
+        
         width: calc(100% - ${magicNum});
         height: 2px;
+
         border: 10px;
         background-color: rgba(0, 0, 0, 0.1);
-        position: absolute;
-        bottom: -2px;
-        left: 50%;
         transform: translate(-50%, 0);
     }
 
@@ -55,27 +56,21 @@ const ProfileData = styled.div`
     div {
         transform: translate(-25%, 20%);
     }
-`;
 
-const ImageContainer = styled.div`
-    width: ${magicNum};
-    height: ${magicNum};
-
-    img {
-        border-radius: 100px;
+    .profile-img {
+        border-radius: 1000px;
         width: 100%;
         height: 100%;
-        object-fit: cover;
     }
 `;
 
 const EntryList = styled.ol`
     display: flex;
     flex-direction: column;
-    border-radius: ${smallRadius};
-    overflow: hidden;
-
     margin: auto;
+
+    overflow: hidden;
+    border-radius: ${smallRadius};
 `;
 
 const GameData = styled.div`
@@ -93,4 +88,4 @@ const GameData = styled.div`
     }
 `;
 
-export { EntryList, Entry, ImageContainer, ProfileData, GameData };
+export { EntryList, Entry, ProfileData, GameData };

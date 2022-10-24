@@ -69,8 +69,11 @@ const AuthProvider = ({
             setItem(StoreId.refreshToken, refreshToken);
             setDefaultAuthHeader(accessToken);
 
-            setUser(profile);
-            setLoggedIn(true);
+            if (profile !== null) {
+                setUser(profile);
+                setLoggedIn(true);
+            }
+
 
             return Promise.resolve(shouldCreateUser);
         } catch (err) {

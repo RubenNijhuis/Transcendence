@@ -2,41 +2,29 @@
 import Heading from "../../Heading";
 import Asset from "../../Asset";
 
-// Crowns
-import GoldCrown from "../../../assets/accesoires/gold-crown.svg";
-import SilverCrown from "../../../assets/accesoires/silver-crown.svg";
-import BronzeCrown from "../../../assets/accesoires/bronze-crown.svg";
-
 // Styling
 import { Container } from "./ProfileDisplay.style";
 
 // Types
 import { ProfileType } from "../../../types/profile";
+import Crown from "../../Crown";
+
+////////////////////////////////////////////////////////////
 
 interface Props {
     user: ProfileType;
 }
 
-const RankDisplay = ({ rank }: { rank: number }): JSX.Element => {
-    let src: any = GoldCrown;
-
-    if (rank === 1) src = GoldCrown;
-    else if (rank === 2) src = SilverCrown;
-    else if (rank === 3) src = BronzeCrown;
-
-    return <img src={src} alt="crown" className="crown" />;
-};
-
 const ProfileDisplay = ({ user }: Props): JSX.Element => {
+    const { banner_url, rank, img_url, username } = user;
+
     return (
         <Container>
-            <div className="banner">
-                <Asset url={user.banner_url} alt="banner" />
-            </div>
+            <Asset url={banner_url} alt="banner" className="banner" />
             <div className="profile">
-                {user.rank < 4 && <RankDisplay rank={user.rank} />}
-                <Asset url={user.img_url} alt="profile" />
-                <Heading type={4}>{user.username}</Heading>
+                {rank < 4 && <Crown rank={rank} />}
+                <Asset url={img_url} alt="profile" className="profile__img" />
+                <Heading type={4}>{username}</Heading>
             </div>
         </Container>
     );

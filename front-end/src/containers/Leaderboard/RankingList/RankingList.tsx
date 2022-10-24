@@ -1,17 +1,15 @@
 // Styling
-import {
-    EntryList,
-    Entry,
-    ImageContainer,
-    ProfileData,
-    GameData
-} from "./RankingList.style";
+import { EntryList, Entry, ProfileData, GameData } from "./RankingList.style";
 
 // Types
 import { ProfileType } from "../../../types/profile";
 
 // Routing
 import { Link } from "react-router-dom";
+import Asset from "../../../components/Asset";
+import PageRoutes from "../../../config/PageRoutes";
+
+////////////////////////////////////////////////////////////
 
 interface Props {
     rankings: ProfileType[];
@@ -20,20 +18,24 @@ interface Props {
 const RankingList = ({ rankings }: Props): JSX.Element => {
     return (
         <EntryList>
-            {rankings.length > 0 &&
-                rankings.map(({ username, rank, img_url, wins }, count) => (
-                    <Entry key={count}>
+            {rankings
+                .slice(3, rankings.length) // Remove first three because of podium
+                .map(({ username, rank, img_url, wins }) => (
+                    <Entry key={rank}>
                         <ProfileData>
                             <span>{rank}</span>
-                            <ImageContainer>
-                                <img
-                                    src={img_url}
-                                    alt={`profile of ${username}`}
-                                />
-                            </ImageContainer>
+                            <Asset
+                                url={img_url}
+                                alt={username}
+                                className="profile-img"
+                            />
                         </ProfileData>
                         <GameData>
-                            <Link to={`/profile/${username}`}>
+                            <Link
+                                to={`${PageRoutes.profileWithUserName(
+                                    username
+                                )}`}
+                            >
                                 <h3>{username}</h3>
                             </Link>
                             <span>Games won: {wins}</span>

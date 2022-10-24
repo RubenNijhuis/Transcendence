@@ -8,8 +8,9 @@ import { Container, ProfileIconContainer } from "./NavBar.style";
 // Navigation
 import { Link } from "react-router-dom";
 
-// Authentication hook
+// Contexts
 import { useAuth } from "../../contexts/AuthContext";
+import { useUser } from "../../contexts/UserContext";
 
 // Links
 import { locations } from "./NavBar.config";
@@ -24,7 +25,6 @@ import Logger from "../../utils/Logger";
 // Store
 import { setItem } from "../../modules/Store";
 import StoreId from "../../config/StoreId";
-import { useUser } from "../../contexts/UserContext";
 
 ////////////////////////////////////////////////////////////
 
