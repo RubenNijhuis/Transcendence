@@ -20,9 +20,7 @@ const createUser = async (userData: createUserProps): Promise<ProfileType> => {
         const route = ApiRoutes.createUser();
         const { data } = await API.post<ProfileType>(route, userData);
 
-        const returnedUserProfile = await addImagesToProfile(data);
-
-        return Promise.resolve(returnedUserProfile);
+        return Promise.resolve(data);
     } catch (err: any) {
         return Promise.reject(err);
     }

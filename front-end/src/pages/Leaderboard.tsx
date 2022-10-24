@@ -1,5 +1,6 @@
 // React
 import { useEffect, useState } from "react";
+import styled from "styled-components";
 
 // UI
 import Heading from "../components/Heading";
@@ -13,9 +14,17 @@ import { useFakeData } from "../contexts/FakeDataContext";
 
 // Proxy
 import getLeaderboard from "../proxies/leaderboard/getLeaderboard";
+import { magicNum } from "../styles/StylingConstants";
 
 // Types
 import { ProfileType } from "../types/profile";
+
+const LeaderboardContainer = styled.div`
+    .heading {
+        text-align: center;
+        margin-bottom: calc(${magicNum} / 2);
+    }
+`;
 
 const Leaderboard = (): JSX.Element => {
     const [leaderboard, setLeaderboard] = useState<ProfileType[]>(null!);
@@ -38,13 +47,13 @@ const Leaderboard = (): JSX.Element => {
 
     return (
         <Layout>
-            <Heading type={1}>Leaderboard</Heading>
             {leaderboard === null && <Loader />}
             {leaderboard && (
-                <>
+                <LeaderboardContainer>
+                    <Heading type={1}>Leaderboard</Heading>
                     <Podium rankings={leaderboard} />
                     <RankingList rankings={leaderboard} />
-                </>
+                </LeaderboardContainer>
             )}
         </Layout>
     );

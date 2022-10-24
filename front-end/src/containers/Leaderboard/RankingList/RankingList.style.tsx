@@ -16,6 +16,9 @@ const Entry = styled.li`
     align-items: flex-start;
     justify-content: flex-start;
     gap: calc(${magicNum} / 2);
+    width: 50%;
+
+    border-bottom: 2px solid ${mainColor};
 
     background: ${backgroundColor};
 
@@ -34,6 +37,7 @@ const Entry = styled.li`
     }
 
     &:last-child {
+        border-bottom: none;
         &:after {
             content: none;
         }
@@ -59,14 +63,15 @@ const ProfileData = styled.div`
 
     .profile-img {
         border-radius: 1000px;
-        width: 100%;
-        height: 100%;
+        width: calc(${magicNum});
+        height: calc(${magicNum});
     }
 `;
 
 const EntryList = styled.ol`
     display: flex;
     flex-direction: column;
+    align-items: center;
     margin: auto;
 
     overflow: hidden;

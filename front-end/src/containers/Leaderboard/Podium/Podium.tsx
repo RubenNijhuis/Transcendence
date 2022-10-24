@@ -30,16 +30,17 @@ const Podium = ({ rankings }: Props): JSX.Element => {
         <PodiumContainer>
             {formattedRankings.map(({ img_url, username, rank }) => (
                 <PodiumPosition pos={rank} key={rank}>
-                    <Link to={`${PageRoutes.profileWithUserName(username)}`}>
-                        <div className="finalist">
-                            <Crown rank={rank} />
-                            <Asset
-                                url={img_url}
-                                className="profile-img"
-                                alt={`winner ${username}`}
-                            />
-                            <span>{username}</span>
-                        </div>
+                    <Link
+                        to={`${PageRoutes.profileWithUserName(username)}`}
+                        className="finalist"
+                    >
+                        <Crown rank={rank} />
+                        <Asset
+                            url={img_url}
+                            className="profile-img"
+                            alt={`winner ${username}`}
+                        />
+                        <span>{username}</span>
                     </Link>
                 </PodiumPosition>
             ))}
