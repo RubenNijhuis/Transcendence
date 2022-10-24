@@ -21,6 +21,8 @@ const PageRoutes = {
     chat: `/chat`,
     leaderBoard: `/leaderboard`,
 
+    settings: `/settings`,
+
     ////////////////////////////////////////////////////////////
 
     whenNotLoggedIn: `/`

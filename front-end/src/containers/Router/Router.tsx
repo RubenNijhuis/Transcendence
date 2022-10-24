@@ -14,6 +14,7 @@ import ChatPage from "../../pages/Chat";
 import Leaderboard from "../../pages/Leaderboard";
 import Pong from "../../pages/Pong";
 import NewPongGame from "../../pages/NewPongGame";
+import SettingsPage from "../../pages/Settings";
 
 // Authentication
 import { AuthGuard } from "../RouteGuards";
@@ -37,6 +38,8 @@ const Router = () => (
                 <Route path={PageRoutes.profile} element={<ProfilePage />}>
                     <Route path=":profileName" element={<ProfilePage />} />
                 </Route>
+
+                <Route path={PageRoutes.settings} element={<SettingsPage/>}/>
 
                 {/* Regular private routes */}
                 <Route path={PageRoutes.play} element={<Play />} />
