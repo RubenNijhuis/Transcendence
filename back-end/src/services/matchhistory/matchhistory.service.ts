@@ -22,13 +22,11 @@ export class MatchHistoryService {
 
   async findMatchesByUserId(id: string) {
     try {
-      console.log(id);
         const matches: MatchHistory[] = await this.matchHistoryRepository
-          .createQueryBuilder("Matchhistory")
-          .where("playerOne = :id", { id })
-          .orWhere("playerTwo = :id", { id })
+          .createQueryBuilder()
+          .where({ playerOne: id })
+          .orWhere({ playerTwo: id })
           .getMany();
-          // console.log("scorematch:", matches[0].scoreOne);
           return matches;
     }
     catch(err: any) {

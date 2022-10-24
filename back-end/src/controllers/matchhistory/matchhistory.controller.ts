@@ -21,9 +21,8 @@ import { MatchHistoryService } from "src/services/matchhistory/matchhistory.serv
       return await this.matchHistoryService.getAllMatches();
     }
 
-    @Get("getmatches")
-    async getMatchByUserID(@Param("uid") uid: string) { //TODO: it no workie just yet
-      console.log("uid: ", uid);
+    @Get("getmatches/:uid")
+    async getMatchByUserID(@Param("uid") uid: string) {
       try {
         return await this.matchHistoryService.findMatchesByUserId(uid);
       } catch (error) {
