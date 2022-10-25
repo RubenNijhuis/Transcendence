@@ -17,7 +17,7 @@ import { locations } from "./NavBar.config";
 import PageRoutes from "../../config/PageRoutes";
 
 // Auth
-import startLogin from "../../proxies/auth/startLogin";
+import { getLoginURL } from "../../proxies/auth";
 
 // DEBUG
 import Logger from "../../utils/Logger";
@@ -31,7 +31,7 @@ import StoreId from "../../config/StoreId";
 const CTAButton = ({ authStatus }: { authStatus: boolean }): JSX.Element => {
     const toLoginPage = async () => {
         try {
-            const url = await startLogin();
+            const url = await getLoginURL();
             setItem(StoreId.loginProcess, true);
             window.location.assign(url);
         } catch (err) {

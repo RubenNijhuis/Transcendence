@@ -1,11 +1,11 @@
-// Routes
+// API config
 import ApiRoutes from "../../config/ApiRoutes";
+import { API } from "../instances/apiInstance";
 
 // Types
 import { AuthTokenType } from "../../types/request";
 
-// Api
-import { API } from "../instances/apiInstance";
+////////////////////////////////////////////////////////////
 
 /**
  * Checks auth token validity and upates if required, otherwise
@@ -15,14 +15,15 @@ const refreshAuthToken = async (
     refreshToken: string
 ): Promise<AuthTokenType> => {
     try {
-        const headers = {
-            Authorization: `Bearer ${refreshToken}`
+        const route = ApiRoutes.refreshAuthToken();
+        const config = {
+            headers: {
+                Authorization: `Bearer ${refreshToken}`
+            }
         };
 
-        const { data } = await API.get<AuthTokenType>(
-            ApiRoutes.refreshAuthToken(),
-            { headers }
-        );
+        const { data } = await API.get<AuthTokenType>(route, config);
+
         return Promise.resolve(data);
     } catch (err: any) {
         return Promise.reject(err);

@@ -31,11 +31,7 @@ const RankingList = ({ rankings }: Props): JSX.Element => {
                             />
                         </ProfileData>
                         <GameData>
-                            <Link
-                                to={`${PageRoutes.profileWithUserName(
-                                    username
-                                )}`}
-                            >
+                            <Link to={PageRoutes.profileWithUsername(username)}>
                                 <h3>{username}</h3>
                             </Link>
                             <span>Games won: {wins}</span>

@@ -2,10 +2,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 // API
-import loginConfirm from "../../proxies/auth/confirmLogin";
-import getUserByAccessToken from "../../proxies/user/getUserByAccessToken";
+import { confirmLogin } from "../../proxies/auth";
+import { getUserByAccessToken } from "../../proxies/user";
 
-import { refreshAuthToken } from "../../proxies/auth/refreshToken";
+import { refreshAuthToken } from "../../proxies/auth";
 import { setDefaultAuthHeader } from "../../proxies/instances/apiInstance";
 
 // Routing
@@ -60,7 +60,7 @@ const AuthProvider = ({
      */
     const signIn = async (code: string): Promise<boolean> => {
         try {
-            const loginResponse = await loginConfirm(code);
+            const loginResponse = await confirmLogin(code);
             const { authToken, profile, shouldCreateUser } = loginResponse;
             const { accessToken, refreshToken } = authToken;
 
@@ -73,7 +73,6 @@ const AuthProvider = ({
                 setUser(profile);
                 setLoggedIn(true);
             }
-
 
             return Promise.resolve(shouldCreateUser);
         } catch (err) {

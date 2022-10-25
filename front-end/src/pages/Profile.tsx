@@ -28,7 +28,7 @@ import Logger from "../utils/Logger";
 import { useFakeData } from "../contexts/FakeDataContext";
 
 // API
-import getProfileByUserName from "../proxies/user/getProfileByUsername";
+import { getProfileByUsername } from "../proxies/user";
 import { getValueFromUrl } from "../utils/getValueFromUrl";
 
 // Store
@@ -59,7 +59,7 @@ const ProfilePage = (): JSX.Element => {
     const { setModalOpen, setModalElement } = useModal();
 
     /**
-     * The `userName` in the url '/profile/:userName' if not
+     * The `username` in the url '/profile/:username' if not
      * specified will default to undefined
      */
     const { profileName } = useParams();
@@ -105,7 +105,7 @@ const ProfilePage = (): JSX.Element => {
             }
 
             try {
-                const returnedProfileByUsername = await getProfileByUserName(
+                const returnedProfileByUsername = await getProfileByUsername(
                     profileName
                 );
                 setSelectedProfile(returnedProfileByUsername);

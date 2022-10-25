@@ -52,7 +52,7 @@ const SenderAnnotation = ({ sender }: Props): JSX.Element => {
         <Container fromUser={sender.uid === user.uid}>
             <Asset
                 url={sender.img_url}
-                alt={`${sender.username}`}
+                alt={sender.username}
                 className="img"
             />
             <span>{sender.username}</span>

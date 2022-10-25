@@ -1,19 +1,18 @@
 // React stuffs
 import React, { createContext, useContext, useEffect, useState } from "react";
 
+// User context
+import { useUser } from "../UserContext";
+
 // Types
 import { GroupChat, Message } from "../../types/chat";
 import { ProfileID, ProfileType } from "../../types/profile";
-
-// Get user
-import { useAuth } from "../AuthContext";
 
 // Generators DEBUG
 import {
     generateGroupChats,
     generateProfile
 } from "../FakeDataContext/fakeDataGenerators";
-import { useUser } from "../UserContext";
 
 ///////////////////////////////////////////////////////////
 interface ChatContextType {
@@ -45,13 +44,21 @@ const ChatProvider = ({
 
     const getMembersFromGroupChats = (chats: GroupChat[]): ProfileType[][] => {
         let members: ProfileType[][] = [];
-        for (const chat of chats) members.push(chat.members);
+
+        for (const chat of chats) {
+            members.push(chat.members);
+        }
+
         return members;
     };
 
     const getMessagesFromGroupChats = (chats: GroupChat[]): Message[][] => {
         let messages: Message[][] = [];
-        for (const chat of chats) messages.push(chat.messages);
+
+        for (const chat of chats) {
+            messages.push(chat.messages);
+        }
+
         return messages;
     };
 
@@ -60,9 +67,9 @@ const ChatProvider = ({
         members: ProfileType[]
     ): ProfileType => {
         // Could return undefined but should always find it anyway so what gives
-        const profile = members.find(
-            (member) => member.uid === uid
-        ) as ProfileType;
+        const profile = members.find((member) => {
+            return member.uid === uid;
+        }) as ProfileType;
 
         return profile;
     };
@@ -81,6 +88,20 @@ const ChatProvider = ({
                 message.sender = findMemberByProfileID(senderID, members[i]);
             }
         }
+    };
+
+    /**
+     * Will return the id of the first chat that is a direct message
+     * Otherwise return the first chat id which is zero
+     */
+    const getFirstDMid = (chats: GroupChat[]): number => {
+        for (const chat of chats) {
+            if (chat.members.length === 2) {
+                return chat.internal_id;
+            }
+        }
+
+        return 0;
     };
 
     ////////////////////////////////////////////////////////////
@@ -111,8 +132,9 @@ const ChatProvider = ({
                 retrievedGroupChats[i].internal_id = i;
             }
 
-            setActiveChatID(0);
+            setActiveChatID(getFirstDMid(retrievedGroupChats));
         };
+
         chatAggregator();
     }, [user]);
 

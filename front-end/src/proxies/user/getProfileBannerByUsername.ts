@@ -1,6 +1,8 @@
 // API
 import { API } from "../instances/apiInstance";
 import ApiRoutes from "../../config/ApiRoutes";
+
+// TODO: remove the config type
 import { AxiosRequestConfig } from "axios";
 
 // Image transform
@@ -8,15 +10,20 @@ import { Buffer } from "buffer";
 
 /////////////////////////////////////////////////////////////
 
-const getProfileBannerByUserName = async (
+/**
+ * Retrieves the profile banner by username
+ * @param username
+ * @returns
+ */
+const getProfileBannerByUsername = async (
     username: string
 ): Promise<string> => {
     try {
-        // Request
         const route = ApiRoutes.getProfileBannerByUsername(username);
         const config: AxiosRequestConfig = {
             responseType: "arraybuffer"
         };
+
         const { data } = await API.get(route, config);
 
         // Image transform
@@ -29,4 +36,4 @@ const getProfileBannerByUserName = async (
     }
 };
 
-export default getProfileBannerByUserName;
+export { getProfileBannerByUsername };

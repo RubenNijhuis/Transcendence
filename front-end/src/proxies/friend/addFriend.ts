@@ -5,15 +5,21 @@ import ApiRoutes from "../../config/ApiRoutes";
 // Types
 import { ProfileType } from "../../types/profile";
 
-const getLeaderboard = async (): Promise<ProfileType[]> => {
+////////////////////////////////////////////////////////////
+
+/**
+ *
+ * @returns
+ */
+const addFriend = async (): Promise<ProfileType[]> => {
     try {
-        const { data } = await API.get<ProfileType[]>(
-            ApiRoutes.getLeaderboard()
-        );
+        const route = ApiRoutes.addFriend();
+        const { data } = await API.get<ProfileType[]>(route);
+
         return Promise.resolve(data);
     } catch (err: any) {
         return Promise.reject(err);
     }
 };
 
-export default getLeaderboard;
+export { addFriend };

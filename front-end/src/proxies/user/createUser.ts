@@ -2,8 +2,6 @@
 import { API } from "../instances/apiInstance";
 import ApiRoutes from "../../config/ApiRoutes";
 
-import addImagesToProfile from "./addImagesToProfile";
-
 // Types
 import { ProfileType } from "../../types/profile";
 
@@ -15,6 +13,11 @@ interface createUserProps {
     description: string;
 }
 
+/**
+ * Creates a user by sending the config to the back-end
+ * @param userData
+ * @returns
+ */
 const createUser = async (userData: createUserProps): Promise<ProfileType> => {
     try {
         const route = ApiRoutes.createUser();
@@ -26,4 +29,4 @@ const createUser = async (userData: createUserProps): Promise<ProfileType> => {
     }
 };
 
-export default createUser;
+export { createUser };

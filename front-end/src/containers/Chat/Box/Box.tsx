@@ -41,7 +41,7 @@ const ChatTitle = ({ chat }: Props): JSX.Element => {
                 />
             )}
             <Heading type={3}>
-                {isDmChat ? `${otherMember.username}` : `${chat.name}`}
+                {isDmChat ? otherMember.username : chat.name}
             </Heading>
         </div>
     );
