@@ -46,8 +46,12 @@ const ApiRoutes = {
     // Authentication //////////////////////////////////////////
     getLoginRoute: () => `/auth/login`,
     confirmLogin: (code: string) => `/auth/confirm?token=${code}`,
-    refreshAuthToken: () => `/auth/refresh`
+    refreshAuthToken: () => `/auth/refresh`,
     // Authentication //////////////////////////////////////////
+
+    // Websockets //////////////////////////////////////////////
+    socketRoute: () => `ws://localhost:8080/api/`
+    // Websockets //////////////////////////////////////////////
 };
 
 export default ApiRoutes;

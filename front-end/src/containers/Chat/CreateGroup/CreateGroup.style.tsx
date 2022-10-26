@@ -8,6 +8,8 @@ import {
 } from "../../../styles/StylingConstants";
 
 const Container = styled.div`
+    margin-bottom: calc(${magicNum} / 2);
+
     .button {
         width: 100%;
         height: calc(${magicNum});
@@ -20,8 +22,6 @@ const Container = styled.div`
             font-weight: 500;
         }
     }
-
-    margin-bottom: calc(${magicNum} / 2);
 `;
 
 const CreateChatContainer = styled.div`
