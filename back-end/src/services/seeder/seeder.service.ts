@@ -5,8 +5,6 @@ import {
   randParagraph,
   randUserName
 } from "@ngneat/falso";
-import { filter } from "rxjs";
-import { FriendRequestController } from "src/controllers/friendrequest/friendrequest.controller";
 import { FriendList, User } from "src/entities";
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
 import { FriendlistService } from "../friendlist/friendlist.service";
@@ -22,7 +20,7 @@ export class SeederService {
 
   async seedCustom(amount: number): Promise<User[]> {
     try {
-      for (let i = 1; i < amount; i++) {
+      for (let i = 0; i < amount; i++) {
         let genIntraId = randUserName();
         await this.userServ.createUser(genIntraId, "lolo");
         await this.userServ.setUser(genIntraId, {
