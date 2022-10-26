@@ -13,8 +13,7 @@ import Slide from "../../components/BoxSlider/Slide/Slide";
 import { useAuth } from "../../contexts/AuthContext";
 
 // Proxies
-import createUser from "../../proxies/user/createUser";
-import uploadImage from "../../proxies/user/uploadImage";
+import { createUser, uploadImage } from "../../proxies/user";
 
 // Routes
 import ApiRoutes from "../../config/ApiRoutes";
@@ -25,6 +24,7 @@ import StoreId from "../../config/StoreId";
 
 // DEBUG
 import { useFormInput } from "../../components/Form/hooks";
+import { useUser } from "../../contexts/UserContext";
 
 interface Props {
     setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -38,7 +38,8 @@ const CreateAccount = ({ setModalOpen }: Props): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
-    const { setUser, setLoggedIn } = useAuth();
+    const { setLoggedIn } = useAuth();
+    const { setUser } = useUser();
 
     ////////////////////////////////////////////////////////////
 

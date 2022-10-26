@@ -10,6 +10,8 @@ import {
     ErrorResponseInterceptor
 } from "./interceptors";
 
+////////////////////////////////////////////////////////////
+
 // Instance
 const API = axios.create({
     baseURL: ApiRoutes.baseUrl()

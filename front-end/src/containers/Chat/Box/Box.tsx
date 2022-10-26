@@ -5,14 +5,16 @@ import { GroupChat } from "../../../types/chat";
 import ChatElement from "../../../components/ChatElements";
 import ChatInput from "../Input";
 import Heading from "../../../components/Heading";
+import Asset from "../../../components/Asset";
 
 // Styling
 import { Container } from "./Box.style";
 
-// Auth
-import { useAuth } from "../../../contexts/AuthContext";
+// Types
 import { ProfileType } from "../../../types/profile";
-import Asset from "../../../components/Asset";
+
+// User
+import { useUser } from "../../../contexts/UserContext";
 
 ////////////////////////////////////////////////////////////
 
@@ -21,15 +23,24 @@ interface Props {
 }
 
 const ChatTitle = ({ chat }: Props): JSX.Element => {
+    const { user } = useUser();
+
     /**
      * If the the amount of members is 2 it means it a DM
      * Therefore we can change the interface from 'Chat' to 'other user name'
      */
-    const { user } = useAuth();
     const isDmChat: boolean = chat.members.length === 2;
+
     const otherMember: ProfileType = chat.members
         .filter((member) => member.uid !== user.uid)
         .shift() as ProfileType;
+
+    const chatTitle: string = (
+        isDmChat ? otherMember.username : chat.name
+    ) as string;
+
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <div className="title">
@@ -39,15 +50,15 @@ const ChatTitle = ({ chat }: Props): JSX.Element => {
                     url={otherMember.img_url}
                 />
             )}
-            <Heading type={3}>
-                {isDmChat ? `${otherMember.username}` : `Chat`}
-            </Heading>
+            <Heading type={3}>{chatTitle}</Heading>
         </div>
     );
 };
 
 const ChatBox = ({ chat }: Props): JSX.Element => {
-    const { user } = useAuth();
+    const { user } = useUser();
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <Container>
@@ -59,11 +70,11 @@ const ChatBox = ({ chat }: Props): JSX.Element => {
                         key={count}
                         message={message}
                         isDm={chat.members.length === 2}
-                        fromUser={message.sender?.username === user.username}
+                        fromUser={message.sender.username === user.username}
                     />
                 ))}
             </div>
-            <ChatInput user={user!} groupchat={chat} />
+            <ChatInput user={user} groupchat={chat} />
         </Container>
     );
 };

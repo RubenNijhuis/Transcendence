@@ -39,17 +39,15 @@ const generateInvite = (
 
 const generateSimpleMessage = (): SimpleMessage => {
     const simpleMessage: SimpleMessage = {
-        content: "BOOP"
+        content: "Lorem ipsum sit dolor amet"
     };
 
     return simpleMessage;
 };
 
 const generatePictureMessage = (): PictureMessage => {
-    const randomWidth: number =
-        Math.ceil(randomNum(1000, 2000) / 100) * 100;
-    const randomHeight: number =
-        Math.ceil(randomNum(1000, 2000) / 100) * 100;
+    const randomWidth: number = Math.ceil(randomNum(1000, 2000) / 100) * 100;
+    const randomHeight: number = Math.ceil(randomNum(1000, 2000) / 100) * 100;
 
     const img_url: string = get_img_url(randomWidth, randomHeight);
 
@@ -118,7 +116,7 @@ const generateGroupChats = (
     const groupChatList: GroupChat[] = [];
 
     for (let i = 0; i < amount; i++) {
-        const randomNum1: number = randomNum(memberRange[0],memberRange[1]);
+        const randomNum1: number = randomNum(memberRange[0], memberRange[1]);
 
         const members: ProfileType[] = [
             ...randomSliceOfArray<ProfileType>(profiles, randomNum1),
@@ -126,7 +124,10 @@ const generateGroupChats = (
         ];
 
         const newGroup: GroupChat = {
+            name: "dikke lul",
+            owner: user,
             group_id: i,
+            administrators: [user],
             internal_id: i,
             members: members,
             messages: []

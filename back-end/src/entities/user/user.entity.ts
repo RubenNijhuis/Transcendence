@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  Generated,
   JoinTable,
   OneToMany,
   PrimaryColumn,
@@ -9,7 +10,11 @@ import {
 import GroupUser from "../groupuser/groupuser.entity";
 @Entity() // need to have a token to search on
 export class User {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn()
+  index: number
+
+  @Column()
+  @Generated("uuid")
   id: string;
   
   @Column({

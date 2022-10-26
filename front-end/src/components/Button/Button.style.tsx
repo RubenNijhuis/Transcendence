@@ -17,9 +17,9 @@ const StyledButton = styled.button`
     border-radius: ${smallRadius};
 
     color: ${(props) =>
-        props.theme === "light" ? `${darkTextColor}` : `${lightTextColor}`};
+        props.theme === "light" ? darkTextColor : lightTextColor};
     background: ${(props) =>
-        props.theme === "light" ? `${lightTextColor}` : `${mainColor}`};
+        props.theme === "light" ? lightTextColor : mainColor};
 
     border: none;
 

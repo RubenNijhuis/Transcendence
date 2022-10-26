@@ -28,7 +28,7 @@ import Logger from "../utils/Logger";
 import { useFakeData } from "../contexts/FakeDataContext";
 
 // API
-import getProfileByUserName from "../proxies/user/getProfileByUsername";
+import { getProfileByUsername } from "../proxies/user";
 import { getValueFromUrl } from "../utils/getValueFromUrl";
 
 // Store
@@ -38,6 +38,7 @@ import StoreId from "../config/StoreId";
 // Modal Components
 import { useModal } from "../contexts/ModalContext";
 import CreateAccount from "../containers/CreateAccount/CreateAccount";
+import { useUser } from "../contexts/UserContext";
 
 ////////////////////////////////////////////////////////////
 
@@ -51,13 +52,14 @@ const ProfilePage = (): JSX.Element => {
     const { matchHistory } = useFakeData();
 
     // Local profile
-    const { user, signIn } = useAuth();
+    const { signIn } = useAuth();
+    const { user } = useUser();
 
     // Create account modal
     const { setModalOpen, setModalElement } = useModal();
 
     /**
-     * The `userName` in the url '/profile/:userName' if not
+     * The `username` in the url '/profile/:username' if not
      * specified will default to undefined
      */
     const { profileName } = useParams();
@@ -66,13 +68,13 @@ const ProfilePage = (): JSX.Element => {
 
     useEffect(() => {
         const runUserRetrieval = async () => {
-
             /**
-             * If the user is in the login process we
-             * check if they still need to make an
-             * account. If that is the case we display the Create Account Modal
+             * If the user is in the login process we check if
+             * they still need to make an account. If that is
+             * the case we display the Create Account Modal
              */
             const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
+
             if (inLoginProcess && user === null) {
                 const href = window.location.href;
                 const token = getValueFromUrl(href, "code"); // TODO: put "code" in a config file
@@ -92,9 +94,9 @@ const ProfilePage = (): JSX.Element => {
             }
 
             /**
-             * If there is no profile name in the url we set the
-             * user as the current profile. Meaning we are on
-             * the user's own profile page
+             * If there is no profile name in the url we set
+             * the user as the current profile. Meaning we
+             * are on the user's own profile page
              */
             if (profileName === undefined) {
                 setSelectedProfile(user);
@@ -103,7 +105,7 @@ const ProfilePage = (): JSX.Element => {
             }
 
             try {
-                const returnedProfileByUsername = await getProfileByUserName(
+                const returnedProfileByUsername = await getProfileByUsername(
                     profileName
                 );
                 setSelectedProfile(returnedProfileByUsername);

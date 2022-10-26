@@ -43,6 +43,9 @@ interface Message {
 
 interface GroupChat {
     group_id: number;
+    name: string | null;
+    owner: ProfileType;
+    administrators: ProfileType[];
     members: ProfileType[];
     messages: Message[];
     internal_id: number;

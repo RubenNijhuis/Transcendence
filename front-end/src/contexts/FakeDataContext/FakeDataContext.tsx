@@ -10,6 +10,7 @@ import { MatchRecord } from "../../types/game";
 
 // Data generation
 import { generateGameResult, generateProfile } from "./fakeDataGenerators";
+import { useUser } from "../UserContext";
 
 // What kind of data and functions the context consists of
 interface FakeDataContextType {
@@ -39,7 +40,7 @@ const FakeDataProvider = ({ children }: { children: React.ReactNode }): JSX.Elem
     const [leaderBoard, setLeaderBoard] = useState<ProfileType[]>(null!);
     const [matchHistory, setMatchHistory] = useState<MatchRecord[]>(null!);
 
-    const { user } = useAuth();
+    const { user } = useUser();
 
     useEffect(() => {
         if (!user) return;

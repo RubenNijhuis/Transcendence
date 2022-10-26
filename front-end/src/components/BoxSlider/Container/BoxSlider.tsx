@@ -36,6 +36,12 @@ const Dot = ({ active }: { active: boolean }): JSX.Element => {
 
 // TODO: styling in seperate folder
 const SliderDots = ({ amount, active }: SliderDotsProps): JSX.Element => {
+    const dots = [];
+
+    for (let i = 0; i < amount; i++) {
+        dots.push(<Dot active={i === active} key={i} />);
+    }
+
     return (
         <div
             className="steps__container"
@@ -49,14 +55,7 @@ const SliderDots = ({ amount, active }: SliderDotsProps): JSX.Element => {
                     margin: "auto"
                 }}
             >
-                {/*
-                 * TODO: make seperate function of this
-                 * Weird way in jsx to use for loop but
-                 * whatev
-                 */}
-                {[amount].map((val, count) => (
-                    <Dot active={count === active} key={count} />
-                ))}
+                {dots}
             </div>
         </div>
     );

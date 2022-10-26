@@ -15,6 +15,7 @@ import {
   UsePipes,
   ValidationPipe
 } from "@nestjs/common";
+import { Request, Response } from "express";
 
 // route config
 import UserRoutes from "src/configs/routes/globalRoutes.config";
@@ -37,19 +38,19 @@ import { UserSeeder } from "src/database/seeds/user-create.seed";
 // user entity
 import User from "../../entities/user/user.entity";
 
-// image upload pipe config
+// image upload and download
 import {
   bannerOptions,
   deleteFiles,
   profileOptions,
 } from "src/middleware/imgUpload/imgUpload";
-
-// file upload library
-import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
-import { Request, Response } from "express";
-import { AccessTokenGuard } from "src/guards/accessToken.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { readdirSync, unlinkSync } from "fs";
+import { readdirSync } from "fs";
+
+
+// guards
+import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
+import { AccessTokenGuard } from "src/guards/accessToken.guard";
 
 /**
  * The user controller will act as the first entry point for user related api calls.
@@ -72,7 +73,7 @@ export class UsersController {
   }
 
   @UseGuards(AccessTokenGuard)
-  @Get("get-img/:imageType/:username")
+  @Get(UserRoutes.getPic)
   async getImg(
     @Param("imageType") imageType: string,
     @Param("username") username: string,
@@ -101,7 +102,7 @@ export class UsersController {
   }
 
   @Get(UserRoutes.getUserOnName)
-  async findUsersById(@Res() res: Response, username: string) {
+  async findUsersById(@Res() res: Response, @Param() username: string) {
     try {
       const user: User = await this.userService.findUserByUsername(username);
       return this.userService.filterUser(user);
@@ -123,7 +124,6 @@ export class UsersController {
 
       return this.userService.filterUser(setUserResp);
     } catch (err) {
-      console.log("controller, setUser(): ", err);
       throw err;
     }
   }
@@ -142,12 +142,8 @@ export class UsersController {
   }
 
   @Post(UserRoutes.enableTfa)
-  @UsePipes(ValidationPipe) //what does this do
+  @UsePipes(ValidationPipe)
   async turnon2fa(@Body() dto: SetTfaDto) {
-    // const isCodeValid = this.userService.isTwoFactorAuthenticationCodeValid(twoFaDto);
-    // if (!isCodeValid) {
-    //     throw new UnauthorizedException('Wrong authentication code');
-    // }
     try {
       await this.userService.setTfaOption(dto.username, dto.option);
     } catch (error) {
@@ -183,15 +179,21 @@ export class UsersController {
     return HttpStatus.OK;
   }
 
-  @Get(UserRoutes.seed)
-  async seedUsers() {
-    const seed = new UserSeeder({ seedingSource: seederConfig });
-    await seed.run();
-  }
+  // @Get(UserRoutes.seed)
+  // async seedUsers() {
+  //   const seed = new UserSeeder({ seedingSource: seederConfig });
+  //   await seed.run();
+  // }
 
-  @Post(UserRoutes.seedAmount)
-  async seedUsersAmount(@Body() dto: SeederAmountDto) {
-    const seedResp = await this.userService.seedCustom(dto.amount);
-    return seedResp;
-  }
+  // @Post(UserRoutes.seedAmount)
+  // async seedUsersAmount(@Body() dto: SeederAmountDto) {
+  //   const seedResp = await this.userService.seedCustom(dto.amount);
+  //   return seedResp;
+  // }
+
+  // @Post(UserRoutes.seedFriendAmount)
+  // async seedOnFriendAmount(@Body() dto: SeederAmountDto) {
+  //   const seedResp = await this.userService.seedCustom(dto.amount);
+  //   return seedResp;
+  // }
 }

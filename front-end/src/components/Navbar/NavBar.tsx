@@ -8,15 +8,16 @@ import { Container, ProfileIconContainer } from "./NavBar.style";
 // Navigation
 import { Link } from "react-router-dom";
 
-// Authentication hook
+// Contexts
 import { useAuth } from "../../contexts/AuthContext";
+import { useUser } from "../../contexts/UserContext";
 
 // Links
 import { locations } from "./NavBar.config";
 import PageRoutes from "../../config/PageRoutes";
 
 // Auth
-import startLogin from "../../proxies/auth/startLogin";
+import { getLoginURL } from "../../proxies/auth";
 
 // DEBUG
 import Logger from "../../utils/Logger";
@@ -30,7 +31,7 @@ import StoreId from "../../config/StoreId";
 const CTAButton = ({ authStatus }: { authStatus: boolean }): JSX.Element => {
     const toLoginPage = async () => {
         try {
-            const url = await startLogin();
+            const url = await getLoginURL();
             setItem(StoreId.loginProcess, true);
             window.location.assign(url);
         } catch (err) {
@@ -83,7 +84,8 @@ const ProfileIcon = ({ url }: { url: string }): JSX.Element => {
 };
 
 const NavBar = (): JSX.Element => {
-    const { isLoggedIn, user } = useAuth();
+    const { isLoggedIn } = useAuth();
+    const { user } = useUser();
 
     ////////////////////////////////////////////////////////////
 

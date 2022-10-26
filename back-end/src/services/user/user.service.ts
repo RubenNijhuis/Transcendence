@@ -30,17 +30,17 @@ import { intraIDDto } from "src/dtos/auth/intraID.dto";
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
 import { ConfigService } from "@nestjs/config";
 /**
+ * IMPORTANT: createUser wordt niet aangeroepen in de frontend
+ * dus ik heb de path verwijderd.
+ */
+
+/**
  * User services
  *
  * Contains all typeorm sql injections.
  * Some functions that not yet used:
  * - set2faSecret
  * - update2faSecret is being used in tfa.service
- */
-
-/**
- * IMPORTANT: createUser wordt niet aangeroepen in de frontend
- * dus ik heb de path verwijderd.
  */
 @Injectable()
 export class UserService {
@@ -68,6 +68,15 @@ export class UserService {
       const returnedUser: User[] = await this.userRepository.find();
       return Promise.resolve(returnedUser);
     } catch (err: any) {
+      throw err;
+    }
+  }
+
+  async getUserByIndex(index: number): Promise<User> {
+    try {
+      const ret: User = await this.userRepository.findOne({ where: { index } });
+      return ret;
+    } catch (err) {
       throw err;
     }
   }
@@ -159,6 +168,7 @@ export class UserService {
 
       return await this.findUserByintraId(intraID);
     } catch (err: any) {
+      console.log(err);
       throw errorHandler(
         err,
         "Failed to update user",
@@ -283,25 +293,4 @@ export class UserService {
     }
   }
 
-  async seedCustom(amount: number): Promise<User[]> {
-    try {
-      for (let i = 1; i <= amount; i++) {
-        console.log("yoyo");
-        let genIntraId = randUserName();
-        await this.createUser(genIntraId, "lolo");
-        await this.setUser(genIntraId, {
-          username: randFullName(),
-          color: randColor().toString(),
-          description: randParagraph()
-        });
-      }
-      return this.getUsers();
-    } catch (err: any) {
-      throw errorHandler(
-        err,
-        "Failed to seed database",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
-    }
-  }
 }

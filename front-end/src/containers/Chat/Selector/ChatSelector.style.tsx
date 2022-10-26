@@ -39,17 +39,20 @@ const DirectMessageEntry = styled.li<{ active: boolean }>`
         border-bottom: 0;
     }
 
-    background-color: ${({ active }) =>
-        active ? `${mainColor}` : `${backgroundColor}`};
+    background-color: ${({ active }) => (active ? mainColor : backgroundColor)};
 
     .profile {
         display: flex;
         flex-direction: row;
         align-items: center;
+        margin-bottom: calc(${magicNum} / 8);
+
+        &:last-child {
+            margin-bottom: 0;
+        }
 
         span {
-            color: ${({ active }) =>
-                active ? `${lightTextColor}` : `${darkTextColor}`};
+            color: ${({ active }) => (active ? lightTextColor : darkTextColor)};
         }
 
         .asset {
@@ -68,6 +71,7 @@ const ChatTypeSelectorContainer = styled.div`
     border: solid 2px ${mainColor};
     margin-bottom: calc(${magicNum} / 2);
     border-radius: ${smallRadius};
+    overflow: hidden;
 
     // For each one if
     .chat-type {

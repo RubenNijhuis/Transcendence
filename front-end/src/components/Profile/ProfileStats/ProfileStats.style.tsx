@@ -1,10 +1,14 @@
 import styled from "styled-components";
+
+// Vars
 import {
     largeRadius,
     lightTextColor,
     magicNum,
     mainColorMono
 } from "../../../styles/StylingConstants";
+
+////////////////////////////////////////////////////////////
 
 const Container = styled.div`
     .stats {
@@ -47,5 +51,7 @@ const Container = styled.div`
         }
     }
 `;
+
+////////////////////////////////////////////////////////////
 
 export { Container };

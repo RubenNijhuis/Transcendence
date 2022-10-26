@@ -6,9 +6,10 @@
  * route is a function
  */
 const ApiRoutes = {
+    // Config
     baseUrl: () => `http://127.0.0.1:8080/api/`,
 
-    // User
+    // User ////////////////////////////////////////////////////
     createUser: () => `/user/setUser`,
     getUserByAccessToken: () => `/auth/getUserFromAccessToken`,
 
@@ -16,25 +17,41 @@ const ApiRoutes = {
         `/user/get-img/profile/${username}`,
     getProfileBannerByUsername: (username: string) =>
         `/user/get-img/banner/${username}`,
+    // User ////////////////////////////////////////////////////
 
-    // Profiles
-    getProfileByUserName: (userName: string) => `/user/${userName}`,
+    // Friend //////////////////////////////////////////////////
+    getFriends: (username: string) => `/friends?username=${username}`,
+    addFriend: () => `/friends/addFriend`,
+    isFriend: () => `/friends/isFriend`,
+    // Friend //////////////////////////////////////////////////
 
-    // Account setup
+    // Profile /////////////////////////////////////////////////
+    getProfileByUsername: (username: string) => `/user/${username}`,
+    // Profile /////////////////////////////////////////////////
+
+    // Account creation ////////////////////////////////////////
     uploadProfileImage: () => `/user/upload-profile-pic`,
     uploadBannerImage: () => `/user/upload-banner-pic`,
+    // Account creation ////////////////////////////////////////
 
-    // Chat
-    getChatByUserName: (userName: string) => `/chats/${userName}`,
+    // Chat ////////////////////////////////////////////////////
+    getChatsByUsername: (username: string) => `/group/${username}`,
+    createChat: () => `/group/create`,
+    // Chat ////////////////////////////////////////////////////
 
-    // Leaderboard
+    // Leaderboard /////////////////////////////////////////////
     getLeaderboard: () => `/leaderboard`,
+    // Leaderboard /////////////////////////////////////////////
 
-    // Auth
+    // Authentication //////////////////////////////////////////
     getLoginRoute: () => `/auth/login`,
     confirmLogin: (code: string) => `/auth/confirm?token=${code}`,
-    createRefreshToken: () => `/auth/createRefresh`,
-    refreshAuthToken: () => `/auth/refresh`
+    refreshAuthToken: () => `/auth/refresh`,
+    // Authentication //////////////////////////////////////////
+
+    // Websockets //////////////////////////////////////////////
+    socketRoute: () => `ws://localhost:8080/api/`
+    // Websockets //////////////////////////////////////////////
 };
 
 export default ApiRoutes;

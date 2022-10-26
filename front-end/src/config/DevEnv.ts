@@ -1,3 +1,4 @@
 const renderWithStrict = false;
+const debugDevBoxActive = false;
 
-export { renderWithStrict };
+export { renderWithStrict, debugDevBoxActive };

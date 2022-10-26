@@ -1,6 +1,6 @@
 import { IsNotEmpty } from "class-validator";
 
-export class CreateFriensdDto {
+export class CreateFriendsDto {
   @IsNotEmpty()
   username: string;
 

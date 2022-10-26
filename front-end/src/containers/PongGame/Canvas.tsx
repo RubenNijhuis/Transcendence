@@ -1,7 +1,10 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
+import { io } from "socket.io-client";
 
 // Styling
 import styled from "styled-components";
+
+////////////////////////////////////////////////////////////
 
 const StyledCanvas = styled.canvas`
     box-sizing: border-box;
@@ -14,12 +17,30 @@ const Container = styled.div`
     width: 100%;
 `;
 
+////////////////////////////////////////////////////////////
+
 interface Props {
     canvasRef: React.RefObject<HTMLCanvasElement>;
 }
 
 const Canvas = ({ canvasRef }: Props): JSX.Element => {
     const canvasContainerRef = useRef(null!);
+
+    const [socketResponse, setSocketResponse] = useState<string>(
+        "Put ur data here lets goooo 🚌"
+    );
+    const dataRef = useRef<HTMLSpanElement>(null!);
+
+    ////////////////////////////////////////////////////////////
+
+    useEffect(() => {
+        const socket = io("ws://localhost:8080/api/");
+
+        socket.emit("testMessage", "pee pee poo poo");
+        socket.on("testMessage", (arg: any) => {
+            setSocketResponse(arg as string);
+        });
+    }, []);
 
     useEffect(() => {
         if (canvasRef.current === null) return;
@@ -31,10 +52,22 @@ const Canvas = ({ canvasRef }: Props): JSX.Element => {
         canvasRef.current.height = canvasContainer.offsetHeight;
     }, [canvasRef]);
 
+    ////////////////////////////////////////////////////////////
+
     return (
-        <Container ref={canvasContainerRef}>
-            <StyledCanvas ref={canvasRef} id="pong" width="0px" height="0px" />
-        </Container>
+        <>
+            <div>
+                <span ref={dataRef}>{socketResponse}</span>
+            </div>
+            <Container ref={canvasContainerRef} style={{ display: "none" }}>
+                <StyledCanvas
+                    ref={canvasRef}
+                    id="pong"
+                    width="0px"
+                    height="0px"
+                />
+            </Container>
+        </>
     );
 };
 

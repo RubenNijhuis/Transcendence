@@ -77,27 +77,27 @@ const GameHistory = ({ player, matches }: Props): JSX.Element => {
                     </div>
                     {paginatedMatches.map((matches, page) => {
                         if (page === selectedPage) {
-                            return matches.map(({ opponent, score }, count) => (
+                            return matches.map(({ player1, score }, count) => (
                                 <Match
                                     key={count}
-                                    win={score.opponent < score.self}
+                                    win={score.player1 < score.player2}
                                 >
                                     <OpponentProfile>
                                         <Asset
-                                            url={opponent.img_url}
-                                            alt="opponent"
+                                            url={player1.img_url}
+                                            alt="player1"
                                         />
                                         <Link
-                                            to={`/profile/${opponent.username}`}
+                                            to={`/profile/${player1.username}`}
                                         >
-                                            <span>{opponent.username}</span>
+                                            <span>{player1.username}</span>
                                         </Link>
                                     </OpponentProfile>
                                     <ScoreBoard>
                                         <div>
-                                            <span>{score.self}</span>
+                                            <span>{score.player1}</span>
                                             <span>—</span>
-                                            <span>{score.opponent}</span>
+                                            <span>{score.player2}</span>
                                         </div>
                                     </ScoreBoard>
                                 </Match>

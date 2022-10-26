@@ -8,7 +8,10 @@ import randomNum from "../../../utils/randomNum";
 // Random player
 import { generateProfile } from "./profile";
 
-const generateGameResult = (player: ProfileType, amount: number): MatchRecord[] => {
+const generateGameResult = (
+    player: ProfileType,
+    amount: number
+): MatchRecord[] => {
     const matchRecordList: MatchRecord[] = [];
 
     const opponents: ProfileType[] = generateProfile(amount);
@@ -17,24 +20,33 @@ const generateGameResult = (player: ProfileType, amount: number): MatchRecord[] 
         const winOrLose: number = randomNum(0, 1);
 
         let score = {
-            opponent: 0,
-            self: 0
+            player1: 0,
+            player2: 0
+        };
+
+        let elo = {
+            player1: 0,
+            player2: 0
         };
 
         const otherScore: number = randomNum(0, 4);
 
         if (winOrLose === 0) {
-            score.opponent = 5;
-            score.self = otherScore;
+            score.player1 = 5;
+            score.player2 = otherScore;
         } else {
-            score.opponent = otherScore;
-            score.self = 5;
+            score.player1 = otherScore;
+            score.player2 = 5;
         }
 
         const newMatchRecord: MatchRecord = {
-            player,
-            opponent: opponents[i],
-            score
+            id: 0,
+            player1: player,
+            player2: opponents[i],
+            score,
+            game_type: 0,
+            score_type: 0,
+            elo
         };
 
         matchRecordList.push(newMatchRecord);

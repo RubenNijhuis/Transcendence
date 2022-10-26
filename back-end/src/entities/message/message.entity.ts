@@ -9,6 +9,7 @@ import {
   Timestamp
 } from "typeorm";
 import Group from "../group/group.entity";
+import User from "../user/user.entity";
 
 @Entity()
 export class Message {
@@ -31,7 +32,9 @@ export class Message {
   @Column()
   content_type: number;
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   sender: string;
 
   @Column()
@@ -40,7 +43,7 @@ export class Message {
   @Column({
     nullable: true
   })
-  read_by: string;
+  read_by: string; //TODO: OnetoMany relation?
 }
 
 export default Message;

@@ -9,6 +9,11 @@ import { FriendRequestModule } from "src/modules/friendrequest/friendrequest.mod
 import { AuthModule } from "src/modules/authentication/auth.module";
 import { MessageModule } from "src/modules/message/message.module";
 import { GroupModule } from "src/modules/group/group.module";
+import { TfaModule } from "src/modules/tfa/tfa.module";
+import { RecordModule } from "src/modules/record/record.module"
+import { MatchHistoryModule } from "src/modules/matchhistory/matchhistory.module";
+import { SeederModule } from "src/modules/seeder/seeder.module";
+
 
 @Module({
   imports: [
@@ -20,6 +25,10 @@ import { GroupModule } from "src/modules/group/group.module";
     AuthModule,
     MessageModule,
     GroupModule,
+    TfaModule,
+    RecordModule,
+    MatchHistoryModule,
+    SeederModule,
     PassportModule.register({ session: true })
   ],
   controllers: [],

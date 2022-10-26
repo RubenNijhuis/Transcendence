@@ -7,20 +7,32 @@ export class FriendRequestController {
   constructor(private readonly friendrequestService: FriendrequestService) {}
 
   @Get("getrequests?")
-  async getrequests(@Query("username") username) {
-    return await this.friendrequestService.getRequests(username);
+  async getrequests(@Query("username") username: string) {
+    try {
+      return await this.friendrequestService.getRequests(username);
+    } catch (error) {
+      throw error;
+    }
   }
 
   @Post("sendrequest")
-  async senrequest(@Body() requestDto: CreateRequestDto) {
-    return await this.friendrequestService.sendRequest(requestDto);
+  async sendrequest(@Body() requestDto: CreateRequestDto) {
+    try {
+      return await this.friendrequestService.sendRequest(requestDto);
+    } catch (error) {
+      throw error;
+    }
   }
 
   @Post("removerequest")
   async removerequest(@Body() requestDto: CreateRequestDto) {
-    return await this.friendrequestService.removeRequest(
-      requestDto.username,
-      requestDto.requested
-    );
+    try {
+      return await this.friendrequestService.removeRequest(
+        requestDto.username,
+        requestDto.requested
+      );
+    } catch (error) {
+      throw error;
+    }
   }
 }

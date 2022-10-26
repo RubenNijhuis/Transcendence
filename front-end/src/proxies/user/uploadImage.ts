@@ -1,10 +1,16 @@
 // Api config
 import { API } from "../instances/apiInstance";
 
-const uploadImage = async (
-    url: string,
-    image: FormData
-): Promise<any> => {
+////////////////////////////////////////////////////////////
+
+// TODO: remove any
+/**
+ * Uploads an image to a specified url
+ * @param url
+ * @param image
+ * @returns
+ */
+const uploadImage = async (url: string, image: FormData): Promise<any> => {
     try {
         const { data } = await API.post(url, image);
         return Promise.resolve(data);
@@ -13,4 +19,4 @@ const uploadImage = async (
     }
 };
 
-export default uploadImage;
+export {uploadImage};
