@@ -63,12 +63,12 @@ const ChatProvider = ({
     };
 
     const findMemberByProfileID = (
-        uid: ProfileID,
+        id: ProfileID,
         members: ProfileType[]
     ): ProfileType => {
         // Could return undefined but should always find it anyway so what gives
         const profile = members.find((member) => {
-            return member.uid === uid;
+            return member.id === id;
         }) as ProfileType;
 
         return profile;

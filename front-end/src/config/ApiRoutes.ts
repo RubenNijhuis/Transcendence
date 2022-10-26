@@ -50,8 +50,10 @@ const ApiRoutes = {
     // Authentication //////////////////////////////////////////
 
     // Websockets //////////////////////////////////////////////
-    socketRoute: () => `ws://localhost:8080/api/`
+    socketRoute: () => `ws://localhost:8080/api/`,
     // Websockets //////////////////////////////////////////////
+       // TFAuthentication //////////////////////////////////////////
+    turnOnTFA: () => `/user/enable2fa`
 };
 
 export default ApiRoutes;

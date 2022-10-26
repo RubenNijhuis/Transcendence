@@ -20,5 +20,10 @@ export const locations = [
         name: "Profile",
         url: PageRoutes.profile,
         onlyWhenLoggedin: true
+    },
+    {
+        name: "Settings",
+        url: PageRoutes.settings,
+        onlyWhenLoggedin: true
     }
 ];

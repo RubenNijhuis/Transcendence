@@ -32,7 +32,7 @@ const ChatTitle = ({ chat }: Props): JSX.Element => {
     const isDmChat: boolean = chat.members.length === 2;
 
     const otherMember: ProfileType = chat.members
-        .filter((member) => member.uid !== user.uid)
+        .filter((member) => member.id !== user.id)
         .shift() as ProfileType;
 
     const chatTitle: string = (

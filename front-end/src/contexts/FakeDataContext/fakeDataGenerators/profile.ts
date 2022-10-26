@@ -103,7 +103,7 @@ const generateProfile = (amount: number): ProfileType[] => {
             banner_url,
             color,
             rank,
-            uid: i + 1,
+            id: (i + 1).toString(),
             img_url,
             wins,
             losses,

@@ -145,7 +145,7 @@ export class UsersController {
   @UsePipes(ValidationPipe)
   async turnon2fa(@Body() dto: SetTfaDto) {
     try {
-      await this.userService.setTfaOption(dto.username, dto.option);
+      await this.userService.setTfaOption(dto.uid);
     } catch (error) {
       throw error;
     }
