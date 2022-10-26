@@ -3,7 +3,7 @@ import StoreId from "../../config/StoreId";
 import { clearAll, getItem, setItem } from "../../modules/Store";
 
 // Auth
-import { refreshAuthToken } from "../../proxies/auth/refreshToken";
+import { refreshAuthToken } from "../../proxies/auth/refreshAuthToken";
 import { setDefaultAuthHeader } from "../../proxies/instances/apiInstance";
 
 // Types

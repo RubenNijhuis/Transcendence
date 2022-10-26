@@ -16,11 +16,11 @@ import {
     Container,
     CreateChatContainer,
     CreateGroupChatContainer
-} from "./ChatInterface.style";
+} from "./CreateGroup.style";
 import Asset from "../../../components/Asset";
 
 // Proxies
-import createChat from "../../../proxies/chat/createChat";
+import { createChat } from "../../../proxies/chat";
 
 // Icons
 import { GrFormSearch, GrFormClose } from "react-icons/gr";
@@ -49,19 +49,23 @@ const CreateGroupChat = ({
     };
 
     const checkIfProfileIsSelected = (uid: number): boolean => {
-        const isFoundInSelectedFriends: boolean =
-            selectedFriends.find((member) => member.uid === uid) !== undefined;
+        let foundInSelectedFriends: boolean;
 
-        return isFoundInSelectedFriends;
+        foundInSelectedFriends =
+            selectedFriends.find((member) => {
+                member.uid === uid;
+            }) !== undefined;
+
+        return foundInSelectedFriends;
     };
 
     const handleSearch = () => {};
 
     const removeFriendFromSelected = (friendID: ProfileType): void => {
         setSelectedFriends((prevState) => {
-            const filteredState = prevState.filter(
-                (friend) => friend.uid !== friendID.uid
-            );
+            const filteredState = prevState.filter((friend) => {
+                return friend.uid !== friendID.uid;
+            });
             return filteredState;
         });
     };
@@ -103,6 +107,7 @@ const CreateGroupChat = ({
                                 onClick={() => toggleSelected(friend)}
                             >
                                 <Asset
+                                    className="friend-image"
                                     url={img_url}
                                     alt={`profile ${username}`}
                                 />
@@ -129,24 +134,14 @@ const CreateChat = ({
 
     ////////////////////////////////////////////////////////////
 
-    // Groupchat naam
-    // gwn string
-    // WHO BE MAKING THIS ??
-    // user uid
-    // WHO BE PATYING WITH ??
-    // get friends and select uid's
-
-    const handleCreateGroupChat = (): void => {
-        // CreateChat({groupName, members})
-    };
-
-    ////////////////////////////////////////////////////////////
-
     return (
         <CreateChatContainer>
             <div className="title">
                 <Heading type={2}>Create a new chat</Heading>
-                <div className="close-button">
+                <div
+                    className="close-button"
+                    onClick={() => setModalOpen(false)}
+                >
                     <GrFormClose />
                 </div>
             </div>
@@ -164,11 +159,15 @@ const CreateChat = ({
     );
 };
 
-const ChatInterface = (): JSX.Element => {
+const CreateGroup = (): JSX.Element => {
     const { setModalOpen, modalOpen, setModalElement } = useModal();
 
     ////////////////////////////////////////////////////////////
 
+    /**
+     * We set the modal component with its closing function
+     * TODO: create some kind of way for the closing function to be global
+     */
     useEffect(() => {
         setModalElement(() => <CreateChat setModalOpen={setModalOpen} />);
     }, [modalOpen]);
@@ -184,4 +183,4 @@ const ChatInterface = (): JSX.Element => {
     );
 };
 
-export default ChatInterface;
+export default CreateGroup;

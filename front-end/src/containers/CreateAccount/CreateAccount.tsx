@@ -13,8 +13,7 @@ import Slide from "../../components/BoxSlider/Slide/Slide";
 import { useAuth } from "../../contexts/AuthContext";
 
 // Proxies
-import createUser from "../../proxies/user/createUser";
-import uploadImage from "../../proxies/user/uploadImage";
+import { createUser, uploadImage } from "../../proxies/user";
 
 // Routes
 import ApiRoutes from "../../config/ApiRoutes";

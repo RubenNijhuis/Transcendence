@@ -14,6 +14,9 @@ interface Props {
     children: React.ReactNode;
 }
 
+/**
+ * Standardizes how we use headers
+ */
 const Heading = ({ type, children }: Props): JSX.Element => {
     const classname = "heading";
 

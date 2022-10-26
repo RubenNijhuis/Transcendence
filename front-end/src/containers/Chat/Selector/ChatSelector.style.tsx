@@ -39,8 +39,7 @@ const DirectMessageEntry = styled.li<{ active: boolean }>`
         border-bottom: 0;
     }
 
-    background-color: ${({ active }) =>
-        active ? `${mainColor}` : `${backgroundColor}`};
+    background-color: ${({ active }) => (active ? mainColor : backgroundColor)};
 
     .profile {
         display: flex;
@@ -53,8 +52,7 @@ const DirectMessageEntry = styled.li<{ active: boolean }>`
         }
 
         span {
-            color: ${({ active }) =>
-                active ? `${lightTextColor}` : `${darkTextColor}`};
+            color: ${({ active }) => (active ? lightTextColor : darkTextColor)};
         }
 
         .asset {

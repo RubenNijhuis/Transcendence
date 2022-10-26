@@ -17,7 +17,7 @@ import {
     Container,
     DirectMessageEntry
 } from "./ChatSelector.style";
-import ChatInterface from "../Interface";
+import ChatInterface from "../CreateGroup";
 import { useUser } from "../../../contexts/UserContext";
 
 interface Props {

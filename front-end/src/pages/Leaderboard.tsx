@@ -13,7 +13,7 @@ import RankingList from "../containers/Leaderboard/RankingList";
 import { useFakeData } from "../contexts/FakeDataContext";
 
 // Proxy
-import getLeaderboard from "../proxies/leaderboard/getLeaderboard";
+import { getLeaderboard } from "../proxies/leaderboard";
 import { magicNum } from "../styles/StylingConstants";
 
 // Types

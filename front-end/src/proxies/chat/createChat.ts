@@ -6,23 +6,36 @@ import ApiRoutes from "../../config/ApiRoutes";
 import { GroupChat } from "../../types/chat";
 import { ProfileType } from "../../types/profile";
 
+////////////////////////////////////////////////////////////
+
+/**
+ * Creates a chat that will be saved in the database
+ * @param owner
+ * @param name
+ * @param users
+ * @returns confirmation response
+ */
 const createChat = async (
     owner: ProfileType,
     name: string,
     users: ProfileType[]
 ): Promise<GroupChat[]> => {
     try {
-        const { data } = await API.post<GroupChat[]>(ApiRoutes.createChat(), {
+        const route = ApiRoutes.createChat();
+        const config = {
             data: {
                 owner,
                 name,
                 users
             }
-        });
+        };
+
+        const { data } = await API.post<GroupChat[]>(route, config);
+        
         return Promise.resolve(data);
     } catch (err: any) {
         return Promise.reject(err);
     }
 };
 
-export default createChat;
+export { createChat };

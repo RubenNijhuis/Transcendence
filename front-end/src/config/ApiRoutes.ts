@@ -26,7 +26,7 @@ const ApiRoutes = {
     // Friend //////////////////////////////////////////////////
 
     // Profile /////////////////////////////////////////////////
-    getProfileByUserName: (userName: string) => `/user/${userName}`,
+    getProfileByUsername: (username: string) => `/user/${username}`,
     // Profile /////////////////////////////////////////////////
 
     // Account creation ////////////////////////////////////////
@@ -35,7 +35,7 @@ const ApiRoutes = {
     // Account creation ////////////////////////////////////////
 
     // Chat ////////////////////////////////////////////////////
-    getChatByUserName: (userName: string) => `/group/${userName}`,
+    getChatsByUsername: (username: string) => `/group/${username}`,
     createChat: () => `/group/create`,
     // Chat ////////////////////////////////////////////////////
 
@@ -46,8 +46,12 @@ const ApiRoutes = {
     // Authentication //////////////////////////////////////////
     getLoginRoute: () => `/auth/login`,
     confirmLogin: (code: string) => `/auth/confirm?token=${code}`,
-    refreshAuthToken: () => `/auth/refresh`
+    refreshAuthToken: () => `/auth/refresh`,
     // Authentication //////////////////////////////////////////
+
+    // Websockets //////////////////////////////////////////////
+    socketRoute: () => `ws://localhost:8080/api/`
+    // Websockets //////////////////////////////////////////////
 };
 
 export default ApiRoutes;

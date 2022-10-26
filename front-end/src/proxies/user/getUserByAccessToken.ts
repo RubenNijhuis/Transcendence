@@ -2,7 +2,7 @@
 import ApiRoutes from "../../config/ApiRoutes";
 import { API } from "../instances/apiInstance";
 
-import addImagesToProfile from "./addImagesToProfile";
+import { addImagesToProfile } from "./addImagesToProfile";
 
 // Types
 import { ProfileType } from "../../types/profile";
@@ -10,6 +10,11 @@ import { AxiosRequestConfig } from "axios";
 
 ////////////////////////////////////////////////////////////
 
+/**
+ * Retrieves a user based on their auth token
+ * @param accessToken
+ * @returns
+ */
 const getUserByAccessToken = async (
     accessToken: string
 ): Promise<ProfileType> => {
@@ -29,4 +34,4 @@ const getUserByAccessToken = async (
     }
 };
 
-export default getUserByAccessToken;
+export { getUserByAccessToken };

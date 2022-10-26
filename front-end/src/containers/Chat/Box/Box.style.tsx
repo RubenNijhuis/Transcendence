@@ -17,7 +17,7 @@ const Container = styled.div`
         background-color: ${mainColor};
         padding: calc(${magicNum} / 4);
 
-        h3 {
+        .heading {
             color: ${lightTextColor};
             margin-bottom: 0;
         }

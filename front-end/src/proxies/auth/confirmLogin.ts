@@ -5,6 +5,13 @@ import { API } from "../instances/apiInstance";
 // Types
 import { LoginConfirmResponse } from "../../types/request";
 
+////////////////////////////////////////////////////////////
+
+/**
+ * I kinda forgot what this does
+ * @param code
+ * @returns
+ */
 const confirmLogin = async (code: string): Promise<LoginConfirmResponse> => {
     try {
         const route = ApiRoutes.confirmLogin(code);
@@ -16,4 +23,4 @@ const confirmLogin = async (code: string): Promise<LoginConfirmResponse> => {
     }
 };
 
-export default confirmLogin;
+export { confirmLogin };
