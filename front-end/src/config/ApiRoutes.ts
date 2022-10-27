@@ -52,8 +52,10 @@ const ApiRoutes = {
     // Websockets //////////////////////////////////////////////
     socketRoute: () => `ws://localhost:8080/api/`,
     // Websockets //////////////////////////////////////////////
-       // TFAuthentication //////////////////////////////////////////
-    turnOnTFA: () => `/user/enable2fa`
+    // TFAuthentication //////////////////////////////////////////
+    turnOnTFA: () => `/user/enable2fa`,
+    getqrTFA: () => `/tfa/google2fa`,
+    confirmTFA: () => `/tfa/google2fa/authenticate`
 };
 
 export default ApiRoutes;

@@ -120,6 +120,7 @@ export class UserService {
       throw err;
     }
   }
+  
 
   async getUserIdFromIntraId(intraId: string): Promise<string> {
     try {
@@ -250,11 +251,11 @@ export class UserService {
   // als ze iets anders doen, graag vermelden in de functie naam, anders eentje deleten
   // thanks :) - zeno
   async update2faSecret(
-    userDto: UsernameDto,
+    intraID: string,
     secret: string
   ): Promise<UpdateResult> {
     try {
-      const user: User = await this.findUserByUsername(userDto.username);
+      const user: User = await this.findUsersByIdNoFilter(intraID);
 
       return await this.userRepository
         .createQueryBuilder()
@@ -272,6 +273,29 @@ export class UserService {
     }
   }
 
+  // async updateTFAiv(
+  //   intraID: string,
+  //   tfaiv : Buffer
+  // ): Promise<UpdateResult> {
+  //   try {
+  //     const user: User = await this.findUsersByIdNoFilter(intraID);
+
+  //     return await this.userRepository
+  //       .createQueryBuilder()
+  //       .update(user)
+  //       .set({ tfaiv: tfaiv })
+  //       .where({ id: user.id })
+  //       .returning("*")
+  //       .execute();
+  //   } catch (err: any) {
+  //     throw errorHandler(
+  //       err,
+  //       "Failed to set tfaiv",
+  //       HttpStatus.INTERNAL_SERVER_ERROR
+  //     );
+  //   }
+  // }
+
   // @angi, kunnen deze weg?
   // setTwoFactorAuthSecret(id: number, twoFactorAuthenticationSecret: string) {
   //   return this.userRepository.update( id, {twoFactorAuthenticationSecret,} );
@@ -286,7 +310,7 @@ export class UserService {
     try {
       const user: User = await this.findUsersByIdNoFilter(uid);
 
-      console.log(user.isTfaEnabled, " ", !user.isTfaEnabled);
+      //console.log(user.isTfaEnabled, " ", !user.isTfaEnabled);
       return await this.userRepository
         .createQueryBuilder()
         .update(user)
