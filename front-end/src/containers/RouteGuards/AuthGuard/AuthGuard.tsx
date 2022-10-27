@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 
 // Router
-import { Navigate, useLocation, Outlet, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, Outlet } from "react-router-dom";
 import PageRoutes from "../../../config/PageRoutes";
 
 // Store
@@ -11,10 +11,6 @@ import StoreId from "../../../config/StoreId";
 // Auth check
 import { useAuth } from "../../../contexts/AuthContext";
 import { getItem } from "../../../modules/Store";
-import { AuthTokenType } from "../../../types/request";
-
-// DEBUG
-import Logger from "../../../utils/Logger";
 
 /**
  * Checks if certain conditions are met when a AuthGuarded
@@ -23,7 +19,6 @@ import Logger from "../../../utils/Logger";
 const AuthGuard = (): JSX.Element => {
     const { isLoggedIn } = useAuth();
     const location = useLocation();
-    const navigate = useNavigate();
     let renderOutlet: boolean = true;
 
     ////////////////////////////////////////////////////////////
@@ -31,7 +26,6 @@ const AuthGuard = (): JSX.Element => {
     useEffect(() => {
         if (isLoggedIn) {
             renderOutlet = true;
-            Logger("AUTH", "AuthGuard", "User already logged in", true);
             return;
         }
 
@@ -41,32 +35,24 @@ const AuthGuard = (): JSX.Element => {
         const isInLoginProcess = getItem<boolean>(StoreId.loginProcess);
         if (isInLoginProcess) {
             renderOutlet = true;
-            Logger("AUTH", "AuthGuard", "User is in login process", true);
             return;
         }
-
-        /**
-         * User must have an access token to reach these routes
-         */
-        const token = getItem<AuthTokenType>(StoreId.accessToken);
-        if (token === undefined || token === null) {
-            Logger("AUTH", "AuthGuard", "User doesn't have an authtoken", true);
-            navigate(PageRoutes.home);
-        } else {
-            // checkTokenValidity
-        }
-    }, [isLoggedIn, navigate]);
+    }, [isLoggedIn]);
 
     ////////////////////////////////////////////////////////////
 
-    return renderOutlet ? (
-        <Outlet />
-    ) : (
-        <Navigate
-            to={PageRoutes.whenNotLoggedIn}
-            state={{ from: location }}
-            replace
-        />
+    return (
+        <>
+            {renderOutlet ? (
+                <Outlet />
+            ) : (
+                <Navigate
+                    to={PageRoutes.whenNotLoggedIn}
+                    state={{ from: location }}
+                    replace
+                />
+            )}
+        </>
     );
 };
 

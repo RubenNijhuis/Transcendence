@@ -70,7 +70,7 @@ export class UserService {
     try {
       const returnedUser: User[] = await this.userRepository.find();
       return Promise.resolve(returnedUser);
-    } catch (err: any) {
+    } catch (err) {
       throw err;
     }
   }
@@ -88,7 +88,7 @@ export class UserService {
     try {
       const ret: User = await this.userRepository.findOne({ where: { id } });
       return this.filterUser(ret);
-    } catch (err: any) {
+    } catch (err) {
       throw err;
     }
   }
@@ -99,7 +99,7 @@ export class UserService {
         where: { intraId }
       });
       return returnedUser;
-    } catch (err: any) {
+    } catch (err) {
       throw err;
     }
   }
@@ -110,7 +110,7 @@ export class UserService {
         where: { username }
       });
       return returnedUser;
-    } catch (err: any) {
+    } catch (err) {
       throw err;
     }
   }
@@ -121,7 +121,7 @@ export class UserService {
         where: { intraId }
       });
       return returnedUser.id;
-    } catch (err: any) {
+    } catch (err) {
       throw err;
     }
   }
@@ -139,7 +139,7 @@ export class UserService {
       // const ret = await this.userRepository.save(testUser);
       const savedUser: User = await this.userRepository.save(newUser);
       return savedUser;
-    } catch (err: any) {
+    } catch (err) {
       console.log("error: ", err);
       throw errorHandler(
         err,
@@ -170,7 +170,7 @@ export class UserService {
         .execute();
 
       return await this.findUserByintraId(intraID);
-    } catch (err: any) {
+    } catch (err) {
       console.log(err);
       throw errorHandler(
         err,
@@ -189,7 +189,7 @@ export class UserService {
         .where("username =:username", { username })
         .execute();
       return result;
-    } catch (err: any) {
+    } catch (err) {
       throw errorHandler(
         err,
         "Failed to remove user",
@@ -219,7 +219,7 @@ export class UserService {
         .where({ id: user.id })
         .returning("*")
         .execute();
-    } catch (err: any) {
+    } catch (err) {
       throw errorHandler(
         err,
         "Failed to set user refresh token",
@@ -231,7 +231,7 @@ export class UserService {
   async set2faSecret(id: number, tfaSecret: string): Promise<UpdateResult> {
     try {
       return await this.userRepository.update(id, { tfaSecret });
-    } catch (err: any) {
+    } catch (err) {
       throw errorHandler(
         err,
         "Failed to set user 2fa secret",
@@ -257,7 +257,7 @@ export class UserService {
         .where({ id: user.id })
         .returning("*")
         .execute();
-    } catch (err: any) {
+    } catch (err) {
       throw errorHandler(
         err,
         "Failed to set user 2fa secret",
@@ -287,7 +287,7 @@ export class UserService {
         .where({ id: user.id })
         .returning("*")
         .execute();
-    } catch (err: any) {
+    } catch (err) {
       throw errorHandler(
         err,
         "Failed to set user tfa option",

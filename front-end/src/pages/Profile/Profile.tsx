@@ -5,41 +5,41 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // UI
-import Layout from "../components/Layout";
-import Loader from "../components/Loader";
-import GameHistory from "../components/GameHistory";
+import Layout from "../../components/Layout";
+import Loader from "../../components/Loader";
+import GameHistory from "../../components/GameHistory";
 
 // Profile components
-import ProfileDisplay from "../components/Profile/ProfileDisplay";
-import ProfileActions from "../components/Profile/ProfileActions";
+import ProfileDisplay from "../../components/Profile/ProfileDisplay";
+import ProfileActions from "../../components/Profile/ProfileActions";
 
 // Authentication
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 // Types
-import { ProfileType } from "../types/profile";
+import { ProfileType } from "../../types/profile";
 
 // Styling constants
-import { largeRadius, mainColor } from "../styles/StylingConstants";
+import { largeRadius, mainColor } from "../../styles/StylingConstants";
 
 // DEBUG
-import Logger from "../utils/Logger";
-import { useFakeData } from "../contexts/FakeDataContext";
+import Logger from "../../utils/Logger";
+import { useFakeData } from "../../contexts/FakeDataContext";
 
 // API
-import { getProfileByUsername } from "../proxies/user";
-import { getValueFromUrl } from "../utils/getValueFromUrl";
+import { getProfileByUsername } from "../../proxies/user";
+import { getValueFromUrl } from "../../utils/getValueFromUrl";
 
 // Store
-import { getItem } from "../modules/Store";
-import StoreId from "../config/StoreId";
+import { getItem } from "../../modules/Store";
+import StoreId from "../../config/StoreId";
 
 // Modal Components
-import { useModal } from "../contexts/ModalContext";
-import CreateAccount from "../containers/CreateAccount/CreateAccount";
+import { useModal } from "../../contexts/ModalContext";
+import CreateAccount from "../../containers/CreateAccount/CreateAccount";
 
 // User context
-import { useUser } from "../contexts/UserContext";
+import { useUser } from "../../contexts/UserContext";
 
 ////////////////////////////////////////////////////////////
 
@@ -118,7 +118,7 @@ const ProfilePage = (): JSX.Element => {
          */
         const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
 
-        if (inLoginProcess === true) {
+        if (inLoginProcess === true && user === null) {
             handleLoginProcess();
         } else {
             handleSetProfile();

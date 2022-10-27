@@ -1,6 +1,6 @@
 // UI
-import Layout from "../components/Layout";
-import Heading from "../components/Heading";
+import Layout from "../../components/Layout";
+import Heading from "../../components/Heading";
 
 const Home = (): JSX.Element => {
     return (

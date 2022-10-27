@@ -3,21 +3,21 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 // UI
-import Heading from "../components/Heading";
-import Layout from "../components/Layout";
-import Loader from "../components/Loader";
-import Podium from "../containers/Leaderboard/Podium";
-import RankingList from "../containers/Leaderboard/RankingList";
+import Heading from "../../components/Heading";
+import Layout from "../../components/Layout";
+import Loader from "../../components/Loader";
+import Podium from "../../containers/Leaderboard/Podium";
+import RankingList from "../../containers/Leaderboard/RankingList";
 
 // DEBUG
-import { useFakeData } from "../contexts/FakeDataContext";
+import { useFakeData } from "../../contexts/FakeDataContext";
 
 // Proxy
-import { getLeaderboard } from "../proxies/leaderboard";
-import { magicNum } from "../styles/StylingConstants";
+import { getLeaderboard } from "../../proxies/leaderboard";
+import { magicNum } from "../../styles/StylingConstants";
 
 // Types
-import { ProfileType } from "../types/profile";
+import { ProfileType } from "../../types/profile";
 
 const LeaderboardContainer = styled.div`
     .heading {

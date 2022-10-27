@@ -53,7 +53,7 @@ export class GroupService {
         }
       return (groups);
     }
-    catch(err: any) {
+    catch(err) {
       return err;
     }
   }
@@ -104,7 +104,7 @@ export class GroupService {
         newGroup.groupname = createGroupDto.groupname;
         const newGroupResp = this.groupRepository.save(newGroup);
         return newGroupResp;
-      } catch (err: any) {
+      } catch (err) {
         throw errorHandler(
           err,
           "Failed to add member to group",
@@ -151,7 +151,7 @@ export class GroupService {
   
           this.groupuserRepository.save(groupuser);
         }
-      } catch (err: any) {
+      } catch (err) {
         throw errorHandler(
           err,
           "Failed to add member to group",
@@ -172,7 +172,7 @@ export class GroupService {
         groupuser.userType = 2;
         return this.groupuserRepository.save(groupuser);
 
-      } catch (err: any) {
+      } catch (err) {
         throw errorHandler(
           err,
           "Failed to add owner to group",
@@ -200,7 +200,7 @@ export class GroupService {
           id: createPasswordDto.id
         })
         .execute();
-    } catch (err: any) {
+    } catch (err) {
       throw errorHandler(
         err,
         "Failed to create password",
@@ -229,7 +229,7 @@ export class GroupService {
           id: editPasswordDto.id
         })
         .execute();
-    } catch (err: any) {
+    } catch (err) {
       throw errorHandler(
         err,
         "Failed to update password",
@@ -262,7 +262,7 @@ export class GroupService {
           this.removeGroup(removegroupDto);
         }
 
-    } catch (err: any) {
+    } catch (err) {
       throw errorHandler(
         err,
         "Failed to remove users",
@@ -283,7 +283,7 @@ export class GroupService {
         groupuser.userType = 1;
       }
       return this.groupuserRepository.save(groupuser);
-    } catch (err: any) {
+    } catch (err) {
       throw errorHandler(
         err,
         "Failed to make user admin",
@@ -304,7 +304,7 @@ export class GroupService {
         groupuser.userType = 0;
       }
       return this.groupuserRepository.save(groupuser);
-    } catch (err: any) {
+    } catch (err) {
       throw errorHandler(
         err,
         "Failed to remove adminstatus from user",

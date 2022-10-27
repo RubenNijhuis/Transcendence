@@ -1,6 +1,6 @@
 // UI
-import Layout from "../components/Layout";
-import PongGameSelect from "../containers/PongGameSelect";
+import Layout from "../../components/Layout";
+import PongGameSelect from "../../containers/PongGameSelect";
 
 ////////////////////////////////////////////////////////////
 

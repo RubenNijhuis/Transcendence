@@ -2,10 +2,10 @@
 import { useEffect, useRef } from "react";
 
 // UI
-import Layout from "../components/Layout";
+import Layout from "../../components/Layout";
 
 // Game logic
-import Canvas, { drawGame } from "../containers/PongGame";
+import Canvas, { drawGame } from "../../containers/PongGame";
 
 ////////////////////////////////////////////////////////////
 

@@ -1,14 +1,14 @@
 import styled from "styled-components";
 
 // UI
-import Layout from "../components/Layout";
-import Loader from "../components/Loader";
-import ChatSelector from "../containers/Chat/Selector";
-import ChatBox from "../containers/Chat/Box";
+import Layout from "../../components/Layout";
+import Loader from "../../components/Loader";
+import ChatSelector from "../../containers/Chat/Selector";
+import ChatBox from "../../containers/Chat/Box";
 
 // Context
-import { useChat } from "../contexts/ChatContext";
-import { magicNum } from "../styles/StylingConstants";
+import { useChat } from "../../contexts/ChatContext";
+import { magicNum } from "../../styles/StylingConstants";
 import { useEffect } from "react";
 
 // TODO: have this in a style file

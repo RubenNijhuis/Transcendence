@@ -19,6 +19,7 @@ const confirmLogin = async (code: string): Promise<ConfirmLoginResponse> => {
         const { data } = await API.get<ConfirmLoginResponse>(route);
 
         if (data.profile) {
+            console.log("STILL MADE IT HERE")
             data.profile = await addImagesToProfile(data.profile);
         }
 
@@ -27,5 +28,7 @@ const confirmLogin = async (code: string): Promise<ConfirmLoginResponse> => {
         return Promise.reject(err);
     }
 };
+
+///////////////////////////////////////////////////////////
 
 export { confirmLogin };

@@ -1,28 +1,27 @@
 // Routing
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
-// Route names config
 import PageRoutes from "../../config/PageRoutes";
 
 // Public Pages
-import Home from "../../pages/Home";
+import Home from "../../pages/Home/Home";
 
 // Private pages
-import ProfilePage from "../../pages/Profile";
-
-import ChatPage from "../../pages/Chat";
-import Leaderboard from "../../pages/Leaderboard";
-
-import Pong from "../../pages/Pong";
-import SelectGame from "../../pages/SelectGame";
+import ProfilePage from "../../pages/Profile/Profile";
+import ChatPage from "../../pages/Chat/Chat";
+import Leaderboard from "../../pages/Leaderboard/Leaderboard";
+import Pong from "../../pages/Pong/Pong";
+import SelectGame from "../../pages/SelectGame/SelectGame";
 
 // Authentication
 import { AuthGuard } from "../RouteGuards";
 
 // 404
-import NotFound from "../../pages/NotFound";
+import NotFound from "../../pages/NotFound/NotFound";
 
-const Router = () => (
+///////////////////////////////////////////////////////////
+
+const Router = (): JSX.Element => (
     <BrowserRouter>
         <Routes>
             {/* Public routes */}
@@ -52,5 +51,7 @@ const Router = () => (
         </Routes>
     </BrowserRouter>
 );
+
+///////////////////////////////////////////////////////////
 
 export default Router;

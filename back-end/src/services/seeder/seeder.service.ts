@@ -30,7 +30,7 @@ export class SeederService {
         });
       }
       return this.userServ.getUsers();
-    } catch (err: any) {
+    } catch (err) {
         console.log(err);
       throw errorHandler(
         err,
