@@ -16,6 +16,9 @@ interface SocketContextType {
     socket: any;
     socketType: SocketType;
 
+    roomId: string;
+    setRoomId: React.Dispatch<React.SetStateAction<string>>;
+
     setSocketType: any;
 }
 
@@ -31,14 +34,19 @@ const SocketProvider = ({
     children: React.ReactNode;
 }): JSX.Element => {
     const [socketType, setSocketType] = useState<SocketType>(null!);
+    const [roomId, setRoomId] = useState<string>(null!);
     const socket = io(ApiRoutes.socketRoute());
 
     ////////////////////////////////////////////////////////////
 
     const value: SocketContextType = {
         socket,
+
         socketType,
-        setSocketType
+        setSocketType,
+
+        roomId,
+        setRoomId
     };
 
     ////////////////////////////////////////////////////////////

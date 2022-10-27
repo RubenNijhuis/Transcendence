@@ -41,6 +41,11 @@ interface Message {
     read_by: ProfileType[];
 }
 
+const enum GroupChatType {
+    DM,
+    Group
+}
+
 interface GroupChat {
     group_id: number;
     name: string | null;
@@ -60,4 +65,4 @@ export type {
     GroupChat
 };
 
-export { MessageContentType };
+export { MessageContentType, GroupChatType };

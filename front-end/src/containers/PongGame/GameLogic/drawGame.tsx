@@ -1,8 +1,7 @@
 // Game components
-import Ball from "./Ball";
-import Bat from "./Bat";
+import { Ball, Bat } from "../GameElements";
 import GameManager from "./GameManager";
-import PowerUps from "./PowerUps";
+import PowerUps from "../PowerUps";
 
 const keyPressListener = (gameManager: GameManager) => {
     // Function to be run on key event

@@ -1,5 +1,4 @@
-import Ball from "./Ball";
-import Bat from "./Bat";
+import { Ball, Bat } from "./GameElements";
 
 class PowerUps {
     positionX: number;

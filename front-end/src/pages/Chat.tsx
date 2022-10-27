@@ -9,6 +9,7 @@ import ChatBox from "../containers/Chat/Box";
 // Context
 import { useChat } from "../contexts/ChatContext";
 import { magicNum } from "../styles/StylingConstants";
+import { useEffect } from "react";
 
 // TODO: have this in a style file
 const Container = styled.div`
@@ -18,25 +19,20 @@ const Container = styled.div`
 `;
 
 const ChatPage = (): JSX.Element => {
-    const { allChats, activeChatID, setActiveChatID } = useChat();
+    const { activeChat, setActiveChat, directChats, groupChats } = useChat();
 
     ////////////////////////////////////////////////////////////
 
     return (
         <Layout>
             <Container>
-                {allChats !== null ? (
-                    <>
-                        <ChatSelector
-                            directMessages={allChats}
-                            selectedChat={activeChatID}
-                            setSelectedChat={setActiveChatID}
-                        />
-                        <ChatBox chat={allChats[activeChatID]} />
-                    </>
-                ) : (
-                    <Loader />
-                )}
+                <ChatSelector
+                    directChats={directChats}
+                    groupChats={groupChats}
+                    selectedChat={activeChat}
+                    setSelectedChat={setActiveChat}
+                />
+                {activeChat && <ChatBox chat={activeChat} />}
             </Container>
         </Layout>
     );

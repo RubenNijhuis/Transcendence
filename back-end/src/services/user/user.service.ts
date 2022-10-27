@@ -54,11 +54,14 @@ export class UserService {
     const newUser: User = user;
 
     if (!newUser) return null;
+
     delete newUser.intraId;
+    delete newUser.index;
     delete newUser.isInitialized;
     delete newUser.isTfaEnabled;
     delete newUser.refreshToken;
     delete newUser.tfaSecret;
+
     return newUser;
   }
 
@@ -292,5 +295,4 @@ export class UserService {
       );
     }
   }
-
 }

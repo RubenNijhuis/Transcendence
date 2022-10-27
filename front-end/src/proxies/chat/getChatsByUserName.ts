@@ -15,8 +15,9 @@ import { GroupChat } from "../../types/chat";
 const getChatsByUsername = async (username: string): Promise<GroupChat[]> => {
     try {
         const route = ApiRoutes.getChatsByUsername(username);
-        
+
         const { data } = await API.get<GroupChat[]>(route);
+
         return Promise.resolve(data);
     } catch (err: any) {
         return Promise.reject(err);
