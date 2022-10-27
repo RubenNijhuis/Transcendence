@@ -12,24 +12,27 @@ import AuthProvider from "./contexts/AuthContext";
 import ModalProvider from "./contexts/ModalContext";
 import ChatProvider from "./contexts/ChatContext";
 import UserProvider from "./contexts/UserContext";
+import SocketProvider from "./contexts/SocketContext";
 
 const App = (): JSX.Element => {
     return (
         <UserProvider>
             <AuthProvider>
-                {/* TODO: wrapper for providers? */}
-                <ModalProvider>
-                    {/* TODO: remove data debug provider */}
-                    <FakeDataProvider>
-                        <ChatProvider>
-                            {/* Global Styling */}
-                            <GlobalStyle />
+                <SocketProvider>
+                    {/* TODO: wrapper for providers? */}
+                    <ModalProvider>
+                        {/* TODO: remove data debug provider */}
+                        <FakeDataProvider>
+                            <ChatProvider>
+                                {/* Global Styling */}
+                                <GlobalStyle />
 
-                            {/* Page routing */}
-                            <Router />
-                        </ChatProvider>
-                    </FakeDataProvider>
-                </ModalProvider>
+                                {/* Page routing */}
+                                <Router />
+                            </ChatProvider>
+                        </FakeDataProvider>
+                    </ModalProvider>
+                </SocketProvider>
             </AuthProvider>
         </UserProvider>
     );

@@ -1,6 +1,3 @@
-import { useEffect, useRef } from "react";
-import Canvas from "./Canvas";
-
 // Game components
 import Ball from "./Ball";
 import Bat from "./Bat";
@@ -124,19 +121,4 @@ const drawGame = (
     animate();
 };
 
-const PongGame = (): JSX.Element => {
-    const canvasRef = useRef<HTMLCanvasElement>(null!);
-
-    useEffect(() => {
-        const context = canvasRef.current.getContext("2d");
-
-        if (context === null) return;
-
-        // Start drawing the game
-        drawGame(canvasRef.current, context);
-    }, []);
-
-    return <Canvas canvasRef={canvasRef} />;
-};
-
-export default PongGame;
+export default drawGame;

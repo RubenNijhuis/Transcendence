@@ -42,7 +42,7 @@ const CTAButton = ({ authStatus }: { authStatus: boolean }): JSX.Element => {
     return (
         <>
             {authStatus ? (
-                <Link className="play-button" to={PageRoutes.play}>
+                <Link className="play-button" to={PageRoutes.selectGame}>
                     <Button theme={"light"}>Play Pong</Button>
                 </Link>
             ) : (

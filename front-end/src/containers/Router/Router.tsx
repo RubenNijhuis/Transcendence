@@ -9,11 +9,13 @@ import Home from "../../pages/Home";
 
 // Private pages
 import ProfilePage from "../../pages/Profile";
-import Play from "../../pages/Play";
+
 import ChatPage from "../../pages/Chat";
 import Leaderboard from "../../pages/Leaderboard";
-import Pong from "../../pages/Pong";
+
 import NewPongGame from "../../pages/NewPongGame";
+import Pong from "../../pages/Pong";
+import SelectGame from "../../pages/SelectGame";
 
 // Authentication
 import { AuthGuard } from "../RouteGuards";
@@ -39,7 +41,7 @@ const Router = () => (
                 </Route>
 
                 {/* Regular private routes */}
-                <Route path={PageRoutes.play} element={<Play />} />
+                <Route path={PageRoutes.selectGame} element={<SelectGame />} />
                 <Route path={PageRoutes.chat} element={<ChatPage />} />
                 <Route
                     path={PageRoutes.leaderBoard}
