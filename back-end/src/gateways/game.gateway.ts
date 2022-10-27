@@ -22,6 +22,13 @@ export class GameSocketGateway {
     this.logger.log('Initialized');
   }
 
+  @SubscribeMessage('healthCheck')
+  healthCheck(@MessageBody() message: string): void {
+    console.log("socket message healthcheck: ", message);
+    const ret = this.server.emit('message: ', message);
+    console.log("emit ret: ", ret);
+  }
+
   @SubscribeMessage('messageToAll')
   handleMessage(@MessageBody() message: string): void {
     this.server.emit('message', message);

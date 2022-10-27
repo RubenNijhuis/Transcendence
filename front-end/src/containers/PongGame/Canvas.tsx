@@ -34,12 +34,18 @@ const Canvas = ({ canvasRef }: Props): JSX.Element => {
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
-        const socket = io("ws://localhost:8080/api/");
+        console.log("websocket test");
+        const socket = io("ws://localhost:8080");
+        console.log("socket: ", socket);
 
-        socket.emit("testMessage", "pee pee poo poo");
-        socket.on("testMessage", (arg: any) => {
+        const emitRet = socket.emit("healthCheck", "pee pee poo poo");
+        console.log("emit ret: ", emitRet);
+
+        const ret = socket.on("healthCheck", (arg: any) => {
             setSocketResponse(arg as string);
         });
+        
+        console.log("socket.on ret: ", ret);
     }, []);
 
     useEffect(() => {

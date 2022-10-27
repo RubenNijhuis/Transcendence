@@ -6,6 +6,6 @@ import { GameSocketService } from "src/services/gateway/game/game.service";
   imports: [],
   controllers: [],
   providers: [GameSocketGateway],
-  exports: [GameSocketService]
+  exports: []
 })
-export class FriendlistModule {}
+export class WebSocketModule {}
