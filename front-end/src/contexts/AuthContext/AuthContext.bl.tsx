@@ -53,8 +53,4 @@ const redirectToHome = (): void => {
 
 ////////////////////////////////////////////////////////////
 
-export {
-    signIn,
-    signOut,
-    redirectToHome,
-};
+export { signIn, signOut, redirectToHome };

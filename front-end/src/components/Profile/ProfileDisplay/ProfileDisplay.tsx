@@ -8,15 +8,18 @@ import { Container } from "./ProfileDisplay.style";
 // Types
 import { ProfileType } from "../../../types/profile";
 import Crown from "../../Crown";
+import ProfileStats from "../ProfileStats";
+import { MatchRecord } from "../../../types/game";
 
 ////////////////////////////////////////////////////////////
 
 interface Props {
-    user: ProfileType;
+    profile: ProfileType;
+    matchHistory: MatchRecord[];
 }
 
-const ProfileDisplay = ({ user }: Props): JSX.Element => {
-    const { banner_url, rank, img_url, username } = user;
+const ProfileDisplay = ({ profile, matchHistory }: Props): JSX.Element => {
+    const { banner_url, rank, img_url, username } = profile;
 
     return (
         <Container>
@@ -26,6 +29,7 @@ const ProfileDisplay = ({ user }: Props): JSX.Element => {
                 <Asset url={img_url} alt="profile" className="profile__img" />
                 <Heading type={4}>{username}</Heading>
             </div>
+            <ProfileStats player={profile} matches={matchHistory} />
         </Container>
     );
 };

@@ -1,4 +1,8 @@
+// UI
 import GameCard from "../../components/GameCard";
+
+// Styling
+// TODO: put in styling file
 import { magicNum } from "../../styles/StylingConstants";
 
 const PongGameSelect = (): JSX.Element => {

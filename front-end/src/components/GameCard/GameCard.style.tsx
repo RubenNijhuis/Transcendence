@@ -5,6 +5,7 @@ import {
     lightTextColor,
     magicNum,
     mainColor,
+    mediumRadius,
     smallRadius
 } from "../../styles/StylingConstants";
 
@@ -18,7 +19,7 @@ const AdvancedCard = styled.div`
     height: 100%;
     aspect-ratio: 5 / 7;
 
-    border-radius: ${smallRadius};
+    border-radius: ${mediumRadius};
     background: ${mainColor};
     overflow: hidden;
 

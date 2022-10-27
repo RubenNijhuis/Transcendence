@@ -9,22 +9,17 @@ import { CreateForm, StyledInput } from "./CreateAccount.style";
 import BoxSlider from "../../components/BoxSlider";
 import Slide from "../../components/BoxSlider/Slide/Slide";
 
-// Auth
-import { useAuth } from "../../contexts/AuthContext";
-
 // Proxies
 import { createUser, uploadImage } from "../../proxies/user";
 
 // Routes
 import ApiRoutes from "../../config/ApiRoutes";
 
-// Store
-import { setItem } from "../../modules/Store";
-import StoreId from "../../config/StoreId";
-
 // DEBUG
 import { useFormInput } from "../../components/Form/hooks";
 import { useUser } from "../../contexts/UserContext";
+
+////////////////////////////////////////////////////////////
 
 interface Props {
     setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -38,7 +33,6 @@ const CreateAccount = ({ setModalOpen }: Props): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
-    const { setLoggedIn } = useAuth();
     const { setUser } = useUser();
 
     ////////////////////////////////////////////////////////////
@@ -149,5 +143,7 @@ const CreateAccount = ({ setModalOpen }: Props): JSX.Element => {
         </CreateForm>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export default CreateAccount;

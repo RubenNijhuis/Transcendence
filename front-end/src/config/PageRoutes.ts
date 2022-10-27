@@ -6,7 +6,7 @@ const PageRoutes = {
 
     ////////////////////////////////////////////////////////////
 
-    selectGame: `/selectGame`,
+    selectGame: `/select-pong`,
     pong: `/pong`,
     newPong: `/new-pong`,
 

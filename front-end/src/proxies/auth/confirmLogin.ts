@@ -4,6 +4,7 @@ import { API } from "../instances/apiInstance";
 
 // Types
 import { ConfirmLoginResponse } from "../../types/request";
+import { addImagesToProfile } from "../user";
 
 ////////////////////////////////////////////////////////////
 
@@ -16,6 +17,10 @@ const confirmLogin = async (code: string): Promise<ConfirmLoginResponse> => {
     try {
         const route = ApiRoutes.confirmLogin(code);
         const { data } = await API.get<ConfirmLoginResponse>(route);
+
+        if (data.profile) {
+            data.profile = await addImagesToProfile(data.profile);
+        }
 
         return Promise.resolve(data);
     } catch (err) {

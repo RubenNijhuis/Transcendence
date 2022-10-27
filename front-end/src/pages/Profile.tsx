@@ -7,11 +7,10 @@ import { useParams } from "react-router-dom";
 // UI
 import Layout from "../components/Layout";
 import Loader from "../components/Loader";
-// import GameHistory from "../components/GameHistory";
+import GameHistory from "../components/GameHistory";
 
 // Profile components
 import ProfileDisplay from "../components/Profile/ProfileDisplay";
-import ProfileStats from "../components/Profile/ProfileStats";
 import ProfileActions from "../components/Profile/ProfileActions";
 
 // Authentication
@@ -28,16 +27,18 @@ import Logger from "../utils/Logger";
 import { useFakeData } from "../contexts/FakeDataContext";
 
 // API
-import { addImagesToProfile, getProfileByUsername } from "../proxies/user";
+import { getProfileByUsername } from "../proxies/user";
 import { getValueFromUrl } from "../utils/getValueFromUrl";
 
 // Store
-import { getItem, setItem } from "../modules/Store";
+import { getItem } from "../modules/Store";
 import StoreId from "../config/StoreId";
 
 // Modal Components
 import { useModal } from "../contexts/ModalContext";
 import CreateAccount from "../containers/CreateAccount/CreateAccount";
+
+// User context
 import { useUser } from "../contexts/UserContext";
 
 ////////////////////////////////////////////////////////////
@@ -72,10 +73,8 @@ const ProfilePage = (): JSX.Element => {
         try {
             const { profile, shouldCreateUser } = await signIn(apiToken);
 
-            if (profile !== null) {
-                const profileWithImages = await addImagesToProfile(profile);
-                setUser(profileWithImages);
-                return;
+            if (profile) {
+                setUser(profile);
             }
 
             if (shouldCreateUser) {
@@ -94,10 +93,8 @@ const ProfilePage = (): JSX.Element => {
          */
         if (profileName !== undefined) {
             try {
-                const returnedProfileByUsername = await getProfileByUsername(
-                    profileName
-                );
-                setSelectedProfile(returnedProfileByUsername);
+                const returnedProfile = await getProfileByUsername(profileName);
+                setSelectedProfile(returnedProfile);
             } catch (err) {
                 console.error(err);
             }
@@ -121,37 +118,35 @@ const ProfilePage = (): JSX.Element => {
          */
         const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
 
-        if (inLoginProcess === true && user === null) {
+        if (inLoginProcess === true) {
             handleLoginProcess();
-            return;
+        } else {
+            handleSetProfile();
         }
-
-        handleSetProfile();
     }, [user]);
 
     ////////////////////////////////////////////////////////////
 
     return (
         <Layout>
-            {selectedProfile && user ? (
+            {selectedProfile ? (
                 <div
                     style={{
                         borderRadius: largeRadius,
                         backgroundColor: mainColor
                     }}
                 >
-                    <ProfileDisplay user={selectedProfile} />
-                    <ProfileStats
-                        player={selectedProfile}
-                        matches={matchHistory}
+                    <ProfileDisplay
+                        profile={selectedProfile}
+                        matchHistory={matchHistory}
                     />
                     {!isUserProfile && (
                         <ProfileActions profile={selectedProfile} />
                     )}
-                    {/* <GameHistory
+                    <GameHistory
                         player={selectedProfile}
                         matches={matchHistory}
-                    /> */}
+                    />
                 </div>
             ) : (
                 <Loader />
