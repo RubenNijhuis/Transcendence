@@ -29,7 +29,7 @@ const getUserByAccessToken = async (
         const returnedUser = await addImagesToProfile(data);
 
         return Promise.resolve(returnedUser);
-    } catch (err: any) {
+    } catch (err) {
         return Promise.reject(err);
     }
 };

@@ -20,17 +20,14 @@ import { useUser } from "../../../contexts/UserContext";
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
-    directChats: GroupChat[];
-    groupChats: GroupChat[];
-    selectedChat: GroupChat;
-    setSelectedChat: React.Dispatch<React.SetStateAction<GroupChat>>;
+interface IMemberList {
+    members: ProfileType[];
 }
 
 /**
  * Display the members of a chat in the group list
  */
-const MemberList = ({ members }: { members: ProfileType[] }): JSX.Element => {
+const MemberList = ({ members }: IMemberList): JSX.Element => {
     return (
         <div>
             {members.map(({ img_url, username }, count) => (
@@ -43,16 +40,20 @@ const MemberList = ({ members }: { members: ProfileType[] }): JSX.Element => {
     );
 };
 
+interface IChatTypeSelector {
+    activeType: GroupChatType;
+    setActiveType: React.Dispatch<React.SetStateAction<GroupChatType>>;
+}
+
 const ChatTypeSelector = ({
     activeType,
     setActiveType
-}: {
-    activeType: GroupChatType;
-    setActiveType: React.Dispatch<React.SetStateAction<GroupChatType>>;
-}): JSX.Element => {
+}: IChatTypeSelector): JSX.Element => {
     const handleChatTypeSelect = (type: GroupChatType): void => {
         setActiveType(type);
     };
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <ChatTypeSelectorContainer>
@@ -81,7 +82,6 @@ interface IDirectMessageList {
     selectedChatType: GroupChatType;
     directChats: GroupChat[];
     groupChats: GroupChat[];
-    selectedChat: GroupChat;
     setSelectedChat: React.Dispatch<React.SetStateAction<GroupChat>>;
 }
 
@@ -89,7 +89,6 @@ const DirectMessageList = ({
     selectedChatType,
     directChats,
     groupChats,
-    selectedChat,
     setSelectedChat
 }: IDirectMessageList): JSX.Element => {
     const { user } = useUser();
@@ -146,15 +145,24 @@ const DirectMessageList = ({
     );
 };
 
+interface IChatSelector {
+    directChats: GroupChat[];
+    groupChats: GroupChat[];
+    selectedChat: GroupChat;
+    setSelectedChat: React.Dispatch<React.SetStateAction<GroupChat>>;
+}
+
 const ChatSelector = ({
     directChats,
     groupChats,
     selectedChat,
     setSelectedChat
-}: Props): JSX.Element => {
+}: IChatSelector): JSX.Element => {
     const [selectedChatType, setSelectedChatType] = useState<GroupChatType>(
         GroupChatType.DM
     );
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <Container>
@@ -167,10 +175,9 @@ const ChatSelector = ({
             {selectedChat && (
                 <DirectMessageList
                     selectedChatType={selectedChatType}
+                    setSelectedChat={setSelectedChat}
                     directChats={directChats}
                     groupChats={groupChats}
-                    selectedChat={selectedChat}
-                    setSelectedChat={setSelectedChat}
                 />
             )}
         </Container>

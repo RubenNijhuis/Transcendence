@@ -20,7 +20,7 @@ const addImagesToProfile = async (
         profile.img_url = await getProfileImageByUsername(profile.username);
 
         return Promise.resolve(profile);
-    } catch (err: any) {
+    } catch (err) {
         return Promise.reject(err);
     }
 };

@@ -19,7 +19,7 @@ const getChatsByUsername = async (username: string): Promise<GroupChat[]> => {
         const { data } = await API.get<GroupChat[]>(route);
 
         return Promise.resolve(data);
-    } catch (err: any) {
+    } catch (err) {
         return Promise.reject(err);
     }
 };

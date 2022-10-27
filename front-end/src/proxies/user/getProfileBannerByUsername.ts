@@ -31,7 +31,7 @@ const getProfileBannerByUsername = async (
         const toBase64String = `data:image/png;base64,${buffer}`;
 
         return Promise.resolve(toBase64String);
-    } catch (err: any) {
+    } catch (err) {
         return Promise.reject(err);
     }
 };

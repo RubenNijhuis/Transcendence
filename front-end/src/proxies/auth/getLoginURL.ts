@@ -15,7 +15,7 @@ const getLoginURL = async (): Promise<string> => {
         const { data } = await API.get<string>(route);
 
         return Promise.resolve(data);
-    } catch (err: any) {
+    } catch (err) {
         return Promise.reject(err);
     }
 };

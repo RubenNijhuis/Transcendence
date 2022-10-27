@@ -1,30 +1,32 @@
 // React stuff
 import { createContext, useContext, useEffect, useState } from "react";
 
-// API
-import { confirmLogin } from "../../proxies/auth";
-import { getUserByAccessToken } from "../../proxies/user";
-
-import { refreshAuthToken } from "../../proxies/auth";
-import { setDefaultAuthHeader } from "../../proxies/instances/apiInstance";
-
-// Routing
-import PageRoutes from "../../config/PageRoutes";
-
 // Store
-import { clearAll, getItem, removeItem, setItem } from "../../modules/Store";
+import { getItem, setItem } from "../../modules/Store";
 import StoreId from "../../config/StoreId";
 
 // Types
+import { SignInResponse } from "../../types/request";
+
+// User
 import { useUser } from "../UserContext";
+
+// Business logic
+import {
+    redirectToHome,
+    signIn,
+    signOut,
+} from "./AuthContext.bl";
+
+// Proxies
+import { checkTokenValidity } from "../../proxies/auth";
 
 ///////////////////////////////////////////////////////////
 
 interface AuthContextType {
     isLoggedIn: boolean;
-    setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 
-    signIn(code: string): Promise<boolean>;
+    signIn(code: string): Promise<SignInResponse>;
     signOut(): any;
 }
 
@@ -53,51 +55,13 @@ const AuthProvider = ({
 
     ////////////////////////////////////////////////////////////
 
-    /**
-     * Makes a request to the back-end using the third party provided
-     * code. The expected return value is a user as well as a bool
-     * indicating whether to create a user or not.
-     */
-    const signIn = async (code: string): Promise<boolean> => {
-        try {
-            const loginResponse = await confirmLogin(code);
-            const { authToken, profile, shouldCreateUser } = loginResponse;
-            const { accessToken, refreshToken } = authToken;
+    // Auto-update logged in status if user exists
+    useEffect(() => {
+        if (!user) return;
 
-            // Reset the store and update the API instance
-            setItem(StoreId.accessToken, accessToken);
-            setItem(StoreId.refreshToken, refreshToken);
-            setDefaultAuthHeader(accessToken);
-
-            if (profile !== null) {
-                setUser(profile);
-                setLoggedIn(true);
-            }
-
-            return Promise.resolve(shouldCreateUser);
-        } catch (err) {
-            console.log(err);
-            return Promise.reject(err);
-        }
-    };
-
-    /**
-     * Signs the user off, removing auth tokens and
-     * redirecting to the home page
-     */
-    const signOut = (): void => {
-        removeItem(StoreId.accessToken);
-        removeItem(StoreId.refreshToken);
-        redirectToHome();
-    };
-
-    const redirectToHome = (): void => {
-        if (window.location.pathname === PageRoutes.home) return;
-
-        window.location.assign(PageRoutes.home);
-    };
-
-    ////////////////////////////////////////////////////////////
+        setLoggedIn(true);
+        setItem(StoreId.loginProcess, false);
+    }, [user]);
 
     /**
      * Checks if there is still an auth token in the store.
@@ -106,43 +70,29 @@ const AuthProvider = ({
      * If the refresh token is also expired we ask the user
      * to manually log in by redirecting them to home
      */
-    // TODO: sign in function and this use effect share a lot of code - reduce duplication
     useEffect(() => {
-        const setToken = async () => {
-            const storeRefreshToken = getItem<string>(StoreId.refreshToken);
+        const runTokenRefresh = async () => {
+            // If the user is still loggin in it's best to not work with the tokens yet
+            const isInLoginProcess = getItem<boolean>(StoreId.loginProcess);
+            if (isInLoginProcess) return;
 
-            if (storeRefreshToken === null) return;
+            const refreshToken = getItem<string>(StoreId.refreshToken);
+            if (refreshToken === null) {
+                redirectToHome();
+                return;
+            }
 
             try {
-                // Reset for login process
-                setItem(StoreId.loginProcess, false);
+                const { user } = await checkTokenValidity(refreshToken);
 
-                const { accessToken, refreshToken } = await refreshAuthToken(
-                    storeRefreshToken
-                );
-
-                // Reset tokens and API instance
-                setItem(StoreId.accessToken, accessToken);
-                setItem(StoreId.refreshToken, refreshToken);
-                setDefaultAuthHeader(accessToken);
-
-                if (user === null) {
-                    const userFromToken = await getUserByAccessToken(
-                        accessToken
-                    );
-
-                    setUser(userFromToken);
-                }
-
+                setUser(user);
                 setLoggedIn(true);
             } catch (err) {
-                // TODO: namespace store functions
-                clearAll();
-                console.error(err);
+                redirectToHome();
             }
         };
-        setToken();
-    });
+        runTokenRefresh();
+    }, []);
 
     ////////////////////////////////////////////////////////////
 
@@ -150,8 +100,7 @@ const AuthProvider = ({
         signIn,
         signOut,
 
-        isLoggedIn,
-        setLoggedIn
+        isLoggedIn
     };
 
     ////////////////////////////////////////////////////////////

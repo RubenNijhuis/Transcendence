@@ -28,11 +28,11 @@ import Logger from "../utils/Logger";
 import { useFakeData } from "../contexts/FakeDataContext";
 
 // API
-import { getProfileByUsername } from "../proxies/user";
+import { addImagesToProfile, getProfileByUsername } from "../proxies/user";
 import { getValueFromUrl } from "../utils/getValueFromUrl";
 
 // Store
-import { getItem } from "../modules/Store";
+import { getItem, setItem } from "../modules/Store";
 import StoreId from "../config/StoreId";
 
 // Modal Components
@@ -53,7 +53,7 @@ const ProfilePage = (): JSX.Element => {
 
     // Local profile
     const { signIn } = useAuth();
-    const { user } = useUser();
+    const { user, setUser } = useUser();
 
     // Create account modal
     const { setModalOpen, setModalElement } = useModal();
@@ -66,44 +66,33 @@ const ProfilePage = (): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
-    useEffect(() => {
-        const runUserRetrieval = async () => {
-            /**
-             * If the user is in the login process we check if
-             * they still need to make an account. If that is
-             * the case we display the Create Account Modal
-             */
-            const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
+    const handleLoginProcess = async () => {
+        const apiToken = getValueFromUrl(window.location.href, "code");
 
-            if (inLoginProcess && user === null) {
-                const href = window.location.href;
-                const token = getValueFromUrl(href, "code"); // TODO: put "code" in a config file
+        try {
+            const { profile, shouldCreateUser } = await signIn(apiToken);
 
-                try {
-                    const shouldCreateUser = await signIn(token);
-
-                    if (shouldCreateUser) {
-                        setModalElement(
-                            <CreateAccount setModalOpen={setModalOpen} />
-                        );
-                        setModalOpen(true);
-                    }
-                } catch (err) {
-                    Logger("AUTH", "Succesful login", "Sign in issue", err);
-                }
-            }
-
-            /**
-             * If there is no profile name in the url we set
-             * the user as the current profile. Meaning we
-             * are on the user's own profile page
-             */
-            if (profileName === undefined) {
-                setSelectedProfile(user);
-                setIsUserProfile(true);
+            if (profile !== null) {
+                const profileWithImages = await addImagesToProfile(profile);
+                setUser(profileWithImages);
                 return;
             }
 
+            if (shouldCreateUser) {
+                setModalElement(<CreateAccount setModalOpen={setModalOpen} />);
+                setModalOpen(true);
+            }
+        } catch (err) {
+            Logger("AUTH", "Succesful login", "Sign in issue", err);
+        }
+    };
+
+    const handleSetProfile = async () => {
+        /**
+         * If there is a profile name in the url we
+         * request that user and set it as the profile
+         */
+        if (profileName !== undefined) {
             try {
                 const returnedProfileByUsername = await getProfileByUsername(
                     profileName
@@ -112,9 +101,33 @@ const ProfilePage = (): JSX.Element => {
             } catch (err) {
                 console.error(err);
             }
-        };
-        runUserRetrieval();
-    }, [profileName, user]);
+        }
+
+        /**
+         * If no profile is in the url we set
+         * the user as the profile
+         */
+        setSelectedProfile(user);
+        setIsUserProfile(true);
+    };
+
+    ////////////////////////////////////////////////////////////
+
+    useEffect(() => {
+        /**
+         * If the user is in the login process we check if
+         * they still need to make an account. If that is
+         * the case we display the Create Account Modal
+         */
+        const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
+
+        if (inLoginProcess === true && user === null) {
+            handleLoginProcess();
+            return;
+        }
+
+        handleSetProfile();
+    }, [user]);
 
     ////////////////////////////////////////////////////////////
 

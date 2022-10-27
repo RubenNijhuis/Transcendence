@@ -3,22 +3,22 @@ import ApiRoutes from "../../config/ApiRoutes";
 import { API } from "../instances/apiInstance";
 
 // Types
-import { LoginConfirmResponse } from "../../types/request";
+import { ConfirmLoginResponse } from "../../types/request";
 
 ////////////////////////////////////////////////////////////
 
 /**
- * I kinda forgot what this does
+ * Sends the third party login confirm code to the back-end
  * @param code
  * @returns
  */
-const confirmLogin = async (code: string): Promise<LoginConfirmResponse> => {
+const confirmLogin = async (code: string): Promise<ConfirmLoginResponse> => {
     try {
         const route = ApiRoutes.confirmLogin(code);
-        const { data } = await API.get<LoginConfirmResponse>(route);
+        const { data } = await API.get<ConfirmLoginResponse>(route);
 
         return Promise.resolve(data);
-    } catch (err: any) {
+    } catch (err) {
         return Promise.reject(err);
     }
 };

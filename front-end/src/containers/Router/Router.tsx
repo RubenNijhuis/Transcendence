@@ -13,7 +13,6 @@ import ProfilePage from "../../pages/Profile";
 import ChatPage from "../../pages/Chat";
 import Leaderboard from "../../pages/Leaderboard";
 
-import NewPongGame from "../../pages/NewPongGame";
 import Pong from "../../pages/Pong";
 import SelectGame from "../../pages/SelectGame";
 
@@ -31,7 +30,6 @@ const Router = () => (
 
             {/* Pong debugging */}
             <Route path={PageRoutes.pong} element={<Pong />} />
-            <Route path={PageRoutes.newPong} element={<NewPongGame />} />
 
             {/* Routes that have to pass through authentication to be loaded */}
             <Route element={<AuthGuard />}>

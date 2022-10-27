@@ -90,8 +90,6 @@ const CreateAccount = ({ setModalOpen }: Props): JSX.Element => {
             const returnedUserProfile = await createUser(providedDetails);
 
             setUser(returnedUserProfile);
-            setLoggedIn(true);
-            setItem(StoreId.loginProcess, false);
             setModalOpen(false);
         } catch (err) {
             console.log(err);

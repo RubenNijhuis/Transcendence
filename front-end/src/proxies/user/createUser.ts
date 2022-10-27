@@ -24,7 +24,7 @@ const createUser = async (userData: createUserProps): Promise<ProfileType> => {
         const { data } = await API.post<ProfileType>(route, userData);
 
         return Promise.resolve(data);
-    } catch (err: any) {
+    } catch (err) {
         return Promise.reject(err);
     }
 };

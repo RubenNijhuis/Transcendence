@@ -29,7 +29,7 @@ const AdvancedCard = styled.div`
         width: 100%;
         height: 100%;
 
-        img {
+        .asset {
             position: absolute;
             top: 0;
             left: 0;

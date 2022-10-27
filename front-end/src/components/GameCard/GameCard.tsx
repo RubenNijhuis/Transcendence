@@ -6,6 +6,7 @@ import { AdvancedCard } from "./GameCard.style";
 
 // Routing
 import { Link } from "react-router-dom";
+import Asset from "../Asset";
 
 interface Props {
     img_url: string;
@@ -25,7 +26,7 @@ const GameCard = ({
     return (
         <AdvancedCard>
             <div className="img">
-                <img src={img_url} alt="background" />
+                <Asset url={img_url} alt={`test`} />
             </div>
             <div className="content">
                 <div className="content__container">
