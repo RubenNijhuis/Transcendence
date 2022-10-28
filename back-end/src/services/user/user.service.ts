@@ -235,18 +235,6 @@ export class UserService {
     }
   }
 
-  async set2faSecret(id: number, tfaSecret: string): Promise<UpdateResult> {
-    try {
-      return await this.userRepository.update(id, { tfaSecret });
-    } catch (err: any) {
-      throw errorHandler(
-        err,
-        "Failed to set user 2fa secret",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
-    }
-  }
-
   // is deze functie niet hetzelde als set2faSecret? je update in beiden de 2fa
   // als ze iets anders doen, graag vermelden in de functie naam, anders eentje deleten
   // thanks :) - zeno
@@ -272,29 +260,6 @@ export class UserService {
       );
     }
   }
-
-  // async updateTFAiv(
-  //   intraID: string,
-  //   tfaiv : Buffer
-  // ): Promise<UpdateResult> {
-  //   try {
-  //     const user: User = await this.findUsersByIdNoFilter(intraID);
-
-  //     return await this.userRepository
-  //       .createQueryBuilder()
-  //       .update(user)
-  //       .set({ tfaiv: tfaiv })
-  //       .where({ id: user.id })
-  //       .returning("*")
-  //       .execute();
-  //   } catch (err: any) {
-  //     throw errorHandler(
-  //       err,
-  //       "Failed to set tfaiv",
-  //       HttpStatus.INTERNAL_SERVER_ERROR
-  //     );
-  //   }
-  // }
 
   // @angi, kunnen deze weg?
   // setTwoFactorAuthSecret(id: number, twoFactorAuthenticationSecret: string) {
