@@ -91,6 +91,7 @@ export class UsersController {
       let fullPath: string = dirname;
 
       const files = readdirSync(dirname).filter(file => file.startsWith(`${intraId}.`));
+      console.log("")
       if (!files)
         fullPath += "standard.png"; // in case nothing has been uploaded, if it ever gets optional??
       else
