@@ -2,7 +2,7 @@
 import Footer from "../Footer";
 import NavBar from "../Navbar";
 
-// DEBUG
+// Debug dev box
 import DebugDevBox from "../../containers/DebugDevBox";
 import { debugDevBoxActive } from "../../config/DevEnv";
 
@@ -11,7 +11,7 @@ import { Container, Content } from "./Layout.style";
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
+interface ILayout {
     children: React.ReactNode;
 }
 
@@ -19,7 +19,7 @@ interface Props {
  * Is wrapped around each page. Standardizes the content 
  * that is always on a page
  */
-const Layout = ({ children }: Props): JSX.Element => {
+const Layout = ({ children }: ILayout): JSX.Element => {
     return (
         <Container>
             <NavBar />
@@ -29,5 +29,7 @@ const Layout = ({ children }: Props): JSX.Element => {
         </Container>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export default Layout;

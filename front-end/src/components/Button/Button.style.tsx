@@ -8,6 +8,8 @@ import {
     lightTextColor
 } from "../../styles/StylingConstants";
 
+///////////////////////////////////////////////////////////
+
 const StyledButton = styled.button`
     display: inline-flex;
     align-items: center;
@@ -18,7 +20,7 @@ const StyledButton = styled.button`
 
     color: ${(props) =>
         props.theme === "light" ? darkTextColor : lightTextColor};
-    background: ${(props) =>
+    background-color: ${(props) =>
         props.theme === "light" ? lightTextColor : mainColor};
 
     border: none;
@@ -27,5 +29,7 @@ const StyledButton = styled.button`
         cursor: pointer;
     }
 `;
+
+///////////////////////////////////////////////////////////
 
 export { StyledButton };

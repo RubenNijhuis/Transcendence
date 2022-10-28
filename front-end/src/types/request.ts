@@ -18,12 +18,34 @@ interface RequestErrorType {
     type: string;
 }
 
-interface LoginConfirmResponse {
+interface ConfirmLoginResponse {
     shouldCreateUser: boolean;
     profile: ProfileType;
     authToken: AuthTokenType;
 }
 
-export type { RequestErrorType, LoginConfirmResponse, AuthTokenType };
+interface SignInResponse {
+    profile: ProfileType;
+    shouldCreateUser: boolean;
+}
+
+interface CreateUserParams {
+    username: string;
+    color: string;
+    description: string;
+}
+
+interface TokenValidityResponse {
+    user: ProfileType;
+}
+
+export type {
+    RequestErrorType,
+    ConfirmLoginResponse,
+    AuthTokenType,
+    SignInResponse,
+    CreateUserParams,
+    TokenValidityResponse
+};
 
 export { AuthStatusType };

@@ -25,17 +25,14 @@ import Button from "../Button";
 // Utils
 import { paginateArray } from "../../utils/paginateArray";
 
-// DEBUG
-import Logger from "../../utils/Logger";
-
 ////////////////////////////////////////////////////////////
 
-interface Props {
+interface IGameHistory {
     player: ProfileType;
     matches: MatchRecord[];
 }
 
-const GameHistory = ({ player, matches }: Props): JSX.Element => {
+const GameHistory = ({ player, matches }: IGameHistory): JSX.Element => {
     const [selectedPage, setSelectedPage] = useState<number>(0);
     const paginatedMatches = paginateArray<MatchRecord>(matches, 8);
 
@@ -47,10 +44,6 @@ const GameHistory = ({ player, matches }: Props): JSX.Element => {
             selectedPage + amountPageChange <= paginatedMatches.length - 1
         ) {
             setSelectedPage((prev) => prev + amountPageChange);
-        } else {
-            Logger("ERROR", "Game History", "Page changing in match records", {
-                error: "Page change would result in position outside of array size"
-            });
         }
     };
 

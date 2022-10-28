@@ -104,7 +104,8 @@ export class AuthController {
         returnedPayload.shouldCreateUser = true;
       }
 
-      if (user.isInitialized === false) returnedPayload.shouldCreateUser = true;
+      if (user && user.isInitialized === false)
+        returnedPayload.shouldCreateUser = true;
 
       if (user && user.isInitialized) {
         const intraIDDto = { intraID };
@@ -113,7 +114,7 @@ export class AuthController {
       }
 
       return returnedPayload;
-    } catch (err: any) {
+    } catch (err) {
       console.log(err);
       throw err;
     }

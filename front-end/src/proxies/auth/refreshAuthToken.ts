@@ -25,7 +25,7 @@ const refreshAuthToken = async (
         const { data } = await API.get<AuthTokenType>(route, config);
 
         return Promise.resolve(data);
-    } catch (err: any) {
+    } catch (err) {
         return Promise.reject(err);
     }
 };

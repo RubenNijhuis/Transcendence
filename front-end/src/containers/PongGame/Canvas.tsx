@@ -3,6 +3,7 @@ import { io } from "socket.io-client";
 
 // Styling
 import styled from "styled-components";
+import { useSocket } from "../../contexts/SocketContext";
 
 ////////////////////////////////////////////////////////////
 
@@ -19,11 +20,11 @@ const Container = styled.div`
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
+interface ICanvas {
     canvasRef: React.RefObject<HTMLCanvasElement>;
 }
 
-const Canvas = ({ canvasRef }: Props): JSX.Element => {
+const Canvas = ({ canvasRef }: ICanvas): JSX.Element => {
     const canvasContainerRef = useRef(null!);
 
     const [socketResponse, setSocketResponse] = useState<string>(
@@ -31,22 +32,20 @@ const Canvas = ({ canvasRef }: Props): JSX.Element => {
     );
     const dataRef = useRef<HTMLSpanElement>(null!);
 
+    const { socket, socketType, setSocketType } = useSocket();
+
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
-        console.log("websocket test");
-        const socket = io("ws://localhost:8080");
-        console.log("socket: ", socket);
-
         const emitRet = socket.emit("healthCheck", "pee pee poo poo");
         console.log("emit ret: ", emitRet);
 
         const ret = socket.on("healthCheck", (arg: any) => {
             setSocketResponse(arg as string);
         });
-        
+
         console.log("socket.on ret: ", ret);
-    }, []);
+    });
 
     useEffect(() => {
         if (canvasRef.current === null) return;

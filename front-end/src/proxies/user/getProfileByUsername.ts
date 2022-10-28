@@ -19,7 +19,7 @@ const getProfileByUsername = async (username: string): Promise<ProfileType> => {
         const { data } = await API.get<ProfileType>(route);
 
         return Promise.resolve(data);
-    } catch (err: any) {
+    } catch (err) {
         return Promise.reject(err);
     }
 };

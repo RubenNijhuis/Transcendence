@@ -5,21 +5,33 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { useUser } from "../UserContext";
 
 // Types
-import { GroupChat, Message } from "../../types/chat";
-import { ProfileID, ProfileType } from "../../types/profile";
+import { GroupChat } from "../../types/chat";
 
 // Generators DEBUG
 import {
     generateGroupChats,
-    generateProfile
 } from "../FakeDataContext/fakeDataGenerators";
 
-///////////////////////////////////////////////////////////
-interface ChatContextType {
-    activeChatID: number;
-    setActiveChatID: React.Dispatch<React.SetStateAction<number>>;
+// Business logic
+import {
+    bindMembersToMessages,
+    categorizeChats,
+    getFirstDM,
+    getMembersFromGroupChats,
+    getMessagesFromGroupChats
+} from "./ChatContext.bl";
 
-    allChats: GroupChat[];
+// Debug data
+import { useFakeData } from "../FakeDataContext";
+
+///////////////////////////////////////////////////////////
+
+interface ChatContextType {
+    activeChat: GroupChat;
+    setActiveChat: React.Dispatch<React.SetStateAction<GroupChat>>;
+
+    directChats: GroupChat[];
+    groupChats: GroupChat[];
 }
 
 const ChatContext = createContext<ChatContextType>(null!);
@@ -33,76 +45,17 @@ const ChatProvider = ({
 }: {
     children: React.ReactNode;
 }): JSX.Element => {
-    const [activeChatID, setActiveChatID] = useState<number>(0);
-    const [allChats, setAllChats] = useState<GroupChat[]>(null!);
+    const [activeChat, setActiveChat] = useState<GroupChat>(null!);
+
+    const [directChats, setDirectChats] = useState<GroupChat[]>(null!);
+    const [groupChats, setGroupChats] = useState<GroupChat[]>(null!);
 
     ////////////////////////////////////////////////////////////
 
     const { user } = useUser();
 
-    ////////////////////////////////////////////////////////////
-
-    const getMembersFromGroupChats = (chats: GroupChat[]): ProfileType[][] => {
-        let members: ProfileType[][] = [];
-
-        for (const chat of chats) {
-            members.push(chat.members);
-        }
-
-        return members;
-    };
-
-    const getMessagesFromGroupChats = (chats: GroupChat[]): Message[][] => {
-        let messages: Message[][] = [];
-
-        for (const chat of chats) {
-            messages.push(chat.messages);
-        }
-
-        return messages;
-    };
-
-    const findMemberByProfileID = (
-        uid: ProfileID,
-        members: ProfileType[]
-    ): ProfileType => {
-        // Could return undefined but should always find it anyway so what gives
-        const profile = members.find((member) => {
-            return member.uid === uid;
-        }) as ProfileType;
-
-        return profile;
-    };
-
-    const bindMembersToMessages = (
-        members: ProfileType[][],
-        totalMessages: Message[][]
-    ): void => {
-        for (let i = 0; i < totalMessages.length; i++) {
-            const messageList = totalMessages[i];
-
-            for (let j = 0; j < messageList.length; j++) {
-                const message = messageList[j];
-                const { senderID } = message;
-
-                message.sender = findMemberByProfileID(senderID, members[i]);
-            }
-        }
-    };
-
-    /**
-     * Will return the id of the first chat that is a direct message
-     * Otherwise return the first chat id which is zero
-     */
-    const getFirstDMid = (chats: GroupChat[]): number => {
-        for (const chat of chats) {
-            if (chat.members.length === 2) {
-                return chat.internal_id;
-            }
-        }
-
-        return 0;
-    };
+    // TODO: remove because it is debug
+    const { profiles } = useFakeData();
 
     ////////////////////////////////////////////////////////////
 
@@ -110,40 +63,42 @@ const ChatProvider = ({
         if (!user) return;
 
         const chatAggregator = async () => {
-            // TODO: Get from api
-            const tempProfiles: ProfileType[] = generateProfile(30);
+            // TODO: Get from api //////////////////////////////////////
             const retrievedGroupChats: GroupChat[] = generateGroupChats(
                 user,
                 10,
                 [1, 4],
-                tempProfiles
+                profiles
             );
+            ////////////////////////////////////////////////////////////
 
-            const members: ProfileType[][] =
-                getMembersFromGroupChats(retrievedGroupChats);
-            const messages: Message[][] =
-                getMessagesFromGroupChats(retrievedGroupChats);
-
+            const members = getMembersFromGroupChats(retrievedGroupChats);
+            const messages = getMessagesFromGroupChats(retrievedGroupChats);
             bindMembersToMessages(members, messages);
-            setAllChats(retrievedGroupChats);
 
-            // Manually set id's for front-end use
-            for (let i = 0; i < retrievedGroupChats.length; i++) {
-                retrievedGroupChats[i].internal_id = i;
-            }
+            const [categorizedDirectChats, categorizedGroupChats] =
+                categorizeChats(retrievedGroupChats);
+            setDirectChats(categorizedDirectChats);
+            setGroupChats(categorizedGroupChats);
 
-            setActiveChatID(getFirstDMid(retrievedGroupChats));
+            const firstDM = getFirstDM(retrievedGroupChats);
+
+            firstDM === null
+                ? setActiveChat(retrievedGroupChats[0])
+                : setActiveChat(firstDM);
         };
 
         chatAggregator();
-    }, [user]);
+    }, [user, profiles]);
 
     ////////////////////////////////////////////////////////////
 
     const value: ChatContextType = {
-        activeChatID,
-        setActiveChatID,
-        allChats
+        activeChat,
+        setActiveChat,
+
+        directChats,
+        groupChats
     };
 
     ////////////////////////////////////////////////////////////
@@ -152,6 +107,8 @@ const ChatProvider = ({
         <ChatContext.Provider value={value}>{children}</ChatContext.Provider>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export { useChat };
 export default ChatProvider;

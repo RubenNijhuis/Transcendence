@@ -25,13 +25,13 @@ const ChatElementContainer = styled.div`
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
+interface IChatElement {
     message: Message;
     fromUser: boolean;
     isDm: boolean;
 }
 
-const ChatElement = ({ fromUser, message, isDm }: Props): JSX.Element => {
+const ChatElement = ({ fromUser, message, isDm }: IChatElement): JSX.Element => {
     const contentType: MessageContentType = message.content_type;
 
     ////////////////////////////////////////////////////////////
@@ -59,5 +59,7 @@ const ChatElement = ({ fromUser, message, isDm }: Props): JSX.Element => {
         </ChatElementContainer>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export default ChatElement;

@@ -2,12 +2,13 @@
  * All routes the front-end uses to interact with the api/backend
  *
  * Every path is a function as sometimes a parameter might
- * be required to create a full path. To keep it simple every
+ * be required to create a full path. To keep it simple, every
  * route is a function
  */
 const ApiRoutes = {
-    // Config
+    // Config //////////////////////////////////////////////////
     baseUrl: () => `http://127.0.0.1:8080/api/`,
+    // Config //////////////////////////////////////////////////
 
     // User ////////////////////////////////////////////////////
     createUser: () => `/user/setUser`,
@@ -50,7 +51,7 @@ const ApiRoutes = {
     // Authentication //////////////////////////////////////////
 
     // Websockets //////////////////////////////////////////////
-    socketRoute: () => `ws://localhost:8080/api/`
+    socketRoute: () => `ws://localhost:8080/`
     // Websockets //////////////////////////////////////////////
 };
 

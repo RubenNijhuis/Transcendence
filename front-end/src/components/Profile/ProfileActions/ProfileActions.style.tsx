@@ -5,6 +5,8 @@ import {
     smallRadius
 } from "../../../styles/StylingConstants";
 
+///////////////////////////////////////////////////////////
+
 const Container = styled.div<{ followsProfile: boolean }>`
     margin: auto;
     max-width: 75%;
@@ -30,7 +32,7 @@ const Container = styled.div<{ followsProfile: boolean }>`
             justify-content: center;
             align-items: center;
 
-            background: white;
+            background-color: white;
             height: 100%;
 
             .heading {
@@ -52,8 +54,8 @@ const Container = styled.div<{ followsProfile: boolean }>`
         letter-spacing: 0.5px;
 
         box-shadow: 0px 0px 5px 2px rgba(53, 113, 255, 0.15);
-        background: rgb(53, 113, 255);
-        background: linear-gradient(
+        background-color: rgb(53, 113, 255);
+        background-color: linear-gradient(
             45deg,
             rgba(51, 112, 252, 1) 0%,
             rgba(34, 96, 255, 1) 100%
@@ -63,7 +65,6 @@ const Container = styled.div<{ followsProfile: boolean }>`
     ${({ followsProfile }) => {
         if (!followsProfile) return;
         return `button {
-                        background: none;
                         background-color: rgb(60,60,60);
                         border: solid rgb(100,100,100) white;
                         box-shadow: none;
@@ -85,7 +86,7 @@ const ProfileStatusDisplay = styled.div<{ activity: number }>`
         display: flex;
         justify-content: center;
         align-items: center;
-        background: ${({ activity }) => {
+        background-color: ${({ activity }) => {
             if (activity === 0) {
                 return `red`;
             } else if (activity === 1) {
@@ -103,5 +104,7 @@ const ProfileStatusDisplay = styled.div<{ activity: number }>`
         display: block;
     }
 `;
+
+///////////////////////////////////////////////////////////
 
 export { Container, ProfileStatusDisplay };

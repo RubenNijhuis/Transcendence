@@ -8,10 +8,13 @@ import {
     smallRadius
 } from "../../../styles/StylingConstants";
 
-const Entry = styled.li`
-    position: relative;
-    padding: calc(${magicNum} / 2) calc(${magicNum} / 2);
+///////////////////////////////////////////////////////////
 
+const Entry = styled.li`
+    position: sticky;
+    padding: calc(${magicNum} / 2) calc(${magicNum} / 2);
+    top: 0;
+    
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
@@ -20,7 +23,7 @@ const Entry = styled.li`
 
     border-bottom: 2px solid ${mainColor};
 
-    background: ${backgroundColor};
+    background-color: ${backgroundColor};
 
     &:after {
         content: "";
@@ -74,7 +77,6 @@ const EntryList = styled.ol`
     align-items: center;
     margin: auto;
 
-    overflow: hidden;
     border-radius: ${smallRadius};
 `;
 
@@ -92,5 +94,7 @@ const GameData = styled.div`
         font-weight: 900;
     }
 `;
+
+///////////////////////////////////////////////////////////
 
 export { EntryList, Entry, ProfileData, GameData };

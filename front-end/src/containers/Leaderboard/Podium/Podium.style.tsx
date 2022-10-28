@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { lightTextColor, magicNum, mainColor, smallRadius } from "../../../styles/StylingConstants";
 
+///////////////////////////////////////////////////////////
+
 const PodiumContainer = styled.div`
     display: grid;
     grid-template-columns: 2fr 3fr 2fr;
@@ -15,7 +17,7 @@ const PodiumContainer = styled.div`
 `;
 
 const PodiumPosition = styled.div<{ pos: number }>`
-    background: ${mainColor};
+    background-color: ${mainColor};
     border-radius: ${smallRadius} ${smallRadius} 0 0;
 
     display: flex;
@@ -58,5 +60,7 @@ const PodiumPosition = styled.div<{ pos: number }>`
         }
     }
 `;
+
+///////////////////////////////////////////////////////////
 
 export { PodiumPosition, PodiumContainer };

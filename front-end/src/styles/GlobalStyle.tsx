@@ -1,5 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-import { secondaryColor } from "./StylingConstants";
+import { backgroundColor } from "./StylingConstants";
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -12,7 +12,7 @@ const GlobalStyle = createGlobalStyle`
         margin: 0;
         padding: 0;
         height: 100%;
-        background-color: ${secondaryColor};
+        background-color: ${backgroundColor};
     }
 
     body {

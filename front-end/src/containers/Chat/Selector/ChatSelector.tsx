@@ -1,15 +1,13 @@
-import { useState } from "react";
+// React
+import { useEffect, useState } from "react";
 
 // UI
 import Asset from "../../../components/Asset";
 import Heading from "../../../components/Heading";
 
-// Auth
-import { useAuth } from "../../../contexts/AuthContext";
-
 // Types
 import { ProfileType } from "../../../types/profile";
-import { GroupChat, Message } from "../../../types/chat";
+import { GroupChat, GroupChatType, Message } from "../../../types/chat";
 
 // Stylinh
 import {
@@ -20,23 +18,20 @@ import {
 import ChatInterface from "../CreateGroup";
 import { useUser } from "../../../contexts/UserContext";
 
-interface Props {
-    directMessages: GroupChat[];
-    selectedChat: number;
-    setSelectedChat: React.Dispatch<React.SetStateAction<number>>;
+////////////////////////////////////////////////////////////
+
+interface IMemberList {
+    members: ProfileType[];
 }
 
 /**
  * Display the members of a chat in the group list
  */
-const MemberList = ({ members }: { members: ProfileType[] }): JSX.Element => {
+const MemberList = ({ members }: IMemberList): JSX.Element => {
     return (
         <div>
             {members.map(({ img_url, username }, count) => (
-                <div
-                    className="profile"
-                    key={count}
-                >
+                <div className="profile" key={count}>
                     <Asset url={img_url} alt="profile" />
                     <span>{username}</span>
                 </div>
@@ -45,34 +40,37 @@ const MemberList = ({ members }: { members: ProfileType[] }): JSX.Element => {
     );
 };
 
-// Show a recent activity like a chat message
-const RecentActivity = ({ message }: { message: Message }): JSX.Element => {
-    return (
-        <div className="activity">
-            <div className="newMessage" />
-        </div>
-    );
-};
+interface IChatTypeSelector {
+    activeType: GroupChatType;
+    setActiveType: React.Dispatch<React.SetStateAction<GroupChatType>>;
+}
 
 const ChatTypeSelector = ({
     activeType,
-    chatTypeSelector
-}: {
-    activeType: number;
-    chatTypeSelector: React.Dispatch<React.SetStateAction<number>>;
-}): JSX.Element => {
+    setActiveType
+}: IChatTypeSelector): JSX.Element => {
+    const handleChatTypeSelect = (type: GroupChatType): void => {
+        setActiveType(type);
+    };
+
+    ////////////////////////////////////////////////////////////
+
     return (
         <ChatTypeSelectorContainer>
             <div
-                className={`chat-type ${activeType === 0 ? "active" : null}`}
-                onClick={() => chatTypeSelector(0)}
+                className={`chat-type ${
+                    activeType === GroupChatType.DM ? "active" : null
+                }`}
+                onClick={() => handleChatTypeSelect(GroupChatType.DM)}
             >
                 <Heading type={3}>DM</Heading>
             </div>
             <div className="divider" />
             <div
-                className={`chat-type ${activeType === 1 ? "active" : null}`}
-                onClick={() => chatTypeSelector(1)}
+                className={`chat-type ${
+                    activeType === GroupChatType.Group ? "active" : null
+                }`}
+                onClick={() => handleChatTypeSelect(GroupChatType.Group)}
             >
                 <Heading type={3}>Groups</Heading>
             </div>
@@ -80,80 +78,108 @@ const ChatTypeSelector = ({
     );
 };
 
+interface IDirectMessageList {
+    selectedChatType: GroupChatType;
+    directChats: GroupChat[];
+    groupChats: GroupChat[];
+    setSelectedChat: React.Dispatch<React.SetStateAction<GroupChat>>;
+}
+
 const DirectMessageList = ({
-    onlyGroups,
-    chats,
-    selectedChat,
+    selectedChatType,
+    directChats,
+    groupChats,
     setSelectedChat
-}: {
-    onlyGroups: boolean;
-    chats: GroupChat[];
-    selectedChat: number;
-    setSelectedChat: React.Dispatch<React.SetStateAction<number>>;
-}): JSX.Element => {
+}: IDirectMessageList): JSX.Element => {
     const { user } = useUser();
+    const [selectedChatId, setSelectedChatId] = useState<number>(0);
+    const [selectedChatList, setSelectedChatList] = useState<GroupChat[]>([]);
 
     ////////////////////////////////////////////////////////////
 
-    const filteredChats = chats.filter((chat) => {
-        if (onlyGroups) {
-            if (chat.members.length > 2) return true;
-        } else {
-            if (chat.members.length < 3) return true;
+    const handleChatSelection = (id: number): void => {
+        setSelectedChat(selectedChatList[id]);
+        setSelectedChatId(id);
+    };
+
+    useEffect(() => {
+        setSelectedChatId(0);
+        switch (selectedChatType) {
+            case GroupChatType.DM:
+                setSelectedChatList(directChats);
+                setSelectedChat(directChats[0]);
+                break;
+            case GroupChatType.Group:
+                setSelectedChatList(groupChats);
+                setSelectedChat(groupChats[0]);
+                break;
+            default:
+                setSelectedChatList(directChats);
+                break;
         }
-    });
+    }, [selectedChatType]);
 
     ////////////////////////////////////////////////////////////
 
     return (
-        <>
-            {filteredChats.map(({ members, messages, internal_id }, count) => {
-                const otherMembers: ProfileType[] = members.filter(
-                    (member) => member.username !== user!.username
-                );
+        <ul className="list">
+            {selectedChatList &&
+                selectedChatList.map(({ members, internal_id }, count) => {
+                    const otherMembers: ProfileType[] = members.filter(
+                        (member) => member.username !== user!.username
+                    );
 
-                return (
-                    <DirectMessageEntry
-                        key={count}
-                        onClick={() => setSelectedChat(internal_id)}
-                        active={internal_id === selectedChat}
-                    >
-                        <div className="content">
+                    const isActive = internal_id === selectedChatId;
+
+                    return (
+                        <DirectMessageEntry
+                            key={count}
+                            onClick={() => handleChatSelection(count)}
+                            active={isActive}
+                        >
                             <MemberList members={otherMembers} />
-                            <RecentActivity
-                                message={messages[messages.length - 1]}
-                            />
-                        </div>
-                    </DirectMessageEntry>
-                );
-            })}
-        </>
+                        </DirectMessageEntry>
+                    );
+                })}
+        </ul>
     );
 };
 
+interface IChatSelector {
+    directChats: GroupChat[];
+    groupChats: GroupChat[];
+    selectedChat: GroupChat;
+    setSelectedChat: React.Dispatch<React.SetStateAction<GroupChat>>;
+}
+
 const ChatSelector = ({
-    directMessages,
+    directChats,
+    groupChats,
     selectedChat,
     setSelectedChat
-}: Props): JSX.Element => {
-    const [selectedChatType, setSelectedChatType] = useState<number>(0);
+}: IChatSelector): JSX.Element => {
+    const [selectedChatType, setSelectedChatType] = useState<GroupChatType>(
+        GroupChatType.DM
+    );
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <Container>
             <ChatTypeSelector
                 activeType={selectedChatType}
-                chatTypeSelector={setSelectedChatType}
+                setActiveType={setSelectedChatType}
             />
-            <ChatInterface />
 
-            <ul className="list">
+            <ChatInterface />
+            {selectedChat && (
                 <DirectMessageList
-                    onlyGroups={selectedChatType === 1}
-                    chats={directMessages}
-                    selectedChat={selectedChat}
+                    selectedChatType={selectedChatType}
                     setSelectedChat={setSelectedChat}
+                    directChats={directChats}
+                    groupChats={groupChats}
                 />
-            </ul>
+            )}
         </Container>
     );
 };

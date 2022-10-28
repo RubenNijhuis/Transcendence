@@ -19,9 +19,6 @@ import PageRoutes from "../../config/PageRoutes";
 // Auth
 import { getLoginURL } from "../../proxies/auth";
 
-// DEBUG
-import Logger from "../../utils/Logger";
-
 // Store
 import { setItem } from "../../modules/Store";
 import StoreId from "../../config/StoreId";
@@ -35,14 +32,14 @@ const CTAButton = ({ authStatus }: { authStatus: boolean }): JSX.Element => {
             setItem(StoreId.loginProcess, true);
             window.location.assign(url);
         } catch (err) {
-            Logger("ERROR", "Navbar", "Req login page url", err);
+            console.error(err);
         }
     };
 
     return (
         <>
             {authStatus ? (
-                <Link className="play-button" to={PageRoutes.play}>
+                <Link className="play-button" to={PageRoutes.selectGame}>
                     <Button theme={"light"}>Play Pong</Button>
                 </Link>
             ) : (
@@ -58,7 +55,11 @@ const CTAButton = ({ authStatus }: { authStatus: boolean }): JSX.Element => {
     );
 };
 
-const NavLinks = ({ authStatus }: { authStatus: boolean }): JSX.Element => {
+interface INavLink {
+    authStatus: boolean;
+}
+
+const NavLinks = ({ authStatus }: INavLink): JSX.Element => {
     return (
         <ul>
             {locations.map(({ name, url, onlyWhenLoggedin }, count) => {
@@ -73,7 +74,11 @@ const NavLinks = ({ authStatus }: { authStatus: boolean }): JSX.Element => {
     );
 };
 
-const ProfileIcon = ({ url }: { url: string }): JSX.Element => {
+interface IProfileIcon {
+    url: string;
+}
+
+const ProfileIcon = ({ url }: IProfileIcon): JSX.Element => {
     return (
         <Link to={PageRoutes.profile}>
             <ProfileIconContainer>
@@ -106,5 +111,7 @@ const NavBar = (): JSX.Element => {
         </Container>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export default NavBar;

@@ -1,11 +1,7 @@
-import { useEffect, useRef } from "react";
-import Canvas from "./Canvas";
-
 // Game components
-import Ball from "./Ball";
-import Bat from "./Bat";
+import { Ball, Bat } from "../GameElements";
 import GameManager from "./GameManager";
-import PowerUps from "./PowerUps";
+import PowerUps from "../PowerUps";
 
 const keyPressListener = (gameManager: GameManager) => {
     // Function to be run on key event
@@ -124,19 +120,4 @@ const drawGame = (
     animate();
 };
 
-const PongGame = (): JSX.Element => {
-    const canvasRef = useRef<HTMLCanvasElement>(null!);
-
-    useEffect(() => {
-        const context = canvasRef.current.getContext("2d");
-
-        if (context === null) return;
-
-        // Start drawing the game
-        drawGame(canvasRef.current, context);
-    }, []);
-
-    return <Canvas canvasRef={canvasRef} />;
-};
-
-export default PongGame;
+export default drawGame;

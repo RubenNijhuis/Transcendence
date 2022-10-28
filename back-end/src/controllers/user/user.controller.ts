@@ -42,11 +42,10 @@ import User from "../../entities/user/user.entity";
 import {
   bannerOptions,
   deleteFiles,
-  profileOptions,
+  profileOptions
 } from "src/middleware/imgUpload/imgUpload";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { readdirSync } from "fs";
-
 
 // guards
 import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
@@ -87,16 +86,20 @@ export class UsersController {
         throw new BadRequestException("Invalid image type");
       }
 
-      const dirname : string = `/app/upload/${imageType}/`;
-      let fullPath: string = dirname;
+      const dirname = `/app/upload/${imageType}/`;
+      let imgPath: string = dirname;
 
-      const files = readdirSync(dirname).filter(file => file.startsWith(`${intraId}.`));
-      console.log("")
-      if (!files)
-        fullPath += "standard.png"; // in case nothing has been uploaded, if it ever gets optional??
-      else
-        fullPath += files[0]; // always takes the first one since there should only be 1 (one) file per user
-      return res.sendFile(fullPath);
+      const files = readdirSync(dirname).filter((file) => {
+        return file.startsWith(`${intraId}.`);
+      });
+
+      if (!files) {
+        imgPath += "standard.png"; // in case nothing has been uploaded, if it ever gets optional??
+      } else {
+        imgPath += files[0]; // always takes the first one since there should only be 1 (one) file per user
+      }
+
+      return res.sendFile(imgPath);
     } catch (err) {
       throw err;
     }
@@ -157,8 +160,9 @@ export class UsersController {
   @UseInterceptors(FileInterceptor("file", bannerOptions))
   async uploadBannerFile(
     @Req() req: Request,
-    @UploadedFile() file: Express.Multer.File) {
-    const path: string = '/app/upload/banner/';
+    @UploadedFile() file: Express.Multer.File
+  ) {
+    const path: string = "/app/upload/banner/";
     const id: string = req.user["intraID"];
 
     deleteFiles(path, id, file.filename);
@@ -171,9 +175,9 @@ export class UsersController {
   async uploadProfileFile(
     @Req() req: Request,
     @UploadedFile() file: Express.Multer.File
-    ) {
+  ) {
     // remove left over files if any
-    const path: string = '/app/upload/profile/';
+    const path: string = "/app/upload/profile/";
     const id: string = req.user["intraID"];
 
     deleteFiles(path, id, file.filename);

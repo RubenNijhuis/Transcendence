@@ -1,6 +1,10 @@
 // React stuffs
 import React, { createContext, useContext, useEffect, useState } from "react";
+
+// UI
 import Modal from "../../components/Modal";
+
+////////////////////////////////////////////////////////////
 
 interface ModalContextType {
     modalOpen: boolean;
@@ -13,15 +17,17 @@ const ModalContext = createContext<ModalContextType>(null!);
 
 const useModal = () => useContext(ModalContext);
 
-const ModalProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
+////////////////////////////////////////////////////////////
+
+const ModalProvider = ({
+    children
+}: {
+    children: React.ReactNode;
+}): JSX.Element => {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [modalElement, setModalElement] = useState<React.ReactNode>(null!);
 
-    const value: ModalContextType = {
-        modalOpen,
-        setModalOpen,
-        setModalElement
-    };
+    ////////////////////////////////////////////////////////////
 
     useEffect(() => {
         const bodyElement = document.getElementsByTagName("body")[0];
@@ -32,6 +38,16 @@ const ModalProvider = ({ children }: { children: React.ReactNode }): JSX.Element
             bodyElement.style.overflow = "scroll";
         }
     }, [modalOpen]);
+
+    ////////////////////////////////////////////////////////////
+
+    const value: ModalContextType = {
+        modalOpen,
+        setModalOpen,
+        setModalElement
+    };
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <ModalContext.Provider value={value}>

@@ -16,10 +16,6 @@ import { Container, ProfileStatusDisplay } from "./ProfileActions.style";
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
-    profile: ProfileType;
-}
-
 const ProfileActivityStatus = (): JSX.Element => {
     let activityElement: ReactElement = <></>;
 
@@ -45,7 +41,11 @@ const ProfileActivityStatus = (): JSX.Element => {
     );
 };
 
-const ProfileActions = ({ profile }: Props): JSX.Element => {
+interface IProfileActions {
+    profile: ProfileType;
+}
+
+const ProfileActions = ({ profile }: IProfileActions): JSX.Element => {
     const [follows, setFollow] = useState<boolean>(false);
 
     ////////////////////////////////////////////////////////////
@@ -70,5 +70,7 @@ const ProfileActions = ({ profile }: Props): JSX.Element => {
         </Container>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export default ProfileActions;

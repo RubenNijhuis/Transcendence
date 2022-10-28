@@ -12,7 +12,7 @@ import {
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
+interface ISimpleMessageDisplay {
     message: Message;
     fromUser: boolean;
 }
@@ -25,14 +25,14 @@ const Container = styled.div<{ fromUser: boolean }>`
 
     .content {
         min-width: 50%;
-        background: ${mainColor};
+        background-color: ${mainColor};
         padding: calc(${magicNum} / 8) calc(${magicNum} / 4);
         border-radius: ${smallRadius};
         color: ${lightTextColor};
     }
 `;
 
-const SimpleMessageDisplay = ({ fromUser, message }: Props): JSX.Element => {
+const SimpleMessageDisplay = ({ fromUser, message }: ISimpleMessageDisplay): JSX.Element => {
     const formattedContent: SimpleMessage = message.content as SimpleMessage;
 
     return (
@@ -41,5 +41,7 @@ const SimpleMessageDisplay = ({ fromUser, message }: Props): JSX.Element => {
         </Container>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export default SimpleMessageDisplay;

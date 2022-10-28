@@ -1,10 +1,10 @@
 // Store
 import StoreId from "../../config/StoreId";
-import { clearAll, getItem, setItem } from "../../modules/Store";
+import { clearAll, getItem } from "../../modules/Store";
 
 // Auth
 import { refreshAuthToken } from "../../proxies/auth/refreshAuthToken";
-import { setDefaultAuthHeader } from "../../proxies/instances/apiInstance";
+import { updateAuthTokens } from "../../proxies/utils";
 
 // Types
 import { ProfileType } from "../../types/profile";
@@ -32,14 +32,9 @@ const handleTokenRefresh = async () => {
     try {
         const newTokens = await refreshAuthToken(storeRefreshToken);
 
-        const { accessToken, refreshToken } = newTokens;
-
-        // Reset tokens and API instance
-        setItem(StoreId.accessToken, accessToken);
-        setItem(StoreId.refreshToken, refreshToken);
-        setDefaultAuthHeader(accessToken);
+        updateAuthTokens(newTokens);
     } catch (err) {
-        console.log(err);
+        console.error(err);
     }
 };
 

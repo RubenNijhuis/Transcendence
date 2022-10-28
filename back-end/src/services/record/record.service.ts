@@ -37,7 +37,7 @@ export class RecordService {
       const newRecord = this.recordRepository.create(banUserDto);
       return this.recordRepository.save(newRecord);
     }
-    catch (err: any) {
+    catch (err) {
       throw errorHandler(
         err,
         "Failed to ban member",
@@ -55,7 +55,7 @@ export class RecordService {
         return true ;
       return false ;
     }
-    catch (err: any) {
+    catch (err) {
       throw errorHandler(
         err,
         "Something went wrong",

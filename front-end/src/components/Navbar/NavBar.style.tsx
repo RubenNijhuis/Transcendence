@@ -4,8 +4,11 @@ import {
     magicNum,
     mainColor,
     mediumRadius,
+    secondaryColor,
     smallRadius
 } from "../../styles/StylingConstants";
+
+///////////////////////////////////////////////////////////
 
 const Container = styled.div`
     padding-top: calc(${magicNum} / 2);
@@ -19,7 +22,7 @@ const Container = styled.div`
         margin: auto;
         padding: calc(${magicNum} / 4) calc(${magicNum} / 2);
 
-        background: ${mainColor};
+        background-color: ${mainColor};
         border-radius: ${mediumRadius};
     }
 
@@ -44,8 +47,8 @@ const Container = styled.div`
         letter-spacing: 0.5px;
 
         box-shadow: 0px 0px 5px 2px rgba(53, 113, 255, 0.15);
-        background: rgb(53, 113, 255);
-        background: linear-gradient(
+        background-color: rgb(53, 113, 255);
+        background-color: linear-gradient(
             45deg,
             rgba(51, 112, 252, 1) 0%,
             rgba(34, 96, 255, 1) 100%
@@ -96,7 +99,7 @@ const ProfileIconContainer = styled.div`
     width: calc(${magicNum} / 2 * 1.5);
     height: calc(${magicNum} / 2 * 1.5);
 
-    border: solid #9d653d 2px;
+    border: solid ${secondaryColor} 2px;
     border-radius: ${smallRadius};
     overflow: hidden;
 
@@ -105,5 +108,7 @@ const ProfileIconContainer = styled.div`
         height: 100%;
     }
 `;
+
+///////////////////////////////////////////////////////////
 
 export { Container, ProfileIconContainer };

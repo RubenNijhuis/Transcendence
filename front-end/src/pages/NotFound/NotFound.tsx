@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
 // Styling constants
-import { magicNum, smallRadius } from "../styles/StylingConstants";
+import { magicNum, smallRadius } from "../../styles/StylingConstants";
 
 // UI
-import Layout from "../components/Layout";
-import Heading from "../components/Heading";
-import Asset from "../components/Asset";
+import Layout from "../../components/Layout";
+import Heading from "../../components/Heading";
+import Asset from "../../components/Asset";
 
 const GoodBye = styled.div`
     .heading {

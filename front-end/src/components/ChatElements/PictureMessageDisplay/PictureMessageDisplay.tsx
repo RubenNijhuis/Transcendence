@@ -8,6 +8,8 @@ import Asset from "../../Asset";
 import styled from "styled-components";
 import { magicNum, smallRadius } from "../../../styles/StylingConstants";
 
+////////////////////////////////////////////////////////////
+
 const Container = styled.div<{ fromUser: boolean }>`
     display: flex;
     flex-direction: column;
@@ -24,13 +26,17 @@ const Container = styled.div<{ fromUser: boolean }>`
     }
 `;
 
-interface Props {
+////////////////////////////////////////////////////////////
+
+interface IPictureMessageDisplay {
     message: Message;
     fromUser: boolean;
 }
 
-const PictureMessageDisplay = ({ fromUser, message }: Props): JSX.Element => {
+const PictureMessageDisplay = ({ fromUser, message }: IPictureMessageDisplay): JSX.Element => {
     const formattedMessage: PictureMessage = message.content as PictureMessage;
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <Container fromUser={fromUser}>
@@ -42,5 +48,7 @@ const PictureMessageDisplay = ({ fromUser, message }: Props): JSX.Element => {
         </Container>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export default PictureMessageDisplay;

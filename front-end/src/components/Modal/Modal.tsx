@@ -1,15 +1,19 @@
 import { Container, ElementContainer } from "./Modal.style";
 
-interface Props {
+///////////////////////////////////////////////////////////
+
+interface IModal {
     element: React.ReactNode;
 }
 
-const Modal = ({ element }: Props): JSX.Element => {
+const Modal = ({ element }: IModal): JSX.Element => {
     return (
         <Container>
             <ElementContainer>{element}</ElementContainer>
         </Container>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export default Modal;

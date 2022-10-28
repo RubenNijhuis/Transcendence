@@ -7,7 +7,7 @@ export const locations = [
         onlyWhenLoggedin: true
     },
     {
-        name: "PongTestPage",
+        name: "Pong",
         url: PageRoutes.pong,
         onlyWhenLoggedin: false
     },

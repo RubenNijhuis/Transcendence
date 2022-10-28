@@ -8,11 +8,11 @@ import Asset from "../Asset";
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
+interface ICrown {
     rank: number;
 }
 
-const Crown = ({ rank }: Props): JSX.Element => {
+const Crown = ({ rank }: ICrown): JSX.Element => {
     let src: any = GoldCrown;
 
     if (rank === 1) src = GoldCrown;

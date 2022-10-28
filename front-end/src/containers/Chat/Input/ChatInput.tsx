@@ -15,17 +15,9 @@ import {
 // UI
 import { Container, SelectTypeIcon, SelectionBox } from "./ChatInput.style";
 
-// Debug
-import Logger from "../../../utils/Logger";
-
 ////////////////////////////////////////////////////////////
 
-interface Props {
-    user: ProfileType;
-    groupchat: GroupChat;
-}
-
-interface MessageTypeSelectProps {
+interface IMessageTypeSelect {
     sender: ProfileType;
     groupchat: GroupChat;
     messageType: MessageContentType;
@@ -39,7 +31,7 @@ const MessageTypeSelect = ({
     messageType,
     setMessageType,
     setMessageContent
-}: MessageTypeSelectProps): JSX.Element => {
+}: IMessageTypeSelect): JSX.Element => {
     const [chatTypeSelected, setChatTypeSelected] = useState<boolean>(false);
 
     ////////////////////////////////////////////////////////////
@@ -171,7 +163,12 @@ const InvitePlayMessageInput = ({
     return <div className="invite-message-input"></div>;
 };
 
-const ChatInput = ({ user, groupchat }: Props): JSX.Element => {
+interface IChatInput {
+    user: ProfileType;
+    groupchat: GroupChat;
+}
+
+const ChatInput = ({ user, groupchat }: IChatInput): JSX.Element => {
     const [messageType, setMessageType] = useState<MessageContentType>(
         MessageContentType.Simple
     );
@@ -180,11 +177,14 @@ const ChatInput = ({ user, groupchat }: Props): JSX.Element => {
         content: ""
     });
 
+    ////////////////////////////////////////////////////////////
+
     const handleMessageSend = (): void => {
         setMessageType(MessageContentType.Simple);
         setMessageContent({ content: "" });
-        Logger("DEBUG", "Chat Input", "Message content", messageContent);
     };
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <Container>
@@ -237,5 +237,7 @@ const ChatInput = ({ user, groupchat }: Props): JSX.Element => {
         </Container>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export default ChatInput;

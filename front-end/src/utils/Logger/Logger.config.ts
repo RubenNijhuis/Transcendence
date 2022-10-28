@@ -21,7 +21,7 @@ const logTypes: LoggableType = {
     AUTH: {
         emoij: "💂‍♂️",
         color: "#374f6b",
-        allowed: false
+        allowed: true
     },
     GAME: {
         emoij: "🏓",

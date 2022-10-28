@@ -25,7 +25,7 @@ const getProfileImageByUsername = async (username: string): Promise<string> => {
         ).toString("base64")}`;
 
         return Promise.resolve(toBase64String);
-    } catch (err: any) {
+    } catch (err) {
         return Promise.reject(err);
     }
 };
