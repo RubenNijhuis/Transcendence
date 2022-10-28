@@ -49,11 +49,11 @@ const CreateGroupChat = ({
     };
 
     const checkIfProfileIsSelected = (uid: number): boolean => {
-        let foundInSelectedFriends: boolean;
+        let foundInSelectedFriends: boolean = false;
 
         foundInSelectedFriends =
             selectedFriends.find((member) => {
-                member.uid === uid;
+                return member.uid === uid;
             }) !== undefined;
 
         return foundInSelectedFriends;

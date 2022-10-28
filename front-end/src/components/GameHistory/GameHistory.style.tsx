@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import {
     darkTextColor,
+    largeRadius,
     lightTextColor,
     magicNum,
     mainColor,
@@ -11,7 +12,7 @@ import {
 ///////////////////////////////////////////////////////////
 
 const Container = styled.div`
-    border-radius: ${mediumRadius};
+    border-radius: ${largeRadius};
     padding: calc(${magicNum} / 2);
     background-color: ${mainColor};
 

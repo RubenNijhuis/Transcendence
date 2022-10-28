@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { backgroundColor, magicNum, mainColor } from "../../styles/StylingConstants";
 
+///////////////////////////////////////////////////////////
+
 const LoaderContainer = styled.div`
     width: 100%;
     height: 100%;
@@ -12,7 +14,7 @@ const LoaderLine = styled.div`
     margin: auto;
     border-radius: 100px;
     position: relative;
-    background: ${backgroundColor};
+    background-color: ${backgroundColor};
     overflow: hidden;
 
     @keyframes minToMaxWidth {
@@ -44,5 +46,7 @@ const LoaderLine = styled.div`
         animation-fill-mode: forwards;
     }
 `;
+
+///////////////////////////////////////////////////////////
 
 export { LoaderContainer, LoaderLine };

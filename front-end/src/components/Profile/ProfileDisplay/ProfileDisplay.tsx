@@ -30,7 +30,7 @@ const ProfileDisplay = ({ profile, matchHistory }: IProfileDisplay): JSX.Element
                     <Asset
                         url={img_url}
                         alt="profile"
-                        className="profile__img"
+                        className="img"
                     />
                     <Heading type={4}>{username}</Heading>
                 </div>

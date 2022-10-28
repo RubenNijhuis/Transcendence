@@ -5,6 +5,7 @@ import {
     magicNum,
     mainColor,
     mediumRadius,
+    secondaryColor,
     smallRadius
 } from "../../../styles/StylingConstants";
 
@@ -54,25 +55,28 @@ const Container = styled.div`
         flex-direction: column;
         align-items: center;
 
-
         transform: translate(-50%, -50%);
 
         .crown {
             width: calc(${magicNum} * 1.5);
         }
 
-        &__img {
+        .img {
             width: calc(${magicNum} * 2);
             height: calc(${magicNum} * 2);
             aspect-ratio: 1/1;
 
             margin-bottom: calc(${magicNum} / 8);
 
-            border-radius: ${smallRadius};
-            border: solid 6px #9d653d;
+            border-radius: ${mediumRadius};
+            border: solid 6px ${secondaryColor};
 
-            background-color: ${mainColor};
+            background-color: ${secondaryColor};
             overflow: hidden;
+
+            img {
+                border-radius: inherit;
+            }
         }
 
         .heading {

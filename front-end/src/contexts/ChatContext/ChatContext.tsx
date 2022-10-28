@@ -6,12 +6,10 @@ import { useUser } from "../UserContext";
 
 // Types
 import { GroupChat } from "../../types/chat";
-import { ProfileType } from "../../types/profile";
 
 // Generators DEBUG
 import {
     generateGroupChats,
-    generateProfile
 } from "../FakeDataContext/fakeDataGenerators";
 
 // Business logic
@@ -22,6 +20,8 @@ import {
     getMembersFromGroupChats,
     getMessagesFromGroupChats
 } from "./ChatContext.bl";
+
+// Debug data
 import { useFakeData } from "../FakeDataContext";
 
 ///////////////////////////////////////////////////////////
@@ -89,7 +89,7 @@ const ChatProvider = ({
         };
 
         chatAggregator();
-    }, [user]);
+    }, [user, profiles]);
 
     ////////////////////////////////////////////////////////////
 

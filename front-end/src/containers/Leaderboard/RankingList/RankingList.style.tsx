@@ -8,6 +8,8 @@ import {
     smallRadius
 } from "../../../styles/StylingConstants";
 
+///////////////////////////////////////////////////////////
+
 const Entry = styled.li`
     position: sticky;
     padding: calc(${magicNum} / 2) calc(${magicNum} / 2);
@@ -21,7 +23,7 @@ const Entry = styled.li`
 
     border-bottom: 2px solid ${mainColor};
 
-    background: ${backgroundColor};
+    background-color: ${backgroundColor};
 
     &:after {
         content: "";
@@ -92,5 +94,7 @@ const GameData = styled.div`
         font-weight: 900;
     }
 `;
+
+///////////////////////////////////////////////////////////
 
 export { EntryList, Entry, ProfileData, GameData };

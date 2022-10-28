@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import { magicNum } from "../../styles/StylingConstants";
 
+///////////////////////////////////////////////////////////
+
 const Container = styled.div`
-    background: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.3);
     display: flex;
     align-content: center;
     justify-content: center;
@@ -20,5 +22,7 @@ const Container = styled.div`
 `;
 
 const ElementContainer = styled.div``;
+
+///////////////////////////////////////////////////////////
 
 export { Container, ElementContainer };

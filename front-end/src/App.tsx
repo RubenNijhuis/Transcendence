@@ -16,8 +16,8 @@ import SocketProvider from "./contexts/SocketContext";
 
 const App = (): JSX.Element => {
     return (
-        <FakeDataProvider>
-            <UserProvider>
+        <UserProvider>
+            <FakeDataProvider>
                 <AuthProvider>
                     <SocketProvider>
                         {/* TODO: wrapper for providers? */}
@@ -33,8 +33,8 @@ const App = (): JSX.Element => {
                         </ModalProvider>
                     </SocketProvider>
                 </AuthProvider>
-            </UserProvider>
-        </FakeDataProvider>
+            </FakeDataProvider>
+        </UserProvider>
     );
 };
 export default App;

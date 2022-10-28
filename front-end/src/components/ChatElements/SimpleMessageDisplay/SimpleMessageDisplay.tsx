@@ -25,7 +25,7 @@ const Container = styled.div<{ fromUser: boolean }>`
 
     .content {
         min-width: 50%;
-        background: ${mainColor};
+        background-color: ${mainColor};
         padding: calc(${magicNum} / 8) calc(${magicNum} / 4);
         border-radius: ${smallRadius};
         color: ${lightTextColor};
@@ -41,5 +41,7 @@ const SimpleMessageDisplay = ({ fromUser, message }: ISimpleMessageDisplay): JSX
         </Container>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export default SimpleMessageDisplay;

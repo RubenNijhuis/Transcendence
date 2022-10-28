@@ -34,7 +34,7 @@ const ProfileStats = ({ player, matches }: IProfileStats): JSX.Element => {
                         style={{
                             width: 36,
                             height: 36,
-                            background: player.color
+                            backgroundColor: player.color
                         }}
                     />
                 </div>

@@ -20,7 +20,7 @@ const StyledButton = styled.button`
 
     color: ${(props) =>
         props.theme === "light" ? darkTextColor : lightTextColor};
-    background: ${(props) =>
+    background-color: ${(props) =>
         props.theme === "light" ? lightTextColor : mainColor};
 
     border: none;

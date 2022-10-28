@@ -17,7 +17,7 @@ const Container = styled.div`
 
     .divider {
         height: 100%;
-        background: black;
+        background-color: black;
         width: 2px;
     }
 
