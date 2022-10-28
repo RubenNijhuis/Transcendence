@@ -5,6 +5,7 @@ import { API } from "../instances/apiInstance";
 // Types
 import { ConfirmLoginResponse } from "../../types/request";
 import { addImagesToProfile } from "../user";
+import { updateAuthTokens } from "../utils";
 
 ////////////////////////////////////////////////////////////
 
@@ -18,8 +19,9 @@ const confirmLogin = async (code: string): Promise<ConfirmLoginResponse> => {
         const route = ApiRoutes.confirmLogin(code);
         const { data } = await API.get<ConfirmLoginResponse>(route);
 
+        updateAuthTokens(data.authToken);
+
         if (data.profile) {
-            console.log("STILL MADE IT HERE")
             data.profile = await addImagesToProfile(data.profile);
         }
 

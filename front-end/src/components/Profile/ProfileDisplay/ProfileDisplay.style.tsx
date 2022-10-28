@@ -13,6 +13,7 @@ const Container = styled.div`
 
     padding: calc(${magicNum} / 2);
     padding-bottom: 0;
+    margin-bottom: calc(${magicNum});
     
     border-radius: ${largeRadius};
     background-color: ${mainColor};
@@ -25,6 +26,10 @@ const Container = styled.div`
         background-color: ${lightTextColor};
         border-radius: ${mediumRadius};
         overflow: hidden;
+
+        &__container {
+            position: relative;
+        }
 
         img {
             transition: filter 0.35s ease-in-out;

@@ -3,12 +3,17 @@ import {
     darkTextColor,
     lightTextColor,
     magicNum,
+    mainColor,
+    mediumRadius,
     smallRadius
 } from "../../styles/StylingConstants";
 
+///////////////////////////////////////////////////////////
+
 const Container = styled.div`
-    border-radius: ${smallRadius};
+    border-radius: ${mediumRadius};
     padding: calc(${magicNum} / 2);
+    background-color: ${mainColor};
 
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -79,5 +84,7 @@ const ScoreBoard = styled.div`
         }
     }
 `;
+
+///////////////////////////////////////////////////////////
 
 export { Container, MatchList, Match, OpponentProfile, ScoreBoard };

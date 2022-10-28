@@ -1,7 +1,7 @@
 // React
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-// Optional url params
+// Url params
 import { useParams } from "react-router-dom";
 
 // UI
@@ -15,15 +15,13 @@ import ProfileActions from "../../components/Profile/ProfileActions";
 
 // Authentication
 import { useAuth } from "../../contexts/AuthContext";
+// User context
+import { useUser } from "../../contexts/UserContext";
 
 // Types
 import { ProfileType } from "../../types/profile";
 
-// Styling constants
-import { largeRadius, mainColor } from "../../styles/StylingConstants";
-
 // DEBUG
-import Logger from "../../utils/Logger";
 import { useFakeData } from "../../contexts/FakeDataContext";
 
 // API
@@ -31,21 +29,17 @@ import { getProfileByUsername } from "../../proxies/user";
 import { getValueFromUrl } from "../../utils/getValueFromUrl";
 
 // Store
-import { getItem } from "../../modules/Store";
+import { getItem, setItem } from "../../modules/Store";
 import StoreId from "../../config/StoreId";
 
 // Modal Components
 import { useModal } from "../../contexts/ModalContext";
 import CreateAccount from "../../containers/CreateAccount/CreateAccount";
 
-// User context
-import { useUser } from "../../contexts/UserContext";
-
 ////////////////////////////////////////////////////////////
 
 const ProfilePage = (): JSX.Element => {
     const [selectedProfile, setSelectedProfile] = useState<ProfileType>(null!);
-    const [isUserProfile, setIsUserProfile] = useState<boolean>(false);
 
     ////////////////////////////////////////////////////////////
 
@@ -75,6 +69,8 @@ const ProfilePage = (): JSX.Element => {
 
             if (profile) {
                 setUser(profile);
+                setItem(StoreId.loginProcess, false);
+                return;
             }
 
             if (shouldCreateUser) {
@@ -82,7 +78,7 @@ const ProfilePage = (): JSX.Element => {
                 setModalOpen(true);
             }
         } catch (err) {
-            Logger("AUTH", "Succesful login", "Sign in issue", err);
+            console.error(err);
         }
     };
 
@@ -105,7 +101,6 @@ const ProfilePage = (): JSX.Element => {
          * the user as the profile
          */
         setSelectedProfile(user);
-        setIsUserProfile(true);
     };
 
     ////////////////////////////////////////////////////////////
@@ -118,11 +113,13 @@ const ProfilePage = (): JSX.Element => {
          */
         const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
 
-        if (inLoginProcess === true && user === null) {
+        // I shouldn't have to check if the user is null but for some reason it's needed
+        if (inLoginProcess === true) {
             handleLoginProcess();
-        } else {
-            handleSetProfile();
+            return;
         }
+
+        handleSetProfile();
     }, [user]);
 
     ////////////////////////////////////////////////////////////
@@ -130,29 +127,26 @@ const ProfilePage = (): JSX.Element => {
     return (
         <Layout>
             {selectedProfile ? (
-                <div
-                    style={{
-                        borderRadius: largeRadius,
-                        backgroundColor: mainColor
-                    }}
-                >
+                <>
                     <ProfileDisplay
                         profile={selectedProfile}
                         matchHistory={matchHistory}
                     />
-                    {!isUserProfile && (
+                    {selectedProfile !== user && (
                         <ProfileActions profile={selectedProfile} />
                     )}
                     <GameHistory
                         player={selectedProfile}
                         matches={matchHistory}
                     />
-                </div>
+                </>
             ) : (
                 <Loader />
             )}
         </Layout>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export default ProfilePage;

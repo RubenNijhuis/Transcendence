@@ -15,12 +15,9 @@ import {
 // UI
 import { Container, SelectTypeIcon, SelectionBox } from "./ChatInput.style";
 
-// Debug
-import Logger from "../../../utils/Logger";
-
 ////////////////////////////////////////////////////////////
 
-interface Props {
+interface IChatInput {
     user: ProfileType;
     groupchat: GroupChat;
 }
@@ -171,7 +168,7 @@ const InvitePlayMessageInput = ({
     return <div className="invite-message-input"></div>;
 };
 
-const ChatInput = ({ user, groupchat }: Props): JSX.Element => {
+const ChatInput = ({ user, groupchat }: IChatInput): JSX.Element => {
     const [messageType, setMessageType] = useState<MessageContentType>(
         MessageContentType.Simple
     );
@@ -183,7 +180,6 @@ const ChatInput = ({ user, groupchat }: Props): JSX.Element => {
     const handleMessageSend = (): void => {
         setMessageType(MessageContentType.Simple);
         setMessageContent({ content: "" });
-        Logger("DEBUG", "Chat Input", "Message content", messageContent);
     };
 
     return (

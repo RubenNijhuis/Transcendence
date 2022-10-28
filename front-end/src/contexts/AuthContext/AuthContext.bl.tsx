@@ -11,9 +11,6 @@ import PageRoutes from "../../config/PageRoutes";
 import { removeItem } from "../../modules/Store";
 import StoreId from "../../config/StoreId";
 
-// Utils
-import { updateAuthTokens } from "../../proxies/utils";
-
 ////////////////////////////////////////////////////////////
 
 /**
@@ -23,11 +20,9 @@ import { updateAuthTokens } from "../../proxies/utils";
  */
 const signIn = async (code: string): Promise<SignInResponse> => {
     try {
-        const { authToken, profile, shouldCreateUser } = await confirmLogin(
+        const { profile, shouldCreateUser } = await confirmLogin(
             code
         );
-
-        updateAuthTokens(authToken);
 
         return Promise.resolve({ profile, shouldCreateUser });
     } catch (err) {
@@ -46,9 +41,9 @@ const signOut = (): void => {
 };
 
 const redirectToHome = (): void => {
-    if (window.location.pathname === PageRoutes.home) return;
+    // if (window.location.pathname === PageRoutes.home) return;
 
-    window.location.assign(PageRoutes.home);
+    // window.location.assign(PageRoutes.home);
 };
 
 ////////////////////////////////////////////////////////////

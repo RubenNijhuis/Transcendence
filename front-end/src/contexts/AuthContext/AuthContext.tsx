@@ -1,8 +1,8 @@
 // React stuff
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 // Store
-import { getItem, setItem } from "../../modules/Store";
+import { clearAll, getItem, setItem } from "../../modules/Store";
 import StoreId from "../../config/StoreId";
 
 // Types
@@ -12,11 +12,7 @@ import { SignInResponse } from "../../types/request";
 import { useUser } from "../UserContext";
 
 // Business logic
-import {
-    redirectToHome,
-    signIn,
-    signOut,
-} from "./AuthContext.bl";
+import { redirectToHome, signIn, signOut } from "./AuthContext.bl";
 
 // Proxies
 import { checkTokenValidity } from "../../proxies/auth";
@@ -27,7 +23,7 @@ interface AuthContextType {
     isLoggedIn: boolean;
 
     signIn(code: string): Promise<SignInResponse>;
-    signOut(): any;
+    signOut(): void;
 }
 
 // Create the context
@@ -48,6 +44,8 @@ const AuthProvider = ({
     children: React.ReactNode;
 }): JSX.Element => {
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
+    // const shouldRevalidateTokens = useRef(true);
+    
 
     ////////////////////////////////////////////////////////////
 
@@ -81,12 +79,13 @@ const AuthProvider = ({
                 redirectToHome();
                 return;
             }
-
+            
             try {
-                const { user } = await checkTokenValidity(refreshToken);
+                // if (shouldRevalidateTokens.current === false) return;
 
+                const { user } = await checkTokenValidity(refreshToken);
                 setUser(user);
-                setLoggedIn(true);
+                // shouldRevalidateTokens.current = false;
             } catch (err) {
                 redirectToHome();
             }

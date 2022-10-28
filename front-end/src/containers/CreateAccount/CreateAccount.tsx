@@ -9,15 +9,17 @@ import { CreateForm, StyledInput } from "./CreateAccount.style";
 import BoxSlider from "../../components/BoxSlider";
 import Slide from "../../components/BoxSlider/Slide/Slide";
 
-// Proxies
-import { createUser, uploadImage } from "../../proxies/user";
-
 // Routes
 import ApiRoutes from "../../config/ApiRoutes";
 
 // DEBUG
 import { useFormInput } from "../../components/Form/hooks";
+
+// Context
 import { useUser } from "../../contexts/UserContext";
+
+// Business logic
+import { handleAccountCreation, handleImageUpload } from "./CreateAccount.bl";
 
 ////////////////////////////////////////////////////////////
 
@@ -37,56 +39,18 @@ const CreateAccount = ({ setModalOpen }: Props): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
-    const retrieveFileFromInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const target = e.target as HTMLInputElement;
-        const file: File = (target.files as FileList)[0];
-        const fileName: string = file.name;
-
-        return { file, fileName };
-    };
-
-    const handleProfileImageUpload = (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        const { file, fileName } = retrieveFileFromInput(e);
-        const fd = new FormData();
-        fd.append("file", file, fileName);
-
-        uploadImage(ApiRoutes.uploadProfileImage(), fd)
-            .then(console.log)
-            .catch(console.log);
-    };
-
-    const handleBannerImageUpload = (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        const { file, fileName } = retrieveFileFromInput(e);
-        const fd = new FormData();
-        fd.append("file", file, fileName);
-
-        uploadImage(ApiRoutes.uploadBannerImage(), fd)
-            .then(console.log)
-            .catch(console.log);
-    };
-
-    const handleAccountCreation = async () => {
-        const providedDetails = {
-            username: username.value,
-            color: color.value,
-            description: description.value
-        };
-
-        /**
-         * Redirects the user to the profile
-         * page upon account creation.
-         */
+    const sendAccountDetails = async () => {
         try {
-            const returnedUserProfile = await createUser(providedDetails);
+            const user = await handleAccountCreation({
+                username: username.value,
+                color: color.value,
+                description: description.value
+            });
 
-            setUser(returnedUserProfile);
+            setUser(user);
             setModalOpen(false);
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     };
 
@@ -108,7 +72,12 @@ const CreateAccount = ({ setModalOpen }: Props): JSX.Element => {
                         <input
                             type="file"
                             alt="user profile"
-                            onChange={handleProfileImageUpload}
+                            onChange={(e) =>
+                                handleImageUpload(
+                                    e,
+                                    ApiRoutes.uploadProfileImage()
+                                )
+                            }
                         />
                     </StyledInput>
                 </Slide>
@@ -118,7 +87,12 @@ const CreateAccount = ({ setModalOpen }: Props): JSX.Element => {
                         <input
                             type="file"
                             alt="user banner"
-                            onChange={handleBannerImageUpload}
+                            onChange={(e) =>
+                                handleImageUpload(
+                                    e,
+                                    ApiRoutes.uploadBannerImage()
+                                )
+                            }
                         />
                     </StyledInput>
                 </Slide>
@@ -135,7 +109,7 @@ const CreateAccount = ({ setModalOpen }: Props): JSX.Element => {
                         <label>Tell something about yourself</label>
                         <textarea rows={4} {...description} />
                     </StyledInput>
-                    <Button theme="dark" onClick={handleAccountCreation}>
+                    <Button theme="dark" onClick={sendAccountDetails}>
                         Ja doe maar
                     </Button>
                 </Slide>

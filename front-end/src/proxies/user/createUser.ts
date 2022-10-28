@@ -5,21 +5,16 @@ import ApiRoutes from "../../config/ApiRoutes";
 // Types
 import { ProfileType } from "../../types/profile";
 import { addImagesToProfile } from "./addImagesToProfile";
+import { CreateUserParams } from "../../types/request";
 
 /////////////////////////////////////////////////////////////
-
-interface createUserProps {
-    username: string;
-    color: string;
-    description: string;
-}
 
 /**
  * Creates a user by sending the config to the back-end
  * @param userData
  * @returns
  */
-const createUser = async (userData: createUserProps): Promise<ProfileType> => {
+const createUser = async (userData: CreateUserParams): Promise<ProfileType> => {
     try {
         const route = ApiRoutes.createUser();
         const { data } = await API.post<ProfileType>(route, userData);

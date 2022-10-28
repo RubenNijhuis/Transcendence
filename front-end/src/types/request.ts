@@ -29,6 +29,23 @@ interface SignInResponse {
     shouldCreateUser: boolean;
 }
 
-export type { RequestErrorType, ConfirmLoginResponse, AuthTokenType, SignInResponse };
+interface CreateUserParams {
+    username: string;
+    color: string;
+    description: string;
+}
+
+interface TokenValidityResponse {
+    user: ProfileType;
+}
+
+export type {
+    RequestErrorType,
+    ConfirmLoginResponse,
+    AuthTokenType,
+    SignInResponse,
+    CreateUserParams,
+    TokenValidityResponse
+};
 
 export { AuthStatusType };

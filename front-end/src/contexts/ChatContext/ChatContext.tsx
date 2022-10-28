@@ -80,8 +80,9 @@ const ChatProvider = ({
 
             const firstDM = getFirstDM(retrievedGroupChats);
 
-            if (firstDM !== null) setActiveChat(firstDM);
-            else setActiveChat(retrievedGroupChats[0]);
+            firstDM === null
+                ? setActiveChat(retrievedGroupChats[0])
+                : setActiveChat(firstDM);
         };
 
         chatAggregator();

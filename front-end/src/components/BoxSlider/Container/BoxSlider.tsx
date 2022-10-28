@@ -9,11 +9,7 @@ import { Container, ChangeSlideButtons } from "./BoxSlider.style";
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
-    children: React.ReactNode;
-}
-
-interface SliderDotsProps {
+interface ISliderDots {
     amount: number;
     active: number;
 }
@@ -35,7 +31,7 @@ const Dot = ({ active }: { active: boolean }): JSX.Element => {
 };
 
 // TODO: styling in seperate folder
-const SliderDots = ({ amount, active }: SliderDotsProps): JSX.Element => {
+const SliderDots = ({ amount, active }: ISliderDots): JSX.Element => {
     const dots = [];
 
     for (let i = 0; i < amount; i++) {
@@ -61,7 +57,11 @@ const SliderDots = ({ amount, active }: SliderDotsProps): JSX.Element => {
     );
 };
 
-const BoxSlider = ({ children }: Props): JSX.Element => {
+interface IBoxSlider {
+    children: React.ReactNode;
+}
+
+const BoxSlider = ({ children }: IBoxSlider): JSX.Element => {
     const [amountSlides, setAmountSlides] = useState<number>(1);
     const [activeSlide, setActiveSlide] = useState<number>(0);
     const boxSlidesContainerRef = useRef<HTMLDivElement>(null!);
@@ -113,5 +113,7 @@ const BoxSlider = ({ children }: Props): JSX.Element => {
         </Container>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export default BoxSlider;

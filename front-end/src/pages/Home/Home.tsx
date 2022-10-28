@@ -2,6 +2,8 @@
 import Layout from "../../components/Layout";
 import Heading from "../../components/Heading";
 
+////////////////////////////////////////////////////////////
+
 const Home = (): JSX.Element => {
     return (
         <Layout>
@@ -9,5 +11,7 @@ const Home = (): JSX.Element => {
         </Layout>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export default Home;
