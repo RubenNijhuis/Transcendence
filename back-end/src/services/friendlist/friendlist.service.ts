@@ -12,21 +12,31 @@ export class FriendlistService {
     private readonly friendlistRepository: Repository<FriendList>
   ) {}
 
-  async getFriends(username: string): Promise<FriendList[]> {
-    const friends  = await this.friendlistRepository
+  private filterOutput(friends: FriendList[]) {
+    const filteredFriends: string[] = [];
+
+    for (let i = 0; i < friends.length; i++) {
+      filteredFriends.push(friends[i].friendname)
+    }
+    return filteredFriends;
+  }
+
+  async getFriends(username: string): Promise<string[]> {
+    const friends: FriendList[] = await this.friendlistRepository
       .createQueryBuilder("friend_list")
       .where("username = :username", { username })
       .getMany();
-    return friends;
+
+    return this.filterOutput(friends);
   }
 
-  async getFriend(username: string, friendname: string): Promise<FriendList> {
+  async getFriend(username: string, friendname: string): Promise<string> {
     const friend = await this.friendlistRepository
       .createQueryBuilder("friend_list")
       .where("username = :username", { username })
       .andWhere("friends = :friendname", { friendname })
       .getOne();
-    return friend;
+    return friend.friendname;
   }
 
   async isFriend(username: string, friendname: string): Promise<boolean> {
