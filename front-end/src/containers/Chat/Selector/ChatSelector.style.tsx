@@ -9,6 +9,8 @@ import {
     smallRadius
 } from "../../../styles/StylingConstants";
 
+////////////////////////////////////////////////////////////
+
 const Container = styled.div`
     border-radius: ${smallRadius};
     overflow: hidden;
@@ -60,7 +62,6 @@ const DirectMessageEntry = styled.li<{ active: boolean }>`
             width: calc(${magicNum} / 4 * 3);
             height: calc(${magicNum} / 4 * 3);
             border-radius: 6px;
-            overflow: hidden;
         }
     }
 `;
@@ -73,7 +74,6 @@ const ChatTypeSelectorContainer = styled.div`
     border-radius: ${smallRadius};
     overflow: hidden;
 
-    // For each one if
     .chat-type {
         width: 50%;
         padding: calc(${magicNum} / 4);
@@ -101,5 +101,7 @@ const ChatTypeSelectorContainer = styled.div`
         margin-bottom: 0;
     }
 `;
+
+////////////////////////////////////////////////////////////
 
 export { Container, DirectMessageEntry, ChatTypeSelectorContainer };

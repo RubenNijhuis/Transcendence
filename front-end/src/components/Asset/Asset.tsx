@@ -3,13 +3,13 @@ import { Container } from "./Asset.style";
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
+interface IAsset {
     url: string;
     alt: string;
     className?: string;
 }
 
-const Asset = ({ url, alt, className }: Props): JSX.Element => {
+const Asset = ({ url, alt, className }: IAsset): JSX.Element => {
     let classTag: string = "asset";
 
     ////////////////////////////////////////////////////////////
@@ -30,5 +30,7 @@ const Asset = ({ url, alt, className }: Props): JSX.Element => {
         </Container>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export default Asset;

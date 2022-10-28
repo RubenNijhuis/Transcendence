@@ -14,17 +14,19 @@ import Crown from "../../../components/Crown";
 
 /////////////////////////////////////////////////////////////
 
-interface Props {
+interface IPodium {
     rankings: ProfileType[];
 }
 
-const Podium = ({ rankings }: Props): JSX.Element => {
+const Podium = ({ rankings }: IPodium): JSX.Element => {
     const formattedRankings: ProfileType[] = rankings.slice(0, 3);
     // Swap pos 1 and 2 in array
     [formattedRankings[0], formattedRankings[1]] = [
         formattedRankings[1],
         formattedRankings[0]
     ];
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <PodiumContainer>

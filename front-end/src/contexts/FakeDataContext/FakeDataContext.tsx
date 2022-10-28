@@ -1,9 +1,6 @@
 // Regular react
 import { createContext, useContext, useEffect, useState } from "react";
 
-// Get the user
-import { useAuth } from "../AuthContext";
-
 // Types
 import { ProfileType } from "../../types/profile";
 import { MatchRecord } from "../../types/game";
@@ -12,55 +9,56 @@ import { MatchRecord } from "../../types/game";
 import { generateGameResult, generateProfile } from "./fakeDataGenerators";
 import { useUser } from "../UserContext";
 
-// What kind of data and functions the context consists of
+////////////////////////////////////////////////////////////
+
 interface FakeDataContextType {
     profiles: ProfileType[];
-    setProfiles: React.Dispatch<React.SetStateAction<ProfileType[]>>;
-
     leaderBoard: ProfileType[];
-    setLeaderBoard: React.Dispatch<React.SetStateAction<ProfileType[]>>;
-
     matchHistory: MatchRecord[];
-    setMatchHistory: React.Dispatch<React.SetStateAction<MatchRecord[]>>;
-
-    fakeUser: ProfileType;
-    setFakeUser: React.Dispatch<React.SetStateAction<ProfileType>>;
 }
 
-// Create context
 const FakeDataContext = createContext<FakeDataContextType>(null!);
 
-// Create an alias
 const useFakeData = () => useContext(FakeDataContext);
 
+////////////////////////////////////////////////////////////
+
 // Setup data storage and update functions
-const FakeDataProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
-    const [fakeUser, setFakeUser] = useState<ProfileType>(null!);
+const FakeDataProvider = ({
+    children
+}: {
+    children: React.ReactNode;
+}): JSX.Element => {
     const [profiles, setProfiles] = useState<ProfileType[]>(null!);
     const [leaderBoard, setLeaderBoard] = useState<ProfileType[]>(null!);
     const [matchHistory, setMatchHistory] = useState<MatchRecord[]>(null!);
 
+    ////////////////////////////////////////////////////////////
+
     const { user } = useUser();
+
+    ////////////////////////////////////////////////////////////
 
     useEffect(() => {
         if (!user) return;
 
         const tempProfiles: ProfileType[] = generateProfile(20);
+        const matchResults = generateGameResult(user, 50);
+
         setProfiles(tempProfiles);
         setLeaderBoard(tempProfiles);
-        setMatchHistory(generateGameResult(user, 50));
+        setMatchHistory(matchResults);
     }, [user]);
 
-    const value = {
-        fakeUser,
-        setFakeUser,
+    ////////////////////////////////////////////////////////////
+
+    const value: FakeDataContextType = {
         profiles,
-        setProfiles,
         leaderBoard,
-        setLeaderBoard,
-        matchHistory,
-        setMatchHistory
+        matchHistory
     };
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <FakeDataContext.Provider value={value}>
@@ -68,6 +66,8 @@ const FakeDataProvider = ({ children }: { children: React.ReactNode }): JSX.Elem
         </FakeDataContext.Provider>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export { useFakeData };
 export default FakeDataProvider;

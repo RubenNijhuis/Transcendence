@@ -1,14 +1,16 @@
 // UI
 import Heading from "../Heading";
+import Asset from "../Asset";
 
 // Styling
 import { AdvancedCard } from "./GameCard.style";
 
 // Routing
 import { Link } from "react-router-dom";
-import Asset from "../Asset";
 
-interface Props {
+///////////////////////////////////////////////////////////
+
+interface IGameCard {
     img_url: string;
     title: string;
     description: string;
@@ -22,7 +24,7 @@ const GameCard = ({
     description,
     url,
     cta
-}: Props): JSX.Element => {
+}: IGameCard): JSX.Element => {
     return (
         <AdvancedCard>
             <div className="img">
@@ -38,4 +40,7 @@ const GameCard = ({
         </AdvancedCard>
     );
 };
+
+///////////////////////////////////////////////////////////
+
 export default GameCard;

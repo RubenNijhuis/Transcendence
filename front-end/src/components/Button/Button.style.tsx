@@ -8,6 +8,8 @@ import {
     lightTextColor
 } from "../../styles/StylingConstants";
 
+///////////////////////////////////////////////////////////
+
 const StyledButton = styled.button`
     display: inline-flex;
     align-items: center;
@@ -27,5 +29,7 @@ const StyledButton = styled.button`
         cursor: pointer;
     }
 `;
+
+///////////////////////////////////////////////////////////
 
 export { StyledButton };

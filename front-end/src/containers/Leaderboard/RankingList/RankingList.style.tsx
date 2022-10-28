@@ -9,9 +9,10 @@ import {
 } from "../../../styles/StylingConstants";
 
 const Entry = styled.li`
-    position: relative;
+    position: sticky;
     padding: calc(${magicNum} / 2) calc(${magicNum} / 2);
-
+    top: 0;
+    
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
@@ -74,7 +75,6 @@ const EntryList = styled.ol`
     align-items: center;
     margin: auto;
 
-    overflow: hidden;
     border-radius: ${smallRadius};
 `;
 

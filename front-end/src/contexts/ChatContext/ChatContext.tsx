@@ -22,6 +22,7 @@ import {
     getMembersFromGroupChats,
     getMessagesFromGroupChats
 } from "./ChatContext.bl";
+import { useFakeData } from "../FakeDataContext";
 
 ///////////////////////////////////////////////////////////
 
@@ -53,6 +54,9 @@ const ChatProvider = ({
 
     const { user } = useUser();
 
+    // TODO: remove because it is debug
+    const { profiles } = useFakeData();
+
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
@@ -60,12 +64,11 @@ const ChatProvider = ({
 
         const chatAggregator = async () => {
             // TODO: Get from api //////////////////////////////////////
-            const tempProfiles: ProfileType[] = generateProfile(30);
             const retrievedGroupChats: GroupChat[] = generateGroupChats(
                 user,
                 10,
                 [1, 4],
-                tempProfiles
+                profiles
             );
             ////////////////////////////////////////////////////////////
 
@@ -104,6 +107,8 @@ const ChatProvider = ({
         <ChatContext.Provider value={value}>{children}</ChatContext.Provider>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export { useChat };
 export default ChatProvider;

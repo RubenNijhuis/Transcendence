@@ -8,12 +8,14 @@ import Heading from "../../Heading";
 // Styling
 import { Container } from "./ProfileStats.style";
 
-interface Props {
+///////////////////////////////////////////////////////////
+
+interface IProfileStats {
     player: ProfileType;
     matches: MatchRecord[];
 }
 
-const ProfileStats = ({ player, matches }: Props): JSX.Element => {
+const ProfileStats = ({ player, matches }: IProfileStats): JSX.Element => {
     return (
         <Container>
             <div className="stats">
@@ -44,5 +46,7 @@ const ProfileStats = ({ player, matches }: Props): JSX.Element => {
         </Container>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export default ProfileStats;

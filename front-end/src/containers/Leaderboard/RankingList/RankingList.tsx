@@ -11,11 +11,11 @@ import PageRoutes from "../../../config/PageRoutes";
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
+interface IRankingList {
     rankings: ProfileType[];
 }
 
-const RankingList = ({ rankings }: Props): JSX.Element => {
+const RankingList = ({ rankings }: IRankingList): JSX.Element => {
     return (
         <EntryList>
             {rankings
@@ -42,5 +42,7 @@ const RankingList = ({ rankings }: Props): JSX.Element => {
         </EntryList>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export default RankingList;

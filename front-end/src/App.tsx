@@ -16,13 +16,13 @@ import SocketProvider from "./contexts/SocketContext";
 
 const App = (): JSX.Element => {
     return (
-        <UserProvider>
-            <AuthProvider>
-                <SocketProvider>
-                    {/* TODO: wrapper for providers? */}
-                    <ModalProvider>
-                        {/* TODO: remove data debug provider */}
-                        <FakeDataProvider>
+        <FakeDataProvider>
+            <UserProvider>
+                <AuthProvider>
+                    <SocketProvider>
+                        {/* TODO: wrapper for providers? */}
+                        <ModalProvider>
+                            {/* TODO: remove data debug provider */}
                             <ChatProvider>
                                 {/* Global Styling */}
                                 <GlobalStyle />
@@ -30,11 +30,11 @@ const App = (): JSX.Element => {
                                 {/* Page routing */}
                                 <Router />
                             </ChatProvider>
-                        </FakeDataProvider>
-                    </ModalProvider>
-                </SocketProvider>
-            </AuthProvider>
-        </UserProvider>
+                        </ModalProvider>
+                    </SocketProvider>
+                </AuthProvider>
+            </UserProvider>
+        </FakeDataProvider>
     );
 };
 export default App;

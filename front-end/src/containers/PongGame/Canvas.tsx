@@ -20,11 +20,11 @@ const Container = styled.div`
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
+interface ICanvas {
     canvasRef: React.RefObject<HTMLCanvasElement>;
 }
 
-const Canvas = ({ canvasRef }: Props): JSX.Element => {
+const Canvas = ({ canvasRef }: ICanvas): JSX.Element => {
     const canvasContainerRef = useRef(null!);
 
     const [socketResponse, setSocketResponse] = useState<string>(

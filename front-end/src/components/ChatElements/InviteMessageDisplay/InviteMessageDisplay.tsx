@@ -15,7 +15,7 @@ import Button from "../../Button";
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
+interface IInviteMessageDisplay {
     message: Message;
     fromUser: boolean;
 }
@@ -41,7 +41,7 @@ const Container = styled.div<{ fromUser: boolean }>`
     }
 `;
 
-const InviteMessageDisplay = ({ fromUser, message }: Props): JSX.Element => {
+const InviteMessageDisplay = ({ fromUser, message }: IInviteMessageDisplay): JSX.Element => {
     const formattedContent: InvitePlayMessage =
         message.content as InvitePlayMessage;
 

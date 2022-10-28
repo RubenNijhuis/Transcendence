@@ -106,6 +106,8 @@ const ProfilePage = (): JSX.Element => {
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
+        const controller = new AbortController();
+        
         /**
          * If the user is in the login process we check if
          * they still need to make an account. If that is
