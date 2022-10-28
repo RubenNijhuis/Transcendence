@@ -106,7 +106,7 @@ export class UsersController {
   }
 
   @Get(UserRoutes.getUserOnName)
-  async findUsersById(@Res() res: Response, @Param() username: string) {
+  async findUsersById(@Res() res: Response, @Param('username') username: string) {
     try {
       const user: User = await this.userService.findUserByUsername(username);
       return this.userService.filterUser(user);

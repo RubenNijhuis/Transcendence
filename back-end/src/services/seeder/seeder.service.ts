@@ -44,11 +44,11 @@ export class SeederService {
     return Math.floor(Math.random() * (max - min) + min);
   }
 
-  async getFriendIndexes(friends: FriendList[]): Promise<number[]> {
+  async getFriendIndexes(friends: string[]): Promise<number[]> {
     var indexes: number[] = [];
 
     for (let i = 0; i < friends.length; i++) {
-        indexes.push((await this.userServ.findUserByUsername(friends[i].friendname)).index);
+        indexes.push((await this.userServ.findUserByUsername(friends[i])).index);
     }
     return indexes;
   }
@@ -78,7 +78,7 @@ export class SeederService {
 
     for (let i = 0; i < users.length; i++) {
         let user: User = users[i];
-        let friends: FriendList[] = await this.friendsServ.getFriends(user.username);
+        let friends: string[] = await this.friendsServ.getFriends(user.username);
         let entry = {
             "username": user.username,
             "amount": friends.length,
@@ -98,7 +98,7 @@ export class SeederService {
         // loop trough users
         for (let i = 0; i < users.length; i++) {
             var user: User = users[i];
-            var currentFriends: FriendList[] = await this.friendsServ.getFriends(user.username);
+            var currentFriends: string[] = await this.friendsServ.getFriends(user.username);
             var targetAmount: number = this.randomNum(1, maxFriends);
             var excludeList: number[] = await this.getFriendIndexes(currentFriends);
 
@@ -112,6 +112,8 @@ export class SeederService {
                     // get random number which is not in exlude list
                     while (excludeList.includes((randomIndex = this.randomNum(0, users.length)))) {}
                     newFriend = await this.userServ.findUserByUsername(users[randomIndex].username);
+                    if (newFriend.username == user.username)
+                      console.log("wrm werkt dit niet[", newFriend.index, "][", user.index, "]");
                     // get username of random index
                     // add new friend to friends && exclude list
                     let query = {
