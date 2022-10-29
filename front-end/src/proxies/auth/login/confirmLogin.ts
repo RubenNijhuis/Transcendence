@@ -1,11 +1,11 @@
 // API request setup
-import ApiRoutes from "../../config/ApiRoutes";
-import { API } from "../instances/apiInstance";
+import ApiRoutes from "../../../config/ApiRoutes";
+import { API } from "../../instances/apiInstance";
 
 // Types
-import { ConfirmLoginResponse } from "../../types/request";
-import { addImagesToProfile } from "../profile";
-import { updateAuthTokens } from "../utils";
+import { ConfirmLoginResponse } from "../../../types/request";
+import { addImagesToProfile } from "../../profile";
+import { updateAuthTokens } from "../../utils";
 
 ////////////////////////////////////////////////////////////
 

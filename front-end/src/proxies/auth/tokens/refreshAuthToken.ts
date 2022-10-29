@@ -1,9 +1,9 @@
 // API config
-import ApiRoutes from "../../config/ApiRoutes";
-import { API } from "../instances/apiInstance";
+import ApiRoutes from "../../../config/ApiRoutes";
+import { API } from "../../instances/apiInstance";
 
 // Types
-import { AuthTokenType } from "../../types/request";
+import { AuthTokenType } from "../../../types/request";
 import { AxiosRequestConfig } from "axios";
 
 ////////////////////////////////////////////////////////////

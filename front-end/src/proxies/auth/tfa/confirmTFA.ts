@@ -1,23 +1,28 @@
 // API Request config
-import ApiRoutes from "../../config/ApiRoutes";
-import { API } from "../instances/apiInstance";
+import ApiRoutes from "../../../config/ApiRoutes";
+import { API } from "../../instances/apiInstance";
 
-const getqrTFA = async (intraID: string): Promise<string> => {
+////////////////////////////////////////////////////////////
+
+const confirmTFA = async (intraID: string, tfaCode: string): Promise<any> => {
     try {
-        const route = ApiRoutes.getqrTFA();
+        const route = ApiRoutes.confirmTFA();
         const config = {
-            intraID
+            intraID,
+            tfaCode
         }
 
         const { data } = await API.post(route, config);
         return Promise.resolve(data);
 
-    } catch (err: any) {
+    } catch (err) {
         return Promise.reject(err);
     }
 };
 
-export { getqrTFA };
+////////////////////////////////////////////////////////////
+
+export { confirmTFA };
 
 //curl --data "intraID=..."  -H "Authorization: Bearer {'jwtsession_token'}" http://localhost:3000/api/auth/google2fa
 

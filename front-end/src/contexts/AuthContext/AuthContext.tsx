@@ -22,6 +22,9 @@ import { checkTokenValidity } from "../../proxies/auth";
 interface AuthContextType {
     isLoggedIn: boolean;
 
+    tfaEnabled: boolean;
+    setTfaEnabled: React.Dispatch<React.SetStateAction<boolean>>;
+
     signIn(code: string): Promise<SignInResponse>;
     signOut(): void;
 }
@@ -44,6 +47,7 @@ const AuthProvider = ({
     children: React.ReactNode;
 }): JSX.Element => {
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
+    const [tfaEnabled, setTfaEnabled] = useState<boolean>(false);
 
     ////////////////////////////////////////////////////////////
 
@@ -55,12 +59,18 @@ const AuthProvider = ({
      * The authentication state will update
      * when a user object exists. Here we
      * set the site settings to logged in.
+     * 
+     * And check for 2fa
      */
     useEffect(() => {
         if (!user) return;
 
         setLoggedIn(true);
         setItem(StoreId.loginProcess, false);
+
+        if (user?.isTfaEnabled) {
+            setTfaEnabled(user.isTfaEnabled);
+        }
     }, [user]);
 
     /**
@@ -84,7 +94,7 @@ const AuthProvider = ({
                 redirectToHome();
                 return;
             }
-            
+
             try {
                 const { user } = await checkTokenValidity(refreshToken);
                 setUser(user);
@@ -100,6 +110,9 @@ const AuthProvider = ({
     const value: AuthContextType = {
         signIn,
         signOut,
+
+        tfaEnabled,
+        setTfaEnabled,
 
         isLoggedIn
     };

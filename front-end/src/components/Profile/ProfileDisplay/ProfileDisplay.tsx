@@ -29,7 +29,7 @@ const ProfileDisplay = ({
     ////////////////////////////////////////////////////////////
 
     const { user } = useUser();
-    const isUser = user.id === profile.id;
+    const isUser = user.uid === profile.uid;
 
     ////////////////////////////////////////////////////////////
 

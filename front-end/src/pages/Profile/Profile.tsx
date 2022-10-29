@@ -80,7 +80,7 @@ const ProfilePage = (): JSX.Element => {
             }
 
             if (shouldCreateUser) {
-                setModalElement(<CreateAccount setModalOpen={setModalOpen} />);
+                setModalElement(<CreateAccount />);
                 setModalOpen(true);
             }
         } catch (err) {
@@ -89,6 +89,7 @@ const ProfilePage = (): JSX.Element => {
     };
 
     const handleSetProfile = async () => {
+        setModalOpen(false);
         /**
          * If there is a profile name in the url we
          * request that user and set it as the profile

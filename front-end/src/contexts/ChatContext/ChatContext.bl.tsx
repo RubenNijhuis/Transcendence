@@ -30,7 +30,7 @@ const findMemberByProfileID = (
 ): ProfileType => {
     // Could return undefined but should always find it anyway so what gives
     const profile = members.find((member) => {
-        return member.id === id;
+        return member.uid === id;
     }) as ProfileType;
 
     return profile;

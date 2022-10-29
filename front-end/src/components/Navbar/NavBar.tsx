@@ -2,8 +2,15 @@
 import Asset from "../Asset";
 import Button from "../Button";
 
+// Icons
+import { FiSettings } from "react-icons/fi";
+
 // Styling
-import { Container, ProfileIconContainer } from "./NavBar.style";
+import {
+    Container,
+    NavLinksContainer,
+    ProfileIconContainer
+} from "./NavBar.style";
 
 // Navigation
 import { Link } from "react-router-dom";
@@ -18,6 +25,14 @@ import PageRoutes from "../../config/PageRoutes";
 
 ////////////////////////////////////////////////////////////
 
+const SettingsPageButton = () => {
+    return (
+        <Link to={PageRoutes.settings} className="settings-icon">
+            <FiSettings />
+        </Link>
+    );
+};
+
 interface ICTAButton {
     authStatus: boolean;
 }
@@ -27,7 +42,7 @@ const CTAButton = ({ authStatus }: ICTAButton): JSX.Element => {
     const text = authStatus ? "Play pong" : "Login";
 
     return (
-        <Link className="play-button" to={url}>
+        <Link className="cta-button" to={url}>
             <Button theme={"light"}>{text}</Button>
         </Link>
     );
@@ -39,7 +54,7 @@ interface INavLink {
 
 const NavLinks = ({ authStatus }: INavLink): JSX.Element => {
     return (
-        <ul>
+        <NavLinksContainer>
             {locations.map(({ name, url, onlyWhenLoggedin }, count) => {
                 if (onlyWhenLoggedin && !authStatus) return null;
                 return (
@@ -48,7 +63,7 @@ const NavLinks = ({ authStatus }: INavLink): JSX.Element => {
                     </li>
                 );
             })}
-        </ul>
+        </NavLinksContainer>
     );
 };
 
@@ -80,9 +95,15 @@ const NavBar = (): JSX.Element => {
                         <div className="logo">PongHub</div>
                     </Link>
                     <NavLinks authStatus={isLoggedIn} />
+
                     <div className="cta">
                         <CTAButton authStatus={isLoggedIn} />
-                        {isLoggedIn && <ProfileIcon url={user!.img_url} />}
+                        {isLoggedIn && (
+                            <>
+                                <ProfileIcon url={user!.img_url} />
+                                <SettingsPageButton />
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

@@ -23,12 +23,8 @@ import { handleAccountCreation, handleImageUpload } from "./CreateAccount.bl";
 
 ////////////////////////////////////////////////////////////
 
-interface ICreateAccount {
-    setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
 // TODO: make component check input data before sending
-const CreateAccount = ({ setModalOpen }: ICreateAccount): JSX.Element => {
+const CreateAccount = (): JSX.Element => {
     const username = useFormInput("");
     const color = useFormInput("");
     const description = useFormInput("");
@@ -48,7 +44,6 @@ const CreateAccount = ({ setModalOpen }: ICreateAccount): JSX.Element => {
             });
 
             setUser(user);
-            setModalOpen(false);
         } catch (err) {
             console.error(err);
         }

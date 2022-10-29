@@ -123,7 +123,7 @@ export class AuthController {
 
       return returnedPayload;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   }

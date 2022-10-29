@@ -1,5 +1,6 @@
 // React stuff
 import { createContext, useContext, useEffect, useState } from "react";
+import Logger from "../../modules/Logger";
 
 // Types
 import { ProfileType } from "../../types/profile";
@@ -39,8 +40,10 @@ const UserProvider = ({
 
     useEffect(() => {
         if (!user) return;
+        Logger("AUTH", "User context", "User object", user);
 
         const retrievedFriends = generateProfile(20);
+        Logger("DEBUG", "User context", "Generating fake friends", null);
         setFriends(retrievedFriends);
     }, [user]);
 

@@ -141,8 +141,8 @@ export class UsersController {
       const removeUserResp = await this.userService.removeUser(dto.username);
 
       return removeUserResp;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -151,8 +151,8 @@ export class UsersController {
   async turnon2fa(@Body() dto: SetTfaDto) {
     try {
       await this.userService.setTfaOption(dto.uid);
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 

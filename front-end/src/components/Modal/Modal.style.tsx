@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { magicNum } from "../../styles/StylingConstants";
+import { backgroundColor, lightTextColor, magicNum } from "../../styles/StylingConstants";
 
 ///////////////////////////////////////////////////////////
 
@@ -21,7 +21,9 @@ const Container = styled.div`
     padding: calc(${magicNum} * 2);
 `;
 
-const ElementContainer = styled.div``;
+const ElementContainer = styled.div`
+    background-color: ${backgroundColor};
+`;
 
 ///////////////////////////////////////////////////////////
 

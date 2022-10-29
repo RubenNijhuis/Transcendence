@@ -39,7 +39,7 @@ const CreateGroupChat = ({
     ////////////////////////////////////////////////////////////
 
     const toggleSelected = (friend: ProfileType): void => {
-        const isSelected: boolean = checkIfProfileIsSelected(friend.id);
+        const isSelected: boolean = checkIfProfileIsSelected(friend.uid);
 
         if (isSelected) {
             removeFriendFromSelected(friend);
@@ -53,7 +53,7 @@ const CreateGroupChat = ({
 
         foundInSelectedFriends =
             selectedFriends.find((member) => {
-                return member.id === id;
+                return member.uid === id;
             }) !== undefined;
 
         return foundInSelectedFriends;
@@ -64,7 +64,7 @@ const CreateGroupChat = ({
     const removeFriendFromSelected = (friendID: ProfileType): void => {
         setSelectedFriends((prevState) => {
             const filteredState = prevState.filter((friend) => {
-                return friend.id !== friendID.id;
+                return friend.uid !== friendID.uid;
             });
             return filteredState;
         });
@@ -96,14 +96,14 @@ const CreateGroupChat = ({
 
                 <ul className="select-friends__list">
                     {friends.map((friend) => {
-                        const { id, img_url, username } = friend;
-                        const isSelected = checkIfProfileIsSelected(friend.id);
+                        const { uid, img_url, username } = friend;
+                        const isSelected = checkIfProfileIsSelected(friend.uid);
                         const selectedClass = isSelected ? "selected" : "";
 
                         return (
                             <div
                                 className={`item ${selectedClass}`}
-                                key={id}
+                                key={uid}
                                 onClick={() => toggleSelected(friend)}
                             >
                                 <Asset

@@ -31,7 +31,7 @@ export class SeederService {
       }
       return this.userServ.getUsers();
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw errorHandler(
         err,
         "Failed to seed database",
@@ -138,7 +138,7 @@ export class SeederService {
       }
       return this.formulateResponse(users);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw errorHandler(
         err,
         "Failed to seed database",

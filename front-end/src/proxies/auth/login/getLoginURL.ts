@@ -1,6 +1,6 @@
 // API Request config
-import ApiRoutes from "../../config/ApiRoutes";
-import { API } from "../instances/apiInstance";
+import ApiRoutes from "../../../config/ApiRoutes";
+import { API } from "../../instances/apiInstance";
 
 ////////////////////////////////////////////////////////////
 

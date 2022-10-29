@@ -93,7 +93,7 @@ const generateMessage = (
             content_type: rand,
             timestamp: new Date().toString(),
             sender: generateProfile(1)[0],
-            senderID: sender.id,
+            senderID: sender.uid,
             id: i,
             group_id,
             read_by: []

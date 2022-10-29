@@ -1,9 +1,9 @@
 // Types
-import { TokenValidityResponse } from "../../types/request";
+import { TokenValidityResponse } from "../../../types/request";
 
 // Proxies
-import { getUserByAccessToken } from "../user";
-import { updateAuthTokens } from "../utils";
+import { getUserByAccessToken } from "../../user";
+import { updateAuthTokens } from "../../utils";
 import { refreshAuthToken } from "./refreshAuthToken";
 
 ////////////////////////////////////////////////////////////
@@ -29,5 +29,7 @@ const checkTokenValidity = async (
         return Promise.reject(err);
     }
 };
+
+////////////////////////////////////////////////////////////
 
 export { checkTokenValidity };

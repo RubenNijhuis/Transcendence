@@ -39,8 +39,8 @@ export class GroupController {
     try {
       await this.groupService.createPassword(createPasswordDto);
       return HttpStatus.OK;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -50,8 +50,8 @@ export class GroupController {
     try {
       await this.groupService.updatePassword(editPasswordDto);
       return HttpStatus.OK;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -67,8 +67,8 @@ export class GroupController {
       const addOwnerDto: EditOwnerDto = { groupId, owner };
       await this.groupService.addOwner(addOwnerDto);
       return HttpStatus.OK;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -77,8 +77,8 @@ export class GroupController {
     try {
       await this.groupService.removeGroup(removeGroupDto);
       return HttpStatus.OK;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -87,8 +87,8 @@ export class GroupController {
     try {
       await this.groupService.addMembers(editMembersDto);
       return HttpStatus.OK;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -97,8 +97,8 @@ export class GroupController {
     try {
       await this.groupService.removeMembers(editMembersDto);
       return HttpStatus.OK;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -107,8 +107,8 @@ export class GroupController {
     try {
       await this.groupService.makeAdmin(makeAdminDto);
       return HttpStatus.OK;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -117,8 +117,8 @@ export class GroupController {
     try {
       await this.groupService.unMakeAdmin(makeAdminDto);
       return HttpStatus.OK;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 }

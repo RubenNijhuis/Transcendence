@@ -3,7 +3,7 @@ type ProfileID = string;
 
 // Global profile interface
 interface ProfileType {
-    id: ProfileID;
+    uid: ProfileID;
 
     username: string;
 
@@ -11,6 +11,8 @@ interface ProfileType {
     banner_url: string;
 
     color: string;
+
+    isTfaEnabled?: boolean;
 
     rank: number;
     wins: number;

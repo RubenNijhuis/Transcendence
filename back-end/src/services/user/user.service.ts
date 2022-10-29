@@ -58,7 +58,6 @@ export class UserService {
     delete newUser.intraId;
     delete newUser.index;
     delete newUser.isInitialized;
-    delete newUser.isTfaEnabled;
     delete newUser.refreshToken;
     delete newUser.tfaSecret;
 
@@ -84,20 +83,20 @@ export class UserService {
     }
   }
 
-  async findUsersById(id: string): Promise<User> {
+  async findUsersById(uid: string): Promise<User> {
     try {
-      const ret: User = await this.userRepository.findOne({ where: { id } });
+      const ret: User = await this.userRepository.findOne({ where: { uid } });
       return this.filterUser(ret);
     } catch (err) {
       throw err;
     }
   }
 
-  async findUsersByIdNoFilter(id: string): Promise<User> {
+  async findUsersByIdNoFilter(uid: string): Promise<User> {
     try {
-      const ret: User = await this.userRepository.findOne({ where: { id } });
+      const ret: User = await this.userRepository.findOne({ where: { uid } });
       return ret;
-    } catch (err: any) {
+    } catch (err) {
       throw err;
     }
   }
@@ -130,7 +129,7 @@ export class UserService {
       const returnedUser: User = await this.userRepository.findOne({
         where: { intraId }
       });
-      return returnedUser.id;
+      return returnedUser.uid;
     } catch (err) {
       throw err;
     }
@@ -175,13 +174,13 @@ export class UserService {
         .createQueryBuilder()
         .update(user)
         .set(query)
-        .where({ id: user.id })
+        .where({ uid: user.uid })
         .returning("*")
         .execute();
 
       return await this.findUserByintraId(intraID);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw errorHandler(
         err,
         "Failed to update user",
@@ -226,7 +225,7 @@ export class UserService {
         .createQueryBuilder()
         .update(user)
         .set({ refreshToken: superHashedToken })
-        .where({ id: user.id })
+        .where({ uid: user.uid })
         .returning("*")
         .execute();
     } catch (err) {
@@ -264,7 +263,7 @@ export class UserService {
         .createQueryBuilder()
         .update(user)
         .set({ tfaSecret: secret })
-        .where({ id: user.id })
+        .where({ uid: user.uid })
         .returning("*")
         .execute();
     } catch (err) {
@@ -295,7 +294,7 @@ export class UserService {
         .createQueryBuilder()
         .update(user)
         .set({ isTfaEnabled: !user.isTfaEnabled })
-        .where({ id: user.id })
+        .where({ uid: user.uid })
         .returning("*")
         .execute();
     } catch (err) {

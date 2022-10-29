@@ -27,8 +27,8 @@ export class FriendlistController {
       );
 
       return friendsList;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -41,8 +41,8 @@ export class FriendlistController {
       );
 
       return getFriendResp;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -55,8 +55,8 @@ export class FriendlistController {
         await this.friendlistService.isFriend(username, friendname);
 
       return isFriendsWithProfile;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -70,8 +70,8 @@ export class FriendlistController {
       );
 
       return addFriendResp;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -86,8 +86,8 @@ export class FriendlistController {
       );
 
       return removeFriendResp;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 }

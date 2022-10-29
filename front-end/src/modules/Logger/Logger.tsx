@@ -31,6 +31,16 @@ const Logger = (
     const messageFormat = `color: white; margin-bottom: 6px`;
     const fromFormat = `color: rgba(255,255,255,0.25); margin-bottom: 6px`;
 
+    if (obj === null) {
+        console.log(
+            `%c${emoij}%c ${message}\n%cFrom: ${from}`,
+            emoijFormat,
+            messageFormat,
+            fromFormat
+        );
+        return;
+    }
+
     console.log(
         `%c${emoij}%c ${message}\n%cFrom: ${from}`,
         emoijFormat,

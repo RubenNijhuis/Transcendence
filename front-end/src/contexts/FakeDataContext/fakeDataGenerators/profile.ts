@@ -73,14 +73,12 @@ const generateProfile = (amount: number): ProfileType[] => {
     const profileList: ProfileType[] = [];
 
     for (let i = 0; i < amount; i++) {
-        const username: string =
-            names[randomNum(0, names.length - 1)];
+        const username: string = names[randomNum(0, names.length - 1)];
         const rank: number = i + 1;
 
         const color: string = "#1e1e1e";
 
-        const randomWidth: number =
-            Math.ceil(randomNum(100, 1000) / 100) * 100;
+        const randomWidth: number = Math.ceil(randomNum(100, 1000) / 100) * 100;
         const randomHeight: number =
             Math.ceil(randomNum(100, 1000) / 100) * 100;
 
@@ -103,7 +101,7 @@ const generateProfile = (amount: number): ProfileType[] => {
             banner_url,
             color,
             rank,
-            id: (i + 1).toString(),
+            uid: (i + 1).toString(),
             img_url,
             wins,
             losses
