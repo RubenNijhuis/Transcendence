@@ -1,7 +1,7 @@
 /**
  * Capitalizes the first letter of any string
- * @param str 
- * @returns 
+ * @param str
+ * @returns
  */
 const capitalizeString = (str: string): string => {
     const firstLetterCap = str.charAt(0).toUpperCase();
@@ -11,4 +11,4 @@ const capitalizeString = (str: string): string => {
     return capitalizedWord;
 };
 
-export { capitalizeString };
+export default capitalizeString;

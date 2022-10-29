@@ -1,9 +1,15 @@
 import { useRef, useEffect, useState } from "react";
-import { io } from "socket.io-client";
 
 // Styling
 import styled from "styled-components";
+
+// Socket
 import { useSocket } from "../../contexts/SocketContext";
+import { SocketType } from "../../types/socket";
+import SocketRoutes from "../../config/SocketRoutes";
+
+// Debug
+import Logger from "../../modules/Logger";
 
 ////////////////////////////////////////////////////////////
 
@@ -37,14 +43,29 @@ const Canvas = ({ canvasRef }: ICanvas): JSX.Element => {
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
-        const emitRet = socket.emit("healthCheck", "pee pee poo poo");
-        console.log("emit ret: ", emitRet);
+        setSocketType(SocketType.Game);
 
-        const ret = socket.on("healthCheck", (arg: any) => {
-            setSocketResponse(arg as string);
-        });
+        const emitRet = socket.emit(
+            SocketRoutes.healthCheck(),
+            "pee pee poo poo"
+        );
+        Logger(
+            "DEBUG",
+            "Canvas",
+            `Socket.emit('${SocketRoutes.healthCheck()}') return`,
+            emitRet
+        );
 
-        console.log("socket.on ret: ", ret);
+        const ret = socket.on(SocketRoutes.healthCheck(), (arg: string) =>
+            setSocketResponse(arg)
+        );
+
+        Logger(
+            "DEBUG",
+            "Canvas",
+            `Socket.on('${SocketRoutes.healthCheck()}') return`,
+            ret
+        );
     });
 
     useEffect(() => {

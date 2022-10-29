@@ -3,7 +3,7 @@ import { MatchRecord } from "../../../types/game";
 import { ProfileType } from "../../../types/profile";
 
 // Random int
-import randomNum from "../../../utils/randomNum";
+import randomNum from "../../../utils/numbers/randomIntFromRange";
 
 // Random player
 import { generateProfile } from "./profile";

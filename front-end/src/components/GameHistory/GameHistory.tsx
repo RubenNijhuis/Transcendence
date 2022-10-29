@@ -23,7 +23,7 @@ import Asset from "../Asset";
 import Button from "../Button";
 
 // Utils
-import { paginateArray } from "../../utils/paginateArray";
+import { paginateArray } from "../../utils/array";
 
 ////////////////////////////////////////////////////////////
 

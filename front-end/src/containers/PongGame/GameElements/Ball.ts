@@ -1,4 +1,4 @@
-import randomNum from "../../../utils/randomNum";
+import randomNum from "../../../utils/numbers/randomIntFromRange";
 
 class Ball {
     positionX: number;

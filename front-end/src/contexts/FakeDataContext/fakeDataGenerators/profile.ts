@@ -1,7 +1,7 @@
 // Random img
 import { get_img_url } from "./utils";
 // Random int
-import randomNum from "../../../utils/randomNum";
+import randomNum from "../../../utils/numbers/randomIntFromRange";
 
 // Types
 import { ProfileType } from "../../../types/profile";

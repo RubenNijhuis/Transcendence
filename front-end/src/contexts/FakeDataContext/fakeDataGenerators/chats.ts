@@ -2,7 +2,7 @@
 import { get_img_url } from "./utils";
 
 // Random int
-import randomNum from "../../../utils/randomNum";
+import randomNum from "../../../utils/numbers/randomIntFromRange";
 
 // Types
 import { ProfileType } from "../../../types/profile";
@@ -19,7 +19,7 @@ import {
 
 // Utils
 import { generateProfile } from "./profile";
-import { randomSliceOfArray } from "../../../utils/arrayManipulation";
+import { randomSliceOfArray } from "../../../utils/array";
 
 ///////////////////////////////////////////////////////////
 

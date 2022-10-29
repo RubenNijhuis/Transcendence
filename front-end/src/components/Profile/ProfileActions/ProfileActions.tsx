@@ -11,7 +11,7 @@ import { addFriend, removeFriend, getIsFriend } from "../../../proxies/friend";
 import { ProfileType } from "../../../types/profile";
 
 // Utils
-import randomNum from "../../../utils/randomNum";
+import randomNum from "../../../utils/numbers/randomIntFromRange";
 
 // UI
 import Button from "../../Button";

@@ -1,10 +1,13 @@
 // Routing
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-
 import PageRoutes from "../../config/PageRoutes";
+
+// Guards
+import { AuthGuard } from "../RouteGuards";
 
 // Public Pages
 import Home from "../../pages/Home";
+import Login from "../../pages/Login";
 
 // Private pages
 import ProfilePage from "../../pages/Profile";
@@ -12,9 +15,6 @@ import ChatPage from "../../pages/Chat";
 import Leaderboard from "../../pages/Leaderboard";
 import Pong from "../../pages/Pong";
 import SelectGame from "../../pages/SelectGame";
-
-// Authentication
-import { AuthGuard } from "../RouteGuards";
 
 // 404
 import NotFound from "../../pages/NotFound";
@@ -26,8 +26,9 @@ const Router = (): JSX.Element => (
         <Routes>
             {/* Public routes */}
             <Route path={PageRoutes.home} element={<Home />} />
+            <Route path={PageRoutes.login} element={<Login />} />
 
-            {/* Pong debugging */}
+            {/* TODO: behind authguard */}
             <Route path={PageRoutes.pong} element={<Pong />} />
 
             {/* Routes that have to pass through authentication to be loaded */}

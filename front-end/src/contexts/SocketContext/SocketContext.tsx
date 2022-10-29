@@ -14,12 +14,12 @@ import { SocketType } from "../../types/socket";
 
 interface SocketContextType {
     socket: any;
+
     socketType: SocketType;
+    setSocketType: any;
 
     roomId: string;
     setRoomId: React.Dispatch<React.SetStateAction<string>>;
-
-    setSocketType: any;
 }
 
 const SocketContext = createContext<SocketContextType>(null!);
@@ -57,6 +57,8 @@ const SocketProvider = ({
         </SocketContext.Provider>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export { useSocket };
 export default SocketProvider;

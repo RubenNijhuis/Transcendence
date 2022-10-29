@@ -16,42 +16,20 @@ import { useUser } from "../../contexts/UserContext";
 import { locations } from "./NavBar.config";
 import PageRoutes from "../../config/PageRoutes";
 
-// Auth
-import { getLoginURL } from "../../proxies/auth";
-
-// Store
-import { setItem } from "../../modules/Store";
-import StoreId from "../../config/StoreId";
-
 ////////////////////////////////////////////////////////////
 
-const CTAButton = ({ authStatus }: { authStatus: boolean }): JSX.Element => {
-    const toLoginPage = async () => {
-        try {
-            const url = await getLoginURL();
-            setItem(StoreId.loginProcess, true);
-            window.location.assign(url);
-        } catch (err) {
-            console.error(err);
-        }
-    };
+interface ICTAButton {
+    authStatus: boolean;
+}
+
+const CTAButton = ({ authStatus }: ICTAButton): JSX.Element => {
+    const url = authStatus ? PageRoutes.selectGame : PageRoutes.login;
+    const text = authStatus ? "Play pong" : "Login";
 
     return (
-        <>
-            {authStatus ? (
-                <Link className="play-button" to={PageRoutes.selectGame}>
-                    <Button theme={"light"}>Play Pong</Button>
-                </Link>
-            ) : (
-                <Button
-                    className="login-button"
-                    theme={"light"}
-                    onClick={toLoginPage}
-                >
-                    Login
-                </Button>
-            )}
-        </>
+        <Link className="play-button" to={url}>
+            <Button theme={"light"}>{text}</Button>
+        </Link>
     );
 };
 

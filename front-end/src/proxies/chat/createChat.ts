@@ -5,7 +5,6 @@ import ApiRoutes from "../../config/ApiRoutes";
 // Types
 import { GroupChat } from "../../types/chat";
 import { ProfileType } from "../../types/profile";
-import { AxiosRequestConfig } from "axios";
 
 ////////////////////////////////////////////////////////////
 

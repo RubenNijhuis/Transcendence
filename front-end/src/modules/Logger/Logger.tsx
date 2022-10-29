@@ -1,4 +1,5 @@
-import { formatObjectToString, logTypes, formatConfig } from "./Logger.config";
+import { logTypes } from "./Logger.config";
+import { formatConfig } from "./Logger.bl";
 
 /**
  * Logs a stylized console message
@@ -24,20 +25,18 @@ const Logger = (
     }
 
     const { emoij, color } = logTypes[type];
-    const formattedObj: string = formatObjectToString(obj);
 
     // Output the message
     const emoijFormat = `background-color: ${color}; font-size: 18px; border-radius: 2px; padding: 0 2px;`;
     const messageFormat = `color: white; margin-bottom: 6px`;
     const fromFormat = `color: rgba(255,255,255,0.25); margin-bottom: 6px`;
-    const objectFormat = `color: rgb(230,230,230);`;
 
     console.log(
-        `%c${emoij}%c ${message}\n%cFrom: ${from}\n%c${formattedObj}`,
+        `%c${emoij}%c ${message}\n%cFrom: ${from}`,
         emoijFormat,
         messageFormat,
         fromFormat,
-        objectFormat
+        obj
     );
 };
 

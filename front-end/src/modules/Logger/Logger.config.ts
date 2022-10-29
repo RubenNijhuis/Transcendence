@@ -6,14 +6,6 @@ interface LoggableType {
     };
 }
 
-const formatObjectToString = (obj: any) =>
-    JSON.stringify(obj, null, 4).replace(/"/g, "");
-
-const formatConfig = {
-    typeError: (type: string) =>
-        `Logger\nType of ${type} was given but doesn't exist in the config`
-};
-
 /**
  * Config this to the types you want for your dev env
  */
@@ -40,5 +32,7 @@ const logTypes: LoggableType = {
     }
 };
 
+///////////////////////////////////////////////////////////
+
 export type { LoggableType };
-export { logTypes, formatObjectToString, formatConfig };
+export { logTypes };

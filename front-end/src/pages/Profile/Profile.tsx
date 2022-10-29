@@ -11,7 +11,6 @@ import GameHistory from "../../components/GameHistory";
 
 // Profile components
 import ProfileDisplay from "../../components/Profile/ProfileDisplay";
-import ProfileActions from "../../components/Profile/ProfileActions";
 
 // Authentication
 import { useAuth } from "../../contexts/AuthContext";
@@ -27,7 +26,7 @@ import { useFakeData } from "../../contexts/FakeDataContext";
 // API
 import { getProfileByUsername } from "../../proxies/profile";
 import { getFriendsByUsername } from "../../proxies/friend/getFriendsByUsername";
-import { getValueFromUrl } from "../../utils/getValueFromUrl";
+import { getValueFromUrl } from "../../utils/string";
 
 // Store
 import { getItem, setItem } from "../../modules/Store";

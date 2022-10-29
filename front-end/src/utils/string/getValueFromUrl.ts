@@ -28,4 +28,4 @@ const getValueFromUrl = (inputString: string, valueName: string): string => {
     return returnVal;
 };
 
-export { getValueFromUrl };
+export default getValueFromUrl;
