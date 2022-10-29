@@ -8,9 +8,7 @@ import { useUser } from "../UserContext";
 import { GroupChat } from "../../types/chat";
 
 // Generators DEBUG
-import {
-    generateGroupChats,
-} from "../FakeDataContext/fakeDataGenerators";
+import { generateGroupChats } from "../FakeDataContext/fakeDataGenerators";
 
 // Business logic
 import {

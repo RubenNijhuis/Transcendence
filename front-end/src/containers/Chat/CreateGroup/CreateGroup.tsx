@@ -7,7 +7,7 @@ import { useModal } from "../../../contexts/ModalContext";
 import { useUser } from "../../../contexts/UserContext";
 
 // Types
-import { ProfileType } from "../../../types/profile";
+import { ProfileID, ProfileType } from "../../../types/profile";
 
 // UI
 import Button from "../../../components/Button";
@@ -48,7 +48,7 @@ const CreateGroupChat = ({
         }
     };
 
-    const checkIfProfileIsSelected = (id: number): boolean => {
+    const checkIfProfileIsSelected = (id: string): boolean => {
         let foundInSelectedFriends: boolean = false;
 
         foundInSelectedFriends =

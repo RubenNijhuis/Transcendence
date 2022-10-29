@@ -14,18 +14,19 @@ const ApiRoutes = {
     createUser: () => `/user/setUser`,
     getUserByAccessToken: () => `/auth/getUserFromAccessToken`,
     // User ////////////////////////////////////////////////////
-    
+
     // Friend //////////////////////////////////////////////////
-    getFriendsByUsername: (username: string) => `/friends/getfriends?username=${username}`,
+    getFriendsByUsername: (username: string) =>
+        `/friends/getfriends?username=${username}`,
     getFriend: () => `/friends/getfriend`,
     addFriend: () => `/friends/addFriend`,
     removeFriend: () => `/friends/removeFriend`,
     getIsFriend: () => `/friends/isFriend`,
     // Friend //////////////////////////////////////////////////
-    
+
     // Profile /////////////////////////////////////////////////
     getProfileByUsername: (username: string) => `/user/${username}`,
-    
+
     getProfileImageByUsername: (username: string) =>
         `/user/get-img/profile/${username}`,
     getProfileBannerByUsername: (username: string) =>
@@ -51,6 +52,12 @@ const ApiRoutes = {
     confirmLogin: (code: string) => `/auth/confirm?token=${code}`,
     refreshAuthToken: () => `/auth/refresh`,
     // Authentication //////////////////////////////////////////
+
+    // TFAuthentication //////////////////////////////////////////
+    turnOnTFA: () => `/user/enable2fa`,
+    getqrTFA: () => `/tfa/google2fa`,
+    confirmTFA: () => `/tfa/google2fa/authenticate`
+    // TFAuthentication //////////////////////////////////////////
 };
 
 export default ApiRoutes;

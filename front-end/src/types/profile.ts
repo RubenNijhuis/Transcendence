@@ -1,5 +1,5 @@
 // Just for semantics
-type ProfileID = number;
+type ProfileID = string;
 
 // Global profile interface
 interface ProfileType {

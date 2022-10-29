@@ -15,6 +15,7 @@ import ChatPage from "../../pages/Chat";
 import Leaderboard from "../../pages/Leaderboard";
 import Pong from "../../pages/Pong";
 import SelectGame from "../../pages/SelectGame";
+import SettingsPage from "../../pages/Settings";
 
 // 404
 import NotFound from "../../pages/NotFound";
@@ -37,6 +38,8 @@ const Router = (): JSX.Element => (
                 <Route path={PageRoutes.profile} element={<ProfilePage />}>
                     <Route path=":profileName" element={<ProfilePage />} />
                 </Route>
+
+                <Route path={PageRoutes.settings} element={<SettingsPage/>}/>
 
                 {/* Regular private routes */}
                 <Route path={PageRoutes.selectGame} element={<SelectGame />} />

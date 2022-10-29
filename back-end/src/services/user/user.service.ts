@@ -93,6 +93,15 @@ export class UserService {
     }
   }
 
+  async findUsersByIdNoFilter(id: string): Promise<User> {
+    try {
+      const ret: User = await this.userRepository.findOne({ where: { id } });
+      return ret;
+    } catch (err: any) {
+      throw err;
+    }
+  }
+
   async findUserByintraId(intraId: string): Promise<User> {
     try {
       const returnedUser: User = await this.userRepository.findOne({
@@ -245,11 +254,11 @@ export class UserService {
   // als ze iets anders doen, graag vermelden in de functie naam, anders eentje deleten
   // thanks :) - zeno
   async update2faSecret(
-    userDto: UsernameDto,
+    intraID: string,
     secret: string
   ): Promise<UpdateResult> {
     try {
-      const user: User = await this.findUserByUsername(userDto.username);
+      const user: User = await this.findUsersByIdNoFilter(intraID);
 
       return await this.userRepository
         .createQueryBuilder()
@@ -277,14 +286,15 @@ export class UserService {
   // }
 
   // FUNCTION IS NOT YET USED
-  async setTfaOption(username: string, option: boolean): Promise<UpdateResult> {
+  async setTfaOption(uid: string): Promise<UpdateResult> {
     try {
-      const user: User = await this.findUserByUsername(username);
+      const user: User = await this.findUsersByIdNoFilter(uid);
 
+      //console.log(user.isTfaEnabled, " ", !user.isTfaEnabled);
       return await this.userRepository
         .createQueryBuilder()
         .update(user)
-        .set({ isTfaEnabled: option })
+        .set({ isTfaEnabled: !user.isTfaEnabled })
         .where({ id: user.id })
         .returning("*")
         .execute();
