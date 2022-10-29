@@ -12,14 +12,6 @@ import {
 ///////////////////////////////////////////////////////////
 
 const Container = styled.div`
-    border-radius: ${largeRadius};
-    padding: calc(${magicNum} / 2);
-    background-color: ${mainColor};
-
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: ${magicNum};
-
     .heading {
         color: ${lightTextColor};
     }

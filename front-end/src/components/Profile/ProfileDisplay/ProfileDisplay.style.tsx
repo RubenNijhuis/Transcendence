@@ -13,7 +13,6 @@ const Container = styled.div`
     position: relative;
 
     padding: calc(${magicNum} / 2);
-    padding-bottom: 0;
     margin-bottom: calc(${magicNum});
     
     border-radius: ${largeRadius};
@@ -30,17 +29,6 @@ const Container = styled.div`
 
         &__container {
             position: relative;
-        }
-
-        img {
-            transition: filter 0.35s ease-in-out;
-            filter: blur(8px);
-        }
-
-        &:hover {
-            img {
-                filter: blur(0px);
-            }
         }
     }
 

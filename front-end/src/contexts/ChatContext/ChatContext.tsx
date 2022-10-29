@@ -61,6 +61,7 @@ const ChatProvider = ({
 
     useEffect(() => {
         if (!user) return;
+        if (!profiles) return;
 
         const chatAggregator = async () => {
             // TODO: Get from api //////////////////////////////////////

@@ -14,6 +14,7 @@ import {
 
 // UI
 import { Container, SelectTypeIcon, SelectionBox } from "./ChatInput.style";
+import Asset from "../../../components/Asset";
 
 ////////////////////////////////////////////////////////////
 
@@ -123,7 +124,7 @@ const PictureMessageInput = ({
                 className="img-preview"
                 style={{ maxWidth: "100%", overflow: "hidden" }}
             >
-                {content.url && <img src={content.url} alt={content.url} />}
+                {content.url && <Asset url={content.url} alt={content.alt} />}
             </div>
             <div className="picture-input">
                 <label>Url</label>

@@ -3,7 +3,7 @@ type ProfileID = number;
 
 // Global profile interface
 interface ProfileType {
-    uid: ProfileID;
+    id: ProfileID;
 
     username: string;
 
@@ -15,9 +15,6 @@ interface ProfileType {
     rank: number;
     wins: number;
     losses: number;
-
-    friends: ProfileType[];
-    blocked: ProfileType[];
 }
 
 export type { ProfileType, ProfileID };

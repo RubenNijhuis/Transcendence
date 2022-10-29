@@ -1,3 +1,5 @@
 import { addFriend } from "./addFriend";
+import { getIsFriend } from "./getIsFriend";
+import { removeFriend } from "./removeFriend";
 
-export { addFriend };
+export { addFriend, getIsFriend, removeFriend };

@@ -4,6 +4,7 @@ import { API } from "../instances/apiInstance";
 
 // Types
 import { AuthTokenType } from "../../types/request";
+import { AxiosRequestConfig } from "axios";
 
 ////////////////////////////////////////////////////////////
 
@@ -16,7 +17,7 @@ const refreshAuthToken = async (
 ): Promise<AuthTokenType> => {
     try {
         const route = ApiRoutes.refreshAuthToken();
-        const config = {
+        const config: AxiosRequestConfig = {
             headers: {
                 Authorization: `Bearer ${refreshToken}`
             }

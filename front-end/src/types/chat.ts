@@ -36,7 +36,7 @@ interface Message {
     timestamp: string;
     senderID: ProfileID;
     sender: ProfileType;
-    uid: number;
+    id: number;
     group_id: number;
     read_by: ProfileType[];
 }

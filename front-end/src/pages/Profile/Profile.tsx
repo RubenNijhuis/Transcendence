@@ -1,5 +1,5 @@
 // React
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 // Url params
 import { useParams } from "react-router-dom";
@@ -25,7 +25,8 @@ import { ProfileType } from "../../types/profile";
 import { useFakeData } from "../../contexts/FakeDataContext";
 
 // API
-import { getProfileByUsername } from "../../proxies/user";
+import { getProfileByUsername } from "../../proxies/profile";
+import { getFriendsByUsername } from "../../proxies/friend/getFriendsByUsername";
 import { getValueFromUrl } from "../../utils/getValueFromUrl";
 
 // Store
@@ -35,11 +36,17 @@ import StoreId from "../../config/StoreId";
 // Modal Components
 import { useModal } from "../../contexts/ModalContext";
 import CreateAccount from "../../containers/CreateAccount/CreateAccount";
+import FriendList from "../../components/FriendsList";
+
+// UI
+import { ProfileDetailsContainer } from "./Profile.style";
+import { ImageSelect } from "../../types/request";
 
 ////////////////////////////////////////////////////////////
 
 const ProfilePage = (): JSX.Element => {
     const [selectedProfile, setSelectedProfile] = useState<ProfileType>(null!);
+    const [profileFriends, setProfileFriends] = useState<ProfileType[]>(null!);
 
     ////////////////////////////////////////////////////////////
 
@@ -89,40 +96,57 @@ const ProfilePage = (): JSX.Element => {
          */
         if (profileName !== undefined) {
             try {
-                const returnedProfile = await getProfileByUsername(profileName);
+                const imageSelect: ImageSelect = {
+                    profile: true,
+                    banner: true
+                };
+
+                const returnedProfile = await getProfileByUsername(
+                    profileName,
+                    imageSelect
+                );
+
                 setSelectedProfile(returnedProfile);
             } catch (err) {
                 console.error(err);
             }
+        } else {
+            /**
+             * If no profile is in the url we set
+             * the user as the profile
+             */
+            setSelectedProfile(user);
         }
-
-        /**
-         * If no profile is in the url we set
-         * the user as the profile
-         */
-        setSelectedProfile(user);
     };
 
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
-        const controller = new AbortController();
-        
-        /**
-         * If the user is in the login process we check if
-         * they still need to make an account. If that is
-         * the case we display the Create Account Modal
-         */
         const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
 
-        // I shouldn't have to check if the user is null but for some reason it's needed
         if (inLoginProcess === true) {
             handleLoginProcess();
             return;
         }
 
         handleSetProfile();
-    }, [user]);
+    }, [user, profileName]);
+
+    useEffect(() => {
+        if (!selectedProfile) return;
+
+        const getProfileFriends = async () => {
+            try {
+                const retrievedFriends = await getFriendsByUsername(
+                    selectedProfile.username
+                );
+                setProfileFriends(retrievedFriends);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        getProfileFriends();
+    }, [selectedProfile]);
 
     ////////////////////////////////////////////////////////////
 
@@ -134,13 +158,17 @@ const ProfilePage = (): JSX.Element => {
                         profile={selectedProfile}
                         matchHistory={matchHistory}
                     />
-                    {selectedProfile !== user && (
-                        <ProfileActions profile={selectedProfile} />
-                    )}
-                    <GameHistory
-                        player={selectedProfile}
-                        matches={matchHistory}
-                    />
+                    <ProfileDetailsContainer>
+                        {profileFriends && (
+                            <FriendList friends={profileFriends} />
+                        )}
+                        {matchHistory && (
+                            <GameHistory
+                                player={selectedProfile}
+                                matches={matchHistory}
+                            />
+                        )}
+                    </ProfileDetailsContainer>
                 </>
             ) : (
                 <Loader />

@@ -13,21 +13,23 @@ const ApiRoutes = {
     // User ////////////////////////////////////////////////////
     createUser: () => `/user/setUser`,
     getUserByAccessToken: () => `/auth/getUserFromAccessToken`,
-
+    // User ////////////////////////////////////////////////////
+    
+    // Friend //////////////////////////////////////////////////
+    getFriendsByUsername: (username: string) => `/friends/getfriends?username=${username}`,
+    getFriend: () => `/friends/getfriend`,
+    addFriend: () => `/friends/addFriend`,
+    removeFriend: () => `/friends/removeFriend`,
+    getIsFriend: () => `/friends/isFriend`,
+    // Friend //////////////////////////////////////////////////
+    
+    // Profile /////////////////////////////////////////////////
+    getProfileByUsername: (username: string) => `/user/${username}`,
+    
     getProfileImageByUsername: (username: string) =>
         `/user/get-img/profile/${username}`,
     getProfileBannerByUsername: (username: string) =>
         `/user/get-img/banner/${username}`,
-    // User ////////////////////////////////////////////////////
-
-    // Friend //////////////////////////////////////////////////
-    getFriends: (username: string) => `/friends?username=${username}`,
-    addFriend: () => `/friends/addFriend`,
-    isFriend: () => `/friends/isFriend`,
-    // Friend //////////////////////////////////////////////////
-
-    // Profile /////////////////////////////////////////////////
-    getProfileByUsername: (username: string) => `/user/${username}`,
     // Profile /////////////////////////////////////////////////
 
     // Account creation ////////////////////////////////////////
@@ -49,10 +51,6 @@ const ApiRoutes = {
     confirmLogin: (code: string) => `/auth/confirm?token=${code}`,
     refreshAuthToken: () => `/auth/refresh`,
     // Authentication //////////////////////////////////////////
-
-    // Websockets //////////////////////////////////////////////
-    socketRoute: () => `ws://localhost:8080/`
-    // Websockets //////////////////////////////////////////////
 };
 
 export default ApiRoutes;

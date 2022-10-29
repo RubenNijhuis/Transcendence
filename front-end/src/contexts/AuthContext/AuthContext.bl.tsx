@@ -41,8 +41,8 @@ const signOut = (): void => {
 };
 
 const redirectToHome = (): void => {
-    // if (window.location.pathname === PageRoutes.home) return;
-
+    if (window.location.pathname === PageRoutes.home) return;
+    console.log("Redirect to home")
     // window.location.assign(PageRoutes.home);
 };
 

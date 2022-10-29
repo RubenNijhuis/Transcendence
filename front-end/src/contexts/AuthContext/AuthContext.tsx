@@ -1,8 +1,8 @@
 // React stuff
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 // Store
-import { clearAll, getItem, setItem } from "../../modules/Store";
+import { getItem, setItem } from "../../modules/Store";
 import StoreId from "../../config/StoreId";
 
 // Types
@@ -44,8 +44,6 @@ const AuthProvider = ({
     children: React.ReactNode;
 }): JSX.Element => {
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
-    // const shouldRevalidateTokens = useRef(true);
-    
 
     ////////////////////////////////////////////////////////////
 
@@ -53,7 +51,11 @@ const AuthProvider = ({
 
     ////////////////////////////////////////////////////////////
 
-    // Auto-update logged in status if user exists
+    /**
+     * The authentication state will update
+     * when a user object exists. Here we
+     * set the site settings to logged in.
+     */
     useEffect(() => {
         if (!user) return;
 
@@ -62,18 +64,21 @@ const AuthProvider = ({
     }, [user]);
 
     /**
-     * Checks if there is still an auth token in the store.
-     * If there is still one we check it's validity and change
-     * the auth state accordingly.
-     * If the refresh token is also expired we ask the user
-     * to manually log in by redirecting them to home
+     * Here we check the auth token status.
      */
     useEffect(() => {
-        const runTokenRefresh = async () => {
-            // If the user is still loggin in it's best to not work with the tokens yet
+        const checkAuthTokenStatus = async () => {
+            /**
+             * If we are still in the login process we don't
+             * have to check token status/validity
+             */
             const isInLoginProcess = getItem<boolean>(StoreId.loginProcess);
             if (isInLoginProcess) return;
 
+            /**
+             * If the refresh token doesn't exist we redirect
+             * the user to a page where they cal log in
+             */
             const refreshToken = getItem<string>(StoreId.refreshToken);
             if (refreshToken === null) {
                 redirectToHome();
@@ -81,16 +86,13 @@ const AuthProvider = ({
             }
             
             try {
-                // if (shouldRevalidateTokens.current === false) return;
-
                 const { user } = await checkTokenValidity(refreshToken);
                 setUser(user);
-                // shouldRevalidateTokens.current = false;
             } catch (err) {
                 redirectToHome();
             }
         };
-        runTokenRefresh();
+        checkAuthTokenStatus();
     }, []);
 
     ////////////////////////////////////////////////////////////

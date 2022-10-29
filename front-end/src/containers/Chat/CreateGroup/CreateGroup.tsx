@@ -39,7 +39,7 @@ const CreateGroupChat = ({
     ////////////////////////////////////////////////////////////
 
     const toggleSelected = (friend: ProfileType): void => {
-        const isSelected: boolean = checkIfProfileIsSelected(friend.uid);
+        const isSelected: boolean = checkIfProfileIsSelected(friend.id);
 
         if (isSelected) {
             removeFriendFromSelected(friend);
@@ -48,12 +48,12 @@ const CreateGroupChat = ({
         }
     };
 
-    const checkIfProfileIsSelected = (uid: number): boolean => {
+    const checkIfProfileIsSelected = (id: number): boolean => {
         let foundInSelectedFriends: boolean = false;
 
         foundInSelectedFriends =
             selectedFriends.find((member) => {
-                return member.uid === uid;
+                return member.id === id;
             }) !== undefined;
 
         return foundInSelectedFriends;
@@ -64,7 +64,7 @@ const CreateGroupChat = ({
     const removeFriendFromSelected = (friendID: ProfileType): void => {
         setSelectedFriends((prevState) => {
             const filteredState = prevState.filter((friend) => {
-                return friend.uid !== friendID.uid;
+                return friend.id !== friendID.id;
             });
             return filteredState;
         });
@@ -96,14 +96,14 @@ const CreateGroupChat = ({
 
                 <ul className="select-friends__list">
                     {friends.map((friend) => {
-                        const { uid, img_url, username } = friend;
-                        const isSelected = checkIfProfileIsSelected(friend.uid);
+                        const { id, img_url, username } = friend;
+                        const isSelected = checkIfProfileIsSelected(friend.id);
                         const selectedClass = isSelected ? "selected" : "";
 
                         return (
                             <div
                                 className={`item ${selectedClass}`}
-                                key={uid}
+                                key={id}
                                 onClick={() => toggleSelected(friend)}
                             >
                                 <Asset

@@ -38,7 +38,7 @@ const GameHistory = ({ player, matches }: IGameHistory): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
-    const changePage = (amountPageChange: number): void => {
+    const handlePageChange = (amountPageChange: number): void => {
         if (
             selectedPage + amountPageChange !== -1 &&
             selectedPage + amountPageChange <= paginatedMatches.length - 1
@@ -51,55 +51,54 @@ const GameHistory = ({ player, matches }: IGameHistory): JSX.Element => {
 
     return (
         <Container>
-            <div className="left-col">
-                <Heading type={3}>Friends</Heading>
-            </div>
-            <div className="right-col">
-                <Heading type={3}>History</Heading>
-                <MatchList>
+            <Heading type={3}>History</Heading>
+            <MatchList>
+                <div>
+                    <Heading type={4}>Page {selectedPage}</Heading>
                     <div>
-                        <Heading type={4}>Page {selectedPage}</Heading>
-                        <div>
-                            <Button theme="dark" onClick={() => changePage(-1)}>
-                                👈
-                            </Button>
-                            <Button theme="dark" onClick={() => changePage(1)}>
-                                👉
-                            </Button>
-                        </div>
+                        <Button
+                            theme="dark"
+                            onClick={() => handlePageChange(-1)}
+                        >
+                            👈
+                        </Button>
+                        <Button
+                            theme="dark"
+                            onClick={() => handlePageChange(1)}
+                        >
+                            👉
+                        </Button>
                     </div>
-                    {paginatedMatches.map((matches, page) => {
-                        if (page === selectedPage) {
-                            return matches.map(({ player1, score }, count) => (
-                                <Match
-                                    key={count}
-                                    win={score.player1 < score.player2}
-                                >
-                                    <OpponentProfile>
-                                        <Asset
-                                            url={player1.img_url}
-                                            alt="player1"
-                                        />
-                                        <Link
-                                            to={`/profile/${player1.username}`}
-                                        >
-                                            <span>{player1.username}</span>
-                                        </Link>
-                                    </OpponentProfile>
-                                    <ScoreBoard>
-                                        <div>
-                                            <span>{score.player1}</span>
-                                            <span>—</span>
-                                            <span>{score.player2}</span>
-                                        </div>
-                                    </ScoreBoard>
-                                </Match>
-                            ));
-                        }
-                        return null;
-                    })}
-                </MatchList>
-            </div>
+                </div>
+                {paginatedMatches.map((matches, page) => {
+                    if (page === selectedPage) {
+                        return matches.map(({ player1, score }, count) => (
+                            <Match
+                                key={count}
+                                win={score.player1 < score.player2}
+                            >
+                                <OpponentProfile>
+                                    <Asset
+                                        url={player1.img_url}
+                                        alt="player1"
+                                    />
+                                    <Link to={`/profile/${player1.username}`}>
+                                        <span>{player1.username}</span>
+                                    </Link>
+                                </OpponentProfile>
+                                <ScoreBoard>
+                                    <div>
+                                        <span>{score.player1}</span>
+                                        <span>—</span>
+                                        <span>{score.player2}</span>
+                                    </div>
+                                </ScoreBoard>
+                            </Match>
+                        ));
+                    }
+                    return null;
+                })}
+            </MatchList>
         </Container>
     );
 };

@@ -5,7 +5,7 @@ import React, { createContext, useContext, useState } from "react";
 import { io } from "socket.io-client";
 
 // Api
-import ApiRoutes from "../../config/ApiRoutes";
+import SocketRoutes from "../../config/SocketRoutes";
 
 // Types
 import { SocketType } from "../../types/socket";
@@ -35,7 +35,7 @@ const SocketProvider = ({
 }): JSX.Element => {
     const [socketType, setSocketType] = useState<SocketType>(null!);
     const [roomId, setRoomId] = useState<string>(null!);
-    const socket = io(ApiRoutes.socketRoute());
+    const socket = io(SocketRoutes.baseUrl());
 
     ////////////////////////////////////////////////////////////
 

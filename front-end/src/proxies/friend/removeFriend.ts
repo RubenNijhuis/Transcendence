@@ -5,21 +5,21 @@ import ApiRoutes from "../../config/ApiRoutes";
 ////////////////////////////////////////////////////////////
 
 /**
- * Adds a friend to the user
- * @returns
+ * Removes a friend from a user
+ * @returns ?
  */
-const addFriend = async (
+const removeFriend = async (
     username: string,
     friendname: string
 ): Promise<any> => {
     try {
-        const route = ApiRoutes.addFriend();
+        const route = ApiRoutes.removeFriend();
         const body = {
             username,
             friendname
         };
-
-        const { data } = await API.post(route, body);
+        
+        const { data } = await API.post<any>(route, body);
 
         return Promise.resolve(data);
     } catch (err) {
@@ -29,4 +29,4 @@ const addFriend = async (
 
 ////////////////////////////////////////////////////////////
 
-export { addFriend };
+export { removeFriend };

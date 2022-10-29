@@ -95,22 +95,30 @@ export class AuthController {
         const hash = createHash("sha256")
           .update(tokens.refreshToken)
           .digest("hex");
-        // TODO: should be party of a custom library. angi: what do you mean???
+        // TODO: add this to some kind of encryption service
         const saltorounds: string =
           this.configService.get<string>("SALT_OR_ROUNDS");
         const numsalt: number = +saltorounds;
         const encrypted_token = await bcrypt.hash(hash, numsalt);
+
         await this.userService.createUser(intraID, encrypted_token);
+
         returnedPayload.shouldCreateUser = true;
       }
 
-      if (user && user.isInitialized === false)
-        returnedPayload.shouldCreateUser = true;
+      if (user) {
+        if (!user.isInitialized) returnedPayload.shouldCreateUser = true;
 
-      if (user && user.isInitialized) {
-        const intraIDDto = { intraID };
-        await this.userService.setRefreshToken(intraIDDto, tokens.refreshToken);
-        returnedPayload.profile = this.userService.filterUser(user);
+        if (user.isInitialized) {
+          const intraIDDto = { intraID };
+
+          await this.userService.setRefreshToken(
+            intraIDDto,
+            tokens.refreshToken
+          );
+
+          returnedPayload.profile = this.userService.filterUser(user);
+        }
       }
 
       return returnedPayload;

@@ -1,4 +1,4 @@
-const renderWithStrict = true;
-const debugDevBoxActive = false;
+const renderWithStrict = false;
+const debugDevBoxActive = true;
 
 export { renderWithStrict, debugDevBoxActive };

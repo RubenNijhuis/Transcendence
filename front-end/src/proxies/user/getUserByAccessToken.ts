@@ -2,7 +2,7 @@
 import ApiRoutes from "../../config/ApiRoutes";
 import { API } from "../instances/apiInstance";
 
-import { addImagesToProfile } from "./addImagesToProfile";
+import { addImagesToProfile } from "../profile/addImagesToProfile";
 
 // Types
 import { ProfileType } from "../../types/profile";
@@ -26,7 +26,10 @@ const getUserByAccessToken = async (
 
         const { data } = await API.get<ProfileType>(route, config);
 
-        const returnedUser = await addImagesToProfile(data);
+        const returnedUser = await addImagesToProfile(data, {
+            profile: true,
+            banner: true
+        });
 
         return Promise.resolve(returnedUser);
     } catch (err) {

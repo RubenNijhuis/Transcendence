@@ -1,5 +1,6 @@
 // Types
 import { ProfileType } from "../../types/profile";
+import { ImageSelect } from "../../types/request";
 
 // Proxies
 import { getProfileBannerByUsername } from "./getProfileBannerByUsername";
@@ -13,11 +14,16 @@ import { getProfileImageByUsername } from "./getProfileImageByUsername";
  * @returns
  */
 const addImagesToProfile = async (
-    profile: ProfileType
+    profile: ProfileType,
+    imageSelect: ImageSelect
 ): Promise<ProfileType> => {
     try {
-        profile.banner_url = await getProfileBannerByUsername(profile.username);
-        profile.img_url = await getProfileImageByUsername(profile.username);
+        // TODO: can this be done in a switch case?
+        if (imageSelect.profile)
+            profile.img_url = await getProfileImageByUsername(profile.username);
+        
+        if (imageSelect.banner)
+            profile.banner_url = await getProfileBannerByUsername(profile.username);
 
         return Promise.resolve(profile);
     } catch (err) {

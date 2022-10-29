@@ -7,16 +7,15 @@ import {
 
 ///////////////////////////////////////////////////////////
 
-const Container = styled.div<{ followsProfile: boolean }>`
+const Container = styled.div<{ isFriend: boolean }>`
     margin: auto;
     max-width: 75%;
-    margin-bottom: ${magicNum};
 
     display: flex;
     flex-direction: row;
     justify-content: space-around;
 
-    padding: calc(${magicNum} / 4) calc(${magicNum} / 2);
+    padding-bottom: calc(${magicNum} / 2);
 
     .status {
         display: flex;
@@ -42,7 +41,7 @@ const Container = styled.div<{ followsProfile: boolean }>`
         }
     }
 
-    button {
+    .button {
         height: calc(${magicNum} * 1.25);
         width: calc(${magicNum} * 3);
         padding: calc(${magicNum} / 4) calc(${magicNum} / 2);
@@ -62,9 +61,9 @@ const Container = styled.div<{ followsProfile: boolean }>`
         );
     }
 
-    ${({ followsProfile }) => {
-        if (!followsProfile) return;
-        return `button {
+    ${({ isFriend }) => {
+        if (!isFriend) return;
+        return `.button {
                         background-color: rgb(60,60,60);
                         border: solid rgb(100,100,100) white;
                         box-shadow: none;

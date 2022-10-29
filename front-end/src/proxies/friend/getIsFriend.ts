@@ -5,21 +5,21 @@ import ApiRoutes from "../../config/ApiRoutes";
 ////////////////////////////////////////////////////////////
 
 /**
- * Adds a friend to the user
- * @returns
+ * Checks if a friend is friends with another friend
+ * @returns boolean
  */
-const addFriend = async (
+const getIsFriend = async (
     username: string,
     friendname: string
-): Promise<any> => {
+): Promise<boolean> => {
     try {
-        const route = ApiRoutes.addFriend();
+        const route = ApiRoutes.getIsFriend();
         const body = {
             username,
             friendname
         };
 
-        const { data } = await API.post(route, body);
+        const { data } = await API.post<boolean>(route, body);
 
         return Promise.resolve(data);
     } catch (err) {
@@ -29,4 +29,4 @@ const addFriend = async (
 
 ////////////////////////////////////////////////////////////
 
-export { addFriend };
+export { getIsFriend };

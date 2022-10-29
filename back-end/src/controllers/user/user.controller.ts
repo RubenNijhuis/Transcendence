@@ -24,7 +24,7 @@ import UserRoutes from "src/configs/routes/globalRoutes.config";
 import { UsernameDto } from "src/dtos/auth/username.dto";
 import { SetTfaDto } from "src/dtos/auth/setTfa.dto";
 import { SetUserDto } from "src/dtos/user/set-user.dto"; // TODO: is this one still used?
-import { SeederAmountDto } from "src/dtos/seeder/custom-seeder.dto";
+
 
 // user functionalities
 import { UserService } from "src/services/user/user.service";
@@ -93,8 +93,8 @@ export class UsersController {
         return file.startsWith(`${intraId}.`);
       });
 
-      if (!files) {
-        imgPath += "standard.png"; // in case nothing has been uploaded, if it ever gets optional??
+      if (files.length === 0) {
+        imgPath += "standard.png"; // in case nothing has been uploaded, if it ever gets optional?? it is 😡
       } else {
         imgPath += files[0]; // always takes the first one since there should only be 1 (one) file per user
       }
@@ -106,9 +106,10 @@ export class UsersController {
   }
 
   @Get(UserRoutes.getUserOnName)
-  async findUsersById(@Res() res: Response, @Param() username: string) {
+  async findUsersById(@Param("username") username: string) {
     try {
       const user: User = await this.userService.findUserByUsername(username);
+
       return this.userService.filterUser(user);
     } catch (err) {
       throw err;
@@ -162,7 +163,7 @@ export class UsersController {
     @Req() req: Request,
     @UploadedFile() file: Express.Multer.File
   ) {
-    const path: string = "/app/upload/banner/";
+    const path = "/app/upload/banner/";
     const id: string = req.user["intraID"];
 
     deleteFiles(path, id, file.filename);
@@ -176,8 +177,8 @@ export class UsersController {
     @Req() req: Request,
     @UploadedFile() file: Express.Multer.File
   ) {
-    // remove left over files if any
-    const path: string = "/app/upload/profile/";
+    // Remove left over files
+    const path = "/app/upload/profile/";
     const id: string = req.user["intraID"];
 
     deleteFiles(path, id, file.filename);

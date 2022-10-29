@@ -35,7 +35,7 @@ const ChatTitle = ({ chat, isDmChat }: IChatTitle): JSX.Element => {
      * Therefore we can change the interface from 'Chat' to 'other user name'
      */
     const otherMember: ProfileType = chat.members
-        .filter((member) => member.uid !== user.uid)
+        .filter((member) => member.id !== user.id)
         .shift() as ProfileType;
 
     const chatTitle: string = (

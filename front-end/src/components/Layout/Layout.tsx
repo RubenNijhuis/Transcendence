@@ -1,6 +1,7 @@
 // UI
-import Footer from "../Footer";
+import Head from "../Head";
 import NavBar from "../Navbar";
+import Footer from "../Footer";
 
 // Debug dev box
 import DebugDevBox from "../../containers/DebugDevBox";
@@ -22,6 +23,7 @@ interface ILayout {
 const Layout = ({ children }: ILayout): JSX.Element => {
     return (
         <Container>
+            {/* <Head /> */}
             <NavBar />
             <Content>{children}</Content>
             <Footer />

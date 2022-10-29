@@ -5,6 +5,7 @@ import ApiRoutes from "../../config/ApiRoutes";
 // Types
 import { GroupChat } from "../../types/chat";
 import { ProfileType } from "../../types/profile";
+import { AxiosRequestConfig } from "axios";
 
 ////////////////////////////////////////////////////////////
 
@@ -22,16 +23,14 @@ const createChat = async (
 ): Promise<GroupChat[]> => {
     try {
         const route = ApiRoutes.createChat();
-        const config = {
-            data: {
-                owner,
-                name,
-                users
-            }
+        const body = {
+            owner,
+            name,
+            users
         };
 
-        const { data } = await API.post<GroupChat[]>(route, config);
-        
+        const { data } = await API.post<GroupChat[]>(route, body);
+
         return Promise.resolve(data);
     } catch (err) {
         return Promise.reject(err);

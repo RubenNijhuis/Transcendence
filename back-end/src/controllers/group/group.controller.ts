@@ -56,15 +56,15 @@ export class GroupController {
   }
 
   @Post("createGroup")
-  async createGroup(@Body() createGroupDto: CreateGroupDto) { 
+  async createGroup(@Body() createGroupDto: CreateGroupDto) {
     try {
-      const group : Group = await this.groupService.createGroup(createGroupDto);
-      const groupId : number = group.id;
-      const users : string[] = createGroupDto.users;
-      const owner : string = createGroupDto.owner
-      const EditMembersDto : EditMembersDto = { groupId, users, owner };
+      const group: Group = await this.groupService.createGroup(createGroupDto);
+      const groupId: number = group.id;
+      const users: string[] = createGroupDto.users;
+      const owner: string = createGroupDto.owner;
+      const EditMembersDto: EditMembersDto = { groupId, users, owner };
       await this.groupService.addMembers(EditMembersDto);
-      const addOwnerDto : EditOwnerDto = { groupId, owner };
+      const addOwnerDto: EditOwnerDto = { groupId, owner };
       await this.groupService.addOwner(addOwnerDto);
       return HttpStatus.OK;
     } catch (error) {

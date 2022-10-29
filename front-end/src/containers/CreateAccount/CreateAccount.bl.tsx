@@ -1,5 +1,6 @@
 // Proxies
-import { createUser, uploadImage } from "../../proxies/user";
+import { createUser } from "../../proxies/user";
+import { uploadImage } from "../../proxies/profile";
 
 // Types
 import { CreateUserParams } from "../../types/request";

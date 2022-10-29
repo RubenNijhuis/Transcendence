@@ -39,13 +39,19 @@ interface TokenValidityResponse {
     user: ProfileType;
 }
 
+interface ImageSelect {
+    profile: boolean;
+    banner: boolean;
+}
+
 export type {
     RequestErrorType,
     ConfirmLoginResponse,
     AuthTokenType,
     SignInResponse,
     CreateUserParams,
-    TokenValidityResponse
+    TokenValidityResponse,
+    ImageSelect
 };
 
 export { AuthStatusType };
