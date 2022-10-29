@@ -121,6 +121,7 @@ export class SeederService {
                 (randomIndex = this.randomNum(0, users.length))
               )
             ) {}
+            // eslint-disable-next-line prefer-const
             newFriend = await this.userServ.findUserByUsername(
               users[randomIndex].username
             );

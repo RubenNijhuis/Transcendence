@@ -29,7 +29,7 @@ export class GroupController {
   }
 
   @Get(":userId")
-  async getGroupsByUserId(@Param() userId: string) {
+  async getGroupsByUserId(@Param('userId') userId: string) {
     return await this.groupService.getGroupsByUserId(userId);
   }
 
