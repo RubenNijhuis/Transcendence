@@ -1,20 +1,16 @@
 // React
 import { useEffect, useState } from "react";
 
-// Url params
-import { useParams } from "react-router-dom";
-
 // UI
 import Layout from "../../components/Layout";
 import Loader from "../../components/Loader";
 import GameHistory from "../../components/GameHistory";
 
 // Profile components
-import ProfileDisplay from "../../components/Profile/ProfileDisplay";
+import { ProfileDisplay } from "../../components/Profile";
 
-// Authentication
+// Contexts
 import { useAuth } from "../../contexts/AuthContext";
-// User context
 import { useUser } from "../../contexts/UserContext";
 
 // Types
@@ -24,8 +20,9 @@ import { Profile, Request } from "../../types";
 import { useFakeData } from "../../contexts/FakeDataContext";
 
 // API
+import { useParams } from "react-router-dom";
 import { getProfileByUsername } from "../../proxies/profile";
-import { getFriendsByUsername } from "../../proxies/friend/getFriendsByUsername";
+import { getFriendsByUsername } from "../../proxies/friend";
 import { getValueFromUrl } from "../../utils/string";
 
 // Store
@@ -34,13 +31,12 @@ import StoreId from "../../config/StoreId";
 
 // Modal Components
 import { useModal } from "../../contexts/ModalContext";
-import CreateAccount from "../../containers/CreateAccount/CreateAccount";
+import CreateAccount from "../../containers/CreateAccount";
 import FriendList from "../../components/FriendsList";
 
 // UI
 import { ProfileDetailsContainer } from "./Profile.style";
-import Logger from "../../modules/Logger";
-import PageRoutes from "../../config/PageRoutes";
+import PageRoutes from "../../config/PageRoutes"; // WIll be removed
 
 ////////////////////////////////////////////////////////////
 
@@ -187,9 +183,11 @@ const ProfilePage = (): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
+    // if (!selectedProfile && )
+
     return (
         <Layout>
-            {selectedProfile ? (
+            {selectedProfile && (
                 <>
                     <ProfileDisplay
                         profile={selectedProfile}
@@ -207,8 +205,6 @@ const ProfilePage = (): JSX.Element => {
                         )}
                     </ProfileDetailsContainer>
                 </>
-            ) : (
-                <Loader />
             )}
         </Layout>
     );

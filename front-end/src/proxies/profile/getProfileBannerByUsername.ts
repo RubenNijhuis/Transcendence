@@ -1,9 +1,6 @@
 // API
-import { API } from "../instances/apiInstance";
+import { API, apiRequestConfig} from "../instances/apiInstance";
 import ApiRoutes from "../../config/ApiRoutes";
-
-// TODO: remove the config type
-import { AxiosRequestConfig } from "axios";
 
 // Image transform
 import { Buffer } from "buffer";
@@ -20,7 +17,7 @@ const getProfileBannerByUsername = async (
 ): Promise<string> => {
     try {
         const route = ApiRoutes.getProfileBannerByUsername(username);
-        const config: AxiosRequestConfig = {
+        const config: apiRequestConfig= {
             responseType: "arraybuffer"
         };
 

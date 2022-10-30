@@ -11,6 +11,8 @@ import {
 ////////////////////////////////////////////////////////////
 
 const Container = styled.div`
+    margin-bottom: calc((${magicNum} / 4) * -1);
+
     .stats {
         position: relative;
         z-index: 100;

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import {
+    backgroundColor,
     lightTextColor,
     magicNum,
     mainColor,
@@ -113,10 +114,35 @@ const NavLinksContainer = styled.ul`
         margin-right: calc(${magicNum} / 6);
 
         a {
+            position: relative;
             color: ${lightTextColor};
             font-size: 18px;
             font-weight: 600;
             text-decoration: none;
+
+            &::before, &:after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                border-radius: 100px;
+                background: ${mainColor}
+            }
+
+            &:after {
+                transition: width 300ms ease-in-out;
+                transition-delay: 0.1s;
+                width: 0%;
+                background: ${backgroundColor};
+            }
+
+            &:hover {
+                &:after {
+                    width: 100%;
+                }
+            }
 
             &:visited {
                 color: ${lightTextColor};

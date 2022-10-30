@@ -13,8 +13,8 @@ const Container = styled.div`
     position: relative;
 
     padding: calc(${magicNum} / 2);
-    margin-bottom: calc(${magicNum});
-    
+    margin-bottom: calc(${magicNum} / 2);
+
     border-radius: ${largeRadius};
     background-color: ${mainColor};
 
@@ -73,6 +73,19 @@ const Container = styled.div`
 
             text-align: center;
             text-shadow: 0px 0px 4px #000000;
+        }
+    }
+
+    .description {
+        color: ${lightTextColor};
+        max-width: calc(${magicNum} * 8);
+        margin: auto;
+        margin-bottom: calc(${magicNum});
+
+        text-align: center;
+
+        .heading {
+            color: ${lightTextColor};
         }
     }
 `;

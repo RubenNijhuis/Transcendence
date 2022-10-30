@@ -1,10 +1,9 @@
 // API config
 import ApiRoutes from "../../../config/ApiRoutes";
-import { API } from "../../instances/apiInstance";
+import { API, apiRequestConfig} from "../../instances/apiInstance";
 
 // Types
 import { Request } from "../../../types";
-import { AxiosRequestConfig } from "axios";
 
 ////////////////////////////////////////////////////////////
 
@@ -17,7 +16,7 @@ const refreshAuthToken = async (
 ): Promise<Request.AuthToken> => {
     try {
         const route = ApiRoutes.refreshAuthToken();
-        const config: AxiosRequestConfig = {
+        const config: apiRequestConfig= {
             headers: {
                 Authorization: `Bearer ${refreshToken}`
             }

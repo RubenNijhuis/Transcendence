@@ -1,4 +1,3 @@
-// TODO: split into seperate index.ts files
 import { confirmLogin } from "./login/confirmLogin";
 import { getLoginURL } from "./login/getLoginURL";
 

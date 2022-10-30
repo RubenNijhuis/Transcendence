@@ -8,14 +8,14 @@ import { io } from "socket.io-client";
 import SocketRoutes from "../../config/SocketRoutes";
 
 // Types
-import { SocketType } from "../../types/socket";
+import { Socket } from "../../types";
 
 ///////////////////////////////////////////////////////////
 
 interface SocketContextType {
     socket: any;
 
-    socketType: SocketType;
+    socketType: Socket.SocketType;
     setSocketType: any;
 
     roomId: string;
@@ -33,7 +33,7 @@ const SocketProvider = ({
 }: {
     children: React.ReactNode;
 }): JSX.Element => {
-    const [socketType, setSocketType] = useState<SocketType>(null!);
+    const [socketType, setSocketType] = useState<Socket.SocketType>(null!);
     const [roomId, setRoomId] = useState<string>(null!);
     const socket = io(SocketRoutes.baseUrl());
 

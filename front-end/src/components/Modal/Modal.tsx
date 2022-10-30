@@ -1,3 +1,7 @@
+// Icons
+import { GrFormClose } from "react-icons/gr";
+
+// Styling
 import {
     CloseButtonContainer,
     Container,
@@ -13,7 +17,9 @@ interface ICloseButton {
 const CloseButton = ({ setModalActive }: ICloseButton) => {
     return (
         <CloseButtonContainer onClick={() => setModalActive(false)}>
-            <span>Close</span>
+            <span>
+                <GrFormClose />
+            </span>
         </CloseButtonContainer>
     );
 };

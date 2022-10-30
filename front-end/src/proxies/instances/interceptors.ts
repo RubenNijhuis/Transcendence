@@ -11,7 +11,7 @@ import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
  */
 const SuccesRequestInterceptor = (
     request: AxiosRequestConfig
-): AxiosRequestConfig => {
+): AxiosRequestConfig=> {
     return request;
 };
 

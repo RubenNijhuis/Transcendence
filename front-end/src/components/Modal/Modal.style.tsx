@@ -52,6 +52,26 @@ const CloseButtonContainer = styled.div`
     &:hover {
         cursor: pointer;
     }
+
+    span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 100%;
+        height: 100%;
+
+        transition: transform ease-in-out 300ms;
+
+        &:hover {
+            transform: rotate(120deg);
+        }
+
+        svg {
+            width: 50%;
+            height: 50%;
+        }
+    }
 `;
 
 ///////////////////////////////////////////////////////////

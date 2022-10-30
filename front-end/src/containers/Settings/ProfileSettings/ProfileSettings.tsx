@@ -49,6 +49,12 @@ const ProfileSettings = () => {
             <Button theme="dark" onClick={renderTFAModal}>
                 Turn {tfaEnabled ? "off" : "on"} 2 factor authentication"
             </Button>
+            <span>Change profile picture</span>
+            <span>Change banner picture</span>
+            <span>Change description picture</span>
+            <span>Change color picture</span>
+            <span>Change blocked picture</span>
+            <span>Change friends picture</span>
         </section>
     );
 };

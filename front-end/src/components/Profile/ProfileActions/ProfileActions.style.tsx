@@ -8,7 +8,7 @@ import {
 ///////////////////////////////////////////////////////////
 
 const Container = styled.div<{ isFriend: boolean }>`
-    margin: auto;
+    margin: calc(${magicNum} / 2) auto;
     max-width: 75%;
 
     display: flex;

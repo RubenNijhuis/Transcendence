@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 // Socket
 import { useSocket } from "../../contexts/SocketContext";
-import { SocketType } from "../../types/socket";
+import { Socket } from "../../types";
 import SocketRoutes from "../../config/SocketRoutes";
 
 // Debug
@@ -43,7 +43,7 @@ const Canvas = ({ canvasRef }: ICanvas): JSX.Element => {
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
-        setSocketType(SocketType.Game);
+        setSocketType(Socket.SocketType.Game);
 
         const emitRet = socket.emit(
             SocketRoutes.healthCheck(),

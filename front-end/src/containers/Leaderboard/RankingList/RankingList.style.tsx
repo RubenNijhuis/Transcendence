@@ -65,7 +65,7 @@ const ProfileData = styled.div`
     }
 
     .profile-img {
-        border-radius: 1000px;
+        border-radius: ${smallRadius};
         width: calc(${magicNum});
         height: calc(${magicNum});
     }

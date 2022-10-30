@@ -140,12 +140,6 @@ const CreateChat = ({
         <CreateChatContainer>
             <div className="title">
                 <Heading type={2}>Create a new chat</Heading>
-                <div
-                    className="close-button"
-                    onClick={() => setModalActive(false)}
-                >
-                    <GrFormClose />
-                </div>
             </div>
             <div className="chat-interface">
                 {/* <CreateDMChat /> */}
@@ -168,7 +162,6 @@ const CreateGroup = (): JSX.Element => {
 
     /**
      * We set the modal component with its closing function
-     * TODO: create some kind of way for the closing function to be global
      */
     useEffect(() => {
         setModalElement(() => <CreateChat setModalActive={setModalActive} />);

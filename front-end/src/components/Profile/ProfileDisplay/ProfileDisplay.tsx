@@ -2,6 +2,8 @@
 import Heading from "../../Heading";
 import Asset from "../../Asset";
 import Crown from "../../Crown";
+
+// Profile components
 import ProfileStats from "../ProfileStats";
 import ProfileActions from "../ProfileActions";
 
@@ -45,8 +47,10 @@ const ProfileDisplay = ({
                 </div>
             </div>
             <ProfileStats player={profile} matches={matchHistory} />
-
-            <p className="descr">{description}</p>
+            <div className="description">
+                <Heading type={3}>About {username}</Heading>
+                <p>{description}</p>
+            </div>
             {!isUser && <ProfileActions profile={profile} />}
         </Container>
     );

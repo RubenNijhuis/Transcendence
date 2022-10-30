@@ -1,8 +1,9 @@
-// Connection types
-const enum SocketType {
-    WaitingRoom,
-    Game,
-    Chat
+namespace Socket {
+    export enum SocketType {
+        WaitingRoom,
+        Game,
+        Chat
+    }
 }
 
-export { SocketType };
+export default Socket;
