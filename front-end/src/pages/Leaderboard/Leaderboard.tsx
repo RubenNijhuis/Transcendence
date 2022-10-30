@@ -30,7 +30,6 @@ const Leaderboard = (): JSX.Element => {
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
-        console.log(leaderBoard);
         setLeaderboard(leaderBoard);
         // getLeaderboard().then(setLeaderboard).catch(console.log);
     }, []);
