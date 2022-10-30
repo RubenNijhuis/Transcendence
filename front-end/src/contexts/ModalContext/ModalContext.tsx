@@ -44,6 +44,7 @@ const ModalProvider = ({
     const value: ModalContextType = {
         modalOpen,
         setModalOpen,
+
         setModalElement
     };
 

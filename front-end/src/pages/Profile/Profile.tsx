@@ -40,6 +40,8 @@ import FriendList from "../../components/FriendsList";
 // UI
 import { ProfileDetailsContainer } from "./Profile.style";
 import { ImageSelect } from "../../types/request";
+import Logger from "../../modules/Logger";
+import PageRoutes from "../../config/PageRoutes";
 
 ////////////////////////////////////////////////////////////
 
@@ -71,6 +73,11 @@ const ProfilePage = (): JSX.Element => {
         const apiToken = getValueFromUrl(window.location.href, "code");
 
         try {
+            // TODO: setup should get 2fa
+            /**
+             * Option 1 - open 2fa modal
+             * Option 2 - reroute to other page and after that reroute to here and reGET user
+             */
             const { profile, shouldCreateUser } = await signIn(apiToken);
 
             if (profile) {
@@ -89,7 +96,9 @@ const ProfilePage = (): JSX.Element => {
     };
 
     const handleSetProfile = async () => {
+        // Bit of a forced reset but it is pretty harmless
         setModalOpen(false);
+
         /**
          * If there is a profile name in the url we
          * request that user and set it as the profile
@@ -107,31 +116,47 @@ const ProfilePage = (): JSX.Element => {
                 );
 
                 setSelectedProfile(returnedProfile);
+                return;
             } catch (err) {
                 console.error(err);
             }
-        } else {
-            /**
-             * If no profile is in the url we set
-             * the user as the profile
-             */
-            setSelectedProfile(user);
         }
+
+        setSelectedProfile(user);
     };
 
     ////////////////////////////////////////////////////////////
 
+    /**
+     * Setting profile/user effect
+     */
     useEffect(() => {
         const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
 
-        if (inLoginProcess === true) {
+        /**
+         * What I think is happening is that the localStore is too slow
+         * But the user state is very fast, so we don't only check for the store
+         * but also see if the user is still null
+         */
+
+        if (user === null && inLoginProcess) {
             handleLoginProcess();
             return;
         }
 
         handleSetProfile();
+
+        // Make util func
+        window.history.pushState(
+            {},
+            "http://localhost:8080", // TODO: get this from config
+            PageRoutes.profile
+        );
     }, [user, profileName]);
 
+    /**
+     * Retrieving friends effect
+     */
     useEffect(() => {
         if (!selectedProfile) return;
 

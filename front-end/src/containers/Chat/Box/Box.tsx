@@ -23,12 +23,10 @@ interface IChatTitle {
     isDmChat: boolean;
 }
 
-interface IChatBox {
-    chat: GroupChat;
-}
-
 const ChatTitle = ({ chat, isDmChat }: IChatTitle): JSX.Element => {
     const { user } = useUser();
+
+    ////////////////////////////////////////////////////////////
 
     /**
      * If the the amount of members is 2 it means it a DM
@@ -57,10 +55,16 @@ const ChatTitle = ({ chat, isDmChat }: IChatTitle): JSX.Element => {
     );
 };
 
-const ChatBox = ({ chat }: IChatBox): JSX.Element => {
-    const { user } = useUser();
+interface IChatBox {
+    chat: GroupChat;
+}
 
+const ChatBox = ({ chat }: IChatBox): JSX.Element => {
     const isDmChat = chat.members.length === 2;
+
+    ////////////////////////////////////////////////////////////
+
+    const { user } = useUser();
 
     ////////////////////////////////////////////////////////////
 
@@ -74,7 +78,7 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
                         key={count}
                         message={message}
                         isDm={isDmChat}
-                        fromUser={message.sender.username === user.username}
+                        fromUser={message.sender.uid === user.uid}
                     />
                 ))}
             </div>
@@ -82,5 +86,7 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
         </Container>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export default ChatBox;

@@ -1,10 +1,10 @@
 // React
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Style
 import {
     Container,
-    MatchList,
+    MatchListContainer,
     Match,
     OpponentProfile,
     ScoreBoard
@@ -27,6 +27,34 @@ import { paginateArray } from "../../utils/array";
 
 ////////////////////////////////////////////////////////////
 
+interface IMatchList {
+    matches: MatchRecord[];
+}
+
+const MatchList = ({ matches }: IMatchList) => {
+    return (
+        <ul>
+            {matches.map(({ player1, player2, score }, count) => (
+                <Match key={count} win={score.player1 < score.player2}>
+                    <OpponentProfile>
+                        <Asset url={player1.img_url} alt="player1" />
+                        <Link to={`/profile/${player1.username}`}>
+                            <span>{player1.username}</span>
+                        </Link>
+                    </OpponentProfile>
+                    <ScoreBoard>
+                        <div>
+                            <span>{score.player1}</span>
+                            <span>—</span>
+                            <span>{score.player2}</span>
+                        </div>
+                    </ScoreBoard>
+                </Match>
+            ))}
+        </ul>
+    );
+};
+
 interface IGameHistory {
     player: ProfileType;
     matches: MatchRecord[];
@@ -34,6 +62,10 @@ interface IGameHistory {
 
 const GameHistory = ({ player, matches }: IGameHistory): JSX.Element => {
     const [selectedPage, setSelectedPage] = useState<number>(0);
+    const [matchesPage, setMatchesPage] = useState<MatchRecord[]>(null!);
+
+    ////////////////////////////////////////////////////////////
+
     const paginatedMatches = paginateArray<MatchRecord>(matches, 8);
 
     ////////////////////////////////////////////////////////////
@@ -44,15 +76,22 @@ const GameHistory = ({ player, matches }: IGameHistory): JSX.Element => {
             selectedPage + amountPageChange <= paginatedMatches.length - 1
         ) {
             setSelectedPage((prev) => prev + amountPageChange);
+            setMatchesPage(paginatedMatches[selectedPage]);
         }
     };
+
+    ////////////////////////////////////////////////////////////
+
+    useEffect(() => {
+        setMatchesPage(paginatedMatches[0]);
+    }, [setMatchesPage]);
 
     ////////////////////////////////////////////////////////////
 
     return (
         <Container>
             <Heading type={3}>History</Heading>
-            <MatchList>
+            <MatchListContainer>
                 <div>
                     <Heading type={4}>Page {selectedPage}</Heading>
                     <div>
@@ -70,37 +109,12 @@ const GameHistory = ({ player, matches }: IGameHistory): JSX.Element => {
                         </Button>
                     </div>
                 </div>
-                {paginatedMatches.map((matches, page) => {
-                    if (page === selectedPage) {
-                        return matches.map(({ player1, score }, count) => (
-                            <Match
-                                key={count}
-                                win={score.player1 < score.player2}
-                            >
-                                <OpponentProfile>
-                                    <Asset
-                                        url={player1.img_url}
-                                        alt="player1"
-                                    />
-                                    <Link to={`/profile/${player1.username}`}>
-                                        <span>{player1.username}</span>
-                                    </Link>
-                                </OpponentProfile>
-                                <ScoreBoard>
-                                    <div>
-                                        <span>{score.player1}</span>
-                                        <span>—</span>
-                                        <span>{score.player2}</span>
-                                    </div>
-                                </ScoreBoard>
-                            </Match>
-                        ));
-                    }
-                    return null;
-                })}
-            </MatchList>
+                {matchesPage && <MatchList matches={matchesPage} />}
+            </MatchListContainer>
         </Container>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export default GameHistory;

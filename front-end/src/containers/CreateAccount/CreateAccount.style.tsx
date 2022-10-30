@@ -8,7 +8,7 @@ import {
 
 const StyledInput = styled.div`
     margin-bottom: calc(${magicNum} / 2);
-    padding: calc(${magicNum} / 4);
+    width: 100%;
 
     label {
         display: block;
@@ -38,6 +38,21 @@ const CreateForm = styled.div`
     border-radius: ${smallRadius};
     background-color: white;
 
+    .heading {
+        text-align: center;
+        margin: calc(${magicNum} / 2) 0;
+    }
+
+    .slide {
+        padding: calc(${magicNum} / 2);
+
+        &:last-child {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
     button {
         width: 100%;
     }
@@ -51,4 +66,4 @@ const ErrorPopup = styled.div`
     padding: calc(${magicNum} / 8);
 `;
 
-export {StyledInput, CreateForm, ErrorPopup};
+export { StyledInput, CreateForm, ErrorPopup };

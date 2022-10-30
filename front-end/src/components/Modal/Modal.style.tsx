@@ -1,5 +1,10 @@
 import styled from "styled-components";
-import { backgroundColor, lightTextColor, magicNum } from "../../styles/StylingConstants";
+import {
+    backgroundColor,
+    lightTextColor,
+    magicNum,
+    smallRadius
+} from "../../styles/StylingConstants";
 
 ///////////////////////////////////////////////////////////
 
@@ -17,11 +22,11 @@ const Container = styled.div`
     position: fixed;
     top: 0;
     left: 0;
-
-    padding: calc(${magicNum} * 2);
 `;
 
 const ElementContainer = styled.div`
+    border-radius: ${smallRadius};
+    overflow: hidden;
     background-color: ${backgroundColor};
 `;
 

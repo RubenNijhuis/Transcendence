@@ -30,8 +30,8 @@ interface IMemberList {
 const MemberList = ({ members }: IMemberList): JSX.Element => {
     return (
         <div>
-            {members.map(({ img_url, username }, count) => (
-                <div className="profile" key={count}>
+            {members.map(({ img_url, username, uid }) => (
+                <div className="profile" key={uid}>
                     <Asset url={img_url} alt="profile" />
                     <span>{username}</span>
                 </div>
@@ -124,7 +124,7 @@ const DirectMessageList = ({
     return (
         <ul className="list">
             {selectedChatList &&
-                selectedChatList.map(({ members, internal_id }, count) => {
+                selectedChatList.map(({ members, internal_id }) => {
                     const otherMembers: ProfileType[] = members.filter(
                         (member) => member.username !== user!.username
                     );
@@ -133,8 +133,8 @@ const DirectMessageList = ({
 
                     return (
                         <DirectMessageEntry
-                            key={count}
-                            onClick={() => handleChatSelection(count)}
+                            key={internal_id}
+                            onClick={() => handleChatSelection(internal_id)}
                             active={isActive}
                         >
                             <MemberList members={otherMembers} />
@@ -183,5 +183,7 @@ const ChatSelector = ({
         </Container>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export default ChatSelector;

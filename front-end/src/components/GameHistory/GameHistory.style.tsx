@@ -17,7 +17,7 @@ const Container = styled.div`
     }
 `;
 
-const MatchList = styled.div`
+const MatchListContainer = styled.div`
     display: flex;
 
     border-radius: ${smallRadius};
@@ -80,4 +80,4 @@ const ScoreBoard = styled.div`
 
 ///////////////////////////////////////////////////////////
 
-export { Container, MatchList, Match, OpponentProfile, ScoreBoard };
+export { Container, MatchListContainer, Match, OpponentProfile, ScoreBoard };

@@ -41,8 +41,8 @@ const FriendList = ({ friends }: IFriendList) => {
         <Container>
             <Heading type={3}>Friends</Heading>
             <ul className="friends-list">
-                {friends.map((friend, count) => (
-                    <FriendEntry friend={friend} key={count} />
+                {friends.map((friend) => (
+                    <FriendEntry friend={friend} key={friend.uid} />
                 ))}
             </ul>
         </Container>

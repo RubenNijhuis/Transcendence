@@ -47,8 +47,8 @@ const RankingList = ({ rankings }: IRankingList): JSX.Element => {
 
     return (
         <EntryList>
-            {filteredRankingList.map((profile, count) => (
-                <RankEntry profile={profile} key={count} />
+            {filteredRankingList.map((profile) => (
+                <RankEntry profile={profile} key={profile.uid} />
             ))}
         </EntryList>
     );

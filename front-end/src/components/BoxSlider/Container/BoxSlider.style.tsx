@@ -1,15 +1,13 @@
 import styled from "styled-components";
-import { magicNum, smallRadius } from "../../../styles/StylingConstants";
+import { lightTextColor, magicNum, smallRadius } from "../../../styles/StylingConstants";
 
 const Container = styled.div`
-    border-radius: ${smallRadius};
-    aspect-ratio: 7/5;
     background-color: rgba(0, 0, 0, 0.2);
     max-width: calc(${magicNum} * 12);
 
     .slides {
         overflow-x: hidden;
-
+        
         // Hide scrollbar
         &::-webkit-scrollbar {
             display: none;
@@ -20,6 +18,7 @@ const Container = styled.div`
 
         width: 100%;
         height: 100%;
+        min-height: calc(${magicNum} * 6);
         display: flex;
     }
 `;
@@ -27,7 +26,9 @@ const Container = styled.div`
 const ChangeSlideButtons = styled.div`
     display: flex;
     justify-content: space-between;
+    padding: calc(${magicNum} / 4);
 
+    background-color: ${lightTextColor};
     .button {
         width: 35%;
     }

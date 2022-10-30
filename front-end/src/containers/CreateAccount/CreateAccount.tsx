@@ -104,8 +104,10 @@ const CreateAccount = (): JSX.Element => {
                         <label>Tell something about yourself</label>
                         <textarea rows={4} {...description} />
                     </StyledInput>
+                </Slide>
+                <Slide>
                     <Button theme="dark" onClick={sendAccountDetails}>
-                        Ja doe maar
+                        Setup your account!
                     </Button>
                 </Slide>
             </BoxSlider>
