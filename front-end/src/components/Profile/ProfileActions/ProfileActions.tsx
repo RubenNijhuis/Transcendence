@@ -8,7 +8,7 @@ import { useUser } from "../../../contexts/UserContext";
 import { addFriend, removeFriend, getIsFriend } from "../../../proxies/friend";
 
 // Types
-import { ProfileType } from "../../../types/profile";
+import { Profile } from "../../../types";
 
 // Utils
 import randomNum from "../../../utils/numbers/randomIntFromRange";
@@ -47,7 +47,7 @@ const ProfileActivityStatus = (): JSX.Element => {
 };
 
 interface IProfileActions {
-    profile: ProfileType;
+    profile: Profile.Instance;
 }
 
 const ProfileActions = ({ profile }: IProfileActions): JSX.Element => {

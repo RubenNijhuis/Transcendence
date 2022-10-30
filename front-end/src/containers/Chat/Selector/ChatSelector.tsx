@@ -6,8 +6,7 @@ import Asset from "../../../components/Asset";
 import Heading from "../../../components/Heading";
 
 // Types
-import { ProfileType } from "../../../types/profile";
-import { GroupChat, GroupChatType, Message } from "../../../types/chat";
+import { Profile, Chat } from "../../../types";
 
 // Stylinh
 import {
@@ -21,7 +20,7 @@ import { useUser } from "../../../contexts/UserContext";
 ////////////////////////////////////////////////////////////
 
 interface IMemberList {
-    members: ProfileType[];
+    members: Profile.Instance[];
 }
 
 /**
@@ -41,15 +40,15 @@ const MemberList = ({ members }: IMemberList): JSX.Element => {
 };
 
 interface IChatTypeSelector {
-    activeType: GroupChatType;
-    setActiveType: React.Dispatch<React.SetStateAction<GroupChatType>>;
+    activeType: Chat.Group.GroupType;
+    setActiveType: React.Dispatch<React.SetStateAction<Chat.Group.GroupType>>;
 }
 
 const ChatTypeSelector = ({
     activeType,
     setActiveType
 }: IChatTypeSelector): JSX.Element => {
-    const handleChatTypeSelect = (type: GroupChatType): void => {
+    const handleChatTypeSelect = (type: Chat.Group.GroupType): void => {
         setActiveType(type);
     };
 
@@ -59,18 +58,18 @@ const ChatTypeSelector = ({
         <ChatTypeSelectorContainer>
             <div
                 className={`chat-type ${
-                    activeType === GroupChatType.DM ? "active" : null
+                    activeType === Chat.Group.GroupType.DM ? "active" : null
                 }`}
-                onClick={() => handleChatTypeSelect(GroupChatType.DM)}
+                onClick={() => handleChatTypeSelect(Chat.Group.GroupType.DM)}
             >
                 <Heading type={3}>DM</Heading>
             </div>
             <div className="divider" />
             <div
                 className={`chat-type ${
-                    activeType === GroupChatType.Group ? "active" : null
+                    activeType === Chat.Group.GroupType.Group ? "active" : null
                 }`}
-                onClick={() => handleChatTypeSelect(GroupChatType.Group)}
+                onClick={() => handleChatTypeSelect(Chat.Group.GroupType.Group)}
             >
                 <Heading type={3}>Groups</Heading>
             </div>
@@ -79,10 +78,10 @@ const ChatTypeSelector = ({
 };
 
 interface IDirectMessageList {
-    selectedChatType: GroupChatType;
-    directChats: GroupChat[];
-    groupChats: GroupChat[];
-    setSelectedChat: React.Dispatch<React.SetStateAction<GroupChat>>;
+    selectedChatType: Chat.Group.GroupType;
+    directChats: Chat.Group.Instance[];
+    groupChats: Chat.Group.Instance[];
+    setSelectedChat: React.Dispatch<React.SetStateAction<Chat.Group.Instance>>;
 }
 
 const DirectMessageList = ({
@@ -93,7 +92,9 @@ const DirectMessageList = ({
 }: IDirectMessageList): JSX.Element => {
     const { user } = useUser();
     const [selectedChatId, setSelectedChatId] = useState<number>(0);
-    const [selectedChatList, setSelectedChatList] = useState<GroupChat[]>([]);
+    const [selectedChatList, setSelectedChatList] = useState<
+        Chat.Group.Instance[]
+    >([]);
 
     ////////////////////////////////////////////////////////////
 
@@ -105,11 +106,11 @@ const DirectMessageList = ({
     useEffect(() => {
         setSelectedChatId(0);
         switch (selectedChatType) {
-            case GroupChatType.DM:
+            case Chat.Group.GroupType.DM:
                 setSelectedChatList(directChats);
                 setSelectedChat(directChats[0]);
                 break;
-            case GroupChatType.Group:
+            case Chat.Group.GroupType.Group:
                 setSelectedChatList(groupChats);
                 setSelectedChat(groupChats[0]);
                 break;
@@ -125,7 +126,7 @@ const DirectMessageList = ({
         <ul className="list">
             {selectedChatList &&
                 selectedChatList.map(({ members, internal_id }) => {
-                    const otherMembers: ProfileType[] = members.filter(
+                    const otherMembers: Profile.Instance[] = members.filter(
                         (member) => member.username !== user!.username
                     );
 
@@ -146,10 +147,10 @@ const DirectMessageList = ({
 };
 
 interface IChatSelector {
-    directChats: GroupChat[];
-    groupChats: GroupChat[];
-    selectedChat: GroupChat;
-    setSelectedChat: React.Dispatch<React.SetStateAction<GroupChat>>;
+    directChats: Chat.Group.Instance[];
+    groupChats: Chat.Group.Instance[];
+    selectedChat: Chat.Group.Instance;
+    setSelectedChat: React.Dispatch<React.SetStateAction<Chat.Group.Instance>>;
 }
 
 const ChatSelector = ({
@@ -158,9 +159,8 @@ const ChatSelector = ({
     selectedChat,
     setSelectedChat
 }: IChatSelector): JSX.Element => {
-    const [selectedChatType, setSelectedChatType] = useState<GroupChatType>(
-        GroupChatType.DM
-    );
+    const [selectedChatType, setSelectedChatType] =
+        useState<Chat.Group.GroupType>(Chat.Group.GroupType.DM);
 
     ////////////////////////////////////////////////////////////
 

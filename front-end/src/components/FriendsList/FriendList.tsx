@@ -1,6 +1,6 @@
 // Types
 import { Link } from "react-router-dom";
-import { ProfileType } from "../../types/profile";
+import { Profile } from "../../types";
 
 // UI
 import Asset from "../Asset";
@@ -12,7 +12,7 @@ import { Container, FriendEntryContainer } from "./FriendList.style";
 ////////////////////////////////////////////////////////////
 
 interface IFriendEntry {
-    friend: ProfileType;
+    friend: Profile.Instance;
 }
 
 const FriendEntry = ({ friend }: IFriendEntry) => {
@@ -33,7 +33,7 @@ const FriendEntry = ({ friend }: IFriendEntry) => {
 };
 
 interface IFriendList {
-    friends: ProfileType[];
+    friends: Profile.Instance[];
 }
 
 const FriendList = ({ friends }: IFriendList) => {

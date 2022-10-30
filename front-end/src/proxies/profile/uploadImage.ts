@@ -19,4 +19,6 @@ const uploadImage = async (url: string, image: FormData): Promise<any> => {
     }
 };
 
-export {uploadImage};
+///////////////////////////////////////////////////////////
+
+export { uploadImage };

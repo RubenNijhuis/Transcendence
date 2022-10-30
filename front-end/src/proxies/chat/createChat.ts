@@ -3,8 +3,7 @@ import { API } from "../instances/apiInstance";
 import ApiRoutes from "../../config/ApiRoutes";
 
 // Types
-import { GroupChat } from "../../types/chat";
-import { ProfileType } from "../../types/profile";
+import { Chat, Profile } from "../../types";
 
 ////////////////////////////////////////////////////////////
 
@@ -16,10 +15,10 @@ import { ProfileType } from "../../types/profile";
  * @returns confirmation response
  */
 const createChat = async (
-    owner: ProfileType,
+    owner: Profile.Instance,
     name: string,
-    users: ProfileType[]
-): Promise<GroupChat[]> => {
+    users: Profile.Instance[]
+): Promise<Chat.Group.Instance[]> => {
     try {
         const route = ApiRoutes.createChat();
         const body = {
@@ -28,12 +27,14 @@ const createChat = async (
             users
         };
 
-        const { data } = await API.post<GroupChat[]>(route, body);
+        const { data } = await API.post<Chat.Group.Instance[]>(route, body);
 
         return Promise.resolve(data);
     } catch (err) {
         return Promise.reject(err);
     }
 };
+
+///////////////////////////////////////////////////////////
 
 export { createChat };

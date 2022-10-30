@@ -1,5 +1,5 @@
 // Types
-import { GroupChat } from "../../../types/chat";
+import { Chat } from "../../../types";
 
 // UI
 import ChatElement from "../../../components/ChatElements";
@@ -11,7 +11,7 @@ import Asset from "../../../components/Asset";
 import { Container } from "./Box.style";
 
 // Types
-import { ProfileType } from "../../../types/profile";
+import { Profile } from "../../../types";
 
 // User
 import { useUser } from "../../../contexts/UserContext";
@@ -19,7 +19,7 @@ import { useUser } from "../../../contexts/UserContext";
 ////////////////////////////////////////////////////////////
 
 interface IChatTitle {
-    chat: GroupChat;
+    chat: Chat.Group.Instance;
     isDmChat: boolean;
 }
 
@@ -32,9 +32,9 @@ const ChatTitle = ({ chat, isDmChat }: IChatTitle): JSX.Element => {
      * If the the amount of members is 2 it means it a DM
      * Therefore we can change the interface from 'Chat' to 'other user name'
      */
-    const otherMember: ProfileType = chat.members
-        .filter((member) => member.uid !== user.uid)
-        .shift() as ProfileType;
+    const otherMember: Profile.Instance = chat.members
+        .filter((member: Profile.Instance) => member.uid !== user.uid)
+        .shift() as Profile.Instance;
 
     const chatTitle: string = (
         isDmChat ? otherMember.username : chat.name
@@ -56,7 +56,7 @@ const ChatTitle = ({ chat, isDmChat }: IChatTitle): JSX.Element => {
 };
 
 interface IChatBox {
-    chat: GroupChat;
+    chat: Chat.Group.Instance;
 }
 
 const ChatBox = ({ chat }: IChatBox): JSX.Element => {

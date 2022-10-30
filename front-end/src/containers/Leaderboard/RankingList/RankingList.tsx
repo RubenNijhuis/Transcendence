@@ -2,7 +2,7 @@
 import { EntryList, Entry, ProfileData, GameData } from "./RankingList.style";
 
 // Types
-import { ProfileType } from "../../../types/profile";
+import { Profile } from "../../../types";
 
 // Routing
 import { Link } from "react-router-dom";
@@ -12,7 +12,7 @@ import PageRoutes from "../../../config/PageRoutes";
 ////////////////////////////////////////////////////////////
 
 interface IRankEntry {
-    profile: ProfileType;
+    profile: Profile.Instance;
 }
 
 const RankEntry = ({ profile }: IRankEntry) => {
@@ -36,7 +36,7 @@ const RankEntry = ({ profile }: IRankEntry) => {
 };
 
 interface IRankingList {
-    rankings: ProfileType[];
+    rankings: Profile.Instance[];
 }
 
 const RankingList = ({ rankings }: IRankingList): JSX.Element => {

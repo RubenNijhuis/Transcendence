@@ -20,7 +20,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useUser } from "../../contexts/UserContext";
 
 // Links
-import { locations } from "./NavBar.config";
+import { locations, NavLink } from "./NavBar.config";
 import PageRoutes from "../../config/PageRoutes";
 
 ////////////////////////////////////////////////////////////
@@ -34,12 +34,12 @@ const SettingsPageButton = () => {
 };
 
 interface ICTAButton {
-    authStatus: boolean;
+    loggedIn: boolean;
 }
 
-const CTAButton = ({ authStatus }: ICTAButton): JSX.Element => {
-    const url = authStatus ? PageRoutes.selectGame : PageRoutes.login;
-    const text = authStatus ? "Play pong" : "Login";
+const CTAButton = ({ loggedIn }: ICTAButton): JSX.Element => {
+    const url = loggedIn ? PageRoutes.selectGame : PageRoutes.login;
+    const text = loggedIn ? "Play pong" : "Login";
 
     return (
         <Link className="cta-button" to={url}>
@@ -48,17 +48,19 @@ const CTAButton = ({ authStatus }: ICTAButton): JSX.Element => {
     );
 };
 
-interface INavLink {
-    authStatus: boolean;
+interface INavLinks {
+    loggedIn: boolean;
+    links: NavLink[];
 }
 
-const NavLinks = ({ authStatus }: INavLink): JSX.Element => {
+const NavLinks = ({ loggedIn, links }: INavLinks): JSX.Element => {
     return (
         <NavLinksContainer>
-            {locations.map(({ name, url, onlyWhenLoggedin }, count) => {
-                if (onlyWhenLoggedin && !authStatus) return null;
+            {links.map(({ name, url, onlyWhenLoggedIn }) => {
+                if (onlyWhenLoggedIn && !loggedIn) return null;
+
                 return (
-                    <li key={count}>
+                    <li key={name}>
                         <Link to={url}>{name}</Link>
                     </li>
                 );
@@ -94,10 +96,11 @@ const NavBar = (): JSX.Element => {
                     <Link to={PageRoutes.home} className="logo">
                         <div className="logo">PongHub</div>
                     </Link>
-                    <NavLinks authStatus={isLoggedIn} />
+
+                    <NavLinks loggedIn={isLoggedIn} links={locations} />
 
                     <div className="cta">
-                        <CTAButton authStatus={isLoggedIn} />
+                        <CTAButton loggedIn={isLoggedIn} />
                         {isLoggedIn && (
                             <>
                                 <ProfileIcon url={user!.img_url} />

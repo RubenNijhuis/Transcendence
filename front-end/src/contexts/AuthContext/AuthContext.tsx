@@ -6,7 +6,7 @@ import { getItem, setItem } from "../../modules/Store";
 import StoreId from "../../config/StoreId";
 
 // Types
-import { SignInResponse } from "../../types/request";
+import { Request } from "../../types";
 
 // User
 import { useUser } from "../UserContext";
@@ -25,7 +25,7 @@ interface AuthContextType {
     tfaEnabled: boolean;
     setTfaEnabled: React.Dispatch<React.SetStateAction<boolean>>;
 
-    signIn(code: string): Promise<SignInResponse>;
+    signIn(code: string): Promise<Request.Response.SignIn>;
     signOut(): void;
 }
 
@@ -59,7 +59,7 @@ const AuthProvider = ({
      * The authentication state will update
      * when a user object exists. Here we
      * set the site settings to logged in.
-     * 
+     *
      * And check for 2fa
      */
     useEffect(() => {
@@ -77,6 +77,8 @@ const AuthProvider = ({
      * Here we check the auth token status.
      */
     useEffect(() => {
+        if (!user) return;
+
         const checkAuthTokenStatus = async () => {
             /**
              * If we are still in the login process we don't
@@ -96,8 +98,8 @@ const AuthProvider = ({
             }
 
             try {
-                const { user } = await checkTokenValidity(refreshToken);
-                setUser(user);
+                const { profile } = await checkTokenValidity(refreshToken);
+                setUser(profile);
             } catch (err) {
                 redirectToHome();
             }
@@ -123,6 +125,8 @@ const AuthProvider = ({
         <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export { useAuth };
 export default AuthProvider;

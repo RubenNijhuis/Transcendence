@@ -1,5 +1,4 @@
-import { logTypes } from "./Logger.config";
-import { formatConfig } from "./Logger.bl";
+import { LogTypes, logTypes } from "./Logger.config";
 
 /**
  * Logs a stylized console message
@@ -10,7 +9,7 @@ import { formatConfig } from "./Logger.bl";
  * @param obj The data to be displayed
  */
 const Logger = (
-    type: string,
+    type: LogTypes,
     from: string,
     message: string,
     obj: any
@@ -18,11 +17,11 @@ const Logger = (
     // If the type isn't allowed to output don't output
     if (logTypes[type].allowed === false) return;
 
-    // If the type doesn't exist in the config throw a warning
-    if (logTypes.hasOwnProperty(type) === false) {
-        console.warn(formatConfig.typeError(type));
-        return;
-    }
+    // // If the type doesn't exist in the config throw a warning
+    // if (logTypes.hasOwnProperty(type) === false) {
+    //     console.warn(formatConfig.typeError(type));
+    //     return;
+    // }
 
     const { emoij, color } = logTypes[type];
 
@@ -51,3 +50,4 @@ const Logger = (
 };
 
 export default Logger;
+export { LogTypes };

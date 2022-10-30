@@ -1,11 +1,12 @@
 // Types
-import { GroupChat, Message } from "../../types/chat";
-import { ProfileID, ProfileType } from "../../types/profile";
+import { Chat, Profile } from "../../types";
 
 ////////////////////////////////////////////////////////////
 
-const getMembersFromGroupChats = (chats: GroupChat[]): ProfileType[][] => {
-    let members: ProfileType[][] = [];
+const getMembersFromGroupChats = (
+    chats: Chat.Group.Instance[]
+): Profile.Instance[][] => {
+    let members: Profile.Instance[][] = [];
 
     for (const chat of chats) {
         members.push(chat.members);
@@ -14,8 +15,10 @@ const getMembersFromGroupChats = (chats: GroupChat[]): ProfileType[][] => {
     return members;
 };
 
-const getMessagesFromGroupChats = (chats: GroupChat[]): Message[][] => {
-    let messages: Message[][] = [];
+const getMessagesFromGroupChats = (
+    chats: Chat.Group.Instance[]
+): Chat.Message.Instance[][] => {
+    let messages: Chat.Message.Instance[][] = [];
 
     for (const chat of chats) {
         messages.push(chat.messages);
@@ -25,20 +28,20 @@ const getMessagesFromGroupChats = (chats: GroupChat[]): Message[][] => {
 };
 
 const findMemberByProfileID = (
-    id: ProfileID,
-    members: ProfileType[]
-): ProfileType => {
+    id: Profile.ProfileID,
+    members: Profile.Instance[]
+): Profile.Instance => {
     // Could return undefined but should always find it anyway so what gives
     const profile = members.find((member) => {
         return member.uid === id;
-    }) as ProfileType;
+    }) as Profile.Instance;
 
     return profile;
 };
 
 const bindMembersToMessages = (
-    members: ProfileType[][],
-    totalMessages: Message[][]
+    members: Profile.Instance[][],
+    totalMessages: Chat.Message.Instance[][]
 ): void => {
     for (let i = 0; i < totalMessages.length; i++) {
         const messageList = totalMessages[i];
@@ -56,7 +59,9 @@ const bindMembersToMessages = (
  * Will return the id of the first chat that is a direct message
  * Otherwise return the first chat id which is zero
  */
-const getFirstDM = (chats: GroupChat[]): GroupChat | null => {
+const getFirstDM = (
+    chats: Chat.Group.Instance[]
+): Chat.Group.Instance | null => {
     for (const chat of chats) {
         if (chat.members.length === 2) {
             return chat;
@@ -66,9 +71,11 @@ const getFirstDM = (chats: GroupChat[]): GroupChat | null => {
     return null;
 };
 
-const categorizeChats = (chats: GroupChat[]): [GroupChat[], GroupChat[]] => {
-    const directChats: GroupChat[] = [];
-    const groupChats: GroupChat[] = [];
+const categorizeChats = (
+    chats: Chat.Group.Instance[]
+): [Chat.Group.Instance[], Chat.Group.Instance[]] => {
+    const directChats: Chat.Group.Instance[] = [];
+    const groupChats: Chat.Group.Instance[] = [];
 
     let amountDirectChats = 0;
     let amountGroupChats = 0;

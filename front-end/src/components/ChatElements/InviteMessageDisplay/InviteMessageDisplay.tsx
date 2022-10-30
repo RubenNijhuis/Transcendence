@@ -1,5 +1,5 @@
 // Types
-import { InvitePlayMessage, Message } from "../../../types/chat";
+import { Chat } from "../../../types";
 
 // Styling
 import styled from "styled-components";
@@ -16,7 +16,7 @@ import Button from "../../Button";
 ////////////////////////////////////////////////////////////
 
 interface IInviteMessageDisplay {
-    message: Message;
+    message: Chat.Message.Instance;
     fromUser: boolean;
 }
 
@@ -42,8 +42,8 @@ const Container = styled.div<{ fromUser: boolean }>`
 `;
 
 const InviteMessageDisplay = ({ fromUser, message }: IInviteMessageDisplay): JSX.Element => {
-    const formattedContent: InvitePlayMessage =
-        message.content as InvitePlayMessage;
+    const formattedContent: Chat.Message.GameInviteMessage =
+        message.content as Chat.Message.GameInviteMessage;
 
     ////////////////////////////////////////////////////////////
 
@@ -57,5 +57,7 @@ const InviteMessageDisplay = ({ fromUser, message }: IInviteMessageDisplay): JSX
         </Container>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export default InviteMessageDisplay;

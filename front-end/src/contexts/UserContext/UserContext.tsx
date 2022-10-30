@@ -1,22 +1,24 @@
 // React stuff
 import { createContext, useContext, useEffect, useState } from "react";
-import Logger from "../../modules/Logger";
 
 // Types
-import { ProfileType } from "../../types/profile";
+import { Profile } from "../../types";
+
+// Debug
+import Logger, { LogTypes } from "../../modules/Logger";
 import { generateProfile } from "../FakeDataContext/fakeDataGenerators";
 
 ///////////////////////////////////////////////////////////
 
 interface UserContextType {
-    user: ProfileType;
-    setUser: React.Dispatch<React.SetStateAction<ProfileType>>;
+    user: Profile.Instance;
+    setUser: React.Dispatch<React.SetStateAction<Profile.Instance>>;
 
-    friends: ProfileType[];
-    setFriends: React.Dispatch<React.SetStateAction<ProfileType[]>>;
+    friends: Profile.Instance[];
+    setFriends: React.Dispatch<React.SetStateAction<Profile.Instance[]>>;
 
-    blocked: ProfileType[];
-    setBlocked: React.Dispatch<React.SetStateAction<ProfileType[]>>;
+    blocked: Profile.Instance[];
+    setBlocked: React.Dispatch<React.SetStateAction<Profile.Instance[]>>;
 }
 
 // Create the context
@@ -32,18 +34,18 @@ const UserProvider = ({
 }: {
     children: React.ReactNode;
 }): JSX.Element => {
-    const [user, setUser] = useState<ProfileType>(null!);
-    const [friends, setFriends] = useState<ProfileType[]>([]);
-    const [blocked, setBlocked] = useState<ProfileType[]>([]);
+    const [user, setUser] = useState<Profile.Instance>(null!);
+    const [friends, setFriends] = useState<Profile.Instance[]>([]);
+    const [blocked, setBlocked] = useState<Profile.Instance[]>([]);
 
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
         if (!user) return;
-        Logger("AUTH", "User context", "User object", user);
+        Logger(LogTypes.AUTH, "User context", "User object", user);
 
         const retrievedFriends = generateProfile(20);
-        Logger("DEBUG", "User context", "Generating fake friends", null);
+        Logger(LogTypes.DEBUG, "User context", "Generating fake friends", null);
         setFriends(retrievedFriends);
     }, [user]);
 
@@ -66,6 +68,8 @@ const UserProvider = ({
         <UserContext.Provider value={value}>{children}</UserContext.Provider>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export { useUser };
 export default UserProvider;

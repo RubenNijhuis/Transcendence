@@ -3,9 +3,10 @@ import { API } from "../instances/apiInstance";
 import ApiRoutes from "../../config/ApiRoutes";
 
 // Types
-import { ProfileType } from "../../types/profile";
+import { Profile, Request } from "../../types";
+
+// Proxies
 import { getProfileByUsername } from "../profile";
-import { ImageSelect } from "../../types/request";
 
 ////////////////////////////////////////////////////////////
 
@@ -16,15 +17,15 @@ import { ImageSelect } from "../../types/request";
  */
 const getFriendsByUsername = async (
     username: string
-): Promise<ProfileType[]> => {
+): Promise<Profile.Instance[]> => {
     try {
         const route = ApiRoutes.getFriendsByUsername(username);
         const { data } = await API.get<string[]>(route);
 
-        const profilesFromUsernames: ProfileType[] = [];
+        const profilesFromUsernames: Profile.Instance[] = [];
 
         for (const profileUsername of data) {
-            const imageSelect: ImageSelect = {
+            const imageSelect: Request.Payload.ImageSelect = {
                 profile: true,
                 banner: false
             };
@@ -42,5 +43,7 @@ const getFriendsByUsername = async (
         return Promise.reject(err);
     }
 };
+
+///////////////////////////////////////////////////////////
 
 export { getFriendsByUsername };

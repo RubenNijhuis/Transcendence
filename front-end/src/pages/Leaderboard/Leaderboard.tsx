@@ -15,13 +15,15 @@ import { useFakeData } from "../../contexts/FakeDataContext";
 import { getLeaderboard } from "../../proxies/leaderboard";
 
 // Types
-import { ProfileType } from "../../types/profile";
+import { Profile } from "../../types";
+
+// Styling
 import { Container } from "./Leaderboard.style";
 
 ////////////////////////////////////////////////////////////
 
 const Leaderboard = (): JSX.Element => {
-    const [leaderboard, setLeaderboard] = useState<ProfileType[]>(null!);
+    const [leaderboard, setLeaderboard] = useState<Profile.Instance[]>(null!);
 
     ////////////////////////////////////////////////////////////
 

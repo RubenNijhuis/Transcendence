@@ -2,7 +2,7 @@
 import { confirmLogin } from "../../proxies/auth";
 
 // Types
-import { SignInResponse } from "../../types/request";
+import { Request } from "../../types";
 
 // Routing
 import PageRoutes from "../../config/PageRoutes";
@@ -18,11 +18,9 @@ import StoreId from "../../config/StoreId";
  * code. The expected return value is a user as well as a bool
  * indicating whether to create a user or not.
  */
-const signIn = async (code: string): Promise<SignInResponse> => {
+const signIn = async (code: string): Promise<Request.Response.SignIn> => {
     try {
-        const { profile, shouldCreateUser } = await confirmLogin(
-            code
-        );
+        const { profile, shouldCreateUser } = await confirmLogin(code);
 
         return Promise.resolve({ profile, shouldCreateUser });
     } catch (err) {
@@ -42,6 +40,7 @@ const signOut = (): void => {
 
 const redirectToHome = (): void => {
     if (window.location.pathname === PageRoutes.home) return;
+
     window.location.assign(PageRoutes.home);
 };
 

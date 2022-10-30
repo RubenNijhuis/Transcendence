@@ -1,5 +1,5 @@
 // Types
-import { PictureMessage, Message } from "../../../types/chat";
+import { Chat } from "../../../types";
 
 // UI
 import Asset from "../../Asset";
@@ -29,12 +29,12 @@ const Container = styled.div<{ fromUser: boolean }>`
 ////////////////////////////////////////////////////////////
 
 interface IPictureMessageDisplay {
-    message: Message;
+    message: Chat.Message.Instance;
     fromUser: boolean;
 }
 
 const PictureMessageDisplay = ({ fromUser, message }: IPictureMessageDisplay): JSX.Element => {
-    const formattedMessage: PictureMessage = message.content as PictureMessage;
+    const formattedMessage: Chat.Message.PictureMessage = message.content as Chat.Message.PictureMessage;
 
     ////////////////////////////////////////////////////////////
 

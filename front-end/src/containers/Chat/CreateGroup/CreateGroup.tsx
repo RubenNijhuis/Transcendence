@@ -7,7 +7,7 @@ import { useModal } from "../../../contexts/ModalContext";
 import { useUser } from "../../../contexts/UserContext";
 
 // Types
-import { ProfileID, ProfileType } from "../../../types/profile";
+import { Profile } from "../../../types";
 
 // UI
 import Button from "../../../components/Button";
@@ -30,15 +30,17 @@ import { GrFormSearch, GrFormClose } from "react-icons/gr";
 const CreateGroupChat = ({
     friends
 }: {
-    friends: ProfileType[];
+    friends: Profile.Instance[];
 }): JSX.Element => {
-    const [selectedFriends, setSelectedFriends] = useState<ProfileType[]>([]);
+    const [selectedFriends, setSelectedFriends] = useState<Profile.Instance[]>(
+        []
+    );
     const groupName = useFormInput("");
     const searchList = useFormInput("");
 
     ////////////////////////////////////////////////////////////
 
-    const toggleSelected = (friend: ProfileType): void => {
+    const toggleSelected = (friend: Profile.Instance): void => {
         const isSelected: boolean = checkIfProfileIsSelected(friend.uid);
 
         if (isSelected) {
@@ -61,7 +63,7 @@ const CreateGroupChat = ({
 
     const handleSearch = () => {};
 
-    const removeFriendFromSelected = (friendID: ProfileType): void => {
+    const removeFriendFromSelected = (friendID: Profile.Instance): void => {
         setSelectedFriends((prevState) => {
             const filteredState = prevState.filter((friend) => {
                 return friend.uid !== friendID.uid;
@@ -70,7 +72,7 @@ const CreateGroupChat = ({
         });
     };
 
-    const addFriendFromSelected = (friendID: ProfileType): void => {
+    const addFriendFromSelected = (friendID: Profile.Instance): void => {
         setSelectedFriends((prevState) => [...prevState, friendID]);
     };
 
@@ -122,9 +124,9 @@ const CreateGroupChat = ({
 };
 
 const CreateChat = ({
-    setModalOpen
+    setModalActive
 }: {
-    setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setModalActive: React.Dispatch<React.SetStateAction<boolean>>;
 }): JSX.Element => {
     const [validSetting, setValidSettings] = useState<boolean>(false);
 
@@ -140,7 +142,7 @@ const CreateChat = ({
                 <Heading type={2}>Create a new chat</Heading>
                 <div
                     className="close-button"
-                    onClick={() => setModalOpen(false)}
+                    onClick={() => setModalActive(false)}
                 >
                     <GrFormClose />
                 </div>
@@ -150,7 +152,7 @@ const CreateChat = ({
                 <CreateGroupChat friends={friends} />
                 <Button
                     className={`finish-button ${validSetting && `valid`}`}
-                    onClick={() => setModalOpen(false)}
+                    onClick={() => setModalActive(false)}
                 >
                     Create chat
                 </Button>
@@ -160,7 +162,7 @@ const CreateChat = ({
 };
 
 const CreateGroup = (): JSX.Element => {
-    const { setModalOpen, modalOpen, setModalElement } = useModal();
+    const { setModalActive, modalActive, setModalElement } = useModal();
 
     ////////////////////////////////////////////////////////////
 
@@ -169,18 +171,20 @@ const CreateGroup = (): JSX.Element => {
      * TODO: create some kind of way for the closing function to be global
      */
     useEffect(() => {
-        setModalElement(() => <CreateChat setModalOpen={setModalOpen} />);
-    }, [modalOpen]);
+        setModalElement(() => <CreateChat setModalActive={setModalActive} />);
+    }, [modalActive]);
 
     ////////////////////////////////////////////////////////////
 
     return (
         <Container>
-            <Button onClick={() => setModalOpen(true)}>
+            <Button onClick={() => setModalActive(true)}>
                 <Heading type={4}>Create a new chat + </Heading>
             </Button>
         </Container>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export default CreateGroup;

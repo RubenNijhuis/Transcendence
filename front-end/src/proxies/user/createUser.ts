@@ -3,9 +3,8 @@ import { API } from "../instances/apiInstance";
 import ApiRoutes from "../../config/ApiRoutes";
 
 // Types
-import { ProfileType } from "../../types/profile";
+import { Profile, Request } from "../../types";
 import { addImagesToProfile } from "../profile/addImagesToProfile";
-import { CreateUserParams } from "../../types/request";
 
 /////////////////////////////////////////////////////////////
 
@@ -14,10 +13,12 @@ import { CreateUserParams } from "../../types/request";
  * @param userData
  * @returns
  */
-const createUser = async (userData: CreateUserParams): Promise<ProfileType> => {
+const createUser = async (
+    userData: Request.Payload.CreateUser
+): Promise<Profile.Instance> => {
     try {
         const route = ApiRoutes.createUser();
-        const { data } = await API.post<ProfileType>(route, userData);
+        const { data } = await API.post<Profile.Instance>(route, userData);
 
         const profile = await addImagesToProfile(data, {
             profile: true,
@@ -29,5 +30,7 @@ const createUser = async (userData: CreateUserParams): Promise<ProfileType> => {
         return Promise.reject(err);
     }
 };
+
+///////////////////////////////////////////////////////////
 
 export { createUser };

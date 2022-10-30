@@ -3,6 +3,7 @@ import {
     backgroundColor,
     lightTextColor,
     magicNum,
+    mainColor,
     smallRadius
 } from "../../styles/StylingConstants";
 
@@ -25,11 +26,34 @@ const Container = styled.div`
 `;
 
 const ElementContainer = styled.div`
+    position: relative;
+
     border-radius: ${smallRadius};
-    overflow: hidden;
     background-color: ${backgroundColor};
+`;
+
+const CloseButtonContainer = styled.div`
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: solid 2px ${mainColor};
+    border-radius: 100px;
+
+    width: calc(${magicNum});
+    height: calc(${magicNum});
+    background-color: ${backgroundColor};
+
+    &:hover {
+        cursor: pointer;
+    }
 `;
 
 ///////////////////////////////////////////////////////////
 
-export { Container, ElementContainer };
+export { Container, ElementContainer, CloseButtonContainer };

@@ -3,10 +3,12 @@ import StoreId from "../../config/StoreId";
 import { setItem } from "../../modules/Store";
 
 // Types
-import { AuthTokenType } from "../../types/request";
+import { Request } from "../../types";
 
 // Proxies
 import { setDefaultAuthHeader } from "../instances/apiInstance";
+
+///////////////////////////////////////////////////////////
 
 /**
  * Reset the store and update the API instance
@@ -14,9 +16,12 @@ import { setDefaultAuthHeader } from "../instances/apiInstance";
 const updateAuthTokens = ({
     accessToken,
     refreshToken
-}: AuthTokenType): void => {
+}: Request.AuthToken): void => {
     setItem(StoreId.accessToken, accessToken);
     setItem(StoreId.refreshToken, refreshToken);
     setDefaultAuthHeader(accessToken);
 };
+
+///////////////////////////////////////////////////////////
+
 export { updateAuthTokens };

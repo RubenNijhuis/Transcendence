@@ -4,7 +4,7 @@ import { get_img_url } from "./utils";
 import randomNum from "../../../utils/numbers/randomIntFromRange";
 
 // Types
-import { ProfileType } from "../../../types/profile";
+import { Profile } from "../../../types";
 
 const names = [
     "RelaxZest",
@@ -69,8 +69,8 @@ const names = [
     "Toughpetr"
 ];
 
-const generateProfile = (amount: number): ProfileType[] => {
-    const profileList: ProfileType[] = [];
+const generateProfile = (amount: number): Profile.Instance[] => {
+    const profileList: Profile.Instance[] = [];
 
     for (let i = 0; i < amount; i++) {
         const username: string = names[randomNum(0, names.length - 1)];
@@ -96,8 +96,9 @@ const generateProfile = (amount: number): ProfileType[] => {
         const wins: number = randomNum(1, 100);
         const losses: number = randomNum(1, 100);
 
-        const newProfile: ProfileType = {
+        const newProfile: Profile.Instance = {
             username,
+            description: "Lorem ipsum sit dolor amet",
             banner_url,
             color,
             rank,
@@ -112,5 +113,7 @@ const generateProfile = (amount: number): ProfileType[] => {
 
     return profileList;
 };
+
+///////////////////////////////////////////////////////////
 
 export { generateProfile };

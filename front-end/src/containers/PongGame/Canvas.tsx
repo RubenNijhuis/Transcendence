@@ -9,7 +9,7 @@ import { SocketType } from "../../types/socket";
 import SocketRoutes from "../../config/SocketRoutes";
 
 // Debug
-import Logger from "../../modules/Logger";
+import Logger, { LogTypes } from "../../modules/Logger";
 
 ////////////////////////////////////////////////////////////
 
@@ -50,7 +50,7 @@ const Canvas = ({ canvasRef }: ICanvas): JSX.Element => {
             "pee pee poo poo"
         );
         Logger(
-            "DEBUG",
+            LogTypes.DEBUG,
             "Canvas",
             `Socket.emit('${SocketRoutes.healthCheck()}') return`,
             emitRet
@@ -61,7 +61,7 @@ const Canvas = ({ canvasRef }: ICanvas): JSX.Element => {
         );
 
         Logger(
-            "DEBUG",
+            LogTypes.DEBUG,
             "Canvas",
             `Socket.on('${SocketRoutes.healthCheck()}') return`,
             ret

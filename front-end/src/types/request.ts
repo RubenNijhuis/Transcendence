@@ -1,57 +1,50 @@
-import { ProfileType } from "./profile";
+import Profile from "./profile";
 
-// Game types
-const enum AuthStatusType {
-    Valid,
-    Invalid,
-    Revoked
+////////////////////////////////////////////////////////////
+
+namespace Request {
+    export interface AuthToken {
+        accessToken: string;
+        refreshToken: string;
+    }
+
+    export interface RequestError {
+        error: string;
+        requestUrl: string;
+        type: string;
+    }
+
+    export namespace Response {
+        export interface ConfirmLogin {
+            shouldCreateUser: boolean;
+            profile: Profile.Instance;
+            authToken: AuthToken;
+        }
+
+        export interface SignIn {
+            profile: Profile.Instance;
+            shouldCreateUser: boolean;
+        }
+
+        export interface TokenValidity {
+            profile: Profile.Instance;
+        }
+    }
+
+    export namespace Payload {
+        export interface CreateUser {
+            username: string;
+            color: string;
+            description: string;
+        }
+
+        export interface ImageSelect {
+            profile: boolean;
+            banner: boolean;
+        }
+    }
 }
 
-interface AuthTokenType {
-    accessToken: string;
-    refreshToken: string;
-}
+////////////////////////////////////////////////////////////
 
-interface RequestErrorType {
-    error: string;
-    requestUrl: string;
-    type: string;
-}
-
-interface ConfirmLoginResponse {
-    shouldCreateUser: boolean;
-    profile: ProfileType;
-    authToken: AuthTokenType;
-}
-
-interface SignInResponse {
-    profile: ProfileType;
-    shouldCreateUser: boolean;
-}
-
-interface CreateUserParams {
-    username: string;
-    color: string;
-    description: string;
-}
-
-interface TokenValidityResponse {
-    user: ProfileType;
-}
-
-interface ImageSelect {
-    profile: boolean;
-    banner: boolean;
-}
-
-export type {
-    RequestErrorType,
-    ConfirmLoginResponse,
-    AuthTokenType,
-    SignInResponse,
-    CreateUserParams,
-    TokenValidityResponse,
-    ImageSelect
-};
-
-export { AuthStatusType };
+export default Request;

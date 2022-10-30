@@ -7,8 +7,8 @@ import Modal from "../../components/Modal";
 ////////////////////////////////////////////////////////////
 
 interface ModalContextType {
-    modalOpen: boolean;
-    setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    modalActive: boolean;
+    setModalActive: React.Dispatch<React.SetStateAction<boolean>>;
 
     setModalElement: React.Dispatch<React.SetStateAction<React.ReactNode>>;
 }
@@ -24,7 +24,7 @@ const ModalProvider = ({
 }: {
     children: React.ReactNode;
 }): JSX.Element => {
-    const [modalOpen, setModalOpen] = useState<boolean>(false);
+    const [modalActive, setModalActive] = useState<boolean>(false);
     const [modalElement, setModalElement] = useState<React.ReactNode>(null!);
 
     ////////////////////////////////////////////////////////////
@@ -32,18 +32,18 @@ const ModalProvider = ({
     useEffect(() => {
         const bodyElement = document.getElementsByTagName("body")[0];
 
-        if (modalOpen) {
+        if (modalActive) {
             bodyElement.style.overflow = "hidden";
         } else {
             bodyElement.style.overflow = "scroll";
         }
-    }, [modalOpen]);
+    }, [modalActive]);
 
     ////////////////////////////////////////////////////////////
 
     const value: ModalContextType = {
-        modalOpen,
-        setModalOpen,
+        modalActive,
+        setModalActive,
 
         setModalElement
     };
@@ -53,7 +53,9 @@ const ModalProvider = ({
     return (
         <ModalContext.Provider value={value}>
             {children}
-            {modalOpen && <Modal element={modalElement} />}
+            {modalActive && (
+                <Modal setModalActive={setModalActive}>{modalElement}</Modal>
+            )}
         </ModalContext.Provider>
     );
 };

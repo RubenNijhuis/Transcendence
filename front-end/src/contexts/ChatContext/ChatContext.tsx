@@ -5,7 +5,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { useUser } from "../UserContext";
 
 // Types
-import { GroupChat } from "../../types/chat";
+import { Chat } from "../../types";
 
 // Generators DEBUG
 import { generateGroupChats } from "../FakeDataContext/fakeDataGenerators";
@@ -25,11 +25,11 @@ import { useFakeData } from "../FakeDataContext";
 ///////////////////////////////////////////////////////////
 
 interface ChatContextType {
-    activeChat: GroupChat;
-    setActiveChat: React.Dispatch<React.SetStateAction<GroupChat>>;
+    activeChat: Chat.Group.Instance;
+    setActiveChat: React.Dispatch<React.SetStateAction<Chat.Group.Instance>>;
 
-    directChats: GroupChat[];
-    groupChats: GroupChat[];
+    directChats: Chat.Group.Instance[];
+    groupChats: Chat.Group.Instance[];
 }
 
 const ChatContext = createContext<ChatContextType>(null!);
@@ -43,10 +43,10 @@ const ChatProvider = ({
 }: {
     children: React.ReactNode;
 }): JSX.Element => {
-    const [activeChat, setActiveChat] = useState<GroupChat>(null!);
+    const [activeChat, setActiveChat] = useState<Chat.Group.Instance>(null!);
 
-    const [directChats, setDirectChats] = useState<GroupChat[]>(null!);
-    const [groupChats, setGroupChats] = useState<GroupChat[]>(null!);
+    const [directChats, setDirectChats] = useState<Chat.Group.Instance[]>(null!);
+    const [groupChats, setGroupChats] = useState<Chat.Group.Instance[]>(null!);
 
     ////////////////////////////////////////////////////////////
 
@@ -63,7 +63,7 @@ const ChatProvider = ({
 
         const chatAggregator = async () => {
             // TODO: Get from api //////////////////////////////////////
-            const retrievedGroupChats: GroupChat[] = generateGroupChats(
+            const retrievedGroupChats: Chat.Group.Instance[] = generateGroupChats(
                 user,
                 10,
                 [1, 4],

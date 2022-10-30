@@ -8,7 +8,7 @@ import { API } from "../../proxies/instances/apiInstance";
 import { updateAuthTokens } from "../../proxies/utils";
 
 // Types
-import { ProfileType } from "../../types/profile";
+import { Profile } from "../../types";
 
 ////////////////////////////////////////////////////////////
 
@@ -16,9 +16,9 @@ const handleClearStorage = (): void => clearAll();
 
 const fillDBwithUsers = (): void => {};
 
-const fillDBwithChats = (user: ProfileType): void => {};
+const fillDBwithChats = (user: Profile.Instance): void => {};
 
-const makeFriends = async (user: ProfileType) => {
+const makeFriends = async (user: Profile.Instance) => {
     try {
         const makeFriendResp = await API.post("/seeder/amount", {
             amount: 10
@@ -50,6 +50,8 @@ const handleTokenRefresh = async () => {
         console.error(err);
     }
 };
+
+///////////////////////////////////////////////////////////
 
 export {
     handleClearStorage,

@@ -1,8 +1,12 @@
+// React
 import { lazy, Suspense } from "react";
 
 // Routing
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import PageRoutes from "../../config/PageRoutes";
+
+// Suspense fallback
+import FallBackPage from "../FallBackPage";
 
 // Guards
 import { AuthGuard } from "../RouteGuards";
@@ -26,17 +30,15 @@ const NotFound = lazy(() => import("../../pages/NotFound"));
 
 const Router = (): JSX.Element => (
     <BrowserRouter>
-        <Suspense fallback={<h1>Loading...</h1>}>
+        <Suspense fallback={<FallBackPage />}>
             <Routes>
                 {/* Public routes */}
-                <Route path={PageRoutes.home} element={<Home />} />
                 <Route path={PageRoutes.login} element={<Login />} />
-
-                {/* TODO: behind authguard */}
-                <Route path={PageRoutes.pong} element={<Pong />} />
 
                 {/* Routes that have to pass through authentication to be loaded */}
                 <Route element={<AuthGuard />}>
+                    <Route path={PageRoutes.home} element={<Home />} />
+
                     {/* Profile page is rendered in two different ways but same component */}
                     <Route path={PageRoutes.profile} element={<ProfilePage />}>
                         <Route path=":profileName" element={<ProfilePage />} />
@@ -52,7 +54,11 @@ const Router = (): JSX.Element => (
                         path={PageRoutes.selectGame}
                         element={<SelectGame />}
                     />
+
+                    <Route path={PageRoutes.pong} element={<Pong />} />
+
                     <Route path={PageRoutes.chat} element={<ChatPage />} />
+
                     <Route
                         path={PageRoutes.leaderBoard}
                         element={<Leaderboard />}

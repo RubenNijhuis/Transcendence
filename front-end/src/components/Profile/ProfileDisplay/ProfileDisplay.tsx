@@ -3,28 +3,29 @@ import Heading from "../../Heading";
 import Asset from "../../Asset";
 import Crown from "../../Crown";
 import ProfileStats from "../ProfileStats";
+import ProfileActions from "../ProfileActions";
 
 // Styling
 import { Container } from "./ProfileDisplay.style";
 
 // Types
-import { ProfileType } from "../../../types/profile";
-import { MatchRecord } from "../../../types/game";
+import { Profile, Game } from "../../../types";
+
+// User
 import { useUser } from "../../../contexts/UserContext";
-import ProfileActions from "../ProfileActions";
 
 ////////////////////////////////////////////////////////////
 
 interface IProfileDisplay {
-    profile: ProfileType;
-    matchHistory: MatchRecord[];
+    profile: Profile.Instance;
+    matchHistory: Game.MatchRecord[];
 }
 
 const ProfileDisplay = ({
     profile,
     matchHistory
 }: IProfileDisplay): JSX.Element => {
-    const { banner_url, rank, img_url, username } = profile;
+    const { banner_url, rank, img_url, username, description } = profile;
 
     ////////////////////////////////////////////////////////////
 
@@ -44,6 +45,8 @@ const ProfileDisplay = ({
                 </div>
             </div>
             <ProfileStats player={profile} matches={matchHistory} />
+
+            <p className="descr">{description}</p>
             {!isUser && <ProfileActions profile={profile} />}
         </Container>
     );

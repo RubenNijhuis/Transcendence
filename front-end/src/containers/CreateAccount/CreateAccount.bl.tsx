@@ -3,8 +3,7 @@ import { createUser } from "../../proxies/user";
 import { uploadImage } from "../../proxies/profile";
 
 // Types
-import { CreateUserParams } from "../../types/request";
-import { ProfileType } from "../../types/profile";
+import { Request, Profile } from "../../types";
 
 ////////////////////////////////////////////////////////////
 
@@ -28,8 +27,8 @@ const handleImageUpload = (
 };
 
 const handleAccountCreation = async (
-    details: CreateUserParams
-): Promise<ProfileType> => {
+    details: Request.Payload.CreateUser
+): Promise<Profile.Instance> => {
     try {
         const returnedUserProfile = await createUser(details);
 

@@ -1,5 +1,5 @@
 // Types
-import { SimpleMessage, Message } from "../../../types/chat";
+import { Chat } from "../../../types";
 
 // Styling
 import styled from "styled-components";
@@ -13,7 +13,7 @@ import {
 ////////////////////////////////////////////////////////////
 
 interface ISimpleMessageDisplay {
-    message: Message;
+    message: Chat.Message.Instance;
     fromUser: boolean;
 }
 
@@ -32,8 +32,12 @@ const Container = styled.div<{ fromUser: boolean }>`
     }
 `;
 
-const SimpleMessageDisplay = ({ fromUser, message }: ISimpleMessageDisplay): JSX.Element => {
-    const formattedContent: SimpleMessage = message.content as SimpleMessage;
+const SimpleMessageDisplay = ({
+    fromUser,
+    message
+}: ISimpleMessageDisplay): JSX.Element => {
+    const formattedContent: Chat.Message.SimpleMessage =
+        message.content as Chat.Message.SimpleMessage;
 
     return (
         <Container fromUser={fromUser}>

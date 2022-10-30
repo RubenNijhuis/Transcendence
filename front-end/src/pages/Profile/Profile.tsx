@@ -18,7 +18,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useUser } from "../../contexts/UserContext";
 
 // Types
-import { ProfileType } from "../../types/profile";
+import { Profile, Request } from "../../types";
 
 // DEBUG
 import { useFakeData } from "../../contexts/FakeDataContext";
@@ -39,15 +39,18 @@ import FriendList from "../../components/FriendsList";
 
 // UI
 import { ProfileDetailsContainer } from "./Profile.style";
-import { ImageSelect } from "../../types/request";
 import Logger from "../../modules/Logger";
 import PageRoutes from "../../config/PageRoutes";
 
 ////////////////////////////////////////////////////////////
 
 const ProfilePage = (): JSX.Element => {
-    const [selectedProfile, setSelectedProfile] = useState<ProfileType>(null!);
-    const [profileFriends, setProfileFriends] = useState<ProfileType[]>(null!);
+    const [selectedProfile, setSelectedProfile] = useState<Profile.Instance>(
+        null!
+    );
+    const [profileFriends, setProfileFriends] = useState<Profile.Instance[]>(
+        null!
+    );
 
     ////////////////////////////////////////////////////////////
 
@@ -59,7 +62,7 @@ const ProfilePage = (): JSX.Element => {
     const { user, setUser } = useUser();
 
     // Create account modal
-    const { setModalOpen, setModalElement } = useModal();
+    const { setModalActive, setModalElement } = useModal();
 
     /**
      * The `username` in the url '/profile/:username' if not
@@ -80,15 +83,23 @@ const ProfilePage = (): JSX.Element => {
              */
             const { profile, shouldCreateUser } = await signIn(apiToken);
 
+            // Make util func
+            window.history.pushState(
+                {},
+                "http://localhost:8080", // TODO: get this from config
+                PageRoutes.profile
+            );
+
             if (profile) {
                 setUser(profile);
                 setItem(StoreId.loginProcess, false);
+
                 return;
             }
 
             if (shouldCreateUser) {
                 setModalElement(<CreateAccount />);
-                setModalOpen(true);
+                setModalActive(true);
             }
         } catch (err) {
             console.error(err);
@@ -97,7 +108,7 @@ const ProfilePage = (): JSX.Element => {
 
     const handleSetProfile = async () => {
         // Bit of a forced reset but it is pretty harmless
-        setModalOpen(false);
+        setModalActive(false);
 
         /**
          * If there is a profile name in the url we
@@ -105,7 +116,7 @@ const ProfilePage = (): JSX.Element => {
          */
         if (profileName !== undefined) {
             try {
-                const imageSelect: ImageSelect = {
+                const imageSelect: Request.Payload.ImageSelect = {
                     profile: true,
                     banner: true
                 };
@@ -116,13 +127,21 @@ const ProfilePage = (): JSX.Element => {
                 );
 
                 setSelectedProfile(returnedProfile);
+
+                // Reset window to top to make it feel like we went to a new page
+                window.scrollTo(0, 0);
+
                 return;
             } catch (err) {
                 console.error(err);
             }
+        } else {
+            setSelectedProfile(user);
         }
 
-        setSelectedProfile(user);
+        // Reset window to top to make it feel like we went to a new page
+        // TODO: add this + url cleaner to cleanup function
+        window.scrollTo(0, 0);
     };
 
     ////////////////////////////////////////////////////////////
@@ -145,13 +164,6 @@ const ProfilePage = (): JSX.Element => {
         }
 
         handleSetProfile();
-
-        // Make util func
-        window.history.pushState(
-            {},
-            "http://localhost:8080", // TODO: get this from config
-            PageRoutes.profile
-        );
     }, [user, profileName]);
 
     /**

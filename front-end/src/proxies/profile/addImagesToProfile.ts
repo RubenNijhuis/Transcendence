@@ -1,6 +1,5 @@
 // Types
-import { ProfileType } from "../../types/profile";
-import { ImageSelect } from "../../types/request";
+import { Profile, Request } from "../../types";
 
 // Proxies
 import { getProfileBannerByUsername } from "./getProfileBannerByUsername";
@@ -14,9 +13,9 @@ import { getProfileImageByUsername } from "./getProfileImageByUsername";
  * @returns
  */
 const addImagesToProfile = async (
-    profile: ProfileType,
-    imageSelect: ImageSelect
-): Promise<ProfileType> => {
+    profile: Profile.Instance,
+    imageSelect: Request.Payload.ImageSelect
+): Promise<Profile.Instance> => {
     try {
         // TODO: can this be done in a switch case?
         if (imageSelect.profile)
@@ -30,5 +29,7 @@ const addImagesToProfile = async (
         return Promise.reject(err);
     }
 };
+
+///////////////////////////////////////////////////////////
 
 export { addImagesToProfile };

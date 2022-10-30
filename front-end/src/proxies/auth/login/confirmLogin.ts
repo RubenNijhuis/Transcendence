@@ -3,7 +3,7 @@ import ApiRoutes from "../../../config/ApiRoutes";
 import { API } from "../../instances/apiInstance";
 
 // Types
-import { ConfirmLoginResponse } from "../../../types/request";
+import { Request } from "../../../types";
 import { addImagesToProfile } from "../../profile";
 import { updateAuthTokens } from "../../utils";
 
@@ -14,10 +14,12 @@ import { updateAuthTokens } from "../../utils";
  * @param code
  * @returns
  */
-const confirmLogin = async (code: string): Promise<ConfirmLoginResponse> => {
+const confirmLogin = async (
+    code: string
+): Promise<Request.Response.ConfirmLogin> => {
     try {
         const route = ApiRoutes.confirmLogin(code);
-        const { data } = await API.get<ConfirmLoginResponse>(route);
+        const { data } = await API.get<Request.Response.ConfirmLogin>(route);
 
         updateAuthTokens(data.authToken);
 

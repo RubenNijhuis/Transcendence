@@ -9,7 +9,7 @@ import Button from "../../components/Button";
 import { useUser } from "../../contexts/UserContext";
 
 // Debug
-import Logger from "../../modules/Logger";
+import Logger, { LogTypes } from "../../modules/Logger";
 
 // Proxies
 import { toggle2FA, confirmTFA, getqrTFA } from "../../proxies/auth";
@@ -33,9 +33,9 @@ const TwoFactorAuthentication = () => {
             const TFAToggleResponse = await toggle2FA(user.uid);
 
             Logger(
-                "TFAToggleResponse",
+                LogTypes.AUTH,
                 "Settings page",
-                "Toggle response",
+                "TFA Toggle Response",
                 TFAToggleResponse
             );
         } catch (err) {
@@ -49,7 +49,12 @@ const TwoFactorAuthentication = () => {
 
             setQRLink(getqrResponse);
 
-            console.log(getqrResponse);
+            Logger(
+                LogTypes.AUTH,
+                "Settings page",
+                "GetTFAqr response",
+                getqrResponse
+            );
         } catch (err) {
             console.error(err);
         }
@@ -60,9 +65,9 @@ const TwoFactorAuthentication = () => {
             const input = await confirmTFA(user.uid, "798016");
 
             Logger(
-                "TFAToggleResponse",
+                LogTypes.AUTH,
                 "Settings page",
-                "Toggle response",
+                "Confirm TFA response",
                 input
             );
         } catch (err) {

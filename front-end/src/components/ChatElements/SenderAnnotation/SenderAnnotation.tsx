@@ -1,5 +1,5 @@
 // Types
-import { ProfileType } from "../../../types/profile";
+import { Profile } from "../../../types";
 
 // UI
 import Asset from "../../Asset";
@@ -11,7 +11,7 @@ import { Container } from "./SenderAnnotation.style";
 ////////////////////////////////////////////////////////////
 
 interface ISenderAnnotation {
-    sender: ProfileType;
+    sender: Profile.Instance;
 }
 
 const SenderAnnotation = ({ sender }: ISenderAnnotation): JSX.Element => {

@@ -3,9 +3,10 @@ import ApiRoutes from "../../config/ApiRoutes";
 import { API } from "../instances/apiInstance";
 
 // Types
-import { ProfileType } from "../../types/profile";
+import { Profile, Request } from "../../types";
+
+// Proxies
 import { addImagesToProfile } from "./addImagesToProfile";
-import { ImageSelect } from "../../types/request";
 
 ////////////////////////////////////////////////////////////
 
@@ -16,12 +17,12 @@ import { ImageSelect } from "../../types/request";
  */
 const getProfileByUsername = async (
     username: string,
-    imageSelect: ImageSelect
-): Promise<ProfileType> => {
+    imageSelect: Request.Payload.ImageSelect
+): Promise<Profile.Instance> => {
     try {
         const route = ApiRoutes.getProfileByUsername(username);
 
-        const { data } = await API.get<ProfileType>(route);
+        const { data } = await API.get<Profile.Instance>(route);
 
         const profile = addImagesToProfile(data, imageSelect);
 
@@ -30,5 +31,7 @@ const getProfileByUsername = async (
         return Promise.reject(err);
     }
 };
+
+///////////////////////////////////////////////////////////
 
 export { getProfileByUsername };

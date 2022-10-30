@@ -21,6 +21,8 @@ import Heading from "../../components/Heading";
 const DebugDevBox = (): JSX.Element => {
     const { user } = useUser();
 
+    ///////////////////////////////////////////////////////////
+
     return (
         <Container>
             <Box>
@@ -42,5 +44,7 @@ const DebugDevBox = (): JSX.Element => {
         </Container>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export default DebugDevBox;

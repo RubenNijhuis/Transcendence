@@ -1,15 +1,35 @@
-import { Container, ElementContainer } from "./Modal.style";
+import {
+    CloseButtonContainer,
+    Container,
+    ElementContainer
+} from "./Modal.style";
 
 ///////////////////////////////////////////////////////////
 
-interface IModal {
-    element: React.ReactNode;
+interface ICloseButton {
+    setModalActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Modal = ({ element }: IModal): JSX.Element => {
+const CloseButton = ({ setModalActive }: ICloseButton) => {
+    return (
+        <CloseButtonContainer onClick={() => setModalActive(false)}>
+            <span>Close</span>
+        </CloseButtonContainer>
+    );
+};
+
+interface IModal {
+    children: React.ReactNode;
+    setModalActive: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Modal = ({ children, setModalActive }: IModal): JSX.Element => {
     return (
         <Container>
-            <ElementContainer>{element}</ElementContainer>
+            <ElementContainer>
+                {children}
+                <CloseButton setModalActive={setModalActive} />
+            </ElementContainer>
         </Container>
     );
 };

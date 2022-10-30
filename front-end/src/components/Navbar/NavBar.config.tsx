@@ -1,24 +1,38 @@
 import PageRoutes from "../../config/PageRoutes";
 
-export const locations = [
+////////////////////////////////////////////////////////////
+
+interface NavLink {
+    name: string;
+    url: string;
+    onlyWhenLoggedIn: boolean;
+}
+
+const locations: NavLink[] = [
     {
         name: "Chat",
         url: PageRoutes.chat,
-        onlyWhenLoggedin: true
+        onlyWhenLoggedIn: true
     },
     {
         name: "Pong",
         url: PageRoutes.pong,
-        onlyWhenLoggedin: false
+        onlyWhenLoggedIn: false
     },
     {
         name: "Leaderboard",
         url: PageRoutes.leaderBoard,
-        onlyWhenLoggedin: true
+        onlyWhenLoggedIn: true
     },
     {
         name: "Profile",
         url: PageRoutes.profile,
-        onlyWhenLoggedin: true
+        onlyWhenLoggedIn: true
     }
 ];
+
+////////////////////////////////////////////////////////////
+
+export type { NavLink };
+
+export { locations };

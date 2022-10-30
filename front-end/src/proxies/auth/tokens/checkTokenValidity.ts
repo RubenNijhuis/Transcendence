@@ -1,5 +1,5 @@
 // Types
-import { TokenValidityResponse } from "../../../types/request";
+import { Request } from "../../../types";
 
 // Proxies
 import { getUserByAccessToken } from "../../user";
@@ -16,15 +16,15 @@ import { refreshAuthToken } from "./refreshAuthToken";
  */
 const checkTokenValidity = async (
     refreshToken: string
-): Promise<TokenValidityResponse> => {
+): Promise<Request.Response.TokenValidity> => {
     try {
         const authToken = await refreshAuthToken(refreshToken);
 
         updateAuthTokens(authToken);
 
-        const userFromToken = await getUserByAccessToken(authToken.accessToken);
+        const profileFromToken = await getUserByAccessToken(authToken.accessToken);
 
-        return Promise.resolve({ user: userFromToken });
+        return Promise.resolve({ profile: profileFromToken });
     } catch (err) {
         return Promise.reject(err);
     }

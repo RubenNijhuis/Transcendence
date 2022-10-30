@@ -3,7 +3,7 @@ import ApiRoutes from "../../../config/ApiRoutes";
 import { API } from "../../instances/apiInstance";
 
 // Types
-import { AuthTokenType } from "../../../types/request";
+import { Request } from "../../../types";
 import { AxiosRequestConfig } from "axios";
 
 ////////////////////////////////////////////////////////////
@@ -14,7 +14,7 @@ import { AxiosRequestConfig } from "axios";
  */
 const refreshAuthToken = async (
     refreshToken: string
-): Promise<AuthTokenType> => {
+): Promise<Request.AuthToken> => {
     try {
         const route = ApiRoutes.refreshAuthToken();
         const config: AxiosRequestConfig = {
@@ -23,12 +23,14 @@ const refreshAuthToken = async (
             }
         };
 
-        const { data } = await API.get<AuthTokenType>(route, config);
+        const { data } = await API.get<Request.AuthToken>(route, config);
 
         return Promise.resolve(data);
     } catch (err) {
         return Promise.reject(err);
     }
 };
+
+///////////////////////////////////////////////////////////
 
 export { refreshAuthToken };

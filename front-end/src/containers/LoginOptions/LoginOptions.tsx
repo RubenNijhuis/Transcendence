@@ -32,22 +32,42 @@ const LoginOptions = () => {
                 </li>
 
                 <li className="login-option">
-                    <Asset url={"https://rubennijhuis.com/"} alt="google" />
+                    <Asset
+                        url={
+                            "https://images.ctfassets.net/vf2eiv36rew2/3hXhnxi3oJYrpkPOFqheVE/a33b25b455d47a5bdfab83a9e1168fc9/Untitled-2-01.png?w=1920&h=1080&q=50&fm=webp"
+                        }
+                        alt="google"
+                    />
                     <span>Log in using google</span>
                 </li>
 
                 <li className="login-option">
-                    <Asset url={"https://rubennijhuis.com/"} alt="github" />
+                    <Asset
+                        url={
+                            "https://images.ctfassets.net/vf2eiv36rew2/3hXhnxi3oJYrpkPOFqheVE/a33b25b455d47a5bdfab83a9e1168fc9/Untitled-2-01.png?w=1920&h=1080&q=50&fm=webp"
+                        }
+                        alt="github"
+                    />
                     <span>Log in using github</span>
                 </li>
 
                 <li className="login-option">
-                    <Asset url={"https://rubennijhuis.com/"} alt="twitter" />
+                    <Asset
+                        url={
+                            "https://images.ctfassets.net/vf2eiv36rew2/3hXhnxi3oJYrpkPOFqheVE/a33b25b455d47a5bdfab83a9e1168fc9/Untitled-2-01.png?w=1920&h=1080&q=50&fm=webp"
+                        }
+                        alt="twitter"
+                    />
                     <span>Log in using twitter</span>
                 </li>
 
                 <li className="login-option">
-                    <Asset url={"https://rubennijhuis.com/"} alt="apple" />
+                    <Asset
+                        url={
+                            "https://images.ctfassets.net/vf2eiv36rew2/3hXhnxi3oJYrpkPOFqheVE/a33b25b455d47a5bdfab83a9e1168fc9/Untitled-2-01.png?w=1920&h=1080&q=50&fm=webp"
+                        }
+                        alt="apple"
+                    />
                     <span>Log in using apple</span>
                 </li>
             </ul>

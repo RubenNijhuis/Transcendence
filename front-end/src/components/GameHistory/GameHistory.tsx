@@ -14,8 +14,7 @@ import {
 import { Link } from "react-router-dom";
 
 // Types
-import { MatchRecord } from "../../types/game";
-import { ProfileType } from "../../types/profile";
+import { Game, Profile } from "../../types";
 
 // UI
 import Heading from "../Heading";
@@ -28,7 +27,7 @@ import { paginateArray } from "../../utils/array";
 ////////////////////////////////////////////////////////////
 
 interface IMatchList {
-    matches: MatchRecord[];
+    matches: Game.MatchRecord[];
 }
 
 const MatchList = ({ matches }: IMatchList) => {
@@ -56,17 +55,17 @@ const MatchList = ({ matches }: IMatchList) => {
 };
 
 interface IGameHistory {
-    player: ProfileType;
-    matches: MatchRecord[];
+    player: Profile.Instance;
+    matches:Game.MatchRecord[];
 }
 
 const GameHistory = ({ player, matches }: IGameHistory): JSX.Element => {
     const [selectedPage, setSelectedPage] = useState<number>(0);
-    const [matchesPage, setMatchesPage] = useState<MatchRecord[]>(null!);
+    const [matchesPage, setMatchesPage] = useState<Game.MatchRecord[]>(null!);
 
     ////////////////////////////////////////////////////////////
 
-    const paginatedMatches = paginateArray<MatchRecord>(matches, 8);
+    const paginatedMatches = paginateArray<Game.MatchRecord>(matches, 8);
 
     ////////////////////////////////////////////////////////////
 
