@@ -37,15 +37,15 @@ const useAuth = () => useContext(AuthContext);
 
 ///////////////////////////////////////////////////////////
 
+interface IAuthProvider {
+    children: React.ReactNode;
+}
+
 /**
  * The authprovider creates a "bucket" in which we can store all
  * the user data as well as the utility functions like login and logout
  */
-const AuthProvider = ({
-    children
-}: {
-    children: React.ReactNode;
-}): JSX.Element => {
+const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [tfaEnabled, setTfaEnabled] = useState<boolean>(false);
 

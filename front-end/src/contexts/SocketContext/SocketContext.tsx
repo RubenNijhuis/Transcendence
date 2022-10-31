@@ -16,9 +16,6 @@ interface SocketContextType {
     connection: any;
 
     setSocketType: React.Dispatch<React.SetStateAction<Socket.SocketType>>;
-
-    roomId: string;
-    setRoomId: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const SocketContext = createContext<SocketContextType>(null!);
@@ -27,39 +24,31 @@ const useSocket = () => useContext(SocketContext);
 
 ///////////////////////////////////////////////////////////
 
-const SocketProvider = ({
-    children
-}: {
+interface ISocketProvider {
     children: React.ReactNode;
-}): JSX.Element => {
-    const [connection, setConnection] = useState<any>(
-        io(SocketRoutes.baseUrl(), {
-            path: SocketRoutes.path(Socket.SocketType.Chat)
-        })
-    );
+}
+
+const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
+    const [connection, setConnection] = useState<any>(null!);
     const [socketType, setSocketType] = useState<Socket.SocketType>(null!);
-    const [roomId, setRoomId] = useState<string>(null!);
 
     ////////////////////////////////////////////////////////////
 
-    // useEffect(() => {
-    //     setSocketType(Socket.SocketType.Game);
+    useEffect(() => {
+        setSocketType(Socket.SocketType.Game);
 
-    //     const path = SocketRoutes.path(socketType);
-    //     const newSocket = io(SocketRoutes.baseUrl(), { path: "/game" });
+        const path = SocketRoutes.path(socketType);
+        const newSocket = io(SocketRoutes.baseUrl(), { path });
 
-    //     setConnection(newSocket);
-    // }, []);
+        setConnection(newSocket);
+    }, []);
 
     ////////////////////////////////////////////////////////////
 
     const value: SocketContextType = {
         connection,
 
-        setSocketType,
-
-        roomId,
-        setRoomId
+        setSocketType
     };
 
     ////////////////////////////////////////////////////////////

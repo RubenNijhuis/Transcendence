@@ -27,7 +27,7 @@ const StyledInput = styled.div`
     }
 `;
 
-const CreateForm = styled.div`
+const CreateAccountForm = styled.form`
     width: calc(${magicNum} * 10);
     max-width: calc(${magicNum} * 10);
     margin: auto;
@@ -66,4 +66,4 @@ const StyledError = styled.div`
     color: black;
 `;
 
-export { StyledInput, CreateForm, StyledError };
+export { StyledInput, CreateAccountForm, StyledError };
