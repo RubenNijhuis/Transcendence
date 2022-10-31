@@ -15,8 +15,7 @@ import { Socket } from "../../types";
 interface SocketContextType {
     connection: any;
 
-    socketType: Socket.SocketType;
-    setSocketType: any;
+    setSocketType: React.Dispatch<React.SetStateAction<Socket.SocketType>>;
 
     roomId: string;
     setRoomId: React.Dispatch<React.SetStateAction<string>>;
@@ -57,7 +56,6 @@ const SocketProvider = ({
     const value: SocketContextType = {
         connection,
 
-        socketType,
         setSocketType,
 
         roomId,

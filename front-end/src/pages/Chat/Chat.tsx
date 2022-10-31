@@ -11,6 +11,7 @@ import { useChat } from "../../contexts/ChatContext";
 import { useSocket } from "../../contexts/SocketContext";
 import { useEffect } from "react";
 import { Socket } from "../../types";
+import SocketRoutes from "../../config/SocketRoutes";
 
 ///////////////////////////////////////////////////////////
 
@@ -19,18 +20,22 @@ const ChatPage = (): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
-    const { connection, socketType, setSocketType } = useSocket();
+    const { connection, setSocketType } = useSocket();
 
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
         setSocketType(Socket.SocketType.Chat);
 
-        connection.emit("connectionCheck", "pee pee poo poo");
+        // Connection check
+        connection.emit(SocketRoutes.connectionCheck(), null);
 
-        connection.on("connectionCheck", (res: string) => {
-            console.log("RESPONSE", res);
-        });
+        connection.on(
+            SocketRoutes.connectionCheck(),
+            (connectionStatus: boolean) => {
+                console.log("Connection check", connectionStatus);
+            }
+        );
     });
 
     ////////////////////////////////////////////////////////////

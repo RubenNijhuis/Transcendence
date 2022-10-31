@@ -1,15 +1,7 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 
 // Styling
 import styled from "styled-components";
-
-// Socket
-import { useSocket } from "../../contexts/SocketContext";
-import { Socket } from "../../types";
-import SocketRoutes from "../../config/SocketRoutes";
-
-// Debug
-import Logger, { LogTypes } from "../../modules/Logger";
 
 ////////////////////////////////////////////////////////////
 
@@ -33,40 +25,7 @@ interface ICanvas {
 const Canvas = ({ canvasRef }: ICanvas): JSX.Element => {
     const canvasContainerRef = useRef(null!);
 
-    const [socketResponse, setSocketResponse] = useState<string>(
-        "Put ur data here lets goooo 🚌"
-    );
-    const dataRef = useRef<HTMLSpanElement>(null!);
-
-    const { connection, socketType, setSocketType } = useSocket();
-
     ////////////////////////////////////////////////////////////
-
-    useEffect(() => {
-        setSocketType(Socket.SocketType.Game);
-
-        const emitRet = connection.emit(
-            SocketRoutes.healthCheck(),
-            "pee pee poo poo"
-        );
-        Logger(
-            LogTypes.DEBUG,
-            "Canvas",
-            `Socket.emit('${SocketRoutes.healthCheck()}') return`,
-            emitRet
-        );
-
-        const ret = connection.on(SocketRoutes.healthCheck(), (arg: string) =>
-            setSocketResponse(arg)
-        );
-
-        Logger(
-            LogTypes.DEBUG,
-            "Canvas",
-            `Socket.on('${SocketRoutes.healthCheck()}') return`,
-            ret
-        );
-    });
 
     useEffect(() => {
         if (canvasRef.current === null) return;
@@ -81,19 +40,9 @@ const Canvas = ({ canvasRef }: ICanvas): JSX.Element => {
     ////////////////////////////////////////////////////////////
 
     return (
-        <>
-            <div>
-                <span ref={dataRef}>{socketResponse}</span>
-            </div>
-            <Container ref={canvasContainerRef} style={{ display: "none" }}>
-                <StyledCanvas
-                    ref={canvasRef}
-                    id="pong"
-                    width="0px"
-                    height="0px"
-                />
-            </Container>
-        </>
+        <Container ref={canvasContainerRef} style={{ display: "none" }}>
+            <StyledCanvas ref={canvasRef} id="pong" width="0px" height="0px" />
+        </Container>
     );
 };
 

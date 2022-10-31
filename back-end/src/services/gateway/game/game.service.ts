@@ -4,9 +4,9 @@ import { Repository } from "typeorm";
 
 @Injectable()
 export class GameSocketService {
-    constructor() { }
+  constructor() {}
 
-    testService(testString: string): string {
-        return testString
-    }
+  testService(testString: string): string {
+    return testString;
+  }
 }

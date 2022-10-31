@@ -12,7 +12,7 @@ const SocketRoutes = {
     // Config //////////////////////////////////////////////////
 
     // misc ////////////////////////////////////////////////////
-    healthCheck: () => `healthCheck`,
+    connectionCheck: () => `connectionCheck`,
     // misc ////////////////////////////////////////////////////
 
     // game ////////////////////////////////////////////////////
@@ -23,11 +23,13 @@ const SocketRoutes = {
     leaveGameRoom: () => `leaveGameRoom`,
 
     leaveGameRoomMessage: () => `leaveGameRoomMessage`,
+
+    newBallPosition: () => `newBallPosition`,
+
     // game ////////////////////////////////////////////////////
 
     // chat ////////////////////////////////////////////////////
-    getNewMessage: () => `getNewMessage`,
-    sendNewMessage: () => `sendNewMessage`,
+    sendNewMessage: () => `newMessage`,
     joinChatRoom: () => `joinChatRoom`,
     leaveChatRoom: () => `leaveChatRoom`
     // chat ////////////////////////////////////////////////////

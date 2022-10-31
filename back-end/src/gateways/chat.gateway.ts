@@ -24,8 +24,8 @@ export class ChatSocketGateway {
   }
 
   @SubscribeMessage("connectionCheck")
-  healthCheck(@MessageBody() message: string): void {
-    this.server.emit("connectionCheck", message);
+  healthCheck(): void {
+    this.server.emit("connectionCheck", true);
   }
 
   @SubscribeMessage("newMessage")
