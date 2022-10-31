@@ -67,30 +67,7 @@ class GameManager {
     }
 
     checkIfBallHitsBats(pongball: Ball) {
-        // Checks if the left bat is hit
-        // if  (pongball.positionX - (pongball.radius * 1.1) <= this.player1Bat.positionX &&
-        //     (pongball.positionY >= this.player1Bat.positionY - this.player1Bat.height / 2 &&
-        //     pongball.positionY <= this.player1Bat.positionY + this.player1Bat.height / 2)) {
-        //     var relativeIntersectY = this.player1Bat.positionY - pongball.positionY;
-        //     var normalizedRelativeIntersectionY = (relativeIntersectY / (this.player1Bat.height / 2));
-        //     var bounceAngle = normalizedRelativeIntersectionY * (5 * Math.PI / 12);
-        //     pongball.velocityX = -pongball.velocityX;
-        //     pongball.velocityY = (pongball.velocity) * -Math.sin(bounceAngle);
-        //     pongball.velocity = this.canvas.width / 270;
-        //     this.powerUp.turn = 0;
-        // }
-        // Checks if right bat is hit
-        // if (pongball.positionX + (pongball.radius * 1.1) >= this.player2Bat.positionX  &&
-        //     (pongball.positionY >= this.player2Bat.positionY - this.player2Bat.height / 2 &&
-        //     pongball.positionY <= this.player2Bat.positionY + this.player2Bat.height / 2)) {
-        //     var relativeIntersectY = this.player2Bat.positionY - pongball.positionY;
-        //     var normalizedRelativeIntersectionY = (relativeIntersectY / (this.player2Bat.height / 2));
-        //     var bounceAngle = normalizedRelativeIntersectionY * (5 * Math.PI / 12);
-        //     pongball.velocityX = -pongball.velocityX;
-        //     pongball.velocityY = -(pongball.velocity) * Math.sin(bounceAngle);
-        //     pongball.velocity = this.canvas.width / 270;
-        //     this.powerUp.turn = 1;
-        // }
+        // Check if left bat is hit
         if (pongball.positionX <= (this.player1Bat.positionX + this.player1Bat.width + pongball.radius)) {
             if (pongball.positionY > this.player1Bat.positionY - (this.player1Bat.height / 2) && 
                 pongball.positionY < this.player1Bat.positionY + (this.player1Bat.height / 2)) {
@@ -103,6 +80,7 @@ class GameManager {
                 this.powerUp.turn = 0;
             }
         }
+        // Check if right bat is hit
         if (pongball.positionX >= (this.player2Bat.positionX - pongball.radius - this.player1Bat.width)) {
             if (pongball.positionY > this.player2Bat.positionY - (this.player2Bat.height / 2) && 
                 pongball.positionY < this.player2Bat.positionY + (this.player2Bat.height / 2)) {

@@ -1,4 +1,8 @@
-import randomNum from "../../utils/randomNum";
+function startVelocity(velocity: number): number {
+    var randomNum: Number = Math.random();
+    if (randomNum < 0.5) return (velocity * -1);
+    else return (velocity);
+}
 
 class Ball {
     positionX: number;
@@ -24,10 +28,10 @@ class Ball {
         
         this.radius = this.canvas.width / 75;
         
-        this.velocity = this.canvas.width / 300
+        this.velocity = this.canvas.width / 170;
 
-        this.velocityX = randomNum(-(this.velocity), this.velocity);
-        this.velocityY = randomNum(-(this.velocity), this.velocity);
+        this.velocityX = startVelocity(this.velocity);
+        this.velocityY = 0;
         
         this.color = "#1e1e1e";
     }
@@ -48,19 +52,11 @@ class Ball {
         this.context.closePath();
     }
 
-    start() {
-        // this.velocityX = randomNum(-2.5, 2.5);
-        // this.velocityY = randomNum(-2.5, 2.5);
-    }
-
     reset() {
         this.positionX = this.canvas.clientWidth / 2;
         this.positionY = this.canvas.clientHeight / 2;
-        this.velocityX = this.velocityY = randomNum(
-            -this.velocity,
-            this.velocity
-        );
-        //this.start();
+        this.velocityY = 0;
+        this.velocityX = startVelocity(this.velocityX);
     }
 
     setPosition(posX: number, posY: number) {

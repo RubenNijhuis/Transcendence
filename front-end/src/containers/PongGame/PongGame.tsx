@@ -115,6 +115,14 @@ const drawGame = (
 
         // Check game
         GameManagement.checkGame(PongBall);
+
+        window.addEventListener("mousemove", movePaddle);
+
+        function movePaddle (evt: any) {
+            let rect = canvas.getBoundingClientRect();
+    
+            Player1.positionY = evt.clientY - rect.top;
+        }
     };
 
     // Respond to keypresses

@@ -73,9 +73,9 @@ class PowerUps {
     getPositionY(max: number) {
         const i = Math.floor(Math.random() * max);
         const positiony = [
-            this.canvas.height * 0.5,
-            this.canvas.height * 0.45,
-            this.canvas.height * 0.4
+            this.canvas.height * 0.7,
+            this.canvas.height * 0.3,
+            this.canvas.height * 0.2
         ];
         return positiony[i];
     }
@@ -85,12 +85,6 @@ class PowerUps {
         pongBall.velocityY *= 1.3;
         pongBall.velocityX *= 1.3;
     }
-
-    // hugeBallPower (pongBall: Ball) {
-    //     pongBall.radius = this.canvas.width / 20;
-    //     pongBall.velocityY *= 1.2;
-    //     pongBall.velocityX *= 1.2;
-    // }
 
     bigBatPower(player1: Bat, player2: Bat, pongBall: Ball) {
         if (this.turn === 0) player1.height = this.canvas.width / 4;
@@ -124,7 +118,6 @@ class PowerUps {
         pongballpower: Ball
     ) {
         var randomNum: Number = Math.floor(Math.random() * 5);
-        // randomNum = 0;
         if (this.power === true && !this.powerTaken) {
             this.powerTaken = true;
             if (randomNum === 0) this.bigBatPower(player1, player2, pongball);
