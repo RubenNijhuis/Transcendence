@@ -25,7 +25,6 @@ import { UsernameDto } from "src/dtos/auth/username.dto";
 import { SetTfaDto } from "src/dtos/auth/setTfa.dto";
 import { SetUserDto } from "src/dtos/user/set-user.dto"; // TODO: is this one still used?
 
-
 // user functionalities
 import { UserService } from "src/services/user/user.service";
 
@@ -99,6 +98,13 @@ export class UsersController {
         imgPath += files[0]; // always takes the first one since there should only be 1 (one) file per user
       }
 
+      // const imgAsBuffer = ""
+      // const imgBuffer = new Buffer(imgAsBuffer, 'base64');
+
+      /**
+       * Trying to send image as base 64 so it doesn't
+       * have to be handled on the front-end
+       */
       return res.sendFile(imgPath);
     } catch (err) {
       throw err;

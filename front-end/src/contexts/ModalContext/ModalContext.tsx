@@ -10,6 +10,8 @@ interface ModalContextType {
     modalActive: boolean;
     setModalActive: React.Dispatch<React.SetStateAction<boolean>>;
 
+    setAllowClose: React.Dispatch<React.SetStateAction<boolean>>;
+
     setModalElement: React.Dispatch<React.SetStateAction<React.ReactNode>>;
 }
 
@@ -25,6 +27,7 @@ const ModalProvider = ({
     children: React.ReactNode;
 }): JSX.Element => {
     const [modalActive, setModalActive] = useState<boolean>(false);
+    const [allowClose, setAllowClose] = useState<boolean>(true);
     const [modalElement, setModalElement] = useState<React.ReactNode>(null!);
 
     ////////////////////////////////////////////////////////////
@@ -45,7 +48,8 @@ const ModalProvider = ({
         modalActive,
         setModalActive,
 
-        setModalElement
+        setModalElement,
+        setAllowClose
     };
 
     ////////////////////////////////////////////////////////////
@@ -54,7 +58,9 @@ const ModalProvider = ({
         <ModalContext.Provider value={value}>
             {children}
             {modalActive && (
-                <Modal setModalActive={setModalActive}>{modalElement}</Modal>
+                <Modal setModalActive={setModalActive} allowClose={allowClose}>
+                    {modalElement}
+                </Modal>
             )}
         </ModalContext.Provider>
     );

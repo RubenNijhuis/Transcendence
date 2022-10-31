@@ -12,9 +12,10 @@ import { Container, ChangeSlideButtons } from "./BoxSlider.style";
 
 interface IBoxSlider {
     children: React.ReactNode;
+    onSlideChange(): void;
 }
 
-const BoxSlider = ({ children }: IBoxSlider): JSX.Element => {
+const BoxSlider = ({ children, onSlideChange }: IBoxSlider): JSX.Element => {
     const [amountSlides, setAmountSlides] = useState<number>(1);
     const [activeSlide, setActiveSlide] = useState<number>(0);
     const boxSlidesContainerRef = useRef<HTMLDivElement>(null!);

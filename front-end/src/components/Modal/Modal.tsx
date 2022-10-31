@@ -26,15 +26,20 @@ const CloseButton = ({ setModalActive }: ICloseButton) => {
 
 interface IModal {
     children: React.ReactNode;
+    allowClose: boolean;
     setModalActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Modal = ({ children, setModalActive }: IModal): JSX.Element => {
+const Modal = ({
+    children,
+    setModalActive,
+    allowClose
+}: IModal): JSX.Element => {
     return (
         <Container>
             <ElementContainer>
                 {children}
-                <CloseButton setModalActive={setModalActive} />
+                {allowClose && <CloseButton setModalActive={setModalActive} />}
             </ElementContainer>
         </Container>
     );

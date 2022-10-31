@@ -58,7 +58,7 @@ const ProfilePage = (): JSX.Element => {
     const { user, setUser } = useUser();
 
     // Create account modal
-    const { setModalActive, setModalElement } = useModal();
+    const { setModalActive, setModalElement, setAllowClose } = useModal();
 
     /**
      * The `username` in the url '/profile/:username' if not
@@ -95,6 +95,7 @@ const ProfilePage = (): JSX.Element => {
 
             if (shouldCreateUser) {
                 setModalElement(<CreateAccount />);
+                setAllowClose(false);
                 setModalActive(true);
             }
         } catch (err) {

@@ -58,12 +58,12 @@ const CreateForm = styled.div`
     }
 `;
 
-const ErrorPopup = styled.div`
+const StyledError = styled.div`
     border: solid 2px red;
-    border-radius: 3px;
-    background-color: #ff8686;
+    background: red;
+    width: 100%;
 
-    padding: calc(${magicNum} / 8);
+    color: black;
 `;
 
-export { StyledInput, CreateForm, ErrorPopup };
+export { StyledInput, CreateForm, StyledError };

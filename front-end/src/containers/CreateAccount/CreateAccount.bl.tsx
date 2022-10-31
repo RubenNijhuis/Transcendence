@@ -15,7 +15,7 @@ const retrieveFileFromInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     return { file, fileName };
 };
 
-const handleImageUpload = (
+const handleImageUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
     route: string
 ) => {
@@ -23,7 +23,13 @@ const handleImageUpload = (
     const fd = new FormData();
     fd.append("file", file, fileName);
 
-    uploadImage(route, fd).then(console.log).catch(console.log);
+    try {
+        const uploadResp = await uploadImage(route, fd);
+        
+        console.log(uploadResp);
+    } catch (err) {
+        console.error(err);
+    }
 };
 
 const handleAccountCreation = async (

@@ -26,7 +26,8 @@ const useFileInput = (): IFileInputReturn => {
 
     return {
         value,
-        onChange: handleInputChange
+        onChange: handleInputChange,
+        
     };
 };
 
