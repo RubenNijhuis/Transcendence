@@ -9,12 +9,15 @@ import {
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
+interface IHeading {
     type: Number;
     children: React.ReactNode;
 }
 
-const Heading = ({ type, children }: Props): JSX.Element => {
+/**
+ * Standardizes how we use headers
+ */
+const Heading = ({ type, children }: IHeading): JSX.Element => {
     const classname = "heading";
 
     switch (type) {
@@ -34,5 +37,7 @@ const Heading = ({ type, children }: Props): JSX.Element => {
             return <StyledH1 className={classname}>{children}</StyledH1>;
     }
 };
+
+///////////////////////////////////////////////////////////
 
 export default Heading;

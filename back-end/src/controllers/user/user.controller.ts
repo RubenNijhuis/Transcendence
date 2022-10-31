@@ -24,7 +24,7 @@ import UserRoutes from "src/configs/routes/globalRoutes.config";
 import { UsernameDto } from "src/dtos/auth/username.dto";
 import { SetTfaDto } from "src/dtos/auth/setTfa.dto";
 import { SetUserDto } from "src/dtos/user/set-user.dto"; // TODO: is this one still used?
-import { SeederAmountDto } from "src/dtos/seeder/custom-seeder.dto";
+
 
 // user functionalities
 import { UserService } from "src/services/user/user.service";
@@ -42,11 +42,10 @@ import User from "../../entities/user/user.entity";
 import {
   bannerOptions,
   deleteFiles,
-  profileOptions,
+  profileOptions
 } from "src/middleware/imgUpload/imgUpload";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { readdirSync } from "fs";
-
 
 // guards
 import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
@@ -87,24 +86,30 @@ export class UsersController {
         throw new BadRequestException("Invalid image type");
       }
 
-      const dirname : string = `/app/upload/${imageType}/`;
-      let fullPath: string = dirname;
+      const dirname = `/app/upload/${imageType}/`;
+      let imgPath: string = dirname;
 
-      const files = readdirSync(dirname).filter(file => file.startsWith(`${intraId}.`));
-      if (!files)
-        fullPath += "standard.png"; // in case nothing has been uploaded, if it ever gets optional??
-      else
-        fullPath += files[0]; // always takes the first one since there should only be 1 (one) file per user
-      return res.sendFile(fullPath);
+      const files = readdirSync(dirname).filter((file) => {
+        return file.startsWith(`${intraId}.`);
+      });
+
+      if (files.length === 0) {
+        imgPath += "standard.png"; // in case nothing has been uploaded, if it ever gets optional?? it is 😡
+      } else {
+        imgPath += files[0]; // always takes the first one since there should only be 1 (one) file per user
+      }
+
+      return res.sendFile(imgPath);
     } catch (err) {
       throw err;
     }
   }
 
   @Get(UserRoutes.getUserOnName)
-  async findUsersById(@Res() res: Response, @Param() username: string) {
+  async findUsersById(@Param("username") username: string) {
     try {
       const user: User = await this.userService.findUserByUsername(username);
+
       return this.userService.filterUser(user);
     } catch (err) {
       throw err;
@@ -136,8 +141,8 @@ export class UsersController {
       const removeUserResp = await this.userService.removeUser(dto.username);
 
       return removeUserResp;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -145,9 +150,9 @@ export class UsersController {
   @UsePipes(ValidationPipe)
   async turnon2fa(@Body() dto: SetTfaDto) {
     try {
-      await this.userService.setTfaOption(dto.username, dto.option);
-    } catch (error) {
-      throw error;
+      await this.userService.setTfaOption(dto.uid);
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -156,8 +161,9 @@ export class UsersController {
   @UseInterceptors(FileInterceptor("file", bannerOptions))
   async uploadBannerFile(
     @Req() req: Request,
-    @UploadedFile() file: Express.Multer.File) {
-    const path: string = '/app/upload/banner/';
+    @UploadedFile() file: Express.Multer.File
+  ) {
+    const path = "/app/upload/banner/";
     const id: string = req.user["intraID"];
 
     deleteFiles(path, id, file.filename);
@@ -170,9 +176,9 @@ export class UsersController {
   async uploadProfileFile(
     @Req() req: Request,
     @UploadedFile() file: Express.Multer.File
-    ) {
-    // remove left over files if any
-    const path: string = '/app/upload/profile/';
+  ) {
+    // Remove left over files
+    const path = "/app/upload/profile/";
     const id: string = req.user["intraID"];
 
     deleteFiles(path, id, file.filename);

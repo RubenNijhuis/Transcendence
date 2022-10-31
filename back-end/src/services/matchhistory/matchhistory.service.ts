@@ -29,7 +29,7 @@ export class MatchHistoryService {
           .getMany();
           return matches;
     }
-    catch(err: any) {
+    catch(err) {
         return err;
     }
   }

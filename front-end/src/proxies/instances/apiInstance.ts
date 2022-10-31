@@ -1,5 +1,5 @@
 // Requests
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import ApiRoutes from "../../config/ApiRoutes";
 
 // Request/Response Interceptors
@@ -11,6 +11,8 @@ import {
 } from "./interceptors";
 
 ////////////////////////////////////////////////////////////
+
+type apiRequestConfig = AxiosRequestConfig;
 
 // Instance
 const API = axios.create({
@@ -34,4 +36,7 @@ API.interceptors.response.use(
     ErrorResponseInterceptor
 );
 
+///////////////////////////////////////////////////////////
+
 export { API, setDefaultAuthHeader };
+export type { apiRequestConfig };

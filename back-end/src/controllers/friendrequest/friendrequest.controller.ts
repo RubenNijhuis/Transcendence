@@ -10,8 +10,8 @@ export class FriendRequestController {
   async getrequests(@Query("username") username: string) {
     try {
       return await this.friendrequestService.getRequests(username);
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -19,8 +19,8 @@ export class FriendRequestController {
   async sendrequest(@Body() requestDto: CreateRequestDto) {
     try {
       return await this.friendrequestService.sendRequest(requestDto);
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -31,8 +31,8 @@ export class FriendRequestController {
         requestDto.username,
         requestDto.requested
       );
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 }

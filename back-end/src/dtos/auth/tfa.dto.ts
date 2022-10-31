@@ -2,7 +2,7 @@ import { IsNotEmpty } from "class-validator";
 
 export class TfaDto {
   @IsNotEmpty()
-  username: string;
+  intraID: string;
 
   @IsNotEmpty()
   tfaCode: string;

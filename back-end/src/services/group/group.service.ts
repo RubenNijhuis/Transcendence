@@ -15,7 +15,9 @@ import { EditOwnerDto } from "src/dtos/group/edit-owner.dto";
 import { CreateGroupDto } from "../../dtos/group/create-group.dto";
 import { CreatePasswordDto } from "../../dtos/group/create-password.dto";
 import { EditPasswordDto } from "../../dtos/group/edit-password.dto";
-import { MuteUserDto } from "src/dtos/group/mute-user.dto";
+import { User } from "src/entities";
+import { RemoveGroupDto } from "src/dtos/group/remove-group.dto";
+import { group } from "console";
 
 @Injectable()
 export class GroupService {
@@ -46,15 +48,25 @@ export class GroupService {
         while(i < Groupusers.length)
         {
           const group: Group = await this.groupRepository.findOne({ where: { id: Groupusers[i].groupId } });
-          console.log(group.id);
           groups.push(group);
           i++;
         }
-        console.log(groups.length)
       return (groups);
     }
-    catch(err: any) {
+    catch(err) {
       return err;
+    }
+  }
+
+  async getGroupSize(groupId: number) {
+    try {
+      const groupusers: Groupuser[] = await this.groupuserRepository
+      .createQueryBuilder("groupuser")
+      .where({ groupId: groupId })
+      .getMany();
+      return (groupusers.length)
+    } catch (error: any) {
+      return error;
     }
   }
 
@@ -75,14 +87,52 @@ export class GroupService {
   }
   
     async createGroup(createGroupDto: CreateGroupDto) {
-      const newGroup : Group = this.groupRepository.create();
-      newGroup.owner = createGroupDto.owner;
-      newGroup.users = [];
-      newGroup.groupname = createGroupDto.groupname;
-      const newGroupResp = this.groupRepository.save(newGroup);
-      return newGroupResp;
+      try {
+        for (let i = 0; i < createGroupDto.users.length; i++) {
+          const user: User = await this.userService.findUsersById(
+            createGroupDto.users[i]
+          );
+          if (!user) throw console.error("user doesn't exist");
+          const owner: User = await this.userService.findUsersById(
+            createGroupDto.owner
+          );
+          if (!owner) throw console.error("owner doesn't exist");
+        }
+        const newGroup : Group = this.groupRepository.create();
+        newGroup.owner = createGroupDto.owner;
+        newGroup.users = [];
+        newGroup.groupname = createGroupDto.groupname;
+        const newGroupResp = this.groupRepository.save(newGroup);
+        return newGroupResp;
+      } catch (err) {
+        throw errorHandler(
+          err,
+          "Failed to add member to group",
+          HttpStatus.INTERNAL_SERVER_ERROR
+        );
+      }
     }
   
+    async removeGroup(removeGroupDto : RemoveGroupDto) {
+      try {
+        const group : Group = await this.findGroupById(removeGroupDto.groupId);
+        this.groupuserRepository
+          .createQueryBuilder("groupuser")
+          .delete()
+          .where({ groupId: removeGroupDto.groupId })
+          .execute();
+        if (group.owner === removeGroupDto.owner) {
+          this.groupRepository
+          .createQueryBuilder("group")
+          .delete()
+          .where({ id: removeGroupDto.groupId })
+          .execute();
+        }
+      } catch (error: any) {
+        throw error;
+      }
+    }
+
     async addMembers(editMembersDto: EditMembersDto) {
       try {
         const group: Group = await this.findGroupById(editMembersDto.groupId);
@@ -101,7 +151,7 @@ export class GroupService {
   
           this.groupuserRepository.save(groupuser);
         }
-      } catch (err: any) {
+      } catch (err) {
         throw errorHandler(
           err,
           "Failed to add member to group",
@@ -120,11 +170,9 @@ export class GroupService {
         groupuser.groupId = editOwnerDto.groupId;
         groupuser.userId = editOwnerDto.owner;
         groupuser.userType = 2;
-  
-        this.groupuserRepository.save(groupuser);
-  
-        return;
-      } catch (err: any) {
+        return this.groupuserRepository.save(groupuser);
+
+      } catch (err) {
         throw errorHandler(
           err,
           "Failed to add owner to group",
@@ -136,7 +184,7 @@ export class GroupService {
   async createPassword(createPasswordDto: CreatePasswordDto) {
     try {
       const group : Group = await this.findGroupById(createPasswordDto.id);
-      if (!group) return console.error("group doesn't exist"); //error lol
+      if (!group) throw console.error("group doesn't exist"); //error lol
 
       const owner : string = group.owner;
       console.log(owner);
@@ -152,7 +200,7 @@ export class GroupService {
           id: createPasswordDto.id
         })
         .execute();
-    } catch (err: any) {
+    } catch (err) {
       throw errorHandler(
         err,
         "Failed to create password",
@@ -181,7 +229,7 @@ export class GroupService {
           id: editPasswordDto.id
         })
         .execute();
-    } catch (err: any) {
+    } catch (err) {
       throw errorHandler(
         err,
         "Failed to update password",
@@ -191,16 +239,30 @@ export class GroupService {
   }
 
   async removeMembers(editMembersDto: EditMembersDto) {
+    //TODO: need to add check if owner is actually the owner
+    let i: number;
+    let ownerRemoved: boolean = false;
     try {
-      for (let i = 0; i < editMembersDto.users.length; i++) {
-        const result: DeleteResult = await this.groupuserRepository
+      for (i = 0; i < editMembersDto.users.length; i++) {
+        if (editMembersDto.users[i] === editMembersDto.owner) {
+          ownerRemoved = true;
+        }
+        this.groupuserRepository
           .createQueryBuilder("groupuser")
           .delete()
           .where({ groupId: editMembersDto.groupId })
           .andWhere({ userId: editMembersDto.users[i] })
           .execute();
         }
-    } catch (err: any) {
+        const size : number = await this.getGroupSize(editMembersDto.groupId);
+        if (size == i || ownerRemoved) {
+          const groupId = editMembersDto.groupId;
+          const owner = editMembersDto.owner;
+          const removegroupDto : RemoveGroupDto = {groupId, owner};
+          this.removeGroup(removegroupDto);
+        }
+
+    } catch (err) {
       throw errorHandler(
         err,
         "Failed to remove users",
@@ -221,7 +283,7 @@ export class GroupService {
         groupuser.userType = 1;
       }
       return this.groupuserRepository.save(groupuser);
-    } catch (err: any) {
+    } catch (err) {
       throw errorHandler(
         err,
         "Failed to make user admin",
@@ -230,19 +292,19 @@ export class GroupService {
     }
   }
 
-  async unMakeAdmin(MakeAdminDto: MakeAdminDto) {
+  async unMakeAdmin(makeAdminDto: MakeAdminDto) {
     try {
       const groupuser: Groupuser = await this.groupuserRepository
         .createQueryBuilder("groupuser")
-        .where({ groupId: MakeAdminDto.group })
-        .andWhere({ userId: MakeAdminDto.user })
+        .where({ groupId: makeAdminDto.group })
+        .andWhere({ userId: makeAdminDto.user })
         .getOne();
-      const group: Group = await this.findGroupById(MakeAdminDto.group);
-      if (groupuser && group.owner === MakeAdminDto.owner) {
+      const group: Group = await this.findGroupById(makeAdminDto.group);
+      if (groupuser && group.owner === makeAdminDto.owner) {
         groupuser.userType = 0;
       }
       return this.groupuserRepository.save(groupuser);
-    } catch (err: any) {
+    } catch (err) {
       throw errorHandler(
         err,
         "Failed to remove adminstatus from user",

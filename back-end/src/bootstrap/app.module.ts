@@ -13,6 +13,7 @@ import { TfaModule } from "src/modules/tfa/tfa.module";
 import { RecordModule } from "src/modules/record/record.module"
 import { MatchHistoryModule } from "src/modules/matchhistory/matchhistory.module";
 import { SeederModule } from "src/modules/seeder/seeder.module";
+import { WebSocketModule } from "src/modules/websocket/websocket.module";
 
 
 @Module({
@@ -29,6 +30,7 @@ import { SeederModule } from "src/modules/seeder/seeder.module";
     RecordModule,
     MatchHistoryModule,
     SeederModule,
+    WebSocketModule,
     PassportModule.register({ session: true })
   ],
   controllers: [],

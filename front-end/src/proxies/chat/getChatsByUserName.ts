@@ -3,7 +3,7 @@ import { API } from "../instances/apiInstance";
 import ApiRoutes from "../../config/ApiRoutes";
 
 // Types
-import { GroupChat } from "../../types/chat";
+import { Chat } from "../../types";
 
 ////////////////////////////////////////////////////////////
 
@@ -12,15 +12,18 @@ import { GroupChat } from "../../types/chat";
  * @param username
  * @returns
  */
-const getChatsByUsername = async (username: string): Promise<GroupChat[]> => {
+const getChatsByUsername = async (username: string): Promise<Chat.Group.Instance[]> => {
     try {
         const route = ApiRoutes.getChatsByUsername(username);
-        
-        const { data } = await API.get<GroupChat[]>(route);
+
+        const { data } = await API.get<Chat.Group.Instance[]>(route);
+
         return Promise.resolve(data);
-    } catch (err: any) {
+    } catch (err) {
         return Promise.reject(err);
     }
 };
+
+///////////////////////////////////////////////////////////
 
 export { getChatsByUsername };

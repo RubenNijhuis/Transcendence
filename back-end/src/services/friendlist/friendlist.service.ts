@@ -1,9 +1,17 @@
-import { HttpStatus, Injectable } from "@nestjs/common";
+// Nestjs
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+
+// DB
 import { Repository } from "typeorm";
+
+// Types
 import { FriendList } from "src/entities";
+
+// Dtos
 import { CreateFriendsDto } from "../../dtos/friendlist/create-friend.dto";
-import { errorHandler } from "src/utils/errorhandler/errorHandler";
+
+////////////////////////////////////////////////////////////
 
 @Injectable()
 export class FriendlistService {
@@ -12,21 +20,35 @@ export class FriendlistService {
     private readonly friendlistRepository: Repository<FriendList>
   ) {}
 
-  async getFriends(username: string): Promise<FriendList[]> {
-    const friends  = await this.friendlistRepository
+  private filterOutput(friends: FriendList[]) {
+    const filteredFriends: string[] = [];
+
+    for (const friend of friends) {
+      filteredFriends.push(friend.friendname);
+    }
+
+    return filteredFriends;
+  }
+
+  async getFriends(username: string): Promise<string[]> {
+    let friends: FriendList[] = [];
+
+    friends = await this.friendlistRepository
       .createQueryBuilder("friend_list")
       .where("username = :username", { username })
       .getMany();
-    return friends;
+
+    return this.filterOutput(friends);
   }
 
-  async getFriend(username: string, friendname: string): Promise<FriendList> {
+  async getFriend(username: string, friendname: string): Promise<string> {
     const friend = await this.friendlistRepository
       .createQueryBuilder("friend_list")
       .where("username = :username", { username })
       .andWhere("friends = :friendname", { friendname })
       .getOne();
-    return friend;
+
+    return friend.friendname;
   }
 
   async isFriend(username: string, friendname: string): Promise<boolean> {
@@ -38,17 +60,20 @@ export class FriendlistService {
 
   async addFriend(createfriendsDto: CreateFriendsDto) {
     const newEntry = this.friendlistRepository.create(createfriendsDto);
+    const saveResponse = this.friendlistRepository.save(newEntry);
 
-    return this.friendlistRepository.save(newEntry);
+    return saveResponse;
   }
 
   async removeFriend(username: string, friendname: string) {
-    return this.friendlistRepository
+    const removeFriendResponse = this.friendlistRepository
       .createQueryBuilder("friend_list")
       .delete()
       .from("friend_list")
       .where("username = :username", { username })
       .andWhere("friends = :friendname", { friendname })
       .execute();
+
+    return removeFriendResponse;
   }
 }

@@ -1,17 +1,17 @@
 // Types
-import { Message, MessageContentType } from "../../types/chat";
+import { Chat } from "../../types";
 
 // UI
 import SimpleMessageDisplay from "./SimpleMessageDisplay";
 import PictureMessageDisplay from "./PictureMessageDisplay";
 import InviteMessageDisplay from "./InviteMessageDisplay";
+import SenderAnnotation from "./SenderAnnotation";
 
 // Styling
 import styled from "styled-components";
 
 // Styling constants
 import { magicNum } from "../../styles/StylingConstants";
-import SenderAnnotation from "./SenderAnnotation";
 
 ////////////////////////////////////////////////////////////
 
@@ -25,14 +25,18 @@ const ChatElementContainer = styled.div`
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
-    message: Message;
+interface IChatElement {
+    message: Chat.Message.Instance;
     fromUser: boolean;
     isDm: boolean;
 }
 
-const ChatElement = ({ fromUser, message, isDm }: Props): JSX.Element => {
-    const contentType: MessageContentType = message.content_type;
+const ChatElement = ({
+    fromUser,
+    message,
+    isDm
+}: IChatElement): JSX.Element => {
+    const contentType: Chat.Message.ContentType = message.content_type;
 
     ////////////////////////////////////////////////////////////
 
@@ -59,5 +63,7 @@ const ChatElement = ({ fromUser, message, isDm }: Props): JSX.Element => {
         </ChatElementContainer>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export default ChatElement;

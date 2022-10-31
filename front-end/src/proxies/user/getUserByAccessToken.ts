@@ -1,12 +1,11 @@
 // Api config
 import ApiRoutes from "../../config/ApiRoutes";
-import { API } from "../instances/apiInstance";
+import { API, apiRequestConfig} from "../instances/apiInstance";
 
-import { addImagesToProfile } from "./addImagesToProfile";
+import { addImagesToProfile } from "../profile/addImagesToProfile";
 
 // Types
-import { ProfileType } from "../../types/profile";
-import { AxiosRequestConfig } from "axios";
+import { Profile } from "../../types";
 
 ////////////////////////////////////////////////////////////
 
@@ -17,21 +16,26 @@ import { AxiosRequestConfig } from "axios";
  */
 const getUserByAccessToken = async (
     accessToken: string
-): Promise<ProfileType> => {
+): Promise<Profile.Instance> => {
     try {
         const route = ApiRoutes.getUserByAccessToken();
-        const config: AxiosRequestConfig = {
+        const config: apiRequestConfig= {
             headers: { Authorization: `Bearer ${accessToken}` }
         };
 
-        const { data } = await API.get<ProfileType>(route, config);
+        const { data } = await API.get<Profile.Instance>(route, config);
 
-        const returnedUser = await addImagesToProfile(data);
+        const returnedUser = await addImagesToProfile(data, {
+            profile: true,
+            banner: true
+        });
 
         return Promise.resolve(returnedUser);
-    } catch (err: any) {
+    } catch (err) {
         return Promise.reject(err);
     }
 };
+
+///////////////////////////////////////////////////////////
 
 export { getUserByAccessToken };

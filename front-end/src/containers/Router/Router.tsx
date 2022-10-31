@@ -1,56 +1,77 @@
+// React
+import { lazy, Suspense } from "react";
+
 // Routing
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-
-// Route names config
 import PageRoutes from "../../config/PageRoutes";
 
-// Public Pages
-import Home from "../../pages/Home";
+// Suspense fallback
+import FallBackPage from "../FallBackPage";
 
-// Private pages
-import ProfilePage from "../../pages/Profile";
-import Play from "../../pages/Play";
-import ChatPage from "../../pages/Chat";
-import Leaderboard from "../../pages/Leaderboard";
-import Pong from "../../pages/Pong";
-import NewPongGame from "../../pages/NewPongGame";
-
-// Authentication
+// Guards
 import { AuthGuard } from "../RouteGuards";
 
+// Public Pages
+const Home = lazy(() => import("../../pages/Home"));
+const Login = lazy(() => import("../../pages/Login"));
+
+// Private pages
+const ProfilePage = lazy(() => import("../../pages/Profile"));
+const ChatPage = lazy(() => import("../../pages/Chat"));
+const Leaderboard = lazy(() => import("../../pages/Leaderboard"));
+const Pong = lazy(() => import("../../pages/Pong"));
+const SelectGame = lazy(() => import("../../pages/SelectGame"));
+const SettingsPage = lazy(() => import("../../pages/Settings"));
+
 // 404
-import NotFound from "../../pages/NotFound";
+const NotFound = lazy(() => import("../../pages/NotFound"));
 
-const Router = () => (
+///////////////////////////////////////////////////////////
+
+const Router = (): JSX.Element => (
     <BrowserRouter>
-        <Routes>
-            {/* Public routes */}
-            <Route path={PageRoutes.home} element={<Home />} />
+        <Suspense fallback={<FallBackPage />}>
+            <Routes>
+                {/* Public routes */}
+                <Route path={PageRoutes.login} element={<Login />} />
 
-            {/* Pong debugging */}
-            <Route path={PageRoutes.pong} element={<Pong />} />
-            <Route path={PageRoutes.newPong} element={<NewPongGame />} />
+                {/* Routes that have to pass through authentication to be loaded */}
+                <Route element={<AuthGuard />}>
+                    <Route path={PageRoutes.home} element={<Home />} />
 
-            {/* Routes that have to pass through authentication to be loaded */}
-            <Route element={<AuthGuard />}>
-                {/* Profile page is rendered in two different ways but same component */}
-                <Route path={PageRoutes.profile} element={<ProfilePage />}>
-                    <Route path=":profileName" element={<ProfilePage />} />
+                    {/* Profile page is rendered in two different ways but same component */}
+                    <Route path={PageRoutes.profile} element={<ProfilePage />}>
+                        <Route path=":profileName" element={<ProfilePage />} />
+                    </Route>
+
+                    <Route
+                        path={PageRoutes.settings}
+                        element={<SettingsPage />}
+                    />
+
+                    {/* Regular private routes */}
+                    <Route
+                        path={PageRoutes.selectGame}
+                        element={<SelectGame />}
+                    />
+
+                    <Route path={PageRoutes.pong} element={<Pong />} />
+
+                    <Route path={PageRoutes.chat} element={<ChatPage />} />
+
+                    <Route
+                        path={PageRoutes.leaderBoard}
+                        element={<Leaderboard />}
+                    />
                 </Route>
 
-                {/* Regular private routes */}
-                <Route path={PageRoutes.play} element={<Play />} />
-                <Route path={PageRoutes.chat} element={<ChatPage />} />
-                <Route
-                    path={PageRoutes.leaderBoard}
-                    element={<Leaderboard />}
-                />
-            </Route>
-
-            {/* 404 route */}
-            <Route path="*" element={<NotFound />} />
-        </Routes>
+                {/* 404 route */}
+                <Route path="*" element={<NotFound />} />
+            </Routes>
+        </Suspense>
     </BrowserRouter>
 );
+
+///////////////////////////////////////////////////////////
 
 export default Router;

@@ -30,8 +30,8 @@ export class RecordController {
       await this.recordService.banUser(banUserDto);
       const ret = { message: "User banned!" };
       return ret;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 }

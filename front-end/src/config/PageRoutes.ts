@@ -6,13 +6,14 @@ const PageRoutes = {
 
     ////////////////////////////////////////////////////////////
 
-    play: `/play`,
+    selectGame: `/select-pong`,
     pong: `/pong`,
     newPong: `/new-pong`,
 
     ////////////////////////////////////////////////////////////
 
     createAccount: `/create-account`,
+    login: `/login`,
 
     ////////////////////////////////////////////////////////////
 
@@ -21,9 +22,11 @@ const PageRoutes = {
     chat: `/chat`,
     leaderBoard: `/leaderboard`,
 
+    settings: `/settings`,
+
     ////////////////////////////////////////////////////////////
 
-    whenNotLoggedIn: `/`
+    whenNotLoggedIn: `/login`
 };
 
 export default PageRoutes;

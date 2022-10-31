@@ -3,65 +3,18 @@ import React, { useEffect, useRef, useState } from "react";
 
 // UI
 import Button from "../../Button";
+import SliderDots from "../Dots";
 
 // Styling
 import { Container, ChangeSlideButtons } from "./BoxSlider.style";
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
+interface IBoxSlider {
     children: React.ReactNode;
 }
 
-interface SliderDotsProps {
-    amount: number;
-    active: number;
-}
-
-const Dot = ({ active }: { active: boolean }): JSX.Element => {
-    return (
-        <div
-            className="step__dot"
-            style={{
-                backgroundColor: active ? "rgb(30,30,30)" : "rgb(200,200,200)",
-                width: 18,
-                height: 18,
-                borderRadius: 1000
-            }}
-        >
-            <span />
-        </div>
-    );
-};
-
-// TODO: styling in seperate folder
-const SliderDots = ({ amount, active }: SliderDotsProps): JSX.Element => {
-    const dots = [];
-
-    for (let i = 0; i < amount; i++) {
-        dots.push(<Dot active={i === active} key={i} />);
-    }
-
-    return (
-        <div
-            className="steps__container"
-            style={{ display: "flex", padding: 9 }}
-        >
-            <div
-                className="steps"
-                style={{
-                    display: "flex",
-                    gap: 9,
-                    margin: "auto"
-                }}
-            >
-                {dots}
-            </div>
-        </div>
-    );
-};
-
-const BoxSlider = ({ children }: Props): JSX.Element => {
+const BoxSlider = ({ children }: IBoxSlider): JSX.Element => {
     const [amountSlides, setAmountSlides] = useState<number>(1);
     const [activeSlide, setActiveSlide] = useState<number>(0);
     const boxSlidesContainerRef = useRef<HTMLDivElement>(null!);
@@ -113,5 +66,7 @@ const BoxSlider = ({ children }: Props): JSX.Element => {
         </Container>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export default BoxSlider;

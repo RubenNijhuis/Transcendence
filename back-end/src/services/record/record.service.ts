@@ -37,7 +37,7 @@ export class RecordService {
       const newRecord = this.recordRepository.create(banUserDto);
       return this.recordRepository.save(newRecord);
     }
-    catch (err: any) {
+    catch (err) {
       throw errorHandler(
         err,
         "Failed to ban member",
@@ -51,12 +51,11 @@ export class RecordService {
       const userRecord : Record = await this.getRecordByUserId(userId, groupId);
       const timeUntilUnban : number = userRecord.createdTime.valueOf() + (userRecord.timeToBan * 1000);
       const timeOfDay : number = new Date().getTime() //TODO: leak?
-      console.log("timetounban ", timeUntilUnban, "timern ", timeOfDay);
       if (timeUntilUnban >= timeOfDay)
         return true ;
       return false ;
     }
-    catch (err: any) {
+    catch (err) {
       throw errorHandler(
         err,
         "Something went wrong",

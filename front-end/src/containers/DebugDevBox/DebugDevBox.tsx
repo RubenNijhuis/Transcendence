@@ -8,7 +8,8 @@ import {
     handleClearStorage,
     handleTokenRefresh,
     fillDBwithChats,
-    fillDBwithUsers
+    fillDBwithUsers,
+    makeFriends
 } from "./DebugDevBox.bl";
 import { useUser } from "../../contexts/UserContext";
 
@@ -19,6 +20,8 @@ import Heading from "../../components/Heading";
 
 const DebugDevBox = (): JSX.Element => {
     const { user } = useUser();
+
+    ///////////////////////////////////////////////////////////
 
     return (
         <Container>
@@ -33,14 +36,15 @@ const DebugDevBox = (): JSX.Element => {
                     Generate chats for user
                 </Button>
                 <Button onClick={fillDBwithUsers}>Generate profiles</Button>
-                {/* <Heading type={4}>Misc</Heading>
-                <Button onClick={() => fillDBwithChats(user)}>
-                    Generate chats for user
+                <Heading type={4}>Misc</Heading>
+                <Button onClick={() => makeFriends(user)}>
+                    Generate friends for user
                 </Button>
-                <Button onClick={fillDBwithUsers}>Generate profiles</Button> */}
             </Box>
         </Container>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export default DebugDevBox;

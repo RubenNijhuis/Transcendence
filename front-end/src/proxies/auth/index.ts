@@ -1,5 +1,19 @@
-import { confirmLogin } from "./confirmLogin";
-import { refreshAuthToken } from "./refreshAuthToken";
-import { getLoginURL } from "./getLoginURL";
+import { confirmLogin } from "./login/confirmLogin";
+import { getLoginURL } from "./login/getLoginURL";
 
-export { confirmLogin, refreshAuthToken, getLoginURL };
+import { refreshAuthToken } from "./tokens/refreshAuthToken";
+import { checkTokenValidity } from "./tokens/checkTokenValidity";
+
+import { toggle2FA } from "./tfa/toggle2FA";
+import { confirmTFA } from "./tfa/confirmTFA";
+import { getqrTFA } from "./tfa/getqrTFA";
+
+export {
+    confirmLogin,
+    refreshAuthToken,
+    getLoginURL,
+    checkTokenValidity,
+    toggle2FA,
+    confirmTFA,
+    getqrTFA
+};

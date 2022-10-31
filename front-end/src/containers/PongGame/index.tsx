@@ -1,3 +1,5 @@
-import PongGame from "./PongGame";
+import drawGame from "./GameLogic/drawGame";
+import Canvas from "./Canvas";
 
-export default PongGame;
+export { drawGame };
+export default Canvas;

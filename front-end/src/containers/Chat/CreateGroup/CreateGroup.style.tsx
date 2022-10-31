@@ -7,7 +7,11 @@ import {
     smallRadius
 } from "../../../styles/StylingConstants";
 
+///////////////////////////////////////////////////////////
+
 const Container = styled.div`
+    margin-bottom: calc(${magicNum} / 2);
+
     .button {
         width: 100%;
         height: calc(${magicNum});
@@ -20,14 +24,12 @@ const Container = styled.div`
             font-weight: 500;
         }
     }
-
-    margin-bottom: calc(${magicNum} / 2);
 `;
 
 const CreateChatContainer = styled.div`
     border: solid 2px ${mainColor};
     border-radius: ${smallRadius};
-    background: ${backgroundColor};
+    background-color: ${backgroundColor};
     box-shadow: 0px 15px 25px 5px rgba(0, 0, 0, 0.14);
 
     min-width: calc(${magicNum} * 12);
@@ -138,6 +140,8 @@ const CreateGroupChatContainer = styled.div`
             border-radius: ${smallRadius};
             max-height: calc(${magicNum} * 6);
             overflow-y: scroll;
+            max-width: calc(${magicNum} * 10);
+            margin: auto;
 
             .item {
                 display: flex;
@@ -173,5 +177,7 @@ const CreateGroupChatContainer = styled.div`
         }
     }
 `;
+
+///////////////////////////////////////////////////////////
 
 export { Container, CreateChatContainer, CreateGroupChatContainer };

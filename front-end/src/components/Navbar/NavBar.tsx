@@ -2,8 +2,15 @@
 import Asset from "../Asset";
 import Button from "../Button";
 
+// Icons
+import { FiSettings } from "react-icons/fi";
+
 // Styling
-import { Container, ProfileIconContainer } from "./NavBar.style";
+import {
+    Container,
+    NavLinksContainer,
+    ProfileIconContainer
+} from "./NavBar.style";
 
 // Navigation
 import { Link } from "react-router-dom";
@@ -13,67 +20,60 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useUser } from "../../contexts/UserContext";
 
 // Links
-import { locations } from "./NavBar.config";
+import { locations, NavLink } from "./NavBar.config";
 import PageRoutes from "../../config/PageRoutes";
-
-// Auth
-import { getLoginURL } from "../../proxies/auth";
-
-// DEBUG
-import Logger from "../../utils/Logger";
-
-// Store
-import { setItem } from "../../modules/Store";
-import StoreId from "../../config/StoreId";
 
 ////////////////////////////////////////////////////////////
 
-const CTAButton = ({ authStatus }: { authStatus: boolean }): JSX.Element => {
-    const toLoginPage = async () => {
-        try {
-            const url = await getLoginURL();
-            setItem(StoreId.loginProcess, true);
-            window.location.assign(url);
-        } catch (err) {
-            Logger("ERROR", "Navbar", "Req login page url", err);
-        }
-    };
-
+const SettingsPageButton = () => {
     return (
-        <>
-            {authStatus ? (
-                <Link className="play-button" to={PageRoutes.play}>
-                    <Button theme={"light"}>Play Pong</Button>
-                </Link>
-            ) : (
-                <Button
-                    className="login-button"
-                    theme={"light"}
-                    onClick={toLoginPage}
-                >
-                    Login
-                </Button>
-            )}
-        </>
+        <Link to={PageRoutes.settings} className="settings-icon">
+            <FiSettings />
+        </Link>
     );
 };
 
-const NavLinks = ({ authStatus }: { authStatus: boolean }): JSX.Element => {
+interface ICTAButton {
+    loggedIn: boolean;
+}
+
+const CTAButton = ({ loggedIn }: ICTAButton): JSX.Element => {
+    const url = loggedIn ? PageRoutes.selectGame : PageRoutes.login;
+    const text = loggedIn ? "Play pong" : "Login";
+
     return (
-        <ul>
-            {locations.map(({ name, url, onlyWhenLoggedin }, count) => {
-                if (onlyWhenLoggedin && !authStatus) return null;
+        <Link className="cta-button" to={url}>
+            <Button theme={"light"}>{text}</Button>
+        </Link>
+    );
+};
+
+interface INavLinks {
+    loggedIn: boolean;
+    links: NavLink[];
+}
+
+const NavLinks = ({ loggedIn, links }: INavLinks): JSX.Element => {
+    return (
+        <NavLinksContainer>
+            {links.map(({ name, url, onlyWhenLoggedIn }) => {
+                if (onlyWhenLoggedIn && !loggedIn) return null;
+
                 return (
-                    <li key={count}>
+                    <li key={name}>
                         <Link to={url}>{name}</Link>
                     </li>
                 );
             })}
-        </ul>
+        </NavLinksContainer>
     );
 };
 
-const ProfileIcon = ({ url }: { url: string }): JSX.Element => {
+interface IProfileIcon {
+    url: string;
+}
+
+const ProfileIcon = ({ url }: IProfileIcon): JSX.Element => {
     return (
         <Link to={PageRoutes.profile}>
             <ProfileIconContainer>
@@ -96,15 +96,24 @@ const NavBar = (): JSX.Element => {
                     <Link to={PageRoutes.home} className="logo">
                         <div className="logo">PongHub</div>
                     </Link>
-                    <NavLinks authStatus={isLoggedIn} />
+
+                    <NavLinks loggedIn={isLoggedIn} links={locations} />
+
                     <div className="cta">
-                        <CTAButton authStatus={isLoggedIn} />
-                        {isLoggedIn && <ProfileIcon url={user!.img_url} />}
+                        <CTAButton loggedIn={isLoggedIn} />
+                        {isLoggedIn && (
+                            <>
+                                <ProfileIcon url={user!.img_url} />
+                                <SettingsPageButton />
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
         </Container>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export default NavBar;

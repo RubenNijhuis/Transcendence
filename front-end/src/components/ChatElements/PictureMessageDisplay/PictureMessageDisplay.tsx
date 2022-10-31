@@ -1,5 +1,5 @@
 // Types
-import { PictureMessage, Message } from "../../../types/chat";
+import { Chat } from "../../../types";
 
 // UI
 import Asset from "../../Asset";
@@ -7,6 +7,8 @@ import Asset from "../../Asset";
 // Styling
 import styled from "styled-components";
 import { magicNum, smallRadius } from "../../../styles/StylingConstants";
+
+////////////////////////////////////////////////////////////
 
 const Container = styled.div<{ fromUser: boolean }>`
     display: flex;
@@ -24,13 +26,17 @@ const Container = styled.div<{ fromUser: boolean }>`
     }
 `;
 
-interface Props {
-    message: Message;
+////////////////////////////////////////////////////////////
+
+interface IPictureMessageDisplay {
+    message: Chat.Message.Instance;
     fromUser: boolean;
 }
 
-const PictureMessageDisplay = ({ fromUser, message }: Props): JSX.Element => {
-    const formattedMessage: PictureMessage = message.content as PictureMessage;
+const PictureMessageDisplay = ({ fromUser, message }: IPictureMessageDisplay): JSX.Element => {
+    const formattedMessage: Chat.Message.PictureMessage = message.content as Chat.Message.PictureMessage;
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <Container fromUser={fromUser}>
@@ -42,5 +48,7 @@ const PictureMessageDisplay = ({ fromUser, message }: Props): JSX.Element => {
         </Container>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export default PictureMessageDisplay;

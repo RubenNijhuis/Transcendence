@@ -1,36 +1,46 @@
 // Types
-import { GroupChat } from "../../../types/chat";
+import { Chat } from "../../../types";
 
 // UI
 import ChatElement from "../../../components/ChatElements";
 import ChatInput from "../Input";
 import Heading from "../../../components/Heading";
+import Asset from "../../../components/Asset";
 
 // Styling
 import { Container } from "./Box.style";
 
-// Auth
-import { useAuth } from "../../../contexts/AuthContext";
-import { ProfileType } from "../../../types/profile";
-import Asset from "../../../components/Asset";
+// Types
+import { Profile } from "../../../types";
+
+// User
 import { useUser } from "../../../contexts/UserContext";
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
-    chat: GroupChat;
+interface IChatTitle {
+    chat: Chat.Group.Instance;
+    isDmChat: boolean;
 }
 
-const ChatTitle = ({ chat }: Props): JSX.Element => {
+const ChatTitle = ({ chat, isDmChat }: IChatTitle): JSX.Element => {
+    const { user } = useUser();
+
+    ////////////////////////////////////////////////////////////
+
     /**
      * If the the amount of members is 2 it means it a DM
      * Therefore we can change the interface from 'Chat' to 'other user name'
      */
-    const { user } = useUser();
-    const isDmChat: boolean = chat.members.length === 2;
-    const otherMember: ProfileType = chat.members
-        .filter((member) => member.uid !== user.uid)
-        .shift() as ProfileType;
+    const otherMember: Profile.Instance = chat.members
+        .filter((member: Profile.Instance) => member.uid !== user.uid)
+        .shift() as Profile.Instance;
+
+    const chatTitle: string = (
+        isDmChat ? otherMember.username : chat.name
+    ) as string;
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <div className="title">
@@ -40,33 +50,43 @@ const ChatTitle = ({ chat }: Props): JSX.Element => {
                     url={otherMember.img_url}
                 />
             )}
-            <Heading type={3}>
-                {isDmChat ? otherMember.username : chat.name}
-            </Heading>
+            <Heading type={3}>{chatTitle}</Heading>
         </div>
     );
 };
 
-const ChatBox = ({ chat }: Props): JSX.Element => {
+interface IChatBox {
+    chat: Chat.Group.Instance;
+}
+
+const ChatBox = ({ chat }: IChatBox): JSX.Element => {
+    const isDmChat = chat.members.length === 2;
+
+    ////////////////////////////////////////////////////////////
+
     const { user } = useUser();
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <Container>
-            <ChatTitle chat={chat} />
+            <ChatTitle chat={chat} isDmChat={isDmChat} />
 
             <div className="chat-content">
                 {chat.messages.map((message, count) => (
                     <ChatElement
                         key={count}
                         message={message}
-                        isDm={chat.members.length === 2}
-                        fromUser={message.sender?.username === user.username}
+                        isDm={isDmChat}
+                        fromUser={message.sender.uid === user.uid}
                     />
                 ))}
             </div>
-            <ChatInput user={user!} groupchat={chat} />
+            <ChatInput user={user} groupchat={chat} />
         </Container>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export default ChatBox;

@@ -1,5 +1,5 @@
 // Types
-import { ProfileType } from "../../../types/profile";
+import { Profile } from "../../../types";
 
 // Routing
 import PageRoutes from "../../../config/PageRoutes";
@@ -14,17 +14,19 @@ import Crown from "../../../components/Crown";
 
 /////////////////////////////////////////////////////////////
 
-interface Props {
-    rankings: ProfileType[];
+interface IPodium {
+    rankings: Profile.Instance[];
 }
 
-const Podium = ({ rankings }: Props): JSX.Element => {
-    const formattedRankings: ProfileType[] = rankings.slice(0, 3);
+const Podium = ({ rankings }: IPodium): JSX.Element => {
+    const formattedRankings: Profile.Instance[] = rankings.slice(0, 3);
     // Swap pos 1 and 2 in array
     [formattedRankings[0], formattedRankings[1]] = [
         formattedRankings[1],
         formattedRankings[0]
     ];
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <PodiumContainer>
@@ -47,5 +49,7 @@ const Podium = ({ rankings }: Props): JSX.Element => {
         </PodiumContainer>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export default Podium;

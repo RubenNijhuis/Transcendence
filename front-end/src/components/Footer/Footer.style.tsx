@@ -3,9 +3,10 @@ import {
     largeRadius,
     lightTextColor,
     magicNum,
-    mainColor,
-    mediumRadius
+    mainColor
 } from "../../styles/StylingConstants";
+
+///////////////////////////////////////////////////////////
 
 const Container = styled.div`
     padding-bottom: calc(${magicNum} / 2);
@@ -30,7 +31,7 @@ const Container = styled.div`
         padding: calc(${magicNum} / 2);
 
         color: ${lightTextColor};
-        background: ${mainColor};
+        background-color: ${mainColor};
         border-radius: ${largeRadius};
 
         .heading {
@@ -91,5 +92,7 @@ const Container = styled.div`
         }
     }
 `;
+
+///////////////////////////////////////////////////////////
 
 export default Container;

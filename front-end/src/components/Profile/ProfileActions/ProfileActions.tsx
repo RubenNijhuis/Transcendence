@@ -1,11 +1,17 @@
 // React
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
+
+// User
+import { useUser } from "../../../contexts/UserContext";
+
+// Proxies
+import { addFriend, removeFriend, getIsFriend } from "../../../proxies/friend";
 
 // Types
-import { ProfileType } from "../../../types/profile";
+import { Profile } from "../../../types";
 
 // Utils
-import randomNum from "../../../utils/randomNum";
+import randomNum from "../../../utils/numbers/randomIntFromRange";
 
 // UI
 import Button from "../../Button";
@@ -16,17 +22,12 @@ import { Container, ProfileStatusDisplay } from "./ProfileActions.style";
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
-    profile: ProfileType;
-}
-
 const ProfileActivityStatus = (): JSX.Element => {
     let activityElement: ReactElement = <></>;
 
     ////////////////////////////////////////////////////////////
 
     const rand = randomNum(0, 2);
-    
 
     if (rand === 0) {
         activityElement = <span className="offline">Offline</span>;
@@ -45,21 +46,60 @@ const ProfileActivityStatus = (): JSX.Element => {
     );
 };
 
-const ProfileActions = ({ profile }: Props): JSX.Element => {
-    const [follows, setFollow] = useState<boolean>(false);
+interface IProfileActions {
+    profile: Profile.Instance;
+}
+
+const ProfileActions = ({ profile }: IProfileActions): JSX.Element => {
+    const [isFriend, setIsFriend] = useState<boolean>(false);
 
     ////////////////////////////////////////////////////////////
 
-    const changeFollow = (): void => {
-        setFollow((prev) => !prev);
+    const { user } = useUser();
+
+    ////////////////////////////////////////////////////////////
+
+    const toggleFriendship = async () => {
+        const username = user.username;
+        const friendname = profile.username;
+
+        try {
+            console.log(username, friendname);
+            if (isFriend) {
+                const removeResp = await removeFriend(username, friendname);
+                console.log(removeResp);
+            } else {
+                const addResp = await addFriend(username, friendname);
+                console.log(addResp);
+            }
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     ////////////////////////////////////////////////////////////
 
+    useEffect(() => {
+        const getFriendStatus = async () => {
+            const username = user.username;
+            const friendname = profile.username;
+
+            try {
+                const friendStatus = await getIsFriend(username, friendname);
+                setIsFriend(friendStatus);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        getFriendStatus();
+    }, []);
+
+    ////////////////////////////////////////////////////////////
+
     return (
-        <Container followsProfile={follows}>
-            <Button theme="dark" onClick={() => changeFollow()}>
-                {follows ? "Following" : "Follow"}
+        <Container isFriend={isFriend}>
+            <Button theme="dark" onClick={() => toggleFriendship()}>
+                {isFriend ? "Following" : "Follow"}
             </Button>
             <div className="status">
                 <div className="header">
@@ -70,5 +110,7 @@ const ProfileActions = ({ profile }: Props): JSX.Element => {
         </Container>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export default ProfileActions;

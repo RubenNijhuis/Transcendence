@@ -11,12 +11,12 @@ import GroupUser from "../groupuser/groupuser.entity";
 @Entity() // need to have a token to search on
 export class User {
   @PrimaryGeneratedColumn()
-  index: number
+  index: number;
 
   @Column()
   @Generated("uuid")
-  id: string;
-  
+  uid: string;
+
   @Column({
     name: "intra_id",
     nullable: true,

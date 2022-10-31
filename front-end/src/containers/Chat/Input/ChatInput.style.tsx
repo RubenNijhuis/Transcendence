@@ -7,6 +7,8 @@ import {
     smallRadius
 } from "../../../styles/StylingConstants";
 
+///////////////////////////////////////////////////////////
+
 const Container = styled.div`
     position: absolute;
     bottom: 0;
@@ -27,8 +29,8 @@ const Container = styled.div`
 
         border-radius: 0px 0px 6px 6px;
 
-        background: rgb(226, 226, 240);
-        background: linear-gradient(
+        background-color: rgb(226, 226, 240);
+        background-color: linear-gradient(
             180deg,
             rgba(226, 226, 240, 0) 0%,
             rgba(226, 226, 240, 1) 10%,
@@ -172,5 +174,7 @@ const SelectionBox = styled.div<{ selected: boolean }>`
         color: black;
     }
 `;
+
+///////////////////////////////////////////////////////////
 
 export { Container, SelectTypeIcon, SelectionBox };

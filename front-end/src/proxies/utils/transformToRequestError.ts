@@ -2,15 +2,17 @@
 import { AxiosError } from "axios";
 
 // Types
-import { RequestErrorType } from "../../types/request";
+import { Request } from "../../types";
+
+///////////////////////////////////////////////////////////
 
 /**
  * Transforms an Axios request error into a RequestErrorType type
  * @param err The request error
  * @returns RequestErrorType
  */
-const transformToRequestError = (err: AxiosError): RequestErrorType => {
-    const returnedError: RequestErrorType = {
+const transformToRequestError = (err: AxiosError): Request.RequestError => {
+    const returnedError: Request.RequestError = {
         error: err.message,
         type: "",
         requestUrl: err.config.url as string
@@ -29,5 +31,7 @@ const transformToRequestError = (err: AxiosError): RequestErrorType => {
 
     return returnedError;
 };
+
+///////////////////////////////////////////////////////////
 
 export default transformToRequestError;

@@ -1,11 +1,15 @@
 import styled from "styled-components";
 import {
+    backgroundColor,
     lightTextColor,
     magicNum,
     mainColor,
     mediumRadius,
+    secondaryColor,
     smallRadius
 } from "../../styles/StylingConstants";
+
+///////////////////////////////////////////////////////////
 
 const Container = styled.div`
     padding-top: calc(${magicNum} / 2);
@@ -19,7 +23,7 @@ const Container = styled.div`
         margin: auto;
         padding: calc(${magicNum} / 4) calc(${magicNum} / 2);
 
-        background: ${mainColor};
+        background-color: ${mainColor};
         border-radius: ${mediumRadius};
     }
 
@@ -34,24 +38,6 @@ const Container = styled.div`
         text-decoration: none;
     }
 
-    .login-button, .play-button button {
-        height: calc(${magicNum} / 2 * 1.25);
-        padding: calc(${magicNum} / 4) calc(${magicNum} / 2);
-        border-radius: 100px;
-
-        color: ${lightTextColor};
-        font-weight: 700;
-        letter-spacing: 0.5px;
-
-        box-shadow: 0px 0px 5px 2px rgba(53, 113, 255, 0.15);
-        background: rgb(53, 113, 255);
-        background: linear-gradient(
-            45deg,
-            rgba(51, 112, 252, 1) 0%,
-            rgba(34, 96, 255, 1) 100%
-        );
-    }
-
     .content {
         display: flex;
         align-items: center;
@@ -63,29 +49,43 @@ const Container = styled.div`
             display: flex;
             flex-direction: row;
             align-items: center;
-            gap: calc(${magicNum} / 2);
-        }
+            gap: calc(${magicNum} / 4);
 
-        ul {
-            display: flex;
-            list-style-type: none;
+            &-button {
+                text-decoration: none;
 
-            li {
-                margin-right: calc(${magicNum} / 6);
+                button {
+                    height: calc(${magicNum} / 2 * 1.25);
+                    padding: calc(${magicNum} / 4) calc(${magicNum} / 2);
+                    border-radius: 100px;
 
-                a {
                     color: ${lightTextColor};
-                    font-size: 18px;
-                    font-weight: 600;
-                    text-decoration: none;
+                    font-weight: 700;
+                    letter-spacing: 0.5px;
 
-                    &:visited {
-                        color: ${lightTextColor};
-                    }
+                    box-shadow: 0px 0px 5px 2px rgba(53, 113, 255, 0.15);
+                    background-color: rgb(53, 113, 255);
+                    background-color: linear-gradient(
+                        45deg,
+                        rgba(51, 112, 252, 1) 0%,
+                        rgba(34, 96, 255, 1) 100%
+                    );
+                }
+            }
 
-                    &:last {
-                        margin-right: none;
-                    }
+            .settings-icon {
+                color: ${lightTextColor};
+
+                &:link {
+                    color: ${lightTextColor};
+                }
+
+                &:visited {
+                    color: ${lightTextColor};
+                }
+
+                &:active {
+                    color: ${lightTextColor};
                 }
             }
         }
@@ -96,7 +96,7 @@ const ProfileIconContainer = styled.div`
     width: calc(${magicNum} / 2 * 1.5);
     height: calc(${magicNum} / 2 * 1.5);
 
-    border: solid #9d653d 2px;
+    border: solid ${secondaryColor} 2px;
     border-radius: ${smallRadius};
     overflow: hidden;
 
@@ -106,4 +106,55 @@ const ProfileIconContainer = styled.div`
     }
 `;
 
-export { Container, ProfileIconContainer };
+const NavLinksContainer = styled.ul`
+    display: flex;
+    list-style-type: none;
+
+    li {
+        margin-right: calc(${magicNum} / 6);
+
+        a {
+            position: relative;
+            color: ${lightTextColor};
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+
+            &::before, &:after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                border-radius: 100px;
+                background: ${mainColor}
+            }
+
+            &:after {
+                transition: width 300ms ease-in-out;
+                transition-delay: 0.1s;
+                width: 0%;
+                background: ${backgroundColor};
+            }
+
+            &:hover {
+                &:after {
+                    width: 100%;
+                }
+            }
+
+            &:visited {
+                color: ${lightTextColor};
+            }
+
+            &:last {
+                margin-right: none;
+            }
+        }
+    }
+`;
+
+///////////////////////////////////////////////////////////
+
+export { Container, ProfileIconContainer, NavLinksContainer };

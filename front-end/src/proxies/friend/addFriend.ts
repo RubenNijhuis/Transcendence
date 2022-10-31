@@ -2,24 +2,31 @@
 import { API } from "../instances/apiInstance";
 import ApiRoutes from "../../config/ApiRoutes";
 
-// Types
-import { ProfileType } from "../../types/profile";
-
 ////////////////////////////////////////////////////////////
 
 /**
- *
+ * Adds a friend to the user
  * @returns
  */
-const addFriend = async (): Promise<ProfileType[]> => {
+const addFriend = async (
+    username: string,
+    friendname: string
+): Promise<any> => {
     try {
         const route = ApiRoutes.addFriend();
-        const { data } = await API.get<ProfileType[]>(route);
+        const body = {
+            username,
+            friendname
+        };
+
+        const { data } = await API.post(route, body);
 
         return Promise.resolve(data);
-    } catch (err: any) {
+    } catch (err) {
         return Promise.reject(err);
     }
 };
+
+////////////////////////////////////////////////////////////
 
 export { addFriend };

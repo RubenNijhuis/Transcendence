@@ -1,8 +1,10 @@
 import styled from "styled-components";
-import { magicNum, secondaryColor } from "../../styles/StylingConstants";
+import { magicNum, backgroundColor } from "../../styles/StylingConstants";
+
+///////////////////////////////////////////////////////////
 
 const Container = styled.div`
-    background: ${secondaryColor};
+    background-color: ${backgroundColor};
     position: relative;
     min-height: 100%;
 
@@ -18,5 +20,7 @@ const Content = styled.main`
 
     flex-grow: 2;
 `;
+
+///////////////////////////////////////////////////////////
 
 export { Container, Content };

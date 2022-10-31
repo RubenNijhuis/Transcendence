@@ -5,6 +5,7 @@ import {
     magicNum,
     mainColor,
     mediumRadius,
+    secondaryColor,
     smallRadius
 } from "../../../styles/StylingConstants";
 
@@ -12,8 +13,8 @@ const Container = styled.div`
     position: relative;
 
     padding: calc(${magicNum} / 2);
-    padding-bottom: 0;
-    
+    margin-bottom: calc(${magicNum} / 2);
+
     border-radius: ${largeRadius};
     background-color: ${mainColor};
 
@@ -26,15 +27,8 @@ const Container = styled.div`
         border-radius: ${mediumRadius};
         overflow: hidden;
 
-        img {
-            transition: filter 0.35s ease-in-out;
-            filter: blur(8px);
-        }
-
-        &:hover {
-            img {
-                filter: blur(0px);
-            }
+        &__container {
+            position: relative;
         }
     }
 
@@ -49,25 +43,28 @@ const Container = styled.div`
         flex-direction: column;
         align-items: center;
 
-
         transform: translate(-50%, -50%);
 
         .crown {
             width: calc(${magicNum} * 1.5);
         }
 
-        &__img {
+        .img {
             width: calc(${magicNum} * 2);
             height: calc(${magicNum} * 2);
             aspect-ratio: 1/1;
 
             margin-bottom: calc(${magicNum} / 8);
 
-            border-radius: ${smallRadius};
-            border: solid 6px #9d653d;
+            border-radius: ${mediumRadius};
+            border: solid 6px ${secondaryColor};
 
-            background-color: ${mainColor};
+            background-color: ${secondaryColor};
             overflow: hidden;
+
+            img {
+                border-radius: inherit;
+            }
         }
 
         .heading {
@@ -76,6 +73,19 @@ const Container = styled.div`
 
             text-align: center;
             text-shadow: 0px 0px 4px #000000;
+        }
+    }
+
+    .description {
+        color: ${lightTextColor};
+        max-width: calc(${magicNum} * 8);
+        margin: auto;
+        margin-bottom: calc(${magicNum});
+
+        text-align: center;
+
+        .heading {
+            color: ${lightTextColor};
         }
     }
 `;

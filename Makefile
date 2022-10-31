@@ -5,6 +5,6 @@ stop:
 	docker-compose down -v
 
 clean: stop
-	docker system prune
+	# docker system prune
 
 re: clean up
