@@ -1,8 +1,8 @@
 namespace Socket {
     export enum SocketType {
-        WaitingRoom,
-        Game,
-        Chat
+        WaitingRoom = "waitingRoom",
+        Game = "game",
+        Chat = "chat"
     }
 }
 

@@ -38,14 +38,14 @@ const Canvas = ({ canvasRef }: ICanvas): JSX.Element => {
     );
     const dataRef = useRef<HTMLSpanElement>(null!);
 
-    const { socket, socketType, setSocketType } = useSocket();
+    const { connection, socketType, setSocketType } = useSocket();
 
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
         setSocketType(Socket.SocketType.Game);
 
-        const emitRet = socket.emit(
+        const emitRet = connection.emit(
             SocketRoutes.healthCheck(),
             "pee pee poo poo"
         );
@@ -56,7 +56,7 @@ const Canvas = ({ canvasRef }: ICanvas): JSX.Element => {
             emitRet
         );
 
-        const ret = socket.on(SocketRoutes.healthCheck(), (arg: string) =>
+        const ret = connection.on(SocketRoutes.healthCheck(), (arg: string) =>
             setSocketResponse(arg)
         );
 

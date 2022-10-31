@@ -24,8 +24,9 @@ services:
       - ./back-end:/app
       - /app/node_modules/bcrypt/
     ports:
-      - "3000:3000"
-      - "3001:3001"
+      - "3000:3000" # main api
+      - "3001:3001" # ws game
+      - "3002:3002" # ws chat
     depends_on:
       - database
 

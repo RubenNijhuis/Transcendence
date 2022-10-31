@@ -1,5 +1,5 @@
 // React stuffs
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 // Socket Library
 import { io } from "socket.io-client";
@@ -13,7 +13,7 @@ import { Socket } from "../../types";
 ///////////////////////////////////////////////////////////
 
 interface SocketContextType {
-    socket: any;
+    connection: any;
 
     socketType: Socket.SocketType;
     setSocketType: any;
@@ -33,14 +33,29 @@ const SocketProvider = ({
 }: {
     children: React.ReactNode;
 }): JSX.Element => {
+    const [connection, setConnection] = useState<any>(
+        io(SocketRoutes.baseUrl(), {
+            path: SocketRoutes.path(Socket.SocketType.Chat)
+        })
+    );
     const [socketType, setSocketType] = useState<Socket.SocketType>(null!);
     const [roomId, setRoomId] = useState<string>(null!);
-    const socket = io(SocketRoutes.baseUrl());
+
+    ////////////////////////////////////////////////////////////
+
+    // useEffect(() => {
+    //     setSocketType(Socket.SocketType.Game);
+
+    //     const path = SocketRoutes.path(socketType);
+    //     const newSocket = io(SocketRoutes.baseUrl(), { path: "/game" });
+
+    //     setConnection(newSocket);
+    // }, []);
 
     ////////////////////////////////////////////////////////////
 
     const value: SocketContextType = {
-        socket,
+        connection,
 
         socketType,
         setSocketType,

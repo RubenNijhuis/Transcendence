@@ -8,11 +8,30 @@ import { Container } from "./Chat.style";
 
 // Context
 import { useChat } from "../../contexts/ChatContext";
+import { useSocket } from "../../contexts/SocketContext";
+import { useEffect } from "react";
+import { Socket } from "../../types";
 
 ///////////////////////////////////////////////////////////
 
 const ChatPage = (): JSX.Element => {
     const { activeChat, setActiveChat, directChats, groupChats } = useChat();
+
+    ////////////////////////////////////////////////////////////
+
+    const { connection, socketType, setSocketType } = useSocket();
+
+    ////////////////////////////////////////////////////////////
+
+    useEffect(() => {
+        setSocketType(Socket.SocketType.Chat);
+
+        connection.emit("connectionCheck", "pee pee poo poo");
+
+        connection.on("connectionCheck", (res: string) => {
+            console.log("RESPONSE", res);
+        });
+    });
 
     ////////////////////////////////////////////////////////////
 

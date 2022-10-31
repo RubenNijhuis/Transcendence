@@ -77,8 +77,6 @@ const AuthProvider = ({
      * Here we check the auth token status.
      */
     useEffect(() => {
-        if (!user) return;
-
         const checkAuthTokenStatus = async () => {
             /**
              * If we are still in the login process we don't

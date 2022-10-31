@@ -34,6 +34,7 @@ const AuthGuard = () => {
         }
 
         if (!isLoggedIn && !inLoginProcess) {
+            console.log("WHAT", isLoggedIn, inLoginProcess);
             navigate(rerouteLink);
             return;
         }
