@@ -135,6 +135,15 @@ export class UserService {
     }
   }
 
+  async getUsersOnUsernames(usernames: string[]) {
+    const users = [];
+
+    for (const username in usernames) {
+      users.push(this.filterUser(await this.findUserByUsername(username)));
+    }
+    return users;
+  }
+
   async createUser(intraID: string, refreshToken: string): Promise<User> {
     try {
       if (await this.findUserByintraId(intraID)) return null;

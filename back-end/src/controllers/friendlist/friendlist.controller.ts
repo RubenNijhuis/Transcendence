@@ -1,5 +1,5 @@
 // Nestjs
-import { Body, Controller, Get, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
 
 // DTO
 import { CreateFriendsDto } from "src/dtos/friendlist/create-friend.dto";
@@ -19,8 +19,8 @@ import { DeleteResult } from "typeorm";
 export class FriendlistController {
   constructor(private readonly friendlistService: FriendlistService) {}
 
-  @Get("getfriends?")
-  async getfriends(@Query("username") username: string): Promise<string[]> {
+  @Get("getfriends")
+  async getfriends(@Param("username") username: string): Promise<string[]> {
     try {
       const friendsList: string[] = await this.friendlistService.getFriends(
         username
@@ -32,12 +32,12 @@ export class FriendlistController {
     }
   }
 
-  @Post("getfriend")
-  async getfriend(@Body() createfriendsDto: CreateFriendsDto): Promise<string> {
+  @Get("isFriend")
+  async getfriend(@Param("username") username: string, @Param("friendname") friendname: string): Promise<string> {
     try {
-      const getFriendResp: string = await this.friendlistService.getFriend(
-        createfriendsDto.username,
-        createfriendsDto.friendname
+      const getFriendResp: string = await this.friendlistService.isFriend(
+        username,
+        friendname
       );
 
       return getFriendResp;
@@ -46,19 +46,17 @@ export class FriendlistController {
     }
   }
 
-  @Post("isfriend")
-  async isfriend(@Body() createfriendsDto: CreateFriendsDto): Promise<boolean> {
-    try {
-      const { username, friendname } = createfriendsDto;
+  // @Get("checkFriend")
+  // async isfriend(@Param("username") username: string, @Param("friendname") friendname: string): Promise<boolean> {
+  //   try {
+  //     const isFriendsWithProfile: boolean =
+  //       await this.friendlistService.checkFriend(username, friendname);
 
-      const isFriendsWithProfile: boolean =
-        await this.friendlistService.isFriend(username, friendname);
-
-      return isFriendsWithProfile;
-    } catch (err) {
-      throw err;
-    }
-  }
+  //     return isFriendsWithProfile;
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  // }
 
   @Post("addfriend")
   async addfriend(

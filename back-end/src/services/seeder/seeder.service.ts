@@ -93,13 +93,13 @@ export class SeederService {
 
   async seedFriends() {
     try {
-      const users: User[] = this.filterUsers(await this.userServ.getUsers());
-      console.log("users: ", users);
-      const maxFriends: number = users.length - 1;
+      const users: User[] = await this.userServ.getUsers();
+      const filteredUsers: User[] = this.filterUsers(users);
+      const maxFriends: number = filteredUsers.length - 1;
 
       // loop trough users
-      for (let i = 0; i < users.length; i++) {
-        const user: User = users[i];
+      for (let i = 0; i < filteredUsers.length; i++) {
+        const user: User = filteredUsers[i];
         const currentFriends: string[] = await this.friendsServ.getFriends(
           user.username
         );
@@ -118,13 +118,11 @@ export class SeederService {
             // get random number which is not in exlude list
             while (
               excludeList.includes(
-                (randomIndex = this.randomNum(0, users.length))
+                (randomIndex = this.randomNum(1, maxFriends - 1))
               )
             ) {}
             // eslint-disable-next-line prefer-const
-            newFriend = await this.userServ.findUserByUsername(
-              users[randomIndex].username
-            );
+            newFriend = users[randomIndex + 1];
             // get username of random index
             // add new friend to friends && exclude list
             const query = {
@@ -136,7 +134,7 @@ export class SeederService {
           }
         }
       }
-      return this.formulateResponse(users);
+      return this.formulateResponse(filteredUsers);
     } catch (err) {
       console.error(err);
       throw errorHandler(
