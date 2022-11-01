@@ -19,10 +19,10 @@ import { DeleteResult } from "typeorm";
 export class FriendlistController {
   constructor(private readonly friendlistService: FriendlistService) {}
 
-  @Get("getfriends")
-  async getfriends(@Param("username") username: string): Promise<string[]> {
+  @Get("getfriends/:username")
+  async getfriends(@Param('username') username: string) {
     try {
-      const friendsList: string[] = await this.friendlistService.getFriends(
+      const friendsList = await this.friendlistService.getFriends(
         username
       );
 
@@ -32,7 +32,7 @@ export class FriendlistController {
     }
   }
 
-  @Get("isFriend")
+  @Get("isFriend/:username/:friendname")
   async getfriend(@Param("username") username: string, @Param("friendname") friendname: string): Promise<string> {
     try {
       const getFriendResp: string = await this.friendlistService.isFriend(
