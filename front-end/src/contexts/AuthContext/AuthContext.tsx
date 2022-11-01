@@ -21,6 +21,7 @@ import { checkTokenValidity } from "../../proxies/auth";
 
 interface AuthContextType {
     isLoggedIn: boolean;
+    setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 
     tfaEnabled: boolean;
     setTfaEnabled: React.Dispatch<React.SetStateAction<boolean>>;
@@ -97,6 +98,7 @@ const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
 
             try {
                 const { profile } = await checkTokenValidity(refreshToken);
+                setLoggedIn(true);
                 setUser(profile);
             } catch (err) {
                 redirectToHome();
@@ -114,7 +116,8 @@ const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
         tfaEnabled,
         setTfaEnabled,
 
-        isLoggedIn
+        isLoggedIn,
+        setLoggedIn
     };
 
     ////////////////////////////////////////////////////////////

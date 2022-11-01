@@ -1,5 +1,5 @@
 // Router
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import PageRoutes from "../../../config/PageRoutes";
 
 // Store
@@ -9,6 +9,8 @@ import { getItem } from "../../../modules/Store";
 // Auth check
 import { useAuth } from "../../../contexts/AuthContext";
 import { useEffect } from "react";
+import { useUser } from "../../../contexts/UserContext";
+import { checkTokenValidity } from "../../../proxies/auth";
 
 ///////////////////////////////////////////////////////////
 
@@ -21,24 +23,42 @@ const AuthGuard = () => {
 
     ////////////////////////////////////////////////////////////
 
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn, setLoggedIn } = useAuth();
+    const { user, setUser } = useUser();
     const navigate = useNavigate();
+    const location = useLocation();
 
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
         const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
-        if (inLoginProcess === null) {
-            navigate(rerouteLink);
-            return;
-        }
+        const refreshToken = getItem<string>(StoreId.refreshToken);
 
-        if (!isLoggedIn && !inLoginProcess) {
-            console.log("WHAT", isLoggedIn, inLoginProcess);
-            navigate(rerouteLink);
-            return;
-        }
-    }, [isLoggedIn]);
+        const checkSetThrough = async () => {
+            if (!user) {
+                if (!isLoggedIn && refreshToken) {
+                    try {
+                        const { profile } = await checkTokenValidity(
+                            refreshToken
+                        );
+                        console.log("I HAPPENED");
+                        setLoggedIn(true);
+                        setUser(profile);
+                        return;
+                    } catch (err) {
+                        console.error(err);
+                    }
+                }
+
+                if (!isLoggedIn) {
+                    console.log("I CAME");
+                    navigate(rerouteLink);
+                    return;
+                }
+            }
+        };
+        checkSetThrough();
+    }, [isLoggedIn, user]);
 
     ///////////////////////////////////////////////////////////
 
