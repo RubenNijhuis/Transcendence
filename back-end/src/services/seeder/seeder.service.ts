@@ -44,11 +44,11 @@ export class SeederService {
     return Math.floor(Math.random() * (max - min) + min);
   }
 
-  async getFriendIndexes(friends: string[]): Promise<number[]> {
+  async getFriendIndexes(friends): Promise<number[]> {
     const indexes: number[] = [];
 
     for (let i = 0; i < friends.length; i++) {
-      indexes.push((await this.userServ.findUserByUsername(friends[i])).index);
+      indexes.push((await this.userServ.findUserByUsername(friends[i].usernme)).index);
     }
     return indexes;
   }
@@ -100,10 +100,10 @@ export class SeederService {
       // loop trough users
       for (let i = 0; i < filteredUsers.length; i++) {
         const user: User = filteredUsers[i];
-        const currentFriends: string[] = await this.friendsServ.getFriends(
+        const currentFriends = await this.friendsServ.getFriends(
           user.username
         );
-        const targetAmount: number = this.randomNum(1, maxFriends);
+        const targetAmount: number = this.randomNum(0, maxFriends);
         const excludeList: number[] = await this.getFriendIndexes(
           currentFriends
         );
@@ -121,6 +121,7 @@ export class SeederService {
                 (randomIndex = this.randomNum(1, maxFriends - 1))
               )
             ) {}
+            console.log("excludes: ", excludeList, "\nrandom index: ", randomIndex + 1);
             // eslint-disable-next-line prefer-const
             newFriend = users[randomIndex + 1];
             // get username of random index

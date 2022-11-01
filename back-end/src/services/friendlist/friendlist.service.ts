@@ -23,25 +23,26 @@ export class FriendlistService {
     private readonly userService: UserService
   ) {}
 
-  private filterOutput(friends: FriendList[]) {
+  private async filterOutput(friends: FriendList[]) {
     const filteredFriends = [];
 
     for (const friend of friends) {
       filteredFriends.push(friend.friendname);
     }
-
-    return this.userService.getUsersOnUsernames(filteredFriends);
+    const ret = await this.userService.getUsersOnUsernames(filteredFriends);
+    return ret;
   }
 
-  async getFriends(username: string): Promise<string[]> {
+  async getFriends(username: string) {
     let friends: FriendList[] = [];
+    console.log("getfriends: ", username);
 
     friends = await this.friendlistRepository
       .createQueryBuilder("friend_list")
       .where("username = :username OR friendname = :username", { username })
       .getMany();
 
-    return this.filterOutput(friends);
+    return await this.filterOutput(friends);
   }
 
   // async getFriend(username: string, friendname: string): Promise<string> {

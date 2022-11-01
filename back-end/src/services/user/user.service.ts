@@ -138,8 +138,8 @@ export class UserService {
   async getUsersOnUsernames(usernames: string[]) {
     const users = [];
 
-    for (const username in usernames) {
-      users.push(this.filterUser(await this.findUserByUsername(username)));
+    for (let i = 0; i < usernames.length; i++) {
+      users.push(this.filterUser(await this.findUserByUsername(usernames[i])));
     }
     return users;
   }

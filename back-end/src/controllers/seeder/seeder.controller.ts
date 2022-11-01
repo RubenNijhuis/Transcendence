@@ -12,6 +12,7 @@ export class SeederController {
     const seedResp: User[] = await this.seedService.seedCustom(dto.amount);
 
     const cleanedRet = await this.seedService.seedFriends();
+    
     return cleanedRet;
   }
 
