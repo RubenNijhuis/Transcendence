@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
 import { BlockList } from "src/entities";
 import { BlocklistService } from "src/services/blocklist/blocklist.service";
+import { DeleteResult } from "typeorm";
 import { CreateBlockDto } from "../../dtos/blocklist/create-blocklist.dto";
 
 @Controller("block")
@@ -33,15 +34,27 @@ export class BlockListController {
   }
 
   @Post("addblock")
-  async addblock(@Body() createBlockDto: CreateBlockDto) {
-    return await this.blocklistService.blockPerson(createBlockDto);
+  async addblock(@Body() createBlockDto: CreateBlockDto): Promise<BlockList> {
+    try {
+      const addblock: BlockList = await this.blocklistService.blockPerson(createBlockDto);
+
+      return addblock;
+    } catch (error) {
+      throw error;
+    }
   }
 
   @Post("unblock")
-  async unblock(@Body() createBlockDto: CreateBlockDto) {
-    return await this.blocklistService.unblockPerson(
-      createBlockDto.username,
-      createBlockDto.blocked
-    );
+  async unblock(@Body() createBlockDto: CreateBlockDto): Promise<DeleteResult> {
+    try {
+      const unblock: DeleteResult = await this.blocklistService.unblockPerson(
+        createBlockDto.username,
+        createBlockDto.blocked
+      );
+
+      return unblock;
+    } catch (error) {
+      throw error;
+    }
   }
 }

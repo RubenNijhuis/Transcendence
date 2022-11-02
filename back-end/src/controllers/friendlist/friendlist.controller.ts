@@ -51,7 +51,7 @@ export class FriendlistController {
     @Body() createfriendsDto: CreateFriendsDto
   ): Promise<FriendList> {
     try {
-      const addFriendResp = await this.friendlistService.addFriend(
+      const addFriendResp: FriendList = await this.friendlistService.addFriend(
         createfriendsDto
       );
 
@@ -66,7 +66,7 @@ export class FriendlistController {
     @Body() createfriendsDto: CreateFriendsDto
   ): Promise<DeleteResult> {
     try {
-      const removeFriendResp = await this.friendlistService.removeFriend(
+      const removeFriendResp: DeleteResult = await this.friendlistService.removeFriend(
         createfriendsDto.username,
         createfriendsDto.friendname
       );
