@@ -47,7 +47,7 @@ const ProfileSettings = () => {
         <section>
             <Heading type={3}>Profile settings</Heading>
             <Button theme="dark" onClick={renderTFAModal}>
-                Turn {tfaEnabled ? "off" : "on"} 2 factor authentication"
+                Turn {tfaEnabled ? "off" : "on"} 2 factor authentication
             </Button>
             <span>Change profile picture</span>
             <span>Change banner picture</span>

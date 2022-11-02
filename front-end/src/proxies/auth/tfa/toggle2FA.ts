@@ -4,11 +4,12 @@ import { API } from "../../instances/apiInstance";
 
 ////////////////////////////////////////////////////////////
 
-const toggle2FA = async (id: string): Promise<string> => {
+const toggle2FA = async (uid: string): Promise<string> => {
     try {
+        console.log(uid);
         const route = ApiRoutes.turnOnTFA();
         const body = {
-            id
+            uid
         };
 
         const { data } = await API.post(route, body);
