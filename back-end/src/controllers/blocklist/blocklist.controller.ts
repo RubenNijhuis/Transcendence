@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
+import { BlockList } from "src/entities";
 import { BlocklistService } from "src/services/blocklist/blocklist.service";
 import { CreateBlockDto } from "../../dtos/blocklist/create-blocklist.dto";
 
@@ -6,17 +7,29 @@ import { CreateBlockDto } from "../../dtos/blocklist/create-blocklist.dto";
 export class BlockListController {
   constructor(private readonly blocklistService: BlocklistService) {}
 
-  @Get("getblocked?")
-  async getblocked(@Query("username") username: string) {
-    return await this.blocklistService.getBlocked(username);
+  @Get("getblocked/:username")
+  async getblocked(@Param("username") username: string) {
+    try {
+      const blockedList = await this.blocklistService.getBlocked(username);
+
+      return blockedList;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  @Post("getblock")
-  async getblock(@Body() createBlockDto: CreateBlockDto) {
-    return await this.blocklistService.getBlock(
-      createBlockDto.username,
-      createBlockDto.blocked
-    );
+  @Get("isBlock/:username/:blocked")
+  async getblock(@Param('username') username: string, @Param('blocked') blocked: string): Promise<boolean> {
+    try {
+      const isBlocked: boolean = await this.blocklistService.isBlock(
+        username,
+        blocked
+      );
+
+      return isBlocked;
+    } catch (error) {
+      throw error;
+    }
   }
 
   @Post("addblock")
