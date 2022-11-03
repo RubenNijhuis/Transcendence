@@ -103,7 +103,7 @@ export class SeederService {
         const currentFriends = await this.friendsServ.getFriends(
           user.username
         );
-        const targetAmount: number = this.randomNum(0, maxFriends);
+        const targetAmount: number = this.randomNum(0, maxFriends - 1);
         const excludeList: number[] = await this.getFriendIndexes(
           currentFriends
         );

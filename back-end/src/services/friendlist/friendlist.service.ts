@@ -23,11 +23,15 @@ export class FriendlistService {
     private readonly userService: UserService
   ) {}
 
-  private async filterOutput(friends: FriendList[]) {
+  private async filterOutput(username: string, friends: FriendList[]) {
     const filteredFriends = [];
 
     for (const friend of friends) {
-      filteredFriends.push(friend.friendname);
+      let name = friend.friendname;
+
+      if (name === username)
+        name = friend.username;
+      filteredFriends.push(name);
     }
     const ret = await this.userService.getUsersOnUsernames(filteredFriends);
     return ret;
@@ -39,11 +43,11 @@ export class FriendlistService {
       .where("username = :username OR friendname = :username", { username })
       .getMany();
 
-    return await this.filterOutput(friends);
+    return await this.filterOutput(username, friends);
   }
 
   async isFriend(username: string, friendname: string): Promise<boolean> {
-    var ret: boolean = false;
+    let ret: boolean = false;
 
     const friend: FriendList = await this.friendlistRepository
       .createQueryBuilder("friend_list")

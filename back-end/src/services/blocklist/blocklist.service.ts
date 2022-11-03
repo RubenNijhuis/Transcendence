@@ -15,11 +15,15 @@ export class BlocklistService {
         private readonly userService: UserService
     ) {}
 
-    private async filterOutput(blocked: BlockList[]) {
+    private async filterOutput(username: string, blocked: BlockList[]) {
         const filteredFriends = [];
     
         for (const block of blocked) {
-          filteredFriends.push(block.blockname);
+            let name = block.blockname;
+
+            if (name === username)
+                name = block.username;
+          filteredFriends.push(name);
         }
         const ret = await this.userService.getUsersOnUsernames(filteredFriends);
         return ret;
@@ -30,7 +34,7 @@ export class BlocklistService {
             .createQueryBuilder('block_list')
             .where('user = :username', { username })
             .getMany();
-        return this.filterOutput(blocked);
+        return this.filterOutput(username, blocked);
     }
 
     async isBlock(username: string, blockedname: string): Promise<boolean> {
