@@ -81,6 +81,18 @@ export class User {
     default: ""
   })
   refreshToken: string;
+  @Column({
+    name: "tfa_iv",
+    nullable: false,
+    default: ""
+  })
+  tfa_iv: string;
+  @Column({
+    name: "tfa_key",
+    nullable: false,
+    default: ""
+  })
+  tfa_key: string;
   @OneToMany((type) => GroupUser, (groupuser) => groupuser.user)
   @JoinTable()
   groups: GroupUser[];

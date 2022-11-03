@@ -10,18 +10,15 @@ import { ConfigService } from "@nestjs/config";
 import { createDecipheriv } from 'crypto';
 
 const crypto = require('crypto');
-const algorithm = 'aes-256-cbc';
-const key = crypto.randomBytes(32);
-const iv = crypto.randomBytes(16);
 
-function encrypt(text: any) {
+function encrypt(text: any, key :any, iv :any) {
   let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv);
   let encrypted = cipher.update(text);
   encrypted = Buffer.concat([encrypted, cipher.final()]);
   return encrypted.toString('hex');
 }
 
-function decrypt(text: any) {
+function decrypt(text: any, key :any, iv :any) {
   let encryptedText = Buffer.from(text, 'hex');
   let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key), iv);
   let decrypted = decipher.update(encryptedText);
@@ -35,7 +32,16 @@ export class TfaService {
 
   async isTfaValid(tfaDto: TfaDto) {
     const ret = await this.usersService.findUsersByIdNoFilter(tfaDto.intraID);
-    var pw  = decrypt(ret.tfaSecret)
+    //you can only confirm if the secret is set
+    if (!ret || !ret.tfaSecret || !ret.tfa_iv || !ret.tfa_key)
+      throw TypeError;
+
+    //get the key and iv to decyrpt the secret
+    const key = Buffer.from(await this.usersService.getTFAkey(ret.uid), "hex");
+    const iv = Buffer.from(await this.usersService.getTFAiv(ret.uid), "hex");
+    var pw  = decrypt(ret.tfaSecret, key, iv);
+
+    //check if decrypted code is valid
     const res = authenticator.check(tfaDto.tfaCode, pw);
     return res;
   }
@@ -44,27 +50,47 @@ export class TfaService {
     const ret = await this.usersService.findUsersByIdNoFilter(
       intraIDdto.intraID
     );
-
     if (!ret || ret.isTfaEnabled === false) {
       throw TypeError;
     }
-    var secret = "";
-    if (!ret.tfaSecret) {
-      secret = authenticator.generateSecret();
-      var pw = encrypt(secret);
-      this.usersService.update2faSecret(intraIDdto.intraID, pw);
-    } else {
-      secret = decrypt(ret.tfaSecret);
+
+    //Create and set key and iv needed for encryption and decryption, if it already exist get form database
+    var key : any = null;
+    var iv : any = null;
+    if (!ret.tfa_key)
+    {
+      key = crypto.randomBytes(32);
+      await this.usersService.setTFAkey(ret.uid, key.toString("hex"));
     }
+    else 
+      key = Buffer.from(await this.usersService.getTFAkey(ret.uid), "hex");
+    if (!ret.tfa_iv)
+    {
+      iv = crypto.randomBytes(16);
+      await this.usersService.setTFAiv(ret.uid, iv.toString("hex"));
+    }  
+    else 
+      iv = Buffer.from(await this.usersService.getTFAiv(ret.uid), "hex");
+
+    //get secret from database else create, encrypt and set one
+    var secret = "";
+    if (!ret.tfaSecret)
+    {
+      secret = authenticator.generateSecret();
+      var pw = encrypt(secret, key, iv);
+      this.usersService.update2faSecret(intraIDdto.intraID, pw);
+    }
+    else
+      secret = decrypt(ret.tfaSecret, key, iv);
+
+    //use secret to make the data for the qr
     const otpauthUrl = authenticator.keyuri(
       "",
       "TRANSCEND_2FA",
       secret
     );
 
-    const res = toDataURL(otpauthUrl);
-
+    //return the url for qr
     return toDataURL(otpauthUrl);
   }
 }
-//AVJFM5BBIY7VIFIY

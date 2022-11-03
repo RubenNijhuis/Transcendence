@@ -284,6 +284,69 @@ export class UserService {
     }
   }
 
+  async setTFAiv(
+    intraID: string,
+    tfa_iv: string
+  ): Promise<UpdateResult> {
+    try {
+      const user: User = await this.findUsersByIdNoFilter(intraID);
+
+      return await this.userRepository
+        .createQueryBuilder()
+        .update(user)
+        .set({ tfa_iv: tfa_iv })
+        .where({ uid: user.uid })
+        .returning("*")
+        .execute();
+    } catch (err) {
+      throw errorHandler(
+        err,
+        "Failed to set user 2fa secret",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  async setTFAkey(
+    intraID: string,
+    tfa_key: string
+  ): Promise<UpdateResult> {
+    try {
+      const user: User = await this.findUsersByIdNoFilter(intraID);
+
+      return await this.userRepository
+        .createQueryBuilder()
+        .update(user)
+        .set({ tfa_key: tfa_key })
+        .where({ uid: user.uid })
+        .returning("*")
+        .execute();
+    } catch (err) {
+      throw errorHandler(
+        err,
+        "Failed to set user 2fa secret",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  async getTFAiv(intraId: string): Promise<string> {
+    try {
+      const user: User = await this.findUsersByIdNoFilter(intraId);
+      return user.tfa_iv;
+    } catch (err) {
+      throw err;
+    }
+  }
+  async getTFAkey(intraId: string): Promise<string> {
+    try {
+      const user: User = await this.findUsersByIdNoFilter(intraId);
+      return user.tfa_key;
+    } catch (err) {
+      throw err;
+    }
+  }
+
   // @angi, kunnen deze weg?
   // setTwoFactorAuthSecret(id: number, twoFactorAuthenticationSecret: string) {
   //   return this.userRepository.update( id, {twoFactorAuthenticationSecret,} );

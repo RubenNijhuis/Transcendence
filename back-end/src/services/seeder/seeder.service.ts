@@ -95,7 +95,7 @@ export class SeederService {
     try {
       const users: User[] = await this.userServ.getUsers();
       const filteredUsers: User[] = this.filterUsers(users);
-      const maxFriends: number = filteredUsers.length - 1;
+      const maxFriends: number = filteredUsers.length - 1; // minus 1 for the user itself
 
       // loop trough users
       for (let i = 0; i < filteredUsers.length; i++) {
@@ -118,12 +118,10 @@ export class SeederService {
             // get random number which is not in exlude list
             while (
               excludeList.includes(
-                (randomIndex = this.randomNum(1, maxFriends - 1))
-              )
+                (randomIndex = this.randomNum(1, maxFriends + 1)) + 1) && users[randomIndex].isInitialized
             ) {}
-            console.log("excludes: ", excludeList, "\nrandom index: ", randomIndex + 1);
             // eslint-disable-next-line prefer-const
-            newFriend = users[randomIndex + 1];
+            newFriend = users[randomIndex];
             // get username of random index
             // add new friend to friends && exclude list
             const query = {

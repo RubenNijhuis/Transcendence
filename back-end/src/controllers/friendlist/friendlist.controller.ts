@@ -19,8 +19,8 @@ import { DeleteResult } from "typeorm";
 export class FriendlistController {
   constructor(private readonly friendlistService: FriendlistService) {}
 
-  @Get("getfriends/:username")
-  async getfriends(@Param('username') username: string) {
+  @Get("getFriends/:username")
+  async getFriends(@Param('username') username: string) {
     try {
       const friendsList = await this.friendlistService.getFriends(
         username
@@ -33,37 +33,25 @@ export class FriendlistController {
   }
 
   @Get("isFriend/:username/:friendname")
-  async getfriend(@Param("username") username: string, @Param("friendname") friendname: string): Promise<string> {
+  async isFriend(@Param("username") username: string, @Param("friendname") friendname: string): Promise<boolean> {
     try {
-      const getFriendResp: string = await this.friendlistService.isFriend(
+      const isFriend: boolean = await this.friendlistService.isFriend(
         username,
         friendname
       );
 
-      return getFriendResp;
+      return isFriend;
     } catch (err) {
       throw err;
     }
   }
 
-  // @Get("checkFriend")
-  // async isfriend(@Param("username") username: string, @Param("friendname") friendname: string): Promise<boolean> {
-  //   try {
-  //     const isFriendsWithProfile: boolean =
-  //       await this.friendlistService.checkFriend(username, friendname);
-
-  //     return isFriendsWithProfile;
-  //   } catch (err) {
-  //     throw err;
-  //   }
-  // }
-
-  @Post("addfriend")
-  async addfriend(
+  @Post("addFriend")
+  async addFriend(
     @Body() createfriendsDto: CreateFriendsDto
   ): Promise<FriendList> {
     try {
-      const addFriendResp = await this.friendlistService.addFriend(
+      const addFriendResp: FriendList = await this.friendlistService.addFriend(
         createfriendsDto
       );
 
@@ -73,12 +61,12 @@ export class FriendlistController {
     }
   }
 
-  @Post("removefriend")
-  async removefriend(
+  @Post("removeFriend")
+  async removeFriend(
     @Body() createfriendsDto: CreateFriendsDto
   ): Promise<DeleteResult> {
     try {
-      const removeFriendResp = await this.friendlistService.removeFriend(
+      const removeFriendResp: DeleteResult = await this.friendlistService.removeFriend(
         createfriendsDto.username,
         createfriendsDto.friendname
       );

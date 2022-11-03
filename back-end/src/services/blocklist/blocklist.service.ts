@@ -1,51 +1,67 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { DeleteResult, Repository } from "typeorm";
 import BlockList from "../../entities/blocklist/blocklist.entity";
 import { CreateBlockDto } from "../../dtos/blocklist/create-blocklist.dto";
+import { UserService } from "../user/user.service";
+import { FriendList } from "src/entities";
 
 @Injectable()
 export class BlocklistService {
+    inject: [UserService]
     constructor(
         @InjectRepository(BlockList)
-        private readonly blocklistRepository: Repository<BlockList>
+        private readonly blocklistRepository: Repository<BlockList>,
+        private readonly userService: UserService
     ) {}
 
-    async getBlocked(username: string): Promise<BlockList[]> {
-        const blocked = await this.blocklistRepository
+    private async filterOutput(blocked: BlockList[]) {
+        const filteredFriends = [];
+    
+        for (const block of blocked) {
+          filteredFriends.push(block.blockname);
+        }
+        const ret = await this.userService.getUsersOnUsernames(filteredFriends);
+        return ret;
+      }
+
+    async getBlocked(username: string) {
+        const blocked: BlockList[] = await this.blocklistRepository
             .createQueryBuilder('block_list')
             .where('user = :username', { username })
             .getMany();
-        return blocked;
+        return this.filterOutput(blocked);
     }
 
-    async getBlock(username: string, blockedname: string): Promise<BlockList> {
+    async isBlock(username: string, blockedname: string): Promise<boolean> {
+        var ret: boolean = false;
+
         const blocked = await this.blocklistRepository
             .createQueryBuilder('block_list')
             .where('user = :username', { username })
             .andWhere('blockname = :blocked', { blockedname })
             .getOne();
-        return blocked;
+        
+        if (blocked)
+            ret = true;
+        return ret;
     }
 
-    async isBlocked(username: string, friendname: string): Promise<boolean> {
-        return (!(await this.getBlock(username, friendname) === null) 
-            || !(await this.getBlock(friendname, username) === null))
+    async blockPerson(createBlockDto: CreateBlockDto): Promise<BlockList> {
+        const newEntry: BlockList = this.blocklistRepository.create(createBlockDto);
+        const saveResponse: BlockList = await this.blocklistRepository.save(newEntry);
+
+        return saveResponse;
     }
 
-    async blockPerson(createBlockDto: CreateBlockDto) {
-        const newEntry = this.blocklistRepository.create(createBlockDto);
-
-        return this.blocklistRepository.save(newEntry);
-    }
-
-    async unblockPerson(username: string, toblock: string) {
-        return this.blocklistRepository
+    async unblockPerson(username: string, toblock: string): Promise<DeleteResult> {
+        const removeFriendResponse: DeleteResult = await this.blocklistRepository
             .createQueryBuilder('block_list')
             .delete()
             .from('block_list')
             .where('username = :username', { username })
             .andWhere('blockname = :toblock', { toblock })
             .execute()
+        return removeFriendResponse;
     }
 }
