@@ -72,8 +72,8 @@ export class FriendlistService {
       .createQueryBuilder("friend_list")
       .delete()
       .from("friend_list")
-      .where("username = :username OR friendname = :username", { username })
-      .andWhere("friendname = :friendname OR username = :friendname", { friendname })
+      .where("username = :username AND friendname = :friendname", { username, friendname })
+      .orWhere("username = :friendname AND friendname = :username", { friendname, username })
       .execute();
 
     return removeFriendResponse;

@@ -48,7 +48,7 @@ export class SeederService {
     const indexes: number[] = [];
 
     for (let i = 0; i < friends.length; i++) {
-      indexes.push((await this.userServ.findUserByUsername(friends[i].usernme)).index);
+      indexes.push((await this.userServ.findUserByUsername(friends[i].username)).index);
     }
     return indexes;
   }
@@ -110,6 +110,7 @@ export class SeederService {
 
         excludeList.push(user.index);
         // if not target amount of friends, add friends until target
+        // console.log("user: ", user.username);
         if (currentFriends.length < targetAmount) {
           for (let i = currentFriends.length; i <= targetAmount; i++) {
             let randomIndex: number;
@@ -117,11 +118,13 @@ export class SeederService {
 
             // get random number which is not in exlude list
             while (
-              excludeList.includes(
-                (randomIndex = this.randomNum(1, maxFriends + 1)) + 1) && users[randomIndex].isInitialized
+              users[randomIndex = this.randomNum(1, maxFriends + 1)].isInitialized && excludeList.includes(
+                (users[randomIndex].index)) 
             ) {}
             // eslint-disable-next-line prefer-const
             newFriend = users[randomIndex];
+            // console.log("excludelist: ", excludeList);
+            // console.log("new friend index: ", newFriend.index);
             // get username of random index
             // add new friend to friends && exclude list
             const query = {
