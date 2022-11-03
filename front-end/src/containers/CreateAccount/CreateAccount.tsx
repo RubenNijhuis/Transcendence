@@ -68,15 +68,18 @@ const CreateAccount = (): JSX.Element => {
         }
     };
 
+    const handleSubmit = (e: any) => {
+        e.preventDefault();
+    };
+
     const slideChangeEffect = () => {
-        setError("not good");
         console.log("slide change!");
     };
 
     ////////////////////////////////////////////////////////////
 
     return (
-        <CreateAccountForm>
+        <CreateAccountForm onSubmit={handleSubmit}>
             <Heading type={2}>Create an account</Heading>
             <BoxSlider onSlideChange={slideChangeEffect}>
                 <Slide>

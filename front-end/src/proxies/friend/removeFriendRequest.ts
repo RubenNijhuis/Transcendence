@@ -8,15 +8,15 @@ import ApiRoutes from "../../config/ApiRoutes";
  * Adds a friend to the user
  * @returns
  */
-const addFriend = async (
+const removeFriendRequest = async (
     username: string,
     friendname: string
 ): Promise<any> => {
     try {
-        const route = ApiRoutes.addFriend();
+        const route = ApiRoutes.removeFriendRequest();
         const body = {
             username,
-            friendname
+            requested: friendname
         };
 
         const { data } = await API.post(route, body);
@@ -29,4 +29,4 @@ const addFriend = async (
 
 ////////////////////////////////////////////////////////////
 
-export { addFriend };
+export { removeFriendRequest };

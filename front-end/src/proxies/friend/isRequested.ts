@@ -8,12 +8,12 @@ import ApiRoutes from "../../config/ApiRoutes";
  * Checks if a friend is friends with another friend
  * @returns boolean
  */
-const getIsFriend = async (
+const isRequested = async (
     username: string,
     friendname: string
 ): Promise<boolean> => {
     try {
-        const route = ApiRoutes.getIsFriend(username, friendname);
+        const route = ApiRoutes.isRequested(username, friendname);
 
         const { data } = await API.get<boolean>(route);
 
@@ -25,4 +25,4 @@ const getIsFriend = async (
 
 ////////////////////////////////////////////////////////////
 
-export { getIsFriend };
+export { isRequested };

@@ -101,7 +101,8 @@ const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
                 setLoggedIn(true);
                 setUser(profile);
             } catch (err) {
-                redirectToHome();
+                console.log("issue");
+                // redirectToHome();
             }
         };
         checkAuthTokenStatus();
