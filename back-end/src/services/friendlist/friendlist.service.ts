@@ -3,10 +3,10 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 
 // DB
-import { Repository } from "typeorm";
+import { DeleteResult, Repository } from "typeorm";
 
 // Types
-import { FriendList } from "src/entities";
+import { FriendList, FriendRequest } from "src/entities";
 
 // Dtos
 import { CreateFriendsDto } from "../../dtos/friendlist/create-friend.dto";
@@ -34,9 +34,7 @@ export class FriendlistService {
   }
 
   async getFriends(username: string) {
-    let friends: FriendList[] = [];
-
-    friends = await this.friendlistRepository
+    const friends: FriendList[] = await this.friendlistRepository
       .createQueryBuilder("friend_list")
       .where("username = :username OR friendname = :username", { username })
       .getMany();
@@ -47,7 +45,7 @@ export class FriendlistService {
   async isFriend(username: string, friendname: string): Promise<boolean> {
     var ret: boolean = false;
 
-    const friend = await this.friendlistRepository
+    const friend: FriendList = await this.friendlistRepository
       .createQueryBuilder("friend_list")
       .where("username = :username OR friendname = :username", { username })
       .andWhere("friendname = :friendname OR username = :friendname", { friendname })
@@ -58,15 +56,15 @@ export class FriendlistService {
     return ret;
   }
 
-  async addFriend(createfriendsDto: CreateFriendsDto) {
-    const newEntry = this.friendlistRepository.create(createfriendsDto);
-    const saveResponse = this.friendlistRepository.save(newEntry);
+  async addFriend(createfriendsDto: CreateFriendsDto): Promise<FriendList> {
+    const newEntry: FriendList = this.friendlistRepository.create(createfriendsDto);
+    const saveResponse: FriendList = await this.friendlistRepository.save(newEntry);
 
     return saveResponse;
   }
 
-  async removeFriend(username: string, friendname: string) {
-    const removeFriendResponse = this.friendlistRepository
+  async removeFriend(username: string, friendname: string): Promise<DeleteResult> {
+    const removeFriendResponse: DeleteResult = await this.friendlistRepository
       .createQueryBuilder("friend_list")
       .delete()
       .from("friend_list")
