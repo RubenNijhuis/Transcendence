@@ -195,15 +195,11 @@ const ProfilePage = (): JSX.Element => {
                         matchHistory={matchHistory}
                     />
                     <ProfileDetailsContainer>
-                        {profileFriends && (
-                            <FriendList friends={profileFriends} />
-                        )}
-                        {matchHistory && (
-                            <GameHistory
-                                player={selectedProfile}
-                                matches={matchHistory}
-                            />
-                        )}
+                        <FriendList friends={profileFriends} />
+                        <GameHistory
+                            player={selectedProfile}
+                            matches={matchHistory}
+                        />
                     </ProfileDetailsContainer>
                 </>
             )}

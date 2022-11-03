@@ -17,11 +17,18 @@ const ApiRoutes = {
 
     // Friend //////////////////////////////////////////////////
     getFriendsByUsername: (username: string) =>
-        `/friends/getfriends?username=${username}`,
+        `/friends/getfriends/${username}`,
     getFriend: () => `/friends/getfriend`,
-    addFriend: () => `/friends/addFriend`,
     removeFriend: () => `/friends/removeFriend`,
-    getIsFriend: () => `/friends/isFriend`,
+
+    sendFriendRequest: () => `/friendrequest/sendrequest`,
+    getFriendRequests: () => `/friendrequests/`,
+    isRequested: (username: string, requested: string) =>
+        `/friendrequest/isRequested/${username}/${requested}`,
+    removeFriendRequest: () => `/friendrequest/remove`,
+
+    getIsFriend: (username: string, friendname: string) =>
+        `/friends/isFriend/${username}/${friendname}`,
     // Friend //////////////////////////////////////////////////
 
     // Profile /////////////////////////////////////////////////

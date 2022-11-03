@@ -8,8 +8,8 @@ import { CreateBlockDto } from "../../dtos/blocklist/create-blocklist.dto";
 export class BlockListController {
   constructor(private readonly blocklistService: BlocklistService) {}
 
-  @Get("getblocked/:username")
-  async getblocked(@Param("username") username: string) {
+  @Get("getBlocked/:username")
+  async getBlocked(@Param("username") username: string) {
     try {
       const blockedList = await this.blocklistService.getBlocked(username);
 
@@ -20,7 +20,7 @@ export class BlockListController {
   }
 
   @Get("isBlock/:username/:blocked")
-  async getblock(@Param('username') username: string, @Param('blocked') blocked: string): Promise<boolean> {
+  async getBlock(@Param('username') username: string, @Param('blocked') blocked: string): Promise<boolean> {
     try {
       const isBlocked: boolean = await this.blocklistService.isBlock(
         username,
@@ -33,8 +33,8 @@ export class BlockListController {
     }
   }
 
-  @Post("addblock")
-  async addblock(@Body() createBlockDto: CreateBlockDto): Promise<BlockList> {
+  @Post("addBlock")
+  async addBlock(@Body() createBlockDto: CreateBlockDto): Promise<BlockList> {
     try {
       const addblock: BlockList = await this.blocklistService.blockPerson(createBlockDto);
 
@@ -44,8 +44,8 @@ export class BlockListController {
     }
   }
 
-  @Post("unblock")
-  async unblock(@Body() createBlockDto: CreateBlockDto): Promise<DeleteResult> {
+  @Post("unBlock")
+  async unBlock(@Body() createBlockDto: CreateBlockDto): Promise<DeleteResult> {
     try {
       const unblock: DeleteResult = await this.blocklistService.unblockPerson(
         createBlockDto.username,

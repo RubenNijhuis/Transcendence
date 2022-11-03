@@ -38,14 +38,16 @@ const useChat = () => useContext(ChatContext);
 
 ///////////////////////////////////////////////////////////
 
-const ChatProvider = ({
-    children
-}: {
+interface IChatProvider {
     children: React.ReactNode;
-}): JSX.Element => {
+}
+
+const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
     const [activeChat, setActiveChat] = useState<Chat.Group.Instance>(null!);
 
-    const [directChats, setDirectChats] = useState<Chat.Group.Instance[]>(null!);
+    const [directChats, setDirectChats] = useState<Chat.Group.Instance[]>(
+        null!
+    );
     const [groupChats, setGroupChats] = useState<Chat.Group.Instance[]>(null!);
 
     ////////////////////////////////////////////////////////////
@@ -63,12 +65,8 @@ const ChatProvider = ({
 
         const chatAggregator = async () => {
             // TODO: Get from api //////////////////////////////////////
-            const retrievedGroupChats: Chat.Group.Instance[] = generateGroupChats(
-                user,
-                10,
-                [1, 4],
-                profiles
-            );
+            const retrievedGroupChats: Chat.Group.Instance[] =
+                generateGroupChats(user, 10, [1, 4], profiles);
             ////////////////////////////////////////////////////////////
 
             const members = getMembersFromGroupChats(retrievedGroupChats);

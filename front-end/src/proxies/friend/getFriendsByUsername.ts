@@ -6,7 +6,7 @@ import ApiRoutes from "../../config/ApiRoutes";
 import { Profile, Request } from "../../types";
 
 // Proxies
-import { getProfileByUsername } from "../profile";
+import { addImagesToProfile, getProfileByUsername } from "../profile";
 
 ////////////////////////////////////////////////////////////
 
@@ -20,25 +20,25 @@ const getFriendsByUsername = async (
 ): Promise<Profile.Instance[]> => {
     try {
         const route = ApiRoutes.getFriendsByUsername(username);
-        const { data } = await API.get<string[]>(route);
+        const { data } = await API.get<Profile.Instance[]>(route);
 
-        const profilesFromUsernames: Profile.Instance[] = [];
+        const profilesWithImages: Profile.Instance[] = [];
 
-        for (const profileUsername of data) {
+        for (const profile of data) {
             const imageSelect: Request.Payload.ImageSelect = {
                 profile: true,
                 banner: false
             };
 
-            const retrievedProfile = await getProfileByUsername(
-                profileUsername,
+            const profilesWithImage = await addImagesToProfile(
+                profile,
                 imageSelect
             );
 
-            profilesFromUsernames.push(retrievedProfile);
+            profilesWithImages.push(profilesWithImage);
         }
 
-        return Promise.resolve(profilesFromUsernames);
+        return Promise.resolve(profilesWithImages);
     } catch (err) {
         return Promise.reject(err);
     }

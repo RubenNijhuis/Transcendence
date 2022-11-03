@@ -1,9 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { DeleteResult, Repository } from "typeorm";
 import BlockList from "../../entities/blocklist/blocklist.entity";
 import { CreateBlockDto } from "../../dtos/blocklist/create-blocklist.dto";
 import { UserService } from "../user/user.service";
+import { FriendList } from "src/entities";
 
 @Injectable()
 export class BlocklistService {
@@ -14,11 +15,15 @@ export class BlocklistService {
         private readonly userService: UserService
     ) {}
 
-    private async filterOutput(blocked: BlockList[]) {
+    private async filterOutput(username: string, blocked: BlockList[]) {
         const filteredFriends = [];
     
         for (const block of blocked) {
-          filteredFriends.push(block.blockname);
+            let name = block.blockname;
+
+            if (name === username)
+                name = block.username;
+          filteredFriends.push(name);
         }
         const ret = await this.userService.getUsersOnUsernames(filteredFriends);
         return ret;
@@ -29,7 +34,7 @@ export class BlocklistService {
             .createQueryBuilder('block_list')
             .where('user = :username', { username })
             .getMany();
-        return this.filterOutput(blocked);
+        return this.filterOutput(username, blocked);
     }
 
     async isBlock(username: string, blockedname: string): Promise<boolean> {
@@ -46,15 +51,15 @@ export class BlocklistService {
         return ret;
     }
 
-    async blockPerson(createBlockDto: CreateBlockDto) {
-        const newEntry = this.blocklistRepository.create(createBlockDto);
-        const saveResponse = this.blocklistRepository.save(newEntry);
+    async blockPerson(createBlockDto: CreateBlockDto): Promise<BlockList> {
+        const newEntry: BlockList = this.blocklistRepository.create(createBlockDto);
+        const saveResponse: BlockList = await this.blocklistRepository.save(newEntry);
 
         return saveResponse;
     }
 
-    async unblockPerson(username: string, toblock: string) {
-        const removeFriendResponse = this.blocklistRepository
+    async unblockPerson(username: string, toblock: string): Promise<DeleteResult> {
+        const removeFriendResponse: DeleteResult = await this.blocklistRepository
             .createQueryBuilder('block_list')
             .delete()
             .from('block_list')

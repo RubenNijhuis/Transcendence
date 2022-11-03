@@ -5,7 +5,13 @@ import { ReactElement, useEffect, useState } from "react";
 import { useUser } from "../../../contexts/UserContext";
 
 // Proxies
-import { addFriend, removeFriend, getIsFriend } from "../../../proxies/friend";
+import {
+    sendFriendRequest,
+    removeFriend,
+    getIsFriend,
+    isRequested,
+    removeFriendRequest
+} from "../../../proxies/friend";
 
 // Types
 import { Profile } from "../../../types";
@@ -52,6 +58,10 @@ interface IProfileActions {
 
 const ProfileActions = ({ profile }: IProfileActions): JSX.Element => {
     const [isFriend, setIsFriend] = useState<boolean>(false);
+    const [requestedFriendship, setRequestedFriendship] =
+        useState<boolean>(false);
+    const [requestButtonText, setRequestButtonText] =
+        useState<string>("Add friend");
 
     ////////////////////////////////////////////////////////////
 
@@ -64,13 +74,18 @@ const ProfileActions = ({ profile }: IProfileActions): JSX.Element => {
         const friendname = profile.username;
 
         try {
-            console.log(username, friendname);
             if (isFriend) {
-                const removeResp = await removeFriend(username, friendname);
-                console.log(removeResp);
+                await removeFriend(username, friendname);
+                setIsFriend(false);
+                setRequestButtonText("Add friend");
             } else {
-                const addResp = await addFriend(username, friendname);
-                console.log(addResp);
+                if (requestedFriendship === true) {
+                    setRequestButtonText("Remove friendship request");
+                    await removeFriendRequest(username, friendname);
+                }
+                await sendFriendRequest(username, friendname);
+                setRequestButtonText("Friendship requested");
+                setIsFriend(true);
             }
         } catch (err) {
             console.error(err);
@@ -85,10 +100,25 @@ const ProfileActions = ({ profile }: IProfileActions): JSX.Element => {
             const friendname = profile.username;
 
             try {
-                const friendStatus = await getIsFriend(username, friendname);
-                setIsFriend(friendStatus);
+                const isFriend = await getIsFriend(username, friendname);
+                setIsFriend(isFriend);
+
+                if (isFriend === true) {
+                    setRequestButtonText("Remove friend");
+                    return;
+                }
+
+                const friendRequestStatus = await isRequested(
+                    username,
+                    friendname
+                );
+
+                if (friendRequestStatus === true) {
+                    setRequestedFriendship(true);
+                    setRequestButtonText("Remove friend request");
+                }
             } catch (err) {
-                console.log(err);
+                console.error(err);
             }
         };
         getFriendStatus();
@@ -99,7 +129,7 @@ const ProfileActions = ({ profile }: IProfileActions): JSX.Element => {
     return (
         <Container isFriend={isFriend}>
             <Button theme="dark" onClick={() => toggleFriendship()}>
-                {isFriend ? "Following" : "Follow"}
+                {requestButtonText}
             </Button>
             <div className="status">
                 <div className="header">

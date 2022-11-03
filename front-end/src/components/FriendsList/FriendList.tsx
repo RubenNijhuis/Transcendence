@@ -40,11 +40,13 @@ const FriendList = ({ friends }: IFriendList) => {
     return (
         <Container>
             <Heading type={3}>Friends</Heading>
-            <ul className="friends-list">
-                {friends.map((friend) => (
-                    <FriendEntry friend={friend} key={friend.uid} />
-                ))}
-            </ul>
+            {friends && (
+                <ul className="friends-list">
+                    {friends.map((friend) => (
+                        <FriendEntry friend={friend} key={friend.uid} />
+                    ))}
+                </ul>
+            )}
         </Container>
     );
 };

@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 // UI
 import Layout from "../../components/Layout";
 import ChatSelector from "../../containers/Chat/Selector";
@@ -9,8 +11,11 @@ import { Container } from "./Chat.style";
 // Context
 import { useChat } from "../../contexts/ChatContext";
 import { useSocket } from "../../contexts/SocketContext";
-import { useEffect } from "react";
+
+// Types
 import { Socket } from "../../types";
+
+// Config
 import SocketRoutes from "../../config/SocketRoutes";
 
 ///////////////////////////////////////////////////////////
@@ -20,29 +25,36 @@ const ChatPage = (): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
-    const { connection, setSocketType } = useSocket();
+    const { connection, createConnection } = useSocket();
 
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
-        setSocketType(Socket.SocketType.Chat);
+        createConnection(Socket.SocketType.Chat);
+    }, [connection]);
 
-        // Connection check
-        connection.emit(SocketRoutes.connectionCheck(), null);
+    const testConnection = () => {
+        if (connection) {
+            // Connection check
+            connection.emit(SocketRoutes.connectionCheck(), null);
 
-        connection.on(
-            SocketRoutes.connectionCheck(),
-            (connectionStatus: boolean) => {
-                console.log("Connection check", connectionStatus);
-            }
-        );
-    });
+            connection.on(
+                SocketRoutes.connectionCheck(),
+                (connectionStatus: boolean) => {
+                    console.log("Connection check", connectionStatus);
+                }
+            );
+        }
+    };
 
     ////////////////////////////////////////////////////////////
 
     return (
         <Layout>
             <Container>
+                <button onClick={testConnection}>
+                    Test connection (console.log)
+                </button>
                 <ChatSelector
                     directChats={directChats}
                     groupChats={groupChats}

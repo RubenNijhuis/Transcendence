@@ -56,7 +56,7 @@ const MatchList = ({ matches }: IMatchList) => {
 
 interface IGameHistory {
     player: Profile.Instance;
-    matches:Game.MatchRecord[];
+    matches: Game.MatchRecord[];
 }
 
 const GameHistory = ({ player, matches }: IGameHistory): JSX.Element => {
@@ -108,7 +108,7 @@ const GameHistory = ({ player, matches }: IGameHistory): JSX.Element => {
                         </Button>
                     </div>
                 </div>
-                {matchesPage && <MatchList matches={matchesPage} />}
+                {matches && matchesPage && <MatchList matches={matchesPage} />}
             </MatchListContainer>
         </Container>
     );

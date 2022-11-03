@@ -3,7 +3,11 @@ import Button from "../../components/Button";
 import Heading from "../../components/Heading";
 
 // Styling
-import { CreateForm, StyledError, StyledInput } from "./CreateAccount.style";
+import {
+    CreateAccountForm,
+    StyledError,
+    StyledInput
+} from "./CreateAccount.style";
 
 // Box slider
 import BoxSlider from "../../components/BoxSlider";
@@ -64,15 +68,18 @@ const CreateAccount = (): JSX.Element => {
         }
     };
 
+    const handleSubmit = (e: any) => {
+        e.preventDefault();
+    };
+
     const slideChangeEffect = () => {
-        setError("not good")
         console.log("slide change!");
     };
 
     ////////////////////////////////////////////////////////////
 
     return (
-        <CreateForm>
+        <CreateAccountForm onSubmit={handleSubmit}>
             <Heading type={2}>Create an account</Heading>
             <BoxSlider onSlideChange={slideChangeEffect}>
                 <Slide>
@@ -136,7 +143,7 @@ const CreateAccount = (): JSX.Element => {
                     </Button>
                 </Slide>
             </BoxSlider>
-        </CreateForm>
+        </CreateAccountForm>
     );
 };
 
