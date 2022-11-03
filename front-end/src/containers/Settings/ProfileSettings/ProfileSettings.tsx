@@ -11,6 +11,9 @@ import { useAuth } from "../../../contexts/AuthContext";
 
 // Modal
 import { useModal } from "../../../contexts/ModalContext";
+import UploadProfilePicture from "./ProfilePicture/UploadProfilePicture";
+import UploadBanner from "./Banner";
+
 
 ////////////////////////////////////////////////////////////
 
@@ -24,6 +27,12 @@ const ProfileSettings = () => {
         setModalElement(<TwoFactorAuthentication />);
         setModalActive(true);
     };
+
+    // const uploadProfilePicture = () => {
+    //     setModalElement(<UploadProfilePicture />);
+    //     setModalActive(true);
+        
+    // }
 
     ////////////////////////////////////////////////////////////
 
@@ -49,12 +58,16 @@ const ProfileSettings = () => {
             <Button theme="dark" onClick={renderTFAModal}>
                 Turn {tfaEnabled ? "off" : "on"} 2 factor authentication
             </Button>
-            <span>Change profile picture</span>
-            <span>Change banner picture</span>
-            <span>Change description picture</span>
-            <span>Change color picture</span>
-            <span>Change blocked picture</span>
-            <span>Change friends picture</span>
+            <br/>
+            <UploadProfilePicture />
+            <UploadBanner />
+            {/* <Button theme="dark" onClick={uploadProfilePicture}>
+                Change profile picture
+            </Button> */}
+            <span>Change description </span>
+            <span>Change color </span>
+            <span>Change blocked </span>
+            <span>Change friends </span>
         </section>
     );
 };

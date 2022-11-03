@@ -1,5 +1,5 @@
 // React
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react"
 
 // UI
 import Asset from "../../components/Asset";

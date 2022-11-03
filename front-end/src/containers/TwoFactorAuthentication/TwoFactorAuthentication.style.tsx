@@ -7,6 +7,7 @@ const Container = styled.section`
     .button {
         margin-bottom: calc(${magicNum} / 4);
     }
+    
 `;
 
 const QrCodeContainer = styled.div`
