@@ -9,6 +9,7 @@ import { getItem } from "../../../modules/Store";
 // Auth check
 import { useAuth } from "../../../contexts/AuthContext";
 import { useEffect } from "react";
+import { useUser } from "../../../contexts/UserContext";
 
 ///////////////////////////////////////////////////////////
 
@@ -22,23 +23,24 @@ const AuthGuard = () => {
     ////////////////////////////////////////////////////////////
 
     const { isLoggedIn } = useAuth();
+    const { user } = useUser();
     const navigate = useNavigate();
 
     ////////////////////////////////////////////////////////////
 
-    useEffect(() => {
-        const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
-        if (inLoginProcess === null) {
-            navigate(rerouteLink);
-            return;
-        }
+    // useEffect(() => {
+    //     const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
 
-        if (!isLoggedIn && !inLoginProcess) {
-            console.log("WHAT", isLoggedIn, inLoginProcess);
-            navigate(rerouteLink);
-            return;
-        }
-    }, [isLoggedIn]);
+    //     // if (inLoginProcess === null) {
+    //     //     navigate(rerouteLink);
+    //     //     return;
+    //     // }
+
+    //     // if (!isLoggedIn) {
+    //     //     navigate(rerouteLink);
+    //     //     return;
+    //     // }
+    // }, [isLoggedIn]);
 
     ///////////////////////////////////////////////////////////
 

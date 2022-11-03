@@ -32,6 +32,8 @@ const BoxSlider = ({ children, onSlideChange }: IBoxSlider): JSX.Element => {
             boxSlidesContainerRef.current.offsetWidth;
 
         boxSlidesContainerRef.current.scrollBy(boxSliderWidth * amount, 0);
+
+        onSlideChange();
     };
 
     ////////////////////////////////////////////////////////////

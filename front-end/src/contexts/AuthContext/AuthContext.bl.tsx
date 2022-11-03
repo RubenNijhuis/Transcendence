@@ -41,7 +41,7 @@ const signOut = (): void => {
 const redirectToHome = (): void => {
     if (window.location.pathname === PageRoutes.home) return;
 
-    window.location.assign(PageRoutes.home);
+    // window.location.assign(PageRoutes.home);
 };
 
 ////////////////////////////////////////////////////////////

@@ -21,11 +21,11 @@ const useModal = () => useContext(ModalContext);
 
 ////////////////////////////////////////////////////////////
 
-const ModalProvider = ({
-    children
-}: {
+interface IModalProvider {
     children: React.ReactNode;
-}): JSX.Element => {
+}
+
+const ModalProvider = ({ children }: IModalProvider): JSX.Element => {
     const [modalActive, setModalActive] = useState<boolean>(false);
     const [allowClose, setAllowClose] = useState<boolean>(true);
     const [modalElement, setModalElement] = useState<React.ReactNode>(null!);

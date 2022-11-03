@@ -21,6 +21,7 @@ import { checkTokenValidity } from "../../proxies/auth";
 
 interface AuthContextType {
     isLoggedIn: boolean;
+    setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 
     tfaEnabled: boolean;
     setTfaEnabled: React.Dispatch<React.SetStateAction<boolean>>;
@@ -37,15 +38,15 @@ const useAuth = () => useContext(AuthContext);
 
 ///////////////////////////////////////////////////////////
 
+interface IAuthProvider {
+    children: React.ReactNode;
+}
+
 /**
  * The authprovider creates a "bucket" in which we can store all
  * the user data as well as the utility functions like login and logout
  */
-const AuthProvider = ({
-    children
-}: {
-    children: React.ReactNode;
-}): JSX.Element => {
+const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [tfaEnabled, setTfaEnabled] = useState<boolean>(false);
 
@@ -97,9 +98,11 @@ const AuthProvider = ({
 
             try {
                 const { profile } = await checkTokenValidity(refreshToken);
+                setLoggedIn(true);
                 setUser(profile);
             } catch (err) {
-                redirectToHome();
+                console.log("issue");
+                // redirectToHome();
             }
         };
         checkAuthTokenStatus();
@@ -114,7 +117,8 @@ const AuthProvider = ({
         tfaEnabled,
         setTfaEnabled,
 
-        isLoggedIn
+        isLoggedIn,
+        setLoggedIn
     };
 
     ////////////////////////////////////////////////////////////

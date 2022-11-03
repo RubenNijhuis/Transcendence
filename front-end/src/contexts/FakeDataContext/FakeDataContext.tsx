@@ -22,12 +22,11 @@ const useFakeData = () => useContext(FakeDataContext);
 
 ////////////////////////////////////////////////////////////
 
-// Setup data storage and update functions
-const FakeDataProvider = ({
-    children
-}: {
+interface IFakeDataProvider {
     children: React.ReactNode;
-}): JSX.Element => {
+}
+
+const FakeDataProvider = ({ children }: IFakeDataProvider): JSX.Element => {
     const [profiles, setProfiles] = useState<Profile.Instance[]>(null!);
     const [leaderBoard, setLeaderBoard] = useState<Profile.Instance[]>(null!);
     const [matchHistory, setMatchHistory] = useState<Game.MatchRecord[]>(null!);
