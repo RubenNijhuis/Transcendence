@@ -45,8 +45,8 @@ export class FriendrequestService {
 
     const request: FriendRequests = await this.friendrequestRepository
       .createQueryBuilder("friend_requests")
-      .where("username = :username OR requested = :requested", { username, requested })
-      .andWhere("username = :username OR requested = :requested", { username, requested })
+      .where("username = :username", { username })
+      .andWhere("requested = :requested", { requested })
       .getOne();
 
     if (request)
