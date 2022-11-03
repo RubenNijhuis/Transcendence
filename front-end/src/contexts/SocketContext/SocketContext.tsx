@@ -14,8 +14,7 @@ import { Socket } from "../../types";
 
 interface SocketContextType {
     connection: any;
-
-    setSocketType: React.Dispatch<React.SetStateAction<Socket.SocketType>>;
+    createConnection: (socketType: Socket.SocketType) => void;
 }
 
 const SocketContext = createContext<SocketContextType>(null!);
@@ -34,21 +33,20 @@ const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
-    useEffect(() => {
-        setSocketType(Socket.SocketType.Game);
+    const createConnection = (socketType: Socket.SocketType) => {
+        setSocketType(socketType);
 
         const path = SocketRoutes.path(socketType);
         const newSocket = io(SocketRoutes.baseUrl(), { path });
 
         setConnection(newSocket);
-    }, []);
+    };
 
     ////////////////////////////////////////////////////////////
 
     const value: SocketContextType = {
         connection,
-
-        setSocketType
+        createConnection
     };
 
     ////////////////////////////////////////////////////////////

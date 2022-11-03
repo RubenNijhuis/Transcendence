@@ -122,6 +122,7 @@ export class UsersController {
     }
   }
 
+  // TODO: set user must not update username if user is initialized
   @Post(UserRoutes.setUser)
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)

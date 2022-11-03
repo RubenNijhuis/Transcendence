@@ -4,8 +4,7 @@ import { FriendrequestService } from "src/services/friendrequest/friendrequest.s
 
 @Controller("friendrequest")
 export class FriendRequestController {
-  constructor(
-    private readonly friendrequestService: FriendrequestService) {}
+  constructor(private readonly friendrequestService: FriendrequestService) {}
 
   @Get("getRequest/:username")
   async getrequests(@Param("username") username: string) {
@@ -26,7 +25,10 @@ export class FriendRequestController {
   }
 
   @Get("isRequested/:username/:requested")
-  async isRequested(@Param("username") username: string, @Param("requested") requested: string): Promise<boolean> {
+  async isRequested(
+    @Param("username") username: string,
+    @Param("requested") requested: string
+  ): Promise<boolean> {
     try {
       return await this.friendrequestService.isRequested(username, requested);
     } catch (err) {

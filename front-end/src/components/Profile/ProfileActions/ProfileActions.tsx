@@ -60,7 +60,8 @@ const ProfileActions = ({ profile }: IProfileActions): JSX.Element => {
     const [isFriend, setIsFriend] = useState<boolean>(false);
     const [requestedFriendship, setRequestedFriendship] =
         useState<boolean>(false);
-    const [requestButtonText, setRequestButtonText] = useState<string>("");
+    const [requestButtonText, setRequestButtonText] =
+        useState<string>("Add friend");
 
     ////////////////////////////////////////////////////////////
 
@@ -76,7 +77,7 @@ const ProfileActions = ({ profile }: IProfileActions): JSX.Element => {
             if (isFriend) {
                 await removeFriend(username, friendname);
                 setIsFriend(false);
-                setRequestButtonText("Remove friend");
+                setRequestButtonText("Add friend");
             } else {
                 if (requestedFriendship === true) {
                     setRequestButtonText("Remove friendship request");
@@ -102,8 +103,6 @@ const ProfileActions = ({ profile }: IProfileActions): JSX.Element => {
                 const isFriend = await getIsFriend(username, friendname);
                 setIsFriend(isFriend);
 
-                console.log(isFriend);
-
                 if (isFriend === true) {
                     setRequestButtonText("Remove friend");
                     return;
@@ -119,7 +118,7 @@ const ProfileActions = ({ profile }: IProfileActions): JSX.Element => {
                     setRequestButtonText("Remove friend request");
                 }
             } catch (err) {
-                console.log(err);
+                console.error(err);
             }
         };
         getFriendStatus();

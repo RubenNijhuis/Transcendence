@@ -7,7 +7,7 @@ import { UserService } from "../user/user.service";
 
 @Injectable()
 export class FriendrequestService {
-  inject: [UserService]
+  inject: [UserService];
   constructor(
     @InjectRepository(FriendRequests)
     private readonly friendrequestRepository: Repository<FriendRequests>,
@@ -20,8 +20,7 @@ export class FriendrequestService {
     for (const item of requests) {
       let name = item.requested;
 
-      if (name === username)
-        name = item.username;
+      if (name === username) name = item.username;
       filteredRequests.push(name);
     }
     const ret = await this.userService.getUsersOnUsernames(filteredRequests);
@@ -38,14 +37,14 @@ export class FriendrequestService {
 
   async getRequested(username: string) {
     const requested: FriendRequests[] = await this.friendrequestRepository
-    .createQueryBuilder("friend_requests")
-    .where("username = :username", { username })
-    .getMany();
-  return await this.filterOutput(username, requested);
+      .createQueryBuilder("friend_requests")
+      .where("username = :username", { username })
+      .getMany();
+    return await this.filterOutput(username, requested);
   }
 
-  async isRequested(username:string, requested: string): Promise<boolean> {
-    var ret: boolean = false;
+  async isRequested(username: string, requested: string): Promise<boolean> {
+    let ret = false;
 
     const request: FriendRequests = await this.friendrequestRepository
       .createQueryBuilder("friend_requests")
@@ -53,18 +52,24 @@ export class FriendrequestService {
       .andWhere("requested = :requested", { requested })
       .getOne();
 
-    if (request)
-      ret = true;
+    if (request) ret = true;
     return ret;
   }
 
-  async sendRequest(createrequestDto: CreateRequestDto): Promise<FriendRequests> {
-    const newEntry: FriendRequests = this.friendrequestRepository.create(createrequestDto);
-    const saveResponse: FriendRequests = await this.friendrequestRepository.save(newEntry);
+  async sendRequest(
+    createrequestDto: CreateRequestDto
+  ): Promise<FriendRequests> {
+    const newEntry: FriendRequests =
+      this.friendrequestRepository.create(createrequestDto);
+    const saveResponse: FriendRequests =
+      await this.friendrequestRepository.save(newEntry);
     return saveResponse;
   }
 
-  async removeRequest(username: string, requested: string): Promise<DeleteResult> {
+  async removeRequest(
+    username: string,
+    requested: string
+  ): Promise<DeleteResult> {
     const removeResponse: DeleteResult = await this.friendrequestRepository
       .createQueryBuilder("friend_requests")
       .delete()
