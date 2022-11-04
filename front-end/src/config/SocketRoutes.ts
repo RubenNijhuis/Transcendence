@@ -15,18 +15,23 @@ const SocketRoutes = {
     connectionCheck: () => `connectionCheck`,
     // misc ////////////////////////////////////////////////////
 
-    // game ////////////////////////////////////////////////////
+    // Rooms ////////////////////////////////////////////////////
     joinWaitingRoom: () => `joinWaitingRoom`,
     leaveWaitingRoom: () => `leaveWaitingRoom`,
 
     joinGameRoom: () => `joinGameRoom`,
     leaveGameRoom: () => `leaveGameRoom`,
+    // Rooms ////////////////////////////////////////////////////
 
-    leaveGameRoomMessage: () => `leaveGameRoomMessage`,
-
-    newBallPosition: () => `newBallPosition`,
-
-    // game ////////////////////////////////////////////////////
+    // Game /////////////////////////////////////////////////////
+    game: {
+        updateBall: () => `updateBall`,
+        updateOpponent: () => `updateOpponent`,
+        updateScore: () => `updateScore`,
+        updateMatchStatus: () => `updateMatchStatus`,
+        sendPlayerPostion: () => `playerPosition`
+    },
+    // Game ////////////////////////////////////////////////////
 
     // chat ////////////////////////////////////////////////////
     sendNewMessage: () => `newMessage`,
