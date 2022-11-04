@@ -1,5 +1,5 @@
 // Router
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import PageRoutes from "../../../config/PageRoutes";
 
 // Store
@@ -10,6 +10,7 @@ import { getItem } from "../../../modules/Store";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useEffect } from "react";
 import { useUser } from "../../../contexts/UserContext";
+import { checkTokenValidity } from "../../../proxies/auth";
 
 ///////////////////////////////////////////////////////////
 
@@ -23,24 +24,26 @@ const AuthGuard = () => {
     ////////////////////////////////////////////////////////////
 
     const { isLoggedIn } = useAuth();
-    const { user } = useUser();
     const navigate = useNavigate();
 
     ////////////////////////////////////////////////////////////
 
-    // useEffect(() => {
-    //     const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
+    useEffect(() => {
+        const checkLetThrough = async () => {
+            const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
 
-    //     // if (inLoginProcess === null) {
-    //     //     navigate(rerouteLink);
-    //     //     return;
-    //     // }
+            if (inLoginProcess === null) {
+                navigate(rerouteLink);
+                return;
+            }
 
-    //     // if (!isLoggedIn) {
-    //     //     navigate(rerouteLink);
-    //     //     return;
-    //     // }
-    // }, [isLoggedIn]);
+            if (!isLoggedIn) {
+                navigate(rerouteLink);
+                return;
+            }
+        };
+        checkLetThrough();
+    });
 
     ///////////////////////////////////////////////////////////
 

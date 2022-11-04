@@ -1,5 +1,5 @@
 // Game components
-import { Ball, Bat } from "../GameElements";
+import { Ball, Bat } from "../../GameElements";
 import GameManager from "./GameManager";
 import PowerUps from "../PowerUps";
 
@@ -114,9 +114,9 @@ const drawGame = (
 
         window.addEventListener("mousemove", movePaddle);
 
-        function movePaddle (evt: any) {
+        function movePaddle(evt: any) {
             let rect = canvas.getBoundingClientRect();
-    
+
             Player1.positionY = evt.clientY - rect.top;
         }
     };

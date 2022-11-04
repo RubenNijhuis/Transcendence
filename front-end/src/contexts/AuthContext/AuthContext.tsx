@@ -85,7 +85,6 @@ const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
              */
             const isInLoginProcess = getItem<boolean>(StoreId.loginProcess);
             if (isInLoginProcess) return;
-
             /**
              * If the refresh token doesn't exist we redirect
              * the user to a page where they cal log in
@@ -95,14 +94,12 @@ const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
                 redirectToHome();
                 return;
             }
-
             try {
                 const { profile } = await checkTokenValidity(refreshToken);
                 setLoggedIn(true);
                 setUser(profile);
             } catch (err) {
-                console.error("Auth issue");
-                // redirectToHome();
+                redirectToHome();
             }
         };
         checkAuthTokenStatus();

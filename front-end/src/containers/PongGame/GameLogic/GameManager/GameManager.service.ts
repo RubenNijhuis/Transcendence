@@ -2,41 +2,7 @@
 import { Ball, Bat } from "../GameElements";
 import PowerUps from "../PowerUps";
 
-class GameManager {
-    player1Score: number;
-    player2Score: number;
-    maxScore: number;
-
-    pongBall: Ball;
-    player1Bat: Bat;
-    player2Bat: Bat;
-    powerUp: PowerUps;
-
-    canvas: HTMLCanvasElement;
-    context: CanvasRenderingContext2D;
-
-    constructor(
-        pongBall: Ball,
-        player1Bat: Bat,
-        player2Bat: Bat,
-        powerUp: PowerUps,
-        canvas: HTMLCanvasElement,
-        context: CanvasRenderingContext2D
-    ) {
-        this.player1Score = 0;
-        this.player2Score = 0;
-        this.maxScore = 10;
-
-        this.pongBall = pongBall;
-        this.player1Bat = player1Bat;
-        this.player2Bat = player2Bat;
-        this.powerUp = powerUp;
-
-        this.canvas = canvas;
-        this.context = context;
-    }
-
-    displayText() {
+    const displayText = () => {
         if (
             this.player1Score !== this.maxScore &&
             this.player2Score !== this.maxScore
@@ -51,28 +17,38 @@ class GameManager {
         }
     }
 
-    resetGame() {
+    const resetGame = () => {
         this.player1Bat.reset();
         this.player2Bat.reset();
 
         this.pongBall.reset();
     }
 
-    checkGame(pongball: Ball) {
+    const checkGame = (pongball: Ball) => {
         this.checkIfBallHitsSide(pongball);
         this.checkIfBallHitsBats(pongball);
         this.checkIfBallHitsPowerUp();
         this.checkIfGameIsFinished();
     }
 
-    checkIfBallHitsBats(pongball: Ball) {
+    const checkIfBallHitsBats(pongball: Ball) {
         // Check if left bat is hit
-        if (pongball.positionX <= (this.player1Bat.positionX + this.player1Bat.width + pongball.radius)) {
-            if (pongball.positionY > this.player1Bat.positionY - (this.player1Bat.height / 2) && 
-                pongball.positionY < this.player1Bat.positionY + (this.player1Bat.height / 2)) {
-                var relativeIntersectY = this.player1Bat.positionY - pongball.positionY;
-                var normalizedRelativeIntersectionY = (relativeIntersectY / (this.player1Bat.height / 2));
-                var bounceAngle = normalizedRelativeIntersectionY * (5 * Math.PI / 12);
+        if (
+            pongball.positionX <=
+            this.player1Bat.positionX + this.player1Bat.width + pongball.radius
+        ) {
+            if (
+                pongball.positionY >
+                    this.player1Bat.positionY - this.player1Bat.height / 2 &&
+                pongball.positionY <
+                    this.player1Bat.positionY + this.player1Bat.height / 2
+            ) {
+                var relativeIntersectY =
+                    this.player1Bat.positionY - pongball.positionY;
+                var normalizedRelativeIntersectionY =
+                    relativeIntersectY / (this.player1Bat.height / 2);
+                var bounceAngle =
+                    normalizedRelativeIntersectionY * ((5 * Math.PI) / 12);
                 pongball.velocityX = -pongball.velocityX;
                 pongball.velocityY = pongball.velocity * -Math.sin(bounceAngle);
                 pongball.velocity = this.canvas.width / 270;
@@ -80,12 +56,22 @@ class GameManager {
             }
         }
         // Check if right bat is hit
-        if (pongball.positionX >= (this.player2Bat.positionX - pongball.radius - this.player1Bat.width)) {
-            if (pongball.positionY > this.player2Bat.positionY - (this.player2Bat.height / 2) && 
-                pongball.positionY < this.player2Bat.positionY + (this.player2Bat.height / 2)) {
-                var relativeIntersectY = this.player2Bat.positionY - pongball.positionY;
-                var normalizedRelativeIntersectionY = (relativeIntersectY / (this.player2Bat.height / 2));
-                var bounceAngle = normalizedRelativeIntersectionY * (5 * Math.PI / 12);
+        if (
+            pongball.positionX >=
+            this.player2Bat.positionX - pongball.radius - this.player1Bat.width
+        ) {
+            if (
+                pongball.positionY >
+                    this.player2Bat.positionY - this.player2Bat.height / 2 &&
+                pongball.positionY <
+                    this.player2Bat.positionY + this.player2Bat.height / 2
+            ) {
+                var relativeIntersectY =
+                    this.player2Bat.positionY - pongball.positionY;
+                var normalizedRelativeIntersectionY =
+                    relativeIntersectY / (this.player2Bat.height / 2);
+                var bounceAngle =
+                    normalizedRelativeIntersectionY * ((5 * Math.PI) / 12);
                 pongball.velocityX = -pongball.velocityX;
                 pongball.velocityY = -pongball.velocity * Math.sin(bounceAngle);
                 pongball.velocity = this.canvas.width / 270;
@@ -195,6 +181,4 @@ class GameManager {
             );
         }
     }
-}
 
-export default GameManager;

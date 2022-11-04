@@ -5,6 +5,11 @@ import Profile from "./profile";
 namespace Game {
     export type MatchRecordID = string;
 
+    export type Position = {
+        posX: number;
+        posY: number;
+    };
+
     export enum ScoreType {
         Friendly,
         Ranked

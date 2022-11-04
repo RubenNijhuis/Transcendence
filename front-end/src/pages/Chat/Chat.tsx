@@ -31,30 +31,28 @@ const ChatPage = (): JSX.Element => {
 
     useEffect(() => {
         createConnection(Socket.SocketType.Chat);
+    }, []);
+
+    useEffect(() => {
+        if (!connection) return;
+
+        connection.on(
+            SocketRoutes.connectionCheck(),
+            (connectionStatus: boolean) => {
+                console.log("Connection check", connectionStatus);
+            }
+        );
+
+        return () => {
+            connection.off(SocketRoutes.connectionCheck());
+        };
     }, [connection]);
-
-    const testConnection = () => {
-        if (connection) {
-            // Connection check
-            connection.emit(SocketRoutes.connectionCheck(), null);
-
-            connection.on(
-                SocketRoutes.connectionCheck(),
-                (connectionStatus: boolean) => {
-                    console.log("Connection check", connectionStatus);
-                }
-            );
-        }
-    };
 
     ////////////////////////////////////////////////////////////
 
     return (
         <Layout>
             <Container>
-                <button onClick={testConnection}>
-                    Test connection (console.log)
-                </button>
                 <ChatSelector
                     directChats={directChats}
                     groupChats={groupChats}

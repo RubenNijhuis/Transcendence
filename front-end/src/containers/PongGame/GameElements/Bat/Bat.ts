@@ -1,3 +1,5 @@
+import { Game } from "../../../../types";
+
 class Bat {
     positionX: number;
     positionY: number;
@@ -9,27 +11,20 @@ class Bat {
     height: number;
 
     context: CanvasRenderingContext2D;
-    canvas: HTMLCanvasElement;
 
     color: string;
 
-    constructor(
-        posX: number,
-        posY: number,
-        context: CanvasRenderingContext2D,
-        c: HTMLCanvasElement
-    ) {
-        this.startX = posX;
-        this.startY = posY;
+    constructor(context: CanvasRenderingContext2D, position: Game.Position) {
+        this.startX = position.posX;
+        this.startY = position.posY;
 
-        this.positionX = posX;
-        this.positionY = posY;
+        this.positionX = position.posX;
+        this.positionY = position.posY;
 
-        this.canvas = c;
         this.context = context;
 
-        this.width = this.canvas.width / 130;
-        this.height = this.canvas.width / 7;
+        this.width = 130;
+        this.height = 7;
 
         this.color = "#1e1e1e";
     }
@@ -50,16 +45,18 @@ class Bat {
         this.positionY = this.startY;
     }
 
-    setPosition(posY: number) {
-        this.positionY = posY;
+    setPosition(position: Game.Position) {
+        this.positionY = position.posY;
+        this.positionX = position.posX;
     }
 
     wallCollisionBatUp() {
         if (this.positionY - this.height / 2 <= 0) return true;
         else return false;
     }
+
     wallCollisionBatDown() {
-        if (this.positionY + this.height / 2 >= this.canvas.height) return true;
+        if (this.positionY + this.height / 2 >= 10) return true;
         else return false;
     }
 }

@@ -6,9 +6,12 @@ import Layout from "../../components/Layout";
 import SocketRoutes from "../../config/SocketRoutes";
 
 // Game logic
-import Canvas, { drawGame } from "../../containers/PongGame";
-import GameManager from "../../containers/PongGame/GameLogic";
+import Canvas from "../../containers/PongGame";
+import GameManager from "../../containers/PongGame/GameLogic/GameManager";
+
+// Sockets
 import { useSocket } from "../../contexts/SocketContext";
+import { Game, Socket } from "../../types";
 
 ////////////////////////////////////////////////////////////
 
@@ -17,45 +20,54 @@ const Pong = (): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
-    // const Manager: GameManager = new GameManager();
+    let Manager: GameManager;
 
     ////////////////////////////////////////////////////////////
 
-    const { connection } = useSocket();
+    const { connection, createConnection } = useSocket();
 
     ////////////////////////////////////////////////////////////
+
+    // Setup connection
+    useEffect(() => {
+        createConnection(Socket.SocketType.Game);
+    }, []);
 
     useEffect(() => {
         const context = canvasRef.current.getContext("2d");
 
         if (context === null) return;
 
-        // Start drawing the game
-        drawGame(canvasRef.current, context);
+        const gameSettings = {
+            gameType: Game.GameType.Classic,
+            prefferedSide: "left",
+            controlSettings: "keyboard"
+        };
 
-        type ballPos = { x: number; y: number };
+        Manager = new GameManager(canvasRef.current, gameSettings);
 
-        /**
-         * From back-end
-         * Ball pos
-         * Score
-         * Other player bat position
-         * Match status = Finished | Started | Abrupt quit
-         *
-         * At start game
-         * Other player data
-         *
-         * Send to back-end
-         * Bat position
-         */
+        if (!connection) return;
 
-        // connection.on(
-        //     SocketRoutes.newBallPosition(),
-        //     (newPosition: ballPos) => {
-        //         GameManager.updateBallPosition(newPosition);
-        //     }
-        // );
-    });
+        connection.on(SocketRoutes.game.updateBall(), Manager.updateBall);
+        connection.on(
+            SocketRoutes.game.updateOpponent(),
+            Manager.updateOpponent
+        );
+        connection.on(SocketRoutes.game.updateScore(), Manager.updateScore);
+        connection.on(
+            SocketRoutes.game.updateMatchStatus(),
+            Manager.updateMatchStatus
+        );
+
+        // TODO: emit player bat position
+
+        return () => {
+            connection.off(SocketRoutes.game.updateBall());
+            connection.off(SocketRoutes.game.updateOpponent());
+            connection.off(SocketRoutes.game.updateScore());
+            connection.off(SocketRoutes.game.updateMatchStatus());
+        };
+    }, [connection]);
 
     ////////////////////////////////////////////////////////////
 

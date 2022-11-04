@@ -17,12 +17,13 @@ const addImagesToProfile = async (
     imageSelect: Request.Payload.ImageSelect
 ): Promise<Profile.Instance> => {
     try {
-        // TODO: can this be done in a switch case?
+        const username = profile.username;
+
         if (imageSelect.profile)
-            profile.img_url = await getProfileImageByUsername(profile.username);
-        
+            profile.img_url = await getProfileImageByUsername(username);
+
         if (imageSelect.banner)
-            profile.banner_url = await getProfileBannerByUsername(profile.username);
+            profile.banner_url = await getProfileBannerByUsername(username);
 
         return Promise.resolve(profile);
     } catch (err) {

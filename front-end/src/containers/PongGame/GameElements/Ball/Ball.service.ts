@@ -1,7 +1,7 @@
 function startVelocity(velocity: number): number {
     var randomNum: Number = Math.random();
-    if (randomNum < 0.5) return (velocity * -1);
-    else return (velocity);
+    if (randomNum < 0.5) return velocity * -1;
+    else return velocity;
 }
 
 class Ball {
@@ -25,14 +25,14 @@ class Ball {
 
         this.canvas = c;
         this.context = context;
-        
+
         this.radius = this.canvas.width / 75;
-        
+
         this.velocity = this.canvas.width / 170;
 
         this.velocityX = startVelocity(this.velocity);
         this.velocityY = 0;
-        
+
         this.color = "#1e1e1e";
     }
 
@@ -52,9 +52,9 @@ class Ball {
         this.context.closePath();
     }
 
-    reset() {
-        this.positionX = this.canvas.clientWidth / 2;
-        this.positionY = this.canvas.clientHeight / 2;
+    reset(posX: number, posY: number) {
+        this.positionX = posX;
+        this.positionY = posY;
         this.velocityY = 0;
         this.velocityX = startVelocity(this.velocityX);
     }
