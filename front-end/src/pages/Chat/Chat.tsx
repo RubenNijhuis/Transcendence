@@ -13,7 +13,7 @@ import { useChat } from "../../contexts/ChatContext";
 import { useSocket } from "../../contexts/SocketContext";
 
 // Types
-import { Socket } from "../../types";
+import { SocketType } from "../../types";
 
 // Config
 import SocketRoutes from "../../config/SocketRoutes";
@@ -30,7 +30,7 @@ const ChatPage = (): JSX.Element => {
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
-        createConnection(Socket.SocketType.Chat);
+        createConnection(SocketType.SocketType.Chat);
     }, []);
 
     useEffect(() => {

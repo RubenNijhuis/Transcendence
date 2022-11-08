@@ -25,8 +25,14 @@ class GameManager {
         this.context = undefined!;
 
         this.ball = new Ball(this.context, this.getMiddleOfBoard(), 10);
-        this.player1Bat = new Bat(this.context, this.getBatStartingPostion());
-        this.player2Bat = new Bat(this.context, this.getBatStartingPostion());
+        this.player1Bat = new Bat(
+            this.context,
+            { posX: 0, posY: 0 } /*this.getBatStartingPostion()*/
+        );
+        this.player2Bat = new Bat(
+            this.context,
+            { posX: 0, posY: 0 } /*this.getBatStartingPostion()*/
+        );
 
         // if (gameSettings.powered === true) {
         //     this.powerUps = powerUps;

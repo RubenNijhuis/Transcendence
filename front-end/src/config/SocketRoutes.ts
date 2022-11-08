@@ -34,9 +34,10 @@ const SocketRoutes = {
     // Game ////////////////////////////////////////////////////
 
     // chat ////////////////////////////////////////////////////
-    sendNewMessage: () => `newMessage`,
-    joinChatRoom: () => `joinChatRoom`,
-    leaveChatRoom: () => `leaveChatRoom`
+    chat: {
+        sendMessage: () => `sendMessage`,
+        receiveMessage: () => `receiveMessage`
+    }
     // chat ////////////////////////////////////////////////////
 };
 

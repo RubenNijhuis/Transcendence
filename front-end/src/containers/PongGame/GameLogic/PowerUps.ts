@@ -81,15 +81,15 @@ class PowerUps {
 
     tinyBallPower(pongBall: Ball) {
         pongBall.radius = this.canvas.width / 200;
-        pongBall.velocityY *= 1.3;
-        pongBall.velocityX *= 1.3;
+        // pongBall.velocityY *= 1.3;
+        // pongBall.velocityX *= 1.3;
     }
 
     bigBatPower(player1: Bat, player2: Bat, pongBall: Ball) {
         if (this.turn === 0) player1.height = this.canvas.width / 4;
         if (this.turn === 1) player2.height = this.canvas.width / 5;
-        pongBall.velocityY *= 1.3;
-        pongBall.velocityX *= 1.3;
+        // pongBall.velocityY *= 1.3;
+        // pongBall.velocityX *= 1.3;
     }
 
     smallBatPower(player1: Bat, player2: Bat) {
@@ -100,13 +100,13 @@ class PowerUps {
     }
 
     fastBallPower(pongBall: Ball) {
-        pongBall.velocityY *= 1.5;
-        pongBall.velocityX *= 1.5;
+        // pongBall.velocityY *= 1.5;
+        // pongBall.velocityX *= 1.5;
     }
 
     duplicateBallPower(pongballpower: Ball) {
-        pongballpower.velocityX *= 0.4;
-        pongballpower.velocityY *= 0.4;
+        // pongballpower.velocityX *= 0.4;
+        // pongballpower.velocityY *= 0.4;
         this.extraPongBall = true;
     }
 
@@ -130,9 +130,9 @@ class PowerUps {
             player2.height = this.canvas.width / 7;
             pongball.radius = this.canvas.width / 75;
             this.extraPongBall = false;
-            pongballpower.velocityX = pongball.velocityX;
-            pongballpower.velocityY = pongball.velocityY;
-            pongballpower.reset();
+            // pongballpower.velocityX = pongball.velocityX;
+            // pongballpower.velocityY = pongball.velocityY;
+            // pongballpower.reset();
         }
     }
 }

@@ -1,3 +1,4 @@
+export const tempnum = 0;
 // function startVelocity(velocity: number): number {
 //     var randomNum: Number = Math.random();
 //     if (randomNum < 0.5) return velocity * -1;

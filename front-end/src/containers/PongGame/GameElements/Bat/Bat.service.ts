@@ -1,3 +1,4 @@
+export const tempnum = 0;
 // class Bat {
 //     positionX: number;
 //     positionY: number;

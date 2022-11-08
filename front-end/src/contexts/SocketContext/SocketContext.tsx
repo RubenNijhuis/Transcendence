@@ -1,5 +1,5 @@
 // React stuffs
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 // Socket Library
 import { io } from "socket.io-client";
@@ -8,13 +8,13 @@ import { io } from "socket.io-client";
 import SocketRoutes from "../../config/SocketRoutes";
 
 // Types
-import { Socket } from "../../types";
+import { SocketType } from "../../types";
 
 ///////////////////////////////////////////////////////////
 
 interface SocketContextType {
-    connection: any;
-    createConnection: (socketType: Socket.SocketType) => void;
+    connection: SocketType.Instance;
+    createConnection: (socketType: SocketType.SocketType) => void;
 }
 
 const SocketContext = createContext<SocketContextType>(null!);
@@ -28,16 +28,20 @@ interface ISocketProvider {
 }
 
 const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
-    const [connection, setConnection] = useState<any>(null!);
-    const [socketType, setSocketType] = useState<Socket.SocketType>(null!);
+    const [connection, setConnection] = useState<SocketType.Instance>(null!);
 
     ////////////////////////////////////////////////////////////
 
-    const createConnection = (socketType: Socket.SocketType) => {
-        setSocketType(socketType);
+    const createConnection = (socketType: SocketType.SocketType) => {
+        if (connection !== null) {
+            connection.close();
+        }
 
-        const path = SocketRoutes.path(socketType);
-        const newSocket = io(SocketRoutes.baseUrl(), { path });
+        const options = { path: SocketRoutes.path(socketType) };
+        const newSocket: SocketType.Instance = io(
+            SocketRoutes.baseUrl(),
+            options
+        );
 
         setConnection(newSocket);
     };

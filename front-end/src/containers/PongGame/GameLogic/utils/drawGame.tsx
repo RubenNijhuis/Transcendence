@@ -1,6 +1,6 @@
 // Game components
 import { Ball, Bat } from "../../GameElements";
-import GameManager from "./GameManager";
+import GameManager from "../GameManager";
 import PowerUps from "../PowerUps";
 
 const keyPressListener = (gameManager: GameManager) => {
@@ -22,27 +22,27 @@ const keyPressListener = (gameManager: GameManager) => {
         const Player2Bat: Bat = gameManager.player2Bat;
 
         if (splitValue === "W" && !Player1Bat.wallCollisionBatUp()) {
-            Player1Bat.setPosition(
-                Player1Bat.positionY - Player1Bat.height / 10
-            );
+            // Player1Bat.setPosition(
+            //     Player1Bat.positionY - Player1Bat.height / 10
+            // );
         }
 
         if (splitValue === "S" && !Player1Bat.wallCollisionBatDown()) {
-            Player1Bat.setPosition(
-                Player1Bat.positionY + Player1Bat.height / 10
-            );
+            // Player1Bat.setPosition(
+            //     Player1Bat.positionY + Player1Bat.height / 10
+            // );
         }
 
         if (splitValue === "O" && !Player2Bat.wallCollisionBatUp()) {
-            Player2Bat.setPosition(
-                Player2Bat.positionY - Player2Bat.height / 10
-            );
+            // Player2Bat.setPosition(
+            //     Player2Bat.positionY - Player2Bat.height / 10
+            // );
         }
 
         if (splitValue === "L" && !Player2Bat.wallCollisionBatDown()) {
-            Player2Bat.setPosition(
-                Player2Bat.positionY + Player2Bat.height / 10
-            );
+            // Player2Bat.setPosition(
+            //     Player2Bat.positionY + Player2Bat.height / 10
+            // );
         }
     };
 
@@ -56,32 +56,32 @@ const drawGame = (
     context: CanvasRenderingContext2D
 ) => {
     // Setup components to be drawn on the canvas
-    const PongBall = new Ball(context, canvas);
-    const PongBallPower = new Ball(context, canvas);
-    const Player1 = new Bat(
-        canvas.clientWidth * 0.01,
-        canvas.clientHeight / 2,
-        context,
-        canvas
-    );
-    const Player2 = new Bat(
-        canvas.clientWidth * 0.99,
-        canvas.clientHeight / 2,
-        context,
-        canvas
-    );
+    // const PongBall = new Ball(context, canvas);
+    // const PongBallPower = new Ball(context, canvas);
+    // const Player1 = new Bat(
+    //     canvas.clientWidth * 0.01,
+    //     canvas.clientHeight / 2,
+    //     context,
+    //     canvas
+    // );
+    // const Player2 = new Bat(
+    //     canvas.clientWidth * 0.99,
+    //     canvas.clientHeight / 2,
+    //     context,
+    //     canvas
+    // );
 
-    const Power = new PowerUps(context, canvas);
+    // const Power = new PowerUps(context, canvas);
 
-    // Initialize the game manager
-    const GameManagement = new GameManager(
-        PongBall,
-        Player1,
-        Player2,
-        Power,
-        canvas,
-        context
-    );
+    // // Initialize the game manager
+    // const GameManagement = new GameManager(
+    //     PongBall,
+    //     Player1,
+    //     Player2,
+    //     Power,
+    //     canvas,
+    //     context
+    // );
 
     // Draws the canvas in an animationFrame
     const animate = (): void => {
@@ -89,42 +89,43 @@ const drawGame = (
         context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 
         // PowerUps
-        Power.getRandomPower(Player1, Player2, PongBall, PongBallPower);
+        //     Power.getRandomPower(Player1, Player2, PongBall, PongBallPower);
 
-        // Draw the elements
-        if (
-            GameManagement.player1Score !== GameManagement.maxScore &&
-            GameManagement.player2Score !== GameManagement.maxScore
-        ) {
-            PongBall.draw();
-            Player1.draw();
-            Player2.draw();
-            Power.draw();
-        }
-        // Draws and checks extra ball (Powerup)
-        if (Power.extraPongBall == true) {
-            PongBallPower.draw();
-            GameManagement.checkGame(PongBallPower);
-        }
+        //     // Draw the elements
+        //     if (
+        //         GameManagement.player1Score !== GameManagement.maxScore &&
+        //         GameManagement.player2Score !== GameManagement.maxScore
+        //     ) {
+        //         PongBall.draw();
+        //         Player1.draw();
+        //         Player2.draw();
+        //         Power.draw();
+        //     }
+        //     // Draws and checks extra ball (Powerup)
+        //     if (Power.extraPongBall == true) {
+        //         PongBallPower.draw();
+        //         GameManagement.checkGame(PongBallPower);
+        //     }
 
-        GameManagement.displayText();
+        //     GameManagement.displayText();
 
-        // Check game
-        GameManagement.checkGame(PongBall);
+        //     // Check game
+        //     GameManagement.checkGame(PongBall);
 
-        window.addEventListener("mousemove", movePaddle);
+        //     window.addEventListener("mousemove", movePaddle);
 
-        function movePaddle(evt: any) {
-            let rect = canvas.getBoundingClientRect();
+        //     function movePaddle(evt: any) {
+        //         let rect = canvas.getBoundingClientRect();
 
-            Player1.positionY = evt.clientY - rect.top;
-        }
+        //         Player1.positionY = evt.clientY - rect.top;
+        //     }
+        // };
+
+        // Respond to keypresses
+        // keyPressListener(GameManagement);
+
+        // Start the loop
     };
-
-    // Respond to keypresses
-    keyPressListener(GameManagement);
-
-    // Start the loop
     animate();
 };
 

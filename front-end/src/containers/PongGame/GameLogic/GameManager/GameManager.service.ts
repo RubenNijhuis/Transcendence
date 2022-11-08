@@ -1,3 +1,4 @@
+export const temp = 0;
 // // Elements
 // import { Ball, Bat } from "../GameElements";
 // import PowerUps from "../PowerUps";

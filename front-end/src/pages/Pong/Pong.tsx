@@ -1,5 +1,6 @@
 // React
 import { useEffect, useRef } from "react";
+import { Socket } from "socket.io-client";
 
 // UI
 import Layout from "../../components/Layout";
@@ -11,7 +12,7 @@ import GameManager from "../../containers/PongGame/GameLogic/GameManager";
 
 // Sockets
 import { useSocket } from "../../contexts/SocketContext";
-import { Game, Socket } from "../../types";
+import { Game, SocketType } from "../../types";
 
 ////////////////////////////////////////////////////////////
 
@@ -28,9 +29,11 @@ const Pong = (): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
-    // Setup connection
+    // TODO: Abstract into business logic part
     useEffect(() => {
-        createConnection(Socket.SocketType.Game);
+        if (connection !== null) return;
+
+        createConnection(SocketType.SocketType.Game);
     }, []);
 
     useEffect(() => {
@@ -38,6 +41,7 @@ const Pong = (): JSX.Element => {
 
         if (context === null) return;
 
+        // TODO: get from user database settings or whatever
         const gameSettings = {
             gameType: Game.GameType.Classic,
             prefferedSide: "left",
@@ -47,27 +51,31 @@ const Pong = (): JSX.Element => {
         Manager = new GameManager(canvasRef.current, gameSettings);
 
         if (!connection) return;
+        setupConnections(connection);
 
-        connection.on(SocketRoutes.game.updateBall(), Manager.updateBall);
-        connection.on(
-            SocketRoutes.game.updateOpponent(),
-            Manager.updateOpponent
-        );
-        connection.on(SocketRoutes.game.updateScore(), Manager.updateScore);
-        connection.on(
+        return () => {
+            removeConnections(connection);
+        };
+    }, [connection]);
+
+    ////////////////////////////////////////////////////////////
+
+    const setupConnections = (socket: Socket) => {
+        socket.on(SocketRoutes.game.updateBall(), Manager.updateBall);
+        socket.on(SocketRoutes.game.updateOpponent(), Manager.updateOpponent);
+        socket.on(SocketRoutes.game.updateScore(), Manager.updateScore);
+        socket.on(
             SocketRoutes.game.updateMatchStatus(),
             Manager.updateMatchStatus
         );
+    };
 
-        // TODO: emit player bat position
-
-        return () => {
-            connection.off(SocketRoutes.game.updateBall());
-            connection.off(SocketRoutes.game.updateOpponent());
-            connection.off(SocketRoutes.game.updateScore());
-            connection.off(SocketRoutes.game.updateMatchStatus());
-        };
-    }, [connection]);
+    const removeConnections = (socket: Socket) => {
+        socket.off(SocketRoutes.game.updateBall());
+        socket.off(SocketRoutes.game.updateOpponent());
+        socket.off(SocketRoutes.game.updateScore());
+        socket.off(SocketRoutes.game.updateMatchStatus());
+    };
 
     ////////////////////////////////////////////////////////////
 
