@@ -80,11 +80,11 @@ const ProfilePage = (): JSX.Element => {
             const { profile, shouldCreateUser } = await signIn(apiToken);
 
             // Make util func
-            window.history.pushState(
-                {},
-                "http://localhost:8080", // TODO: get this from config
-                PageRoutes.profile
-            );
+            // window.history.pushState(
+            //     {},
+            //     "http://localhost:8080", // TODO: get this from config
+            //     PageRoutes.profile
+            // );
 
             if (profile) {
                 setUser(profile);
@@ -124,10 +124,7 @@ const ProfilePage = (): JSX.Element => {
                 );
 
                 setSelectedProfile(returnedProfile);
-
-                // Reset window to top to make it feel like we went to a new page
                 window.scrollTo(0, 0);
-
                 return;
             } catch (err) {
                 console.error(err);
@@ -135,10 +132,6 @@ const ProfilePage = (): JSX.Element => {
         } else {
             setSelectedProfile(user);
         }
-
-        // Reset window to top to make it feel like we went to a new page
-        // TODO: add this + url cleaner to cleanup function
-        window.scrollTo(0, 0);
     };
 
     ////////////////////////////////////////////////////////////

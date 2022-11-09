@@ -13,7 +13,34 @@ import { useAuth } from "../../../contexts/AuthContext";
 import { useModal } from "../../../contexts/ModalContext";
 import UploadProfilePicture from "./ProfilePicture/UploadProfilePicture";
 import UploadBanner from "./Banner";
+import {
+    backgroundColor,
+    lightTextColor,
+    magicNum,
+    mainColor,
+    smallRadius
+} from "../../../styles/StylingConstants";
+import styled from "styled-components";
 
+// TODO: in style file
+const Container = styled.section`
+    background-color: ${backgroundColor};
+    border: solid 2px ${mainColor};
+    border-radius: ${smallRadius};
+    margin-bottom: calc(${magicNum} / 2);
+
+    .header,
+    .content {
+        padding: calc(${magicNum} / 2);
+    }
+
+    .header {
+        background-color: ${mainColor};
+        .heading {
+            color: ${lightTextColor};
+        }
+    }
+`;
 
 ////////////////////////////////////////////////////////////
 
@@ -31,7 +58,7 @@ const ProfileSettings = () => {
     // const uploadProfilePicture = () => {
     //     setModalElement(<UploadProfilePicture />);
     //     setModalActive(true);
-        
+
     // }
 
     ////////////////////////////////////////////////////////////
@@ -53,22 +80,26 @@ const ProfileSettings = () => {
     ////////////////////////////////////////////////////////////
 
     return (
-        <section>
-            <Heading type={3}>Profile settings</Heading>
-            <Button theme="dark" onClick={renderTFAModal}>
-                Turn {tfaEnabled ? "off" : "on"} 2 factor authentication
-            </Button>
-            <br/>
-            <UploadProfilePicture />
-            <UploadBanner />
-            {/* <Button theme="dark" onClick={uploadProfilePicture}>
+        <Container>
+            <div className="header">
+                <Heading type={3}>Profile settings</Heading>
+            </div>
+            <div className="content">
+                <Button theme="dark" onClick={renderTFAModal}>
+                    Turn {tfaEnabled ? "off" : "on"} 2 factor authentication
+                </Button>
+                <br />
+                <UploadProfilePicture />
+                <UploadBanner />
+                {/* <Button theme="dark" onClick={uploadProfilePicture}>
                 Change profile picture
             </Button> */}
-            <span>Change description </span>
-            <span>Change color </span>
-            <span>Change blocked </span>
-            <span>Change friends </span>
-        </section>
+                <span>Change description </span>
+                <span>Change color </span>
+                <span>Change blocked </span>
+                <span>Change friends </span>
+            </div>
+        </Container>
     );
 };
 

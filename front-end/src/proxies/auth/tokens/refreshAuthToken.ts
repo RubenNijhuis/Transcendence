@@ -12,8 +12,7 @@ import { Request } from "../../../types";
  * reroutes the user to the home page to re-login
  */
 const refreshAuthToken = async (
-    refreshToken: string,
-    cancelToken?: any
+    refreshToken: string
 ): Promise<Request.AuthToken> => {
     try {
         const route = ApiRoutes.refreshAuthToken();
@@ -22,8 +21,6 @@ const refreshAuthToken = async (
                 Authorization: `Bearer ${refreshToken}`
             }
         };
-
-        if (cancelToken) config.cancelToken = cancelToken.token;
 
         const { data } = await API.get<Request.AuthToken>(route, config);
 

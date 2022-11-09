@@ -1,5 +1,5 @@
 // Router
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import PageRoutes from "../../../config/PageRoutes";
 
 // Store
@@ -11,7 +11,6 @@ import { useAuth } from "../../../contexts/AuthContext";
 import { useEffect } from "react";
 import { useUser } from "../../../contexts/UserContext";
 import { checkTokenValidity } from "../../../proxies/auth";
-import axios from "axios";
 
 ///////////////////////////////////////////////////////////
 
@@ -31,11 +30,8 @@ const AuthGuard = () => {
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
-        const cancelToken = axios.CancelToken.source();
-
         const checkLetThrough = async () => {
             const refreshToken = getItem<string>(StoreId.refreshToken);
-
             const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
 
             if (inLoginProcess) {
@@ -45,10 +41,7 @@ const AuthGuard = () => {
 
             if (!isLoggedIn) {
                 if (refreshToken) {
-                    const { profile } = await checkTokenValidity(
-                        refreshToken,
-                        cancelToken
-                    );
+                    const { profile } = await checkTokenValidity(refreshToken);
                     setLoggedIn(true);
                     setUser(profile);
                 } else {
@@ -57,10 +50,6 @@ const AuthGuard = () => {
             }
         };
         checkLetThrough();
-
-        return () => {
-            cancelToken.cancel();
-        };
     }, [isLoggedIn]);
 
     ///////////////////////////////////////////////////////////

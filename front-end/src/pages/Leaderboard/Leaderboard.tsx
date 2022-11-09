@@ -40,14 +40,12 @@ const Leaderboard = (): JSX.Element => {
 
     return (
         <Layout>
-            {leaderboard ? (
+            {leaderboard && (
                 <Container>
                     <Heading type={1}>Leaderboard</Heading>
                     <Podium rankings={leaderboard} />
                     <RankingList rankings={leaderboard} />
                 </Container>
-            ) : (
-                <Loader />
             )}
         </Layout>
     );

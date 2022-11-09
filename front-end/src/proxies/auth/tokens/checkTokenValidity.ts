@@ -15,11 +15,10 @@ import { refreshAuthToken } from "./refreshAuthToken";
  * @returns
  */
 const checkTokenValidity = async (
-    refreshToken: string,
-    cancelToken: any
+    refreshToken: string
 ): Promise<Request.Response.TokenValidity> => {
     try {
-        const authToken = await refreshAuthToken(refreshToken, cancelToken);
+        const authToken = await refreshAuthToken(refreshToken);
 
         updateAuthTokens(authToken);
 
