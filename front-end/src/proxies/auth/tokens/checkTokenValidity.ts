@@ -15,14 +15,17 @@ import { refreshAuthToken } from "./refreshAuthToken";
  * @returns
  */
 const checkTokenValidity = async (
-    refreshToken: string
+    refreshToken: string,
+    cancelToken: any
 ): Promise<Request.Response.TokenValidity> => {
     try {
-        const authToken = await refreshAuthToken(refreshToken);
+        const authToken = await refreshAuthToken(refreshToken, cancelToken);
 
         updateAuthTokens(authToken);
 
-        const profileFromToken = await getUserByAccessToken(authToken.accessToken);
+        const profileFromToken = await getUserByAccessToken(
+            authToken.accessToken
+        );
 
         return Promise.resolve({ profile: profileFromToken });
     } catch (err) {

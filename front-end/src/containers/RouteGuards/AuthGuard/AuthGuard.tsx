@@ -11,6 +11,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 import { useEffect } from "react";
 import { useUser } from "../../../contexts/UserContext";
 import { checkTokenValidity } from "../../../proxies/auth";
+import axios from "axios";
 
 ///////////////////////////////////////////////////////////
 
@@ -23,27 +24,44 @@ const AuthGuard = () => {
 
     ////////////////////////////////////////////////////////////
 
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn, setLoggedIn } = useAuth();
+    const { setUser } = useUser();
     const navigate = useNavigate();
 
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
+        const cancelToken = axios.CancelToken.source();
+
         const checkLetThrough = async () => {
+            const refreshToken = getItem<string>(StoreId.refreshToken);
+
             const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
 
-            if (inLoginProcess === null) {
-                navigate(rerouteLink);
+            if (inLoginProcess) {
+                navigate(PageRoutes.profile);
                 return;
             }
 
             if (!isLoggedIn) {
-                navigate(rerouteLink);
-                return;
+                if (refreshToken) {
+                    const { profile } = await checkTokenValidity(
+                        refreshToken,
+                        cancelToken
+                    );
+                    setLoggedIn(true);
+                    setUser(profile);
+                } else {
+                    navigate(rerouteLink);
+                }
             }
         };
         checkLetThrough();
-    });
+
+        return () => {
+            cancelToken.cancel();
+        };
+    }, [isLoggedIn]);
 
     ///////////////////////////////////////////////////////////
 

@@ -1,6 +1,6 @@
 // API config
 import ApiRoutes from "../../../config/ApiRoutes";
-import { API, apiRequestConfig} from "../../instances/apiInstance";
+import { API, apiRequestConfig } from "../../instances/apiInstance";
 
 // Types
 import { Request } from "../../../types";
@@ -12,15 +12,18 @@ import { Request } from "../../../types";
  * reroutes the user to the home page to re-login
  */
 const refreshAuthToken = async (
-    refreshToken: string
+    refreshToken: string,
+    cancelToken?: any
 ): Promise<Request.AuthToken> => {
     try {
         const route = ApiRoutes.refreshAuthToken();
-        const config: apiRequestConfig= {
+        const config: apiRequestConfig = {
             headers: {
                 Authorization: `Bearer ${refreshToken}`
             }
         };
+
+        if (cancelToken) config.cancelToken = cancelToken.token;
 
         const { data } = await API.get<Request.AuthToken>(route, config);
 

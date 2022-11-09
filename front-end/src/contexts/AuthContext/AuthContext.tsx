@@ -16,6 +16,7 @@ import { redirectToHome, signIn, signOut } from "./AuthContext.bl";
 
 // Proxies
 import { checkTokenValidity } from "../../proxies/auth";
+import axios, { Axios } from "axios";
 
 ///////////////////////////////////////////////////////////
 
@@ -78,6 +79,8 @@ const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
      * Here we check the auth token status.
      */
     useEffect(() => {
+        const cancelToken = axios.CancelToken.source();
+
         const checkAuthTokenStatus = async () => {
             /**
              * If we are still in the login process we don't
@@ -95,7 +98,11 @@ const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
                 return;
             }
             try {
-                const { profile } = await checkTokenValidity(refreshToken);
+                const { profile } = await checkTokenValidity(
+                    refreshToken,
+                    cancelToken
+                );
+                console.log("Or here");
                 setLoggedIn(true);
                 setUser(profile);
             } catch (err) {
@@ -103,6 +110,10 @@ const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
             }
         };
         checkAuthTokenStatus();
+
+        return () => {
+            cancelToken.cancel();
+        };
     }, []);
 
     ////////////////////////////////////////////////////////////
