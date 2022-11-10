@@ -30,6 +30,8 @@ const UserRoutes = {
   // enabeling 2fa
   enableTfa: "enable2fa",
 
+  updateDescription: "updateDescription",
+
   // getting a profile/banner picture
   getPic: "get-img/:imageType/:username",
 

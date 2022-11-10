@@ -284,6 +284,29 @@ export class UserService {
     }
   }
 
+  async setDescription(
+    username: string,
+    description: string
+  ): Promise<UpdateResult> {
+    try {
+      const user: User = await this.findUserByUsername(username);
+
+      return await this.userRepository
+        .createQueryBuilder()
+        .update(user)
+        .set({ description: description })
+        .where({ uid: user.uid })
+        .returning("*")
+        .execute();
+    } catch (err) {
+      throw errorHandler(
+        err,
+        "Failed to set user description",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
   async setTFAiv(
     intraID: string,
     tfa_iv: string

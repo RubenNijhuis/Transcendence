@@ -13,6 +13,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 import { useModal } from "../../../contexts/ModalContext";
 import UploadProfilePicture from "./ProfilePicture/UploadProfilePicture";
 import UploadBanner from "./Banner";
+import UploadDescription from "./Description";
 import {
     backgroundColor,
     lightTextColor,
@@ -21,6 +22,7 @@ import {
     smallRadius
 } from "../../../styles/StylingConstants";
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
 
 // TODO: in style file
 const Container = styled.section`
@@ -94,10 +96,11 @@ const ProfileSettings = () => {
                 {/* <Button theme="dark" onClick={uploadProfilePicture}>
                 Change profile picture
             </Button> */}
-                <span>Change description </span>
+                <UploadDescription />
                 <span>Change color </span>
                 <span>Change blocked </span>
                 <span>Change friends </span>
+				<input type="submit" value="Save" />
             </div>
         </Container>
     );
