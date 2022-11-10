@@ -26,7 +26,7 @@ interface AuthContextType {
     tfaEnabled: boolean;
     setTfaEnabled: React.Dispatch<React.SetStateAction<boolean>>;
 
-    signIn(code: string): Promise<Request.Response.SignIn>;
+    signIn(code: string): Promise<Request.Response.ConfirmLogin>;
     signOut(): void;
 }
 

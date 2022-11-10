@@ -54,6 +54,7 @@ const Container = styled.div`
             height: calc(${magicNum} * 2);
             aspect-ratio: 1/1;
 
+            box-shadow: 0px 0px 35px 15px rgba(0, 0, 0, 0.35);
             margin-bottom: calc(${magicNum} / 8);
 
             border-radius: ${mediumRadius};

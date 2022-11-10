@@ -40,17 +40,21 @@ const ProfileDisplay = ({
         <Container>
             <div className="banner__container">
                 <Asset url={banner_url} alt="banner" className="banner" />
+
                 <div className="profile">
                     {rank < 4 && <Crown rank={rank} />}
                     <Asset url={img_url} alt="profile" className="img" />
                     <Heading type={4}>{username}</Heading>
                 </div>
             </div>
+
             <ProfileStats player={profile} matches={matchHistory} />
+
             <div className="description">
                 <Heading type={3}>About {username}</Heading>
                 <p>{description}</p>
             </div>
+
             {!isUser && <ProfileActions profile={profile} />}
         </Container>
     );

@@ -18,6 +18,7 @@ interface LoginConfirmPayload {
   shouldCreateUser: boolean;
   profile: null | User;
   authToken: AuthTokenType;
+  TWOfaEnabled: boolean;
 }
 
 export { AuthTokenType, PayloadType, JwtPayload, LoginConfirmPayload };

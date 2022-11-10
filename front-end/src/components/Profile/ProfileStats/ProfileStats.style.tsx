@@ -5,7 +5,8 @@ import {
     largeRadius,
     lightTextColor,
     magicNum,
-    mainColorMono
+    mainColorMono,
+    smallRadius
 } from "../../../styles/StylingConstants";
 
 ////////////////////////////////////////////////////////////
@@ -49,6 +50,7 @@ const Container = styled.div`
 
             .color {
                 margin: auto;
+                border-radius: ${smallRadius};
             }
         }
     }

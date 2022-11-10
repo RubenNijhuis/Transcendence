@@ -19,11 +19,7 @@ namespace Request {
             shouldCreateUser: boolean;
             profile: Profile.Instance;
             authToken: AuthToken;
-        }
-
-        export interface SignIn {
-            profile: Profile.Instance;
-            shouldCreateUser: boolean;
+            TWOfaEnabled: boolean;
         }
 
         export interface TokenValidity {

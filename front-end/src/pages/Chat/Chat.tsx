@@ -59,6 +59,7 @@ const ChatPage = (): JSX.Element => {
                     selectedChat={activeChat}
                     setSelectedChat={setActiveChat}
                 />
+
                 {activeChat && <ChatBox chat={activeChat} />}
             </Container>
         </Layout>

@@ -36,7 +36,7 @@ import FriendList from "../../components/FriendsList";
 
 // UI
 import { ProfileDetailsContainer } from "./Profile.style";
-import PageRoutes from "../../config/PageRoutes"; // WIll be removed
+import TwoFactorAuthentication from "../../containers/TwoFactorAuthentication";
 
 ////////////////////////////////////////////////////////////
 
@@ -77,19 +77,19 @@ const ProfilePage = (): JSX.Element => {
              * Option 1 - open 2fa modal
              * Option 2 - reroute to other page and after that reroute to here and reGET user
              */
-            const { profile, shouldCreateUser } = await signIn(apiToken);
+            const { profile, shouldCreateUser, TWOfaEnabled } = await signIn(
+                apiToken
+            );
 
-            // Make util func
-            // window.history.pushState(
-            //     {},
-            //     "http://localhost:8080", // TODO: get this from config
-            //     PageRoutes.profile
-            // );
+            if (TWOfaEnabled === true) {
+                setModalElement(<TwoFactorAuthentication />);
+                setAllowClose(false);
+                setModalActive(true);
+            }
 
             if (profile) {
                 setUser(profile);
                 setItem(StoreId.loginProcess, false);
-
                 return;
             }
 
@@ -124,7 +124,6 @@ const ProfilePage = (): JSX.Element => {
                 );
 
                 setSelectedProfile(returnedProfile);
-                window.scrollTo(0, 0);
                 return;
             } catch (err) {
                 console.error(err);
@@ -140,20 +139,26 @@ const ProfilePage = (): JSX.Element => {
      * Setting profile/user effect
      */
     useEffect(() => {
-        const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
+        const runProfileSetup = async () => {
+            const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
 
-        /**
-         * What I think is happening is that the localStore is too slow
-         * But the user state is very fast, so we don't only check for the store
-         * but also see if the user is still null
-         */
+            /**
+             * What I think is happening is that the localStore is too slow
+             * But the user state is very fast, so we don't only check for the store
+             * but also see if the user is still null
+             */
 
-        if (user === null && inLoginProcess) {
-            handleLoginProcess();
-            return;
-        }
+            if (user === null && inLoginProcess) {
+                handleLoginProcess();
+                return;
+            }
 
-        handleSetProfile();
+            await handleSetProfile();
+
+            // Returns page to the top
+            window.scrollTo(0, 0);
+        };
+        runProfileSetup();
     }, [user, profileName]);
 
     /**
@@ -187,6 +192,7 @@ const ProfilePage = (): JSX.Element => {
                         profile={selectedProfile}
                         matchHistory={matchHistory}
                     />
+
                     <ProfileDetailsContainer>
                         <FriendList friends={profileFriends} />
                         <GameHistory
