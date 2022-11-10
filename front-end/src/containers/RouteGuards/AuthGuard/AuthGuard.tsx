@@ -1,3 +1,6 @@
+// React
+import { useEffect } from "react";
+
 // Router
 import { Outlet, useNavigate } from "react-router-dom";
 import PageRoutes from "../../../config/PageRoutes";
@@ -8,8 +11,9 @@ import { getItem } from "../../../modules/Store";
 
 // Auth check
 import { useAuth } from "../../../contexts/AuthContext";
-import { useEffect } from "react";
 import { useUser } from "../../../contexts/UserContext";
+
+// Proxies
 import { checkTokenValidity } from "../../../proxies/auth";
 
 ///////////////////////////////////////////////////////////
@@ -19,10 +23,6 @@ import { checkTokenValidity } from "../../../proxies/auth";
  * page is accessed. Otherwise reroute to another page
  */
 const AuthGuard = () => {
-    const rerouteLink = PageRoutes.whenNotLoggedIn;
-
-    ////////////////////////////////////////////////////////////
-
     const { isLoggedIn, setLoggedIn } = useAuth();
     const { setUser } = useUser();
     const navigate = useNavigate();
@@ -40,13 +40,19 @@ const AuthGuard = () => {
             }
 
             if (!isLoggedIn) {
-                if (refreshToken) {
-                    const { profile } = await checkTokenValidity(refreshToken);
-                    setLoggedIn(true);
-                    setUser(profile);
-                } else {
-                    navigate(rerouteLink);
+                if (refreshToken !== null) {
+                    try {
+                        const { profile } = await checkTokenValidity(
+                            refreshToken
+                        );
+                        setLoggedIn(true);
+                        setUser(profile);
+                        return;
+                    } catch (err) {
+                        console.error(err);
+                    }
                 }
+                navigate(PageRoutes.whenNotLoggedIn);
             }
         };
         checkLetThrough();

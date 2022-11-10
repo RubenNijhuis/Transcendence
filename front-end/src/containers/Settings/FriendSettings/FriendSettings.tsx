@@ -23,6 +23,7 @@ const Container = styled.section`
     .header {
         background-color: ${mainColor};
         .heading {
+            margin-bottom: 0;
             color: ${lightTextColor};
         }
     }

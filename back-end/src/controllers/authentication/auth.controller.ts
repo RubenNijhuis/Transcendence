@@ -68,6 +68,7 @@ export class AuthController {
       const returnedPayload: LoginConfirmPayload = {
         shouldCreateUser: false,
         profile: null,
+        TWOfaEnabled: false,
         authToken: {
           accessToken: null,
           refreshToken: null
@@ -110,6 +111,8 @@ export class AuthController {
         if (!user.isInitialized) returnedPayload.shouldCreateUser = true;
 
         if (user.isInitialized) {
+          if (user.isTfaEnabled === true) returnedPayload.TWOfaEnabled = true;
+
           const intraIDDto = { intraID };
 
           await this.userService.setRefreshToken(

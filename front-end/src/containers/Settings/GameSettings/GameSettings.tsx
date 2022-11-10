@@ -24,6 +24,7 @@ const Container = styled.section`
         background-color: ${mainColor};
         .heading {
             color: ${lightTextColor};
+            margin-bottom: 0;
         }
     }
 `;

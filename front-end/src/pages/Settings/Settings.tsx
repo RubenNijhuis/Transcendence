@@ -14,8 +14,11 @@ const SettingsPage = (): JSX.Element => {
     return (
         <Layout>
             <Heading type={1}>Settings page</Heading>
+
             <ProfileSettings />
+
             <FriendSettings />
+
             <GameSettings />
         </Layout>
     );

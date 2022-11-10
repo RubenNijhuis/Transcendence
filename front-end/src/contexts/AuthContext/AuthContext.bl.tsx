@@ -18,11 +18,11 @@ import StoreId from "../../config/StoreId";
  * code. The expected return value is a user as well as a bool
  * indicating whether to create a user or not.
  */
-const signIn = async (code: string): Promise<Request.Response.SignIn> => {
+const signIn = async (code: string): Promise<Request.Response.ConfirmLogin> => {
     try {
-        const { profile, shouldCreateUser } = await confirmLogin(code);
+        const configmLoginResp = await confirmLogin(code);
 
-        return Promise.resolve({ profile, shouldCreateUser });
+        return Promise.resolve(configmLoginResp);
     } catch (err) {
         return Promise.reject(err);
     }
