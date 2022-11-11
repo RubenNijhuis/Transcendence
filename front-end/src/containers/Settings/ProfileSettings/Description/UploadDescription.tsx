@@ -8,6 +8,7 @@ import ApiRoutes from "../../../../config/ApiRoutes";
 import { useUser } from "../../../../contexts/UserContext";
 import { API } from "../../../../proxies/instances/apiInstance";
 import { useFormInput } from "../../../../components/Form/hooks";
+import { uploadDescription } from "../../../../proxies/settings/UploadDescription";
 
 const UploadDescription = () => {
     const description = useFormInput("");
@@ -20,17 +21,7 @@ const UploadDescription = () => {
 
     const handleText = async (event: any) => {
         try {
-            const route = ApiRoutes.updateDescription(); // TODO: make proxy
-            const username = user.username;
-
-            const config = {
-                username,
-                description: description.value
-            };
-
-            const { data } = await API.post(route, config);
-
-            return Promise.resolve(data);
+            await uploadDescription(user.username, description.value);
         } catch (err) {
             return Promise.reject(err);
         }

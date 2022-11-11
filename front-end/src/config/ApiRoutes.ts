@@ -14,6 +14,7 @@ const ApiRoutes = {
     createUser: () => `/user/setUser`,
     getUserByAccessToken: () => `/auth/getUserFromAccessToken`,
 	updateDescription: () => `/user/updateDescription`,
+	updateColor: () => `/user/updateColor`,
     // User ////////////////////////////////////////////////////
 
     // Friend //////////////////////////////////////////////////

@@ -50,6 +50,7 @@ import { readdirSync } from "fs";
 import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
 import { SetDescriptionDto } from "src/dtos/user/description.dto";
+import { SetcolorDto } from "src/dtos/user/color.dto";
 
 /**
  * The user controller will act as the first entry point for user related api calls.
@@ -167,9 +168,19 @@ export class UsersController {
   @Post(UserRoutes.updateDescription)
   @UsePipes(ValidationPipe)
   async updateDescription(@Body() dto: SetDescriptionDto) {
-	  console.log("desc:",dto.description);
     try {
       await this.userService.setDescription(dto.username, dto.description);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  @Post(UserRoutes.updateColor)
+  @UsePipes(ValidationPipe)
+  async updateColor(@Body() dto: SetcolorDto) {
+	  console.log("color:",dto.color);
+    try {
+      await this.userService.setColor(dto.username, dto.color);
     } catch (err) {
       throw err;
     }

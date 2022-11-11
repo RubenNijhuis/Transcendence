@@ -307,6 +307,29 @@ export class UserService {
     }
   }
 
+  async setColor(
+    username: string,
+    color: string
+  ): Promise<UpdateResult> {
+    try {
+      const user: User = await this.findUserByUsername(username);
+
+      return await this.userRepository
+        .createQueryBuilder()
+        .update(user)
+        .set({ color: color })
+        .where({ uid: user.uid })
+        .returning("*")
+        .execute();
+    } catch (err) {
+      throw errorHandler(
+        err,
+        "Failed to set user color",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
   async setTFAiv(
     intraID: string,
     tfa_iv: string

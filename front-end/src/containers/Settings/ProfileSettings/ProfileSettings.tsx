@@ -23,6 +23,7 @@ import {
 } from "../../../styles/StylingConstants";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
+import UploadColor from "./Color/UploadColor";
 
 // TODO: in style file
 const Container = styled.section`
@@ -98,7 +99,7 @@ const ProfileSettings = () => {
                 Change profile picture
             </Button> */}
                 <UploadDescription />
-                <span>Change color </span>
+                <UploadColor />
                 <span>Change blocked </span>
                 <span>Change friends </span>
 				<input type="submit" value="Save" />
