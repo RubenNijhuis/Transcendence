@@ -14,6 +14,8 @@ import { useModal } from "../../../contexts/ModalContext";
 import UploadProfilePicture from "./ProfilePicture/UploadProfilePicture";
 import UploadBanner from "./Banner";
 import UploadDescription from "./Description";
+
+// Styling
 import {
     backgroundColor,
     lightTextColor,
@@ -101,7 +103,7 @@ const ProfileSettings = () => {
                 <span>Change color </span>
                 <span>Change blocked </span>
                 <span>Change friends </span>
-				<input type="submit" value="Save" />
+                <input type="submit" value="Save" />
             </div>
         </Container>
     );

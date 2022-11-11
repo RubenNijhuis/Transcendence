@@ -62,6 +62,7 @@ namespace Chat {
             administrators: Profile.Instance[];
             members: Profile.Instance[];
             messages: Message.Instance[];
+            protected: boolean;
             internal_id: number;
         }
     }

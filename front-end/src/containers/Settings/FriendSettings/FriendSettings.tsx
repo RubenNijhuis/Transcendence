@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import Heading from "../../../components/Heading";
+
+// Styling
 import {
     backgroundColor,
     lightTextColor,

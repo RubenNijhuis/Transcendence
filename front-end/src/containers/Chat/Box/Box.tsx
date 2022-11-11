@@ -1,5 +1,5 @@
 // Types
-import { Chat } from "../../../types";
+import { Chat, SocketType } from "../../../types";
 
 // UI
 import ChatElement from "../../../components/ChatElements";
@@ -8,13 +8,18 @@ import Heading from "../../../components/Heading";
 import Asset from "../../../components/Asset";
 
 // Styling
-import { Container } from "./Box.style";
+import { Container, PasswordLayer } from "./Box.style";
 
 // Types
 import { Profile } from "../../../types";
 
 // User
 import { useUser } from "../../../contexts/UserContext";
+import { useEffect, useState } from "react";
+import { useFormInput } from "../../../components/Form/hooks";
+import Button from "../../../components/Button";
+import { useSocket } from "../../../contexts/SocketContext";
+import SocketRoutes from "../../../config/SocketRoutes";
 
 ////////////////////////////////////////////////////////////
 
@@ -55,16 +60,97 @@ const ChatTitle = ({ chat, isDmChat }: IChatTitle): JSX.Element => {
     );
 };
 
+interface IPasswordInput {
+    setUnlocked: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const PasswordInput = ({ setUnlocked }: IPasswordInput) => {
+    const passwordText = useFormInput("");
+    const [passwordError, setPasswordError] = useState<boolean>(false);
+
+    ////////////////////////////////////////////////////////////
+
+    const verifyPassword = async () => {
+        //     try {
+        //         const verifyResponse = await verifyPassword(passwordText.value);
+        //         if (verifyResponse === false) {
+        //             setPasswordError(false);
+        //         }
+        //         setUnlocked(true);
+        //     } catch (err) {
+        //         console.error(err);
+        //     }
+    };
+
+    ////////////////////////////////////////////////////////////
+
+    return (
+        <PasswordLayer>
+            {passwordError && (
+                <div className="error">The password is incorrect</div>
+            )}
+            <Heading type={3}>Please put in the password for this chat</Heading>
+            <input {...passwordText} />
+            <Button onClick={verifyPassword}>Verify password</Button>
+        </PasswordLayer>
+    );
+};
+
 interface IChatBox {
     chat: Chat.Group.Instance;
 }
 
 const ChatBox = ({ chat }: IChatBox): JSX.Element => {
-    const isDmChat = chat.members.length === 2;
+    const [unlocked, setUnlocked] = useState<boolean>(false);
 
     ////////////////////////////////////////////////////////////
 
+    const isDmChat = chat.members.length === 2;
+
     const { user } = useUser();
+    const { connection, createConnection, destroyConnectionInstance } =
+        useSocket();
+
+    ////////////////////////////////////////////////////////////
+
+    useEffect(() => {
+        if (chat.protected === false) {
+            setUnlocked(true);
+            setUnlocked(false);
+            return;
+        }
+    }, [chat.protected]);
+
+    ////////////////////////////////////////////////////////////
+
+    // TODO: Abstract into business logic part
+    useEffect(() => {
+        if (unlocked === false) return;
+
+        createConnection(SocketType.SocketType.Game);
+    }, []);
+
+    useEffect(() => {
+        if (!connection) return;
+        setupConnections(connection);
+
+        return () => {
+            removeConnections(connection);
+            destroyConnectionInstance();
+        };
+    }, [connection]);
+
+    ////////////////////////////////////////////////////////////
+
+    const setupConnections = (socket: SocketType.Instance) => {
+        socket.on(SocketRoutes.chat.sendMessage(), () => {});
+        socket.on(SocketRoutes.chat.receiveMessage(), () => {});
+    };
+
+    const removeConnections = (socket: SocketType.Instance) => {
+        socket.off(SocketRoutes.chat.sendMessage());
+        socket.off(SocketRoutes.chat.receiveMessage());
+    };
 
     ////////////////////////////////////////////////////////////
 
@@ -73,14 +159,16 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
             <ChatTitle chat={chat} isDmChat={isDmChat} />
 
             <div className="chat-content">
-                {chat.messages.map((message, count) => (
-                    <ChatElement
-                        key={count}
-                        message={message}
-                        isDm={isDmChat}
-                        fromUser={message.sender.uid === user.uid}
-                    />
-                ))}
+                {unlocked &&
+                    chat.messages.map((message, count) => (
+                        <ChatElement
+                            key={count}
+                            message={message}
+                            isDm={isDmChat}
+                            fromUser={message.sender.uid === user.uid}
+                        />
+                    ))}
+                {!unlocked && <PasswordInput setUnlocked={setUnlocked} />}
             </div>
             <ChatInput user={user} groupchat={chat} />
         </Container>

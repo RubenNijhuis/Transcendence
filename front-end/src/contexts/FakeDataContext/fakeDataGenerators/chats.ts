@@ -120,7 +120,8 @@ const generateGroupChats = (
             administrators: [user],
             internal_id: i,
             members: members,
-            messages: []
+            messages: [],
+            protected: false
         };
 
         newGroup.messages.push(

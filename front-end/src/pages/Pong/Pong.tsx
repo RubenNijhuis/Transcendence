@@ -25,14 +25,13 @@ const Pong = (): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
-    const { connection, createConnection } = useSocket();
+    const { connection, createConnection, destroyConnectionInstance } =
+        useSocket();
 
     ////////////////////////////////////////////////////////////
 
     // TODO: Abstract into business logic part
     useEffect(() => {
-        if (connection !== null) return;
-
         createConnection(SocketType.SocketType.Game);
     }, []);
 
@@ -55,6 +54,7 @@ const Pong = (): JSX.Element => {
 
         return () => {
             removeConnections(connection);
+            destroyConnectionInstance();
         };
     }, [connection]);
 
