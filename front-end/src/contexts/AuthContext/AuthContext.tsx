@@ -96,7 +96,6 @@ const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
             }
             try {
                 const { profile } = await checkTokenValidity(refreshToken);
-                console.log("Or here");
                 setLoggedIn(true);
                 setUser(profile);
             } catch (err) {

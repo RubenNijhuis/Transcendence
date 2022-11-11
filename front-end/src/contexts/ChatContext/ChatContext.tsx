@@ -60,8 +60,7 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
-        if (!user) return;
-        if (!profiles) return;
+        if (!user || !profiles) return;
 
         const chatAggregator = async () => {
             // TODO: Get from api //////////////////////////////////////

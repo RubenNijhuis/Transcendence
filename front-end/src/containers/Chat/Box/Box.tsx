@@ -1,3 +1,6 @@
+// React
+import { useEffect, useState } from "react";
+
 // Types
 import { Chat, SocketType } from "../../../types";
 
@@ -6,6 +9,7 @@ import ChatElement from "../../../components/ChatElements";
 import ChatInput from "../Input";
 import Heading from "../../../components/Heading";
 import Asset from "../../../components/Asset";
+import Button from "../../../components/Button";
 
 // Styling
 import { Container, PasswordLayer } from "./Box.style";
@@ -15,11 +19,16 @@ import { Profile } from "../../../types";
 
 // User
 import { useUser } from "../../../contexts/UserContext";
-import { useEffect, useState } from "react";
-import { useFormInput } from "../../../components/Form/hooks";
-import Button from "../../../components/Button";
-import { useSocket } from "../../../contexts/SocketContext";
+
+// Socket
 import SocketRoutes from "../../../config/SocketRoutes";
+import { useSocket } from "../../../contexts/SocketContext";
+
+// Form hooks
+import { useFormInput } from "../../../components/Form/hooks";
+
+// Proxies
+import { verifyPassword } from "../../../proxies/chat";
 
 ////////////////////////////////////////////////////////////
 
@@ -48,7 +57,7 @@ const ChatTitle = ({ chat, isDmChat }: IChatTitle): JSX.Element => {
     ////////////////////////////////////////////////////////////
 
     return (
-        <div className="title">
+        <div className="chat-title">
             {isDmChat && (
                 <Asset
                     alt={`${otherMember.username} profile`}
@@ -61,25 +70,28 @@ const ChatTitle = ({ chat, isDmChat }: IChatTitle): JSX.Element => {
 };
 
 interface IPasswordInput {
-    setUnlocked: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsProtected: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const PasswordInput = ({ setUnlocked }: IPasswordInput) => {
+const PasswordInput = ({ setIsProtected }: IPasswordInput) => {
     const passwordText = useFormInput("");
     const [passwordError, setPasswordError] = useState<boolean>(false);
 
     ////////////////////////////////////////////////////////////
 
-    const verifyPassword = async () => {
-        //     try {
-        //         const verifyResponse = await verifyPassword(passwordText.value);
-        //         if (verifyResponse === false) {
-        //             setPasswordError(false);
-        //         }
-        //         setUnlocked(true);
-        //     } catch (err) {
-        //         console.error(err);
-        //     }
+    const sendPassword = async () => {
+        try {
+            const verifyResponse = await verifyPassword(passwordText.value);
+
+            if (verifyResponse === false) {
+                setPasswordError(false);
+                return;
+            }
+
+            setIsProtected(true);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     ////////////////////////////////////////////////////////////
@@ -90,8 +102,8 @@ const PasswordInput = ({ setUnlocked }: IPasswordInput) => {
                 <div className="error">The password is incorrect</div>
             )}
             <Heading type={3}>Please put in the password for this chat</Heading>
-            <input {...passwordText} />
-            <Button onClick={verifyPassword}>Verify password</Button>
+            <input type="password" {...passwordText} />
+            <Button onClick={sendPassword}>Verify password</Button>
         </PasswordLayer>
     );
 };
@@ -101,7 +113,8 @@ interface IChatBox {
 }
 
 const ChatBox = ({ chat }: IChatBox): JSX.Element => {
-    const [unlocked, setUnlocked] = useState<boolean>(false);
+    const [isProtected, setIsProtected] = useState<boolean>(false);
+    const [isUnlocked, setIsUnlocked] = useState<boolean>(false);
 
     ////////////////////////////////////////////////////////////
 
@@ -115,17 +128,23 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
 
     useEffect(() => {
         if (chat.protected === false) {
-            setUnlocked(true);
-            setUnlocked(false);
+            setIsProtected(false);
+            setIsUnlocked(true);
             return;
         }
-    }, [chat.protected]);
+
+        if (chat.protected === true) {
+            setIsProtected(true);
+            setIsUnlocked(false);
+            return;
+        }
+    }, [chat.protected, chat]);
 
     ////////////////////////////////////////////////////////////
 
     // TODO: Abstract into business logic part
     useEffect(() => {
-        if (unlocked === false) return;
+        if (isProtected === false) return;
 
         createConnection(SocketType.SocketType.Game);
     }, []);
@@ -159,7 +178,8 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
             <ChatTitle chat={chat} isDmChat={isDmChat} />
 
             <div className="chat-content">
-                {unlocked &&
+                {!isProtected &&
+                    isUnlocked &&
                     chat.messages.map((message, count) => (
                         <ChatElement
                             key={count}
@@ -168,7 +188,9 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
                             fromUser={message.sender.uid === user.uid}
                         />
                     ))}
-                {!unlocked && <PasswordInput setUnlocked={setUnlocked} />}
+                {!isUnlocked && (
+                    <PasswordInput setIsProtected={setIsProtected} />
+                )}
             </div>
             <ChatInput user={user} groupchat={chat} />
         </Container>
