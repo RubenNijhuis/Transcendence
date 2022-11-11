@@ -8,20 +8,32 @@ import {
   HttpStatus,
   Param
 } from "@nestjs/common";
+
+// DTO's
+import { EditOwnerDto } from "src/dtos/group";
 import { MakeAdminDto } from "src/dtos/group/make-admin.dto";
 import { EditMembersDto } from "src/dtos/group/edit-members.dto";
-import { GroupService } from "src/services/group/group.service";
 import { CreateGroupDto } from "../../dtos/group/create-group.dto";
 import { CreatePasswordDto } from "../../dtos/group/create-password.dto";
 import { EditPasswordDto } from "../../dtos/group/edit-password.dto";
-import { errorHandler } from "src/utils/errorhandler/errorHandler";
-import Group from "src/entities/group/group.entity";
-import { EditOwnerDto } from "src/dtos/group";
 import { RemoveGroupDto } from "src/dtos/group/remove-group.dto";
+
+// Entities
+import Group from "src/entities/group/group.entity";
+
+// Service
+import { GroupService } from "src/services/group/group.service";
+
+// Error handling
+import { errorHandler } from "src/utils/errorhandler/errorHandler";
+
+////////////////////////////////////////////////////////////
 
 @Controller("group")
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
+
+  ////////////////////////////////////////////////////////////
 
   @Get()
   async getAllMessages() {
@@ -29,7 +41,7 @@ export class GroupController {
   }
 
   @Get(":userId")
-  async getGroupsByUserId(@Param('userId') userId: string) {
+  async getGroupsByUserId(@Param("userId") userId: string) {
     return await this.groupService.getGroupsByUserId(userId);
   }
 

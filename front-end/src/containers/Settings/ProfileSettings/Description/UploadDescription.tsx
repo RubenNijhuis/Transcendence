@@ -4,11 +4,15 @@ import { CreateForm, StyledInput } from "./UploadDescription.style";
 // Routes
 import ApiRoutes from "../../../../config/ApiRoutes";
 
-// DEBUG
-import { useUser } from "../../../../contexts/UserContext";
+// API
 import { API } from "../../../../proxies/instances/apiInstance";
+
+// Form hooks
 import { useFormInput } from "../../../../components/Form/hooks";
 import { uploadDescription } from "../../../../proxies/settings/UploadDescription";
+
+// Context
+import { useUser } from "../../../../contexts/UserContext";
 
 const UploadDescription = () => {
     const description = useFormInput("");
@@ -19,7 +23,7 @@ const UploadDescription = () => {
 
     ////////////////////////////////////////////////////////////
 
-    const handleText = async (event: any) => {
+    const updateDescription = async (event: any) => {
         try {
             await uploadDescription(user.username, description.value);
         } catch (err) {
@@ -34,7 +38,7 @@ const UploadDescription = () => {
                 {/* {error && <ErrorMessage message={error} />} */}
                 <textarea {...description} rows={4} />
             </StyledInput>
-            <button onClick={handleText}>Click</button>
+            <button onClick={updateDescription}>Click</button>
         </CreateForm>
     );
 };
