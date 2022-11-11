@@ -121,7 +121,7 @@ const generateGroupChats = (
             internal_id: i,
             members: members,
             messages: [],
-            protected: false
+            protected: randomNum1 !== 1
         };
 
         newGroup.messages.push(

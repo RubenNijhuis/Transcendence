@@ -39,20 +39,20 @@ const AuthGuard = () => {
                 return;
             }
 
-            if (!isLoggedIn) {
-                if (refreshToken !== null) {
-                    try {
-                        const { profile } = await checkTokenValidity(
-                            refreshToken
-                        );
-                        setLoggedIn(true);
-                        setUser(profile);
-                        return;
-                    } catch (err) {
-                        console.error(err);
-                    }
-                }
+            if (refreshToken === null) {
                 navigate(PageRoutes.whenNotLoggedIn);
+                return;
+            }
+
+            if (!isLoggedIn) {
+                try {
+                    const { profile } = await checkTokenValidity(refreshToken);
+                    setLoggedIn(true);
+                    setUser(profile);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                }
             }
         };
         checkLetThrough();

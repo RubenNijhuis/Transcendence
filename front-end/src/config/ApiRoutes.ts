@@ -13,7 +13,7 @@ const ApiRoutes = {
     // User ////////////////////////////////////////////////////
     createUser: () => `/user/setUser`,
     getUserByAccessToken: () => `/auth/getUserFromAccessToken`,
-	updateDescription: () => `/user/updateDescription`,
+    updateDescription: () => `/user/updateDescription`,
     // User ////////////////////////////////////////////////////
 
     // Friend //////////////////////////////////////////////////
@@ -49,6 +49,7 @@ const ApiRoutes = {
     // Chat ////////////////////////////////////////////////////
     getChatsByUsername: (username: string) => `/group/${username}`,
     createChat: () => `/group/create`,
+    verifyPassword: (id: string) => `/group/${id}`,
     // Chat ////////////////////////////////////////////////////
 
     // Leaderboard /////////////////////////////////////////////

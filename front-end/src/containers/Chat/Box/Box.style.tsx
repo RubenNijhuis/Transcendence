@@ -11,15 +11,25 @@ const Container = styled.div`
     border: solid 2px ${mainColor};
     border-radius: ${smallRadius};
     position: relative;
-    padding-bottom: calc(${magicNum});
+    display: flex;
+    flex-direction: column;
 
-    .title {
+    .chat-title {
+        display: flex;
+        align-items: center;
+        gap: calc(${magicNum} / 4);
         background-color: ${mainColor};
         padding: calc(${magicNum} / 4);
 
         .heading {
             color: ${lightTextColor};
             margin-bottom: 0;
+        }
+
+        .asset {
+            width: calc(${magicNum} / 2 * 1.5);
+            height: calc(${magicNum} / 2 * 1.5);
+            border-radius: ${smallRadius};
         }
     }
 
