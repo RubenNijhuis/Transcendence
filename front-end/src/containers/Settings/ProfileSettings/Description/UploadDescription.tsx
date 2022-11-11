@@ -1,12 +1,6 @@
 // Styling
 import { CreateForm, StyledInput } from "./UploadDescription.style";
 
-// Routes
-import ApiRoutes from "../../../../config/ApiRoutes";
-
-// API
-import { API } from "../../../../proxies/instances/apiInstance";
-
 // Form hooks
 import { useFormInput } from "../../../../components/Form/hooks";
 import { uploadDescription } from "../../../../proxies/settings/UploadDescription";

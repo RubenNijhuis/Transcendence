@@ -26,6 +26,7 @@ import {
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import UploadColor from "./Color/UploadColor";
+import ChangeBanStatus from "./Ban";
 
 // TODO: in style file
 const Container = styled.section`
@@ -102,7 +103,7 @@ const ProfileSettings = () => {
             </Button> */}
                 <UploadDescription />
                 <UploadColor />
-                <span>Change blocked </span>
+                <ChangeBanStatus />
                 <span>Change friends </span>
                 <input type="submit" value="Save" />
             </div>

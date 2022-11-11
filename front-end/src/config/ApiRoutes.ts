@@ -71,7 +71,8 @@ const ApiRoutes = {
 	updateDescription: () => `/user/updateDescription`,
 	updateColor: () => `/user/updateColor`,
 	addBlock: () => `/block/addBlock`,
-	unBlock: () => `/block/unBlock`
+	unBlock: () => `/block/unBlock`,
+	isBlock: (username: string, blocked: string) => `/block/isBlock/${username}/${blocked}`
 	//Settings
 
 

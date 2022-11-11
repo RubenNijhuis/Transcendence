@@ -1,26 +1,25 @@
 // Styling
-import { CreateForm, StyledInput } from "./UploadColor.style";
+import { CreateForm, StyledInput } from "./ChangeBanStatus.style";
 
 // DEBUG
 import { MutableRefObject, useRef} from "react";
 import { useUser } from "../../../../contexts/UserContext";
-import { uploadColor } from "../../../../proxies/settings/UploadColor";
-import { hexInputCheck } from "../../../../utils/inputCheck";
+import { IsBlock } from "../../../../proxies/settings/isBlock"
+import { Block } from "../../../../proxies/settings/Block"
+import { UnBlock } from "../../../../proxies/settings/UnBlock"
 
 
-const UploadColor = () => {
+
+const ChangeBanStatus = () => {
 	const { user } = useUser();
 	const ref = useRef() as MutableRefObject<HTMLTextAreaElement>;
 
 	const handleText = async (event: any) => {
 		try {
-			const color = ref.current.value;
-
-			if (hexInputCheck(color) == false)
-				throw "Not a valid hex value. Did you forget the #? Is your hex value 6 long?";
-
-			await uploadColor(user.username, color);
-
+			if (await IsBlock(user.username, ref.current.value) == false)
+				await Block(user.username, ref.current.value);
+			else
+				await UnBlock(user.username, ref.current.value);
 		} catch (err) {
 			return Promise.reject(err);
 		}
@@ -30,7 +29,7 @@ const UploadColor = () => {
     return (
         <CreateForm>
                     <StyledInput>
-                        <label>Change Color</label>
+                        <label>Block/Unblock user</label>
                         {/* {error && <ErrorMessage message={error} />} */}
                         <textarea ref={ref} />
                     </StyledInput>
@@ -39,4 +38,4 @@ const UploadColor = () => {
     );
 }
 
-export default UploadColor;
+export default ChangeBanStatus;
