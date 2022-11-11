@@ -32,6 +32,8 @@ const UserRoutes = {
 
   updateDescription: "updateDescription",
 
+  updateColor: "updateColor",
+
   // getting a profile/banner picture
   getPic: "get-img/:imageType/:username",
 
