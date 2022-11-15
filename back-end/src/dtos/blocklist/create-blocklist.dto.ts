@@ -5,5 +5,5 @@ export class CreateBlockDto {
     username: string
 
     @IsNotEmpty()
-    blocked: string
+    blockname: string
 }

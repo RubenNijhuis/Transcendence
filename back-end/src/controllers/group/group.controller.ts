@@ -67,6 +67,18 @@ export class GroupController {
     }
   }
 
+  @Get("validatepassword/:groupid/:password")
+  async validatePassword(
+    @Param("password") password: string,
+    @Param("groupid") groupId: number
+  ): Promise<boolean> {
+    try {
+      return await this.groupService.validatePassword(password, groupId);
+    } catch (err) {
+      throw err;
+    }
+  }
+
   @Post("createGroup")
   async createGroup(@Body() createGroupDto: CreateGroupDto) {
     try {

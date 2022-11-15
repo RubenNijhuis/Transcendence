@@ -49,7 +49,7 @@ export class BlockListController {
     try {
       const unblock: DeleteResult = await this.blocklistService.unblockPerson(
         createBlockDto.username,
-        createBlockDto.blocked
+        createBlockDto.blockname
       );
 
       return unblock;

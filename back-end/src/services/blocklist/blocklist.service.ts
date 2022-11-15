@@ -37,13 +37,13 @@ export class BlocklistService {
         return this.filterOutput(username, blocked);
     }
 
-    async isBlock(username: string, blockedname: string): Promise<boolean> {
+    async isBlock(username: string, blockname: string): Promise<boolean> {
         var ret: boolean = false;
 		console.log("AAAAAAAAAAA");
         const blocked = await this.blocklistRepository
             .createQueryBuilder('block_list')
             .where({username})
-            .andWhere({blockname: blockedname})
+            .andWhere({blockname})
             .getOne();
 
         if (blocked)

@@ -43,17 +43,17 @@ export class GroupService {
         .createQueryBuilder("groupuser")
         .where(userId)
         .getMany();
-        let i : number = 0;
-        let groups : Group[] = [];
-        while(i < Groupusers.length)
-        {
-          const group: Group = await this.groupRepository.findOne({ where: { id: Groupusers[i].groupId } });
-          groups.push(group);
-          i++;
-        }
-      return (groups);
-    }
-    catch(err) {
+      let i: number = 0;
+      let groups: Group[] = [];
+      while (i < Groupusers.length) {
+        const group: Group = await this.groupRepository.findOne({
+          where: { id: Groupusers[i].groupId }
+        });
+        groups.push(group);
+        i++;
+      }
+      return groups;
+    } catch (err) {
       return err;
     }
   }
@@ -61,137 +61,138 @@ export class GroupService {
   async getGroupSize(groupId: number) {
     try {
       const groupusers: Groupuser[] = await this.groupuserRepository
-      .createQueryBuilder("groupuser")
-      .where({ groupId: groupId })
-      .getMany();
-      return (groupusers.length)
+        .createQueryBuilder("groupuser")
+        .where({ groupId: groupId })
+        .getMany();
+      return groupusers.length;
     } catch (error: any) {
       return error;
     }
   }
 
-  findGroupuserById(userId: string, groupId: number)
-  {
-    return (this.groupuserRepository
-        .createQueryBuilder("groupuser")
-        .where({ groupId })
-        .andWhere({ userId })
-        .getOne());
+  findGroupuserById(userId: string, groupId: number) {
+    return this.groupuserRepository
+      .createQueryBuilder("groupuser")
+      .where({ groupId })
+      .andWhere({ userId })
+      .getOne();
   }
 
   async hashPassword(input: string) {
     const hash1 = createHash("sha256").update(input).digest("hex");
-    const saltOrRounds : number = 10;
-    const password : string = await bcrypt.hash(hash1, saltOrRounds);
+    const saltOrRounds: number = 10;
+    const password: string = await bcrypt.hash(hash1, saltOrRounds);
     return password;
   }
-  
-    async createGroup(createGroupDto: CreateGroupDto) {
-      try {
-        for (let i = 0; i < createGroupDto.users.length; i++) {
-          const user: User = await this.userService.findUsersById(
-            createGroupDto.users[i]
-          );
-          if (!user) throw console.error("user doesn't exist");
-          const owner: User = await this.userService.findUsersById(
-            createGroupDto.owner
-          );
-          if (!owner) throw console.error("owner doesn't exist");
-        }
-        const newGroup : Group = this.groupRepository.create();
-        newGroup.owner = createGroupDto.owner;
-        newGroup.users = [];
-        newGroup.groupname = createGroupDto.groupname;
-        const newGroupResp = this.groupRepository.save(newGroup);
-        return newGroupResp;
-      } catch (err) {
-        throw errorHandler(
-          err,
-          "Failed to add member to group",
-          HttpStatus.INTERNAL_SERVER_ERROR
+
+  async createGroup(createGroupDto: CreateGroupDto) {
+    try {
+      for (let i = 0; i < createGroupDto.users.length; i++) {
+        const user: User = await this.userService.findUsersById(
+          createGroupDto.users[i]
         );
+        if (!user) throw console.error("user doesn't exist");
+        const owner: User = await this.userService.findUsersById(
+          createGroupDto.owner
+        );
+        if (!owner) throw console.error("owner doesn't exist");
       }
+      const newGroup: Group = this.groupRepository.create();
+      newGroup.owner = createGroupDto.owner;
+      newGroup.users = [];
+      newGroup.groupname = createGroupDto.groupname;
+      const newGroupResp = this.groupRepository.save(newGroup);
+      return newGroupResp;
+    } catch (err) {
+      throw errorHandler(
+        err,
+        "Failed to add member to group",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
-  
-    async removeGroup(removeGroupDto : RemoveGroupDto) {
-      try {
-        const group : Group = await this.findGroupById(removeGroupDto.groupId);
-        this.groupuserRepository
-          .createQueryBuilder("groupuser")
-          .delete()
-          .where({ groupId: removeGroupDto.groupId })
-          .execute();
-        if (group.owner === removeGroupDto.owner) {
-          this.groupRepository
+  }
+
+  async removeGroup(removeGroupDto: RemoveGroupDto) {
+    try {
+      const group: Group = await this.findGroupById(removeGroupDto.groupId);
+      this.groupuserRepository
+        .createQueryBuilder("groupuser")
+        .delete()
+        .where({ groupId: removeGroupDto.groupId })
+        .execute();
+      if (group.owner === removeGroupDto.owner) {
+        this.groupRepository
           .createQueryBuilder("group")
           .delete()
           .where({ id: removeGroupDto.groupId })
           .execute();
-        }
-      } catch (error: any) {
-        throw error;
       }
+    } catch (error: any) {
+      throw error;
     }
+  }
 
-    async addMembers(editMembersDto: EditMembersDto) {
-      try {
-        const group: Group = await this.findGroupById(editMembersDto.groupId);
-  
-        for (let i = 0; i < editMembersDto.users.length; i++) {
-          if (editMembersDto.users[i] == group.owner) continue;
-  
-          const groupuser = this.groupuserRepository.create();
-          groupuser.group = group;
-          groupuser.user = await this.userService.findUsersById(
-            editMembersDto.users[i]
-          );
-          groupuser.groupId = editMembersDto.groupId;
-          groupuser.userId = editMembersDto.users[i];
-          groupuser.userType = 0;
-  
-          this.groupuserRepository.save(groupuser);
-        }
-      } catch (err) {
-        throw errorHandler(
-          err,
-          "Failed to add member to group",
-          HttpStatus.INTERNAL_SERVER_ERROR
-        );
-      }
-    }
-  
-    async addOwner(editOwnerDto: EditOwnerDto) {
-      try {
-        const group: Group = await this.findGroupById(editOwnerDto.groupId);
-  
+  async addMembers(editMembersDto: EditMembersDto) {
+    try {
+      const group: Group = await this.findGroupById(editMembersDto.groupId);
+
+      for (let i = 0; i < editMembersDto.users.length; i++) {
+        if (editMembersDto.users[i] == group.owner) continue;
+
         const groupuser = this.groupuserRepository.create();
         groupuser.group = group;
-        groupuser.user = await this.userService.findUsersById(editOwnerDto.owner);
-        groupuser.groupId = editOwnerDto.groupId;
-        groupuser.userId = editOwnerDto.owner;
-        groupuser.userType = 2;
-        return this.groupuserRepository.save(groupuser);
-
-      } catch (err) {
-        throw errorHandler(
-          err,
-          "Failed to add owner to group",
-          HttpStatus.INTERNAL_SERVER_ERROR
+        groupuser.user = await this.userService.findUsersById(
+          editMembersDto.users[i]
         );
+        groupuser.groupId = editMembersDto.groupId;
+        groupuser.userId = editMembersDto.users[i];
+        groupuser.userType = 0;
+
+        this.groupuserRepository.save(groupuser);
       }
+    } catch (err) {
+      throw errorHandler(
+        err,
+        "Failed to add member to group",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
+  }
+
+  async addOwner(editOwnerDto: EditOwnerDto) {
+    try {
+      const group: Group = await this.findGroupById(editOwnerDto.groupId);
+
+      const groupuser = this.groupuserRepository.create();
+      groupuser.group = group;
+      groupuser.user = await this.userService.findUsersById(editOwnerDto.owner);
+      groupuser.groupId = editOwnerDto.groupId;
+      groupuser.userId = editOwnerDto.owner;
+      groupuser.userType = 2;
+      return this.groupuserRepository.save(groupuser);
+    } catch (err) {
+      throw errorHandler(
+        err,
+        "Failed to add owner to group",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
 
   async createPassword(createPasswordDto: CreatePasswordDto) {
     try {
-      const group : Group = await this.findGroupById(createPasswordDto.id);
+      const group: Group = await this.findGroupById(createPasswordDto.id);
       if (!group) throw console.error("group doesn't exist"); //error lol
 
-      const owner : string = group.owner;
+      const owner: string = group.owner;
       console.log(owner);
 
-      if (owner !== createPasswordDto.owner) return console.error("owner doesn't match");
+      if (owner !== createPasswordDto.owner)
+        return console.error("owner doesn't match");
 
-      const password : string = await this.hashPassword(createPasswordDto.password);
+      const password: string = await this.hashPassword(
+        createPasswordDto.password
+      );
       await this.groupRepository
         .createQueryBuilder()
         .update()
@@ -211,15 +212,19 @@ export class GroupService {
 
   async updatePassword(editPasswordDto: EditPasswordDto) {
     try {
-      const group : Group = await this.findGroupById(editPasswordDto.id);
+      const group: Group = await this.findGroupById(editPasswordDto.id);
       if (!group) return console.error("group doesn't exist"); //error lol
 
-      const oldHash : string = await this.hashPassword(editPasswordDto.oldPassword);
-      const isMatch : boolean = await bcrypt.compare(oldHash, group.password);
+      const oldHash: string = await this.hashPassword(
+        editPasswordDto.oldPassword
+      );
+      const isMatch: boolean = await bcrypt.compare(oldHash, group.password);
 
-      if ((!isMatch && group.owner === editPasswordDto.owner))
+      if (!isMatch && group.owner === editPasswordDto.owner)
         return console.error("error lol");
-      const newHash : string = await this.hashPassword(editPasswordDto.oldPassword);
+      const newHash: string = await this.hashPassword(
+        editPasswordDto.oldPassword
+      );
 
       await this.groupRepository
         .createQueryBuilder()
@@ -233,6 +238,20 @@ export class GroupService {
       throw errorHandler(
         err,
         "Failed to update password",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  async validatePassword(password: string, groupId: number) {
+    try {
+      const hash: string = await this.hashPassword(password);
+      const group: Group = await this.findGroupById(groupId);
+      return await bcrypt.compare(hash, group.password);
+    } catch (err) {
+      throw errorHandler(
+        err,
+        "Failed to remove users",
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
@@ -253,15 +272,14 @@ export class GroupService {
           .where({ groupId: editMembersDto.groupId })
           .andWhere({ userId: editMembersDto.users[i] })
           .execute();
-        }
-        const size : number = await this.getGroupSize(editMembersDto.groupId);
-        if (size == i || ownerRemoved) {
-          const groupId = editMembersDto.groupId;
-          const owner = editMembersDto.owner;
-          const removegroupDto : RemoveGroupDto = {groupId, owner};
-          this.removeGroup(removegroupDto);
-        }
-
+      }
+      const size: number = await this.getGroupSize(editMembersDto.groupId);
+      if (size == i || ownerRemoved) {
+        const groupId = editMembersDto.groupId;
+        const owner = editMembersDto.owner;
+        const removegroupDto: RemoveGroupDto = { groupId, owner };
+        this.removeGroup(removegroupDto);
+      }
     } catch (err) {
       throw errorHandler(
         err,
