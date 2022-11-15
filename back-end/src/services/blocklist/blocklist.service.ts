@@ -39,7 +39,6 @@ export class BlocklistService {
 
     async isBlock(username: string, blockname: string): Promise<boolean> {
         var ret: boolean = false;
-		console.log("AAAAAAAAAAA");
         const blocked = await this.blocklistRepository
             .createQueryBuilder('block_list')
             .where({username})
@@ -58,13 +57,13 @@ export class BlocklistService {
         return saveResponse;
     }
 
-    async unblockPerson(username: string, toblock: string): Promise<DeleteResult> {
+    async unblockPerson(username: string, blockname: string): Promise<DeleteResult> {
         const removeFriendResponse: DeleteResult = await this.blocklistRepository
             .createQueryBuilder('block_list')
             .delete()
             .from('block_list')
-            .where('username = :username', { username })
-            .andWhere('blockname = :toblock', { toblock })
+            .where({username})
+            .andWhere({blockname})
             .execute()
         return removeFriendResponse;
     }

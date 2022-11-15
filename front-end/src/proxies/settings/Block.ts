@@ -3,12 +3,12 @@ import { API } from "../instances/apiInstance";
 
 ////////////////////////////////////////////////////////////
 
-const Block = async (username: string, blocked: string): Promise<any> => {
+const Block = async (username: string, blockname: string): Promise<any> => {
     try {
         const route = ApiRoutes.addBlock();
         const config = {
 			username,
-			blocked
+			blockname
 		}
 		const { data } = await API.post(route, config);
 		return Promise.resolve(data);

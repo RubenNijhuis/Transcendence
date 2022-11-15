@@ -3,9 +3,9 @@ import { API } from "../instances/apiInstance";
 
 ////////////////////////////////////////////////////////////
 
-const IsBlock = async (username: string, blocked: string): Promise<any> => {
+const IsBlock = async (username: string, blockname: string): Promise<any> => {
     try {
-        const route = ApiRoutes.isBlock(username, blocked);
+        const route = ApiRoutes.isBlock(username, blockname);
 		const { data } = await API.get(route);
 		return Promise.resolve(data);
 
