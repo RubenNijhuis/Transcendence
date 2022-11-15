@@ -1,60 +1,73 @@
-import { GameType } from "./game";
-import { ProfileID, ProfileType } from "./profile";
+import Game from "./game";
+import Profile from "./profile";
 
-const enum MessageContentType {
-    Simple,
-    Picture,
-    InvitePlay
+////////////////////////////////////////////////////////////
+
+namespace Chat {
+    export namespace Message {
+        export enum ContentType {
+            Simple,
+            Picture,
+            InvitePlay
+        }
+
+        // General type
+        export type MessageTypes =
+            | SimpleMessage
+            | PictureMessage
+            | GameInviteMessage;
+
+        // How we define a simple message
+        export interface SimpleMessage {
+            content: string;
+        }
+
+        // How we define a picture message
+        export interface PictureMessage {
+            url: string;
+            alt: string;
+        }
+
+        // Game invite
+        export interface GameInviteMessage {
+            opponent: Profile.Instance;
+            user: Profile.Instance;
+            game_type: Game.GameType;
+            accepted: boolean;
+        }
+
+        // Message interface
+        export interface Instance {
+            content: MessageTypes;
+            content_type: Message.ContentType;
+            timestamp: string;
+            senderID: Profile.ProfileID;
+            sender: Profile.Instance;
+            id: number;
+            group_id: number;
+            read_by: Profile.Instance[];
+        }
+    }
+
+    export namespace Group {
+        export enum GroupType {
+            DM,
+            Group
+        }
+
+        export interface Instance {
+            group_id: number;
+            name: string | null;
+            owner: Profile.Instance;
+            administrators: Profile.Instance[];
+            members: Profile.Instance[];
+            messages: Message.Instance[];
+            protected: boolean;
+            internal_id: number;
+        }
+    }
 }
 
-// General type
-type MessageTypes = SimpleMessage | PictureMessage | InvitePlayMessage;
+////////////////////////////////////////////////////////////
 
-// How we define a simple message
-interface SimpleMessage {
-    content: string;
-}
-
-// How we define a picture message
-interface PictureMessage {
-    url: string;
-    alt: string;
-}
-
-// Game invite
-interface InvitePlayMessage {
-    opponent: ProfileType;
-    user: ProfileType;
-    game_type: GameType;
-    accepted: boolean;
-}
-
-// Message interface
-interface Message {
-    content: MessageTypes;
-    content_type: MessageContentType;
-    timestamp: string;
-    senderID: ProfileID;
-    sender: ProfileType;
-    uid: number;
-    group_id: number;
-    read_by: ProfileType[];
-}
-
-interface GroupChat {
-    group_id: number;
-    members: ProfileType[];
-    messages: Message[];
-    internal_id: number;
-}
-
-export type {
-    PictureMessage,
-    InvitePlayMessage,
-    SimpleMessage,
-    Message,
-    MessageTypes,
-    GroupChat
-};
-
-export { MessageContentType };
+export default Chat;

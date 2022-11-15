@@ -1,26 +1,37 @@
 // UI
-import Footer from "../Footer";
+import Head from "../Head";
 import NavBar from "../Navbar";
+import Footer from "../Footer";
 
-// DEBUG
+// Debug dev box
 import DebugDevBox from "../../containers/DebugDevBox";
+import { debugDevBoxActive } from "../../config/DevEnv";
 
 // Styling
 import { Container, Content } from "./Layout.style";
 
-interface Props {
+////////////////////////////////////////////////////////////
+
+interface ILayout {
     children: React.ReactNode;
 }
 
-const Layout = ({ children }: Props): JSX.Element => {
+/**
+ * Is wrapped around each page. Standardizes the content 
+ * that is always on a page
+ */
+const Layout = ({ children }: ILayout): JSX.Element => {
     return (
         <Container>
+            {/* <Head /> */}
             <NavBar />
             <Content>{children}</Content>
             <Footer />
-            {false && <DebugDevBox />}
+            {debugDevBoxActive && <DebugDevBox />}
         </Container>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export default Layout;

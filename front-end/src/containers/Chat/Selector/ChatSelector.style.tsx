@@ -9,13 +9,15 @@ import {
     smallRadius
 } from "../../../styles/StylingConstants";
 
+////////////////////////////////////////////////////////////
+
 const Container = styled.div`
     border-radius: ${smallRadius};
     overflow: hidden;
 
     .divider {
         height: 100%;
-        background: black;
+        background-color: black;
         width: 2px;
     }
 
@@ -39,17 +41,20 @@ const DirectMessageEntry = styled.li<{ active: boolean }>`
         border-bottom: 0;
     }
 
-    background-color: ${({ active }) =>
-        active ? `${mainColor}` : `${backgroundColor}`};
+    background-color: ${({ active }) => (active ? mainColor : backgroundColor)};
 
     .profile {
         display: flex;
         flex-direction: row;
         align-items: center;
+        margin-bottom: calc(${magicNum} / 8);
+
+        &:last-child {
+            margin-bottom: 0;
+        }
 
         span {
-            color: ${({ active }) =>
-                active ? `${lightTextColor}` : `${darkTextColor}`};
+            color: ${({ active }) => (active ? lightTextColor : darkTextColor)};
         }
 
         .asset {
@@ -57,7 +62,6 @@ const DirectMessageEntry = styled.li<{ active: boolean }>`
             width: calc(${magicNum} / 4 * 3);
             height: calc(${magicNum} / 4 * 3);
             border-radius: 6px;
-            overflow: hidden;
         }
     }
 `;
@@ -68,8 +72,8 @@ const ChatTypeSelectorContainer = styled.div`
     border: solid 2px ${mainColor};
     margin-bottom: calc(${magicNum} / 2);
     border-radius: ${smallRadius};
+    overflow: hidden;
 
-    // For each one if
     .chat-type {
         width: 50%;
         padding: calc(${magicNum} / 4);
@@ -97,5 +101,7 @@ const ChatTypeSelectorContainer = styled.div`
         margin-bottom: 0;
     }
 `;
+
+////////////////////////////////////////////////////////////
 
 export { Container, DirectMessageEntry, ChatTypeSelectorContainer };

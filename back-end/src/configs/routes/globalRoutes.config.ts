@@ -30,6 +30,13 @@ const UserRoutes = {
   // enabeling 2fa
   enableTfa: "enable2fa",
 
+  updateDescription: "updateDescription",
+
+  updateColor: "updateColor",
+
+  // getting a profile/banner picture
+  getPic: "get-img/:imageType/:username",
+
   // uploading banner pic
   uploadBannerPic: "upload-banner-pic",
 
@@ -37,9 +44,12 @@ const UserRoutes = {
   uploadProfilePic: "upload-profile-pic",
 
   // seeding database
-  seed: "seeder",
+  // seed: "seeder",
 
   // seeding database with amount
-  seedAmount: "seeder-amount"
+  // seedAmount: "seeder-amount",
+
+  // seeding database based on amount of friends
+  // seedFriendAmount: "seeder-amount"
 };
 export default UserRoutes;

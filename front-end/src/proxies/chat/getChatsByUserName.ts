@@ -3,17 +3,27 @@ import { API } from "../instances/apiInstance";
 import ApiRoutes from "../../config/ApiRoutes";
 
 // Types
-import { GroupChat } from "../../types/chat";
+import { Chat } from "../../types";
 
-const getChatByUserName = async (userName: string): Promise<GroupChat[]> => {
+////////////////////////////////////////////////////////////
+
+/**
+ * Retrieves all chats from a user
+ * @param username
+ * @returns
+ */
+const getChatsByUsername = async (username: string): Promise<Chat.Group.Instance[]> => {
     try {
-        const { data } = await API.get<GroupChat[]>(
-            ApiRoutes.getChatByUserName(userName)
-        );
+        const route = ApiRoutes.getChatsByUsername(username);
+
+        const { data } = await API.get<Chat.Group.Instance[]>(route);
+
         return Promise.resolve(data);
-    } catch (err: any) {
+    } catch (err) {
         return Promise.reject(err);
     }
 };
 
-export default getChatByUserName;
+///////////////////////////////////////////////////////////
+
+export { getChatsByUsername };

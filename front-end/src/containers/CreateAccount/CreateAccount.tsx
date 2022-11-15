@@ -3,138 +3,121 @@ import Button from "../../components/Button";
 import Heading from "../../components/Heading";
 
 // Styling
-import { CreateForm, StyledInput } from "./CreateAccount.style";
+import {
+    CreateAccountForm,
+    StyledError,
+    StyledInput
+} from "./CreateAccount.style";
 
 // Box slider
 import BoxSlider from "../../components/BoxSlider";
 import Slide from "../../components/BoxSlider/Slide/Slide";
 
-// Auth
-import { useAuth } from "../../contexts/AuthContext";
-
-// Proxies
-import createUser from "../../proxies/user/createUser";
-import uploadImage from "../../proxies/user/uploadImage";
-
 // Routes
 import ApiRoutes from "../../config/ApiRoutes";
-
-// Store
-import { setItem } from "../../modules/Store";
-import StoreId from "../../config/StoreId";
 
 // DEBUG
 import { useFormInput } from "../../components/Form/hooks";
 
-interface Props {
-    setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+// Context
+import { useUser } from "../../contexts/UserContext";
+
+// Business logic
+import { handleAccountCreation, handleImageUpload } from "./CreateAccount.bl";
+import { useState } from "react";
+
+////////////////////////////////////////////////////////////
+
+interface IErrorMessage {
+    message: string;
 }
 
+const ErrorMessage = ({ message }: IErrorMessage) => {
+    return (
+        <StyledError>
+            <span>{message}</span>
+        </StyledError>
+    );
+};
+
 // TODO: make component check input data before sending
-const CreateAccount = ({ setModalOpen }: Props): JSX.Element => {
+const CreateAccount = (): JSX.Element => {
     const username = useFormInput("");
     const color = useFormInput("");
     const description = useFormInput("");
 
-    ////////////////////////////////////////////////////////////
-
-    const { setUser, setLoggedIn } = useAuth();
+    const [error, setError] = useState<string | null>(null);
 
     ////////////////////////////////////////////////////////////
 
-    const retrieveFileFromInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const target = e.target as HTMLInputElement;
-        const file: File = (target.files as FileList)[0];
-        const fileName: string = file.name;
+    const { setUser } = useUser();
 
-        return { file, fileName };
-    };
+    ////////////////////////////////////////////////////////////
 
-    const handleProfileImageUpload = (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        const { file, fileName } = retrieveFileFromInput(e);
-        const fd = new FormData();
-        fd.append("file", file, fileName);
-
-        uploadImage(ApiRoutes.uploadProfileImage(), fd)
-            .then(console.log)
-            .catch(console.log);
-    };
-
-    const handleBannerImageUpload = (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        const { file, fileName } = retrieveFileFromInput(e);
-        const fd = new FormData();
-        fd.append("file", file, fileName);
-
-        uploadImage(ApiRoutes.uploadBannerImage(), fd)
-            .then(console.log)
-            .catch(console.log);
-    };
-
-    const handleAccountCreation = async () => {
-        const providedDetails = {
-            username: username.value,
-            color: color.value,
-            description: description.value
-        };
-
-        /**
-         * Redirects the user to the profile
-         * page upon account creation.
-         */
+    const sendAccountDetails = async () => {
         try {
-            const returnedUserProfile = await createUser(providedDetails);
+            const user = await handleAccountCreation({
+                username: username.value,
+                color: color.value,
+                description: description.value
+            });
 
-            setUser(returnedUserProfile);
-            setLoggedIn(true);
-            setItem(StoreId.loginProcess, false);
-            setModalOpen(false);
+            setUser(user);
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     };
 
-<<<<<<< Updated upstream
-=======
     const handleSubmit = (e: any) => {
         e.preventDefault();
     };
 
-    const slideChangeEffect = () => {};
+    const slideChangeEffect = () => {
+        console.log("slide change!");
+    };
 
->>>>>>> Stashed changes
     ////////////////////////////////////////////////////////////
 
     return (
-        <CreateForm>
+        <CreateAccountForm onSubmit={handleSubmit}>
             <Heading type={2}>Create an account</Heading>
-            <BoxSlider>
+            <BoxSlider onSlideChange={slideChangeEffect}>
                 <Slide>
                     <StyledInput>
-                        <label>Set your Username</label>
+                        <label>Setup your Username</label>
+                        {error && <ErrorMessage message={error} />}
                         <input type="text" {...username} />
                     </StyledInput>
                 </Slide>
                 <Slide>
                     <StyledInput>
                         <label>Upload a profile picture</label>
+                        {error && <ErrorMessage message={error} />}
                         <input
                             type="file"
                             alt="user profile"
-                            onChange={handleProfileImageUpload}
+                            onChange={(e) =>
+                                handleImageUpload(
+                                    e,
+                                    ApiRoutes.uploadProfileImage()
+                                )
+                            }
                         />
                     </StyledInput>
                 </Slide>
                 <Slide>
                     <StyledInput>
                         <label>Upload a banner picture</label>
+                        {error && <ErrorMessage message={error} />}
                         <input
                             type="file"
                             alt="user banner"
-                            onChange={handleBannerImageUpload}
+                            onChange={(e) =>
+                                handleImageUpload(
+                                    e,
+                                    ApiRoutes.uploadBannerImage()
+                                )
+                            }
                         />
                     </StyledInput>
                 </Slide>
@@ -143,21 +126,27 @@ const CreateAccount = ({ setModalOpen }: Props): JSX.Element => {
                         <label>
                             Choose a Color (must be in hex form #1e1e1e)
                         </label>
+                        {error && <ErrorMessage message={error} />}
                         <input type="text" {...color} />
                     </StyledInput>
                 </Slide>
                 <Slide>
                     <StyledInput>
                         <label>Tell something about yourself</label>
+                        {error && <ErrorMessage message={error} />}
                         <textarea rows={4} {...description} />
                     </StyledInput>
-                    <Button theme="dark" onClick={handleAccountCreation}>
-                        Ja doe maar
+                </Slide>
+                <Slide>
+                    <Button theme="dark" onClick={sendAccountDetails}>
+                        Setup your account!
                     </Button>
                 </Slide>
             </BoxSlider>
-        </CreateForm>
+        </CreateAccountForm>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export default CreateAccount;

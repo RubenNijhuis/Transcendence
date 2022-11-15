@@ -1,46 +1,61 @@
 // Types
-import { MatchRecord } from "../../../types/game";
-import { ProfileType } from "../../../types/profile";
+import { Game, Profile } from "../../../types";
 
 // Random int
-import randomNum from "../../../utils/randomNum";
+import randomNum from "../../../utils/numbers/randomIntFromRange";
 
 // Random player
 import { generateProfile } from "./profile";
 
-const generateGameResult = (player: ProfileType, amount: number): MatchRecord[] => {
-    const matchRecordList: MatchRecord[] = [];
+////////////////////////////////////////////////////////////
 
-    const opponents: ProfileType[] = generateProfile(amount);
+const generateGameResult = (
+    player: Profile.Instance,
+    amount: number
+): Game.MatchRecord[] => {
+    const MatchRecordList: Game.MatchRecord[] = [];
+
+    const opponents: Profile.Instance[] = generateProfile(amount);
 
     for (let i = 0; i < amount; i++) {
         const winOrLose: number = randomNum(0, 1);
 
         let score = {
-            opponent: 0,
-            self: 0
+            player1: 0,
+            player2: 0
+        };
+
+        let elo = {
+            player1: 0,
+            player2: 0
         };
 
         const otherScore: number = randomNum(0, 4);
 
         if (winOrLose === 0) {
-            score.opponent = 5;
-            score.self = otherScore;
+            score.player1 = 5;
+            score.player2 = otherScore;
         } else {
-            score.opponent = otherScore;
-            score.self = 5;
+            score.player1 = otherScore;
+            score.player2 = 5;
         }
 
-        const newMatchRecord: MatchRecord = {
-            player,
-            opponent: opponents[i],
-            score
+        const newMatchRecord: Game.MatchRecord = {
+            uid: (0).toString(),
+            player1: player,
+            player2: opponents[i],
+            score,
+            gameType: Game.GameType.Classic,
+            scoreType: Game.ScoreType.Friendly,
+            elo
         };
 
-        matchRecordList.push(newMatchRecord);
+        MatchRecordList.push(newMatchRecord);
     }
 
-    return matchRecordList;
+    return MatchRecordList;
 };
+
+////////////////////////////////////////////////////////////
 
 export { generateGameResult };

@@ -2,77 +2,65 @@
 import { get_img_url } from "./utils";
 
 // Random int
-import randomNum from "../../../utils/randomNum";
+import randomNum from "../../../utils/numbers/randomIntFromRange";
 
 // Types
-import { ProfileType } from "../../../types/profile";
-import { GameType } from "../../../types/game";
-import {
-    Message,
-    PictureMessage,
-    GroupChat,
-    SimpleMessage,
-    InvitePlayMessage,
-    MessageContentType,
-    MessageTypes
-} from "../../../types/chat";
+import { Profile, Game, Chat } from "../../../types";
 
 // Utils
 import { generateProfile } from "./profile";
-import { randomSliceOfArray } from "../../../utils/arrayManipulation";
+import { randomSliceOfArray } from "../../../utils/array";
 
 ///////////////////////////////////////////////////////////
 
 const generateInvite = (
-    user: ProfileType,
-    opponent: ProfileType
-): InvitePlayMessage => {
-    const invite: InvitePlayMessage = {
+    user: Profile.Instance,
+    opponent: Profile.Instance
+): Chat.Message.GameInviteMessage => {
+    const invite: Chat.Message.GameInviteMessage = {
         opponent,
         user,
-        game_type: GameType.Classic,
+        game_type: Game.GameType.Classic,
         accepted: false
     };
 
     return invite;
 };
 
-const generateSimpleMessage = (): SimpleMessage => {
-    const simpleMessage: SimpleMessage = {
-        content: "BOOP"
+const generateSimpleMessage = (): Chat.Message.SimpleMessage => {
+    const simpleMessage: Chat.Message.SimpleMessage = {
+        content: "Lorem ipsum sit dolor amet"
     };
 
     return simpleMessage;
 };
 
-const generatePictureMessage = (): PictureMessage => {
-    const randomWidth: number =
-        Math.ceil(randomNum(1000, 2000) / 100) * 100;
-    const randomHeight: number =
-        Math.ceil(randomNum(1000, 2000) / 100) * 100;
+const generatePictureMessage = (): Chat.Message.PictureMessage => {
+    const randomWidth: number = Math.ceil(randomNum(1000, 2000) / 100) * 100;
+    const randomHeight: number = Math.ceil(randomNum(1000, 2000) / 100) * 100;
 
     const img_url: string = get_img_url(randomWidth, randomHeight);
 
-    const picture: PictureMessage = {
+    const picture: Chat.Message.PictureMessage = {
         url: img_url,
-        alt: "sent"
+        alt: "random"
     };
 
     return picture;
 };
 
 const generateNewMessageContent = (
-    sender: ProfileType,
-    receiver: ProfileType,
-    type: MessageContentType
-): MessageTypes => {
-    let messageContent: MessageTypes = null!;
+    sender: Profile.Instance,
+    receiver: Profile.Instance,
+    type: Chat.Message.ContentType
+): Chat.Message.MessageTypes => {
+    let messageContent: Chat.Message.MessageTypes = null!;
 
-    if (type === MessageContentType.Simple) {
+    if (type === Chat.Message.ContentType.Simple) {
         messageContent = generateSimpleMessage();
-    } else if (type === MessageContentType.Picture) {
+    } else if (type === Chat.Message.ContentType.Picture) {
         messageContent = generatePictureMessage();
-    } else if (type === MessageContentType.InvitePlay) {
+    } else if (type === Chat.Message.ContentType.InvitePlay) {
         messageContent = generateInvite(sender, receiver);
     }
 
@@ -80,23 +68,23 @@ const generateNewMessageContent = (
 };
 
 const generateMessage = (
-    sender: ProfileType,
-    receiver: ProfileType,
+    sender: Profile.Instance,
+    receiver: Profile.Instance,
     group_id: number,
     amount: number
-): Message[] => {
-    const messages: Message[] = [];
+): Chat.Message.Instance[] => {
+    const messages: Chat.Message.Instance[] = [];
 
     for (let i = 0; i < amount; i++) {
         const rand: number = randomNum(0, 2);
 
-        const newMessage: Message = {
+        const newMessage: Chat.Message.Instance = {
             content: generateNewMessageContent(sender, receiver, rand),
             content_type: rand,
             timestamp: new Date().toString(),
             sender: generateProfile(1)[0],
             senderID: sender.uid,
-            uid: i,
+            id: i,
             group_id,
             read_by: []
         };
@@ -110,26 +98,30 @@ const generateMessage = (
 ///////////////////////////////////////////////////////////
 
 const generateGroupChats = (
-    user: ProfileType,
+    user: Profile.Instance,
     amount: number,
     memberRange: [number, number],
-    profiles: ProfileType[]
-): GroupChat[] => {
-    const groupChatList: GroupChat[] = [];
+    profiles: Profile.Instance[]
+): Chat.Group.Instance[] => {
+    const groupChatList: Chat.Group.Instance[] = [];
 
     for (let i = 0; i < amount; i++) {
-        const randomNum1: number = randomNum(memberRange[0],memberRange[1]);
+        const randomNum1: number = randomNum(memberRange[0], memberRange[1]);
 
-        const members: ProfileType[] = [
-            ...randomSliceOfArray<ProfileType>(profiles, randomNum1),
+        const members: Profile.Instance[] = [
+            ...randomSliceOfArray<Profile.Instance>(profiles, randomNum1),
             user
         ];
 
-        const newGroup: GroupChat = {
+        const newGroup: Chat.Group.Instance = {
+            name: "dikke lul",
+            owner: user,
             group_id: i,
+            administrators: [user],
             internal_id: i,
             members: members,
-            messages: []
+            messages: [],
+            protected: randomNum1 !== 1
         };
 
         newGroup.messages.push(
@@ -163,5 +155,7 @@ const generateGroupChats = (
 
     return groupChatList;
 };
+
+///////////////////////////////////////////////////////////
 
 export { generateGroupChats };

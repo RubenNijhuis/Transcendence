@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
 import { CreateRequestDto } from "src/dtos/friendrequest/create-request.dto";
 import { FriendrequestService } from "src/services/friendrequest/friendrequest.service";
 
@@ -6,21 +6,54 @@ import { FriendrequestService } from "src/services/friendrequest/friendrequest.s
 export class FriendRequestController {
   constructor(private readonly friendrequestService: FriendrequestService) {}
 
-  @Get("getrequests?")
-  async getrequests(@Query("username") username) {
-    return await this.friendrequestService.getRequests(username);
+  @Get("getRequest/:username")
+  async getrequests(@Param("username") username: string) {
+    try {
+      return await this.friendrequestService.getRequests(username);
+    } catch (err) {
+      throw err;
+    }
   }
 
-  @Post("sendrequest")
-  async senrequest(@Body() requestDto: CreateRequestDto) {
-    return await this.friendrequestService.sendRequest(requestDto);
+  @Get("getRequested/:username")
+  async getrequested(@Param("username") username: string) {
+    try {
+      return await this.friendrequestService.getRequested(username);
+    } catch (err) {
+      throw err;
+    }
   }
 
-  @Post("removerequest")
+  @Get("isRequested/:username/:requested")
+  async isRequested(
+    @Param("username") username: string,
+    @Param("requested") requested: string
+  ): Promise<boolean> {
+    try {
+      return await this.friendrequestService.isRequested(username, requested);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  @Post("sendRequest")
+  async sendrequest(@Body() requestDto: CreateRequestDto) {
+    try {
+      return await this.friendrequestService.sendRequest(requestDto);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  @Post("removeRequest")
   async removerequest(@Body() requestDto: CreateRequestDto) {
-    return await this.friendrequestService.removeRequest(
-      requestDto.username,
-      requestDto.requested
-    );
+    try {
+      return await this.friendrequestService.removeRequest(
+        requestDto.username,
+        requestDto.requested
+      );
+    } catch (err) {
+      throw err;
+    }
   }
 }

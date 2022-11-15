@@ -7,34 +7,16 @@ import {
     smallRadius
 } from "../../../styles/StylingConstants";
 
+///////////////////////////////////////////////////////////
+
 const Container = styled.div`
-    position: absolute;
-    bottom: 0;
-    left: 0;
+    position: relative;
+
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
     padding: calc(${magicNum} / 4);
-
-    &:before {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-
-        border-radius: 0px 0px 6px 6px;
-
-        background: rgb(226, 226, 240);
-        background: linear-gradient(
-            180deg,
-            rgba(226, 226, 240, 0) 0%,
-            rgba(226, 226, 240, 1) 10%,
-            rgba(226, 226, 240, 1) 100%
-        );
-    }
 
     .input-wrapper {
         z-index: 100;
@@ -172,5 +154,7 @@ const SelectionBox = styled.div<{ selected: boolean }>`
         color: black;
     }
 `;
+
+///////////////////////////////////////////////////////////
 
 export { Container, SelectTypeIcon, SelectionBox };

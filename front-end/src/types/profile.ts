@@ -1,18 +1,25 @@
-// Just for semantics
-type ProfileID = number;
+namespace Profile {
+    export type ProfileID = string;
 
-// Global profile interface
-interface ProfileType {
-    uid: ProfileID;
-    username: string;
-    img_url: string;
-    banner_url: string;
-    color: string;
-    rank: number;
-    wins: number;
-    losses: number;
-    friends: ProfileType[];
-    blocked: ProfileType[];
+    export interface Instance {
+        uid: ProfileID;
+
+        username: string;
+        description: string;
+
+        img_url: string;
+        banner_url: string;
+
+        color: string;
+
+        isTfaEnabled?: boolean;
+
+        rank: number;
+        wins: number;
+        losses: number;
+    }
 }
 
-export type { ProfileType, ProfileID };
+////////////////////////////////////////////////////////////
+
+export default Profile;

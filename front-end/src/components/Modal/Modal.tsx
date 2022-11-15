@@ -1,15 +1,50 @@
-import { Container, ElementContainer } from "./Modal.style";
+// Icons
+import { GrFormClose } from "react-icons/gr";
 
-interface Props {
-    element: React.ReactNode;
+// Styling
+import {
+    CloseButtonContainer,
+    Container,
+    ElementContainer
+} from "./Modal.style";
+
+///////////////////////////////////////////////////////////
+
+interface ICloseButton {
+    setModalActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Modal = ({ element }: Props): JSX.Element => {
+const CloseButton = ({ setModalActive }: ICloseButton) => {
+    return (
+        <CloseButtonContainer onClick={() => setModalActive(false)}>
+            <span>
+                <GrFormClose />
+            </span>
+        </CloseButtonContainer>
+    );
+};
+
+interface IModal {
+    children: React.ReactNode;
+    allowClose: boolean;
+    setModalActive: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Modal = ({
+    children,
+    setModalActive,
+    allowClose
+}: IModal): JSX.Element => {
     return (
         <Container>
-            <ElementContainer>{element}</ElementContainer>
+            <ElementContainer>
+                {children}
+                {allowClose && <CloseButton setModalActive={setModalActive} />}
+            </ElementContainer>
         </Container>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export default Modal;

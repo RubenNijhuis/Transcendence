@@ -11,15 +11,25 @@ const Container = styled.div`
     border: solid 2px ${mainColor};
     border-radius: ${smallRadius};
     position: relative;
-    padding-bottom: calc(${magicNum});
+    display: flex;
+    flex-direction: column;
 
-    .title {
+    .chat-title {
+        display: flex;
+        align-items: center;
+        gap: calc(${magicNum} / 4);
         background-color: ${mainColor};
         padding: calc(${magicNum} / 4);
 
-        h3 {
+        .heading {
             color: ${lightTextColor};
             margin-bottom: 0;
+        }
+
+        .asset {
+            width: calc(${magicNum} / 2 * 1.5);
+            height: calc(${magicNum} / 2 * 1.5);
+            border-radius: ${smallRadius};
         }
     }
 
@@ -33,4 +43,35 @@ const Container = styled.div`
     }
 `;
 
-export { Container };
+const PasswordLayer = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .error {
+        border: solid 2px red;
+        padding: 8px 19px;
+        border-radius: ${smallRadius};
+    }
+
+    .heading {
+        font-size: 18px;
+    }
+
+    input {
+        border-radius: ${smallRadius};
+        border: solid 2px ${mainColor};
+        padding: 8px 19px;
+        margin-bottom: calc(${magicNum} / 4);
+    }
+`;
+
+export { Container, PasswordLayer };

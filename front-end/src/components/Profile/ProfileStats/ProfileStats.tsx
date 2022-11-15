@@ -1,6 +1,5 @@
 // Types
-import { ProfileType } from "../../../types/profile";
-import { MatchRecord } from "../../../types/game";
+import { Game, Profile } from "../../../types";
 
 // UI
 import Heading from "../../Heading";
@@ -8,12 +7,14 @@ import Heading from "../../Heading";
 // Styling
 import { Container } from "./ProfileStats.style";
 
-interface Props {
-    player: ProfileType;
-    matches: MatchRecord[];
+///////////////////////////////////////////////////////////
+
+interface IProfileStats {
+    player: Profile.Instance;
+    matches: Game.MatchRecord[];
 }
 
-const ProfileStats = ({ player, matches }: Props): JSX.Element => {
+const ProfileStats = ({ player, matches }: IProfileStats): JSX.Element => {
     return (
         <Container>
             <div className="stats">
@@ -32,7 +33,7 @@ const ProfileStats = ({ player, matches }: Props): JSX.Element => {
                         style={{
                             width: 36,
                             height: 36,
-                            background: player.color
+                            backgroundColor: player.color
                         }}
                     />
                 </div>
@@ -44,5 +45,7 @@ const ProfileStats = ({ player, matches }: Props): JSX.Element => {
         </Container>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export default ProfileStats;

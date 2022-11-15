@@ -2,22 +2,13 @@ import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class FriendList {
-  @PrimaryGeneratedColumn({
-    type: "bigint",
-    name: "id"
-  })
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    name: "users",
-    nullable: true
-  })
+  @Column()
   username: string;
 
-  @Column({
-    name: "friends",
-    nullable: true
-  })
+  @Column()
   friendname: string;
 }
 export default FriendList;

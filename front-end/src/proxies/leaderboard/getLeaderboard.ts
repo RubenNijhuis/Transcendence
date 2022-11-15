@@ -3,17 +3,26 @@ import { API } from "../instances/apiInstance";
 import ApiRoutes from "../../config/ApiRoutes";
 
 // Types
-import { ProfileType } from "../../types/profile";
+import { Profile } from "../../types";
 
-const getLeaderboard = async (): Promise<ProfileType[]> => {
+////////////////////////////////////////////////////////////
+
+/**
+ * Returns the first 100 on the leaderboard
+ * @returns
+ */
+const getLeaderboard = async (): Promise<Profile.Instance[]> => {
     try {
-        const { data } = await API.get<ProfileType[]>(
-            ApiRoutes.getLeaderboard()
-        );
+        const route = ApiRoutes.getLeaderboard();
+
+        const { data } = await API.get<Profile.Instance[]>(route);
+
         return Promise.resolve(data);
-    } catch (err: any) {
+    } catch (err) {
         return Promise.reject(err);
     }
 };
 
-export default getLeaderboard;
+///////////////////////////////////////////////////////////
+
+export { getLeaderboard };

@@ -5,6 +5,7 @@ import {
     lightTextColor,
     magicNum,
     mainColor,
+    mediumRadius,
     smallRadius
 } from "../../styles/StylingConstants";
 
@@ -18,8 +19,8 @@ const AdvancedCard = styled.div`
     height: 100%;
     aspect-ratio: 5 / 7;
 
-    border-radius: ${smallRadius};
-    background: ${mainColor};
+    border-radius: ${mediumRadius};
+    background-color: ${mainColor};
     overflow: hidden;
 
     .img {
@@ -29,7 +30,7 @@ const AdvancedCard = styled.div`
         width: 100%;
         height: 100%;
 
-        img {
+        .asset {
             position: absolute;
             top: 0;
             left: 0;
@@ -78,7 +79,7 @@ const AdvancedCard = styled.div`
         transition: all 0.35s ease-in-out;
 
         /* From https://css.glass */
-        background: rgba(0, 0, 0, 0.1);
+        background-color: rgba(0, 0, 0, 0.1);
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         backdrop-filter: blur(10px);
 
@@ -107,9 +108,11 @@ const AdvancedCard = styled.div`
             text-decoration: none;
             color: ${mainColor};
             font-weight: 700;
-            background: ${lightTextColor};
+            background-color: ${lightTextColor};
         }
     }
 `;
+
+///////////////////////////////////////////////////////////
 
 export { AdvancedCard };

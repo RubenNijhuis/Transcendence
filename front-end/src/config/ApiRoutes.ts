@@ -2,39 +2,72 @@
  * All routes the front-end uses to interact with the api/backend
  *
  * Every path is a function as sometimes a parameter might
- * be required to create a full path. To keep it simple every
+ * be required to create a full path. To keep it simple, every
  * route is a function
  */
 const ApiRoutes = {
+    // Config //////////////////////////////////////////////////
     baseUrl: () => `http://127.0.0.1:8080/api/`,
+    // Config //////////////////////////////////////////////////
 
-    // User
+    // User ////////////////////////////////////////////////////
     createUser: () => `/user/setUser`,
     getUserByAccessToken: () => `/auth/getUserFromAccessToken`,
+    updateDescription: () => `/user/updateDescription`,
+    updateColor: () => `/user/updateColor`,
+    // User ////////////////////////////////////////////////////
+
+    // Friend //////////////////////////////////////////////////
+    getFriendsByUsername: (username: string) =>
+        `/friends/getfriends/${username}`,
+    getFriend: () => `/friends/getfriend`,
+    removeFriend: () => `/friends/removeFriend`,
+
+    sendFriendRequest: () => `/friendrequest/sendrequest`,
+    getFriendRequests: () => `/friendrequests/`,
+    isRequested: (username: string, requested: string) =>
+        `/friendrequest/isRequested/${username}/${requested}`,
+    removeFriendRequest: () => `/friendrequest/remove`,
+
+    getIsFriend: (username: string, friendname: string) =>
+        `/friends/isFriend/${username}/${friendname}`,
+    // Friend //////////////////////////////////////////////////
+
+    // Profile /////////////////////////////////////////////////
+    getProfileByUsername: (username: string) => `/user/${username}`,
 
     getProfileImageByUsername: (username: string) =>
         `/user/get-img/profile/${username}`,
     getProfileBannerByUsername: (username: string) =>
         `/user/get-img/banner/${username}`,
+    // Profile /////////////////////////////////////////////////
 
-    // Profiles
-    getProfileByUserName: (userName: string) => `/user/${userName}`,
-
-    // Account setup
+    // Account creation ////////////////////////////////////////
     uploadProfileImage: () => `/user/upload-profile-pic`,
     uploadBannerImage: () => `/user/upload-banner-pic`,
+    // Account creation ////////////////////////////////////////
 
-    // Chat
-    getChatByUserName: (userName: string) => `/chats/${userName}`,
+    // Chat ////////////////////////////////////////////////////
+    getChatsByUsername: (username: string) => `/group/${username}`,
+    createChat: () => `/group/create`,
+    verifyPassword: (id: string) => `/group/${id}`,
+    // Chat ////////////////////////////////////////////////////
 
-    // Leaderboard
+    // Leaderboard /////////////////////////////////////////////
     getLeaderboard: () => `/leaderboard`,
+    // Leaderboard /////////////////////////////////////////////
 
-    // Auth
+    // Authentication //////////////////////////////////////////
     getLoginRoute: () => `/auth/login`,
     confirmLogin: (code: string) => `/auth/confirm?token=${code}`,
-    createRefreshToken: () => `/auth/createRefresh`,
-    refreshAuthToken: () => `/auth/refresh`
+    refreshAuthToken: () => `/auth/refresh`,
+    // Authentication //////////////////////////////////////////
+
+    // TFAuthentication //////////////////////////////////////////
+    turnOnTFA: () => `/user/enable2fa`,
+    getqrTFA: () => `/tfa/google2fa`,
+    confirmTFA: () => `/tfa/google2fa/authenticate`
+    // TFAuthentication //////////////////////////////////////////
 };
 
 export default ApiRoutes;

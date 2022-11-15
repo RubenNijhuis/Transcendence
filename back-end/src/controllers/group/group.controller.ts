@@ -4,34 +4,55 @@ import {
   UsePipes,
   ValidationPipe,
   Get,
-  Post
+  Post,
+  HttpStatus,
+  Param
 } from "@nestjs/common";
+
+// DTO's
+import { EditOwnerDto } from "src/dtos/group";
 import { MakeAdminDto } from "src/dtos/group/make-admin.dto";
 import { EditMembersDto } from "src/dtos/group/edit-members.dto";
-import { GroupService } from "src/services/group/group.service";
 import { CreateGroupDto } from "../../dtos/group/create-group.dto";
 import { CreatePasswordDto } from "../../dtos/group/create-password.dto";
 import { EditPasswordDto } from "../../dtos/group/edit-password.dto";
+import { RemoveGroupDto } from "src/dtos/group/remove-group.dto";
+
+// Entities
+import Group from "src/entities/group/group.entity";
+
+// Service
+import { GroupService } from "src/services/group/group.service";
+
+// Error handling
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
+
+////////////////////////////////////////////////////////////
 
 @Controller("group")
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
+
+  ////////////////////////////////////////////////////////////
 
   @Get()
   async getAllMessages() {
     return await this.groupService.getAllMessages();
   }
 
+  @Get(":userId")
+  async getGroupsByUserId(@Param("userId") userId: string) {
+    return await this.groupService.getGroupsByUserId(userId);
+  }
+
   @Post("createPassword")
   @UsePipes(ValidationPipe)
-  async createPassword(@Body() CreatePasswordDto: CreatePasswordDto) {
+  async createPassword(@Body() createPasswordDto: CreatePasswordDto) {
     try {
-      await this.groupService.createPassword(CreatePasswordDto);
-      const ret = { message: "Password set! :D" };
-      return ret;
-    } catch (error) {
-      throw error;
+      await this.groupService.createPassword(createPasswordDto);
+      return HttpStatus.OK;
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -40,78 +61,76 @@ export class GroupController {
   async updatePassword(@Body() editPasswordDto: EditPasswordDto) {
     try {
       await this.groupService.updatePassword(editPasswordDto);
-      const ret = { message: "Password updated! :D" };
-      return ret;
-    } catch (error) {
-      throw error;
+      return HttpStatus.OK;
+    } catch (err) {
+      throw err;
     }
   }
 
   @Post("createGroup")
   async createGroup(@Body() createGroupDto: CreateGroupDto) {
     try {
-      const group = await this.groupService.createGroup(createGroupDto);
-      const groupId = group.id;
-      const users = createGroupDto.users;
-      const EditMembersDto = { groupId, users };
+      const group: Group = await this.groupService.createGroup(createGroupDto);
+      const groupId: number = group.id;
+      const users: string[] = createGroupDto.users;
+      const owner: string = createGroupDto.owner;
+      const EditMembersDto: EditMembersDto = { groupId, users, owner };
       await this.groupService.addMembers(EditMembersDto);
-      const owner = createGroupDto.owner;
-      const addOwnerDto = { groupId, owner };
+      const addOwnerDto: EditOwnerDto = { groupId, owner };
       await this.groupService.addOwner(addOwnerDto);
-      const ret = { message: "Group created with id: " + group.id };
-      return ret;
-    } catch (error) {
-      throw error;
+      return HttpStatus.OK;
+    } catch (err) {
+      throw err;
     }
   }
 
-  // @Post("removeGroup")
-  // async removeGroup(@Body() removeGroupDto: removeGroupDto)
-  //   try {
-
-  //   }
+  @Post("removeGroup")
+  async removeGroup(@Body() removeGroupDto: RemoveGroupDto) {
+    try {
+      await this.groupService.removeGroup(removeGroupDto);
+      return HttpStatus.OK;
+    } catch (err) {
+      throw err;
+    }
+  }
 
   @Post("addMembers")
-  async addMembers(@Body() EditMembersDto: EditMembersDto) {
+  async addMembers(@Body() editMembersDto: EditMembersDto) {
     try {
-      await this.groupService.addMembers(EditMembersDto);
-      const ret = { message: "members added " };
-      return ret;
-    } catch (error) {
-      throw error;
+      await this.groupService.addMembers(editMembersDto);
+      return HttpStatus.OK;
+    } catch (err) {
+      throw err;
     }
   }
 
   @Post("removeMembers")
-  async removeMembers(@Body() EditMembersDto: EditMembersDto) {
+  async removeMembers(@Body() editMembersDto: EditMembersDto) {
     try {
-      await this.groupService.removeMembers(EditMembersDto);
-      const ret = { message: "members removed " };
-      return ret;
-    } catch (error) {
-      throw error;
+      await this.groupService.removeMembers(editMembersDto);
+      return HttpStatus.OK;
+    } catch (err) {
+      throw err;
     }
   }
 
   @Post("makeAdmin")
-  async makeAdmin(@Body() MakeAdminDto: MakeAdminDto) {
+  async makeAdmin(@Body() makeAdminDto: MakeAdminDto) {
     try {
-      const admin = await this.groupService.makeAdmin(MakeAdminDto);
-      const ret = { message: "user " + admin.userId + " is now admin" };
-      return ret;
-    } catch (error) {
-      throw error;
+      await this.groupService.makeAdmin(makeAdminDto);
+      return HttpStatus.OK;
+    } catch (err) {
+      throw err;
     }
   }
 
   @Post("removeAdmin")
-  async unMakeAdmin(@Body() MakeAdminDto: MakeAdminDto) {
+  async unMakeAdmin(@Body() makeAdminDto: MakeAdminDto) {
     try {
-      const admin = await this.groupService.unMakeAdmin(MakeAdminDto);
-      const ret = { message: "user " + admin.userId + " is no longer admin" };
-      return ret;
-    } catch (error) {
-      throw error;
+      await this.groupService.unMakeAdmin(makeAdminDto);
+      return HttpStatus.OK;
+    } catch (err) {
+      throw err;
     }
   }
 }

@@ -30,17 +30,17 @@ import { intraIDDto } from "src/dtos/auth/intraID.dto";
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
 import { ConfigService } from "@nestjs/config";
 /**
+ * IMPORTANT: createUser wordt niet aangeroepen in de frontend
+ * dus ik heb de path verwijderd.
+ */
+
+/**
  * User services
  *
  * Contains all typeorm sql injections.
  * Some functions that not yet used:
  * - set2faSecret
  * - update2faSecret is being used in tfa.service
- */
-
-/**
- * IMPORTANT: createUser wordt niet aangeroepen in de frontend
- * dus ik heb de path verwijderd.
  */
 @Injectable()
 export class UserService {
@@ -54,11 +54,13 @@ export class UserService {
     const newUser: User = user;
 
     if (!newUser) return null;
+
     delete newUser.intraId;
+    delete newUser.index;
     delete newUser.isInitialized;
-    delete newUser.isTfaEnabled;
     delete newUser.refreshToken;
     delete newUser.tfaSecret;
+
     return newUser;
   }
 
@@ -67,16 +69,34 @@ export class UserService {
     try {
       const returnedUser: User[] = await this.userRepository.find();
       return Promise.resolve(returnedUser);
-    } catch (err: any) {
+    } catch (err) {
       throw err;
     }
   }
 
-  async findUsersById(id: string): Promise<User> {
+  async getUserByIndex(index: number): Promise<User> {
     try {
-      const ret: User = await this.userRepository.findOne({ where: { id } });
+      const ret: User = await this.userRepository.findOne({ where: { index } });
+      return ret;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async findUsersById(uid: string): Promise<User> {
+    try {
+      const ret: User = await this.userRepository.findOne({ where: { uid } });
       return this.filterUser(ret);
-    } catch (err: any) {
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async findUsersByIdNoFilter(uid: string): Promise<User> {
+    try {
+      const ret: User = await this.userRepository.findOne({ where: { uid } });
+      return ret;
+    } catch (err) {
       throw err;
     }
   }
@@ -87,7 +107,7 @@ export class UserService {
         where: { intraId }
       });
       return returnedUser;
-    } catch (err: any) {
+    } catch (err) {
       throw err;
     }
   }
@@ -95,10 +115,11 @@ export class UserService {
   async findUserByUsername(username: string): Promise<User> {
     try {
       const returnedUser: User = await this.userRepository.findOne({
-        where: { username }
+        where: { username: username }
       });
+
       return returnedUser;
-    } catch (err: any) {
+    } catch (err) {
       throw err;
     }
   }
@@ -108,10 +129,19 @@ export class UserService {
       const returnedUser: User = await this.userRepository.findOne({
         where: { intraId }
       });
-      return returnedUser.id;
-    } catch (err: any) {
+      return returnedUser.uid;
+    } catch (err) {
       throw err;
     }
+  }
+
+  async getUsersOnUsernames(usernames: string[]) {
+    const users = [];
+
+    for (let i = 0; i < usernames.length; i++) {
+      users.push(this.filterUser(await this.findUserByUsername(usernames[i])));
+    }
+    return users;
   }
 
   async createUser(intraID: string, refreshToken: string): Promise<User> {
@@ -127,7 +157,7 @@ export class UserService {
       // const ret = await this.userRepository.save(testUser);
       const savedUser: User = await this.userRepository.save(newUser);
       return savedUser;
-    } catch (err: any) {
+    } catch (err) {
       console.log("error: ", err);
       throw errorHandler(
         err,
@@ -153,12 +183,13 @@ export class UserService {
         .createQueryBuilder()
         .update(user)
         .set(query)
-        .where({ id: user.id })
+        .where({ uid: user.uid })
         .returning("*")
         .execute();
 
       return await this.findUserByintraId(intraID);
-    } catch (err: any) {
+    } catch (err) {
+      console.error(err);
       throw errorHandler(
         err,
         "Failed to update user",
@@ -176,7 +207,7 @@ export class UserService {
         .where("username =:username", { username })
         .execute();
       return result;
-    } catch (err: any) {
+    } catch (err) {
       throw errorHandler(
         err,
         "Failed to remove user",
@@ -203,10 +234,10 @@ export class UserService {
         .createQueryBuilder()
         .update(user)
         .set({ refreshToken: superHashedToken })
-        .where({ id: user.id })
+        .where({ uid: user.uid })
         .returning("*")
         .execute();
-    } catch (err: any) {
+    } catch (err) {
       throw errorHandler(
         err,
         "Failed to set user refresh token",
@@ -218,7 +249,7 @@ export class UserService {
   async set2faSecret(id: number, tfaSecret: string): Promise<UpdateResult> {
     try {
       return await this.userRepository.update(id, { tfaSecret });
-    } catch (err: any) {
+    } catch (err) {
       throw errorHandler(
         err,
         "Failed to set user 2fa secret",
@@ -231,25 +262,134 @@ export class UserService {
   // als ze iets anders doen, graag vermelden in de functie naam, anders eentje deleten
   // thanks :) - zeno
   async update2faSecret(
-    userDto: UsernameDto,
+    intraID: string,
     secret: string
   ): Promise<UpdateResult> {
     try {
-      const user: User = await this.findUserByUsername(userDto.username);
+      const user: User = await this.findUsersByIdNoFilter(intraID);
 
       return await this.userRepository
         .createQueryBuilder()
         .update(user)
         .set({ tfaSecret: secret })
-        .where({ id: user.id })
+        .where({ uid: user.uid })
         .returning("*")
         .execute();
-    } catch (err: any) {
+    } catch (err) {
       throw errorHandler(
         err,
         "Failed to set user 2fa secret",
         HttpStatus.INTERNAL_SERVER_ERROR
       );
+    }
+  }
+
+  async setDescription(
+    username: string,
+    description: string
+  ): Promise<UpdateResult> {
+    try {
+      const user: User = await this.findUserByUsername(username);
+
+      return await this.userRepository
+        .createQueryBuilder()
+        .update(user)
+        .set({ description: description })
+        .where({ uid: user.uid })
+        .returning("*")
+        .execute();
+    } catch (err) {
+      throw errorHandler(
+        err,
+        "Failed to set user description",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  async setColor(
+    username: string,
+    color: string
+  ): Promise<UpdateResult> {
+    try {
+      const user: User = await this.findUserByUsername(username);
+
+      return await this.userRepository
+        .createQueryBuilder()
+        .update(user)
+        .set({ color: color })
+        .where({ uid: user.uid })
+        .returning("*")
+        .execute();
+    } catch (err) {
+      throw errorHandler(
+        err,
+        "Failed to set user color",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  async setTFAiv(
+    intraID: string,
+    tfa_iv: string
+  ): Promise<UpdateResult> {
+    try {
+      const user: User = await this.findUsersByIdNoFilter(intraID);
+
+      return await this.userRepository
+        .createQueryBuilder()
+        .update(user)
+        .set({ tfa_iv: tfa_iv })
+        .where({ uid: user.uid })
+        .returning("*")
+        .execute();
+    } catch (err) {
+      throw errorHandler(
+        err,
+        "Failed to set user 2fa secret",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  async setTFAkey(
+    intraID: string,
+    tfa_key: string
+  ): Promise<UpdateResult> {
+    try {
+      const user: User = await this.findUsersByIdNoFilter(intraID);
+
+      return await this.userRepository
+        .createQueryBuilder()
+        .update(user)
+        .set({ tfa_key: tfa_key })
+        .where({ uid: user.uid })
+        .returning("*")
+        .execute();
+    } catch (err) {
+      throw errorHandler(
+        err,
+        "Failed to set user 2fa secret",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  async getTFAiv(intraId: string): Promise<string> {
+    try {
+      const user: User = await this.findUsersByIdNoFilter(intraId);
+      return user.tfa_iv;
+    } catch (err) {
+      throw err;
+    }
+  }
+  async getTFAkey(intraId: string): Promise<string> {
+    try {
+      const user: User = await this.findUsersByIdNoFilter(intraId);
+      return user.tfa_key;
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -263,43 +403,22 @@ export class UserService {
   // }
 
   // FUNCTION IS NOT YET USED
-  async setTfaOption(username: string, option: boolean): Promise<UpdateResult> {
+  async setTfaOption(uid: string): Promise<UpdateResult> {
     try {
-      const user: User = await this.findUserByUsername(username);
+      const user: User = await this.findUsersByIdNoFilter(uid);
 
+      //console.log(user.isTfaEnabled, " ", !user.isTfaEnabled);
       return await this.userRepository
         .createQueryBuilder()
         .update(user)
-        .set({ isTfaEnabled: option })
-        .where({ id: user.id })
+        .set({ isTfaEnabled: !user.isTfaEnabled })
+        .where({ uid: user.uid })
         .returning("*")
         .execute();
-    } catch (err: any) {
+    } catch (err) {
       throw errorHandler(
         err,
         "Failed to set user tfa option",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
-    }
-  }
-
-  async seedCustom(amount: number): Promise<User[]> {
-    try {
-      for (let i = 1; i <= amount; i++) {
-        console.log("yoyo");
-        let genIntraId = randUserName();
-        await this.createUser(genIntraId, "lolo");
-        await this.setUser(genIntraId, {
-          username: randFullName(),
-          color: randColor().toString(),
-          description: randParagraph()
-        });
-      }
-      return this.getUsers();
-    } catch (err: any) {
-      throw errorHandler(
-        err,
-        "Failed to seed database",
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     }

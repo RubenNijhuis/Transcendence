@@ -7,6 +7,8 @@ import Container from "./Footer.style";
 // Config
 import { InboundLinks, GithubLink } from "./Footer.config";
 
+////////////////////////////////////////////////////////////
+
 const Footer = (): JSX.Element => {
     return (
         <Container>

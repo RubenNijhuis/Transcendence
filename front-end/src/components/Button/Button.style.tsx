@@ -5,8 +5,11 @@ import {
     smallRadius,
     mainColor,
     darkTextColor,
-    lightTextColor
+    lightTextColor,
+    backgroundColor
 } from "../../styles/StylingConstants";
+
+///////////////////////////////////////////////////////////
 
 const StyledButton = styled.button`
     display: inline-flex;
@@ -16,16 +19,19 @@ const StyledButton = styled.button`
     padding: calc(${magicNum} / 4) calc(${magicNum} / 2);
     border-radius: ${smallRadius};
 
-    color: ${(props) =>
-        props.theme === "light" ? `${darkTextColor}` : `${lightTextColor}`};
-    background: ${(props) =>
-        props.theme === "light" ? `${lightTextColor}` : `${mainColor}`};
+    color: ${({ theme }) =>
+        theme === "light" ? darkTextColor : lightTextColor};
+    background-color: ${({ theme }) =>
+        theme === "light" ? backgroundColor : mainColor};
 
-    border: none;
+    border: ${({ theme }) =>
+        theme === "light" ? `2px solid ${mainColor}` : "none"};
 
     &:hover {
         cursor: pointer;
     }
 `;
+
+///////////////////////////////////////////////////////////
 
 export { StyledButton };

@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  Generated,
   JoinTable,
   OneToMany,
   PrimaryColumn,
@@ -9,9 +10,13 @@ import {
 import GroupUser from "../groupuser/groupuser.entity";
 @Entity() // need to have a token to search on
 export class User {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
-  
+  @PrimaryGeneratedColumn()
+  index: number;
+
+  @Column()
+  @Generated("uuid")
+  uid: string;
+
   @Column({
     name: "intra_id",
     nullable: true,
@@ -76,6 +81,18 @@ export class User {
     default: ""
   })
   refreshToken: string;
+  @Column({
+    name: "tfa_iv",
+    nullable: false,
+    default: ""
+  })
+  tfa_iv: string;
+  @Column({
+    name: "tfa_key",
+    nullable: false,
+    default: ""
+  })
+  tfa_key: string;
   @OneToMany((type) => GroupUser, (groupuser) => groupuser.user)
   @JoinTable()
   groups: GroupUser[];

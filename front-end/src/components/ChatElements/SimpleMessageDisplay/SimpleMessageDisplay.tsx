@@ -1,5 +1,5 @@
 // Types
-import { SimpleMessage, Message } from "../../../types/chat";
+import { Chat } from "../../../types";
 
 // Styling
 import styled from "styled-components";
@@ -12,8 +12,8 @@ import {
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
-    message: Message;
+interface ISimpleMessageDisplay {
+    message: Chat.Message.Instance;
     fromUser: boolean;
 }
 
@@ -25,15 +25,19 @@ const Container = styled.div<{ fromUser: boolean }>`
 
     .content {
         min-width: 50%;
-        background: ${mainColor};
+        background-color: ${mainColor};
         padding: calc(${magicNum} / 8) calc(${magicNum} / 4);
         border-radius: ${smallRadius};
         color: ${lightTextColor};
     }
 `;
 
-const SimpleMessageDisplay = ({ fromUser, message }: Props): JSX.Element => {
-    const formattedContent: SimpleMessage = message.content as SimpleMessage;
+const SimpleMessageDisplay = ({
+    fromUser,
+    message
+}: ISimpleMessageDisplay): JSX.Element => {
+    const formattedContent: Chat.Message.SimpleMessage =
+        message.content as Chat.Message.SimpleMessage;
 
     return (
         <Container fromUser={fromUser}>
@@ -41,5 +45,7 @@ const SimpleMessageDisplay = ({ fromUser, message }: Props): JSX.Element => {
         </Container>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export default SimpleMessageDisplay;

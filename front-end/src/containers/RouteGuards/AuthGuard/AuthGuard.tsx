@@ -2,72 +2,67 @@
 import { useEffect } from "react";
 
 // Router
-import { Navigate, useLocation, Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import PageRoutes from "../../../config/PageRoutes";
 
 // Store
 import StoreId from "../../../config/StoreId";
+import { getItem } from "../../../modules/Store";
 
 // Auth check
 import { useAuth } from "../../../contexts/AuthContext";
-import { getItem } from "../../../modules/Store";
-import { AuthTokenType } from "../../../types/request";
+import { useUser } from "../../../contexts/UserContext";
 
-// DEBUG
-import Logger from "../../../utils/Logger";
+// Proxies
+import { checkTokenValidity } from "../../../proxies/auth";
+
+///////////////////////////////////////////////////////////
 
 /**
- * Checks if certain conditions are met when a AuthGuarded
- * page is accesed. Otherwise reroute to another page
+ * Checks if certain conditions are met when an AuthGuarded
+ * page is accessed. Otherwise reroute to another page
  */
-const AuthGuard = (): JSX.Element => {
-    const { isLoggedIn } = useAuth();
-    const location = useLocation();
+const AuthGuard = () => {
+    const { isLoggedIn, setLoggedIn } = useAuth();
+    const { setUser } = useUser();
     const navigate = useNavigate();
-    let renderOutlet: boolean = true;
 
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
-        if (isLoggedIn) {
-            renderOutlet = true;
-            Logger("AUTH", "AuthGuard", "User already logged in", true);
-            return;
-        }
+        const checkLetThrough = async () => {
+            const refreshToken = getItem<string>(StoreId.refreshToken);
+            const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
 
-        /**
-         * In the login process we must show the profile page
-         */
-        const isInLoginProcess = getItem<boolean>(StoreId.loginProcess);
-        if (isInLoginProcess) {
-            renderOutlet = true;
-            Logger("AUTH", "AuthGuard", "User is in login process", true);
-            return;
-        }
+            if (inLoginProcess) {
+                navigate(PageRoutes.profile);
+                return;
+            }
 
-        /**
-         * User must have an access token to reach these routes
-         */
-        const token = getItem<AuthTokenType>(StoreId.accessToken);
-        if (token === undefined || token === null) {
-            Logger("AUTH", "AuthGuard", "User doesn't have an authtoken", true);
-            navigate(PageRoutes.home);
-        } else {
-            // checkTokenValidity
-        }
-    }, [isLoggedIn, navigate]);
+            if (refreshToken === null) {
+                navigate(PageRoutes.whenNotLoggedIn);
+                return;
+            }
 
-    ////////////////////////////////////////////////////////////
+            if (!isLoggedIn) {
+                try {
+                    const { profile } = await checkTokenValidity(refreshToken);
+                    setLoggedIn(true);
+                    setUser(profile);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+        };
+        checkLetThrough();
+    }, [isLoggedIn]);
 
-    return renderOutlet ? (
-        <Outlet />
-    ) : (
-        <Navigate
-            to={PageRoutes.whenNotLoggedIn}
-            state={{ from: location }}
-            replace
-        />
-    );
+    ///////////////////////////////////////////////////////////
+
+    return <Outlet />;
 };
+
+///////////////////////////////////////////////////////////
 
 export default AuthGuard;

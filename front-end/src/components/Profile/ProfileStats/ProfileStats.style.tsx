@@ -1,12 +1,19 @@
 import styled from "styled-components";
+
+// Vars
 import {
     largeRadius,
     lightTextColor,
     magicNum,
-    mainColorMono
+    mainColorMono,
+    smallRadius
 } from "../../../styles/StylingConstants";
 
+////////////////////////////////////////////////////////////
+
 const Container = styled.div`
+    margin-bottom: calc((${magicNum} / 4) * -1);
+
     .stats {
         position: relative;
         z-index: 100;
@@ -43,9 +50,12 @@ const Container = styled.div`
 
             .color {
                 margin: auto;
+                border-radius: ${smallRadius};
             }
         }
     }
 `;
+
+////////////////////////////////////////////////////////////
 
 export { Container };

@@ -3,12 +3,14 @@ import { Container } from "./Slide.style";
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
+interface ISlide {
     children: React.ReactNode;
 }
 
-const Slide = ({ children }: Props): JSX.Element => {
+const Slide = ({ children }: ISlide): JSX.Element => {
     return <Container className="slide">{children}</Container>;
 };
+
+////////////////////////////////////////////////////////////
 
 export default Slide;

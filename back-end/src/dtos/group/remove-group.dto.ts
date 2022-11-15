@@ -1,9 +1,9 @@
 import { IsNotEmpty } from "class-validator";
 
-export class CreateGroupDto {
+export class RemoveGroupDto {
 	@IsNotEmpty()
 	groupId: number;
 
 	@IsNotEmpty()
-	owner: number;
+	owner: string;
 }

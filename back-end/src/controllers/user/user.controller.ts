@@ -15,6 +15,7 @@ import {
   UsePipes,
   ValidationPipe
 } from "@nestjs/common";
+import { Request, Response } from "express";
 
 // route config
 import UserRoutes from "src/configs/routes/globalRoutes.config";
@@ -23,7 +24,6 @@ import UserRoutes from "src/configs/routes/globalRoutes.config";
 import { UsernameDto } from "src/dtos/auth/username.dto";
 import { SetTfaDto } from "src/dtos/auth/setTfa.dto";
 import { SetUserDto } from "src/dtos/user/set-user.dto"; // TODO: is this one still used?
-import { SeederAmountDto } from "src/dtos/seeder/custom-seeder.dto";
 
 // user functionalities
 import { UserService } from "src/services/user/user.service";
@@ -37,19 +37,20 @@ import { UserSeeder } from "src/database/seeds/user-create.seed";
 // user entity
 import User from "../../entities/user/user.entity";
 
-// image upload pipe config
+// image upload and download
 import {
   bannerOptions,
   deleteFiles,
-  profileOptions,
+  profileOptions
 } from "src/middleware/imgUpload/imgUpload";
-
-// file upload library
-import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
-import { Request, Response } from "express";
-import { AccessTokenGuard } from "src/guards/accessToken.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { readdirSync, unlinkSync } from "fs";
+import { readdirSync } from "fs";
+
+// guards
+import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
+import { AccessTokenGuard } from "src/guards/accessToken.guard";
+import { SetDescriptionDto } from "src/dtos/user/description.dto";
+import { SetcolorDto } from "src/dtos/user/color.dto";
 
 /**
  * The user controller will act as the first entry point for user related api calls.
@@ -72,7 +73,7 @@ export class UsersController {
   }
 
   @UseGuards(AccessTokenGuard)
-  @Get("get-img/:imageType/:username")
+  @Get(UserRoutes.getPic)
   async getImg(
     @Param("imageType") imageType: string,
     @Param("username") username: string,
@@ -86,30 +87,44 @@ export class UsersController {
         throw new BadRequestException("Invalid image type");
       }
 
-      const dirname : string = `/app/upload/${imageType}/`;
-      let fullPath: string = dirname;
+      const dirname = `/app/upload/${imageType}/`;
+      let imgPath: string = dirname;
 
-      const files = readdirSync(dirname).filter(file => file.startsWith(`${intraId}.`));
-      if (!files)
-        fullPath += "standard.png"; // in case nothing has been uploaded, if it ever gets optional??
-      else
-        fullPath += files[0]; // always takes the first one since there should only be 1 (one) file per user
-      return res.sendFile(fullPath);
+      const files = readdirSync(dirname).filter((file) => {
+        return file.startsWith(`${intraId}.`);
+      });
+
+      if (files.length === 0) {
+        imgPath += "standard.png"; // in case nothing has been uploaded, if it ever gets optional?? it is 😡
+      } else {
+        imgPath += files[0]; // always takes the first one since there should only be 1 (one) file per user
+      }
+
+      // const imgAsBuffer = ""
+      // const imgBuffer = new Buffer(imgAsBuffer, 'base64');
+
+      /**
+       * Trying to send image as base 64 so it doesn't
+       * have to be handled on the front-end
+       */
+      return res.sendFile(imgPath);
     } catch (err) {
       throw err;
     }
   }
 
   @Get(UserRoutes.getUserOnName)
-  async findUsersById(@Res() res: Response, username: string) {
+  async findUsersById(@Param("username") username: string) {
     try {
       const user: User = await this.userService.findUserByUsername(username);
+
       return this.userService.filterUser(user);
     } catch (err) {
       throw err;
     }
   }
 
+  // TODO: set user must not update username if user is initialized
   @Post(UserRoutes.setUser)
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
@@ -123,7 +138,6 @@ export class UsersController {
 
       return this.userService.filterUser(setUserResp);
     } catch (err) {
-      console.log("controller, setUser(): ", err);
       throw err;
     }
   }
@@ -136,22 +150,39 @@ export class UsersController {
       const removeUserResp = await this.userService.removeUser(dto.username);
 
       return removeUserResp;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   }
 
   @Post(UserRoutes.enableTfa)
-  @UsePipes(ValidationPipe) //what does this do
+  @UsePipes(ValidationPipe)
   async turnon2fa(@Body() dto: SetTfaDto) {
-    // const isCodeValid = this.userService.isTwoFactorAuthenticationCodeValid(twoFaDto);
-    // if (!isCodeValid) {
-    //     throw new UnauthorizedException('Wrong authentication code');
-    // }
     try {
-      await this.userService.setTfaOption(dto.username, dto.option);
-    } catch (error) {
-      throw error;
+      await this.userService.setTfaOption(dto.uid);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  @Post(UserRoutes.updateDescription)
+  @UsePipes(ValidationPipe)
+  async updateDescription(@Body() dto: SetDescriptionDto) {
+    try {
+      await this.userService.setDescription(dto.username, dto.description);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  @Post(UserRoutes.updateColor)
+  @UsePipes(ValidationPipe)
+  async updateColor(@Body() dto: SetcolorDto) {
+	  console.log("color:",dto.color);
+    try {
+      await this.userService.setColor(dto.username, dto.color);
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -160,8 +191,9 @@ export class UsersController {
   @UseInterceptors(FileInterceptor("file", bannerOptions))
   async uploadBannerFile(
     @Req() req: Request,
-    @UploadedFile() file: Express.Multer.File) {
-    const path: string = '/app/upload/banner/';
+    @UploadedFile() file: Express.Multer.File
+  ) {
+    const path = "/app/upload/banner/";
     const id: string = req.user["intraID"];
 
     deleteFiles(path, id, file.filename);
@@ -174,24 +206,30 @@ export class UsersController {
   async uploadProfileFile(
     @Req() req: Request,
     @UploadedFile() file: Express.Multer.File
-    ) {
-    // remove left over files if any
-    const path: string = '/app/upload/profile/';
+  ) {
+    // Remove left over files
+    const path = "/app/upload/profile/";
     const id: string = req.user["intraID"];
 
     deleteFiles(path, id, file.filename);
     return HttpStatus.OK;
   }
 
-  @Get(UserRoutes.seed)
-  async seedUsers() {
-    const seed = new UserSeeder({ seedingSource: seederConfig });
-    await seed.run();
-  }
+  // @Get(UserRoutes.seed)
+  // async seedUsers() {
+  //   const seed = new UserSeeder({ seedingSource: seederConfig });
+  //   await seed.run();
+  // }
 
-  @Post(UserRoutes.seedAmount)
-  async seedUsersAmount(@Body() dto: SeederAmountDto) {
-    const seedResp = await this.userService.seedCustom(dto.amount);
-    return seedResp;
-  }
+  // @Post(UserRoutes.seedAmount)
+  // async seedUsersAmount(@Body() dto: SeederAmountDto) {
+  //   const seedResp = await this.userService.seedCustom(dto.amount);
+  //   return seedResp;
+  // }
+
+  // @Post(UserRoutes.seedFriendAmount)
+  // async seedOnFriendAmount(@Body() dto: SeederAmountDto) {
+  //   const seedResp = await this.userService.seedCustom(dto.amount);
+  //   return seedResp;
+  // }
 }

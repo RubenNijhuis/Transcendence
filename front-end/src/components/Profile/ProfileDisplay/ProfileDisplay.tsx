@@ -1,44 +1,65 @@
 // UI
 import Heading from "../../Heading";
 import Asset from "../../Asset";
+import Crown from "../../Crown";
 
-// Crowns
-import GoldCrown from "../../../assets/accesoires/gold-crown.svg";
-import SilverCrown from "../../../assets/accesoires/silver-crown.svg";
-import BronzeCrown from "../../../assets/accesoires/bronze-crown.svg";
+// Profile components
+import ProfileStats from "../ProfileStats";
+import ProfileActions from "../ProfileActions";
 
 // Styling
 import { Container } from "./ProfileDisplay.style";
 
 // Types
-import { ProfileType } from "../../../types/profile";
+import { Profile, Game } from "../../../types";
 
-interface Props {
-    user: ProfileType;
+// User
+import { useUser } from "../../../contexts/UserContext";
+
+////////////////////////////////////////////////////////////
+
+interface IProfileDisplay {
+    profile: Profile.Instance;
+    matchHistory: Game.MatchRecord[];
 }
 
-const RankDisplay = ({ rank }: { rank: number }): JSX.Element => {
-    let src: any = GoldCrown;
+const ProfileDisplay = ({
+    profile,
+    matchHistory
+}: IProfileDisplay): JSX.Element => {
+    const { banner_url, rank, img_url, username, description } = profile;
 
-    if (rank === 1) src = GoldCrown;
-    else if (rank === 2) src = SilverCrown;
-    else if (rank === 3) src = BronzeCrown;
+    ////////////////////////////////////////////////////////////
 
-    return <img src={src} alt="crown" className="crown" />;
-};
+    const { user } = useUser();
+    const isUser = user.uid === profile.uid;
 
-const ProfileDisplay = ({ user }: Props): JSX.Element => {
+    ////////////////////////////////////////////////////////////
+
     return (
         <Container>
-            <div className="banner">
-                <Asset url={user.banner_url} alt="banner" />
+            <div className="banner__container">
+                <Asset url={banner_url} alt="banner" className="banner" />
+
+                <div className="profile">
+                    {rank < 4 && <Crown rank={rank} />}
+                    <Asset url={img_url} alt="profile" className="img" />
+                    <Heading type={4}>{username}</Heading>
+                </div>
             </div>
-            <div className="profile">
-                {user.rank < 4 && <RankDisplay rank={user.rank} />}
-                <Asset url={user.img_url} alt="profile" />
-                <Heading type={4}>{user.username}</Heading>
+
+            <ProfileStats player={profile} matches={matchHistory} />
+
+            <div className="description">
+                <Heading type={3}>About {username}</Heading>
+                <p>{description}</p>
             </div>
+
+            {!isUser && <ProfileActions profile={profile} />}
         </Container>
     );
 };
+
+////////////////////////////////////////////////////////////
+
 export default ProfileDisplay;

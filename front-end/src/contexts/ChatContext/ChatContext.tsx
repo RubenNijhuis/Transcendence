@@ -1,141 +1,100 @@
 // React stuffs
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-// Types
-import { GroupChat, Message } from "../../types/chat";
-import { ProfileID, ProfileType } from "../../types/profile";
+// User context
+import { useUser } from "../UserContext";
 
-// Get user
-import { useAuth } from "../AuthContext";
+// Types
+import { Chat } from "../../types";
 
 // Generators DEBUG
+import { generateGroupChats } from "../FakeDataContext/fakeDataGenerators";
+
+// Business logic
 import {
-    generateGroupChats,
-    generateProfile
-} from "../FakeDataContext/fakeDataGenerators";
+    bindMembersToMessages,
+    categorizeChats,
+    getFirstDM,
+    getMembersFromGroupChats,
+    getMessagesFromGroupChats
+} from "./ChatContext.bl";
+
+// Debug data
+import { useFakeData } from "../FakeDataContext";
+
+///////////////////////////////////////////////////////////
 
 interface ChatContextType {
-    activeChatID: number;
-    setActiveChatID: React.Dispatch<React.SetStateAction<number>>;
+    activeChat: Chat.Group.Instance;
+    setActiveChat: React.Dispatch<React.SetStateAction<Chat.Group.Instance>>;
 
-    allChats: GroupChat[];
+    directChats: Chat.Group.Instance[];
+    groupChats: Chat.Group.Instance[];
 }
 
 const ChatContext = createContext<ChatContextType>(null!);
+
 const useChat = () => useContext(ChatContext);
 
-const ChatProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
-    const [activeChatID, setActiveChatID] = useState<number>(0);
-    const [allChats, setAllChats] = useState<GroupChat[]>(null!);
+///////////////////////////////////////////////////////////
+
+interface IChatProvider {
+    children: React.ReactNode;
+}
+
+const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
+    const [activeChat, setActiveChat] = useState<Chat.Group.Instance>(null!);
+
+    const [directChats, setDirectChats] = useState<Chat.Group.Instance[]>(
+        null!
+    );
+    const [groupChats, setGroupChats] = useState<Chat.Group.Instance[]>(null!);
 
     ////////////////////////////////////////////////////////////
 
-    const { user } = useAuth();
+    const { user } = useUser();
 
-    ////////////////////////////////////////////////////////////
-
-    const getMembersFromGroupChats = (chats: GroupChat[]): ProfileType[][] => {
-        let members: ProfileType[][] = [];
-
-        for (const chat of chats) {
-            members.push(chat.members);
-        }
-
-        return members;
-    };
-
-    const getMessagesFromGroupChats = (chats: GroupChat[]): Message[][] => {
-        let messages: Message[][] = [];
-
-        for (const chat of chats) {
-            messages.push(chat.messages);
-        }
-
-        return messages;
-    };
-
-    const findMemberByProfileID = (
-        uid: ProfileID,
-        members: ProfileType[]
-    ): ProfileType => {
-        // WHY TYPESCRIPT
-        let profile: ProfileType = {
-            uid: 0,
-            username: "",
-            img_url: "",
-            banner_url: "",
-            color: "",
-            rank: 0,
-            wins: 0,
-            losses: 0,
-            friends: [],
-            blocked: []
-        };
-
-        for (const member of members) {
-            if (member.uid === uid) {
-                profile = member;
-                return profile;
-            }
-        }
-
-        return profile;
-    };
-
-    const bindMembersToMessages = (
-        members: ProfileType[][],
-        totalMessages: Message[][]
-    ): void => {
-        for (let i = 0; i < totalMessages.length; i++) {
-            const messageList = totalMessages[i];
-
-            for (let j = 0; j < messageList.length; j++) {
-                const message = messageList[j];
-                const { senderID } = message;
-
-                message.sender = findMemberByProfileID(senderID, members[i]);
-            }
-        }
-    };
+    // TODO: remove because it is debug
+    const { profiles } = useFakeData();
 
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
-        if (!user) return;
+        if (!user || !profiles) return;
 
         const chatAggregator = async () => {
-            // TODO: Get from api
-            const tempProfiles: ProfileType[] = generateProfile(30);
-            const retrievedGroupChats: GroupChat[] = generateGroupChats(
-                user,
-                10,
-                [1, 4],
-                tempProfiles
-            );
+            // TODO: Get from api //////////////////////////////////////
+            const retrievedGroupChats: Chat.Group.Instance[] =
+                generateGroupChats(user, 10, [1, 4], profiles);
+            ////////////////////////////////////////////////////////////
 
-            const members: ProfileType[][] =
-                getMembersFromGroupChats(retrievedGroupChats);
-            const messages: Message[][] =
-                getMessagesFromGroupChats(retrievedGroupChats);
-
+            const members = getMembersFromGroupChats(retrievedGroupChats);
+            const messages = getMessagesFromGroupChats(retrievedGroupChats);
             bindMembersToMessages(members, messages);
-            setAllChats(retrievedGroupChats);
 
-            for (let i = 0; i < retrievedGroupChats.length; i++) {
-                retrievedGroupChats[i].internal_id = i;
-            }
-            
-            setActiveChatID(0);
+            const [categorizedDirectChats, categorizedGroupChats] =
+                categorizeChats(retrievedGroupChats);
+            setDirectChats(categorizedDirectChats);
+            setGroupChats(categorizedGroupChats);
+
+            const firstDM = getFirstDM(retrievedGroupChats);
+
+            firstDM === null
+                ? setActiveChat(retrievedGroupChats[0])
+                : setActiveChat(firstDM);
         };
+
         chatAggregator();
-    }, [user]);
+    }, [user, profiles]);
 
     ////////////////////////////////////////////////////////////
 
     const value: ChatContextType = {
-        activeChatID,
-        setActiveChatID,
-        allChats
+        activeChat,
+        setActiveChat,
+
+        directChats,
+        groupChats
     };
 
     ////////////////////////////////////////////////////////////
@@ -144,6 +103,8 @@ const ChatProvider = ({ children }: { children: React.ReactNode }): JSX.Element 
         <ChatContext.Provider value={value}>{children}</ChatContext.Provider>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export { useChat };
 export default ChatProvider;

@@ -3,7 +3,7 @@ import { StyledButton } from "./Button.style";
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
+interface IButton {
     theme?: string;
     className?: string;
     children: React.ReactNode;
@@ -15,7 +15,7 @@ const Button = ({
     children,
     className,
     onClick
-}: Props): JSX.Element => {
+}: IButton): JSX.Element => {
     let fullClassName = "button";
 
     ////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   frontend:
@@ -24,7 +24,9 @@ services:
       - ./back-end:/app
       - /app/node_modules/bcrypt/
     ports:
-      - "3000:3000"
+      - "3000:3000" # Main API
+      - "3001:3001" # Game Socket
+      - "3002:3002" # Chat Socket
     depends_on:
       - database
 
@@ -58,8 +60,8 @@ services:
     image: dpage/pgadmin4
     restart: always
     volumes:
-       - ./pgadmin/servers.json:/pgadmin4/servers.json
-       - ./pgadmin/pgpass:/pgpass
+      - ./pgadmin/servers.json:/pgadmin4/servers.json
+      - ./pgadmin/pgpass:/pgpass
     env_file:
       - ./back-end/env/.env
     ports:

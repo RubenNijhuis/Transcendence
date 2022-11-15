@@ -55,6 +55,7 @@ export class AuthController {
     return redirectUrl;
   }
 
+  // TODO: checking if the user should be created needs to be a seperate function
   /**
    * Takes a third party authentication token that can be
    * used to setup an account
@@ -67,6 +68,7 @@ export class AuthController {
       const returnedPayload: LoginConfirmPayload = {
         shouldCreateUser: false,
         profile: null,
+        TWOfaEnabled: false,
         authToken: {
           accessToken: null,
           refreshToken: null
@@ -94,25 +96,37 @@ export class AuthController {
         const hash = createHash("sha256")
           .update(tokens.refreshToken)
           .digest("hex");
-        // TODO: should be party of a custom library. angi: what do you mean???
+        // TODO: add this to some kind of encryption service
         const saltorounds: string =
           this.configService.get<string>("SALT_OR_ROUNDS");
         const numsalt: number = +saltorounds;
         const encrypted_token = await bcrypt.hash(hash, numsalt);
+
         await this.userService.createUser(intraID, encrypted_token);
 
         returnedPayload.shouldCreateUser = true;
       }
 
-      if (user && user.isInitialized) {
-        const intraIDDto = { intraID };
-        await this.userService.setRefreshToken(intraIDDto, tokens.refreshToken);
-        returnedPayload.profile = this.userService.filterUser(user);
+      if (user) {
+        if (!user.isInitialized) returnedPayload.shouldCreateUser = true;
+
+        if (user.isInitialized) {
+          if (user.isTfaEnabled === true) returnedPayload.TWOfaEnabled = true;
+
+          const intraIDDto = { intraID };
+
+          await this.userService.setRefreshToken(
+            intraIDDto,
+            tokens.refreshToken
+          );
+
+          returnedPayload.profile = this.userService.filterUser(user);
+        }
       }
 
       return returnedPayload;
-    } catch (err: any) {
-      console.log(err);
+    } catch (err) {
+      console.error(err);
       throw err;
     }
   }
@@ -129,17 +143,6 @@ export class AuthController {
     const refreshTokenRes = await this.authService.refreshTokens(refreshToken);
 
     return refreshTokenRes;
-  }
-
-  @UseGuards(RefreshTokenGuard)
-  @Get("createRefresh")
-  async createNewRefreshTokens(@Req() req: Request) {
-    const refreshToken = req.user["refreshToken"];
-    const newTokenResp = await this.authService.createNewRefreshTokens(
-      refreshToken
-    );
-
-    return newTokenResp;
   }
 
   // TODO: this should be in the user controller

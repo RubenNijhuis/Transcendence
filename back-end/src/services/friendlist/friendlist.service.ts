@@ -1,53 +1,81 @@
+// Nestjs
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { FriendList } from "src/entities";
-import { CreateFriensdDto } from "../../dtos/friendlist/create-friend.dto";
+
+// DB
+import { DeleteResult, Repository } from "typeorm";
+
+// Types
+import { FriendList, FriendRequest } from "src/entities";
+
+// Dtos
+import { CreateFriendsDto } from "../../dtos/friendlist/create-friend.dto";
+import { UserService } from "../user/user.service";
+
+////////////////////////////////////////////////////////////
 
 @Injectable()
 export class FriendlistService {
+  inject: [UserService]
   constructor(
     @InjectRepository(FriendList)
-    private readonly friendlistRepository: Repository<FriendList>
+    private readonly friendlistRepository: Repository<FriendList>,
+    private readonly userService: UserService
   ) {}
 
-  async getFriends(username: string): Promise<FriendList[]> {
-    const friends = await this.friendlistRepository
-      .createQueryBuilder("friend_list")
-      .where("users = :username", { username })
-      .getMany();
-    return friends;
+  private async filterOutput(username: string, friends: FriendList[]) {
+    const filteredFriends = [];
+
+    for (const friend of friends) {
+      let name = friend.friendname;
+
+      if (name === username)
+        name = friend.username;
+      filteredFriends.push(name);
+    }
+    const ret = await this.userService.getUsersOnUsernames(filteredFriends);
+    return ret;
   }
 
-  async getFriend(username: string, friendname: string): Promise<FriendList> {
-    const friend = await this.friendlistRepository
+  async getFriends(username: string) {
+    const friends: FriendList[] = await this.friendlistRepository
       .createQueryBuilder("friend_list")
-      .where("users = :username", { username })
-      .andWhere("friends = :friendname", { friendname })
-      .getOne();
-    return friend;
+      .where("username = :username OR friendname = :username", { username })
+      .getMany();
+
+    return await this.filterOutput(username, friends);
   }
 
   async isFriend(username: string, friendname: string): Promise<boolean> {
-    return (
-      !((await this.getFriend(username, friendname)) === null) ||
-      !((await this.getFriend(friendname, username)) === null)
-    );
+    let ret: boolean = false;
+
+    const friend: FriendList = await this.friendlistRepository
+      .createQueryBuilder("friend_list")
+      .where("username = :username OR friendname = :username", { username })
+      .andWhere("friendname = :friendname OR username = :friendname", { friendname })
+      .getOne();
+    
+    if (friend)
+      ret = true;
+    return ret;
   }
 
-  async addFriend(createfriendsDto: CreateFriensdDto) {
-    const newEntry = this.friendlistRepository.create(createfriendsDto);
+  async addFriend(createfriendsDto: CreateFriendsDto): Promise<FriendList> {
+    const newEntry: FriendList = this.friendlistRepository.create(createfriendsDto);
+    const saveResponse: FriendList = await this.friendlistRepository.save(newEntry);
 
-    return this.friendlistRepository.save(newEntry);
+    return saveResponse;
   }
 
-  async removeFriend(username: string, friendname: string) {
-    return this.friendlistRepository
+  async removeFriend(username: string, friendname: string): Promise<DeleteResult> {
+    const removeFriendResponse: DeleteResult = await this.friendlistRepository
       .createQueryBuilder("friend_list")
       .delete()
       .from("friend_list")
-      .where("users = :username", { username })
-      .andWhere("friends = :friendname", { friendname })
+      .where("username = :username AND friendname = :friendname", { username, friendname })
+      .orWhere("username = :friendname AND friendname = :username", { friendname, username })
       .execute();
+
+    return removeFriendResponse;
   }
 }

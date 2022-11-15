@@ -1,60 +1,74 @@
+// React
+import { useEffect, useState } from "react";
+
 // Types
-import { GroupChat } from "../../../types/chat";
+import { Chat, SocketType } from "../../../types";
 
 // UI
 import ChatElement from "../../../components/ChatElements";
 import ChatInput from "../Input";
 import Heading from "../../../components/Heading";
+import Asset from "../../../components/Asset";
+import Button from "../../../components/Button";
 
 // Styling
-import { Container } from "./Box.style";
+import { Container, PasswordLayer } from "./Box.style";
 
-// Auth
-import { useAuth } from "../../../contexts/AuthContext";
-import { ProfileType } from "../../../types/profile";
-import Asset from "../../../components/Asset";
+// Types
+import { Profile } from "../../../types";
+
+// User
+import { useUser } from "../../../contexts/UserContext";
+
+// Socket
+import SocketRoutes from "../../../config/SocketRoutes";
+import { useSocket } from "../../../contexts/SocketContext";
+
+// Form hooks
+import { useFormInput } from "../../../components/Form/hooks";
+
+// Proxies
+import { verifyPassword } from "../../../proxies/chat";
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
-    chat: GroupChat;
+interface IChatTitle {
+    chat: Chat.Group.Instance;
+    isDmChat: boolean;
 }
 
-const ChatTitle = ({ chat }: Props): JSX.Element => {
+const ChatTitle = ({ chat, isDmChat }: IChatTitle): JSX.Element => {
+    const { user } = useUser();
+
+    ////////////////////////////////////////////////////////////
+
     /**
      * If the the amount of members is 2 it means it a DM
      * Therefore we can change the interface from 'Chat' to 'other user name'
      */
-    const { user } = useAuth();
-    const isDmChat: boolean = chat.members.length === 2;
-    const otherMember: ProfileType = chat.members
-        .filter((member) => member.uid !== user.uid)
-        .shift() as ProfileType;
+    const otherMember: Profile.Instance = chat.members
+        .filter((member: Profile.Instance) => member.uid !== user.uid)
+        .shift() as Profile.Instance;
+
+    const chatTitle: string = (
+        isDmChat ? otherMember.username : chat.name
+    ) as string;
+
+    ////////////////////////////////////////////////////////////
 
     return (
-        <div className="title">
+        <div className="chat-title">
             {isDmChat && (
                 <Asset
                     alt={`${otherMember.username} profile`}
                     url={otherMember.img_url}
                 />
             )}
-            <Heading type={3}>
-                {isDmChat ? `${otherMember.username}` : `Chat`}
-            </Heading>
+            <Heading type={3}>{chatTitle}</Heading>
         </div>
     );
 };
 
-<<<<<<< Updated upstream
-const ChatBox = ({ chat }: Props): JSX.Element => {
-    const { user } = useAuth();
-
-    return (
-        <Container>
-            <ChatTitle chat={chat} />
-
-=======
 interface IPasswordInput {
     setIsProtected: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -166,20 +180,26 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
         <Container>
             <ChatTitle chat={chat} isDmChat={isDmChat} />
             <Button onClick={sendMessage}>Send standard message</Button>
->>>>>>> Stashed changes
             <div className="chat-content">
-                {chat.messages.map((message, count) => (
-                    <ChatElement
-                        key={count}
-                        message={message}
-                        isDm={chat.members.length === 2}
-                        fromUser={message.sender?.username === user.username}
-                    />
-                ))}
+                {!isProtected &&
+                    isUnlocked &&
+                    chat.messages.map((message, count) => (
+                        <ChatElement
+                            key={count}
+                            message={message}
+                            isDm={isDmChat}
+                            fromUser={message.sender.uid === user.uid}
+                        />
+                    ))}
+                {!isUnlocked && (
+                    <PasswordInput setIsProtected={setIsProtected} />
+                )}
             </div>
-            <ChatInput user={user!} groupchat={chat} />
+            <ChatInput user={user} groupchat={chat} />
         </Container>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export default ChatBox;

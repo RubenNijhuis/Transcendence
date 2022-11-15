@@ -5,74 +5,88 @@ import {
     magicNum,
     mainColor,
     mediumRadius,
+    secondaryColor,
     smallRadius
 } from "../../../styles/StylingConstants";
 
 const Container = styled.div`
-    background-color: ${mainColor};
-    padding: calc(${magicNum} / 2);
-    padding-bottom: 0;
-    border-radius: ${largeRadius};
     position: relative;
+
+    padding: calc(${magicNum} / 2);
+    margin-bottom: calc(${magicNum} / 2);
+
+    border-radius: ${largeRadius};
+    background-color: ${mainColor};
 
     .banner {
         width: 100%;
+        height: 100%;
         aspect-ratio: 9/4;
 
-        .asset {
-            img {
-                transition: filter 0.35s ease-in-out;
-                filter: blur(8px);
-            }
-            background-color: ${lightTextColor};
-            border-radius: ${mediumRadius};
-            overflow: hidden;
-            width: 100%;
-            height: 100%;
-        }
+        background-color: ${lightTextColor};
+        border-radius: ${mediumRadius};
+        overflow: hidden;
 
-        &:hover {
-            .asset img {
-                filter: blur(0px);
-            }
+        &__container {
+            position: relative;
         }
     }
 
     .profile {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
         position: absolute;
         left: 50%;
         top: 50%;
-        transform: translate(-50%, -50%);
+
         width: fit-content;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        transform: translate(-50%, -50%);
 
         .crown {
             width: calc(${magicNum} * 1.5);
         }
 
-        .asset {
-            aspect-ratio: 1/1;
+        .img {
             width: calc(${magicNum} * 2);
             height: calc(${magicNum} * 2);
-            border-radius: ${smallRadius};
+            aspect-ratio: 1/1;
 
-            border-radius: ${smallRadius};
+            box-shadow: 0px 0px 35px 15px rgba(0, 0, 0, 0.35);
+            margin-bottom: calc(${magicNum} / 8);
+
+            border-radius: ${mediumRadius};
+            border: solid 6px ${secondaryColor};
+
+            background-color: ${secondaryColor};
             overflow: hidden;
 
-            margin-bottom: calc(${magicNum} / 8);
-            background-color: ${mainColor};
-
-            border: solid 6px #9d653d;
+            img {
+                border-radius: inherit;
+            }
         }
 
         .heading {
             margin-bottom: 0;
-            text-align: center;
             color: ${lightTextColor};
 
+            text-align: center;
             text-shadow: 0px 0px 4px #000000;
+        }
+    }
+
+    .description {
+        color: ${lightTextColor};
+        max-width: calc(${magicNum} * 8);
+        margin: auto;
+        margin-bottom: calc(${magicNum});
+
+        text-align: center;
+
+        .heading {
+            color: ${lightTextColor};
         }
     }
 `;

@@ -1,10 +1,10 @@
 // Random img
 import { get_img_url } from "./utils";
 // Random int
-import randomNum from "../../../utils/randomNum";
+import randomNum from "../../../utils/numbers/randomIntFromRange";
 
 // Types
-import { ProfileType } from "../../../types/profile";
+import { Profile } from "../../../types";
 
 const names = [
     "RelaxZest",
@@ -69,18 +69,16 @@ const names = [
     "Toughpetr"
 ];
 
-const generateProfile = (amount: number): ProfileType[] => {
-    const profileList: ProfileType[] = [];
+const generateProfile = (amount: number): Profile.Instance[] => {
+    const profileList: Profile.Instance[] = [];
 
     for (let i = 0; i < amount; i++) {
-        const username: string =
-            names[randomNum(0, names.length - 1)];
+        const username: string = names[randomNum(0, names.length - 1)];
         const rank: number = i + 1;
 
         const color: string = "#1e1e1e";
 
-        const randomWidth: number =
-            Math.ceil(randomNum(100, 1000) / 100) * 100;
+        const randomWidth: number = Math.ceil(randomNum(100, 1000) / 100) * 100;
         const randomHeight: number =
             Math.ceil(randomNum(100, 1000) / 100) * 100;
 
@@ -98,17 +96,16 @@ const generateProfile = (amount: number): ProfileType[] => {
         const wins: number = randomNum(1, 100);
         const losses: number = randomNum(1, 100);
 
-        const newProfile: ProfileType = {
+        const newProfile: Profile.Instance = {
             username,
+            description: "Lorem ipsum sit dolor amet",
             banner_url,
             color,
             rank,
-            uid: i + 1,
+            uid: (i + 1).toString(),
             img_url,
             wins,
-            losses,
-            friends: [],
-            blocked: []
+            losses
         };
 
         profileList.push(newProfile);
@@ -116,5 +113,7 @@ const generateProfile = (amount: number): ProfileType[] => {
 
     return profileList;
 };
+
+///////////////////////////////////////////////////////////
 
 export { generateProfile };

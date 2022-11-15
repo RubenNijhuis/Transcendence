@@ -11,24 +11,30 @@ import FakeDataProvider from "./contexts/FakeDataContext";
 import AuthProvider from "./contexts/AuthContext";
 import ModalProvider from "./contexts/ModalContext";
 import ChatProvider from "./contexts/ChatContext";
+import UserProvider from "./contexts/UserContext";
+import SocketProvider from "./contexts/SocketContext";
 
 const App = (): JSX.Element => {
     return (
-        <AuthProvider>
-            {/* TODO: wrapper for providers? */}
-            <ModalProvider>
-                {/* TODO: remove data debug provider */}
-                <FakeDataProvider>
-                    <ChatProvider>
-                        {/* Global Styling */}
-                        <GlobalStyle />
+        <UserProvider>
+            <FakeDataProvider>
+                <AuthProvider>
+                    <SocketProvider>
+                        {/* TODO: wrapper for providers? */}
+                        <ModalProvider>
+                            {/* TODO: remove data debug provider */}
+                            <ChatProvider>
+                                {/* Global Styling */}
+                                <GlobalStyle />
 
-                        {/* Page routing */}
-                        <Router />
-                    </ChatProvider>
-                </FakeDataProvider>
-            </ModalProvider>
-        </AuthProvider>
+                                {/* Page routing */}
+                                <Router />
+                            </ChatProvider>
+                        </ModalProvider>
+                    </SocketProvider>
+                </AuthProvider>
+            </FakeDataProvider>
+        </UserProvider>
     );
 };
 export default App;

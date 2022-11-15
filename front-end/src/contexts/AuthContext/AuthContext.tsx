@@ -1,33 +1,33 @@
 // React stuff
 import { createContext, useContext, useEffect, useState } from "react";
 
-// API
-import loginConfirm from "../../proxies/auth/confirmLogin";
-import getUserByAccessToken from "../../proxies/user/getUserByAccessToken";
-import addImagesToProfile from "../../proxies/user/addImagesToProfile";
-
-import { refreshAuthToken } from "../../proxies/auth/refreshToken";
-import { setDefaultAuthHeader } from "../../proxies/instances/apiInstance";
-
-// Routing
-import PageRoutes from "../../config/PageRoutes";
-
 // Store
-import { getItem, removeItem, setItem } from "../../modules/Store";
+import { getItem, setItem } from "../../modules/Store";
 import StoreId from "../../config/StoreId";
 
 // Types
-import { ProfileType } from "../../types/profile";
+import { Request } from "../../types";
+
+// User
+import { useUser } from "../UserContext";
+
+// Business logic
+import { redirectToHome, signIn, signOut } from "./AuthContext.bl";
+
+// Proxies
+import { checkTokenValidity } from "../../proxies/auth";
+
+///////////////////////////////////////////////////////////
 
 interface AuthContextType {
-    user: ProfileType;
-    setUser: React.Dispatch<React.SetStateAction<ProfileType>>;
-
     isLoggedIn: boolean;
     setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 
-    signIn(code: string): Promise<boolean>;
-    signOut(): any;
+    tfaEnabled: boolean;
+    setTfaEnabled: React.Dispatch<React.SetStateAction<boolean>>;
+
+    signIn(code: string): Promise<Request.Response.ConfirmLogin>;
+    signOut(): void;
 }
 
 // Create the context
@@ -36,120 +36,83 @@ const AuthContext = createContext<AuthContextType>(null!);
 // Shorthand to use auth as a hook
 const useAuth = () => useContext(AuthContext);
 
+///////////////////////////////////////////////////////////
+
+interface IAuthProvider {
+    children: React.ReactNode;
+}
+
 /**
  * The authprovider creates a "bucket" in which we can store all
  * the user data as well as the utility functions like login and logout
  */
-const AuthProvider = ({
-    children
-}: {
-    children: React.ReactNode;
-}): JSX.Element => {
-    const [user, setUser] = useState<ProfileType>(null!);
+const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
+    const [tfaEnabled, setTfaEnabled] = useState<boolean>(false);
+
+    ////////////////////////////////////////////////////////////
+
+    const { user, setUser } = useUser();
 
     ////////////////////////////////////////////////////////////
 
     /**
-     * Makes a request to the back-end using the third party provided
-     * code. The expected return value is a user as well as a bool
-     * indicating whether to create a user or not.
+     * The authentication state will update
+     * when a user object exists. Here we
+     * set the site settings to logged in.
+     *
+     * And check for 2fa
      */
-    const signIn = async (code: string): Promise<boolean> => {
-        try {
-            const { authToken, profile, shouldCreateUser } = await loginConfirm(
-                code
-            );
-
-            // Destructuring the return value
-            const { accessToken, refreshToken } = authToken;
-
-            // Reset the store and update the API instance
-            setItem(StoreId.accessToken, accessToken);
-            setItem(StoreId.refreshToken, refreshToken);
-            setDefaultAuthHeader(accessToken);
-
-            if (profile !== null) {
-                const returnedUserProfile = await addImagesToProfile(profile);
-                setUser(returnedUserProfile);
-                setLoggedIn(true);
-            }
-
-            return Promise.resolve(shouldCreateUser);
-        } catch (err) {
-            console.log(err);
-            return Promise.reject(err);
-        }
-    };
-
-    /**
-     * Signs the user off, removing auth tokens and
-     * redirecting to the home page
-     */
-    const signOut = (): void => {
-        removeItem(StoreId.accessToken);
-        removeItem(StoreId.refreshToken);
-        redirectToHome();
-    };
-
-    const redirectToHome = (): void => {
-        if (window.location.pathname !== PageRoutes.home) {
-            window.location.assign(PageRoutes.home);
-        }
-    };
-
-    ////////////////////////////////////////////////////////////
-
-    /**
-     * Checks if there is still an auth token in the store.
-     * If there is still one we check it's validity and change
-     * the auth state accordingly.
-     * If the refresh token is also expired we ask the user
-     * to manually log in
-     */
-    // TODO: sign in function and this use effect share a lot of code - reduce duplication
     useEffect(() => {
-        const setToken = async () => {
-            const storeRefreshToken = getItem<string>(StoreId.refreshToken);
+        if (!user) return;
 
-            if (storeRefreshToken !== null) {
-                try {
-                    // Reset for login process
-                    setItem(StoreId.loginProcess, false);
+        setLoggedIn(true);
+        setItem(StoreId.loginProcess, false);
 
-                    const { accessToken, refreshToken } =
-                        await refreshAuthToken(storeRefreshToken);
+        if (user?.isTfaEnabled) {
+            setTfaEnabled(user.isTfaEnabled);
+        }
+    }, [user]);
 
-                    // Reset tokens and API instance
-                    setItem(StoreId.accessToken, accessToken);
-                    setItem(StoreId.refreshToken, refreshToken);
-                    setDefaultAuthHeader(accessToken);
-
-                    if (user === null) {
-                        const userFromToken = await getUserByAccessToken(
-                            accessToken
-                        );
-
-                        setUser(userFromToken);
-                    }
-
-                    setLoggedIn(true);
-                } catch (err) {
-                    console.error(err);
-                }
+    /**
+     * Here we check the auth token status.
+     */
+    useEffect(() => {
+        const checkAuthTokenStatus = async () => {
+            /**
+             * If we are still in the login process we don't
+             * have to check token status/validity
+             */
+            const isInLoginProcess = getItem<boolean>(StoreId.loginProcess);
+            if (isInLoginProcess) return;
+            /**
+             * If the refresh token doesn't exist we redirect
+             * the user to a page where they cal log in
+             */
+            const refreshToken = getItem<string>(StoreId.refreshToken);
+            if (refreshToken === null) {
+                redirectToHome();
+                return;
+            }
+            try {
+                const { profile } = await checkTokenValidity(refreshToken);
+                setLoggedIn(true);
+                setUser(profile);
+            } catch (err) {
+                redirectToHome();
             }
         };
-        setToken();
-    });
+        checkAuthTokenStatus();
+    }, []);
 
     ////////////////////////////////////////////////////////////
 
     const value: AuthContextType = {
-        user,
-        setUser,
-
         signIn,
         signOut,
+
+        tfaEnabled,
+        setTfaEnabled,
 
         isLoggedIn,
         setLoggedIn
@@ -161,6 +124,8 @@ const AuthProvider = ({
         <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
     );
 };
+
+///////////////////////////////////////////////////////////
 
 export { useAuth };
 export default AuthProvider;

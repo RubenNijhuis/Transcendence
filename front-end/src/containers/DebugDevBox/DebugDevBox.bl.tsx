@@ -1,13 +1,14 @@
 // Store
 import StoreId from "../../config/StoreId";
-import { clearAll, getItem, setItem } from "../../modules/Store";
+import { clearAll, getItem } from "../../modules/Store";
 
 // Auth
-import { refreshAuthToken } from "../../proxies/auth/refreshToken";
-import { setDefaultAuthHeader } from "../../proxies/instances/apiInstance";
+import { refreshAuthToken } from "../../proxies/auth/tokens/refreshAuthToken";
+import { API } from "../../proxies/instances/apiInstance";
+import { updateAuthTokens } from "../../proxies/utils";
 
 // Types
-import { ProfileType } from "../../types/profile";
+import { Profile } from "../../types";
 
 ////////////////////////////////////////////////////////////
 
@@ -15,7 +16,19 @@ const handleClearStorage = (): void => clearAll();
 
 const fillDBwithUsers = (): void => {};
 
-const fillDBwithChats = (user: ProfileType): void => {};
+const fillDBwithChats = (user: Profile.Instance): void => {};
+
+const makeFriends = async (user: Profile.Instance) => {
+    try {
+        const makeFriendResp = await API.post("/seeder/amount", {
+            amount: 10
+        });
+
+        console.log(makeFriendResp);
+    } catch (err) {
+        console.error(err);
+    }
+};
 
 const handleTokenRefresh = async () => {
     const storeRefreshToken = getItem<string>(StoreId.refreshToken);
@@ -32,20 +45,18 @@ const handleTokenRefresh = async () => {
     try {
         const newTokens = await refreshAuthToken(storeRefreshToken);
 
-        const { accessToken, refreshToken } = newTokens;
-
-        // Reset tokens and API instance
-        setItem(StoreId.accessToken, accessToken);
-        setItem(StoreId.refreshToken, refreshToken);
-        setDefaultAuthHeader(accessToken);
+        updateAuthTokens(newTokens);
     } catch (err) {
-        console.log(err);
+        console.error(err);
     }
 };
+
+///////////////////////////////////////////////////////////
 
 export {
     handleClearStorage,
     fillDBwithChats,
     fillDBwithUsers,
-    handleTokenRefresh
+    handleTokenRefresh,
+    makeFriends
 };

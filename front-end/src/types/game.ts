@@ -1,20 +1,49 @@
-import { ProfileID, ProfileType } from "./profile";
+import Profile from "./profile";
 
-// How we define match data
-interface MatchRecord {
-    opponent: ProfileType;
-    player: ProfileType;
-    score: {
-        opponent: number;
-        self: number;
+///////////////////////////////////////////////////////////
+
+namespace Game {
+    export type MatchRecordID = string;
+
+    export type Position = {
+        posX: number;
+        posY: number;
     };
+
+    export enum ScoreType {
+        Friendly,
+        Ranked
+    }
+
+    export enum GameType {
+        Classic,
+        Powered
+    }
+
+    export interface ELO {
+        player1: number;
+        player2: number;
+    }
+
+    export interface Score {
+        player1: number;
+        player2: number;
+    }
+
+    export interface MatchRecord {
+        uid: MatchRecordID;
+
+        player1: Profile.Instance;
+        player2: Profile.Instance;
+
+        scoreType: ScoreType;
+        gameType: GameType;
+
+        elo: ELO;
+        score: Score;
+    }
 }
 
-// Game types
-const enum GameType {
-    Classic,
-    Powered
-}
+///////////////////////////////////////////////////////////
 
-export type { MatchRecord };
-export { GameType };
+export default Game;

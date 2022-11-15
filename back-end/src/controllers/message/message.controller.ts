@@ -23,7 +23,7 @@ export class MessageController {
   }
 
   @Get("id/group_id?")
-  async getAllMessagesByGroupId(@Query("group_id") group_id) {
+  async getAllMessagesByGroupId(@Query("group_id") group_id: number) {
     const ret = await this.messageService.getAllMessagesByGroupId(group_id);
     return ret;
   }

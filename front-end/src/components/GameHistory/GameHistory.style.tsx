@@ -1,25 +1,23 @@
 import styled from "styled-components";
 import {
     darkTextColor,
+    largeRadius,
     lightTextColor,
     magicNum,
+    mainColor,
+    mediumRadius,
     smallRadius
 } from "../../styles/StylingConstants";
 
+///////////////////////////////////////////////////////////
+
 const Container = styled.div`
-    border-radius: ${smallRadius};
-    padding: calc(${magicNum} / 2);
-
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: ${magicNum};
-
     .heading {
         color: ${lightTextColor};
     }
 `;
 
-const MatchList = styled.div`
+const MatchListContainer = styled.div`
     display: flex;
 
     border-radius: ${smallRadius};
@@ -80,4 +78,6 @@ const ScoreBoard = styled.div`
     }
 `;
 
-export { Container, MatchList, Match, OpponentProfile, ScoreBoard };
+///////////////////////////////////////////////////////////
+
+export { Container, MatchListContainer, Match, OpponentProfile, ScoreBoard };

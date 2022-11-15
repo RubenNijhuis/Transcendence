@@ -1,23 +1,41 @@
 // Api config
 import ApiRoutes from "../../config/ApiRoutes";
-import { API } from "../instances/apiInstance";
+import { API, apiRequestConfig} from "../instances/apiInstance";
+
+import { addImagesToProfile } from "../profile/addImagesToProfile";
 
 // Types
-import { ProfileType } from "../../types/profile";
-import addImagesToProfile from "./addImagesToProfile";
+import { Profile } from "../../types";
 
+////////////////////////////////////////////////////////////
+
+/**
+ * Retrieves a user based on their auth token
+ * @param accessToken
+ * @returns
+ */
 const getUserByAccessToken = async (
     accessToken: string
-): Promise<ProfileType> => {
+): Promise<Profile.Instance> => {
     try {
-        const { data } = await API.get(ApiRoutes.getUserByAccessToken(), {
+        const route = ApiRoutes.getUserByAccessToken();
+        const config: apiRequestConfig= {
             headers: { Authorization: `Bearer ${accessToken}` }
+        };
+
+        const { data } = await API.get<Profile.Instance>(route, config);
+
+        const returnedUser = await addImagesToProfile(data, {
+            profile: true,
+            banner: true
         });
-        const returnedUser = await addImagesToProfile(data);
+
         return Promise.resolve(returnedUser);
-    } catch (err: any) {
+    } catch (err) {
         return Promise.reject(err);
     }
 };
 
-export default getUserByAccessToken;
+///////////////////////////////////////////////////////////
+
+export { getUserByAccessToken };

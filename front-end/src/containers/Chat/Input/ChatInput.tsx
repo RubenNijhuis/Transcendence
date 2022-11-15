@@ -1,36 +1,25 @@
+// React
 import React, { useState } from "react";
 
 // Types
-import { ProfileType } from "../../../types/profile";
-import { GameType } from "../../../types/game";
-import {
-    GroupChat,
-    MessageContentType,
-    SimpleMessage,
-    PictureMessage,
-    InvitePlayMessage,
-    MessageTypes
-} from "../../../types/chat";
+import { Profile, Game, Chat } from "../../../types";
 
 // UI
 import { Container, SelectTypeIcon, SelectionBox } from "./ChatInput.style";
-
-// Debug
-import Logger from "../../../utils/Logger";
+import Asset from "../../../components/Asset";
 
 ////////////////////////////////////////////////////////////
 
-interface Props {
-    user: ProfileType;
-    groupchat: GroupChat;
-}
-
-interface MessageTypeSelectProps {
-    sender: ProfileType;
-    groupchat: GroupChat;
-    messageType: MessageContentType;
-    setMessageType: React.Dispatch<React.SetStateAction<MessageContentType>>;
-    setMessageContent: React.Dispatch<React.SetStateAction<MessageTypes>>;
+interface IMessageTypeSelect {
+    sender: Profile.Instance;
+    groupchat: Chat.Group.Instance;
+    messageType: Chat.Message.ContentType;
+    setMessageType: React.Dispatch<
+        React.SetStateAction<Chat.Message.ContentType>
+    >;
+    setMessageContent: React.Dispatch<
+        React.SetStateAction<Chat.Message.MessageTypes>
+    >;
 }
 
 const MessageTypeSelect = ({
@@ -39,25 +28,25 @@ const MessageTypeSelect = ({
     messageType,
     setMessageType,
     setMessageContent
-}: MessageTypeSelectProps): JSX.Element => {
+}: IMessageTypeSelect): JSX.Element => {
     const [chatTypeSelected, setChatTypeSelected] = useState<boolean>(false);
 
     ////////////////////////////////////////////////////////////
 
-    const handleChatTypeChange = (type: MessageContentType): void => {
+    const handleChatTypeChange = (type: Chat.Message.ContentType): void => {
         if (type === messageType) return;
 
         setMessageType(type);
-        if (type === MessageContentType.Simple)
+        if (type === Chat.Message.ContentType.Simple)
             setMessageContent({ content: "" });
-        else if (type === MessageContentType.Picture)
+        else if (type === Chat.Message.ContentType.Picture)
             setMessageContent({ alt: "", url: "" });
-        else if (type === MessageContentType.InvitePlay)
+        else if (type === Chat.Message.ContentType.InvitePlay)
             setMessageContent({
                 opponent: groupchat.members[0],
                 user: sender,
                 accepted: false,
-                game_type: GameType.Classic
+                game_type: Game.GameType.Classic
             });
     };
 
@@ -77,21 +66,23 @@ const MessageTypeSelect = ({
             <SelectionBox selected={chatTypeSelected}>
                 <span
                     onClick={() =>
-                        handleChatTypeChange(MessageContentType.Simple)
+                        handleChatTypeChange(Chat.Message.ContentType.Simple)
                     }
                 >
                     Simple
                 </span>
                 <span
                     onClick={() =>
-                        handleChatTypeChange(MessageContentType.Picture)
+                        handleChatTypeChange(Chat.Message.ContentType.Picture)
                     }
                 >
                     Picture
                 </span>
                 <span
                     onClick={() =>
-                        handleChatTypeChange(MessageContentType.InvitePlay)
+                        handleChatTypeChange(
+                            Chat.Message.ContentType.InvitePlay
+                        )
                     }
                 >
                     Invite
@@ -101,13 +92,17 @@ const MessageTypeSelect = ({
     );
 };
 
+interface ISimpleMessageInput {
+    content: Chat.Message.SimpleMessage;
+    setContent: React.Dispatch<
+        React.SetStateAction<Chat.Message.SimpleMessage>
+    >;
+}
+
 const SimpleMessageInput = ({
     content,
     setContent
-}: {
-    content: SimpleMessage;
-    setContent: React.Dispatch<React.SetStateAction<SimpleMessage>>;
-}): JSX.Element => {
+}: ISimpleMessageInput): JSX.Element => {
     return (
         <div className="simple-message-input">
             <input
@@ -118,20 +113,24 @@ const SimpleMessageInput = ({
     );
 };
 
+interface IPictureMessageInput {
+    content: Chat.Message.PictureMessage;
+    setContent: React.Dispatch<
+        React.SetStateAction<Chat.Message.PictureMessage>
+    >;
+}
+
 const PictureMessageInput = ({
     content,
     setContent
-}: {
-    content: PictureMessage;
-    setContent: React.Dispatch<React.SetStateAction<PictureMessage>>;
-}): JSX.Element => {
+}: IPictureMessageInput): JSX.Element => {
     return (
         <div className="picture-message-input">
             <div
                 className="img-preview"
                 style={{ maxWidth: "100%", overflow: "hidden" }}
             >
-                {content.url && <img src={content.url} alt={content.url} />}
+                {content.url && <Asset url={content.url} alt={content.alt} />}
             </div>
             <div className="picture-input">
                 <label>Url</label>
@@ -161,63 +160,82 @@ const PictureMessageInput = ({
     );
 };
 
+interface IInvitePlayMessageInput {
+    content: Chat.Message.GameInviteMessage;
+    setContent: React.Dispatch<
+        React.SetStateAction<Chat.Message.GameInviteMessage>
+    >;
+}
+
 const InvitePlayMessageInput = ({
     content,
     setContent
-}: {
-    content: InvitePlayMessage;
-    setContent: React.Dispatch<React.SetStateAction<InvitePlayMessage>>;
-}): JSX.Element => {
+}: IInvitePlayMessageInput): JSX.Element => {
     return <div className="invite-message-input"></div>;
 };
 
-const ChatInput = ({ user, groupchat }: Props): JSX.Element => {
-    const [messageType, setMessageType] = useState<MessageContentType>(
-        MessageContentType.Simple
+interface IChatInput {
+    user: Profile.Instance;
+    groupchat: Chat.Group.Instance;
+}
+
+const ChatInput = ({ user, groupchat }: IChatInput): JSX.Element => {
+    const [messageType, setMessageType] = useState<Chat.Message.ContentType>(
+        Chat.Message.ContentType.Simple
     );
 
-    const [messageContent, setMessageContent] = useState<MessageTypes>({
-        content: ""
-    });
+    const [messageContent, setMessageContent] =
+        useState<Chat.Message.MessageTypes>({
+            content: ""
+        });
+
+    ////////////////////////////////////////////////////////////
 
     const handleMessageSend = (): void => {
-        setMessageType(MessageContentType.Simple);
+        setMessageType(Chat.Message.ContentType.Simple);
         setMessageContent({ content: "" });
-        Logger("DEBUG", "Chat Input", "Message content", messageContent);
     };
+
+    ////////////////////////////////////////////////////////////
 
     return (
         <Container>
             <div className="input-wrapper">
                 <div className="input">
-                    {messageType === MessageContentType.Simple && (
+                    {messageType === Chat.Message.ContentType.Simple && (
                         <SimpleMessageInput
-                            content={messageContent as SimpleMessage}
+                            content={
+                                messageContent as Chat.Message.SimpleMessage
+                            }
                             setContent={
                                 setMessageContent as React.Dispatch<
-                                    React.SetStateAction<SimpleMessage>
+                                    React.SetStateAction<Chat.Message.SimpleMessage>
                                 >
                             }
                         />
                     )}
 
-                    {messageType === MessageContentType.Picture && (
+                    {messageType === Chat.Message.ContentType.Picture && (
                         <PictureMessageInput
-                            content={messageContent as PictureMessage}
+                            content={
+                                messageContent as Chat.Message.PictureMessage
+                            }
                             setContent={
                                 setMessageContent as React.Dispatch<
-                                    React.SetStateAction<PictureMessage>
+                                    React.SetStateAction<Chat.Message.PictureMessage>
                                 >
                             }
                         />
                     )}
 
-                    {messageType === MessageContentType.InvitePlay && (
+                    {messageType === Chat.Message.ContentType.InvitePlay && (
                         <InvitePlayMessageInput
-                            content={messageContent as InvitePlayMessage}
+                            content={
+                                messageContent as Chat.Message.GameInviteMessage
+                            }
                             setContent={
                                 setMessageContent as React.Dispatch<
-                                    React.SetStateAction<InvitePlayMessage>
+                                    React.SetStateAction<Chat.Message.GameInviteMessage>
                                 >
                             }
                         />
@@ -237,5 +255,7 @@ const ChatInput = ({ user, groupchat }: Props): JSX.Element => {
         </Container>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 export default ChatInput;
