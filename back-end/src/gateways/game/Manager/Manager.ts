@@ -35,11 +35,13 @@ class Manager {
     // }
   }
 
-    runGames(games: Game[]): void {
-      
-    }
-    
-    newGame()
+  runGames(games: Game[]): void {
+    return;
+  }
+
+  newGame(): void {
+    return;
+  }
 }
 
 // const amountGames = 100;

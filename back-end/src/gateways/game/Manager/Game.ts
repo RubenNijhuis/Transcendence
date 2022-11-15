@@ -1,5 +1,7 @@
 import { Socket } from "socket.io";
 import { User } from "src/entities";
+import Ball from "./Ball";
+import Bat from "./Bat";
 
 enum GameStatus {
   Initial,
@@ -15,8 +17,8 @@ type Position = {
 
 class Game {
   ball: Ball;
-  player1Bat: Player;
-  player2Bat: Player;
+  player1Bat: Bat;
+  player2Bat: Bat;
 
   player1Profile: User;
   player2Profile: User;
@@ -49,7 +51,7 @@ class Game {
       this.status = GameStatus.Running;
     }
 
-    updateBallPos();
+    // updateBallPos();
   }
 
   setupGame(): void {
@@ -58,7 +60,8 @@ class Game {
 
   // retrieve ball pos
   getBallPos(): { posX: number; posY: number } {
-    return this.ball.getPosition();
+    return { posX: 0, posY: 0 };
+    // return this.ball.getPosition();
   }
 
   getPlayersPos(): [
@@ -67,12 +70,18 @@ class Game {
   ] {
     const player1 = {
       id: this.player1Profile.uid,
-      pos: this.player1Bat.getPosition()
+      pos: {
+        posX: 0,
+        posY: 0
+      }
     };
 
     const player2 = {
       id: this.player2Profile.uid,
-      pos: this.player2Bat.getPosition()
+      pos: {
+        posX: 0,
+        posY: 0
+      }
     };
 
     return [player1, player2];

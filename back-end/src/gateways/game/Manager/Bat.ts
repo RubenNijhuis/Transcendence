@@ -1,4 +1,4 @@
-class Ball {
+class Bat {
   position: number;
 
   constructor() {
@@ -6,4 +6,4 @@ class Ball {
   }
 }
 
-export default Ball;
+export default Bat;
