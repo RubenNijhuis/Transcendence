@@ -17,7 +17,7 @@ export class BlocklistService {
 
     private async filterOutput(username: string, blocked: BlockList[]) {
         const filteredFriends = [];
-    
+
         for (const block of blocked) {
             let name = block.blockname;
 
@@ -32,20 +32,20 @@ export class BlocklistService {
     async getBlocked(username: string) {
         const blocked: BlockList[] = await this.blocklistRepository
             .createQueryBuilder('block_list')
-            .where('user = :username', { username })
+            .where({username})
             .getMany();
         return this.filterOutput(username, blocked);
     }
 
     async isBlock(username: string, blockedname: string): Promise<boolean> {
         var ret: boolean = false;
-
+		console.log("AAAAAAAAAAA");
         const blocked = await this.blocklistRepository
             .createQueryBuilder('block_list')
-            .where('user = :username', { username })
-            .andWhere('blockname = :blocked', { blockedname })
+            .where({username})
+            .andWhere({blockname: blockedname})
             .getOne();
-        
+
         if (blocked)
             ret = true;
         return ret;

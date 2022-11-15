@@ -21,7 +21,7 @@ export class BlockListController {
 
   @Get("isBlock/:username/:blocked")
   async getBlock(@Param('username') username: string, @Param('blocked') blocked: string): Promise<boolean> {
-    try {
+	try {
       const isBlocked: boolean = await this.blocklistService.isBlock(
         username,
         blocked
