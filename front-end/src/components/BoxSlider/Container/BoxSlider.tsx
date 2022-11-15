@@ -11,6 +11,10 @@ import { Container, ChangeSlideButtons } from "./BoxSlider.style";
 
 interface Props {
     children: React.ReactNode;
+<<<<<<< Updated upstream
+=======
+    onSlideChange: () => void;
+>>>>>>> Stashed changes
 }
 
 interface SliderDotsProps {

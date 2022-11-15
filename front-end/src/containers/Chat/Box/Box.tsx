@@ -46,6 +46,7 @@ const ChatTitle = ({ chat }: Props): JSX.Element => {
     );
 };
 
+<<<<<<< Updated upstream
 const ChatBox = ({ chat }: Props): JSX.Element => {
     const { user } = useAuth();
 
@@ -53,6 +54,119 @@ const ChatBox = ({ chat }: Props): JSX.Element => {
         <Container>
             <ChatTitle chat={chat} />
 
+=======
+interface IPasswordInput {
+    setIsProtected: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const PasswordInput = ({ setIsProtected }: IPasswordInput) => {
+    const passwordText = useFormInput("");
+    const [passwordError, setPasswordError] = useState<boolean>(false);
+
+    ////////////////////////////////////////////////////////////
+
+    const sendPassword = async () => {
+        try {
+            const verifyResponse = await verifyPassword(passwordText.value);
+
+            if (verifyResponse === false) {
+                setPasswordError(false);
+                return;
+            }
+
+            setIsProtected(true);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    ////////////////////////////////////////////////////////////
+
+    return (
+        <PasswordLayer>
+            {passwordError && (
+                <div className="error">The password is incorrect</div>
+            )}
+            <Heading type={3}>Please put in the password for this chat</Heading>
+            <input type="password" {...passwordText} />
+            <Button onClick={sendPassword}>Verify password</Button>
+        </PasswordLayer>
+    );
+};
+
+interface IChatBox {
+    chat: Chat.Group.Instance;
+}
+
+const ChatBox = ({ chat }: IChatBox): JSX.Element => {
+    const [isProtected, setIsProtected] = useState<boolean>(false);
+    const [isUnlocked, setIsUnlocked] = useState<boolean>(false);
+
+    ////////////////////////////////////////////////////////////
+
+    const isDmChat = chat.members.length === 2;
+
+    const { user } = useUser();
+    const { connection, createConnection, destroyConnectionInstance } =
+        useSocket();
+
+    ////////////////////////////////////////////////////////////
+
+    useEffect(() => {
+        if (chat.protected === false) {
+            setIsProtected(false);
+            setIsUnlocked(true);
+            return;
+        }
+
+        if (chat.protected === true) {
+            setIsProtected(true);
+            setIsUnlocked(false);
+            return;
+        }
+    }, [chat.protected, chat]);
+
+    ////////////////////////////////////////////////////////////
+
+    // TODO: Abstract into business logic part
+    useEffect(() => {
+        createConnection(SocketType.SocketType.Chat);
+    }, [chat]);
+
+    useEffect(() => {
+        if (!connection) return;
+        setupConnections(connection);
+
+        return () => {
+            removeConnections(connection);
+            destroyConnectionInstance();
+        };
+    }, [connection]);
+
+    const sendMessage = () => {
+        console.log(chat);
+        connection.emit("sendMessage", chat);
+    };
+
+    ////////////////////////////////////////////////////////////
+
+    const setupConnections = (socket: SocketType.Instance) => {
+        socket.on(SocketRoutes.chat.receiveMessage(), (res) => {
+            console.log(res);
+        });
+    };
+
+    const removeConnections = (socket: SocketType.Instance) => {
+        socket.off(SocketRoutes.chat.receiveMessage());
+    };
+
+    ////////////////////////////////////////////////////////////
+
+    return (
+        <Container>
+            <ChatTitle chat={chat} isDmChat={isDmChat} />
+            <Button onClick={sendMessage}>Send standard message</Button>
+>>>>>>> Stashed changes
             <div className="chat-content">
                 {chat.messages.map((message, count) => (
                     <ChatElement

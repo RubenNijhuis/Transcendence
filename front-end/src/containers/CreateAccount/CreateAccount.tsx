@@ -97,6 +97,15 @@ const CreateAccount = ({ setModalOpen }: Props): JSX.Element => {
         }
     };
 
+<<<<<<< Updated upstream
+=======
+    const handleSubmit = (e: any) => {
+        e.preventDefault();
+    };
+
+    const slideChangeEffect = () => {};
+
+>>>>>>> Stashed changes
     ////////////////////////////////////////////////////////////
 
     return (
