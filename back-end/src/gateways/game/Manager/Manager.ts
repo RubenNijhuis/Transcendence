@@ -1,15 +1,18 @@
 import { Socket } from "socket.io";
 import Game from "./Game";
+import { GameStatus, Position } from "./types";
 
 class Manager {
   isRunning: boolean;
   games: Game[];
   connection: Socket;
+  deltaTime: number;
 
   constructor(connection: Socket) {
     this.games = [];
     this.isRunning = true;
     this.connection = connection;
+    this.deltaTime = 16; // ms
   }
 
   run() {
@@ -26,91 +29,52 @@ class Manager {
     }, 1000);
 
     // Start managing games
-    // while (games.length > 0) {
-    //   for (let i = 0; i < runningGames.length; i++) {
-    //     updateGameStats(runningGames[i]);
-    //   }
-    //   console.log(runningGames);
-    //   await timer(1000);
-    // }
   }
 
-  runGames(games: Game[]): void {
+  removeGamesFromRunning(games: Game[]): void {
+    this.games = games.filter((game) => {
+      return game.getGameStatus() !== GameStatus.Finished;
+    });
+  }
+
+  async runGames(games: Game[]): Promise<void> {
+    // Adds the delay - is promise based maybe better with a Date() tick?
+    const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+    // Keep looping as long as there are games
+    while (games.length > 0) {
+      // Go through each game
+      for (let i = 0; i < games.length; i++) {
+        games[i].render();
+
+        // Emit new ball position
+        this.connection.emit("newBallPos", games[i].getBallPos());
+
+        // Check every loop which games are finished
+        this.removeGamesFromRunning(games);
+      }
+      // Add delay
+      await delay(this.deltaTime);
+    }
+  }
+
+  async newGame(): Promise<void> {
     return;
   }
 
-  newGame(): void {
-    return;
+  updateBatPosition(movePayload: { player: string; pos: Position }): void {
+    // get game that this update applies to
+    const game = this.games[0]; // should be dynamic
+
+    if (movePayload.player === "player1") {
+      game.player1Bat.setPosition(movePayload.pos);
+    } else {
+      game.player2Bat.setPosition(movePayload.pos);
+    }
   }
 }
 
-// const amountGames = 100;
-// const deltaTime = 16;
-// const runTime = 60;
-
-// let runningGames = [];
-
-// ////////////////////////////////////////////////////////////
-
-// for (let i = 0; i < 10; i++) {
-//   runningGames.push({ id: i + 1, amountHits: 0, finished: false });
-// }
-
-// ////////////////////////////////////////////////////////////
-
-// const timer = (ms) => new Promise((res) => setTimeout(res, ms));
-
-// const removeGameFromRunning = (id) => {
-//   runningGames = runningGames.filter((game) => game.id !== id);
-//   // update data in database
-//   // emit (finished game)
-// };
-
-// const updateGameStats = async (game) => {
-//   await timer(60);
-//   game.amountHits++;
-
-//   if (game.amountHits === runTime * game.id) {
-//     game.finished = true;
-//     removeGameFromRunning(game.id);
-//   }
-// };
-
-// ////////////////////////////////////////////////////////////
-
-// (async () => {
-//   console.time("Game running 1 sec");
-
-//   while (runningGames.length !== 0) {
-//     for (let i = 0; i < runningGames.length; i++) {
-//       updateGameStats(runningGames[i]);
-//     }
-//     await timer(16);
-//   }
-
-//   console.timeLog("Game running 1 sec");
-// })();
-
 export default Manager;
-
-// // Elements
-// import { Ball, Bat } from "../GameElements";
-// import PowerUps from "../PowerUps";
-
-//     const displayText = () => {
-//         if (
-//             this.player1Score !== this.maxScore &&
-//             this.player2Score !== this.maxScore
-//         ) {
-//             this.context.font = "30px Arial";
-//             this.context.textAlign = "center";
-//             this.context.fillText(
-//                 `${this.player1Score} - ${this.player2Score}`,
-//                 this.canvas.clientWidth / 2,
-//                 100
-//             );
-//         }
-//     }
 
 //     const resetGame = () => {
 //         this.player1Bat.reset();

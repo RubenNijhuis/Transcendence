@@ -28,11 +28,7 @@ export class GameSocketGateway {
   connection: Socket;
 
   private logger: Logger = new Logger("GameSocketGateway");
-
-  // in manager
   private manager: Manager;
-  private isRunning = false;
-  // in manager
 
   afterInit() {
     this.logger.log("✅ Game gateway - Initialized ");
@@ -40,11 +36,16 @@ export class GameSocketGateway {
     this.manager.run();
   }
 
-  @SubscribeMessage("updateBallPos")
-  updateBallPos(@MessageBody() newPosition: any): void {
-    this.logger.log("New pos: ", newPosition);
-    // this.manager.updateBallPos(newXY, gameID);
-    // Manager will emit new data to other member in game
+  /**
+   * Technically there should be some identifier
+   * for each bat so that it can't influence the
+   * other one but yeah time limits
+   */
+  @SubscribeMessage("moveBat")
+  updateBallPos(@MessageBody() batMovePayload): void {
+    this.logger.log("New pos: ", batMovePayload);
+
+    this.manager.updateBatPosition(batMovePayload);
   }
 
   //   @SubscribeMessage("healthCheck")

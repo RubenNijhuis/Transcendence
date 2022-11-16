@@ -2,18 +2,7 @@ import { Socket } from "socket.io";
 import { User } from "src/entities";
 import Ball from "./Ball";
 import Bat from "./Bat";
-
-enum GameStatus {
-  Initial,
-  Setup,
-  Running,
-  Finished
-}
-
-type Position = {
-  posX: number;
-  posY: number;
-};
+import { GameStatus, Position } from "./types";
 
 class Game {
   ball: Ball;
@@ -29,12 +18,7 @@ class Game {
   roomID: string;
   connection: Socket;
 
-  constructor(
-    connection: Socket,
-    roomID: string,
-    player1ID: string,
-    player2ID: string
-  ) {
+  constructor(connection: Socket, roomID: string) {
     this.ball = new Ball();
     this.player1Bat = new Bat();
     this.player2Bat = new Bat();
@@ -59,9 +43,8 @@ class Game {
   }
 
   // retrieve ball pos
-  getBallPos(): { posX: number; posY: number } {
-    return { posX: 0, posY: 0 };
-    // return this.ball.getPosition();
+  getBallPos(): Position {
+    return this.ball.getPosition();
   }
 
   getPlayersPos(): [
