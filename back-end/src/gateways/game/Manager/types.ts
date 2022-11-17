@@ -33,7 +33,7 @@ interface GameRequest {
 
 interface Profile {
   uid: string;
-  socket: Socket;
+  connection: Socket;
   elo: number;
 }
 

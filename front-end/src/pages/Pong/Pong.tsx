@@ -65,12 +65,17 @@ const Pong = (): JSX.Element => {
         };
     }, [connection]);
 
-    const getRooms = () => {
+    const joinMatch = () => {
         const gameRequest = {
-            requester: nameHandeler1.value,
-            joiner: nameHandeler2.value
+            profile: {
+                uid: Date.now().toString(),
+                elo: 100
+            }
         };
-        connection.emit("joinFriendlyMatch", gameRequest);
+
+        console.log(gameRequest.profile.uid);
+
+        connection.emit("joinMatch", gameRequest);
     };
 
     ////////////////////////////////////////////////////////////
@@ -98,12 +103,7 @@ const Pong = (): JSX.Element => {
 
     return (
         <Layout>
-            <Button onClick={getRooms}>Get le rooms</Button>
-            <p>Profile 1</p>
-            <input type="text" {...nameHandeler1} />
-            <hr />
-            <p>Profile 2</p>
-            <input type="text" {...nameHandeler2} />
+            <Button onClick={joinMatch}>Join match</Button>
             <Canvas canvasRef={canvasRef} />
         </Layout>
     );
