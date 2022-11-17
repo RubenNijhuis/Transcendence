@@ -1,6 +1,8 @@
 // React
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Socket } from "socket.io-client";
+import Button from "../../components/Button";
+import { useFormInput } from "../../components/Form/hooks";
 
 // UI
 import Layout from "../../components/Layout";
@@ -12,12 +14,15 @@ import GameManager from "../../containers/PongGame/GameLogic/GameManager";
 
 // Sockets
 import { useSocket } from "../../contexts/SocketContext";
+import { useUser } from "../../contexts/UserContext";
 import { Game, SocketType } from "../../types";
 
 ////////////////////////////////////////////////////////////
 
 const Pong = (): JSX.Element => {
     const canvasRef = useRef<HTMLCanvasElement>(null!);
+    const nameHandeler1 = useFormInput("");
+    const nameHandeler2 = useFormInput("");
 
     ////////////////////////////////////////////////////////////
 
@@ -27,6 +32,8 @@ const Pong = (): JSX.Element => {
 
     const { connection, createConnection, destroyConnectionInstance } =
         useSocket();
+
+    const { user } = useUser();
 
     ////////////////////////////////////////////////////////////
 
@@ -58,9 +65,18 @@ const Pong = (): JSX.Element => {
         };
     }, [connection]);
 
+    const getRooms = () => {
+        const gameRequest = {
+            requester: nameHandeler1.value,
+            joiner: nameHandeler2.value
+        };
+        connection.emit("joinFriendlyMatch", gameRequest);
+    };
+
     ////////////////////////////////////////////////////////////
 
     const setupConnections = (socket: Socket) => {
+        socket.on("gameStatus", (res) => console.log(res));
         socket.on(SocketRoutes.game.updateBall(), Manager.updateBall);
         socket.on(SocketRoutes.game.updateOpponent(), Manager.updateOpponent);
         socket.on(SocketRoutes.game.updateScore(), Manager.updateScore);
@@ -71,6 +87,7 @@ const Pong = (): JSX.Element => {
     };
 
     const removeConnections = (socket: Socket) => {
+        socket.off("gameStatus");
         socket.off(SocketRoutes.game.updateBall());
         socket.off(SocketRoutes.game.updateOpponent());
         socket.off(SocketRoutes.game.updateScore());
@@ -81,6 +98,12 @@ const Pong = (): JSX.Element => {
 
     return (
         <Layout>
+            <Button onClick={getRooms}>Get le rooms</Button>
+            <p>Profile 1</p>
+            <input type="text" {...nameHandeler1} />
+            <hr />
+            <p>Profile 2</p>
+            <input type="text" {...nameHandeler2} />
             <Canvas canvasRef={canvasRef} />
         </Layout>
     );

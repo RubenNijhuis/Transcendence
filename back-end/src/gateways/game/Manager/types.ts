@@ -1,3 +1,5 @@
+import { Socket } from "socket.io";
+
 enum GameStatus {
   Initial,
   Setup,
@@ -5,9 +7,34 @@ enum GameStatus {
   Finished
 }
 
+enum RoomPermission {
+  FULL,
+  MINIMAL
+}
+
 type Position = {
   posX: number;
   posY: number;
 };
 
-export { GameStatus, Position };
+interface Room {
+  roomID: string;
+  profiles: Profile[];
+}
+
+interface FriendlyMatch {
+  roomID: string;
+  profile: Profile;
+}
+
+interface GameRequest {
+  profile: Profile;
+}
+
+interface Profile {
+  uid: string;
+  socket: Socket;
+  elo: number;
+}
+
+export { Room, GameStatus, Position, GameRequest, Profile, FriendlyMatch };

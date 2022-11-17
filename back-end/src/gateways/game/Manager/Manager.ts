@@ -1,14 +1,14 @@
-import { Socket } from "socket.io";
+import { Server, Socket } from "socket.io";
 import Game from "./Game";
 import { GameStatus, Position } from "./types";
 
 class Manager {
   isRunning: boolean;
   games: Game[];
-  connection: Socket;
+  connection: Server;
   deltaTime: number;
 
-  constructor(connection: Socket) {
+  constructor(connection: Server) {
     this.games = [];
     this.isRunning = true;
     this.connection = connection;
