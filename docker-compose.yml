@@ -8,6 +8,7 @@ services:
     restart: always
     volumes:
       - ./front-end:/app
+      - ../shared:/shared
     ports:
       - "8081:8081"
     links: # Using links since it connects to the backend port no matter what hostport
@@ -23,6 +24,7 @@ services:
     volumes:
       - ./back-end:/app
       - /app/node_modules/bcrypt/
+      - ../shared:/shared
     ports:
       - "3000:3000" # Main API
       - "3001:3001" # Game Socket
