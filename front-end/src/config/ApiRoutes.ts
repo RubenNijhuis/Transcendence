@@ -72,7 +72,11 @@ const ApiRoutes = {
 	updateColor: () => `/user/updateColor`,
 	addBlock: () => `/block/addBlock`,
 	unBlock: () => `/block/unBlock`,
-	isBlock: (username: string, blockname: string) => `/block/isBlock/${username}/${blockname}`
+	isBlock: (username: string, blockname: string) => `/block/isBlock/${username}/${blockname}`,
+	isFriend: (username: string, friendname: string) => `/friends/isFriend/${username}/${friendname}`,
+	addFriend: () => `/friends/addFriend`,
+	unFriend: () => `/friends/removeFriend`
+
 	//Settings
 
 

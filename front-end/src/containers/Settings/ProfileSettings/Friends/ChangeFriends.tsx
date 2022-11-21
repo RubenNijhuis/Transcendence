@@ -1,25 +1,26 @@
 // Styling
-import { CreateForm, StyledInput } from "./ChangeBanStatus.style";
+import { CreateForm, StyledInput } from "./ChangeFriends.style";
 
 // DEBUG
 import { MutableRefObject, useRef} from "react";
 import { useUser } from "../../../../contexts/UserContext";
-import { IsBlock } from "../../../../proxies/settings/IsBlock"
-import { Block } from "../../../../proxies/settings/Block"
-import { UnBlock } from "../../../../proxies/settings/UnBlock"
+import { IsFriend } from "../../../../proxies/settings/IsFriend";
+import { AddFriend } from "../../../../proxies/settings/AddFriend";
+import { RemoveFriend } from "../../../../proxies/settings/RemoveFriend";
 
 
 
-const ChangeBanStatus = () => {
+
+const ChangeFriends = () => {
 	const { user } = useUser();
 	const ref = useRef() as MutableRefObject<HTMLTextAreaElement>;
 
 	const handleText = async (event: any) => {
 		try {
-			if (await IsBlock(user.username, ref.current.value) == false)
-				await Block(user.username, ref.current.value);
+			if (await IsFriend(user.username, ref.current.value) == false)
+				await AddFriend(user.username, ref.current.value);
 			else
-				await UnBlock(user.username, ref.current.value);
+				await RemoveFriend(user.username, ref.current.value);
 		} catch (err) {
 			return Promise.reject(err);
 		}
@@ -29,7 +30,7 @@ const ChangeBanStatus = () => {
     return (
         <CreateForm>
                     <StyledInput>
-                        <label>Block/Unblock user</label>
+                        <label>Add/remove friend</label>
                         {/* {error && <ErrorMessage message={error} />} */}
                         <textarea ref={ref} />
                     </StyledInput>
@@ -38,4 +39,4 @@ const ChangeBanStatus = () => {
     );
 }
 
-export default ChangeBanStatus;
+export default ChangeFriends;
