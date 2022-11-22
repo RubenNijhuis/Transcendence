@@ -48,6 +48,7 @@ const Container = styled.section`
             color: ${lightTextColor};
         }
     }
+
 `;
 
 ////////////////////////////////////////////////////////////
@@ -93,9 +94,6 @@ const ProfileSettings = () => {
                 <Heading type={3}>Profile settings</Heading>
             </div>
             <div className="content">
-                <Button theme="dark" onClick={renderTFAModal}>
-                    Turn {tfaEnabled ? "off" : "on"} 2 factor authentication
-                </Button>
                 <br />
                 <UploadProfilePicture />
                 <UploadBanner />
@@ -106,7 +104,9 @@ const ProfileSettings = () => {
                 <UploadColor />
                 <ChangeBanStatus />
                 <ChangeFriends />
-                <input type="submit" value="Save" />
+				<Button theme="dark" onClick={renderTFAModal}>
+					Turn {tfaEnabled ? "off" : "on"} 2 factor authentication
+				</Button>
             </div>
         </Container>
     );
