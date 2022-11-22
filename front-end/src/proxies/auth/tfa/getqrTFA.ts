@@ -8,7 +8,7 @@ const getqrTFA = async (intraID: string): Promise<string> => {
     try {
         const route = ApiRoutes.getqrTFA();
         const body = {
-            intraID
+            intraID,
         };
 
         const { data } = await API.post(route, body);

@@ -1,7 +1,7 @@
-import { Position } from "./types";
+import { Game } from "./types";
 
 class Ball {
-  position: Position;
+  position: Game.Position;
   velocity: {
     x: number;
     y: number;
@@ -23,11 +23,11 @@ class Ball {
     return;
   }
 
-  getPosition(): Position {
+  getPosition(): Game.Position {
     return this.position;
   }
 
-  setPosition(pos: Position): void {
+  setPosition(pos: Game.Position): void {
     this.position = pos;
   }
 }

@@ -1,28 +1,30 @@
 // React
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+
+// Sockets
 import { Socket } from "socket.io-client";
-import Button from "../../components/Button";
-import { useFormInput } from "../../components/Form/hooks";
 
 // UI
+import Button from "../../components/Button";
 import Layout from "../../components/Layout";
 import SocketRoutes from "../../config/SocketRoutes";
 
 // Game logic
 import Canvas from "../../containers/PongGame";
 import GameManager from "../../containers/PongGame/GameLogic/GameManager";
+import MatchMakingStatus from "../../containers/PongGame/MatchMakingStatus";
 
 // Sockets
 import { useSocket } from "../../contexts/SocketContext";
-import { useUser } from "../../contexts/UserContext";
-import { Game, SocketType } from "../../types";
+// import { useUser } from "@contexts/UserContext";
+
+import SocketType from "../../types/Socket";
+import Match from "../../types/Match";
 
 ////////////////////////////////////////////////////////////
 
 const Pong = (): JSX.Element => {
-    const canvasRef = useRef<HTMLCanvasElement>(null!);
-    const nameHandeler1 = useFormInput("");
-    const nameHandeler2 = useFormInput("");
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     ////////////////////////////////////////////////////////////
 
@@ -33,23 +35,25 @@ const Pong = (): JSX.Element => {
     const { connection, createConnection, destroyConnectionInstance } =
         useSocket();
 
-    const { user } = useUser();
+    // const { user } = useUser();
 
     ////////////////////////////////////////////////////////////
 
     // TODO: Abstract into business logic part
     useEffect(() => {
-        createConnection(SocketType.SocketType.Game);
-    }, []);
+        createConnection(SocketType.Type.Game);
+    }, [createConnection]);
 
     useEffect(() => {
+        if (canvasRef.current === null) return;
+
         const context = canvasRef.current.getContext("2d");
 
         if (context === null) return;
 
         // TODO: get from user database settings or whatever
         const gameSettings = {
-            gameType: Game.GameType.Classic,
+            gameType: Match.GameType.Classic,
             prefferedSide: "left",
             controlSettings: "keyboard"
         };
@@ -103,6 +107,7 @@ const Pong = (): JSX.Element => {
 
     return (
         <Layout>
+            <MatchMakingStatus />
             <Button onClick={joinMatch}>Join match</Button>
             <Canvas canvasRef={canvasRef} />
         </Layout>

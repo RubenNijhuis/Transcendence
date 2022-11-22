@@ -1,3 +1,3 @@
-import UploadColor from "./UploadColor"
+import UploadColor from "./UploadColor";
 
 export default UploadColor;

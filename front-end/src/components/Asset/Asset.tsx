@@ -10,7 +10,7 @@ interface IAsset {
 }
 
 const Asset = ({ url, alt, className }: IAsset): JSX.Element => {
-    let classTag: string = "asset";
+    let classTag = "asset";
 
     ////////////////////////////////////////////////////////////
 

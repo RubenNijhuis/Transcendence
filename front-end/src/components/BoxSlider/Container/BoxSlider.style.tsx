@@ -1,5 +1,9 @@
 import styled from "styled-components";
-import { lightTextColor, magicNum, smallRadius } from "../../../styles/StylingConstants";
+import {
+    lightTextColor,
+    magicNum,
+    smallRadius,
+} from "../../../styles/StylingConstants";
 
 const Container = styled.div`
     background-color: rgba(0, 0, 0, 0.2);
@@ -7,7 +11,7 @@ const Container = styled.div`
 
     .slides {
         overflow-x: hidden;
-        
+
         // Hide scrollbar
         &::-webkit-scrollbar {
             display: none;

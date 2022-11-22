@@ -2,7 +2,7 @@ const enum LogTypes {
     AUTH,
     GAME,
     DEBUG,
-    ERROR
+    ERROR,
 }
 
 /**
@@ -12,23 +12,23 @@ const logTypes = [
     {
         emoij: "💂‍♂️",
         color: "#374f6b",
-        allowed: true
+        allowed: true,
     },
     {
         emoij: "🏓",
         color: "#fb21ff",
-        allowed: true
+        allowed: true,
     },
     {
         emoij: "🕷",
         color: "#fff536",
-        allowed: true
+        allowed: true,
     },
     {
         emoij: "💥",
         color: "#ff8282",
-        allowed: true
-    }
+        allowed: true,
+    },
 ];
 
 ///////////////////////////////////////////////////////////

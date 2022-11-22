@@ -25,7 +25,7 @@ interface IProfileDisplay {
 
 const ProfileDisplay = ({
     profile,
-    matchHistory
+    matchHistory,
 }: IProfileDisplay): JSX.Element => {
     const { banner_url, rank, img_url, username, description } = profile;
 

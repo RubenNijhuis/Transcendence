@@ -1,7 +1,6 @@
 // UI
 import Button from "../../components/Button";
-import { Container } from "./DebugDevBox.style";
-import { Box } from "./DebugDevBox.style";
+import { Container, Box } from "./DebugDevBox.style";
 
 // Business logic
 import {
@@ -9,7 +8,7 @@ import {
     handleTokenRefresh,
     fillDBwithChats,
     fillDBwithUsers,
-    makeFriends
+    makeFriends,
 } from "./DebugDevBox.bl";
 import { useUser } from "../../contexts/UserContext";
 

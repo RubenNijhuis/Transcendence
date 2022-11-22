@@ -1,6 +1,6 @@
 import { Logger } from "@nestjs/common";
 import { Server, Socket } from "socket.io";
-import { Profile, Room } from "../game/Manager/types";
+import { Room, Match } from "../game/Manager/types";
 
 ////////////////////////////////////////////////////////////
 
@@ -11,8 +11,8 @@ const QUE_IDENTIFIER = "queue";
 class RoomManager {
   connection: Server;
   logger: Logger;
-  rooms: Room[];
-  profiles: Profile[];
+  rooms: Room.Instance[];
+  profiles: Match.PlayerProfile[];
 
   ////////////////////////////////////////////////////////////
 
@@ -27,14 +27,14 @@ class RoomManager {
 
   // QUE /////////////////////////////////////////////////////
 
-  joinQue(connection: Socket, profilePayload: Profile): void {
+  joinQue(connection: Socket, profilePayload: Match.PlayerProfile): void {
     connection.join(QUE_IDENTIFIER);
     this.addProfile(profilePayload);
   }
 
   // Profile /////////////////////////////////////////////////
 
-  addProfile(profile: Profile): void {
+  addProfile(profile: Match.PlayerProfile): void {
     this.profiles.push(profile);
   }
 
@@ -67,7 +67,7 @@ class RoomManager {
     return room;
   }
 
-  getProfilesByRoom(roomID: string): Profile[] {
+  getProfilesByRoom(roomID: string): Match.PlayerProfile[] {
     const roomIndex = this.rooms.findIndex((item) => {
       return item.roomID === roomID;
     });
@@ -79,7 +79,7 @@ class RoomManager {
     return Math.abs(elo1 - elo2) < 200;
   }
 
-  makeMatch(player1SID: Profile, player2SID: Profile) {
+  makeMatch(player1SID: Match.PlayerProfile, player2SID: Match.PlayerProfile) {
     const roomID = "abc";
     player1SID.connection.join(roomID);
     player2SID.connection.join(roomID);
@@ -87,7 +87,7 @@ class RoomManager {
     this.connection.to(roomID).emit("gameStatus", { gameStatus: "startGame" });
   }
 
-  checkIfMatchable(profile: Profile) {
+  checkIfMatchable(profile: Match.PlayerProfile) {
     for (const player of this.profiles) {
       if (player.uid !== profile.uid) {
         if (this.calculateELODiff(profile.elo, player.elo)) {

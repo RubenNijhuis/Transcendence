@@ -1,3 +1,3 @@
 import SelectGame from "./SelectGame";
 
-export default SelectGame
+export default SelectGame;

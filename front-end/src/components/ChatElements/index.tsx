@@ -1,3 +1,3 @@
-import ChatElement from './ChatElement';
+import ChatElement from "./ChatElement";
 
 export default ChatElement;

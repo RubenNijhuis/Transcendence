@@ -21,11 +21,7 @@ const SenderAnnotation = ({ sender }: ISenderAnnotation): JSX.Element => {
 
     return (
         <Container fromUser={sender.uid === user.uid}>
-            <Asset
-                url={sender.img_url}
-                alt={sender.username}
-                className="img"
-            />
+            <Asset url={sender.img_url} alt={sender.username} className="img" />
             <span>{sender.username}</span>
         </Container>
     );

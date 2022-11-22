@@ -21,7 +21,7 @@ import {
     lightTextColor,
     magicNum,
     mainColor,
-    smallRadius
+    smallRadius,
 } from "../../../styles/StylingConstants";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";

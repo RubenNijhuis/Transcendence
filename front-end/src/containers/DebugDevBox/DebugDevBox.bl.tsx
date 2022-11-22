@@ -21,7 +21,7 @@ const fillDBwithChats = (user: Profile.Instance): void => {};
 const makeFriends = async (user: Profile.Instance) => {
     try {
         const makeFriendResp = await API.post("/seeder/amount", {
-            amount: 10
+            amount: 10,
         });
 
         console.log(makeFriendResp);
@@ -58,5 +58,5 @@ export {
     fillDBwithChats,
     fillDBwithUsers,
     handleTokenRefresh,
-    makeFriends
+    makeFriends,
 };

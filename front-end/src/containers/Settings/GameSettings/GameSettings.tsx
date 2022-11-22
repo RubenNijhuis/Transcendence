@@ -5,7 +5,7 @@ import {
     lightTextColor,
     magicNum,
     mainColor,
-    smallRadius
+    smallRadius,
 } from "../../../styles/StylingConstants";
 
 // TODO: in style file

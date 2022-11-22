@@ -66,7 +66,7 @@ const ApiRoutes = {
     // TFAuthentication //////////////////////////////////////////
     turnOnTFA: () => `/user/enable2fa`,
     getqrTFA: () => `/tfa/google2fa`,
-    confirmTFA: () => `/tfa/google2fa/authenticate`
+    confirmTFA: () => `/tfa/google2fa/authenticate`,
     // TFAuthentication //////////////////////////////////////////
 };
 

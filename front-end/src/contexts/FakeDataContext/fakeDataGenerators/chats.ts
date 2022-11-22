@@ -21,7 +21,7 @@ const generateInvite = (
         opponent,
         user,
         game_type: Game.GameType.Classic,
-        accepted: false
+        accepted: false,
     };
 
     return invite;
@@ -29,7 +29,7 @@ const generateInvite = (
 
 const generateSimpleMessage = (): Chat.Message.SimpleMessage => {
     const simpleMessage: Chat.Message.SimpleMessage = {
-        content: "Lorem ipsum sit dolor amet"
+        content: "Lorem ipsum sit dolor amet",
     };
 
     return simpleMessage;
@@ -43,7 +43,7 @@ const generatePictureMessage = (): Chat.Message.PictureMessage => {
 
     const picture: Chat.Message.PictureMessage = {
         url: img_url,
-        alt: "random"
+        alt: "random",
     };
 
     return picture;
@@ -86,7 +86,7 @@ const generateMessage = (
             senderID: sender.uid,
             id: i,
             group_id,
-            read_by: []
+            read_by: [],
         };
 
         messages.push(newMessage);
@@ -110,7 +110,7 @@ const generateGroupChats = (
 
         const members: Profile.Instance[] = [
             ...randomSliceOfArray<Profile.Instance>(profiles, randomNum1),
-            user
+            user,
         ];
 
         const newGroup: Chat.Group.Instance = {
@@ -121,7 +121,7 @@ const generateGroupChats = (
             internal_id: i,
             members: members,
             messages: [],
-            protected: randomNum1 !== 1
+            protected: randomNum1 !== 1,
         };
 
         newGroup.messages.push(

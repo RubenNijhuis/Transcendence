@@ -34,7 +34,7 @@ interface IChatElement {
 const ChatElement = ({
     fromUser,
     message,
-    isDm
+    isDm,
 }: IChatElement): JSX.Element => {
     const contentType: Chat.Message.ContentType = message.content_type;
 
@@ -51,7 +51,7 @@ const ChatElement = ({
     const messageElements = [
         <SimpleMessageDisplay fromUser={fromUser} message={message} />,
         <PictureMessageDisplay fromUser={fromUser} message={message} />,
-        <InviteMessageDisplay fromUser={fromUser} message={message} />
+        <InviteMessageDisplay fromUser={fromUser} message={message} />,
     ];
 
     ////////////////////////////////////////////////////////////

@@ -4,7 +4,7 @@ import {
     lightTextColor,
     magicNum,
     mainColor,
-    smallRadius
+    smallRadius,
 } from "../../../styles/StylingConstants";
 
 const Container = styled.div`

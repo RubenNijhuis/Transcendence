@@ -6,7 +6,7 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import PageRoutes from "../../config/PageRoutes";
 
 // Guards
-import { AuthGuard } from "../RouteGuards";
+import { AuthGuard } from "../../containers/RouteGuards";
 
 // Public Pages
 import Home from "../../pages/Home";

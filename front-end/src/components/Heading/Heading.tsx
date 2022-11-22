@@ -4,13 +4,13 @@ import {
     StyledH3,
     StyledH4,
     StyledH5,
-    StyledH6
+    StyledH6,
 } from "./Heading.style";
 
 ////////////////////////////////////////////////////////////
 
 interface IHeading {
-    type: Number;
+    type: number;
     children: React.ReactNode;
 }
 

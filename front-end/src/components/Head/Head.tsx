@@ -17,7 +17,7 @@ const Head = () => {
             <title>PongHub</title>
 
             <meta name="author" content={authors}></meta>
-            <meta name="description" content={description}/>
+            <meta name="description" content={description} />
 
             <link rel="canonical" href="http://localhost:8080/" />
         </Helmet>

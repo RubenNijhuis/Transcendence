@@ -56,7 +56,7 @@ const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
     const value: SocketContextType = {
         connection,
         createConnection,
-        destroyConnectionInstance
+        destroyConnectionInstance,
     };
 
     ////////////////////////////////////////////////////////////

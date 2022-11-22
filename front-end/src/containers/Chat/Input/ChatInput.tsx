@@ -27,7 +27,7 @@ const MessageTypeSelect = ({
     groupchat,
     messageType,
     setMessageType,
-    setMessageContent
+    setMessageContent,
 }: IMessageTypeSelect): JSX.Element => {
     const [chatTypeSelected, setChatTypeSelected] = useState<boolean>(false);
 
@@ -46,7 +46,7 @@ const MessageTypeSelect = ({
                 opponent: groupchat.members[0],
                 user: sender,
                 accepted: false,
-                game_type: Game.GameType.Classic
+                game_type: Game.GameType.Classic,
             });
     };
 
@@ -101,7 +101,7 @@ interface ISimpleMessageInput {
 
 const SimpleMessageInput = ({
     content,
-    setContent
+    setContent,
 }: ISimpleMessageInput): JSX.Element => {
     return (
         <div className="simple-message-input">
@@ -122,7 +122,7 @@ interface IPictureMessageInput {
 
 const PictureMessageInput = ({
     content,
-    setContent
+    setContent,
 }: IPictureMessageInput): JSX.Element => {
     return (
         <div className="picture-message-input">
@@ -140,7 +140,7 @@ const PictureMessageInput = ({
                     onChange={(e) =>
                         setContent((prevState) => ({
                             ...prevState,
-                            url: e.target.value
+                            url: e.target.value,
                         }))
                     }
                 />
@@ -151,7 +151,7 @@ const PictureMessageInput = ({
                     onChange={(e) =>
                         setContent((prevState) => ({
                             ...prevState,
-                            alt: e.target.value
+                            alt: e.target.value,
                         }))
                     }
                 />
@@ -169,7 +169,7 @@ interface IInvitePlayMessageInput {
 
 const InvitePlayMessageInput = ({
     content,
-    setContent
+    setContent,
 }: IInvitePlayMessageInput): JSX.Element => {
     return <div className="invite-message-input"></div>;
 };
@@ -186,7 +186,7 @@ const ChatInput = ({ user, groupchat }: IChatInput): JSX.Element => {
 
     const [messageContent, setMessageContent] =
         useState<Chat.Message.MessageTypes>({
-            content: ""
+            content: "",
         });
 
     ////////////////////////////////////////////////////////////

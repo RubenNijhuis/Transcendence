@@ -2,9 +2,9 @@ import { Socket } from "socket.io";
 import { User } from "src/entities";
 import Ball from "./Ball";
 import Bat from "./Bat";
-import { GameStatus, Position } from "./types";
+import { Game, Match } from "./types";
 
-class Game {
+class GameInstance {
   ball: Ball;
   player1Bat: Bat;
   player2Bat: Bat;
@@ -13,7 +13,7 @@ class Game {
   player2Profile: User;
 
   finished: boolean;
-  status: GameStatus;
+  status: Match.Status;
 
   roomID: string;
   connection: Socket;
@@ -31,25 +31,25 @@ class Game {
 
   // update game data
   render(): void {
-    if (this.status === GameStatus.Setup) {
-      this.status = GameStatus.Running;
+    if (this.status === Match.Status.Starting) {
+      this.status = Match.Status.Playing;
     }
 
     // updateBallPos();
   }
 
   setupGame(): void {
-    this.status = GameStatus.Setup;
+    this.status = Match.Status.Setup;
   }
 
   // retrieve ball pos
-  getBallPos(): Position {
+  getBallPos(): Game.Position {
     return this.ball.getPosition();
   }
 
   getPlayersPos(): [
-    { id: string; pos: Position },
-    { id: string; pos: Position }
+    { id: string; pos: Game.Position },
+    { id: string; pos: Game.Position }
   ] {
     const player1 = {
       id: this.player1Profile.uid,
@@ -70,9 +70,9 @@ class Game {
     return [player1, player2];
   }
 
-  getGameStatus(): GameStatus {
+  getGameStatus(): Match.Status {
     return this.status;
   }
 }
 
-export default Game;
+export default GameInstance;

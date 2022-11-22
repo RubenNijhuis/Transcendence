@@ -1,5 +1,6 @@
 // Types
-import { Game, Profile } from "../../../types";
+import Profile from "../../../types/Profile";
+import Game from "../../../types/Game";
 
 // Random int
 import randomNum from "../../../utils/numbers/randomIntFromRange";
@@ -20,14 +21,14 @@ const generateGameResult = (
     for (let i = 0; i < amount; i++) {
         const winOrLose: number = randomNum(0, 1);
 
-        let score = {
+        const score = {
             player1: 0,
-            player2: 0
+            player2: 0,
         };
 
-        let elo = {
+        const elo = {
             player1: 0,
-            player2: 0
+            player2: 0,
         };
 
         const otherScore: number = randomNum(0, 4);
@@ -47,7 +48,7 @@ const generateGameResult = (
             score,
             gameType: Game.GameType.Classic,
             scoreType: Game.ScoreType.Friendly,
-            elo
+            elo,
         };
 
         MatchRecordList.push(newMatchRecord);

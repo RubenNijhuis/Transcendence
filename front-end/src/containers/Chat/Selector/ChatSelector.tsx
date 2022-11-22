@@ -12,7 +12,7 @@ import { Profile, Chat } from "../../../types";
 import {
     ChatTypeSelectorContainer,
     Container,
-    DirectMessageEntry
+    DirectMessageEntry,
 } from "./ChatSelector.style";
 import ChatInterface from "../CreateGroup";
 import { useUser } from "../../../contexts/UserContext";
@@ -46,7 +46,7 @@ interface IChatTypeSelector {
 
 const ChatTypeSelector = ({
     activeType,
-    setActiveType
+    setActiveType,
 }: IChatTypeSelector): JSX.Element => {
     const handleChatTypeSelect = (type: Chat.Group.GroupType): void => {
         setActiveType(type);
@@ -88,7 +88,7 @@ const DirectMessageList = ({
     selectedChatType,
     directChats,
     groupChats,
-    setSelectedChat
+    setSelectedChat,
 }: IDirectMessageList): JSX.Element => {
     const { user } = useUser();
     const [selectedChatId, setSelectedChatId] = useState<number>(0);
@@ -157,7 +157,7 @@ const ChatSelector = ({
     directChats,
     groupChats,
     selectedChat,
-    setSelectedChat
+    setSelectedChat,
 }: IChatSelector): JSX.Element => {
     const [selectedChatType, setSelectedChatType] =
         useState<Chat.Group.GroupType>(Chat.Group.GroupType.DM);

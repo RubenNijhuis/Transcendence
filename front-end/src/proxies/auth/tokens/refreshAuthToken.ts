@@ -18,8 +18,8 @@ const refreshAuthToken = async (
         const route = ApiRoutes.refreshAuthToken();
         const config: apiRequestConfig = {
             headers: {
-                Authorization: `Bearer ${refreshToken}`
-            }
+                Authorization: `Bearer ${refreshToken}`,
+            },
         };
 
         const { data } = await API.get<Request.AuthToken>(route, config);

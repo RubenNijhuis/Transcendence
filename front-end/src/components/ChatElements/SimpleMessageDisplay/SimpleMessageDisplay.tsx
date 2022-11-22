@@ -7,7 +7,7 @@ import {
     lightTextColor,
     magicNum,
     mainColor,
-    smallRadius
+    smallRadius,
 } from "../../../styles/StylingConstants";
 
 ////////////////////////////////////////////////////////////
@@ -34,7 +34,7 @@ const Container = styled.div<{ fromUser: boolean }>`
 
 const SimpleMessageDisplay = ({
     fromUser,
-    message
+    message,
 }: ISimpleMessageDisplay): JSX.Element => {
     const formattedContent: Chat.Message.SimpleMessage =
         message.content as Chat.Message.SimpleMessage;

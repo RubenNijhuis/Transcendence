@@ -7,7 +7,7 @@ import {
     SuccesRequestInterceptor,
     ErrorRequestInterceptor,
     SuccesResponseInterceptor,
-    ErrorResponseInterceptor
+    ErrorResponseInterceptor,
 } from "./interceptors";
 
 ////////////////////////////////////////////////////////////
@@ -16,7 +16,7 @@ type apiRequestConfig = AxiosRequestConfig;
 
 // Instance
 const API = axios.create({
-    baseURL: ApiRoutes.baseUrl()
+    baseURL: ApiRoutes.baseUrl(),
 });
 
 /**

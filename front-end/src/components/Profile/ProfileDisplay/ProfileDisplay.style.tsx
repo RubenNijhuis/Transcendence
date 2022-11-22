@@ -6,7 +6,7 @@ import {
     mainColor,
     mediumRadius,
     secondaryColor,
-    smallRadius
+    smallRadius,
 } from "../../../styles/StylingConstants";
 
 const Container = styled.div`

@@ -17,7 +17,7 @@ interface ILayout {
 }
 
 /**
- * Is wrapped around each page. Standardizes the content 
+ * Is wrapped around each page. Standardizes the content
  * that is always on a page
  */
 const Layout = ({ children }: ILayout): JSX.Element => {

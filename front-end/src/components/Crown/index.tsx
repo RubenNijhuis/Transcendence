@@ -1,3 +1,3 @@
-import Crown from './Crown'
+import Crown from "./Crown";
 
 export default Crown;

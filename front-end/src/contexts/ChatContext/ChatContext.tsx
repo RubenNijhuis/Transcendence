@@ -16,7 +16,7 @@ import {
     categorizeChats,
     getFirstDM,
     getMembersFromGroupChats,
-    getMessagesFromGroupChats
+    getMessagesFromGroupChats,
 } from "./ChatContext.bl";
 
 // Debug data
@@ -94,7 +94,7 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
         setActiveChat,
 
         directChats,
-        groupChats
+        groupChats,
     };
 
     ////////////////////////////////////////////////////////////

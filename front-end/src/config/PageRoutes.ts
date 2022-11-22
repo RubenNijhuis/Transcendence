@@ -26,7 +26,7 @@ const PageRoutes = {
 
     ////////////////////////////////////////////////////////////
 
-    whenNotLoggedIn: `/login`
+    whenNotLoggedIn: `/login`,
 };
 
 export default PageRoutes;

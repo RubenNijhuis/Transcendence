@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import {
     Container,
     MatchListContainer,
-    Match,
+    MatchItem,
     OpponentProfile,
     ScoreBoard
 } from "./GameHistory.style";
@@ -23,18 +23,19 @@ import Button from "../Button";
 
 // Utils
 import { paginateArray } from "../../utils/array";
+import Match from "../../types/Match";
 
 ////////////////////////////////////////////////////////////
 
 interface IMatchList {
-    matches: Game.MatchRecord[];
+    matches: Match.Record[];
 }
 
 const MatchList = ({ matches }: IMatchList) => {
     return (
         <ul>
             {matches.map(({ player1, player2, score }, count) => (
-                <Match key={count} win={score.player1 < score.player2}>
+                <MatchItem key={count} win={score.player1 < score.player2}>
                     <OpponentProfile>
                         <Asset url={player1.img_url} alt="player1" />
                         <Link to={`/profile/${player1.username}`}>
@@ -48,7 +49,7 @@ const MatchList = ({ matches }: IMatchList) => {
                             <span>{score.player2}</span>
                         </div>
                     </ScoreBoard>
-                </Match>
+                </MatchItem>
             ))}
         </ul>
     );
@@ -56,7 +57,7 @@ const MatchList = ({ matches }: IMatchList) => {
 
 interface IGameHistory {
     player: Profile.Instance;
-    matches: Game.MatchRecord[];
+    matches: Match.Record[];
 }
 
 const GameHistory = ({ player, matches }: IGameHistory): JSX.Element => {

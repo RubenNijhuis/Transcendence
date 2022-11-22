@@ -3,7 +3,7 @@ import {
     backgroundColor,
     magicNum,
     mainColor,
-    smallRadius
+    smallRadius,
 } from "../../styles/StylingConstants";
 
 const Container = styled.div`

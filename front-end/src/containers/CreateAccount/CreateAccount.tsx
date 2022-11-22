@@ -6,7 +6,7 @@ import Heading from "../../components/Heading";
 import {
     CreateAccountForm,
     StyledError,
-    StyledInput
+    StyledInput,
 } from "./CreateAccount.style";
 
 // Box slider
@@ -59,7 +59,7 @@ const CreateAccount = (): JSX.Element => {
             const user = await handleAccountCreation({
                 username: username.value,
                 color: color.value,
-                description: description.value
+                description: description.value,
             });
 
             setUser(user);

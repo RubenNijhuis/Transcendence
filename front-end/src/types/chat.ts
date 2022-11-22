@@ -1,5 +1,5 @@
-import Game from "./game";
-import Profile from "./profile";
+import Match from "./Match";
+import Profile from "./Profile";
 
 ////////////////////////////////////////////////////////////
 
@@ -8,7 +8,7 @@ namespace Chat {
         export enum ContentType {
             Simple,
             Picture,
-            InvitePlay
+            InvitePlay,
         }
 
         // General type
@@ -32,7 +32,7 @@ namespace Chat {
         export interface GameInviteMessage {
             opponent: Profile.Instance;
             user: Profile.Instance;
-            game_type: Game.GameType;
+            game_type: Match.GameType;
             accepted: boolean;
         }
 
@@ -52,7 +52,7 @@ namespace Chat {
     export namespace Group {
         export enum GroupType {
             DM,
-            Group
+            Group,
         }
 
         export interface Instance {

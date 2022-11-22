@@ -12,7 +12,9 @@ import { Chat } from "../../types";
  * @param username
  * @returns
  */
-const getChatsByUsername = async (username: string): Promise<Chat.Group.Instance[]> => {
+const getChatsByUsername = async (
+    username: string
+): Promise<Chat.Group.Instance[]> => {
     try {
         const route = ApiRoutes.getChatsByUsername(username);
 

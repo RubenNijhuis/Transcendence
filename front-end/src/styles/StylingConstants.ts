@@ -9,7 +9,7 @@ export const largeRadius = "24px";
 // Background colors
 export const mainColor = "rgb(46, 54, 65)";
 export const mainColorMono = "#434F5F";
-export const secondaryColor = '#3f2d34';
+export const secondaryColor = "#3f2d34";
 export const backgroundColor = "rgba(226,226,240,1)";
 
 // Text colors

@@ -6,7 +6,7 @@ import {
     mainColor,
     mediumRadius,
     secondaryColor,
-    smallRadius
+    smallRadius,
 } from "../../styles/StylingConstants";
 
 ///////////////////////////////////////////////////////////
@@ -120,15 +120,16 @@ const NavLinksContainer = styled.ul`
             font-weight: 600;
             text-decoration: none;
 
-            &::before, &:after {
-                content: '';
+            &::before,
+            &:after {
+                content: "";
                 position: absolute;
                 bottom: 0;
                 left: 0;
                 width: 100%;
                 height: 2px;
                 border-radius: 100px;
-                background: ${mainColor}
+                background: ${mainColor};
             }
 
             &:after {

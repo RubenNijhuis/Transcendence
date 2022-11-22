@@ -15,7 +15,7 @@ import { setDefaultAuthHeader } from "../instances/apiInstance";
  */
 const updateAuthTokens = ({
     accessToken,
-    refreshToken
+    refreshToken,
 }: Request.AuthToken): void => {
     setItem(StoreId.accessToken, accessToken);
     setItem(StoreId.refreshToken, refreshToken);

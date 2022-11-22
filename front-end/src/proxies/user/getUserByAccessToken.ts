@@ -1,6 +1,6 @@
 // Api config
 import ApiRoutes from "../../config/ApiRoutes";
-import { API, apiRequestConfig} from "../instances/apiInstance";
+import { API, apiRequestConfig } from "../instances/apiInstance";
 
 import { addImagesToProfile } from "../profile/addImagesToProfile";
 
@@ -19,15 +19,15 @@ const getUserByAccessToken = async (
 ): Promise<Profile.Instance> => {
     try {
         const route = ApiRoutes.getUserByAccessToken();
-        const config: apiRequestConfig= {
-            headers: { Authorization: `Bearer ${accessToken}` }
+        const config: apiRequestConfig = {
+            headers: { Authorization: `Bearer ${accessToken}` },
         };
 
         const { data } = await API.get<Profile.Instance>(route, config);
 
         const returnedUser = await addImagesToProfile(data, {
             profile: true,
-            banner: true
+            banner: true,
         });
 
         return Promise.resolve(returnedUser);

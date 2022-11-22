@@ -5,7 +5,7 @@ import { GrFormClose } from "react-icons/gr";
 import {
     CloseButtonContainer,
     Container,
-    ElementContainer
+    ElementContainer,
 } from "./Modal.style";
 
 ///////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ interface IModal {
 const Modal = ({
     children,
     setModalActive,
-    allowClose
+    allowClose,
 }: IModal): JSX.Element => {
     return (
         <Container>

@@ -49,7 +49,7 @@ const ModalProvider = ({ children }: IModalProvider): JSX.Element => {
         setModalActive,
 
         setModalElement,
-        setAllowClose
+        setAllowClose,
     };
 
     ////////////////////////////////////////////////////////////

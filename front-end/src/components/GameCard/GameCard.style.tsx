@@ -6,7 +6,7 @@ import {
     magicNum,
     mainColor,
     mediumRadius,
-    smallRadius
+    smallRadius,
 } from "../../styles/StylingConstants";
 
 ////////////////////////////////////////////////////////////

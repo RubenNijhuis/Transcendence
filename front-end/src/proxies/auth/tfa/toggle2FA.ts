@@ -9,7 +9,7 @@ const toggle2FA = async (uid: string): Promise<string> => {
         console.log(uid);
         const route = ApiRoutes.turnOnTFA();
         const body = {
-            uid
+            uid,
         };
 
         const { data } = await API.post(route, body);

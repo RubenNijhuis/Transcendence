@@ -1,5 +1,9 @@
 import styled from "styled-components";
-import { magicNum, mainColor, smallRadius } from "../../styles/StylingConstants";
+import {
+    magicNum,
+    mainColor,
+    smallRadius,
+} from "../../styles/StylingConstants";
 
 ////////////////////////////////////////////////////////////
 
@@ -25,7 +29,6 @@ const Container = styled.section`
             flex-direction: column;
             align-items: center;
 
-            
             .asset {
                 background-color: ${mainColor};
                 width: 100%;
