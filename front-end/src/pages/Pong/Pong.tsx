@@ -42,7 +42,7 @@ const Pong = (): JSX.Element => {
     // TODO: Abstract into business logic part
     useEffect(() => {
         createConnection(SocketType.Type.Game);
-    }, [createConnection]);
+    }, []);
 
     useEffect(() => {
         if (canvasRef.current === null) return;
