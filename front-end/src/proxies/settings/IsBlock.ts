@@ -1,7 +1,7 @@
 import ApiRoutes from "../../config/ApiRoutes";
 import { API } from "../instances/apiInstance";
 
-////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 
 const IsBlock = async (username: string, blockname: string): Promise<any> => {
     try {
@@ -9,11 +9,12 @@ const IsBlock = async (username: string, blockname: string): Promise<any> => {
 		const { data } = await API.get(route);
 		return Promise.resolve(data);
 
-    } catch (err) {
+    }
+	catch (err) {
         return Promise.reject(err);
     }
 };
 
-////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 
 export { IsBlock };
