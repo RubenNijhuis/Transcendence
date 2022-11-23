@@ -20,14 +20,13 @@ const useFileInput = (): IFileInputReturn => {
 
         setValue({
             file: returnedFile,
-            fileName
+            fileName,
         });
     };
 
     return {
         value,
         onChange: handleInputChange,
-        
     };
 };
 

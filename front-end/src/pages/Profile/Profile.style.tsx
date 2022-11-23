@@ -2,7 +2,7 @@ import styled from "styled-components";
 import {
     largeRadius,
     magicNum,
-    mainColor
+    mainColor,
 } from "../../styles/StylingConstants";
 
 const ProfileDetailsContainer = styled.section`

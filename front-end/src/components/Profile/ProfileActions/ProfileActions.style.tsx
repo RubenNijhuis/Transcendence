@@ -2,7 +2,7 @@ import styled from "styled-components";
 import {
     lightTextColor,
     magicNum,
-    smallRadius
+    smallRadius,
 } from "../../../styles/StylingConstants";
 
 ///////////////////////////////////////////////////////////

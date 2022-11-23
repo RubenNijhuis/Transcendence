@@ -1,23 +1,23 @@
 namespace Profile {
-    export type ProfileID = string;
+  export type ProfileID = string;
 
-    export interface Instance {
-        uid: ProfileID;
+  export interface Instance {
+    uid: ProfileID;
 
-        username: string;
-        description: string;
+    username: string;
+    description: string;
 
-        img_url: string;
-        banner_url: string;
+    img_url: string;
+    banner_url: string;
 
-        color: string;
+    color: string;
 
-        isTfaEnabled?: boolean;
+    isTfaEnabled?: boolean;
 
-        rank: number;
-        wins: number;
-        losses: number;
-    }
+    rank: number;
+    wins: number;
+    losses: number;
+  }
 }
 
 ////////////////////////////////////////////////////////////

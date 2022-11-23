@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 
 // UI
 import Layout from "../../components/Layout";
-import Loader from "../../components/Loader";
 import GameHistory from "../../components/GameHistory";
 
 // Profile components
@@ -103,19 +102,12 @@ const ProfilePage = (): JSX.Element => {
         }
     };
 
-    const handleSetProfile = async () => {
-        // Bit of a forced reset but it is pretty harmless
-        setModalActive(false);
-
-        /**
-         * If there is a profile name in the url we
-         * request that user and set it as the profile
-         */
+    const handleSetProfile = async (): Promise<Profile.Instance> => {
         if (profileName !== undefined) {
             try {
                 const imageSelect: Request.Payload.ImageSelect = {
                     profile: true,
-                    banner: true
+                    banner: true,
                 };
 
                 const returnedProfile = await getProfileByUsername(
@@ -123,14 +115,13 @@ const ProfilePage = (): JSX.Element => {
                     imageSelect
                 );
 
-                setSelectedProfile(returnedProfile);
-                return;
+                return Promise.resolve(returnedProfile);
             } catch (err) {
                 console.error(err);
             }
-        } else {
-            setSelectedProfile(user);
         }
+
+        return Promise.resolve(user);
     };
 
     ////////////////////////////////////////////////////////////
@@ -140,20 +131,18 @@ const ProfilePage = (): JSX.Element => {
      */
     useEffect(() => {
         const runProfileSetup = async () => {
-            const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
+            // Bit of a forced reset but it is pretty harmless
+            setModalActive(false);
 
-            /**
-             * What I think is happening is that the localStore is too slow
-             * But the user state is very fast, so we don't only check for the store
-             * but also see if the user is still null
-             */
+            const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
 
             if (user === null && inLoginProcess) {
                 handleLoginProcess();
                 return;
             }
 
-            await handleSetProfile();
+            const profileToBeSet = await handleSetProfile();
+            setSelectedProfile(profileToBeSet);
 
             // Returns page to the top
             window.scrollTo(0, 0);
@@ -181,8 +170,6 @@ const ProfilePage = (): JSX.Element => {
     }, [selectedProfile]);
 
     ////////////////////////////////////////////////////////////
-
-    // if (!selectedProfile && )
 
     return (
         <Layout>

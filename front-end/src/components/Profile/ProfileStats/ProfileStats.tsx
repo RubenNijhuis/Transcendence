@@ -1,5 +1,5 @@
 // Types
-import { Game, Profile } from "../../../types";
+import { Match, Profile } from "../../../types";
 
 // UI
 import Heading from "../../Heading";
@@ -11,7 +11,7 @@ import { Container } from "./ProfileStats.style";
 
 interface IProfileStats {
     player: Profile.Instance;
-    matches: Game.MatchRecord[];
+    matches: Match.Record[];
 }
 
 const ProfileStats = ({ player, matches }: IProfileStats): JSX.Element => {

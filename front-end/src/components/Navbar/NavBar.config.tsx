@@ -12,23 +12,23 @@ const locations: NavLink[] = [
     {
         name: "Chat",
         url: PageRoutes.chat,
-        onlyWhenLoggedIn: true
+        onlyWhenLoggedIn: true,
     },
     {
         name: "Pong",
         url: PageRoutes.pong,
-        onlyWhenLoggedIn: false
+        onlyWhenLoggedIn: false,
     },
     {
         name: "Leaderboard",
         url: PageRoutes.leaderBoard,
-        onlyWhenLoggedIn: true
+        onlyWhenLoggedIn: true,
     },
     {
         name: "Profile",
         url: PageRoutes.profile,
-        onlyWhenLoggedIn: true
-    }
+        onlyWhenLoggedIn: true,
+    },
 ];
 
 ////////////////////////////////////////////////////////////

@@ -14,7 +14,7 @@ const PongGameSelect = (): JSX.Element => {
                 display: "flex",
                 flexDirection: "row",
                 gap: magicNum,
-                justifyContent: "center"
+                justifyContent: "center",
             }}
         >
             <GameCard

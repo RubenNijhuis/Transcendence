@@ -3,7 +3,7 @@ import {
     largeRadius,
     lightTextColor,
     magicNum,
-    mainColor
+    mainColor,
 } from "../../styles/StylingConstants";
 
 ///////////////////////////////////////////////////////////

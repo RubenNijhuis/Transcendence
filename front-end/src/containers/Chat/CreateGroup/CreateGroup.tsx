@@ -15,7 +15,7 @@ import Heading from "../../../components/Heading";
 import {
     Container,
     CreateChatContainer,
-    CreateGroupChatContainer
+    CreateGroupChatContainer,
 } from "./CreateGroup.style";
 import Asset from "../../../components/Asset";
 
@@ -28,7 +28,7 @@ import { GrFormSearch, GrFormClose } from "react-icons/gr";
 ///////////////////////////////////////////////////////////
 
 const CreateGroupChat = ({
-    friends
+    friends,
 }: {
     friends: Profile.Instance[];
 }): JSX.Element => {
@@ -51,7 +51,7 @@ const CreateGroupChat = ({
     };
 
     const checkIfProfileIsSelected = (id: string): boolean => {
-        let foundInSelectedFriends: boolean = false;
+        let foundInSelectedFriends = false;
 
         foundInSelectedFriends =
             selectedFriends.find((member) => {
@@ -124,7 +124,7 @@ const CreateGroupChat = ({
 };
 
 const CreateChat = ({
-    setModalActive
+    setModalActive,
 }: {
     setModalActive: React.Dispatch<React.SetStateAction<boolean>>;
 }): JSX.Element => {

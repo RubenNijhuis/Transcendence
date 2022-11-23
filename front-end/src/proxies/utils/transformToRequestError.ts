@@ -15,7 +15,7 @@ const transformToRequestError = (err: AxiosError): Request.RequestError => {
     const returnedError: Request.RequestError = {
         error: err.message,
         type: "",
-        requestUrl: err.config.url as string
+        requestUrl: err.config.url as string,
     };
 
     if (err.response) {

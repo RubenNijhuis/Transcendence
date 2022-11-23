@@ -22,7 +22,7 @@ const createUser = async (
 
         const profile = await addImagesToProfile(data, {
             profile: true,
-            banner: true
+            banner: true,
         });
 
         return Promise.resolve(profile);

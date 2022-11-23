@@ -12,7 +12,7 @@ import { Container, ChangeSlideButtons } from "./BoxSlider.style";
 
 interface IBoxSlider {
     children: React.ReactNode;
-    onSlideChange(): void;
+    onSlideChange: () => void;
 }
 
 const BoxSlider = ({ children, onSlideChange }: IBoxSlider): JSX.Element => {

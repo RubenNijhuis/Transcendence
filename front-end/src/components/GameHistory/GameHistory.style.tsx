@@ -6,7 +6,7 @@ import {
     magicNum,
     mainColor,
     mediumRadius,
-    smallRadius
+    smallRadius,
 } from "../../styles/StylingConstants";
 
 ///////////////////////////////////////////////////////////
@@ -27,7 +27,7 @@ const MatchListContainer = styled.div`
     flex-direction: column;
 `;
 
-const Match = styled.div<{ win: boolean }>`
+const MatchItem = styled.div<{ win: boolean }>`
     padding: calc(${magicNum} / 4);
     padding-right: calc(${magicNum} / 2);
 
@@ -80,4 +80,10 @@ const ScoreBoard = styled.div`
 
 ///////////////////////////////////////////////////////////
 
-export { Container, MatchListContainer, Match, OpponentProfile, ScoreBoard };
+export {
+    Container,
+    MatchListContainer,
+    MatchItem,
+    OpponentProfile,
+    ScoreBoard,
+};

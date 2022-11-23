@@ -92,4 +92,4 @@ class LocalStore {
 }
 
 export default LocalStore;
-export { setItem, getItem, removeItem, clearAll, amountKeys};
+export { setItem, getItem, removeItem, clearAll, amountKeys };

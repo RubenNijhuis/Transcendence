@@ -9,7 +9,7 @@ import { FiSettings } from "react-icons/fi";
 import {
     Container,
     NavLinksContainer,
-    ProfileIconContainer
+    ProfileIconContainer,
 } from "./NavBar.style";
 
 // Navigation

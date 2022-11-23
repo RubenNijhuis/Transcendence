@@ -66,7 +66,7 @@ const names = [
     "Ditrope",
     "Velosia",
     "Burbobdt",
-    "Toughpetr"
+    "Toughpetr",
 ];
 
 const generateProfile = (amount: number): Profile.Instance[] => {
@@ -76,7 +76,7 @@ const generateProfile = (amount: number): Profile.Instance[] => {
         const username: string = names[randomNum(0, names.length - 1)];
         const rank: number = i + 1;
 
-        const color: string = "#1e1e1e";
+        const color = "#1e1e1e";
 
         const randomWidth: number = Math.ceil(randomNum(100, 1000) / 100) * 100;
         const randomHeight: number =
@@ -105,7 +105,7 @@ const generateProfile = (amount: number): Profile.Instance[] => {
             uid: (i + 1).toString(),
             img_url,
             wins,
-            losses
+            losses,
         };
 
         profileList.push(newProfile);

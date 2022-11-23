@@ -9,5 +9,5 @@ export {
     getProfileBannerByUsername,
     getProfileByUsername,
     getProfileImageByUsername,
-    uploadImage
+    uploadImage,
 };

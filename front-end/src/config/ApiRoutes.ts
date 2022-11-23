@@ -48,7 +48,7 @@ const ApiRoutes = {
     // Chat ////////////////////////////////////////////////////
     getChatsByUsername: (username: string) => `/group/${username}`,
     createChat: () => `/group/create`,
-    verifyPassword: (id: string) => `/group/${id}`,
+    verifyPassword: (id: number) => `/group/${id}`,
     // Chat ////////////////////////////////////////////////////
 
     // Leaderboard /////////////////////////////////////////////

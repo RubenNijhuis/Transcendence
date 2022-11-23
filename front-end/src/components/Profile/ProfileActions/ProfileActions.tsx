@@ -10,7 +10,7 @@ import {
     removeFriend,
     getIsFriend,
     isRequested,
-    removeFriendRequest
+    removeFriendRequest,
 } from "../../../proxies/friend";
 
 // Types

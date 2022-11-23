@@ -71,9 +71,10 @@ const ChatTitle = ({ chat, isDmChat }: IChatTitle): JSX.Element => {
 
 interface IPasswordInput {
     setIsProtected: React.Dispatch<React.SetStateAction<boolean>>;
+    activeChat: Chat.Group.Instance;
 }
 
-const PasswordInput = ({ setIsProtected }: IPasswordInput) => {
+const PasswordInput = ({ activeChat, setIsProtected }: IPasswordInput) => {
     const passwordText = useFormInput("");
     const [passwordError, setPasswordError] = useState<boolean>(false);
 
@@ -81,7 +82,10 @@ const PasswordInput = ({ setIsProtected }: IPasswordInput) => {
 
     const sendPassword = async () => {
         try {
-            const verifyResponse = await verifyPassword(passwordText.value);
+            const verifyResponse = await verifyPassword(
+                activeChat.group_id,
+                passwordText.value
+            );
 
             if (verifyResponse === false) {
                 setPasswordError(false);
@@ -144,10 +148,8 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
 
     // TODO: Abstract into business logic part
     useEffect(() => {
-        if (isProtected === false) return;
-
-        createConnection(SocketType.SocketType.Game);
-    }, []);
+        createConnection(SocketType.Type.Chat);
+    }, [chat]);
 
     useEffect(() => {
         if (!connection) return;
@@ -159,15 +161,20 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
         };
     }, [connection]);
 
+    const sendMessage = () => {
+        console.log(chat);
+        connection.emit("sendMessage", chat);
+    };
+
     ////////////////////////////////////////////////////////////
 
     const setupConnections = (socket: SocketType.Instance) => {
-        socket.on(SocketRoutes.chat.sendMessage(), () => {});
-        socket.on(SocketRoutes.chat.receiveMessage(), () => {});
+        socket.on(SocketRoutes.chat.receiveMessage(), (res) => {
+            console.log(res);
+        });
     };
 
     const removeConnections = (socket: SocketType.Instance) => {
-        socket.off(SocketRoutes.chat.sendMessage());
         socket.off(SocketRoutes.chat.receiveMessage());
     };
 
@@ -176,7 +183,7 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
     return (
         <Container>
             <ChatTitle chat={chat} isDmChat={isDmChat} />
-
+            <Button onClick={sendMessage}>Send standard message</Button>
             <div className="chat-content">
                 {!isProtected &&
                     isUnlocked &&
@@ -189,7 +196,10 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
                         />
                     ))}
                 {!isUnlocked && (
-                    <PasswordInput setIsProtected={setIsProtected} />
+                    <PasswordInput
+                        setIsProtected={setIsProtected}
+                        activeChat={chat}
+                    />
                 )}
             </div>
             <ChatInput user={user} groupchat={chat} />

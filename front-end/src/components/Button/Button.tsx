@@ -14,7 +14,7 @@ const Button = ({
     theme,
     children,
     className,
-    onClick
+    onClick,
 }: IButton): JSX.Element => {
     let fullClassName = "button";
 

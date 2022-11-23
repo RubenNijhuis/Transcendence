@@ -16,7 +16,7 @@ const removeFriendRequest = async (
         const route = ApiRoutes.removeFriendRequest();
         const body = {
             username,
-            requested: friendname
+            requested: friendname,
         };
 
         const { data } = await API.post(route, body);

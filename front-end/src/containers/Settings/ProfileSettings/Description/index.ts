@@ -1,3 +1,3 @@
-import UploadDescription from "./UploadDescription"
+import UploadDescription from "./UploadDescription";
 
 export default UploadDescription;

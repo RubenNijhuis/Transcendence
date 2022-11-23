@@ -6,7 +6,7 @@ import {
     mainColor,
     darkTextColor,
     lightTextColor,
-    backgroundColor
+    backgroundColor,
 } from "../../styles/StylingConstants";
 
 ///////////////////////////////////////////////////////////

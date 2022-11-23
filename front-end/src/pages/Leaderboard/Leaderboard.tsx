@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 // UI
 import Heading from "../../components/Heading";
 import Layout from "../../components/Layout";
-import Loader from "../../components/Loader";
 import Podium from "../../containers/Leaderboard/Podium";
 import RankingList from "../../containers/Leaderboard/RankingList";
 
@@ -34,7 +33,7 @@ const Leaderboard = (): JSX.Element => {
     useEffect(() => {
         setLeaderboard(leaderBoard);
         // getLeaderboard().then(setLeaderboard).catch(console.log);
-    }, []);
+    }, [leaderBoard]);
 
     ////////////////////////////////////////////////////////////
 

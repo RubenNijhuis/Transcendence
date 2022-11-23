@@ -4,7 +4,7 @@ export const InboundLinks = [
     {
         name: "Home",
         url: PageRoutes.home,
-        onlyWhenLoggedin: false
+        onlyWhenLoggedin: false,
     },
 ];
 

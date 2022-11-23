@@ -23,14 +23,14 @@ interface ICanvas {
 }
 
 const Canvas = ({ canvasRef }: ICanvas): JSX.Element => {
-    const canvasContainerRef = useRef(null!);
+    const canvasContainerRef = useRef<HTMLDivElement>(null!);
 
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
         if (canvasRef.current === null) return;
 
-        const canvasContainer: HTMLElement = canvasContainerRef.current;
+        const canvasContainer: HTMLDivElement = canvasContainerRef.current;
 
         // Set canvas width and height to container
         canvasRef.current.width = canvasContainer.offsetWidth;

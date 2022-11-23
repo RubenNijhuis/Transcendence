@@ -5,11 +5,11 @@
  * @returns string
  */
 const getValueFromUrl = (inputString: string, valueName: string): string => {
-    let returnVal: string = "";
+    let returnVal = "";
 
     const delimiters = {
         query: "?",
-        nameToValue: "="
+        nameToValue: "=",
     };
 
     const splitInput: string[] = inputString.split(delimiters.query);

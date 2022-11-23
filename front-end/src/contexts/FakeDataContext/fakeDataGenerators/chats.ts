@@ -5,7 +5,7 @@ import { get_img_url } from "./utils";
 import randomNum from "../../../utils/numbers/randomIntFromRange";
 
 // Types
-import { Profile, Game, Chat } from "../../../types";
+import { Profile, Game, Chat, Match } from "../../../types";
 
 // Utils
 import { generateProfile } from "./profile";
@@ -16,32 +16,32 @@ import { randomSliceOfArray } from "../../../utils/array";
 const generateInvite = (
     user: Profile.Instance,
     opponent: Profile.Instance
-): Chat.Message.GameInviteMessage => {
-    const invite: Chat.Message.GameInviteMessage = {
+): Chat.Message.GameInvite => {
+    const invite: Chat.Message.GameInvite = {
         opponent,
         user,
-        game_type: Game.GameType.Classic,
+        game_type: Match.GameType.Classic,
         accepted: false
     };
 
     return invite;
 };
 
-const generateSimpleMessage = (): Chat.Message.SimpleMessage => {
-    const simpleMessage: Chat.Message.SimpleMessage = {
+const generateSimpleMessage = (): Chat.Message.Simple => {
+    const simpleMessage: Chat.Message.Simple = {
         content: "Lorem ipsum sit dolor amet"
     };
 
     return simpleMessage;
 };
 
-const generatePictureMessage = (): Chat.Message.PictureMessage => {
+const generatePictureMessage = (): Chat.Message.Picture => {
     const randomWidth: number = Math.ceil(randomNum(1000, 2000) / 100) * 100;
     const randomHeight: number = Math.ceil(randomNum(1000, 2000) / 100) * 100;
 
     const img_url: string = get_img_url(randomWidth, randomHeight);
 
-    const picture: Chat.Message.PictureMessage = {
+    const picture: Chat.Message.Picture = {
         url: img_url,
         alt: "random"
     };

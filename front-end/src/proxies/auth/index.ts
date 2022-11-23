@@ -15,5 +15,5 @@ export {
     checkTokenValidity,
     toggle2FA,
     confirmTFA,
-    getqrTFA
+    getqrTFA,
 };

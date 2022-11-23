@@ -1,5 +1,5 @@
 // API
-import { API, apiRequestConfig} from "../instances/apiInstance";
+import { API, apiRequestConfig } from "../instances/apiInstance";
 import ApiRoutes from "../../config/ApiRoutes";
 
 // Image transform
@@ -17,8 +17,8 @@ const getProfileBannerByUsername = async (
 ): Promise<string> => {
     try {
         const route = ApiRoutes.getProfileBannerByUsername(username);
-        const config: apiRequestConfig= {
-            responseType: "arraybuffer"
+        const config: apiRequestConfig = {
+            responseType: "arraybuffer",
         };
 
         const { data } = await API.get(route, config);

@@ -1,5 +1,5 @@
 // React
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef } from "react";
 
 // UI
 import Asset from "../../components/Asset";
@@ -18,7 +18,7 @@ import { toggle2FA, confirmTFA, getqrTFA } from "../../proxies/auth";
 import { Container, QrCodeContainer } from "./TwoFactorAuthentication.style";
 
 //tfa input
-import AuthCode, { AuthCodeRef } from 'react-auth-code-input';
+import AuthCode, { AuthCodeRef } from "react-auth-code-input";
 
 ////////////////////////////////////////////////////////////
 
@@ -30,7 +30,7 @@ const TwoFactorAuthentication = () => {
     const { user } = useUser();
 
     ////////////////////////////////////////////////////////////
-    
+
     const [result, setResult] = useState<string>(null!);
     const AuthInputRef = useRef<AuthCodeRef>(null);
     const handleOnChange = (res: any) => {
@@ -71,10 +71,8 @@ const TwoFactorAuthentication = () => {
         }
     };
 
-
     const ConfirmTFA = async () => {
         try {
-            
             const input = await confirmTFA(user.uid, result);
 
             Logger(
@@ -105,7 +103,11 @@ const TwoFactorAuthentication = () => {
             <Button theme="dark" onClick={ConfirmTFA}>
                 confirm
             </Button>
-            <AuthCode allowedCharacters='numeric' onChange={handleOnChange} ref={AuthInputRef} />
+            <AuthCode
+                allowedCharacters="numeric"
+                onChange={handleOnChange}
+                ref={AuthInputRef}
+            />
             <button onClick={() => AuthInputRef.current?.clear()}>Clear</button>
             <QrCodeContainer>
                 {QRlink && <Asset url={QRlink} alt="qr code" />}

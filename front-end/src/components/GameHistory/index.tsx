@@ -1,3 +1,3 @@
-import GameHistory from './GameHistory'
+import GameHistory from "./GameHistory";
 
 export default GameHistory;

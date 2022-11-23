@@ -3,7 +3,7 @@ import styled from "styled-components";
 import {
     magicNum,
     mainColor,
-    smallRadius
+    smallRadius,
 } from "../../styles/StylingConstants";
 
 const StyledInput = styled.div`
