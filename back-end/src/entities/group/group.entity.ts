@@ -5,7 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn
 } from "typeorm";
-import Groupuser from "../groupuser/groupuser.entity";
+import GroupUser from "../groupuser/groupuser.entity";
 import Message from "../message/message.entity";
 import Record from "../record/record.entity";
 
@@ -27,9 +27,9 @@ export class Group {
   @Column()
   groupname: string;
 
-  @OneToMany((type) => Groupuser, (groupuser) => groupuser.group)
+  @OneToMany((type) => GroupUser, (groupuser) => groupuser.group)
   @JoinTable()
-  users: Groupuser[];
+  users: GroupUser[];
 
   @OneToMany((type) => Message, (message) => message.group, {
     nullable: true

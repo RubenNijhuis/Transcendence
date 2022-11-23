@@ -39,5 +39,4 @@ export class MessageController {
       return error;
     }
   }
-
 }

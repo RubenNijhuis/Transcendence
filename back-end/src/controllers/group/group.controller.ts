@@ -92,6 +92,7 @@ export class GroupController {
       await this.groupService.addOwner(addOwnerDto);
       return HttpStatus.OK;
     } catch (err) {
+      
       throw err;
     }
   }
