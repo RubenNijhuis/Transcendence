@@ -11,7 +11,7 @@ import ProfileActions from "../ProfileActions";
 import { Container } from "./ProfileDisplay.style";
 
 // Types
-import { Profile, Game } from "../../../types";
+import { Profile, Match } from "../../../types";
 
 // User
 import { useUser } from "../../../contexts/UserContext";
@@ -20,12 +20,12 @@ import { useUser } from "../../../contexts/UserContext";
 
 interface IProfileDisplay {
     profile: Profile.Instance;
-    matchHistory: Game.MatchRecord[];
+    matchHistory: Match.Record[];
 }
 
 const ProfileDisplay = ({
     profile,
-    matchHistory,
+    matchHistory
 }: IProfileDisplay): JSX.Element => {
     const { banner_url, rank, img_url, username, description } = profile;
 

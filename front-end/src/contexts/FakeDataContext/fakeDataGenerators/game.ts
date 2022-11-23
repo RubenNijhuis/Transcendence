@@ -1,6 +1,5 @@
 // Types
-import Profile from "../../../types/Profile";
-import Game from "../../../types/Game";
+import { Match, Profile } from "../../../types";
 
 // Random int
 import randomNum from "../../../utils/numbers/randomIntFromRange";
@@ -13,8 +12,8 @@ import { generateProfile } from "./profile";
 const generateGameResult = (
     player: Profile.Instance,
     amount: number
-): Game.MatchRecord[] => {
-    const MatchRecordList: Game.MatchRecord[] = [];
+): Match.Record[] => {
+    const MatchRecordList: Match.Record[] = [];
 
     const opponents: Profile.Instance[] = generateProfile(amount);
 
@@ -23,12 +22,12 @@ const generateGameResult = (
 
         const score = {
             player1: 0,
-            player2: 0,
+            player2: 0
         };
 
         const elo = {
             player1: 0,
-            player2: 0,
+            player2: 0
         };
 
         const otherScore: number = randomNum(0, 4);
@@ -41,14 +40,14 @@ const generateGameResult = (
             score.player2 = 5;
         }
 
-        const newMatchRecord: Game.MatchRecord = {
+        const newMatchRecord: Match.Record = {
             uid: (0).toString(),
             player1: player,
             player2: opponents[i],
             score,
-            gameType: Game.GameType.Classic,
-            scoreType: Game.ScoreType.Friendly,
-            elo,
+            gameType: Match.GameType.Classic,
+            scoreType: Match.ScoreType.Friendly,
+            elo
         };
 
         MatchRecordList.push(newMatchRecord);

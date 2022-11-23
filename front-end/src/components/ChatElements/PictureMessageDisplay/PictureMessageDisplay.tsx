@@ -35,10 +35,10 @@ interface IPictureMessageDisplay {
 
 const PictureMessageDisplay = ({
     fromUser,
-    message,
+    message
 }: IPictureMessageDisplay): JSX.Element => {
-    const formattedMessage: Chat.Message.PictureMessage =
-        message.content as Chat.Message.PictureMessage;
+    const formattedMessage: Chat.Message.Picture =
+        message.content as Chat.Message.Picture;
 
     ////////////////////////////////////////////////////////////
 

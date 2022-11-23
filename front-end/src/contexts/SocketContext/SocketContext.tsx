@@ -14,7 +14,7 @@ import { SocketType } from "../../types";
 
 interface SocketContextType {
     connection: SocketType.Instance;
-    createConnection: (socketType: SocketType.SocketType) => void;
+    createConnection: (socketType: SocketType.Type) => void;
     destroyConnectionInstance: () => void;
 }
 
@@ -33,7 +33,7 @@ const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
-    const createConnection = (socketType: SocketType.SocketType) => {
+    const createConnection = (socketType: SocketType.Type) => {
         if (connection !== null) {
             connection.close();
         }
@@ -56,7 +56,7 @@ const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
     const value: SocketContextType = {
         connection,
         createConnection,
-        destroyConnectionInstance,
+        destroyConnectionInstance
     };
 
     ////////////////////////////////////////////////////////////

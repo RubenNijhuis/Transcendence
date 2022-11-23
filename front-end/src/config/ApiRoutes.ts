@@ -50,7 +50,7 @@ const ApiRoutes = {
     // Chat ////////////////////////////////////////////////////
     getChatsByUsername: (username: string) => `/group/${username}`,
     createChat: () => `/group/create`,
-    verifyPassword: (id: string) => `/group/${id}`,
+    verifyPassword: (id: number) => `/group/${id}`,
     // Chat ////////////////////////////////////////////////////
 
     // Leaderboard /////////////////////////////////////////////
@@ -66,7 +66,7 @@ const ApiRoutes = {
     // TFAuthentication //////////////////////////////////////////
     turnOnTFA: () => `/user/enable2fa`,
     getqrTFA: () => `/tfa/google2fa`,
-    confirmTFA: () => `/tfa/google2fa/authenticate`,
+    confirmTFA: () => `/tfa/google2fa/authenticate`
     // TFAuthentication //////////////////////////////////////////
 };
 

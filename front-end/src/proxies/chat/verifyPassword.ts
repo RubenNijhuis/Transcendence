@@ -11,7 +11,7 @@ import ApiRoutes from "../../config/ApiRoutes";
  * @returns boolean
  */
 const verifyPassword = async (
-    groupID: string,
+    groupID: number,
     password: string
 ): Promise<boolean> => {
     try {
@@ -19,8 +19,8 @@ const verifyPassword = async (
         const config: apiRequestConfig = {
             data: {
                 groupID,
-                password,
-            },
+                password
+            }
         };
 
         const { data } = await API.post<boolean>(route, config);

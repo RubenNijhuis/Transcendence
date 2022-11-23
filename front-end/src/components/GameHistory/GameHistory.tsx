@@ -62,11 +62,11 @@ interface IGameHistory {
 
 const GameHistory = ({ player, matches }: IGameHistory): JSX.Element => {
     const [selectedPage, setSelectedPage] = useState<number>(0);
-    const [matchesPage, setMatchesPage] = useState<Game.MatchRecord[]>(null!);
+    const [matchesPage, setMatchesPage] = useState<Match.Record[]>(null!);
 
     ////////////////////////////////////////////////////////////
 
-    const paginatedMatches = paginateArray<Game.MatchRecord>(matches, 8);
+    const paginatedMatches = paginateArray<Match.Record>(matches, 8);
 
     ////////////////////////////////////////////////////////////
 

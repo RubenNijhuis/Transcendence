@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 
 // Types
-import { Profile, Game, Chat } from "../../../types";
+import { Profile, Game, Chat, Match } from "../../../types";
 
 // UI
 import { Container, SelectTypeIcon, SelectionBox } from "./ChatInput.style";
@@ -27,7 +27,7 @@ const MessageTypeSelect = ({
     groupchat,
     messageType,
     setMessageType,
-    setMessageContent,
+    setMessageContent
 }: IMessageTypeSelect): JSX.Element => {
     const [chatTypeSelected, setChatTypeSelected] = useState<boolean>(false);
 
@@ -46,7 +46,7 @@ const MessageTypeSelect = ({
                 opponent: groupchat.members[0],
                 user: sender,
                 accepted: false,
-                game_type: Game.GameType.Classic,
+                game_type: Match.GameType.Classic
             });
     };
 
@@ -93,15 +93,13 @@ const MessageTypeSelect = ({
 };
 
 interface ISimpleMessageInput {
-    content: Chat.Message.SimpleMessage;
-    setContent: React.Dispatch<
-        React.SetStateAction<Chat.Message.SimpleMessage>
-    >;
+    content: Chat.Message.Simple;
+    setContent: React.Dispatch<React.SetStateAction<Chat.Message.Simple>>;
 }
 
 const SimpleMessageInput = ({
     content,
-    setContent,
+    setContent
 }: ISimpleMessageInput): JSX.Element => {
     return (
         <div className="simple-message-input">
@@ -114,15 +112,13 @@ const SimpleMessageInput = ({
 };
 
 interface IPictureMessageInput {
-    content: Chat.Message.PictureMessage;
-    setContent: React.Dispatch<
-        React.SetStateAction<Chat.Message.PictureMessage>
-    >;
+    content: Chat.Message.Picture;
+    setContent: React.Dispatch<React.SetStateAction<Chat.Message.Picture>>;
 }
 
 const PictureMessageInput = ({
     content,
-    setContent,
+    setContent
 }: IPictureMessageInput): JSX.Element => {
     return (
         <div className="picture-message-input">
@@ -140,7 +136,7 @@ const PictureMessageInput = ({
                     onChange={(e) =>
                         setContent((prevState) => ({
                             ...prevState,
-                            url: e.target.value,
+                            url: e.target.value
                         }))
                     }
                 />
@@ -151,7 +147,7 @@ const PictureMessageInput = ({
                     onChange={(e) =>
                         setContent((prevState) => ({
                             ...prevState,
-                            alt: e.target.value,
+                            alt: e.target.value
                         }))
                     }
                 />
@@ -161,15 +157,13 @@ const PictureMessageInput = ({
 };
 
 interface IInvitePlayMessageInput {
-    content: Chat.Message.GameInviteMessage;
-    setContent: React.Dispatch<
-        React.SetStateAction<Chat.Message.GameInviteMessage>
-    >;
+    content: Chat.Message.GameInvite;
+    setContent: React.Dispatch<React.SetStateAction<Chat.Message.GameInvite>>;
 }
 
 const InvitePlayMessageInput = ({
     content,
-    setContent,
+    setContent
 }: IInvitePlayMessageInput): JSX.Element => {
     return <div className="invite-message-input"></div>;
 };
@@ -186,7 +180,7 @@ const ChatInput = ({ user, groupchat }: IChatInput): JSX.Element => {
 
     const [messageContent, setMessageContent] =
         useState<Chat.Message.MessageTypes>({
-            content: "",
+            content: ""
         });
 
     ////////////////////////////////////////////////////////////
@@ -204,12 +198,10 @@ const ChatInput = ({ user, groupchat }: IChatInput): JSX.Element => {
                 <div className="input">
                     {messageType === Chat.Message.ContentType.Simple && (
                         <SimpleMessageInput
-                            content={
-                                messageContent as Chat.Message.SimpleMessage
-                            }
+                            content={messageContent as Chat.Message.Simple}
                             setContent={
                                 setMessageContent as React.Dispatch<
-                                    React.SetStateAction<Chat.Message.SimpleMessage>
+                                    React.SetStateAction<Chat.Message.Simple>
                                 >
                             }
                         />
@@ -217,12 +209,10 @@ const ChatInput = ({ user, groupchat }: IChatInput): JSX.Element => {
 
                     {messageType === Chat.Message.ContentType.Picture && (
                         <PictureMessageInput
-                            content={
-                                messageContent as Chat.Message.PictureMessage
-                            }
+                            content={messageContent as Chat.Message.Picture}
                             setContent={
                                 setMessageContent as React.Dispatch<
-                                    React.SetStateAction<Chat.Message.PictureMessage>
+                                    React.SetStateAction<Chat.Message.Picture>
                                 >
                             }
                         />
@@ -230,12 +220,10 @@ const ChatInput = ({ user, groupchat }: IChatInput): JSX.Element => {
 
                     {messageType === Chat.Message.ContentType.InvitePlay && (
                         <InvitePlayMessageInput
-                            content={
-                                messageContent as Chat.Message.GameInviteMessage
-                            }
+                            content={messageContent as Chat.Message.GameInvite}
                             setContent={
                                 setMessageContent as React.Dispatch<
-                                    React.SetStateAction<Chat.Message.GameInviteMessage>
+                                    React.SetStateAction<Chat.Message.GameInvite>
                                 >
                             }
                         />

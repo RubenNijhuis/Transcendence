@@ -2,7 +2,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Types
-import type { Game, Profile } from "../../types";
+import { Game, Profile, Match } from "../../types";
 
 // Data generation
 import { generateGameResult, generateProfile } from "./fakeDataGenerators";
@@ -13,7 +13,7 @@ import { useUser } from "../UserContext";
 interface FakeDataContextType {
     profiles: Profile.Instance[];
     leaderBoard: Profile.Instance[];
-    matchHistory: Game.Matchrecord[];
+    matchHistory: Match.Record[];
 }
 
 const FakeDataContext = createContext<FakeDataContextType>(null!);
@@ -29,7 +29,7 @@ interface IFakeDataProvider {
 const FakeDataProvider = ({ children }: IFakeDataProvider): JSX.Element => {
     const [profiles, setProfiles] = useState<Profile.Instance[]>(null!);
     const [leaderBoard, setLeaderBoard] = useState<Profile.Instance[]>(null!);
-    const [matchHistory, setMatchHistory] = useState<Game.MatchRecord[]>(null!);
+    const [matchHistory, setMatchHistory] = useState<Match.Record[]>(null!);
 
     ////////////////////////////////////////////////////////////
 
@@ -53,7 +53,7 @@ const FakeDataProvider = ({ children }: IFakeDataProvider): JSX.Element => {
     const value: FakeDataContextType = {
         profiles,
         leaderBoard,
-        matchHistory,
+        matchHistory
     };
 
     ////////////////////////////////////////////////////////////

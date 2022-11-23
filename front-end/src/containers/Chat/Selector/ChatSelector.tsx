@@ -12,7 +12,7 @@ import { Profile, Chat } from "../../../types";
 import {
     ChatTypeSelectorContainer,
     Container,
-    DirectMessageEntry,
+    DirectMessageEntry
 } from "./ChatSelector.style";
 import ChatInterface from "../CreateGroup";
 import { useUser } from "../../../contexts/UserContext";
@@ -28,27 +28,27 @@ interface IMemberList {
  */
 const MemberList = ({ members }: IMemberList): JSX.Element => {
     return (
-        <div>
+        <ul>
             {members.map(({ img_url, username, uid }) => (
-                <div className="profile" key={uid}>
+                <li className="profile" key={uid}>
                     <Asset url={img_url} alt="profile" />
                     <span>{username}</span>
-                </div>
+                </li>
             ))}
-        </div>
+        </ul>
     );
 };
 
 interface IChatTypeSelector {
-    activeType: Chat.Group.GroupType;
-    setActiveType: React.Dispatch<React.SetStateAction<Chat.Group.GroupType>>;
+    activeType: Chat.Group.Type;
+    setActiveType: React.Dispatch<React.SetStateAction<Chat.Group.Type>>;
 }
 
 const ChatTypeSelector = ({
     activeType,
-    setActiveType,
+    setActiveType
 }: IChatTypeSelector): JSX.Element => {
-    const handleChatTypeSelect = (type: Chat.Group.GroupType): void => {
+    const handleChatTypeSelect = (type: Chat.Group.Type): void => {
         setActiveType(type);
     };
 
@@ -58,18 +58,18 @@ const ChatTypeSelector = ({
         <ChatTypeSelectorContainer>
             <div
                 className={`chat-type ${
-                    activeType === Chat.Group.GroupType.DM ? "active" : null
+                    activeType === Chat.Group.Type.DM ? "active" : null
                 }`}
-                onClick={() => handleChatTypeSelect(Chat.Group.GroupType.DM)}
+                onClick={() => handleChatTypeSelect(Chat.Group.Type.DM)}
             >
                 <Heading type={3}>DM</Heading>
             </div>
             <div className="divider" />
             <div
                 className={`chat-type ${
-                    activeType === Chat.Group.GroupType.Group ? "active" : null
+                    activeType === Chat.Group.Type.Group ? "active" : null
                 }`}
-                onClick={() => handleChatTypeSelect(Chat.Group.GroupType.Group)}
+                onClick={() => handleChatTypeSelect(Chat.Group.Type.Group)}
             >
                 <Heading type={3}>Groups</Heading>
             </div>
@@ -78,7 +78,7 @@ const ChatTypeSelector = ({
 };
 
 interface IDirectMessageList {
-    selectedChatType: Chat.Group.GroupType;
+    selectedChatType: Chat.Group.Type;
     directChats: Chat.Group.Instance[];
     groupChats: Chat.Group.Instance[];
     setSelectedChat: React.Dispatch<React.SetStateAction<Chat.Group.Instance>>;
@@ -88,7 +88,7 @@ const DirectMessageList = ({
     selectedChatType,
     directChats,
     groupChats,
-    setSelectedChat,
+    setSelectedChat
 }: IDirectMessageList): JSX.Element => {
     const { user } = useUser();
     const [selectedChatId, setSelectedChatId] = useState<number>(0);
@@ -106,11 +106,11 @@ const DirectMessageList = ({
     useEffect(() => {
         setSelectedChatId(0);
         switch (selectedChatType) {
-            case Chat.Group.GroupType.DM:
+            case Chat.Group.Type.DM:
                 setSelectedChatList(directChats);
                 setSelectedChat(directChats[0]);
                 break;
-            case Chat.Group.GroupType.Group:
+            case Chat.Group.Type.Group:
                 setSelectedChatList(groupChats);
                 setSelectedChat(groupChats[0]);
                 break;
@@ -157,10 +157,11 @@ const ChatSelector = ({
     directChats,
     groupChats,
     selectedChat,
-    setSelectedChat,
+    setSelectedChat
 }: IChatSelector): JSX.Element => {
-    const [selectedChatType, setSelectedChatType] =
-        useState<Chat.Group.GroupType>(Chat.Group.GroupType.DM);
+    const [selectedChatType, setSelectedChatType] = useState<Chat.Group.Type>(
+        Chat.Group.Type.DM
+    );
 
     ////////////////////////////////////////////////////////////
 

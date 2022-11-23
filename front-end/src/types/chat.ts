@@ -8,28 +8,25 @@ namespace Chat {
         export enum ContentType {
             Simple,
             Picture,
-            InvitePlay,
+            InvitePlay
         }
 
         // General type
-        export type MessageTypes =
-            | SimpleMessage
-            | PictureMessage
-            | GameInviteMessage;
+        export type MessageTypes = Simple | Picture | GameInvite;
 
         // How we define a simple message
-        export interface SimpleMessage {
+        export interface Simple {
             content: string;
         }
 
         // How we define a picture message
-        export interface PictureMessage {
+        export interface Picture {
             url: string;
             alt: string;
         }
 
         // Game invite
-        export interface GameInviteMessage {
+        export interface GameInvite {
             opponent: Profile.Instance;
             user: Profile.Instance;
             game_type: Match.GameType;
@@ -50,9 +47,9 @@ namespace Chat {
     }
 
     export namespace Group {
-        export enum GroupType {
+        export enum Type {
             DM,
-            Group,
+            Group
         }
 
         export interface Instance {

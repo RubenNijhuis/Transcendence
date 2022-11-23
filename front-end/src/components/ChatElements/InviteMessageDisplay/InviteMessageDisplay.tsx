@@ -7,7 +7,7 @@ import {
     lightTextColor,
     magicNum,
     mainColor,
-    smallRadius,
+    smallRadius
 } from "../../../styles/StylingConstants";
 
 // UI
@@ -43,10 +43,10 @@ const Container = styled.div<{ fromUser: boolean }>`
 
 const InviteMessageDisplay = ({
     fromUser,
-    message,
+    message
 }: IInviteMessageDisplay): JSX.Element => {
-    const formattedContent: Chat.Message.GameInviteMessage =
-        message.content as Chat.Message.GameInviteMessage;
+    const formattedContent: Chat.Message.GameInvite =
+        message.content as Chat.Message.GameInvite;
 
     ////////////////////////////////////////////////////////////
 
