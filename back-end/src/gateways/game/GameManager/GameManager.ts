@@ -2,7 +2,7 @@ import { Server } from "socket.io";
 import GameInstance from "./GameInstance";
 import { Game, Match } from "./types";
 
-class Manager {
+class GameManager {
   isRunning: boolean;
   games: GameInstance[];
   connection: Server;
@@ -74,7 +74,7 @@ class Manager {
   }
 }
 
-export default Manager;
+export default GameManager;
 
 //     const resetGame = () => {
 //         this.player1Bat.reset();

@@ -12,9 +12,9 @@ import { Socket, Server } from "socket.io";
 import { Logger } from "@nestjs/common";
 
 // Game elements
-import Manager from "./Manager/Manager";
+import GameManager from "./GameManager/GameManager";
 import RoomManager from "../RoomManager";
-import { Match } from "./Manager/types";
+import { Match } from "./GameManager/types";
 
 @WebSocketGateway(3001, {
   cors: {
@@ -29,7 +29,7 @@ export class GameSocketGateway {
   ////////////////////////////////////////////////////////////
 
   private logger: Logger = new Logger("GameSocketGateway");
-  private manager: Manager;
+  private manager: GameManager;
   private roomManager: RoomManager;
 
   // Misc handelers //////////////////////////////////////////
@@ -37,7 +37,7 @@ export class GameSocketGateway {
   afterInit() {
     // Init managers
     this.roomManager = new RoomManager(this.connection);
-    this.manager = new Manager(this.connection);
+    this.manager = new GameManager(this.connection);
 
     this.manager.run();
   }
@@ -68,10 +68,9 @@ export class GameSocketGateway {
     // Send status update
     this.connection.to(roomID).emit("gameStatus", { gameStatus: "joinedRoom" }); // TODO: config names should be in a config file
 
-    const roomSize = this.roomManager.getRoomSize(roomID);
-
     // TODO: setting numbers should be in a config file
     // If room is full we update the game status
+    const roomSize = this.roomManager.getRoomSize(roomID);
     if (roomSize === 2) {
       this.connection
         .to(roomID)
