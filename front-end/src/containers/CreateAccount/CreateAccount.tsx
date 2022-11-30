@@ -25,6 +25,7 @@ import { useUser } from "../../contexts/UserContext";
 // Business logic
 import { handleAccountCreation, handleImageUpload } from "./CreateAccount.bl";
 import { useState } from "react";
+import ColorPicker from "../../components/ColorPicker";
 
 ////////////////////////////////////////////////////////////
 
@@ -43,9 +44,9 @@ const ErrorMessage = ({ message }: IErrorMessage) => {
 // TODO: make component check input data before sending
 const CreateAccount = (): JSX.Element => {
     const username = useFormInput("");
-    const color = useFormInput("");
     const description = useFormInput("");
 
+    const [color, setColor] = useState<string>("#e91e63");
     const [error, setError] = useState<string | null>(null);
 
     ////////////////////////////////////////////////////////////
@@ -58,7 +59,7 @@ const CreateAccount = (): JSX.Element => {
         try {
             const user = await handleAccountCreation({
                 username: username.value,
-                color: color.value,
+                color: color,
                 description: description.value
             });
 
@@ -67,6 +68,10 @@ const CreateAccount = (): JSX.Element => {
             console.error(err);
         }
     };
+
+    const handleColorPicker = (input: string) => {
+        setColor(input);
+    }
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
@@ -123,11 +128,11 @@ const CreateAccount = (): JSX.Element => {
                 </Slide>
                 <Slide>
                     <StyledInput>
-                        <label>
-                            Choose a Color (must be in hex form #1e1e1e)
+                        <label style={{color: color}}>
+                            Choose a Color
                         </label>
                         {error && <ErrorMessage message={error} />}
-                        <input type="text" {...color} />
+                        <ColorPicker color={color} handler={handleColorPicker} />
                     </StyledInput>
                 </Slide>
                 <Slide>

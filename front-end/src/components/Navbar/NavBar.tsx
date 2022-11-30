@@ -22,16 +22,10 @@ import { useUser } from "../../contexts/UserContext";
 // Links
 import { locations, NavLink } from "./NavBar.config";
 import PageRoutes from "../../config/PageRoutes";
+import { useState } from "react";
+import DropDown from "../DropDown";
 
 ////////////////////////////////////////////////////////////
-
-const SettingsPageButton = () => {
-    return (
-        <Link to={PageRoutes.settings} className="settings-icon">
-            <FiSettings />
-        </Link>
-    );
-};
 
 interface ICTAButton {
     loggedIn: boolean;
@@ -104,7 +98,7 @@ const NavBar = (): JSX.Element => {
                         {isLoggedIn && (
                             <>
                                 <ProfileIcon url={user!.img_url} />
-                                <SettingsPageButton />
+                                <DropDown />
                             </>
                         )}
                     </div>

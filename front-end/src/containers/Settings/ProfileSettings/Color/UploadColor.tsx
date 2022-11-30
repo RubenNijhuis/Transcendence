@@ -5,41 +5,41 @@ import { CreateForm, StyledInput } from "./UploadColor.style";
 import ApiRoutes from "../../../../config/ApiRoutes";
 
 // DEBUG
-import { MutableRefObject, useRef} from "react";
+import { MutableRefObject, useEffect, useRef, useState} from "react";
 import { useUser } from "../../../../contexts/UserContext";
 import { API } from "../../../../proxies/instances/apiInstance";
 import { ErrorResponseInterceptor } from "../../../../proxies/instances/interceptors";
 import { uploadColor } from "../../../../proxies/settings/UploadColor";
 import { hexInputCheck } from "../../../../utils/inputCheck";
+import ColorPicker from "../../../../components/ColorPicker";
 
 
 const UploadColor = () => {
 	const { user } = useUser();
-	const ref = useRef() as MutableRefObject<HTMLTextAreaElement>;
+	const [color, setColor] = useState<string>("");
 
-	const handleText = async (event: any) => {
+	if (color === "" && user)
+		setColor(user.color)
+
+	const handleColorPicker = async (input: string) => {
 		try {
-			const color = ref.current.value;
-
-			if (hexInputCheck(color) == false)
+			setColor(input);
+			if (hexInputCheck(input) == false)
 				throw "Not a valid hex value. Did you forget the #? Is your hex value 6 long?";
-
-			await uploadColor(user.username, color);
-
-		} catch (err) {
+			await uploadColor(user.username, input);
+		}
+		catch (err) {
 			return Promise.reject(err);
 		}
-
-	};
+    }
 
     return (
         <CreateForm>
                     <StyledInput>
                         <label>Change Color</label>
                         {/* {error && <ErrorMessage message={error} />} */}
-                        <textarea ref={ref} />
+						<ColorPicker color={color} handler={handleColorPicker} />
                     </StyledInput>
-					<button onClick={handleText}>Click</button>
         </CreateForm>
     );
 }
