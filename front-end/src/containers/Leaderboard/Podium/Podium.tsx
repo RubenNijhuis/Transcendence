@@ -23,7 +23,7 @@ const Podium = ({ rankings }: IPodium): JSX.Element => {
     // Swap pos 1 and 2 in array
     [formattedRankings[0], formattedRankings[1]] = [
         formattedRankings[1],
-        formattedRankings[0]
+        formattedRankings[0],
     ];
 
     ////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 import {
     lightTextColor,
     magicNum,
-    mainColor
+    mainColor,
 } from "../../../styles/StylingConstants";
 
 interface ISliderDots {
@@ -17,7 +17,7 @@ const Dot = ({ active }: { active: boolean }): JSX.Element => {
                 backgroundColor: active ? mainColor : lightTextColor,
                 width: 18,
                 height: 18,
-                borderRadius: 1000
+                borderRadius: 1000,
             }}
         >
             <span />
@@ -42,7 +42,7 @@ const SliderDots = ({ amount, active }: ISliderDots): JSX.Element => {
                 style={{
                     display: "flex",
                     gap: 9,
-                    margin: "auto"
+                    margin: "auto",
                 }}
             >
                 {dots}

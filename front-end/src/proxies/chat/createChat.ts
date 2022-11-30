@@ -24,7 +24,7 @@ const createChat = async (
         const body = {
             owner,
             name,
-            users
+            users,
         };
 
         const { data } = await API.post<Chat.Group.Instance[]>(route, body);

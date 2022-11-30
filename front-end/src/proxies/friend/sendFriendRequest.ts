@@ -16,7 +16,7 @@ const sendFriendRequest = async (
         const route = ApiRoutes.sendFriendRequest();
         const body = {
             username,
-            requested: friendname
+            requested: friendname,
         };
 
         const { data } = await API.post(route, body);

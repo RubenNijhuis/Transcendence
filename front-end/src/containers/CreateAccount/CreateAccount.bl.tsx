@@ -25,7 +25,7 @@ const handleImageUpload = async (
 
     try {
         const uploadResp = await uploadImage(route, fd);
-        
+
         console.log(uploadResp);
     } catch (err) {
         console.error(err);

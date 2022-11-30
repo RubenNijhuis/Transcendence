@@ -23,7 +23,7 @@ const GameCard = ({
     title,
     description,
     url,
-    cta
+    cta,
 }: IGameCard): JSX.Element => {
     return (
         <AdvancedCard>

@@ -30,7 +30,7 @@ const useUser = () => useContext(UserContext);
 ///////////////////////////////////////////////////////////
 
 const UserProvider = ({
-    children
+    children,
 }: {
     children: React.ReactNode;
 }): JSX.Element => {
@@ -59,7 +59,7 @@ const UserProvider = ({
         setFriends,
 
         blocked,
-        setBlocked
+        setBlocked,
     };
 
     ////////////////////////////////////////////////////////////

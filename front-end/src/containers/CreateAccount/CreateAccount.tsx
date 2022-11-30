@@ -6,7 +6,7 @@ import Heading from "../../components/Heading";
 import {
     CreateAccountForm,
     StyledError,
-    StyledInput
+    StyledInput,
 } from "./CreateAccount.style";
 
 // Box slider

@@ -1,3 +1,3 @@
-import TwoFactorAuthentication from './TwoFactorAuthentication'
+import TwoFactorAuthentication from "./TwoFactorAuthentication";
 
 export default TwoFactorAuthentication;

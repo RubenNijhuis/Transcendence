@@ -19,7 +19,7 @@ const useFormInput = (str: string): IFormInputReturn => {
 
     return {
         value,
-        onChange: handleInputChange
+        onChange: handleInputChange,
     };
 };
 

@@ -11,5 +11,5 @@ export {
     removeFriend,
     getFriendsByUsername,
     isRequested,
-    removeFriendRequest
+    removeFriendRequest,
 };

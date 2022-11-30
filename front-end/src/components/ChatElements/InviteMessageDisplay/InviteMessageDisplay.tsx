@@ -41,9 +41,12 @@ const Container = styled.div<{ fromUser: boolean }>`
     }
 `;
 
-const InviteMessageDisplay = ({ fromUser, message }: IInviteMessageDisplay): JSX.Element => {
-    const formattedContent: Chat.Message.GameInviteMessage =
-        message.content as Chat.Message.GameInviteMessage;
+const InviteMessageDisplay = ({
+    fromUser,
+    message
+}: IInviteMessageDisplay): JSX.Element => {
+    const formattedContent: Chat.Message.GameInvite =
+        message.content as Chat.Message.GameInvite;
 
     ////////////////////////////////////////////////////////////
 

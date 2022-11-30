@@ -1,10 +1,10 @@
-import { Server, Socket } from "socket.io";
-import Game from "./Game";
-import { GameStatus, Position } from "./types";
+import { Server } from "socket.io";
+import GameInstance from "./GameInstance";
+import { Game, Match } from "./types";
 
 class Manager {
   isRunning: boolean;
-  games: Game[];
+  games: GameInstance[];
   connection: Server;
   deltaTime: number;
 
@@ -31,13 +31,13 @@ class Manager {
     // Start managing games
   }
 
-  removeGamesFromRunning(games: Game[]): void {
+  removeGamesFromRunning(games: GameInstance[]): void {
     this.games = games.filter((game) => {
-      return game.getGameStatus() !== GameStatus.Finished;
+      return game.getGameStatus() !== Match.Status.Finished;
     });
   }
 
-  async runGames(games: Game[]): Promise<void> {
+  async runGames(games: GameInstance[]): Promise<void> {
     // Adds the delay - is promise based maybe better with a Date() tick?
     const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
@@ -62,7 +62,7 @@ class Manager {
     return;
   }
 
-  updateBatPosition(movePayload: { player: string; pos: Position }): void {
+  updateBatPosition(movePayload: { player: string; pos: Game.Position }): void {
     // get game that this update applies to
     const game = this.games[0]; // should be dynamic
 

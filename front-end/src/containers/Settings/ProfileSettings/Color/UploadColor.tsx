@@ -5,14 +5,17 @@ import { CreateForm, StyledInput } from "./UploadColor.style";
 import ApiRoutes from "../../../../config/ApiRoutes";
 
 // DEBUG
+<<<<<<< HEAD
 import { MutableRefObject, useEffect, useRef, useState} from "react";
+=======
+import { MutableRefObject, useRef } from "react";
+>>>>>>> 11bbe759a33d6a0d483d9e9dfc9f3840aa7819b8
 import { useUser } from "../../../../contexts/UserContext";
 import { API } from "../../../../proxies/instances/apiInstance";
 import { ErrorResponseInterceptor } from "../../../../proxies/instances/interceptors";
 import { uploadColor } from "../../../../proxies/settings/UploadColor";
 import { hexInputCheck } from "../../../../utils/inputCheck";
 import ColorPicker from "../../../../components/ColorPicker";
-
 
 const UploadColor = () => {
 	const { user } = useUser();
@@ -42,6 +45,6 @@ const UploadColor = () => {
                     </StyledInput>
         </CreateForm>
     );
-}
+};
 
 export default UploadColor;

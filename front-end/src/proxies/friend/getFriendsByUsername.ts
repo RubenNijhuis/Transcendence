@@ -27,7 +27,7 @@ const getFriendsByUsername = async (
         for (const profile of data) {
             const imageSelect: Request.Payload.ImageSelect = {
                 profile: true,
-                banner: false
+                banner: false,
             };
 
             const profilesWithImage = await addImagesToProfile(

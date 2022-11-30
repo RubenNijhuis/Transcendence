@@ -71,9 +71,10 @@ const ChatTitle = ({ chat, isDmChat }: IChatTitle): JSX.Element => {
 
 interface IPasswordInput {
     setIsProtected: React.Dispatch<React.SetStateAction<boolean>>;
+    activeChat: Chat.Group.Instance;
 }
 
-const PasswordInput = ({ setIsProtected }: IPasswordInput) => {
+const PasswordInput = ({ activeChat, setIsProtected }: IPasswordInput) => {
     const passwordText = useFormInput("");
     const [passwordError, setPasswordError] = useState<boolean>(false);
 
@@ -81,7 +82,10 @@ const PasswordInput = ({ setIsProtected }: IPasswordInput) => {
 
     const sendPassword = async () => {
         try {
-            const verifyResponse = await verifyPassword(passwordText.value);
+            const verifyResponse = await verifyPassword(
+                activeChat.group_id,
+                passwordText.value
+            );
 
             if (verifyResponse === false) {
                 setPasswordError(false);
@@ -144,7 +148,7 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
 
     // TODO: Abstract into business logic part
     useEffect(() => {
-        createConnection(SocketType.SocketType.Chat);
+        createConnection(SocketType.Type.Chat);
     }, [chat]);
 
     useEffect(() => {
@@ -192,7 +196,10 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
                         />
                     ))}
                 {!isUnlocked && (
-                    <PasswordInput setIsProtected={setIsProtected} />
+                    <PasswordInput
+                        setIsProtected={setIsProtected}
+                        activeChat={chat}
+                    />
                 )}
             </div>
             <ChatInput user={user} groupchat={chat} />

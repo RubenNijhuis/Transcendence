@@ -57,7 +57,7 @@ class GameManager {
     getMiddleOfBoard(): Game.Position {
         const middle: Game.Position = {
             posX: 0,
-            posY: 0
+            posY: 0,
         };
 
         return middle;
@@ -76,7 +76,7 @@ class GameManager {
     scalePosition(position: Game.Position): Game.Position {
         const scaledPosition: Game.Position = {
             posX: 0,
-            posY: 0
+            posY: 0,
         };
 
         scaledPosition.posX = position.posX + 0;

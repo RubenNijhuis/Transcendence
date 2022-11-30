@@ -5,7 +5,7 @@ import Heading from "../../components/Heading";
 import {
     FriendSettings,
     GameSettings,
-    ProfileSettings
+    ProfileSettings,
 } from "../../containers/Settings";
 
 ////////////////////////////////////////////////////////////

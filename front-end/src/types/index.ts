@@ -1,9 +1,10 @@
-import Game from "./game";
-import Profile from "./profile";
-import Chat from "./chat";
-import Request from "./request";
-import SocketType from "./socket";
+import Game from "./Game";
+import Profile from "./Profile";
+import Chat from "./Chat";
+import Request from "./Request";
+import SocketType from "./Socket";
+import Match from "./Match";
 
 ///////////////////////////////////////////////////////////
 
-export { Game, type Profile, Chat, type Request, SocketType };
+export { type Game, type Profile, Chat, type Request, SocketType, Match };

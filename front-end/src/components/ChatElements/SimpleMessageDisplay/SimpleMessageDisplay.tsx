@@ -36,8 +36,8 @@ const SimpleMessageDisplay = ({
     fromUser,
     message
 }: ISimpleMessageDisplay): JSX.Element => {
-    const formattedContent: Chat.Message.SimpleMessage =
-        message.content as Chat.Message.SimpleMessage;
+    const formattedContent: Chat.Message.Simple =
+        message.content as Chat.Message.Simple;
 
     return (
         <Container fromUser={fromUser}>

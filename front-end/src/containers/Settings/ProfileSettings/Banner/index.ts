@@ -1,3 +1,3 @@
-import UploadBanner from "./UploadBanner"
+import UploadBanner from "./UploadBanner";
 
 export default UploadBanner;

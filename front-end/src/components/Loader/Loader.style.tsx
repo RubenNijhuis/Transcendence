@@ -1,5 +1,9 @@
 import styled from "styled-components";
-import { backgroundColor, magicNum, mainColor } from "../../styles/StylingConstants";
+import {
+    backgroundColor,
+    magicNum,
+    mainColor,
+} from "../../styles/StylingConstants";
 
 ///////////////////////////////////////////////////////////
 

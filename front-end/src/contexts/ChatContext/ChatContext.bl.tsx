@@ -6,7 +6,7 @@ import { Chat, Profile } from "../../types";
 const getMembersFromGroupChats = (
     chats: Chat.Group.Instance[]
 ): Profile.Instance[][] => {
-    let members: Profile.Instance[][] = [];
+    const members: Profile.Instance[][] = [];
 
     for (const chat of chats) {
         members.push(chat.members);
@@ -18,7 +18,7 @@ const getMembersFromGroupChats = (
 const getMessagesFromGroupChats = (
     chats: Chat.Group.Instance[]
 ): Chat.Message.Instance[][] => {
-    let messages: Chat.Message.Instance[][] = [];
+    const messages: Chat.Message.Instance[][] = [];
 
     for (const chat of chats) {
         messages.push(chat.messages);
@@ -105,5 +105,5 @@ export {
     findMemberByProfileID,
     bindMembersToMessages,
     getFirstDM,
-    categorizeChats
+    categorizeChats,
 };

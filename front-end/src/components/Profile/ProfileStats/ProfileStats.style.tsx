@@ -6,7 +6,7 @@ import {
     lightTextColor,
     magicNum,
     mainColorMono,
-    smallRadius
+    smallRadius,
 } from "../../../styles/StylingConstants";
 
 ////////////////////////////////////////////////////////////

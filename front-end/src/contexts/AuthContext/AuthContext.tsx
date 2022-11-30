@@ -115,7 +115,7 @@ const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
         setTfaEnabled,
 
         isLoggedIn,
-        setLoggedIn
+        setLoggedIn,
     };
 
     ////////////////////////////////////////////////////////////

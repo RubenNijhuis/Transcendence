@@ -29,15 +29,15 @@ const SocketRoutes = {
         updateOpponent: () => `updateOpponent`,
         updateScore: () => `updateScore`,
         updateMatchStatus: () => `updateMatchStatus`,
-        sendPlayerPostion: () => `playerPosition`
+        sendPlayerPostion: () => `playerPosition`,
     },
     // Game ////////////////////////////////////////////////////
 
     // chat ////////////////////////////////////////////////////
     chat: {
         sendMessage: () => `sendMessage`,
-        receiveMessage: () => `receiveMessage`
-    }
+        receiveMessage: () => `receiveMessage`,
+    },
     // chat ////////////////////////////////////////////////////
 };
 

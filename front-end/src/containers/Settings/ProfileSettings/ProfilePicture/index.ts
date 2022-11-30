@@ -1,3 +1,3 @@
-import UploadProfilePicture from "./UploadProfilePicture"
+import UploadProfilePicture from "./UploadProfilePicture";
 
 export default UploadProfilePicture;

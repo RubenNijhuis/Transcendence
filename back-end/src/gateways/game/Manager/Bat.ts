@@ -1,7 +1,7 @@
-import { Position } from "./types";
+import { Game } from "./types";
 
 class Bat {
-  position: Position;
+  position: Game.Position;
   size: {
     x: number;
     y: number;
@@ -18,11 +18,11 @@ class Bat {
     };
   }
 
-  setPosition(pos: Position): void {
+  setPosition(pos: Game.Position): void {
     this.position = pos;
   }
 
-  getPosition(): Position {
+  getPosition(): Game.Position {
     return this.position;
   }
 }

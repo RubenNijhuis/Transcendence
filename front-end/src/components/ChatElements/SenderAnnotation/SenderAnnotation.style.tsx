@@ -32,4 +32,4 @@ const Container = styled.div<{ fromUser: boolean }>`
 
 ////////////////////////////////////////////////////////////
 
-export {Container};
+export { Container };

@@ -14,7 +14,7 @@ import { Logger } from "@nestjs/common";
 // Game elements
 import Manager from "./Manager/Manager";
 import RoomManager from "../RoomManager";
-import { FriendlyMatch, GameRequest } from "./Manager/types";
+import { Match } from "./Manager/types";
 
 @WebSocketGateway(3001, {
   cors: {
@@ -51,32 +51,37 @@ export class GameSocketGateway {
 
   @SubscribeMessage("joinFriendlyMatch")
   joinGame(
-    @MessageBody() matchPayload: FriendlyMatch,
+    @MessageBody() matchPayload: Match.Request,
     @ConnectedSocket() client: Socket
   ) {
+    const { profile } = matchPayload;
+    const roomID = "Bla"; // Needs to be generated somehow
+
+    profile.connection = client;
+
+    if (matchPayload.scoreType === Match.ScoreType.Friendly) {
+    }
+
     // Attach socket to profile object
-    matchPayload.profile.connection = client;
-    this.roomManager.addClientToRoom(matchPayload.roomID, client);
+    this.roomManager.addClientToRoom(roomID, client);
 
     // Send status update
-    this.connection
-      .to(matchPayload.roomID)
-      .emit("gameStatus", { gameStatus: "joinedRoom" }); // TODO: config names should be in a config file
+    this.connection.to(roomID).emit("gameStatus", { gameStatus: "joinedRoom" }); // TODO: config names should be in a config file
 
-    const roomSize = this.roomManager.getRoomSize(matchPayload.roomID);
+    const roomSize = this.roomManager.getRoomSize(roomID);
 
     // TODO: setting numbers should be in a config file
     // If room is full we update the game status
     if (roomSize === 2) {
       this.connection
-        .to(matchPayload.roomID)
+        .to(roomID)
         .emit("gameStatus", { gameStatus: "startGame" }); // TODO: config names should be in a config file
     }
   }
 
   @SubscribeMessage("joinMatch")
   joinMatch(
-    @MessageBody() gameRequest: GameRequest,
+    @MessageBody() gameRequest: Match.Request,
     @ConnectedSocket() client: Socket
   ) {
     // Attach socket to profile object
