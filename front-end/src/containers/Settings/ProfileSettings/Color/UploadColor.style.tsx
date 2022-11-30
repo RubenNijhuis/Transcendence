@@ -18,13 +18,8 @@ const StyledInput = styled.div`
         padding: calc(${magicNum} / 8) calc(${magicNum} / 4);
     }
 
-    input,
-    textarea {
-        width: 100%;
-        border: 1px rgb(230, 230, 230);
-        height: calc(${magicNum} / 2);
-        padding: calc(${magicNum} / 8) calc(${magicNum} / 4);
-        border-radius: ${smallRadius};
+    div {
+        margin-left: calc(${magicNum} / 12);
     }
 `;
 

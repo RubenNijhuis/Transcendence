@@ -37,7 +37,9 @@ const UploadColor = () => {
                     <StyledInput>
                         <label>Change Color</label>
                         {/* {error && <ErrorMessage message={error} />} */}
-						<ColorPicker color={color} handler={handleColorPicker} />
+						<div>
+							<ColorPicker color={color} handler={handleColorPicker} />
+						</div>
                     </StyledInput>
         </CreateForm>
     );
