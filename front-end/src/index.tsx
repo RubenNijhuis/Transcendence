@@ -3,7 +3,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 // Rendered tsx app
-import App from "./app";
+import App from "./App";
 import { renderWithStrict } from "./config/DevEnv";
 
 // App will attach to this node in the dom
