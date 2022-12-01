@@ -199,11 +199,12 @@ export class UserService {
   }
 
   async removeUser(username: string): Promise<DeleteResult> {
+    console.log(username);
     try {
       const result: DeleteResult = await this.userRepository
-        .createQueryBuilder("Users")
+        .createQueryBuilder("User")
         .delete()
-        .from("users")
+        .from("user")
         .where("username =:username", { username })
         .execute();
       return result;

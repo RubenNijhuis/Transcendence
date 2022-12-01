@@ -75,7 +75,8 @@ const ApiRoutes = {
 	isBlock: (username: string, blockname: string) => `/block/isBlock/${username}/${blockname}`,
 	isFriend: (username: string, friendname: string) => `/friends/isFriend/${username}/${friendname}`,
 	addFriend: () => `/friends/addFriend`,
-	unFriend: () => `/friends/removeFriend`
+	unFriend: () => `/friends/removeFriend`,
+    deleteUser: () => `/user/remove`
 
 	//Settings
 

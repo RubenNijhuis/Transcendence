@@ -28,6 +28,7 @@ import { useParams } from "react-router-dom";
 import UploadColor from "./Color/UploadColor";
 import ChangeBanStatus from "./Ban";
 import ChangeFriends from "./Friends";
+import DeleteUser from "./Delete";
 
 // TODO: in style file
 const Container = styled.section`
@@ -61,6 +62,11 @@ const ProfileSettings = () => {
 
     const renderTFAModal = () => {
         setModalElement(<TwoFactorAuthentication />);
+        setModalActive(true);
+    };
+
+    const renderDeleteModal = () => {
+        setModalElement(<DeleteUser />);
         setModalActive(true);
     };
 
@@ -104,6 +110,9 @@ const ProfileSettings = () => {
                 <UploadColor />
                 <ChangeBanStatus />
                 <ChangeFriends />
+                <Button theme="dark" onClick={renderDeleteModal}>
+                    Delete Your Account
+				</Button>
 				<Button theme="dark" onClick={renderTFAModal}>
 					Turn {tfaEnabled ? "off" : "on"} 2 factor authentication
 				</Button>
