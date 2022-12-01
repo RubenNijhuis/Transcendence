@@ -43,8 +43,9 @@ export class GroupService {
         .createQueryBuilder("groupuser")
         .where(userId)
         .getMany();
-      let i: number = 0;
-      let groups: Group[] = [];
+
+      let i = 0;
+      const groups: Group[] = [];
       while (i < Groupusers.length) {
         const group: Group = await this.groupRepository.findOne({
           where: { id: Groupusers[i].groupId }
@@ -52,6 +53,7 @@ export class GroupService {
         groups.push(group);
         i++;
       }
+
       return groups;
     } catch (err) {
       return err;
@@ -80,7 +82,7 @@ export class GroupService {
 
   async hashPassword(input: string) {
     const hash1 = createHash("sha256").update(input).digest("hex");
-    const saltOrRounds: number = 10;
+    const saltOrRounds = 10;
     const password: string = await bcrypt.hash(hash1, saltOrRounds);
     return password;
   }
@@ -91,16 +93,22 @@ export class GroupService {
         const user: User = await this.userService.findUsersByIdNoFilter(
           createGroupDto.users[i]
         );
+
         if (!user) throw console.error("user doesn't exist");
+
         const owner: User = await this.userService.findUsersByIdNoFilter(
           createGroupDto.owner
         );
+
         if (!owner) throw console.error("owner doesn't exist");
       }
+
       const newGroup: Group = this.groupRepository.create();
+
       newGroup.owner = createGroupDto.owner;
       newGroup.users = [];
       newGroup.groupname = createGroupDto.groupname;
+
       return this.groupRepository.save(newGroup);
     } catch (err) {
       throw errorHandler(
@@ -114,13 +122,14 @@ export class GroupService {
   async removeGroup(removeGroupDto: RemoveGroupDto) {
     try {
       const group: Group = await this.findGroupById(removeGroupDto.groupId);
-      if (group.owner === removeGroupDto.owner) {
-        this.groupRepository
-          .createQueryBuilder("group")
-          .delete()
-          .where({ id: removeGroupDto.groupId })
-          .execute();
-      }
+
+      if (group.owner !== removeGroupDto.owner) return;
+
+      this.groupRepository
+        .createQueryBuilder("group")
+        .delete()
+        .where({ id: removeGroupDto.groupId })
+        .execute();
     } catch (error: any) {
       throw error;
     }
@@ -134,15 +143,18 @@ export class GroupService {
         if (editMembersDto.users[i] == group.owner) continue;
 
         const groupuser = this.groupuserRepository.create();
-        groupuser.group  = group;
+
+        groupuser.group = group;
         groupuser.user = await this.userService.findUsersByIdNoFilter(
           editMembersDto.users[i]
         );
         groupuser.groupId = editMembersDto.groupId;
         groupuser.userId = editMembersDto.users[i];
         groupuser.userType = 0;
-        console.log("WE PASS HERE AS WELL")
+
+        console.log("WE PASS HERE AS WELL");
         console.log(groupuser.userId);
+
         this.groupuserRepository.save(groupuser);
       }
     } catch (err) {
@@ -159,11 +171,15 @@ export class GroupService {
       const group: Group = await this.findGroupById(editOwnerDto.groupId);
 
       const groupuser = this.groupuserRepository.create();
+
       groupuser.group = group;
-      groupuser.user = await this.userService.findUsersByIdNoFilter(editOwnerDto.owner);
+      groupuser.user = await this.userService.findUsersByIdNoFilter(
+        editOwnerDto.owner
+      );
       groupuser.groupId = editOwnerDto.groupId;
       groupuser.userId = editOwnerDto.owner;
       groupuser.userType = 2;
+
       return this.groupuserRepository.save(groupuser);
     } catch (err) {
       throw errorHandler(
@@ -188,6 +204,7 @@ export class GroupService {
       const password: string = await this.hashPassword(
         createPasswordDto.password
       );
+
       await this.groupRepository
         .createQueryBuilder()
         .update()

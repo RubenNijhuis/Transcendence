@@ -5,7 +5,7 @@ import Profile from "./profile";
 
 ////////////////////////////////////////////////////////////
 
-namespace Match {
+declare namespace Match {
   export type ID = string;
 
   export enum Status {
@@ -61,7 +61,7 @@ namespace Match {
 
 ////////////////////////////////////////////////////////////
 
-namespace Game {
+declare namespace Game {
   export type Position = {
     posX: number;
     posY: number;
@@ -75,7 +75,7 @@ namespace Game {
 
 ////////////////////////////////////////////////////////////
 
-namespace Room {
+declare namespace Room {
   export interface Instance {
     roomID: string;
     profiles: Match.PlayerProfile[];

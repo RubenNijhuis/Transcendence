@@ -6,7 +6,7 @@ import {
     lightTextColor,
     magicNum,
     mainColor,
-    smallRadius,
+    smallRadius
 } from "../../../styles/StylingConstants";
 
 ////////////////////////////////////////////////////////////
@@ -19,16 +19,6 @@ const Container = styled.div`
         height: 100%;
         background-color: black;
         width: 2px;
-    }
-
-    .list {
-        list-style: none;
-        border: solid 2px ${mainColor};
-        border-radius: ${smallRadius};
-        overflow-y: scroll;
-        overscroll-behavior: contain;
-
-        max-height: calc(${magicNum} * 10);
     }
 `;
 
@@ -102,6 +92,21 @@ const ChatTypeSelectorContainer = styled.div`
     }
 `;
 
+const DirectMessageList = styled.ul`
+    list-style: none;
+    border: solid 2px ${mainColor};
+    border-radius: ${smallRadius};
+    overflow-y: scroll;
+    overscroll-behavior: contain;
+
+    max-height: calc(${magicNum} * 10);
+`;
+
 ////////////////////////////////////////////////////////////
 
-export { Container, DirectMessageEntry, ChatTypeSelectorContainer };
+export {
+    Container,
+    DirectMessageEntry,
+    ChatTypeSelectorContainer,
+    DirectMessageList
+};

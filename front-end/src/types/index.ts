@@ -7,4 +7,4 @@ import Match from "./Match";
 
 ///////////////////////////////////////////////////////////
 
-export type { Game, Profile, Chat, Request, SocketType, Match };
+export { type Game, type Profile, Chat, type Request, SocketType, Match };

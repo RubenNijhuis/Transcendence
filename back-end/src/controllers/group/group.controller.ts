@@ -86,13 +86,17 @@ export class GroupController {
       const groupId: number = group.id;
       const users: string[] = createGroupDto.users;
       const owner: string = createGroupDto.owner;
+
       const EditMembersDto: EditMembersDto = { groupId, users, owner };
+
       await this.groupService.addMembers(EditMembersDto);
+
       const addOwnerDto: EditOwnerDto = { groupId, owner };
+
       await this.groupService.addOwner(addOwnerDto);
+
       return HttpStatus.OK;
     } catch (err) {
-      
       throw err;
     }
   }

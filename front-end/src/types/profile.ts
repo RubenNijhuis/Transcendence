@@ -12,7 +12,7 @@ namespace Profile {
 
     color: string;
 
-    isTfaEnabled?: boolean;
+    isTfaEnabled: boolean;
 
     rank: number;
     wins: number;
