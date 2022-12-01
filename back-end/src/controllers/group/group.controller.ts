@@ -67,6 +67,18 @@ export class GroupController {
     }
   }
 
+  @Get("validatepassword/:groupid/:password")
+  async validatePassword(
+    @Param("password") password: string,
+    @Param("groupid") groupId: number
+  ): Promise<boolean> {
+    try {
+      return await this.groupService.validatePassword(password, groupId);
+    } catch (err) {
+      throw err;
+    }
+  }
+
   @Post("createGroup")
   async createGroup(@Body() createGroupDto: CreateGroupDto) {
     try {
@@ -74,10 +86,15 @@ export class GroupController {
       const groupId: number = group.id;
       const users: string[] = createGroupDto.users;
       const owner: string = createGroupDto.owner;
+
       const EditMembersDto: EditMembersDto = { groupId, users, owner };
+
       await this.groupService.addMembers(EditMembersDto);
+
       const addOwnerDto: EditOwnerDto = { groupId, owner };
+
       await this.groupService.addOwner(addOwnerDto);
+
       return HttpStatus.OK;
     } catch (err) {
       throw err;

@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { User } from "src/entities";
 import { BlocklistService } from "src/services/blocklist/blocklist.service";
@@ -10,7 +11,7 @@ import { UserModule } from "../user/user.module";
   imports: [
     TypeOrmModule.forFeature([User]),
     TypeOrmModule.forFeature([BlockList]),
-    UserModule,
+	UserModule,
   ],
   controllers: [BlockListController],
   providers: [BlocklistService],

@@ -12,7 +12,7 @@ import { Request } from "../../types";
 import { useUser } from "../UserContext";
 
 // Business logic
-import { redirectToHome, signIn, signOut } from "./AuthContext.bl";
+import { redirectToLogin, signIn, signOut } from "./AuthContext.bl";
 
 // Proxies
 import { checkTokenValidity } from "../../proxies/auth";
@@ -68,10 +68,7 @@ const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
 
         setLoggedIn(true);
         setItem(StoreId.loginProcess, false);
-
-        if (user?.isTfaEnabled) {
-            setTfaEnabled(user.isTfaEnabled);
-        }
+        setTfaEnabled(user.isTfaEnabled);
     }, [user]);
 
     /**
@@ -85,21 +82,23 @@ const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
              */
             const isInLoginProcess = getItem<boolean>(StoreId.loginProcess);
             if (isInLoginProcess) return;
+
             /**
              * If the refresh token doesn't exist we redirect
              * the user to a page where they cal log in
              */
             const refreshToken = getItem<string>(StoreId.refreshToken);
             if (refreshToken === null) {
-                redirectToHome();
+                redirectToLogin();
                 return;
             }
+
             try {
                 const { profile } = await checkTokenValidity(refreshToken);
                 setLoggedIn(true);
                 setUser(profile);
             } catch (err) {
-                redirectToHome();
+                signOut()
             }
         };
         checkAuthTokenStatus();
@@ -115,7 +114,7 @@ const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
         setTfaEnabled,
 
         isLoggedIn,
-        setLoggedIn,
+        setLoggedIn
     };
 
     ////////////////////////////////////////////////////////////

@@ -14,6 +14,7 @@ import { RecordModule } from "src/modules/record/record.module"
 import { MatchHistoryModule } from "src/modules/matchhistory/matchhistory.module";
 import { SeederModule } from "src/modules/seeder/seeder.module";
 import { WebSocketModule } from "src/modules/websocket/websocket.module";
+import { BlockListModule } from "src/modules/blocklist/blocklist.module";
 
 
 @Module({
@@ -31,7 +32,8 @@ import { WebSocketModule } from "src/modules/websocket/websocket.module";
     MatchHistoryModule,
     SeederModule,
     WebSocketModule,
-    PassportModule.register({ session: true })
+    PassportModule.register({ session: true }),
+	BlockListModule,
   ],
   controllers: [],
   providers: []

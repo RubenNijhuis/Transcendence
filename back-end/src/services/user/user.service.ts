@@ -56,7 +56,7 @@ export class UserService {
     if (!newUser) return null;
 
     delete newUser.intraId;
-    delete newUser.index;
+   delete newUser.index;
     delete newUser.isInitialized;
     delete newUser.refreshToken;
     delete newUser.tfaSecret;

@@ -13,8 +13,6 @@ const ApiRoutes = {
     // User ////////////////////////////////////////////////////
     createUser: () => `/user/setUser`,
     getUserByAccessToken: () => `/auth/getUserFromAccessToken`,
-    updateDescription: () => `/user/updateDescription`,
-    updateColor: () => `/user/updateColor`,
     // User ////////////////////////////////////////////////////
 
     // Friend //////////////////////////////////////////////////
@@ -66,8 +64,22 @@ const ApiRoutes = {
     // TFAuthentication //////////////////////////////////////////
     turnOnTFA: () => `/user/enable2fa`,
     getqrTFA: () => `/tfa/google2fa`,
-    confirmTFA: () => `/tfa/google2fa/authenticate`
+    confirmTFA: () => `/tfa/google2fa/authenticate`,
     // TFAuthentication //////////////////////////////////////////
+
+	//Settings
+	updateDescription: () => `/user/updateDescription`,
+	updateColor: () => `/user/updateColor`,
+	addBlock: () => `/block/addBlock`,
+	unBlock: () => `/block/unBlock`,
+	isBlock: (username: string, blockname: string) => `/block/isBlock/${username}/${blockname}`,
+	isFriend: (username: string, friendname: string) => `/friends/isFriend/${username}/${friendname}`,
+	addFriend: () => `/friends/addFriend`,
+	unFriend: () => `/friends/removeFriend`
+
+	//Settings
+
+
 };
 
 export default ApiRoutes;

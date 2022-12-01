@@ -98,6 +98,7 @@ const generateProfile = (amount: number): Profile.Instance[] => {
 
         const newProfile: Profile.Instance = {
             username,
+            isTfaEnabled: false,
             description: "Lorem ipsum sit dolor amet",
             banner_url,
             color,

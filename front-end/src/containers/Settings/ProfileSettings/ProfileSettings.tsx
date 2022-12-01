@@ -26,6 +26,8 @@ import {
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import UploadColor from "./Color/UploadColor";
+import ChangeBanStatus from "./Ban";
+import ChangeFriends from "./Friends";
 
 // TODO: in style file
 const Container = styled.section`
@@ -46,6 +48,7 @@ const Container = styled.section`
             color: ${lightTextColor};
         }
     }
+
 `;
 
 ////////////////////////////////////////////////////////////
@@ -91,9 +94,6 @@ const ProfileSettings = () => {
                 <Heading type={3}>Profile settings</Heading>
             </div>
             <div className="content">
-                <Button theme="dark" onClick={renderTFAModal}>
-                    Turn {tfaEnabled ? "off" : "on"} 2 factor authentication
-                </Button>
                 <br />
                 <UploadProfilePicture />
                 <UploadBanner />
@@ -102,9 +102,11 @@ const ProfileSettings = () => {
             </Button> */}
                 <UploadDescription />
                 <UploadColor />
-                <span>Change blocked </span>
-                <span>Change friends </span>
-                <input type="submit" value="Save" />
+                <ChangeBanStatus />
+                <ChangeFriends />
+				<Button theme="dark" onClick={renderTFAModal}>
+					Turn {tfaEnabled ? "off" : "on"} 2 factor authentication
+				</Button>
             </div>
         </Container>
     );

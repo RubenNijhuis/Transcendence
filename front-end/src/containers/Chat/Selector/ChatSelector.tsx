@@ -12,7 +12,8 @@ import { Profile, Chat } from "../../../types";
 import {
     ChatTypeSelectorContainer,
     Container,
-    DirectMessageEntry
+    DirectMessageEntry,
+    DirectMessageList
 } from "./ChatSelector.style";
 import ChatInterface from "../CreateGroup";
 import { useUser } from "../../../contexts/UserContext";
@@ -84,17 +85,20 @@ interface IDirectMessageList {
     setSelectedChat: React.Dispatch<React.SetStateAction<Chat.Group.Instance>>;
 }
 
-const DirectMessageList = ({
+const DirectMessages = ({
     selectedChatType,
     directChats,
     groupChats,
     setSelectedChat
 }: IDirectMessageList): JSX.Element => {
-    const { user } = useUser();
     const [selectedChatId, setSelectedChatId] = useState<number>(0);
     const [selectedChatList, setSelectedChatList] = useState<
         Chat.Group.Instance[]
     >([]);
+
+    ////////////////////////////////////////////////////////////
+
+    const { user } = useUser();
 
     ////////////////////////////////////////////////////////////
 
@@ -123,7 +127,7 @@ const DirectMessageList = ({
     ////////////////////////////////////////////////////////////
 
     return (
-        <ul className="list">
+        <DirectMessageList>
             {selectedChatList &&
                 selectedChatList.map(({ members, internal_id }) => {
                     const otherMembers: Profile.Instance[] = members.filter(
@@ -142,7 +146,7 @@ const DirectMessageList = ({
                         </DirectMessageEntry>
                     );
                 })}
-        </ul>
+        </DirectMessageList>
     );
 };
 
@@ -174,7 +178,7 @@ const ChatSelector = ({
 
             <ChatInterface />
             {selectedChat && (
-                <DirectMessageList
+                <DirectMessages
                     selectedChatType={selectedChatType}
                     setSelectedChat={setSelectedChat}
                     directChats={directChats}

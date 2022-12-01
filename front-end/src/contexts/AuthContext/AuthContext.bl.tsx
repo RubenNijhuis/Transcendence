@@ -35,15 +35,14 @@ const signIn = async (code: string): Promise<Request.Response.ConfirmLogin> => {
 const signOut = (): void => {
     removeItem(StoreId.accessToken);
     removeItem(StoreId.refreshToken);
-    redirectToHome();
+    redirectToLogin();
 };
 
-const redirectToHome = (): void => {
-    if (window.location.pathname === PageRoutes.home) return;
-
-    // window.location.assign(PageRoutes.home);
+const redirectToLogin = (): void => {
+    if (window.location.pathname === PageRoutes.whenNotLoggedIn) return;
+    window.location.assign(PageRoutes.whenNotLoggedIn);
 };
 
 ////////////////////////////////////////////////////////////
 
-export { signIn, signOut, redirectToHome };
+export { signIn, signOut, redirectToLogin };

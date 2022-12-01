@@ -93,6 +93,7 @@ export class User {
     default: ""
   })
   tfa_key: string;
+  
   @OneToMany((type) => GroupUser, (groupuser) => groupuser.user)
   @JoinTable()
   groups: GroupUser[];

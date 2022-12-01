@@ -1,6 +1,6 @@
 import { Logger } from "@nestjs/common";
 import { Server, Socket } from "socket.io";
-import { Room, Match } from "../game/Manager/types";
+import { Room, Match } from "../game/GameManager/types";
 
 ////////////////////////////////////////////////////////////
 

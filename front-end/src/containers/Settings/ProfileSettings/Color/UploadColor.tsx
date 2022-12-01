@@ -1,14 +1,9 @@
 // Styling
 import { CreateForm, StyledInput } from "./UploadColor.style";
 
-// Routes
-import ApiRoutes from "../../../../config/ApiRoutes";
-
 // DEBUG
 import { MutableRefObject, useEffect, useRef, useState} from "react";
 import { useUser } from "../../../../contexts/UserContext";
-import { API } from "../../../../proxies/instances/apiInstance";
-import { ErrorResponseInterceptor } from "../../../../proxies/instances/interceptors";
 import { uploadColor } from "../../../../proxies/settings/UploadColor";
 import { hexInputCheck } from "../../../../utils/inputCheck";
 import ColorPicker from "../../../../components/ColorPicker";

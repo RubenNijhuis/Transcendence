@@ -17,7 +17,7 @@ export class BlocklistService {
 
     private async filterOutput(username: string, blocked: BlockList[]) {
         const filteredFriends = [];
-    
+
         for (const block of blocked) {
             let name = block.blockname;
 
@@ -32,20 +32,19 @@ export class BlocklistService {
     async getBlocked(username: string) {
         const blocked: BlockList[] = await this.blocklistRepository
             .createQueryBuilder('block_list')
-            .where('user = :username', { username })
+            .where({username})
             .getMany();
         return this.filterOutput(username, blocked);
     }
 
-    async isBlock(username: string, blockedname: string): Promise<boolean> {
+    async isBlock(username: string, blockname: string): Promise<boolean> {
         var ret: boolean = false;
-
         const blocked = await this.blocklistRepository
             .createQueryBuilder('block_list')
-            .where('user = :username', { username })
-            .andWhere('blockname = :blocked', { blockedname })
+            .where({username})
+            .andWhere({blockname})
             .getOne();
-        
+
         if (blocked)
             ret = true;
         return ret;
@@ -58,13 +57,13 @@ export class BlocklistService {
         return saveResponse;
     }
 
-    async unblockPerson(username: string, toblock: string): Promise<DeleteResult> {
+    async unblockPerson(username: string, blockname: string): Promise<DeleteResult> {
         const removeFriendResponse: DeleteResult = await this.blocklistRepository
             .createQueryBuilder('block_list')
             .delete()
             .from('block_list')
-            .where('username = :username', { username })
-            .andWhere('blockname = :toblock', { toblock })
+            .where({username})
+            .andWhere({blockname})
             .execute()
         return removeFriendResponse;
     }

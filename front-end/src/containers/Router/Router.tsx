@@ -8,8 +8,7 @@ import PageRoutes from "../../config/PageRoutes";
 // Guards
 import { AuthGuard } from "../../containers/RouteGuards";
 
-// Public Pages
-import Home from "../../pages/Home";
+// Public Page
 import Login from "../../pages/Login";
 
 // Private pages
@@ -33,7 +32,7 @@ const Router = (): JSX.Element => (
 
             {/* Routes that have to pass through authentication to be loaded */}
             <Route element={<AuthGuard />}>
-                <Route path={PageRoutes.home} element={<Home />} />
+                <Route path={PageRoutes.home} element={<Login />} />
 
                 {/* Profile page is rendered in two different ways but same component */}
                 <Route path={PageRoutes.profile} element={<ProfilePage />}>
