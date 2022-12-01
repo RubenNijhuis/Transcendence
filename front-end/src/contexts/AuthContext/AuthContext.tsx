@@ -76,6 +76,8 @@ const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
      */
     useEffect(() => {
         const checkAuthTokenStatus = async () => {
+            if (user === null) return;
+
             /**
              * If we are still in the login process we don't
              * have to check token status/validity
@@ -98,7 +100,8 @@ const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
                 setLoggedIn(true);
                 setUser(profile);
             } catch (err) {
-                signOut()
+                console.error(err);
+                // signOut()
             }
         };
         checkAuthTokenStatus();
