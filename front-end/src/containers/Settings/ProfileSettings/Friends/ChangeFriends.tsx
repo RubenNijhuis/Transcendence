@@ -19,8 +19,11 @@ const ChangeFriends = () => {
 		try {
 			if (await IsFriend(user.username, ref.current.value) == false)
 				await AddFriend(user.username, ref.current.value);
-			else
+			else{
+				console.log("HERE");
 				await RemoveFriend(user.username, ref.current.value);
+			}
+				
 		} catch (err) {
 			return Promise.reject(err);
 		}

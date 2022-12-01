@@ -1,5 +1,6 @@
 // Nestjs
 import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
+import { UsernameDto } from "src/dtos/auth";
 
 // DTO
 import { CreateFriendsDto } from "src/dtos/friendlist/create-friend.dto";
@@ -69,6 +70,21 @@ export class FriendlistController {
       const removeFriendResp: DeleteResult = await this.friendlistService.removeFriend(
         createfriendsDto.username,
         createfriendsDto.friendname
+      );
+
+      return removeFriendResp;
+    } catch (err) {
+      throw err;
+    }
+  }
+  
+  @Post("removeAllFriends")
+  async removeAllFriends(
+    @Body() usernameDto: UsernameDto
+  ): Promise<DeleteResult> {
+    try {
+      const removeFriendResp: DeleteResult = await this.friendlistService.removeAllFriends(
+        usernameDto.username,
       );
 
       return removeFriendResp;

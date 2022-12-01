@@ -48,15 +48,15 @@ export class FriendlistService {
 
   async isFriend(username: string, friendname: string): Promise<boolean> {
     let ret: boolean = false;
-
+    console.log("user: ", username, "friend: ", friendname);
     const friend: FriendList = await this.friendlistRepository
       .createQueryBuilder("friend_list")
-      .where("username = :username OR friendname = :username", { username })
-      .andWhere("friendname = :friendname OR username = :friendname", { friendname })
+      .where("username = :username AND friendname = :friendname", { username, friendname })
+      .andWhere("friendname = :username AND username = :friendname", { friendname })
       .getOne();
-    
     if (friend)
       ret = true;
+    console.log("true: ", ret);
     return ret;
   }
 
@@ -74,6 +74,17 @@ export class FriendlistService {
       .from("friend_list")
       .where("username = :username AND friendname = :friendname", { username, friendname })
       .orWhere("username = :friendname AND friendname = :username", { friendname, username })
+      .execute();
+
+    return removeFriendResponse;
+  }
+
+  async removeAllFriends(username: string): Promise<DeleteResult> {
+    const removeFriendResponse: DeleteResult = await this.friendlistRepository
+      .createQueryBuilder("friend_list")
+      .delete()
+      .from("friend_list")
+      .where("username = :username OR friendname = :username", { username })
       .execute();
 
     return removeFriendResponse;

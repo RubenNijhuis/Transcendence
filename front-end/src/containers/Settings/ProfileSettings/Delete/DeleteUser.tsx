@@ -4,6 +4,7 @@ import { Container } from "./DeleteUser.style";
 import { deleteUser } from "../../../../proxies/settings/DeleteUser";
 import { useUser } from "../../../../contexts/UserContext";
 import Button from "../../../../components/Button";
+import { RemoveAllFriends } from "../../../../proxies/settings/RemoveAllFriends";
 
 ////////////////////////////////////////////////////////////
 
@@ -13,6 +14,7 @@ const { user } = useUser();
 
 	const DeleteButton = async (event: any) => {
         try {
+            await RemoveAllFriends(user.username);
 			await deleteUser(user.username);
 		} catch (err) {
 			console.error(err);

@@ -122,3 +122,7 @@ const ProfileSettings = () => {
 };
 
 export default ProfileSettings;
+
+
+//friend request moet gestuurd worden niet de toevoeging van de friend
+//ook de add friend werkt alleen als je het reset
