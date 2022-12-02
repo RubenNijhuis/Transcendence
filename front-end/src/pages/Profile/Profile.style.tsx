@@ -3,6 +3,7 @@ import {
     largeRadius,
     magicNum,
     mainColor,
+    mediumRadius,
 } from "../../styles/StylingConstants";
 
 const ProfileDetailsContainer = styled.section`
@@ -11,7 +12,7 @@ const ProfileDetailsContainer = styled.section`
     padding: calc(${magicNum} / 2);
 
     background-color: ${mainColor};
-    border-radius: ${largeRadius};
+    border-radius: ${mediumRadius};
 
     grid-template-areas: "👯‍♀️ 🎮";
 

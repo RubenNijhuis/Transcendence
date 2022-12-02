@@ -12,6 +12,7 @@ import { getItem } from "../../../modules/Store";
 // Auth check
 import { useAuth } from "../../../contexts/AuthContext";
 import { useUser } from "../../../contexts/UserContext";
+import { redirectToLogin } from "../../../contexts/AuthContext/AuthContext.bl";
 
 // Proxies
 import { checkTokenValidity } from "../../../proxies/auth";
@@ -51,7 +52,7 @@ const AuthGuard = () => {
                     setUser(profile);
                     return;
                 } catch (err) {
-                    console.error(err);
+                    redirectToLogin();
                 }
             }
         };

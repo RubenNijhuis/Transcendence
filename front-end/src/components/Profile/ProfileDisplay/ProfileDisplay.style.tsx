@@ -15,7 +15,7 @@ const Container = styled.div`
     padding: calc(${magicNum} / 2);
     margin-bottom: calc(${magicNum} / 2);
 
-    border-radius: ${largeRadius};
+    border-radius: ${mediumRadius};
     background-color: ${mainColor};
 
     .banner {

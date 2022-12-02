@@ -74,6 +74,10 @@ const CreateChatContainer = styled.div`
 
 const CreateGroupChatContainer = styled.div`
     margin-bottom: calc(${magicNum} / 2);
+    padding: calc(${magicNum} / 2);
+    min-width: calc(${magicNum} * 12);
+    min-height: calc(${magicNum} * 10);
+    
 
     .group-name {
         .heading {
@@ -140,7 +144,6 @@ const CreateGroupChatContainer = styled.div`
             border-radius: ${smallRadius};
             max-height: calc(${magicNum} * 6);
             overflow-y: scroll;
-            max-width: calc(${magicNum} * 10);
             margin: auto;
 
             .item {

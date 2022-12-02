@@ -15,7 +15,7 @@ import Heading from "../../../components/Heading";
 import {
     Container,
     CreateChatContainer,
-    CreateGroupChatContainer,
+    CreateGroupChatContainer
 } from "./CreateGroup.style";
 import Asset from "../../../components/Asset";
 
@@ -27,16 +27,20 @@ import { GrFormSearch, GrFormClose } from "react-icons/gr";
 
 ///////////////////////////////////////////////////////////
 
-const CreateGroupChat = ({
-    friends,
-}: {
-    friends: Profile.Instance[];
-}): JSX.Element => {
+interface ICreateGroupChat {
+    setModalActive: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const CreateGroupChat = ({ setModalActive }: ICreateGroupChat): JSX.Element => {
     const [selectedFriends, setSelectedFriends] = useState<Profile.Instance[]>(
         []
     );
     const groupName = useFormInput("");
     const searchList = useFormInput("");
+
+    ////////////////////////////////////////////////////////////
+
+    const { user, friends } = useUser();
 
     ////////////////////////////////////////////////////////////
 
@@ -61,8 +65,6 @@ const CreateGroupChat = ({
         return foundInSelectedFriends;
     };
 
-    const handleSearch = () => {};
-
     const removeFriendFromSelected = (friendID: Profile.Instance): void => {
         setSelectedFriends((prevState) => {
             const filteredState = prevState.filter((friend) => {
@@ -76,15 +78,32 @@ const CreateGroupChat = ({
         setSelectedFriends((prevState) => [...prevState, friendID]);
     };
 
+    const createGroupChat = async () => {
+        try {
+            const selectedFriendsUIDS = selectedFriends.map((item) => item.uid);
+            console.log(groupName)
+            await createChat(user.uid, groupName.value, selectedFriendsUIDS);
+            setModalActive(false);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     ////////////////////////////////////////////////////////////
 
     return (
         <CreateGroupChatContainer>
+            <div className="title">
+                <Heading type={2}>Create a new chat</Heading>
+            </div>
+
             <div className="group-name">
                 <Heading type={4}>Set a group name</Heading>
                 <input type="text" {...groupName} />
             </div>
+
             <hr className="divider" />
+
             <div className="select-friends">
                 <div className="header">
                     <Heading type={4}>Select Friends</Heading>
@@ -119,39 +138,9 @@ const CreateGroupChat = ({
                     })}
                 </ul>
             </div>
+
+            <Button onClick={createGroupChat}>Create chat</Button>
         </CreateGroupChatContainer>
-    );
-};
-
-const CreateChat = ({
-    setModalActive,
-}: {
-    setModalActive: React.Dispatch<React.SetStateAction<boolean>>;
-}): JSX.Element => {
-    const [validSetting, setValidSettings] = useState<boolean>(false);
-
-    ////////////////////////////////////////////////////////////
-
-    const { friends } = useUser();
-
-    ////////////////////////////////////////////////////////////
-
-    return (
-        <CreateChatContainer>
-            <div className="title">
-                <Heading type={2}>Create a new chat</Heading>
-            </div>
-            <div className="chat-interface">
-                {/* <CreateDMChat /> */}
-                <CreateGroupChat friends={friends} />
-                <Button
-                    className={`finish-button ${validSetting && `valid`}`}
-                    onClick={() => setModalActive(false)}
-                >
-                    Create chat
-                </Button>
-            </div>
-        </CreateChatContainer>
     );
 };
 
@@ -164,7 +153,7 @@ const CreateGroup = (): JSX.Element => {
      * We set the modal component with its closing function
      */
     useEffect(() => {
-        setModalElement(() => <CreateChat setModalActive={setModalActive} />);
+        setModalElement(<CreateGroupChat setModalActive={setModalActive} />);
     }, [modalActive]);
 
     ////////////////////////////////////////////////////////////
