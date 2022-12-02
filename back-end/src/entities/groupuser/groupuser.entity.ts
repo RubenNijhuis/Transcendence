@@ -14,13 +14,13 @@ export class GroupUser {
   group: Group;
 
   @Column()
-  userId: string;
+  memberId: string;
 
   @ManyToOne((type) => User, (user) => user.groups)
   user: User;
 
   @Column()
-  userType: number;
+  permissions: number;
 }
 
 export default GroupUser;

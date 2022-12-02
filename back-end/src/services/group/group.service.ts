@@ -149,12 +149,8 @@ export class GroupService {
           editMembersDto.users[i]
         );
         groupuser.groupId = editMembersDto.groupId;
-        groupuser.userId = editMembersDto.users[i];
-        groupuser.userType = 0;
-
-        console.log("WE PASS HERE AS WELL");
-        console.log(groupuser.userId);
-
+        groupuser.memberId = editMembersDto.users[i];
+        groupuser.permissions = 0;
         this.groupuserRepository.save(groupuser);
       }
     } catch (err) {
@@ -177,8 +173,8 @@ export class GroupService {
         editOwnerDto.owner
       );
       groupuser.groupId = editOwnerDto.groupId;
-      groupuser.userId = editOwnerDto.owner;
-      groupuser.userType = 2;
+      groupuser.memberId = editOwnerDto.owner;
+      groupuser.permissions = 2;
 
       return this.groupuserRepository.save(groupuser);
     } catch (err) {
@@ -310,7 +306,7 @@ export class GroupService {
         .getOne();
       const group: Group = await this.findGroupById(makeAdminDto.group);
       if (groupuser && group.owner === makeAdminDto.owner) {
-        groupuser.userType = 1;
+        groupuser.permissions = 1;
       }
       return this.groupuserRepository.save(groupuser);
     } catch (err) {
@@ -331,7 +327,7 @@ export class GroupService {
         .getOne();
       const group: Group = await this.findGroupById(makeAdminDto.group);
       if (groupuser && group.owner === makeAdminDto.owner) {
-        groupuser.userType = 0;
+        groupuser.permissions = 0;
       }
       return this.groupuserRepository.save(groupuser);
     } catch (err) {

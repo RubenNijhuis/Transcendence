@@ -3,6 +3,7 @@ import {
   Entity,
   JoinTable,
   OneToMany,
+  Generated,
   PrimaryGeneratedColumn
 } from "typeorm";
 import GroupUser from "../groupuser/groupuser.entity";
@@ -18,6 +19,10 @@ export class Group {
 
   @Column()
   owner: string;
+
+  @Column()
+  @Generated("uuid")
+  uid: string;
 
   @Column({
     nullable: true

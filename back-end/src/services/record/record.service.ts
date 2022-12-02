@@ -32,7 +32,7 @@ export class RecordService {
   async banUser(banUserDto : BanUserDto) {
     try {
       const admin : GroupUser = await this.groupService.findGroupuserById(banUserDto.admin, banUserDto.groupId);
-      if (admin.userType == 0)
+      if (admin.permissions == 0)
         throw console.error("not permitted");
       const newRecord = this.recordRepository.create(banUserDto);
       return this.recordRepository.save(newRecord);
