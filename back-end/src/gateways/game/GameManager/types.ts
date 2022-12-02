@@ -1,7 +1,6 @@
 import { Socket } from "socket.io";
 
 import Game from "./GameInstance";
-import Profile from "./profile";
 
 ////////////////////////////////////////////////////////////
 
@@ -33,7 +32,7 @@ declare namespace Match {
   }
 
   export interface PlayerProfile {
-    uid: Profile.ProfileID;
+    uid: string;
     connection: Socket;
     username: string;
     elo: number;
