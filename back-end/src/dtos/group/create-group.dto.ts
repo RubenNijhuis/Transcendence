@@ -5,7 +5,7 @@ export class CreateGroupDto {
   owner: string;
 
   @IsNotEmpty()
-  groupname: string;
+  name: string;
 
   @IsNotEmpty()
   users: string[];

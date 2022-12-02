@@ -107,7 +107,7 @@ export class GroupService {
 
       newGroup.owner = createGroupDto.owner;
       newGroup.users = [];
-      newGroup.groupname = createGroupDto.groupname;
+      newGroup.name = createGroupDto.name;
 
       return this.groupRepository.save(newGroup);
     } catch (err) {

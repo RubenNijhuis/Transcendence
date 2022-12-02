@@ -30,7 +30,7 @@ export class Group {
   password: string;
 
   @Column()
-  groupname: string;
+  name: string;
 
   @OneToMany((type) => GroupUser, (groupuser) => groupuser.group)
   @JoinTable()
