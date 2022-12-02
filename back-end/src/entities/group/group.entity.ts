@@ -30,6 +30,9 @@ export class Group {
   password: string;
 
   @Column()
+  protected: boolean;
+
+  @Column()
   name: string;
 
   @OneToMany((type) => GroupUser, (groupuser) => groupuser.group)
