@@ -4,6 +4,7 @@ import {
     lightTextColor,
     magicNum,
     mainColor,
+    mediumRadius,
 } from "../../styles/StylingConstants";
 
 ///////////////////////////////////////////////////////////
@@ -32,7 +33,7 @@ const Container = styled.div`
 
         color: ${lightTextColor};
         background-color: ${mainColor};
-        border-radius: ${largeRadius};
+        border-radius: ${mediumRadius};
 
         .heading {
             grid-area: heading;

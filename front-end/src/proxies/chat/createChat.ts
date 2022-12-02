@@ -15,9 +15,9 @@ import { Chat, Profile } from "../../types";
  * @returns confirmation response
  */
 const createChat = async (
-    owner: Profile.Instance,
+    owner: Profile.ProfileID,
     name: string,
-    users: Profile.Instance[]
+    users: Profile.ProfileID[]
 ): Promise<Chat.Group.Instance[]> => {
     try {
         const route = ApiRoutes.createChat();
@@ -27,7 +27,7 @@ const createChat = async (
             users,
         };
 
-        const { data } = await API.post<Chat.Group.Instance[]>(route, body);
+        const { data } = await API.post(route, body);
 
         return Promise.resolve(data);
     } catch (err) {

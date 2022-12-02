@@ -6,6 +6,7 @@ import {
     lightTextColor,
     magicNum,
     mainColorMono,
+    mediumRadius,
     smallRadius,
 } from "../../../styles/StylingConstants";
 
@@ -25,7 +26,7 @@ const Container = styled.div`
         padding: calc(${magicNum} / 2) calc(${magicNum});
         flex-direction: row;
         justify-content: space-evenly;
-        border-radius: ${largeRadius};
+        border-radius: ${mediumRadius};
         background-color: ${mainColorMono};
         box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.1);
         min-width: 75%;

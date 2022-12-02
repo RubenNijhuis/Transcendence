@@ -45,6 +45,7 @@ export class GroupController {
     return await this.groupService.getGroupsByUserId(userId);
   }
 
+  // TODO: when with access token the uid can be taken from that no need to bring it with the dto
   @Post("createPassword")
   @UsePipes(ValidationPipe)
   async createPassword(@Body() createPasswordDto: CreatePasswordDto) {
@@ -56,6 +57,7 @@ export class GroupController {
     }
   }
 
+  // TODO: when with access token the uid can be taken from that no need to bring it with the dto
   @Post("updatePassword")
   @UsePipes(ValidationPipe)
   async updatePassword(@Body() editPasswordDto: EditPasswordDto) {
@@ -67,6 +69,8 @@ export class GroupController {
     }
   }
 
+  // TODO: get password from body
+  // TODO: make post request
   @Get("validatepassword/:groupid/:password")
   async validatePassword(
     @Param("password") password: string,
@@ -79,6 +83,7 @@ export class GroupController {
     }
   }
 
+  // TODO: when with access token the uid can be taken from that no need to bring it with the dto
   @Post("createGroup")
   async createGroup(@Body() createGroupDto: CreateGroupDto) {
     try {
@@ -101,6 +106,7 @@ export class GroupController {
     }
   }
 
+  // TODO: when with access token the uid can be taken from that no need to bring it with the dto
   @Post("removeGroup")
   async removeGroup(@Body() removeGroupDto: RemoveGroupDto) {
     try {
@@ -110,7 +116,7 @@ export class GroupController {
       throw err;
     }
   }
-
+  // TODO: when with access token the uid can be taken from that no need to bring it with the dto
   @Post("addMembers")
   async addMembers(@Body() editMembersDto: EditMembersDto) {
     try {
@@ -121,6 +127,7 @@ export class GroupController {
     }
   }
 
+  // TODO: when with access token the uid can be taken from that no need to bring it with the dto
   @Post("removeMembers")
   async removeMembers(@Body() editMembersDto: EditMembersDto) {
     try {
@@ -131,6 +138,7 @@ export class GroupController {
     }
   }
 
+  // TODO: when with access token the uid can be taken from that no need to bring it with the dto
   @Post("makeAdmin")
   async makeAdmin(@Body() makeAdminDto: MakeAdminDto) {
     try {
@@ -141,6 +149,7 @@ export class GroupController {
     }
   }
 
+  // TODO: when with access token the uid can be taken from that no need to bring it with the dto
   @Post("removeAdmin")
   async unMakeAdmin(@Body() makeAdminDto: MakeAdminDto) {
     try {

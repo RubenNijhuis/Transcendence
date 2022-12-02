@@ -71,41 +71,41 @@ const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
         setTfaEnabled(user.isTfaEnabled);
     }, [user]);
 
-    /**
-     * Here we check the auth token status.
-     */
-    useEffect(() => {
-        const checkAuthTokenStatus = async () => {
-            if (user === null) return;
+    // /**
+    //  * Deleted as probably not used anymore
+    //  * Here we check the auth token status.
+    //  */
+    // useEffect(() => {
+    //     const checkAuthTokenStatus = async () => {
+    //         if (isLoggedIn === true) return;
 
-            /**
-             * If we are still in the login process we don't
-             * have to check token status/validity
-             */
-            const isInLoginProcess = getItem<boolean>(StoreId.loginProcess);
-            if (isInLoginProcess) return;
+    //         /**
+    //          * If we are still in the login process we don't
+    //          * have to check token status/validity
+    //          */
+    //         const isInLoginProcess = getItem<boolean>(StoreId.loginProcess);
+    //         if (isInLoginProcess) return;
 
-            /**
-             * If the refresh token doesn't exist we redirect
-             * the user to a page where they cal log in
-             */
-            const refreshToken = getItem<string>(StoreId.refreshToken);
-            if (refreshToken === null) {
-                redirectToLogin();
-                return;
-            }
+    //         /**
+    //          * If the refresh token doesn't exist we redirect
+    //          * the user to a page where they cal log in
+    //          */
+    //         const refreshToken = getItem<string>(StoreId.refreshToken);
+    //         if (refreshToken === null) {
+    //             redirectToLogin();
+    //             return;
+    //         }
 
-            try {
-                const { profile } = await checkTokenValidity(refreshToken);
-                setLoggedIn(true);
-                setUser(profile);
-            } catch (err) {
-                console.error(err);
-                // signOut()
-            }
-        };
-        checkAuthTokenStatus();
-    }, []);
+    //         try {
+    //             const { profile } = await checkTokenValidity(refreshToken);
+    //             setLoggedIn(true);
+    //             setUser(profile);
+    //         } catch (err) {
+    //             signOut()
+    //         }
+    //     };
+    //     checkAuthTokenStatus();
+    // }, []);
 
     ////////////////////////////////////////////////////////////
 

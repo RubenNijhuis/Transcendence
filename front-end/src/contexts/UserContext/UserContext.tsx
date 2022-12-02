@@ -7,6 +7,7 @@ import { Profile } from "../../types";
 // Debug
 import Logger, { LogTypes } from "../../modules/Logger";
 import { generateProfile } from "../FakeDataContext/fakeDataGenerators";
+import { getFriendsByUsername } from "../../proxies/friend";
 
 ///////////////////////////////////////////////////////////
 
@@ -42,11 +43,14 @@ const UserProvider = ({
 
     useEffect(() => {
         if (!user) return;
-        Logger(LogTypes.AUTH, "User context", "User object", user);
 
-        const retrievedFriends = generateProfile(20);
-        Logger(LogTypes.DEBUG, "User context", "Generating fake friends", null);
-        setFriends(retrievedFriends);
+        const getFriends = async () => {
+            Logger(LogTypes.AUTH, "User context", "User object", user);
+    
+            const retrievedFriends = await getFriendsByUsername(user.username)
+            setFriends(retrievedFriends);
+        }
+        getFriends()
     }, [user]);
 
     ////////////////////////////////////////////////////////////
