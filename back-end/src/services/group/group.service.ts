@@ -41,7 +41,7 @@ export class GroupService {
     try {
       const Groupusers: Groupuser[] = await this.groupuserRepository
         .createQueryBuilder("groupuser")
-        .where(userId)
+        .where({memberId: userId})
         .getMany();
 
       let i = 0;
@@ -53,7 +53,6 @@ export class GroupService {
         groups.push(group);
         i++;
       }
-
       return groups;
     } catch (err) {
       return err;
@@ -108,6 +107,7 @@ export class GroupService {
       newGroup.owner = createGroupDto.owner;
       newGroup.users = [];
       newGroup.name = createGroupDto.name;
+      newGroup.protected = false;
 
       return this.groupRepository.save(newGroup);
     } catch (err) {
@@ -205,6 +205,7 @@ export class GroupService {
         .createQueryBuilder()
         .update()
         .set({ password: password })
+        .set({ protected: true})
         .where({
           id: createPasswordDto.id
         })
