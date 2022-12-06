@@ -8,7 +8,10 @@ import { useUser } from "../UserContext";
 import { Chat } from "../../types";
 
 // Generators DEBUG
-import { generateGroupChats } from "../FakeDataContext/fakeDataGenerators";
+import {
+    generateGroupChats,
+    generateProfile
+} from "../FakeDataContext/fakeDataGenerators";
 
 // Business logic
 import {
@@ -16,11 +19,12 @@ import {
     categorizeChats,
     getFirstDM,
     getMembersFromGroupChats,
-    getMessagesFromGroupChats,
+    getMessagesFromGroupChats
 } from "./ChatContext.bl";
 
 // Debug data
 import { useFakeData } from "../FakeDataContext";
+import { getChatsByUsername } from "../../proxies/chat";
 
 ///////////////////////////////////////////////////////////
 
@@ -64,9 +68,11 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
 
         const chatAggregator = async () => {
             // TODO: Get from api //////////////////////////////////////
+            // const retrievedGroupChats: Chat.Group.Instance[] = await getChatsByUsername(user.uid);
             const retrievedGroupChats: Chat.Group.Instance[] =
                 generateGroupChats(user, 10, [1, 4], profiles);
-            ////////////////////////////////////////////////////////////
+
+            console.log(retrievedGroupChats);
 
             const members = getMembersFromGroupChats(retrievedGroupChats);
             const messages = getMessagesFromGroupChats(retrievedGroupChats);
@@ -94,7 +100,7 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
         setActiveChat,
 
         directChats,
-        groupChats,
+        groupChats
     };
 
     ////////////////////////////////////////////////////////////

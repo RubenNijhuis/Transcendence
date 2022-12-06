@@ -56,7 +56,7 @@ export class UserService {
     if (!newUser) return null;
 
     delete newUser.intraId;
-   delete newUser.index;
+    delete newUser.index;
     delete newUser.isInitialized;
     delete newUser.refreshToken;
     delete newUser.tfaSecret;
@@ -307,10 +307,7 @@ export class UserService {
     }
   }
 
-  async setColor(
-    username: string,
-    color: string
-  ): Promise<UpdateResult> {
+  async setColor(username: string, color: string): Promise<UpdateResult> {
     try {
       const user: User = await this.findUserByUsername(username);
 
@@ -330,10 +327,7 @@ export class UserService {
     }
   }
 
-  async setTFAiv(
-    intraID: string,
-    tfa_iv: string
-  ): Promise<UpdateResult> {
+  async setTFAiv(intraID: string, tfa_iv: string): Promise<UpdateResult> {
     try {
       const user: User = await this.findUsersByIdNoFilter(intraID);
 
@@ -353,10 +347,7 @@ export class UserService {
     }
   }
 
-  async setTFAkey(
-    intraID: string,
-    tfa_key: string
-  ): Promise<UpdateResult> {
+  async setTFAkey(intraID: string, tfa_key: string): Promise<UpdateResult> {
     try {
       const user: User = await this.findUsersByIdNoFilter(intraID);
 

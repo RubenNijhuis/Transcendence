@@ -6,16 +6,19 @@ import {
   Get,
   Post,
   HttpStatus,
-  Param
+  Param,
+  UseGuards,
+  Req
 } from "@nestjs/common";
+
+import { Request } from "express";
 
 // DTO's
 import { EditOwnerDto } from "src/dtos/group";
 import { MakeAdminDto } from "src/dtos/group/make-admin.dto";
 import { EditMembersDto } from "src/dtos/group/edit-members.dto";
 import { CreateGroupDto } from "../../dtos/group/create-group.dto";
-import { CreatePasswordDto } from "../../dtos/group/create-password.dto";
-import { EditPasswordDto } from "../../dtos/group/edit-password.dto";
+import { SetPasswordDto } from "../../dtos/group/set-password";
 import { RemoveGroupDto } from "src/dtos/group/remove-group.dto";
 
 // Entities
@@ -26,12 +29,18 @@ import { GroupService } from "src/services/group/group.service";
 
 // Error handling
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
+import { AccessTokenGuard } from "src/guards/accessToken.guard";
+import { UserService } from "src/services/user/user.service";
+import User from "src/entities/user/user.entity";
 
 ////////////////////////////////////////////////////////////
 
 @Controller("group")
 export class GroupController {
-  constructor(private readonly groupService: GroupService) {}
+  constructor(
+    private readonly groupService: GroupService,
+    private readonly userService: UserService
+  ) {}
 
   ////////////////////////////////////////////////////////////
 
@@ -45,24 +54,19 @@ export class GroupController {
     return await this.groupService.getGroupsByUserId(userId);
   }
 
-  // TODO: when with access token the uid can be taken from that no need to bring it with the dto
-  @Post("createPassword")
+  @Post("setPassword")
   @UsePipes(ValidationPipe)
-  async createPassword(@Body() createPasswordDto: CreatePasswordDto) {
+  @UseGuards(AccessTokenGuard)
+  async setPassword(
+    @Req() req: Request,
+    @Body() setPasswordDto: SetPasswordDto
+  ): Promise<any> {
     try {
-      await this.groupService.createPassword(createPasswordDto);
-      return HttpStatus.OK;
-    } catch (err) {
-      throw err;
-    }
-  }
+      // Get UID through access token
+      const intraID = req.user["intraID"];
+      const user: User = await this.userService.findUserByintraId(intraID);
 
-  // TODO: when with access token the uid can be taken from that no need to bring it with the dto
-  @Post("updatePassword")
-  @UsePipes(ValidationPipe)
-  async updatePassword(@Body() editPasswordDto: EditPasswordDto) {
-    try {
-      await this.groupService.updatePassword(editPasswordDto);
+      await this.groupService.setPassword(user.uid, setPasswordDto);
       return HttpStatus.OK;
     } catch (err) {
       throw err;
@@ -71,13 +75,12 @@ export class GroupController {
 
   // TODO: get password from body
   // TODO: make post request
-  @Get("validatepassword/:groupid/:password")
+  @Get("validatePassword")
   async validatePassword(
-    @Param("password") password: string,
-    @Param("groupid") groupId: number
+    @Body() setPasswordDto: SetPasswordDto
   ): Promise<boolean> {
     try {
-      return await this.groupService.validatePassword(password, groupId);
+      return await this.groupService.validatePassword(setPasswordDto);
     } catch (err) {
       throw err;
     }
@@ -92,12 +95,17 @@ export class GroupController {
       const users: string[] = createGroupDto.users;
       const owner: string = createGroupDto.owner;
 
-      const EditMembersDto: EditMembersDto = { groupId, users, owner };
+      if (createGroupDto.password !== null) {
+        await this.groupService.setPassword(createGroupDto.owner, {
+          id: group.id,
+          password: createGroupDto.password
+        });
+      }
 
+      const EditMembersDto: EditMembersDto = { groupId, users, owner };
       await this.groupService.addMembers(EditMembersDto);
 
       const addOwnerDto: EditOwnerDto = { groupId, owner };
-
       await this.groupService.addOwner(addOwnerDto);
 
       return HttpStatus.OK;
@@ -138,6 +146,7 @@ export class GroupController {
     }
   }
 
+  // makeAdmin and removeAdmin should be a setpermissions route
   // TODO: when with access token the uid can be taken from that no need to bring it with the dto
   @Post("makeAdmin")
   async makeAdmin(@Body() makeAdminDto: MakeAdminDto) {

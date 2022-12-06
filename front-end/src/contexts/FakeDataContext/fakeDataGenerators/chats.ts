@@ -56,13 +56,13 @@ const generateNewMessageContent = (
 ): Chat.Message.MessageTypes => {
     let messageContent: Chat.Message.MessageTypes = null!;
 
-    if (type === Chat.Message.ContentType.Simple) {
-        messageContent = generateSimpleMessage();
-    } else if (type === Chat.Message.ContentType.Picture) {
-        messageContent = generatePictureMessage();
-    } else if (type === Chat.Message.ContentType.InvitePlay) {
-        messageContent = generateInvite(sender, receiver);
-    }
+    const messageTypeToGeneratorTable = [
+        generateSimpleMessage(),
+        generatePictureMessage(),
+        generateInvite(sender, receiver)
+    ];
+
+    messageContent = messageTypeToGeneratorTable[type];
 
     return messageContent;
 };
@@ -76,7 +76,7 @@ const generateMessage = (
     const messages: Chat.Message.Instance[] = [];
 
     for (let i = 0; i < amount; i++) {
-        const rand: number = randomNum(0, 2);
+        const rand: number = randomNum(0, 3);
 
         const newMessage: Chat.Message.Instance = {
             content: generateNewMessageContent(sender, receiver, rand),

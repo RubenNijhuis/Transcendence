@@ -1,4 +1,4 @@
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsOptional } from "class-validator";
 
 export class CreateGroupDto {
   @IsNotEmpty()
@@ -9,4 +9,7 @@ export class CreateGroupDto {
 
   @IsNotEmpty()
   users: string[];
+
+  @IsOptional()
+  password: string;
 }
