@@ -78,7 +78,7 @@ export class GroupService {
     return this.groupuserRepository
       .createQueryBuilder("groupuser")
       .where({ groupId })
-      .andWhere({ userId })
+      .andWhere({ memberId: userId })
       .getOne();
   }
 
