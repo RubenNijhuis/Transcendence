@@ -17,6 +17,7 @@ import { SetPasswordDto } from "../../dtos/group/set-password";
 import { User } from "src/entities";
 import { RemoveGroupDto } from "src/dtos/group/remove-group.dto";
 import { ValidatePasswordDto } from "src/dtos/group/validate-password";
+import { SetPermissionDto } from "src/dtos/group/set-permission.dto";
 
 @Injectable()
 export class GroupService {
@@ -120,12 +121,12 @@ export class GroupService {
     }
   }
 
-  async removeGroup(removeGroupDto: RemoveGroupDto) {
+  async removeGroup(owner: string, removeGroupDto: RemoveGroupDto) {
     try {
       const group: Group = await this.findGroupById(removeGroupDto.groupId);
 
       // This needs to be taken from access token
-      if (group.owner !== removeGroupDto.owner) return;
+      if (group.owner !== owner) return;
 
       this.groupRepository
         .createQueryBuilder("group")
@@ -137,10 +138,10 @@ export class GroupService {
     }
   }
 
-  async addMembers(editMembersDto: EditMembersDto) {
+  async addMembers(owner: string, editMembersDto: EditMembersDto) {
     try {
       const group: Group = await this.findGroupById(editMembersDto.groupId);
-
+      if (owner !== group.owner) return ;
       for (const member of editMembersDto.users) {
         if (member == group.owner) continue;
 
@@ -259,7 +260,7 @@ export class GroupService {
 
   // TODO: function handles too much, needs to be split
   // E.g remove members and a cleanup function that runs after
-  async removeMembers(editMembersDto: EditMembersDto): Promise<void> {
+  async removeMembers(owner: string, editMembersDto: EditMembersDto): Promise<void> {
     try {
       // What is `i`?
       let i: number;
@@ -279,9 +280,8 @@ export class GroupService {
       const size: number = await this.getGroupSize(editMembersDto.groupId);
       if (size == i || isRemovable) {
         const groupId = editMembersDto.groupId;
-        const owner = editMembersDto.owner;
         const removegroupDto: RemoveGroupDto = { groupId, owner };
-        this.removeGroup(removegroupDto);
+        this.removeGroup(owner, removegroupDto);
       }
     } catch (err) {
       throw errorHandler(
@@ -292,38 +292,16 @@ export class GroupService {
     }
   }
 
-  // TODO: makeAdmin and unMakeadmin should be a set permissions function or toggle
-  async makeAdmin(makeAdminDto: MakeAdminDto) {
+  async setPermission(owner: string, setPermissionDto: SetPermissionDto) {  
     try {
       const groupuser: GroupUser = await this.groupuserRepository
         .createQueryBuilder("groupuser")
-        .where({ groupId: makeAdminDto.group })
-        .andWhere({ userId: makeAdminDto.user })
+        .where({ groupId: setPermissionDto.group })
+        .andWhere({ userId: setPermissionDto.user })
         .getOne();
-      const group: Group = await this.findGroupById(makeAdminDto.group);
-      if (groupuser && group.owner === makeAdminDto.owner) {
-        groupuser.permissions = 1;
-      }
-      return this.groupuserRepository.save(groupuser);
-    } catch (err) {
-      throw errorHandler(
-        err,
-        "Failed to make user admin",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
-    }
-  }
-
-  async unMakeAdmin(makeAdminDto: MakeAdminDto) {
-    try {
-      const groupuser: GroupUser = await this.groupuserRepository
-        .createQueryBuilder("groupuser")
-        .where({ groupId: makeAdminDto.group })
-        .andWhere({ userId: makeAdminDto.user })
-        .getOne();
-      const group: Group = await this.findGroupById(makeAdminDto.group);
-      if (groupuser && group.owner === makeAdminDto.owner) {
-        groupuser.permissions = 0;
+      const group: Group = await this.findGroupById(setPermissionDto.group);
+      if (groupuser && group.owner === owner) {
+        groupuser.permissions = setPermissionDto.level;
       }
       return this.groupuserRepository.save(groupuser);
     } catch (err) {

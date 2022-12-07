@@ -1,7 +1,6 @@
-import { NumericLimit } from "argon2";
-import { IsNotEmpty, MinLength } from "class-validator";
+import { IsNotEmpty } from "class-validator";
 
-export class MakeAdminDto {
+export class SetPermissionDto {
   @IsNotEmpty()
   owner: string;
 

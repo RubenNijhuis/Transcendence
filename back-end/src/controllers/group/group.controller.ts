@@ -15,11 +15,12 @@ import { Request } from "express";
 
 // DTO's
 import { EditOwnerDto } from "src/dtos/group";
-import { MakeAdminDto } from "src/dtos/group/make-admin.dto";
+import { SetPermissionDto } from "src/dtos/group/set-permission.dto";
 import { EditMembersDto } from "src/dtos/group/edit-members.dto";
 import { CreateGroupDto } from "../../dtos/group/create-group.dto";
 import { SetPasswordDto } from "../../dtos/group/set-password";
 import { RemoveGroupDto } from "src/dtos/group/remove-group.dto";
+import { ValidatePasswordDto } from "src/dtos/group/validate-password";
 
 // Entities
 import Group from "src/entities/group/group.entity";
@@ -81,10 +82,10 @@ export class GroupController {
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
   async validatePassword(
-    @Body() validatePassword: ValidatePassword
+    @Body() validatePasswordDto: ValidatePasswordDto
   ): Promise<boolean> {
     try {
-      return await this.groupService.validatePassword(validatePassword);
+      return await this.groupService.validatePassword(validatePasswordDto);
     } catch (err) {
       throw err;
     }
@@ -118,7 +119,7 @@ export class GroupController {
       }
 
       const EditMembersDto: EditMembersDto = { groupId, users, owner };
-      await this.groupService.addMembers(EditMembersDto);
+      await this.groupService.addMembers(user.uid, EditMembersDto);
 
       const addOwnerDto: EditOwnerDto = { groupId, owner };
       await this.groupService.addOwner(addOwnerDto);
