@@ -45,11 +45,15 @@ export class GroupController {
   ////////////////////////////////////////////////////////////
 
   @Get()
+  @UsePipes(ValidationPipe)
+  @UseGuards(AccessTokenGuard)
   async getAllMessages() {
     return await this.groupService.getAllMessages();
   }
 
   @Get(":userId")
+  @UsePipes(ValidationPipe)
+  @UseGuards(AccessTokenGuard)
   async getGroupsByUserId(@Param("userId") userId: string) {
     return await this.groupService.getGroupsByUserId(userId);
   }
@@ -73,24 +77,35 @@ export class GroupController {
     }
   }
 
-  // TODO: get password from body
-  // TODO: make post request
-  @Get("validatePassword")
+  @Post("validatePassword")
+  @UsePipes(ValidationPipe)
+  @UseGuards(AccessTokenGuard)
   async validatePassword(
-    @Body() setPasswordDto: SetPasswordDto
+    @Body() validatePassword: ValidatePassword
   ): Promise<boolean> {
     try {
-      return await this.groupService.validatePassword(setPasswordDto);
+      return await this.groupService.validatePassword(validatePassword);
     } catch (err) {
       throw err;
     }
   }
 
-  // TODO: when with access token the uid can be taken from that no need to bring it with the dto
   @Post("createGroup")
-  async createGroup(@Body() createGroupDto: CreateGroupDto) {
+  @UsePipes(ValidationPipe)
+  @UseGuards(AccessTokenGuard)
+  async createGroup(
+    @Req() req: Request,
+    @Body() createGroupDto: CreateGroupDto
+  ) {
     try {
-      const group: Group = await this.groupService.createGroup(createGroupDto);
+      // Get UID through access token
+      const intraID = req.user["intraID"];
+      const user: User = await this.userService.findUserByintraId(intraID);
+
+      const group: Group = await this.groupService.createGroup(
+        user.uid,
+        createGroupDto
+      );
       const groupId: number = group.id;
       const users: string[] = createGroupDto.users;
       const owner: string = createGroupDto.owner;
@@ -114,11 +129,20 @@ export class GroupController {
     }
   }
 
-  // TODO: when with access token the uid can be taken from that no need to bring it with the dto
   @Post("removeGroup")
-  async removeGroup(@Body() removeGroupDto: RemoveGroupDto) {
+  @UsePipes(ValidationPipe)
+  @UseGuards(AccessTokenGuard)
+  async removeGroup(
+    @Req() req: Request,
+    @Body() removeGroupDto: RemoveGroupDto
+  ) {
     try {
-      await this.groupService.removeGroup(removeGroupDto);
+      // Get UID through access token
+      const intraID = req.user["intraID"];
+      const user: User = await this.userService.findUserByintraId(intraID);
+
+      // TODO: add user uid to remove group
+      await this.groupService.removeGroup(user.uid, removeGroupDto);
       return HttpStatus.OK;
     } catch (err) {
       throw err;
@@ -126,43 +150,59 @@ export class GroupController {
   }
   // TODO: when with access token the uid can be taken from that no need to bring it with the dto
   @Post("addMembers")
-  async addMembers(@Body() editMembersDto: EditMembersDto) {
+  @UsePipes(ValidationPipe)
+  @UseGuards(AccessTokenGuard)
+  async addMembers(
+    @Req() req: Request,
+    @Body() editMembersDto: EditMembersDto
+  ) {
     try {
-      await this.groupService.addMembers(editMembersDto);
+      // Get UID through access token
+      const intraID = req.user["intraID"];
+      const user: User = await this.userService.findUserByintraId(intraID);
+
+      // TODO: add user uid to add members func
+      await this.groupService.addMembers(user.uid, editMembersDto);
       return HttpStatus.OK;
     } catch (err) {
       throw err;
     }
   }
 
-  // TODO: when with access token the uid can be taken from that no need to bring it with the dto
   @Post("removeMembers")
-  async removeMembers(@Body() editMembersDto: EditMembersDto) {
+  @UsePipes(ValidationPipe)
+  @UseGuards(AccessTokenGuard)
+  async removeMembers(
+    @Req() req: Request,
+    @Body() editMembersDto: EditMembersDto
+  ) {
     try {
-      await this.groupService.removeMembers(editMembersDto);
+      // Get UID through access token
+      const intraID = req.user["intraID"];
+      const user: User = await this.userService.findUserByintraId(intraID);
+
+      // TODO: add user uid to remove members func
+      await this.groupService.removeMembers(user.uid, editMembersDto);
       return HttpStatus.OK;
     } catch (err) {
       throw err;
     }
   }
 
-  // makeAdmin and removeAdmin should be a setpermissions route
-  // TODO: when with access token the uid can be taken from that no need to bring it with the dto
-  @Post("makeAdmin")
-  async makeAdmin(@Body() makeAdminDto: MakeAdminDto) {
+  // TODO: make setpermissiontdo
+  @UsePipes(ValidationPipe)
+  @UseGuards(AccessTokenGuard)
+  @Post("setPermission")
+  async setPermission(
+    @Req() req: Request,
+    @Body() setPermissionDto: SetPermissionDto
+  ) {
     try {
-      await this.groupService.makeAdmin(makeAdminDto);
-      return HttpStatus.OK;
-    } catch (err) {
-      throw err;
-    }
-  }
+      // Get UID through access token
+      const intraID = req.user["intraID"];
+      const user: User = await this.userService.findUserByintraId(intraID);
 
-  // TODO: when with access token the uid can be taken from that no need to bring it with the dto
-  @Post("removeAdmin")
-  async unMakeAdmin(@Body() makeAdminDto: MakeAdminDto) {
-    try {
-      await this.groupService.unMakeAdmin(makeAdminDto);
+      await this.groupService.setPermission(user.uid, setPermissionDto);
       return HttpStatus.OK;
     } catch (err) {
       throw err;

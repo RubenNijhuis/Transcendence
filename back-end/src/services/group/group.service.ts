@@ -89,7 +89,7 @@ export class GroupService {
     return password;
   }
 
-  async createGroup(createGroupDto: CreateGroupDto) {
+  async createGroup(owner: string, createGroupDto: CreateGroupDto) {
     try {
       for (const member of createGroupDto.users) {
         const user: User = await this.userService.findUsersByIdNoFilter(member);
@@ -105,7 +105,7 @@ export class GroupService {
 
       const newGroup: Group = this.groupRepository.create();
 
-      newGroup.owner = createGroupDto.owner;
+      newGroup.owner = owner;
       newGroup.users = [];
       newGroup.name = createGroupDto.name;
       newGroup.protected = false;
