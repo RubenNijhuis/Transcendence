@@ -13,7 +13,7 @@ import { MakeAdminDto } from "src/dtos/group/make-admin.dto";
 import { EditMembersDto } from "src/dtos/group/edit-members.dto";
 import { EditOwnerDto } from "src/dtos/group/edit-owner.dto";
 import { CreateGroupDto } from "../../dtos/group/create-group.dto";
-import { SetPasswordDto } from "../../dtos/group/set-password";
+import { SetPasswordDto } from "../../dtos/group/set-password.dto";
 import { User } from "src/entities";
 import { RemoveGroupDto } from "src/dtos/group/remove-group.dto";
 import { ValidatePasswordDto } from "src/dtos/group/validate-password";
