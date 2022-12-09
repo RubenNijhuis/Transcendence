@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from "@nestjs/common";
+import { forwardRef, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeleteResult, Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
@@ -6,7 +6,9 @@ import { createHash } from "crypto";
 
 import Group from "src/entities/group/group.entity";
 import GroupUser from "../../entities/groupuser/groupuser.entity";
+import Message from "src/entities/message/message.entity";
 import { UserService } from "../user/user.service";
+import { MessageService } from "../message/message.service";
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
 
 import { MakeAdminDto } from "src/dtos/group/make-admin.dto";
@@ -26,7 +28,9 @@ export class GroupService {
     private readonly groupRepository: Repository<Group>,
     @InjectRepository(GroupUser)
     private readonly groupuserRepository: Repository<GroupUser>,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    @Inject(forwardRef(() => MessageService))
+    private readonly messageService: MessageService
   ) {}
 
   getAllMessages() {
@@ -37,9 +41,26 @@ export class GroupService {
     return this.groupRepository.findOne({ where: { id } });
   }
 
+
+  async getGroup(userId: string, groupId: number) {
+    try {
+      const group: Group = await this.findGroupById(groupId);
+      const groupUsers: GroupUser[] = await this.groupuserRepository
+        .createQueryBuilder("groupuser")
+        .where({ memberId: userId })
+        .getMany();
+      const messages: Message[] = await this.messageService.getAllMessagesByGroupId(groupId);
+      group.messages = messages;
+      group.users = groupUsers;
+      return group;
+    } catch(error: any) {
+      return error;
+    }
+  }
+
   async getGroupsByUserId(userId: string) {
     try {
-      const Groupusers: GroupUser[] = await this.groupuserRepository
+      const groupUsers: GroupUser[] = await this.groupuserRepository
         .createQueryBuilder("groupuser")
         .where({ memberId: userId })
         .getMany();
@@ -47,9 +68,9 @@ export class GroupService {
       // Doet dit niet exact hetzlefde als de vorige code?
       let i = 0;
       const groups: Group[] = [];
-      while (i < Groupusers.length) {
+      while (i < groupUsers.length) {
         const group: Group = await this.groupRepository.findOne({
-          where: { id: Groupusers[i].groupId }
+          where: { id: groupUsers[i].groupId }
         });
         groups.push(group);
         i++;

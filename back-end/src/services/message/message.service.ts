@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateMessageDto } from "src/dtos/group/create-message.dto";
 import Group from "src/entities/group/group.entity";
@@ -12,6 +12,7 @@ export class MessageService {
   constructor(
     @InjectRepository(Message)
     private readonly chatRepository: Repository<Message>,
+    @Inject(forwardRef(() => GroupService))
     private readonly groupService: GroupService,
     private readonly recordService: RecordService
   ) {}
