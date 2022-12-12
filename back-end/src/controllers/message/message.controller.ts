@@ -49,7 +49,7 @@ export class MessageController {
       const user: User = await this.userService.findUserByintraId(intraID);
 
       const senderID = user.uid;
-      await this.messageService.createMessage(createMessageDto);
+      await this.messageService.createMessage(senderID, createMessageDto);
 
       return HttpStatus.OK;
     } catch (error) {

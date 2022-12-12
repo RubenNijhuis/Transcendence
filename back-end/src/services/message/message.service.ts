@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import {
+  forwardRef,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateMessageDto } from "src/dtos/group/create-message.dto";
 import Group from "src/entities/group/group.entity";
@@ -12,6 +18,7 @@ export class MessageService {
   constructor(
     @InjectRepository(Message)
     private readonly chatRepository: Repository<Message>,
+    @Inject(forwardRef(() => GroupService))
     private readonly groupService: GroupService,
     private readonly recordService: RecordService
   ) {}
@@ -21,18 +28,18 @@ export class MessageService {
   }
 
   async getAllMessagesByGroupId(group_id: number): Promise<Message[]> {
-    const allMessages : Message[] = await this.chatRepository
+    const allMessages: Message[] = await this.chatRepository
       .createQueryBuilder("chat")
       .where("group_id = :group_id", { group_id })
       .getMany();
     return allMessages;
   }
 
-  async createMessage(createMessageDto: CreateMessageDto) {
-    const group : Group = await this.groupService.findGroupById(
+  async createMessage(senderID: string, createMessageDto: CreateMessageDto) {
+    const group: Group = await this.groupService.findGroupById(
       createMessageDto.group_id
     );
-    if (this.recordService.isUserBanned(createMessageDto.senderID, createMessageDto.group_id))
+    if (this.recordService.isUserBanned(senderID, createMessageDto.group_id))
       throw console.error("This user is Banned/Muted");
     const newChat = this.chatRepository.create(createMessageDto);
     newChat.sender = null;
