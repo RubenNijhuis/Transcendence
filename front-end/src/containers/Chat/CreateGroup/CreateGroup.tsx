@@ -37,6 +37,7 @@ const CreateGroupChat = ({ setModalActive }: ICreateGroupChat): JSX.Element => {
     );
     const groupName = useFormInput("");
     const searchList = useFormInput("");
+    const password = useFormInput("");
 
     ////////////////////////////////////////////////////////////
 
@@ -81,8 +82,7 @@ const CreateGroupChat = ({ setModalActive }: ICreateGroupChat): JSX.Element => {
     const createGroupChat = async () => {
         try {
             const selectedFriendsUIDS = selectedFriends.map((item) => item.uid);
-            console.log(groupName)
-            await createChat(user.uid, groupName.value, selectedFriendsUIDS);
+            await createChat(user.uid, groupName.value, selectedFriendsUIDS, password.value);
             setModalActive(false);
         } catch (err) {
             console.error(err);
@@ -100,6 +100,11 @@ const CreateGroupChat = ({ setModalActive }: ICreateGroupChat): JSX.Element => {
             <div className="group-name">
                 <Heading type={4}>Set a group name</Heading>
                 <input type="text" {...groupName} />
+            </div>
+
+            <div className="group-name">
+                <Heading type={4}>Set a password</Heading>
+                <input type="text" {...password} />
             </div>
 
             <hr className="divider" />

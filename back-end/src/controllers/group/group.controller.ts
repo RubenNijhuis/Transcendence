@@ -1,3 +1,4 @@
+// Nestjs
 import {
   Body,
   Controller,
@@ -11,6 +12,7 @@ import {
   Req
 } from "@nestjs/common";
 
+// Requests
 import { Request } from "express";
 
 // DTO's
@@ -27,11 +29,13 @@ import Group from "src/entities/group/group.entity";
 
 // Service
 import { GroupService } from "src/services/group/group.service";
-
-// Error handling
-import { errorHandler } from "src/utils/errorhandler/errorHandler";
-import { AccessTokenGuard } from "src/guards/accessToken.guard";
 import { UserService } from "src/services/user/user.service";
+import { MessageService } from "src/services/message/message.service";
+
+// Guards
+import { AccessTokenGuard } from "src/guards/accessToken.guard";
+
+// Types
 import User from "src/entities/user/user.entity";
 
 ////////////////////////////////////////////////////////////
@@ -40,17 +44,11 @@ import User from "src/entities/user/user.entity";
 export class GroupController {
   constructor(
     private readonly groupService: GroupService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly messageService: MessageService
   ) {}
 
   ////////////////////////////////////////////////////////////
-
-  @Get()
-  @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
-  async getAllMessages() {
-    return await this.groupService.getAllMessages();
-  }
 
   @Get(":userId")
   @UsePipes(ValidationPipe)
@@ -91,6 +89,19 @@ export class GroupController {
     }
   }
 
+  @Get(":id/messages")
+  @UsePipes(ValidationPipe)
+  @UseGuards(AccessTokenGuard)
+  async getMessagesFromGroup(@Param("id") id: number) {
+    try {
+      const messagesFromGroup =
+        await this.messageService.getAllMessagesByGroupId(id);
+      return messagesFromGroup;
+    } catch (err) {
+      throw err;
+    }
+  }
+
   @Post("createGroup")
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
@@ -109,18 +120,20 @@ export class GroupController {
       );
       const groupId: number = group.id;
       const users: string[] = createGroupDto.users;
-      const owner: string = createGroupDto.owner;
+      const owner: string = user.uid;
 
       if (createGroupDto.password !== null) {
-        await this.groupService.setPassword(createGroupDto.owner, {
+        await this.groupService.setPassword(owner, {
           id: group.id,
           password: createGroupDto.password
         });
       }
 
-      const EditMembersDto: EditMembersDto = { groupId, users, owner };
+      const EditMembersDto: EditMembersDto = { groupId, users };
       await this.groupService.addMembers(user.uid, EditMembersDto);
 
+      // TODO: why does the owner need to be set if it's done
+      // in the create group service func?
       const addOwnerDto: EditOwnerDto = { groupId, owner };
       await this.groupService.addOwner(addOwnerDto);
 

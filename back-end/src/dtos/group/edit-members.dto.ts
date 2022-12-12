@@ -6,7 +6,4 @@ export class EditMembersDto {
 
   @IsNotEmpty()
   users: string[];
-
-  @IsNotEmpty()
-  owner: string;
 }

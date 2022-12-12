@@ -29,10 +29,6 @@ export class GroupService {
     private readonly userService: UserService
   ) {}
 
-  getAllMessages() {
-    return this.groupRepository.find();
-  }
-
   findGroupById(id: number) {
     return this.groupRepository.findOne({ where: { id } });
   }
@@ -141,7 +137,7 @@ export class GroupService {
   async addMembers(owner: string, editMembersDto: EditMembersDto) {
     try {
       const group: Group = await this.findGroupById(editMembersDto.groupId);
-      if (owner !== group.owner) return ;
+      if (owner !== group.owner) return;
       for (const member of editMembersDto.users) {
         if (member == group.owner) continue;
 
@@ -260,13 +256,16 @@ export class GroupService {
 
   // TODO: function handles too much, needs to be split
   // E.g remove members and a cleanup function that runs after
-  async removeMembers(owner: string, editMembersDto: EditMembersDto): Promise<void> {
+  async removeMembers(
+    owner: string,
+    editMembersDto: EditMembersDto
+  ): Promise<void> {
     try {
       // What is `i`?
       let i: number;
       let isRemovable = true;
       for (const member of editMembersDto.users) {
-        if (member === editMembersDto.owner) {
+        if (member === owner) {
           isRemovable = false;
         }
         this.groupuserRepository
@@ -292,17 +291,20 @@ export class GroupService {
     }
   }
 
-  async setPermission(owner: string, setPermissionDto: SetPermissionDto) {  
+  async setPermission(owner: string, setPermissionDto: SetPermissionDto) {
     try {
       const groupuser: GroupUser = await this.groupuserRepository
         .createQueryBuilder("groupuser")
         .where({ groupId: setPermissionDto.group })
         .andWhere({ userId: setPermissionDto.user })
         .getOne();
+
       const group: Group = await this.findGroupById(setPermissionDto.group);
+
       if (groupuser && group.owner === owner) {
         groupuser.permissions = setPermissionDto.level;
       }
+
       return this.groupuserRepository.save(groupuser);
     } catch (err) {
       throw errorHandler(

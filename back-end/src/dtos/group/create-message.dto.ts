@@ -9,7 +9,4 @@ export class CreateMessageDto {
 
   @IsNotEmpty()
   content_type: number;
-
-  @IsNotEmpty()
-  senderID: string;
 }

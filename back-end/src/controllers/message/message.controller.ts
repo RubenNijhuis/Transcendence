@@ -3,38 +3,55 @@ import {
   Controller,
   UsePipes,
   ValidationPipe,
-  Delete,
-  Get,
-  Query,
-  Param,
   Post,
-  Put
+  HttpStatus,
+  UseGuards,
+  Req
 } from "@nestjs/common";
+
+// Requests
+import { Request } from "express";
+
+// Dto's
 import { CreateMessageDto } from "src/dtos/group/create-message.dto";
+
+// Types
+import User from "src/entities/user/user.entity";
+
+// Guard
+import { AccessTokenGuard } from "src/guards/accessToken.guard";
+
+// Services
 import { MessageService } from "src/services/message/message.service";
+import { UserService } from "src/services/user/user.service";
+
+////////////////////////////////////////////////////////////
 
 @Controller("message")
 export class MessageController {
-  constructor(private readonly messageService: MessageService) {}
+  constructor(
+    private readonly messageService: MessageService,
+    private readonly userService: UserService
+  ) {}
 
-  @Get()
-  async getAllMessages() {
-    return await this.messageService.getAllMessages();
-  }
+  ////////////////////////////////////////////////////////////
 
-  @Get("id/group_id?")
-  async getAllMessagesByGroupId(@Query("group_id") group_id: number) {
-    const ret = await this.messageService.getAllMessagesByGroupId(group_id);
-    return ret;
-  }
-
-  @Post("createMessage")
+  @Post("create")
   @UsePipes(ValidationPipe)
-  async createMessage(@Body() createMessageDto: CreateMessageDto) {
+  @UseGuards(AccessTokenGuard)
+  async createMessage(
+    @Req() req: Request,
+    @Body() createMessageDto: CreateMessageDto
+  ) {
     try {
-      const message = await this.messageService.createMessage(createMessageDto);
-      const ret = { message: message.content };
-      return ret;
+      // Get UID through access token
+      const intraID = req.user["intraID"];
+      const user: User = await this.userService.findUserByintraId(intraID);
+
+      const senderID = user.uid;
+      await this.messageService.createMessage(createMessageDto);
+
+      return HttpStatus.OK;
     } catch (error) {
       return error;
     }
