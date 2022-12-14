@@ -5,9 +5,10 @@ import Message from "src/entities/message/message.entity";
 import { MessageService } from "src/services/message/message.service";
 import { GroupModule } from "../group/group.module";
 import { RecordModule } from "../record/record.module";
+import { UserModule } from "../user/user.module";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Message]), forwardRef(() => GroupModule), RecordModule],
+  imports: [TypeOrmModule.forFeature([Message]), forwardRef(() => GroupModule), RecordModule, UserModule],
   controllers: [MessageController],
   providers: [MessageService],
   exports: [MessageService]
