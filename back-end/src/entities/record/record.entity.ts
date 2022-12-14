@@ -8,7 +8,7 @@ export class Record {
   id: number;
 
   @Column()
-  groupId: number;
+  groupId: string;
 
   @ManyToOne((type) => Group, (group) => group.records)
   group: Group;

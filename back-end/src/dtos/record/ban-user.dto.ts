@@ -8,7 +8,7 @@ export class BanUserDto {
   userId: string;
 
   @IsNotEmpty()
-  groupId: number;
+  groupId: string;
 
   @IsNotEmpty() //TODO debatable if this is necessary
   type: number;

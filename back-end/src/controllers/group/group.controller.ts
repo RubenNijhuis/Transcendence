@@ -54,7 +54,7 @@ export class GroupController {
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
   async getGroup(
-    @Param("groupId") groupId: number,
+    @Param("groupId") groupId: string,
     @Req() req: Request
   ): Promise<any> {
     try {
@@ -108,13 +108,13 @@ export class GroupController {
     }
   }
 
-  @Get(":id/messages")
+  @Get(":uid/messages")
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
-  async getMessagesFromGroup(@Param("id") id: number) {
+  async getMessagesFromGroup(@Param("uid") uid: string) {
     try {
       const messagesFromGroup =
-        await this.messageService.getAllMessagesByGroupId(id);
+        await this.messageService.getAllMessagesByGroupId(uid);
       return messagesFromGroup;
     } catch (err) {
       throw err;
@@ -137,13 +137,13 @@ export class GroupController {
         user.uid,
         createGroupDto
       );
-      const groupId: number = group.id;
+      const groupId: string = group.uid;
       const users: string[] = createGroupDto.users;
       const owner: string = user.uid;
 
       if (createGroupDto.password !== null) {
         await this.groupService.setPassword(owner, {
-          id: group.id,
+          id: group.uid,
           password: createGroupDto.password
         });
       }

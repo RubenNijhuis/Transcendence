@@ -20,7 +20,7 @@ export class RecordService {
     return this.recordRepository.find();
   }
 
-  getRecordByUserId(userId: string, groupId: number)
+  getRecordByUserId(userId: string, groupId: string)
     {
       return (this.recordRepository
           .createQueryBuilder("record")
@@ -46,7 +46,7 @@ export class RecordService {
     }
   }
 
-  async isUserBanned(userId : string, groupId : number) {
+  async isUserBanned(userId : string, groupId : string) {
     try {
       const userRecord : Record = await this.getRecordByUserId(userId, groupId);
       const timeUntilUnban : number = userRecord.createdTime.valueOf() + (userRecord.timeToBan * 1000);

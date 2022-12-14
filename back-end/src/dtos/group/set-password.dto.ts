@@ -2,7 +2,7 @@ import { IsNotEmpty } from "class-validator";
 
 export class SetPasswordDto {
   @IsNotEmpty()
-  id: number;
+  id: string;
 
   @IsNotEmpty()
   password: string;

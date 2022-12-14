@@ -5,7 +5,7 @@ export class SetPermissionDto {
   user: string;
 
   @IsNotEmpty()
-  group: number;
+  group: string;
 
   @IsNotEmpty()
   level: number;

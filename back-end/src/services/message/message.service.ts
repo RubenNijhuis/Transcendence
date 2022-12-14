@@ -27,7 +27,7 @@ export class MessageService {
     return this.chatRepository.find();
   }
 
-  async getAllMessagesByGroupId(group_id: number): Promise<Message[]> {
+  async getAllMessagesByGroupId(group_id: string): Promise<Message[]> {
     const allMessages: Message[] = await this.chatRepository
       .createQueryBuilder("chat")
       .where("group_id = :group_id", { group_id })

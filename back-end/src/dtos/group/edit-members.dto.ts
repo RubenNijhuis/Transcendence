@@ -2,7 +2,7 @@ import { IsNotEmpty } from "class-validator";
 
 export class EditMembersDto {
   @IsNotEmpty()
-  groupId: number;
+  groupId: string;
 
   @IsNotEmpty()
   users: string[];

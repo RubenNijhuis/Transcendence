@@ -33,12 +33,12 @@ export class GroupService {
     private readonly messageService: MessageService
   ) {}
 
-  findGroupById(id: number) {
-    return this.groupRepository.findOne({ where: { id } });
+  findGroupById(uid: string) {
+    return this.groupRepository.findOne({ where: { uid } });
   }
 
 
-  async getGroup(userId: string, groupId: number) {
+  async getGroup(userId: string, groupId: string) {
     try {
       const group: Group = await this.findGroupById(groupId);
       const groupUsers: GroupUser[] = await this.groupuserRepository
@@ -66,7 +66,7 @@ export class GroupService {
       const groups: Group[] = [];
       while (i < groupUsers.length) {
         const group: Group = await this.groupRepository.findOne({
-          where: { id: groupUsers[i].groupId }
+          where: { uid: groupUsers[i].groupId }
         });
         groups.push(group);
         i++;
@@ -78,7 +78,7 @@ export class GroupService {
     }
   }
 
-  async getGroupSize(groupId: number) {
+  async getGroupSize(groupId: string) {
     try {
       const groupusers: GroupUser[] = await this.groupuserRepository
         .createQueryBuilder("groupuser")
@@ -92,7 +92,7 @@ export class GroupService {
   }
 
   // TODO: return type and no one liners pls
-  findGroupuserById(userId: string, groupId: number) {
+  findGroupuserById(userId: string, groupId: string) {
     return this.groupuserRepository
       .createQueryBuilder("groupuser")
       .where({ groupId })
