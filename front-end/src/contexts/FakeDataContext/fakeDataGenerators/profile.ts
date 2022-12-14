@@ -101,6 +101,7 @@ const generateProfile = (amount: number): Profile.Instance[] => {
             isTfaEnabled: false,
             description: "Lorem ipsum sit dolor amet",
             banner_url,
+            elo: 300,
             color,
             rank,
             uid: (i + 1).toString(),

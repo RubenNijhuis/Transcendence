@@ -74,6 +74,19 @@ export class UserService {
     }
   }
 
+  async getUsersSortedOnElo(): Promise<User[]> {
+    try {
+      const returnedUser: User[] = await this.userRepository.find({
+        order: {
+          elo: "DESC"
+        }
+      });
+      return Promise.resolve(returnedUser);
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async getUserByIndex(index: number): Promise<User> {
     try {
       const ret: User = await this.userRepository.findOne({ where: { index } });

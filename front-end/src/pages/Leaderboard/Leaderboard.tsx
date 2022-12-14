@@ -26,7 +26,7 @@ const Leaderboard = (): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
-    const { leaderBoard } = useFakeData();
+    const { leaderBoard } = useFakeData(); //I how to make this realdata??
 
     ////////////////////////////////////////////////////////////
 

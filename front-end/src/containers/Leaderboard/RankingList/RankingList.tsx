@@ -28,8 +28,8 @@ const RankEntry = ({ profile }: IRankEntry) => {
                 <Link to={PageRoutes.profileWithUsername(username)}>
                     <h3>{username}</h3>
                 </Link>
-                <span>Games won: {wins}</span>
-                <span>Elo: 100</span>
+                <span>Gamees won: {wins}</span>
+                <span>Elo: {profile.elo}</span>
             </GameData>
         </Entry>
     );
