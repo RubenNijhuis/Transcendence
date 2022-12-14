@@ -68,9 +68,9 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
 
         const chatAggregator = async () => {
             // TODO: Get from api //////////////////////////////////////
-            // const retrievedGroupChats: Chat.Group.Instance[] = await getChatsByUsername(user.uid);
-            const retrievedGroupChats: Chat.Group.Instance[] =
-                generateGroupChats(user, 10, [1, 4], profiles);
+            const retrievedGroupChats: Chat.Group.Instance[] = await getChatsByUsername(user.uid);
+            // const retrievedGroupChats: Chat.Group.Instance[] =
+            //     generateGroupChats(user, 10, [1, 4], profiles);
 
             console.log(retrievedGroupChats);
 

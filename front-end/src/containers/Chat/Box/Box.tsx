@@ -10,6 +10,7 @@ import ChatInput from "../Input";
 import Heading from "../../../components/Heading";
 import Asset from "../../../components/Asset";
 import Button from "../../../components/Button";
+import ChatSettings from "../Settings";
 
 // Styling
 import { Container, PasswordLayer } from "./Box.style";
@@ -29,16 +30,20 @@ import { useFormInput } from "../../../components/Form/hooks";
 
 // Proxies
 import { verifyPassword } from "../../../proxies/chat";
+import { useModal } from "../../../contexts/ModalContext";
 
 ////////////////////////////////////////////////////////////
 
 interface IChatTitle {
     chat: Chat.Group.Instance;
     isDmChat: boolean;
+    isUnlocked: boolean;
 }
 
-const ChatTitle = ({ chat, isDmChat }: IChatTitle): JSX.Element => {
+const ChatTitle = ({ chat, isDmChat, isUnlocked }: IChatTitle): JSX.Element => {
     const { user } = useUser();
+
+    const { setModalActive, setModalElement } = useModal();
 
     ////////////////////////////////////////////////////////////
 
@@ -56,25 +61,47 @@ const ChatTitle = ({ chat, isDmChat }: IChatTitle): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
+    const openSettingsPanel = () => {
+        setModalElement(<ChatSettings chat={chat} user={user} />);
+        setModalActive(true);
+    };
+
+    const isAdministrator = () => {
+        for (const member of chat.administrators) {
+            if (member.uid === user.uid) return true;
+        }
+            
+        return false;
+    }
+
+    ////////////////////////////////////////////////////////////
+
     return (
         <div className="chat-title">
-            {isDmChat && (
-                <Asset
-                    alt={`${otherMember.username} profile`}
-                    url={otherMember.img_url}
-                />
+            <div className="title">
+                {isDmChat && (
+                    <Asset
+                        alt={`${otherMember.username} profile`}
+                        url={otherMember.img_url}
+                    />
+                )}
+                <Heading type={3}>{chatTitle}</Heading>
+            </div>
+            {isUnlocked && isAdministrator() && (
+                <div className="settings">
+                    <button onClick={openSettingsPanel}>Settings</button>
+                </div>
             )}
-            <Heading type={3}>{chatTitle}</Heading>
         </div>
     );
 };
 
 interface IPasswordInput {
-    setIsProtected: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsUnlocked: React.Dispatch<React.SetStateAction<boolean>>;
     activeChat: Chat.Group.Instance;
 }
 
-const PasswordInput = ({ activeChat, setIsProtected }: IPasswordInput) => {
+const PasswordInput = ({ activeChat, setIsUnlocked }: IPasswordInput) => {
     const passwordText = useFormInput("");
     const [passwordError, setPasswordError] = useState<boolean>(false);
 
@@ -82,17 +109,17 @@ const PasswordInput = ({ activeChat, setIsProtected }: IPasswordInput) => {
 
     const sendPassword = async () => {
         try {
-            const verifyResponse = await verifyPassword(
-                activeChat.group_id,
-                passwordText.value
-            );
+            // const verifyResponse = await verifyPassword(
+            //     activeChat.group_id,
+            //     passwordText.value
+            // );
 
-            if (verifyResponse === false) {
-                setPasswordError(false);
-                return;
-            }
+            // if (verifyResponse === false) {
+            //     setPasswordError(false);
+            //     return;
+            // }
 
-            setIsProtected(true);
+            setIsUnlocked(true);
         } catch (err) {
             console.error(err);
         }
@@ -117,7 +144,6 @@ interface IChatBox {
 }
 
 const ChatBox = ({ chat }: IChatBox): JSX.Element => {
-    const [isProtected, setIsProtected] = useState<boolean>(false);
     const [isUnlocked, setIsUnlocked] = useState<boolean>(false);
 
     ////////////////////////////////////////////////////////////
@@ -131,17 +157,7 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
-        if (chat.protected === false) {
-            setIsProtected(false);
-            setIsUnlocked(true);
-            return;
-        }
-
-        if (chat.protected === true) {
-            setIsProtected(true);
-            setIsUnlocked(false);
-            return;
-        }
+        setIsUnlocked(!chat.protected);
     }, [chat.protected, chat]);
 
     ////////////////////////////////////////////////////////////
@@ -182,11 +198,14 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
 
     return (
         <Container>
-            <ChatTitle chat={chat} isDmChat={isDmChat} />
+            <ChatTitle
+                chat={chat}
+                isDmChat={isDmChat}
+                isUnlocked={isUnlocked}
+            />
             <Button onClick={sendMessage}>Send standard message</Button>
             <div className="chat-content">
-                {!isProtected &&
-                    isUnlocked &&
+                {isUnlocked &&
                     chat.messages.map((message, count) => (
                         <ChatElement
                             key={count}
@@ -197,7 +216,7 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
                     ))}
                 {!isUnlocked && (
                     <PasswordInput
-                        setIsProtected={setIsProtected}
+                        setIsUnlocked={setIsUnlocked}
                         activeChat={chat}
                     />
                 )}

@@ -50,7 +50,7 @@ export class GroupController {
 
   ////////////////////////////////////////////////////////////
 
-  @Get(":groupId")
+  @Get("chats/:groupId")
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
   async getGroup(
@@ -72,7 +72,16 @@ export class GroupController {
   @Get(":userId")
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
-  async getGroupsByUserId(@Param("userId") userId: string) {
+  async getGroupsByUserId(
+    @Req() req: Request,
+    @Param("userId") userId: string
+  ) {
+    // Get UID through access token
+    const intraID = req.user["intraID"];
+    const user: User = await this.userService.findUserByintraId(intraID);
+
+    if (user.uid !== userId) return HttpStatus.CONFLICT;
+
     return await this.groupService.getGroupsByUserId(userId);
   }
 
@@ -140,13 +149,6 @@ export class GroupController {
       const groupId: string = group.uid;
       const users: string[] = createGroupDto.users;
       const owner: string = user.uid;
-
-      if (createGroupDto.password !== null) {
-        await this.groupService.setPassword(owner, {
-          id: group.uid,
-          password: createGroupDto.password
-        });
-      }
 
       const EditMembersDto: EditMembersDto = { groupId, users };
       await this.groupService.addMembers(user.uid, EditMembersDto);

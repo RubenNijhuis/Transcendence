@@ -157,15 +157,16 @@ const CreateGroup = (): JSX.Element => {
     /**
      * We set the modal component with its closing function
      */
-    useEffect(() => {
+    const openCreateGroup = () => {
         setModalElement(<CreateGroupChat setModalActive={setModalActive} />);
-    }, [modalActive]);
+        setModalActive(true);
+    }
 
     ////////////////////////////////////////////////////////////
 
     return (
         <Container>
-            <Button onClick={() => setModalActive(true)}>
+            <Button onClick={openCreateGroup}>
                 <Heading type={4}>Create a new chat + </Heading>
             </Button>
         </Container>

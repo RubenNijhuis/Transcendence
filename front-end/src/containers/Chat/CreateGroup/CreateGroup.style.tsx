@@ -80,6 +80,7 @@ const CreateGroupChatContainer = styled.div`
     
 
     .group-name {
+        margin-bottom: calc(${magicNum} / 2);
         .heading {
             margin-bottom: calc(${magicNum} / 4);
         }

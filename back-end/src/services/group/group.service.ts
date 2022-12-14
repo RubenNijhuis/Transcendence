@@ -37,7 +37,6 @@ export class GroupService {
     return this.groupRepository.findOne({ where: { uid } });
   }
 
-
   async getGroup(userId: string, groupId: string) {
     try {
       const group: Group = await this.findGroupById(groupId);
@@ -47,16 +46,18 @@ export class GroupService {
         .where({ memberId: userId })
         .getMany();
       const members: User[] = [];
-      for(let i = 0; i < groupUsers.length; i++)
-      {
-        const member: User = await this.userService.findUsersById(groupUsers[i].memberId);
+      for (let i = 0; i < groupUsers.length; i++) {
+        const member: User = await this.userService.findUsersById(
+          groupUsers[i].memberId
+        );
         groupUsers[i].user = member;
       }
-      const messages: Message[] = await this.messageService.getAllMessagesByGroupId(groupId);
+      const messages: Message[] =
+        await this.messageService.getAllMessagesByGroupId(groupId);
       group.messages = messages;
       group.users = groupUsers;
       return group;
-    } catch(error: any) {
+    } catch (error: any) {
       return error;
     }
   }
@@ -68,12 +69,14 @@ export class GroupService {
         .where({ memberId: userId })
         .getMany();
 
+      console.log(groupUsers, "WHDUHAUDHUWAUDHWAUJ");
+
       // Doet dit niet exact hetzlefde als de vorige code?
       let i = 0;
       const groups: Group[] = [];
       while (i < groupUsers.length) {
         const group: Group = await this.groupRepository.findOne({
-          where: { uid: groupUsers[i].groupId }
+          where: { id: parseInt(groupUsers[i].groupId) }
         });
         groups.push(group);
         i++;
@@ -134,6 +137,9 @@ export class GroupService {
       newGroup.users = [];
       newGroup.name = createGroupDto.name;
       newGroup.protected = false;
+
+      if (createGroupDto.password !== null)
+        newGroup.password = createGroupDto.password;
 
       return this.groupRepository.save(newGroup);
     } catch (err) {

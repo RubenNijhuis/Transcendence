@@ -15,11 +15,17 @@ const Container = styled.div`
     flex-direction: column;
 
     .chat-title {
-        display: flex;
-        align-items: center;
-        gap: calc(${magicNum} / 4);
-        background-color: ${mainColor};
         padding: calc(${magicNum} / 4);
+        background-color: ${mainColor};
+
+        display: flex;
+        justify-content: space-between;
+        
+        .title {
+            display: flex;
+            align-items: center;
+            gap: calc(${magicNum} / 4);
+        }
 
         .heading {
             color: ${lightTextColor};
