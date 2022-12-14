@@ -43,8 +43,15 @@ export class GroupService {
       const group: Group = await this.findGroupById(groupId);
       const groupUsers: GroupUser[] = await this.groupuserRepository
         .createQueryBuilder("groupuser")
+        //.leftJoinAndSelect("groupuser.user", "user") //could be different method
         .where({ memberId: userId })
         .getMany();
+      const members: User[] = [];
+      for(let i = 0; i < groupUsers.length; i++)
+      {
+        const member: User = await this.userService.findUsersById(groupUsers[i].memberId);
+        groupUsers[i].user = member;
+      }
       const messages: Message[] = await this.messageService.getAllMessagesByGroupId(groupId);
       group.messages = messages;
       group.users = groupUsers;
