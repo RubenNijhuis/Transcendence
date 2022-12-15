@@ -50,7 +50,7 @@ export class GroupController {
 
   ////////////////////////////////////////////////////////////
 
-  @Get("chats/:groupId")
+  @Get(":groupId")
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
   async getGroup(
@@ -62,14 +62,13 @@ export class GroupController {
       const intraID = req.user["intraID"];
       const user: User = await this.userService.findUserByintraId(intraID);
 
-      await this.groupService.getGroup(user.uid, groupId);
-      return HttpStatus.OK;
+      return await this.groupService.getGroup(user.uid, groupId);
     } catch (err) {
       throw err;
     }
   }
 
-  @Get(":userId")
+  @Get("chats/:userId")
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
   async getGroupsByUserId(
