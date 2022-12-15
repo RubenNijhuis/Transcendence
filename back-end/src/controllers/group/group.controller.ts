@@ -49,7 +49,19 @@ export class GroupController {
   ) {}
 
   ////////////////////////////////////////////////////////////
+  // uid - user -> [groups] (main call)
+  // uid - group -> group
 
+  // main call
+  // 1. alle groups
+  // per group
+  // - alle messages
+  // - alle users -> voledige account
+  
+  // TOE VOEGEN USERS
+  // users -> range functie voor users aanvragen met [uid]
+
+  // PREFIX MAKEN VOOR PARAMETER CALLS
   @Get("chats/:groupId")
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
@@ -69,6 +81,7 @@ export class GroupController {
     }
   }
 
+  // PREFIX MAKEN VOOR PARAMETER CALLS
   @Get(":userId")
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
