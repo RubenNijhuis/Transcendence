@@ -26,13 +26,13 @@ const Leaderboard = (): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
-    const { leaderBoard } = useFakeData(); //I how to make this realdata??
+    const { leaderBoard } = useFakeData(); //Do I delete this?
 
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
         setLeaderboard(leaderBoard);
-        // getLeaderboard().then(setLeaderboard).catch(console.log);
+        getLeaderboard().then(setLeaderboard).catch(console.log);
     }, [leaderBoard]);
 
     ////////////////////////////////////////////////////////////
