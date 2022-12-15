@@ -17,6 +17,7 @@ namespace Profile {
       rank: number;
       wins: number;
       losses: number;
+      elo: number;
     }
   }
   

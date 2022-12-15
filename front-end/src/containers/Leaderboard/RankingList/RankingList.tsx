@@ -29,7 +29,7 @@ const RankEntry = ({ profile }: IRankEntry) => {
                     <h3>{username}</h3>
                 </Link>
                 <span>Games won: {wins}</span>
-                <span>Elo: 100</span>
+                <span>Elo: {profile.elo}</span>
             </GameData>
         </Entry>
     );

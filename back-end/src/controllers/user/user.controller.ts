@@ -72,6 +72,13 @@ export class UsersController {
     return await this.userService.getUsers();
   }
 
+  //@UseGuards(AccessTokenGuard)
+  @Get("getLeaderboard")
+  async getLeaderboard() {
+
+    return await this.userService.getUsersSortedOnElo();
+  }
+
   @UseGuards(AccessTokenGuard)
   @Get(UserRoutes.getPic)
   async getImg(
