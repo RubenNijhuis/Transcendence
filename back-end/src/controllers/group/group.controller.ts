@@ -62,7 +62,7 @@ export class GroupController {
   // users -> range functie voor users aanvragen met [uid]
 
   // PREFIX MAKEN VOOR PARAMETER CALLS
-  @Get("chats/:groupId")
+  @Get("groups/:groupId")
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
   async getGroup(
@@ -74,15 +74,13 @@ export class GroupController {
       const intraID = req.user["intraID"];
       const user: User = await this.userService.findUserByintraId(intraID);
 
-      await this.groupService.getGroup(user.uid, groupId);
-      return HttpStatus.OK;
+      return await this.groupService.getGroup(user.uid, groupId);
     } catch (err) {
       throw err;
     }
   }
 
-  // PREFIX MAKEN VOOR PARAMETER CALLS
-  @Get(":userId")
+  @Get("chats/:userId")
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
   async getGroupsByUserId(
@@ -130,18 +128,18 @@ export class GroupController {
     }
   }
 
-  @Get(":uid/messages")
-  @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
-  async getMessagesFromGroup(@Param("uid") uid: string) {
-    try {
-      const messagesFromGroup =
-        await this.messageService.getAllMessagesByGroupId(uid);
-      return messagesFromGroup;
-    } catch (err) {
-      throw err;
-    }
-  }
+  // @Get(":uid/messages")
+  // @UsePipes(ValidationPipe)
+  // @UseGuards(AccessTokenGuard)
+  // async getMessagesFromGroup(@Param("uid") uid: string) {
+  //   try {
+  //     const messagesFromGroup =
+  //       await this.messageService.getAllMessagesByGroupId(uid);
+  //     return messagesFromGroup;
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  // }
 
   @Post("createGroup")
   @UsePipes(ValidationPipe)

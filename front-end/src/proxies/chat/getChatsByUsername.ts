@@ -16,11 +16,18 @@ const getChatsByUsername = async (
     username: string
 ): Promise<Chat.Group.Instance[]> => {
     try {
-        const route = ApiRoutes.getChatsByUsername(username);
+        let chats: Chat.Group.Instance[] = [];
 
-        const { data } = await API.get<Chat.Group.Instance[]>(route);
+        const metaroute = ApiRoutes.getGroupsByUid(username);
+        const metachats = await API.get<any[]>(metaroute);
 
-        return Promise.resolve(data);
+        for (const a of metachats.data) {
+            console.log(a);
+            const newchat = await API.get<Chat.Group.Instance>(ApiRoutes.getChatById(a.uid));
+            chats.push(newchat.data);
+        }
+
+        return Promise.resolve(chats);
     } catch (err) {
         return Promise.reject(err);
     }
