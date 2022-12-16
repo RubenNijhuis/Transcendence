@@ -42,8 +42,7 @@ export class GroupService {
       const group: Group = await this.findGroupById(groupId);
       const groupUsers: GroupUser[] = await this.groupuserRepository
         .createQueryBuilder("groupuser")
-        //.leftJoinAndSelect("groupuser.user", "user") //could be different method
-        .where({ memberId: userId })
+        .where({ groupId: groupId })
         .getMany();
       for (let i = 0; i < groupUsers.length; i++) {
         const member: User = await this.userService.findUsersById(
@@ -51,11 +50,10 @@ export class GroupService {
         );
         groupUsers[i].user = member;
       }
-
       const messages: Message[] =
         await this.messageService.getAllMessagesByGroupId(groupId);
-
-      group.messages = messages;
+      if (messages)
+        group.messages = messages;
       group.users = groupUsers;
       return group;
     } catch (error: any) {
@@ -70,8 +68,6 @@ export class GroupService {
         .where({ memberId: userId })
         .getMany();
 
-      console.log(groupUsers, "WHDUHAUDHUWAUDHWAUJ");
-
       // Doet dit niet exact hetzlefde als de vorige code?
       let i = 0;
       const groups: Group[] = [];
@@ -79,8 +75,6 @@ export class GroupService {
         const group: Group = await this.groupRepository.findOne({
           where: { uid: groupUsers[i].groupId }
         });
-
-        console.log("✅", groupUsers[i].groupId);
         groups.push(group);
         i++;
       }

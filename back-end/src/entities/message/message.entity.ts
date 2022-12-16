@@ -21,6 +21,9 @@ export class Message {
   @ManyToOne((type) => Group, (group) => group.messages)
   group: Group;
 
+  @Column()
+  groupId: string;
+
   @CreateDateColumn({
     nullable: true
   })

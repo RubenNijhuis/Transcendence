@@ -50,18 +50,17 @@ export class GroupController {
 
   ////////////////////////////////////////////////////////////
 
-  @Get(":groupId")
+  @Get("group/:groupId")
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
   async getGroup(
     @Param("groupId") groupId: string,
-    @Req() req: Request
+   @Req() req: Request
   ): Promise<any> {
     try {
       // Get UID through access token
-      const intraID = req.user["intraID"];
-      const user: User = await this.userService.findUserByintraId(intraID);
-
+     const intraID = req.user["intraID"];
+     const user: User = await this.userService.findUserByintraId(intraID);
       return await this.groupService.getGroup(user.uid, groupId);
     } catch (err) {
       throw err;
