@@ -17,9 +17,6 @@ import {
 } from "@nestjs/common";
 import { Request, Response } from "express";
 
-// route config
-import UserRoutes from "src/configs/routes/globalRoutes.config";
-
 // dtos
 import { UsernameDto } from "src/dtos/auth/username.dto";
 import { SetTfaDto } from "src/dtos/auth/setTfa.dto";
@@ -63,11 +60,11 @@ import { SetcolorDto } from "src/dtos/user/color.dto";
  * - seeding the database with random users
  */
 
-@Controller(UserRoutes.prefix)
+@Controller("user")
 export class UsersController {
   constructor(private readonly userService: UserService) {}
 
-  @Get()
+  @Get("")
   async getUsers() {
     return await this.userService.getUsers();
   }
@@ -80,7 +77,7 @@ export class UsersController {
   }
 
   @UseGuards(AccessTokenGuard)
-  @Get(UserRoutes.getPic)
+  @Get("get-img/:imageType/:username")
   async getImg(
     @Param("imageType") imageType: string,
     @Param("username") username: string,
@@ -120,7 +117,7 @@ export class UsersController {
     }
   }
 
-  @Get(UserRoutes.getUserOnName)
+  @Get(":username")
   async findUsersById(@Param("username") username: string) {
     try {
       const user: User = await this.userService.findUserByUsername(username);
@@ -132,7 +129,7 @@ export class UsersController {
   }
 
   // TODO: set user must not update username if user is initialized
-  @Post(UserRoutes.setUser)
+  @Post("setUser")
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
   async setUser(
@@ -149,7 +146,7 @@ export class UsersController {
     }
   }
 
-  @Post(UserRoutes.remove)
+  @Post("remove")
   @UsePipes(ValidationPipe)
   @UseGuards(Jwt2faStrategy)
   async removeUser(@Req() req: Request, @Body() dto: UsernameDto) {
@@ -162,7 +159,7 @@ export class UsersController {
     }
   }
 
-  @Post(UserRoutes.enableTfa)
+  @Post("enable2fa")
   @UsePipes(ValidationPipe)
   async turnon2fa(@Body() dto: SetTfaDto) {
     try {
@@ -172,7 +169,7 @@ export class UsersController {
     }
   }
 
-  @Post(UserRoutes.updateDescription)
+  @Post("updateDescription")
   @UsePipes(ValidationPipe)
   async updateDescription(@Body() dto: SetDescriptionDto) {
     try {
@@ -182,7 +179,7 @@ export class UsersController {
     }
   }
 
-  @Post(UserRoutes.updateColor)
+  @Post("updateColor")
   @UsePipes(ValidationPipe)
   async updateColor(@Body() dto: SetcolorDto) {
 	  console.log("color:",dto.color);
@@ -193,7 +190,7 @@ export class UsersController {
     }
   }
 
-  @Post(UserRoutes.uploadBannerPic)
+  @Post("upload-banner-pic")
   @UseGuards(AccessTokenGuard)
   @UseInterceptors(FileInterceptor("file", bannerOptions))
   async uploadBannerFile(
@@ -207,7 +204,7 @@ export class UsersController {
     return HttpStatus.OK;
   }
 
-  @Post(UserRoutes.uploadProfilePic)
+  @Post("upload-profile-pic")
   @UseGuards(AccessTokenGuard)
   @UseInterceptors(FileInterceptor("file", profileOptions))
   async uploadProfileFile(

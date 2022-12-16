@@ -33,6 +33,16 @@ export class GroupService {
     private readonly messageService: MessageService
   ) {}
 
+    // only used for debug purposes
+  async getGroups(): Promise<Group[]> {
+    try {
+      const returnedUser: Group[] = await this.groupRepository.find();
+      return Promise.resolve(returnedUser);
+    } catch (err) {
+      throw err;
+    }
+  }
+
   findGroupById(uid: string) {
     return this.groupRepository.findOne({ where: { uid } });
   }
@@ -80,7 +90,7 @@ export class GroupService {
       const groups: Group[] = [];
       while (i < groupUsers.length) {
         const group: Group = await this.groupRepository.findOne({
-          where: { id: parseInt(groupUsers[i].groupId) }
+          where: { uid: groupUsers[i].groupId }
         });
 
         console.log("✅", groupUsers[i].groupId);

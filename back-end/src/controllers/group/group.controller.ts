@@ -62,6 +62,17 @@ export class GroupController {
   // users -> range functie voor users aanvragen met [uid]
 
   // PREFIX MAKEN VOOR PARAMETER CALLS
+  @Get("")
+  @UsePipes(ValidationPipe)
+  @UseGuards(AccessTokenGuard)
+  async getAll(): Promise<any> {
+    try {
+      return await this.groupService.getGroups();
+    } catch (err) {
+      throw err;
+    }
+  }
+
   @Get("groups/:groupId")
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
