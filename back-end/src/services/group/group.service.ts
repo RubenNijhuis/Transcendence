@@ -45,9 +45,6 @@ export class GroupService {
         //.leftJoinAndSelect("groupuser.user", "user") //could be different method
         .where({ memberId: userId })
         .getMany();
-
-      const members: User[] = [];
-
       for (let i = 0; i < groupUsers.length; i++) {
         const member: User = await this.userService.findUsersById(
           groupUsers[i].memberId
@@ -56,7 +53,7 @@ export class GroupService {
       }
 
       const messages: Message[] =
-        await this.messageService.getAllMessagesByGroupId(parseInt(groupId));
+        await this.messageService.getAllMessagesByGroupId(groupId);
 
       group.messages = messages;
       group.users = groupUsers;
@@ -80,7 +77,7 @@ export class GroupService {
       const groups: Group[] = [];
       while (i < groupUsers.length) {
         const group: Group = await this.groupRepository.findOne({
-          where: { id: parseInt(groupUsers[i].groupId) }
+          where: { uid: groupUsers[i].groupId }
         });
 
         console.log("✅", groupUsers[i].groupId);
@@ -108,12 +105,13 @@ export class GroupService {
   }
 
   // TODO: return type and no one liners pls
-  findGroupuserById(userId: string, groupId: string) {
-    return this.groupuserRepository
+  async findGroupuserById(userId: string, groupId: string) {
+    const groupuser: GroupUser = await this.groupuserRepository
       .createQueryBuilder("groupuser")
       .where({ groupId })
       .andWhere({ memberId: userId })
       .getOne();
+      return groupuser;
   }
 
   async hashPassword(input: string) {
@@ -229,7 +227,7 @@ export class GroupService {
       // Get group from db
       const group: Group = await this.findGroupById(setPasswordDto.id);
       if (!group) return console.error("group doesn't exist"); //error lol
-
+      if (owner !== group.owner) return console.error("no permission to do this");
       /**
        * If there is already a previous password we compare the new password
        * to the former. If they match we return an error as a password

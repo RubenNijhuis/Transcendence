@@ -15,7 +15,7 @@ export class Group {
   @PrimaryGeneratedColumn({
     type: "bigint"
   })
-  id: number;
+  index: number;
 
   @Column()
   owner: string;

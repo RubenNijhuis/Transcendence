@@ -27,7 +27,7 @@ export class MessageService {
     return this.chatRepository.find();
   }
 
-  async getAllMessagesByGroupId(group_id: number): Promise<Message[]> {
+  async getAllMessagesByGroupId(group_id: string): Promise<Message[]> {
     const allMessages: Message[] = await this.chatRepository
       .createQueryBuilder("chat")
       .where("group_id = :group_id", { group_id })
@@ -37,7 +37,7 @@ export class MessageService {
 
   async createMessage(senderID: string, createMessageDto: CreateMessageDto) {
     const group: Group = await this.groupService.findGroupById(
-      parseInt(createMessageDto.group_id)
+      createMessageDto.group_id
     );
     if (this.recordService.isUserBanned(senderID, createMessageDto.group_id))
       throw console.error("This user is Banned/Muted");
