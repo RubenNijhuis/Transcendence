@@ -49,8 +49,31 @@ export class GroupController {
   ) {}
 
   ////////////////////////////////////////////////////////////
+  // uid - user -> [groups] (main call)
+  // uid - group -> group
 
-  @Get("group/:groupId")
+  // main call
+  // 1. alle groups
+  // per group
+  // - alle messages
+  // - alle users -> voledige account
+  
+  // TOE VOEGEN USERS
+  // users -> range functie voor users aanvragen met [uid]
+
+  // PREFIX MAKEN VOOR PARAMETER CALLS
+  @Get("")
+  @UsePipes(ValidationPipe)
+  @UseGuards(AccessTokenGuard)
+  async getAll(): Promise<any> {
+    try {
+      return await this.groupService.getGroups();
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  @Get("groups/:groupId")
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
   async getGroup(
@@ -115,18 +138,18 @@ export class GroupController {
     }
   }
 
-  @Get(":uid/messages")
-  @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
-  async getMessagesFromGroup(@Param("uid") uid: string) {
-    try {
-      const messagesFromGroup =
-        await this.messageService.getAllMessagesByGroupId(uid);
-      return messagesFromGroup;
-    } catch (err) {
-      throw err;
-    }
-  }
+  // @Get(":uid/messages")
+  // @UsePipes(ValidationPipe)
+  // @UseGuards(AccessTokenGuard)
+  // async getMessagesFromGroup(@Param("uid") uid: string) {
+  //   try {
+  //     const messagesFromGroup =
+  //       await this.messageService.getAllMessagesByGroupId(uid);
+  //     return messagesFromGroup;
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  // }
 
   @Post("createGroup")
   @UsePipes(ValidationPipe)

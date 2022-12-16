@@ -8,6 +8,7 @@ services:
     restart: always
     volumes:
       - ./front-end:/app
+      - frontend_node_module:/app/node_modules
       - ../shared:/shared
     ports:
       - "8081:8081"
@@ -23,7 +24,7 @@ services:
       - ./back-end/env/.env
     volumes:
       - ./back-end:/app
-      - /app/node_modules/bcrypt/
+      - backend_node_module:/app/node_modules
       - ../shared:/shared
     ports:
       - "3000:3000" # Main API
@@ -74,5 +75,7 @@ services:
       - database
 
 volumes: # create volume for postgres
+  backend_node_module:
+  frontend_node_module:
   db: {}
   pgadmin:

@@ -33,6 +33,16 @@ export class GroupService {
     private readonly messageService: MessageService
   ) {}
 
+    // only used for debug purposes
+  async getGroups(): Promise<Group[]> {
+    try {
+      const returnedUser: Group[] = await this.groupRepository.find();
+      return Promise.resolve(returnedUser);
+    } catch (err) {
+      throw err;
+    }
+  }
+
   findGroupById(uid: string) {
     return this.groupRepository.findOne({ where: { uid } });
   }
@@ -50,6 +60,7 @@ export class GroupService {
         );
         groupUsers[i].user = member;
       }
+
       const messages: Message[] =
         await this.messageService.getAllMessagesByGroupId(groupId);
       if (messages)
@@ -75,6 +86,8 @@ export class GroupService {
         const group: Group = await this.groupRepository.findOne({
           where: { uid: groupUsers[i].groupId }
         });
+
+        console.log("✅", groupUsers[i].groupId);
         groups.push(group);
         i++;
       }

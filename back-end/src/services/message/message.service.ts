@@ -49,6 +49,17 @@ export class MessageService {
     return this.chatRepository.save(newChat);
   }
 }
+//   async createMessage(senderID: string, createMessageDto: CreateMessageDto) {
+//     const group: Group = await this.groupService.findGroupById(
+//       parseInt(createMessageDto.group_id)
+//     );
+//     if (this.recordService.isUserBanned(senderID, createMessageDto.group_id))
+//       throw console.error("This user is Banned/Muted");
+//     const newChat = this.chatRepository.create(createMessageDto);
+//     newChat.sender = null;
+//     newChat.group = group;
+//     return this.chatRepository.save(newChat);
+//   }
 
 //  getPostById(id: number) {
 //    const post = this.messages.find(post => post.id === id);

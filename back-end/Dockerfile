@@ -4,10 +4,12 @@ WORKDIR /app
 
 ENV NODE_ENV=development
 
+COPY package.json package-lock.json ./
+
+RUN npm i
+
 # Bundle app source
 COPY . .
-
-RUN npm install
 
 # Build nest application
 RUN npm run build
