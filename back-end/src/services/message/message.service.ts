@@ -9,6 +9,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { CreateMessageDto } from "src/dtos/group/create-message.dto";
 import Group from "src/entities/group/group.entity";
 import Message from "src/entities/message/message.entity";
+import { errorHandler } from "src/utils/errorhandler/errorHandler";
 import { Repository } from "typeorm";
 import { GroupService } from "../group/group.service";
 import { RecordService } from "../record/record.service";
@@ -36,20 +37,27 @@ export class MessageService {
   }
 
   async createMessage(senderID: string, createMessageDto: CreateMessageDto) {
+    try {
     const group: Group = await this.groupService.findGroupById(
       createMessageDto.group_id
     );
     if (await this.recordService.isUserBanned(senderID, createMessageDto.group_id))
-      throw console.error("This user is Banned/Muted");
+      throw console.error("You are currently still muted");
     const newChat = this.chatRepository.create(createMessageDto);
     newChat.senderID = senderID;
     newChat.sender = null;
     newChat.group = group;
     newChat.groupId = group.uid;
     return this.chatRepository.save(newChat);
+  } catch (err) {
+    throw errorHandler(
+      err,
+      "something",
+      HttpStatus.FORBIDDEN
+    );
+    }
   }
 }
-
 //  getPostById(id: number) {
 //    const post = this.messages.find(post => post.id === id);
 //    if (post) {

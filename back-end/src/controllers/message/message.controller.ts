@@ -37,19 +37,19 @@ export class MessageController {
   ////////////////////////////////////////////////////////////
 
   @Post("create")
-  @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
+  // @UsePipes(ValidationPipe)
+  // @UseGuards(AccessTokenGuard)
   async createMessage(
-    @Req() req: Request,
+    // @Req() req: Request,
     @Body() createMessageDto: CreateMessageDto
   ) {
     try {
       // Get UID through access token
-      const intraID = req.user["intraID"];
-      const user: User = await this.userService.findUserByintraId(intraID);
+      // const intraID = req.user["intraID"];
+      // const user: User = await this.userService.findUserByintraId(intraID);
 
-      const senderID = user.uid;
-      await this.messageService.createMessage(senderID, createMessageDto);
+      const userId = "3ec03adf-c7fc-4fa4-b30e-50cf872b8888";
+      await this.messageService.createMessage(userId, createMessageDto);
 
       return HttpStatus.OK;
     } catch (error) {
