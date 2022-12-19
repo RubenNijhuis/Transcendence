@@ -1,44 +1,16 @@
-import { HttpStatus, Inject, Injectable } from "@nestjs/common";
-import {
-  randColor,
-  randFullName,
-  randParagraph,
-  randUserName
-} from "@ngneat/falso";
-import { FriendList, User } from "src/entities";
+import { HttpStatus, Injectable } from "@nestjs/common";
+import { User } from "src/entities";
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
 import { FriendlistService } from "../friendlist/friendlist.service";
 import { UserService } from "../user/user.service";
 
 @Injectable()
-export class SeederService {
-  inject: [FriendlistService, UserService];
-  constructor(
+export class FriendSeederService {
+    inject: [FriendlistService, UserService];
+    constructor(
     private readonly userServ: UserService,
     private readonly friendsServ: FriendlistService
   ) {}
-
-  async seedCustom(amount: number): Promise<User[]> {
-    try {
-      for (let i = 0; i < amount; i++) {
-        let genIntraId = randUserName();
-        await this.userServ.createUser(genIntraId, "lolo");
-        await this.userServ.setUser(genIntraId, {
-          username: randFullName(),
-          color: randColor().toString(),
-          description: randParagraph()
-        });
-      }
-      return this.userServ.getUsers();
-    } catch (err) {
-      console.error(err);
-      throw errorHandler(
-        err,
-        "Failed to seed database",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
-    }
-  }
 
   private randomNum(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min) + min);
@@ -52,7 +24,7 @@ export class SeederService {
     }
     return indexes;
   }
-
+  
   private filterUsers(users: User[]): User[] {
     const filteredUsers: User[] = users;
 
@@ -91,6 +63,7 @@ export class SeederService {
     return ret;
   }
 
+  // makes friend connections with users
   async seedFriends() {
     try {
       const users: User[] = await this.userServ.getUsers();

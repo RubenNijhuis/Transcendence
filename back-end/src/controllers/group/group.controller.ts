@@ -165,19 +165,19 @@ export class GroupController {
 
       const group: Group = await this.groupService.createGroup(
         user.uid,
-        createGroupDto
+        createGroupDto.name,
+        createGroupDto.users,
+        createGroupDto.password
       );
       const groupId: string = group.uid;
       const users: string[] = createGroupDto.users;
       const owner: string = user.uid;
 
-      const EditMembersDto: EditMembersDto = { groupId, users };
-      await this.groupService.addMembers(user.uid, EditMembersDto);
+      await this.groupService.addMembers(user.uid, groupId, users);
 
       // TODO: why does the owner need to be set if it's done
       // in the create group service func?
-      const addOwnerDto: EditOwnerDto = { groupId, owner };
-      await this.groupService.addOwner(addOwnerDto);
+      await this.groupService.addOwner(groupId, owner);
 
       return HttpStatus.OK;
     } catch (err) {
@@ -218,7 +218,7 @@ export class GroupController {
       const user: User = await this.userService.findUserByintraId(intraID);
 
       // TODO: add user uid to add members func
-      await this.groupService.addMembers(user.uid, editMembersDto);
+      await this.groupService.addMembers(user.uid, editMembersDto.groupId, editMembersDto.users);
       return HttpStatus.OK;
     } catch (err) {
       throw err;
