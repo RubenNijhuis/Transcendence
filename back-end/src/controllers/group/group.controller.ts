@@ -37,6 +37,8 @@ import { AccessTokenGuard } from "src/guards/accessToken.guard";
 
 // Types
 import User from "src/entities/user/user.entity";
+import { BanUserDto } from "src/dtos/record/ban-user.dto";
+import { RecordService } from "src/services/record/record.service";
 
 ////////////////////////////////////////////////////////////
 
@@ -45,7 +47,8 @@ export class GroupController {
   constructor(
     private readonly groupService: GroupService,
     private readonly userService: UserService,
-    private readonly messageService: MessageService
+    private readonly messageService: MessageService,
+    private readonly recordService: RecordService
   ) {}
 
   ////////////////////////////////////////////////////////////
@@ -197,7 +200,6 @@ export class GroupController {
       const intraID = req.user["intraID"];
       const user: User = await this.userService.findUserByintraId(intraID);
 
-      // TODO: add user uid to remove group
       await this.groupService.removeGroup(user.uid, removeGroupDto);
       return HttpStatus.OK;
     } catch (err) {
@@ -217,7 +219,6 @@ export class GroupController {
       const intraID = req.user["intraID"];
       const user: User = await this.userService.findUserByintraId(intraID);
 
-      // TODO: add user uid to add members func
       await this.groupService.addMembers(user.uid, editMembersDto);
       return HttpStatus.OK;
     } catch (err) {
@@ -237,7 +238,6 @@ export class GroupController {
       const intraID = req.user["intraID"];
       const user: User = await this.userService.findUserByintraId(intraID);
 
-      // TODO: add user uid to remove members func
       await this.groupService.removeMembers(user.uid, editMembersDto);
       return HttpStatus.OK;
     } catch (err) {
@@ -245,7 +245,6 @@ export class GroupController {
     }
   }
 
-  // TODO: make setpermissiontdo
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
   @Post("setPermission")
@@ -260,6 +259,26 @@ export class GroupController {
 
       await this.groupService.setPermission(user.uid, setPermissionDto);
       return HttpStatus.OK;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  @Post("banUser")
+  @UsePipes(ValidationPipe)
+  @UseGuards(AccessTokenGuard)
+  async banUser(
+    @Req() req: Request,
+    @Body() banUserDto: BanUserDto
+  ) {
+    try {
+      // Get UID through access token
+      const intraID = req.user["intraID"];
+      const user: User = await this.userService.findUserByintraId(intraID);
+
+      await this.recordService.banUser(user.uid, banUserDto);
+      const ret = { message: "User banned!" };
+      return ret;
     } catch (err) {
       throw err;
     }

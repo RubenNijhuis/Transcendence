@@ -1,9 +1,6 @@
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsOptional } from "class-validator";
 
 export class BanUserDto {
-  @IsNotEmpty()
-  admin: string;
-
   @IsNotEmpty()
   userId: string;
 
@@ -13,6 +10,6 @@ export class BanUserDto {
   @IsNotEmpty() //TODO debatable if this is necessary
   type: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   timeToBan: number;
 }

@@ -150,7 +150,11 @@ export class GroupService {
       newGroup.protected = false;
 
       if (createGroupDto.password !== null)
-        newGroup.password = createGroupDto.password;
+      {
+        newGroup.protected = true;
+        const hashedPassword: string = await this.hashPassword(createGroupDto.password);
+        newGroup.password = hashedPassword;
+      }
 
       return this.groupRepository.save(newGroup);
     } catch (err) {
@@ -306,7 +310,7 @@ export class GroupService {
     editMembersDto: EditMembersDto
   ): Promise<void> {
     try {
-      // What is `i`?
+      // What is `i`? "I don't know.. didn't write this" -Jules
       let i: number;
       let isRemovable = true;
       for (const member of editMembersDto.users) {

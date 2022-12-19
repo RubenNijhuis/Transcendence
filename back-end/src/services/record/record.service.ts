@@ -7,6 +7,7 @@ import { Repository } from "typeorm";
 import { GroupService } from "src/services/group/group.service"
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
 import { check } from "prettier";
+import { exec } from "child_process";
 
 @Injectable()
 export class RecordService {
@@ -24,45 +25,56 @@ export class RecordService {
     {
       return (this.recordRepository
           .createQueryBuilder("record")
-          .where({ groupId })
-          .andWhere({ userId })
+          .where({ groupId: groupId })
+          .andWhere({ userId: userId })
           .getOne());
     }
 
-  async banUser(banUserDto : BanUserDto) {
+  async banUser(adminId: string, banUserDto : BanUserDto) {
     try {
-      const admin : GroupUser = await this.groupService.findGroupuserById(banUserDto.admin, banUserDto.groupId);
+      const admin : GroupUser = await this.groupService.findGroupuserById(adminId, banUserDto.groupId);
       if (admin.permissions == 0)
-        throw console.error("not permitted");
-      const newRecord = this.recordRepository.create(banUserDto);
+      throw errorHandler(Error(), "Not permitted to Ban users", HttpStatus.INTERNAL_SERVER_ERROR);
+      if (await this.isUserBanned(banUserDto.userId, banUserDto.groupId)) {
+        const record: Record = await this.getRecordByUserId(
+          banUserDto.userId,
+          banUserDto.groupId
+        );
+        // TODO: this checks whether the user is already banned or not, maybe better solution?
+        if (record.type == 1) throw errorHandler(Error(), "User is already banned", HttpStatus.INTERNAL_SERVER_ERROR);
+        
+        await this.recordRepository
+          .createQueryBuilder("record")
+          .delete()
+          .where({ groupId: banUserDto.groupId })
+          .andWhere({ userId: banUserDto.userId })
+          .execute();
+      }
+      const newRecord : Record = this.recordRepository.create(banUserDto);
       return this.recordRepository.save(newRecord);
     }
     catch (err) {
-      throw errorHandler(
-        err,
-        "Failed to ban member",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+      throw err
     }
   }
 
   async isUserBanned(userId : string, groupId : string) {
-    try {
-      const userRecord : Record = await this.getRecordByUserId(userId, groupId);
+    const userRecord : Record = await this.getRecordByUserId(userId, groupId);
       if (!userRecord)
         return false;
+      if (userRecord.type == 1)
+        return true ;
       const timeUntilUnban : number = userRecord.createdTime.valueOf() + (userRecord.timeToBan * 1000);
       const timeOfDay : number = new Date().getTime() //TODO: leak?
+      console.log("unban:", timeUntilUnban, "timenow", timeOfDay);
       if (timeUntilUnban >= timeOfDay)
         return true ;
+      await this.recordRepository
+        .createQueryBuilder("record")
+        .delete()
+        .where({ groupId: groupId })
+        .andWhere({ userId: userId })
+        .execute();
       return false ;
-    }
-    catch (err) {
-      throw errorHandler(
-        err,
-        "Something went wrong",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
-    }
   }
 }
