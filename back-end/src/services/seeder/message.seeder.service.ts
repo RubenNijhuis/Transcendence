@@ -26,20 +26,13 @@ export class MessageseederService {
 
     async seedMessages() {
         try {
-            // const users: User[] = await this.userServ.getUsers();
-            // const usersIds: string[] = users.map((u) => { return u.uid; });
             const groups: Group[] = await this.groupServ.getGroups();
 
             for (var i = 0; i < groups.length; i++) {
                 const members: GroupUser[] = groups[i].users;
 
-                for (let j = 0; j < members.length; j++) {
-                    const message: CreateMessageDto = {
-                        group_id: groups[i].uid,
-                        content: "lol",
-                        content_type: 0
-                    }                        
-                    await this.messageServ.createMessage(members[j].memberId, message);
+                for (let j = 0; j < members.length; j++) {                      
+                    await this.messageServ.createMessage(members[j].memberId, groups[i].uid, "lol", 0);
                 }
             }
         } catch (err) {
