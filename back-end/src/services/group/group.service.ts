@@ -33,7 +33,7 @@ export class GroupService {
     private readonly messageService: MessageService
   ) {}
 
-    // only used for debug purposes
+  // only used for debug purposes
   async getGroups(): Promise<Group[]> {
     try {
       const returnedUser: Group[] = await this.groupRepository.find();
@@ -63,8 +63,7 @@ export class GroupService {
 
       const messages: Message[] =
         await this.messageService.getAllMessagesByGroupId(groupId);
-      if (messages)
-        group.messages = messages;
+      if (messages) group.messages = messages;
       group.users = groupUsers;
       return group;
     } catch (error: any) {
@@ -118,7 +117,7 @@ export class GroupService {
       .where({ groupId })
       .andWhere({ memberId: userId })
       .getOne();
-      return groupuser;
+    return groupuser;
   }
 
   async hashPassword(input: string) {
@@ -128,7 +127,12 @@ export class GroupService {
     return password;
   }
 
-  async createGroup(owner: string, name: string, users: string[], password: string) {
+  async createGroup(
+    owner: string,
+    name: string,
+    users: string[],
+    password: string
+  ) {
     try {
       for (const member of users) {
         const user: User = await this.userService.findUsersByIdNoFilter(member);
@@ -149,8 +153,7 @@ export class GroupService {
       newGroup.name = name;
       newGroup.protected = false;
 
-      if (password !== null)
-      {
+      if (password !== null) {
         newGroup.protected = true;
         const hashedPassword: string = await this.hashPassword(password);
         newGroup.password = hashedPassword;
@@ -216,9 +219,7 @@ export class GroupService {
       const groupuser = this.groupuserRepository.create();
 
       groupuser.group = group;
-      groupuser.user = await this.userService.findUsersByIdNoFilter(
-        owner
-      );
+      groupuser.user = await this.userService.findUsersByIdNoFilter(owner);
       groupuser.groupId = groupId;
       groupuser.memberId = owner;
       groupuser.permissions = 2;
@@ -238,7 +239,8 @@ export class GroupService {
       // Get group from db
       const group: Group = await this.findGroupById(setPasswordDto.id);
       if (!group) return console.error("group doesn't exist"); //error lol
-      if (owner !== group.owner) return console.error("no permission to do this");
+      if (owner !== group.owner)
+        return console.error("no permission to do this");
       /**
        * If there is already a previous password we compare the new password
        * to the former. If they match we return an error as a password

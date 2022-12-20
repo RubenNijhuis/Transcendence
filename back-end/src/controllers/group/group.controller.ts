@@ -60,7 +60,7 @@ export class GroupController {
   // per group
   // - alle messages
   // - alle users -> voledige account
-  
+
   // TOE VOEGEN USERS
   // users -> range functie voor users aanvragen met [uid]
 
@@ -81,12 +81,12 @@ export class GroupController {
   @UseGuards(AccessTokenGuard)
   async getGroup(
     @Param("groupId") groupId: string,
-   @Req() req: Request
+    @Req() req: Request
   ): Promise<any> {
     try {
       // Get UID through access token
-     const intraID = req.user["intraID"];
-     const user: User = await this.userService.findUserByintraId(intraID);
+      const intraID = req.user["intraID"];
+      const user: User = await this.userService.findUserByintraId(intraID);
       return await this.groupService.getGroup(user.uid, groupId);
     } catch (err) {
       throw err;
@@ -220,7 +220,11 @@ export class GroupController {
       const user: User = await this.userService.findUserByintraId(intraID);
 
       // TODO: add user uid to add members func
-      await this.groupService.addMembers(user.uid, editMembersDto.groupId, editMembersDto.users);
+      await this.groupService.addMembers(
+        user.uid,
+        editMembersDto.groupId,
+        editMembersDto.users
+      );
       return HttpStatus.OK;
     } catch (err) {
       throw err;
@@ -268,10 +272,7 @@ export class GroupController {
   @Post("banUser")
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
-  async banUser(
-    @Req() req: Request,
-    @Body() banUserDto: BanUserDto
-  ) {
+  async banUser(@Req() req: Request, @Body() banUserDto: BanUserDto) {
     try {
       // Get UID through access token
       const intraID = req.user["intraID"];

@@ -6,8 +6,8 @@ import { UserService } from "../user/user.service";
 
 @Injectable()
 export class FriendSeederService {
-    inject: [FriendlistService, UserService];
-    constructor(
+  inject: [FriendlistService, UserService];
+  constructor(
     private readonly userServ: UserService,
     private readonly friendsServ: FriendlistService
   ) {}
@@ -20,11 +20,13 @@ export class FriendSeederService {
     const indexes: number[] = [];
 
     for (let i = 0; i < friends.length; i++) {
-      indexes.push((await this.userServ.findUserByUsername(friends[i].username)).index);
+      indexes.push(
+        (await this.userServ.findUserByUsername(friends[i].username)).index
+      );
     }
     return indexes;
   }
-  
+
   private filterUsers(users: User[]): User[] {
     const filteredUsers: User[] = users;
 
@@ -73,9 +75,7 @@ export class FriendSeederService {
       // loop trough users
       for (let i = 0; i < filteredUsers.length; i++) {
         const user: User = filteredUsers[i];
-        const currentFriends = await this.friendsServ.getFriends(
-          user.username
-        );
+        const currentFriends = await this.friendsServ.getFriends(user.username);
         const targetAmount: number = this.randomNum(0, maxFriends - 1);
         const excludeList: number[] = await this.getFriendIndexes(
           currentFriends
@@ -91,8 +91,9 @@ export class FriendSeederService {
 
             // get random number which is not in exlude list
             while (
-              users[randomIndex = this.randomNum(1, maxFriends + 1)].isInitialized && excludeList.includes(
-                (users[randomIndex].index)) 
+              users[(randomIndex = this.randomNum(1, maxFriends + 1))]
+                .isInitialized &&
+              excludeList.includes(users[randomIndex].index)
             ) {}
             // eslint-disable-next-line prefer-const
             newFriend = users[randomIndex];

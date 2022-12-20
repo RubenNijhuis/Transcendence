@@ -72,7 +72,6 @@ export class UsersController {
   //@UseGuards(AccessTokenGuard)
   @Get("getLeaderboard")
   async getLeaderboard() {
-
     return await this.userService.getUsersSortedOnElo();
   }
 
@@ -182,7 +181,7 @@ export class UsersController {
   @Post("updateColor")
   @UsePipes(ValidationPipe)
   async updateColor(@Body() dto: SetcolorDto) {
-	  console.log("color:",dto.color);
+    console.log("color:", dto.color);
     try {
       await this.userService.setColor(dto.username, dto.color);
     } catch (err) {

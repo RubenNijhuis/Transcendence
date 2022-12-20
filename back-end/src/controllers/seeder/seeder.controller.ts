@@ -12,16 +12,15 @@ export class SeederController {
     private readonly userSeeder: UserSeederService,
     private readonly friendSeeder: FriendSeederService,
     private readonly groupSeeder: GroupseederService
-    ) {}
+  ) {}
 
   @Post("amount")
   async seedUsersAmount(@Body() dto: SeederAmountDto) {
     const seedResp: User[] = await this.userSeeder.seedCustom(dto.amount);
 
-
     const cleanedRet = await this.friendSeeder.seedFriends();
     await this.groupSeeder.seedGroups();
-    
+
     return cleanedRet;
   }
 

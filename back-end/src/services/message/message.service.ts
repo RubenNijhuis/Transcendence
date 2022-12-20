@@ -31,12 +31,17 @@ export class MessageService {
   async getAllMessagesByGroupId(id: string): Promise<Message[]> {
     const allMessages: Message[] = await this.chatRepository
       .createQueryBuilder("message")
-      .where({groupId: id})
+      .where({ groupId: id })
       .getMany();
     return allMessages;
   }
 
-  async createMessage(senderID: string, group_id: string, content: string, content_type: number) {
+  async createMessage(
+    senderID: string,
+    group_id: string,
+    content: string,
+    content_type: number
+  ) {
     try {
       const group: Group = await this.groupService.findGroupById(group_id);
       if (await this.recordService.isUserBanned(senderID, group_id))
@@ -47,16 +52,12 @@ export class MessageService {
         senderID: senderID,
         content: content,
         content_type: content_type,
-        sender: null,
-      }
+        sender: null
+      };
       const newChat = this.chatRepository.create(query);
       return this.chatRepository.save(newChat);
     } catch (err) {
-      throw errorHandler(
-        err,
-        "something",
-        HttpStatus.FORBIDDEN
-      );
+      throw errorHandler(err, "something", HttpStatus.FORBIDDEN);
     }
   }
 }
