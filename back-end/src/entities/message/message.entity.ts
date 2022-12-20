@@ -40,7 +40,7 @@ export class Message {
   })
   sender: string;
 
-  @Column()
+  @Column() // needed?
   senderID: string;
 
   @Column({

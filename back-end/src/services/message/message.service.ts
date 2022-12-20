@@ -35,17 +35,23 @@ export class MessageService {
     return allMessages;
   }
 
-  async createMessage(senderID: string, createMessageDto: CreateMessageDto) {
-    const group: Group = await this.groupService.findGroupById(
-      createMessageDto.group_id
-    );
-    if (await this.recordService.isUserBanned(senderID, createMessageDto.group_id))
+  async createMessage(senderID: string, group_id: string, content: string, content_type: string) {
+    const group: Group = await this.groupService.findGroupById(group_id);
+    if (await this.recordService.isUserBanned(senderID, group_id))
       throw console.error("This user is Banned/Muted");
-    const newChat = this.chatRepository.create(createMessageDto);
-    newChat.senderID = senderID;
-    newChat.sender = null;
-    newChat.group = group;
-    newChat.groupId = group.uid;
+    const query = {
+      group: group,
+      groupId: group.uid,
+      senderID: senderID,
+      content: content,
+      content_type: content_type,
+      sender: null,
+    }
+    const newChat = this.chatRepository.create(query);
+    // newChat.senderID = senderID;
+    // newChat.sender = null;
+    // newChat.group = group;
+    // newChat.groupId = group.uid;
     return this.chatRepository.save(newChat);
   }
 }

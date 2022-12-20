@@ -2,7 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { User } from "src/entities";
 import {
     randBird,
-  } from "@ngneat/falso";import { FriendlistService } from "../friendlist/friendlist.service";
+  } from "@ngneat/falso";
+import { FriendlistService } from "../friendlist/friendlist.service";
 import { GroupService } from "../group/group.service";
 import { UserService } from "../user/user.service";
 import Group from "src/entities/group/group.entity";
@@ -15,7 +16,6 @@ export class GroupseederService {
     constructor(
         private readonly groupServ: GroupService,
         private readonly userServ: UserService,
-        private readonly friendsServ: FriendlistService
     ) {}
 
     private randomNum(min: number, max: number): number {
@@ -36,7 +36,7 @@ export class GroupseederService {
                 const num: number = this.randomNum(0, 2);
                 const pass: string = passwords[num];
 
-                console.log("members: [", members, "]", ", pass: [", pass, "], num: ", num);
+                // console.log("members: [", members, "]", ", pass: [", pass, "], num: ", num);
                 const group: Group = await this.groupServ.createGroup(users[i].uid, randoName , members, pass);
                 await this.groupServ.addMembers(users[i].uid, group.uid, members);
                 await this.groupServ.addOwner(group.uid, users[i].uid);
