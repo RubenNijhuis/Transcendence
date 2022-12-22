@@ -130,7 +130,7 @@ export class AuthService {
 
       const intraIDDto = { intraID: decoded.intraID };
       const addUser: UpdateResult = await this.userService.setRefreshToken(
-        intraIDDto,
+        intraIDDto.intraID,
         tokens.refreshToken
       );
       if (!addUser)

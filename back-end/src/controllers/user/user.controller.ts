@@ -137,7 +137,12 @@ export class UsersController {
   ): Promise<any> {
     try {
       const intraID = req.user["intraID"];
-      const setUserResp = await this.userService.setUser(intraID, SetUserDto);
+      const setUserResp = await this.userService.setUser(
+        intraID,
+        SetUserDto.username,
+        SetUserDto.color,
+        SetUserDto.description
+      );
 
       return this.userService.filterUser(setUserResp);
     } catch (err) {
@@ -217,22 +222,4 @@ export class UsersController {
     deleteFiles(path, id, file.filename);
     return HttpStatus.OK;
   }
-
-  // @Get(UserRoutes.seed)
-  // async seedUsers() {
-  //   const seed = new UserSeeder({ seedingSource: seederConfig });
-  //   await seed.run();
-  // }
-
-  // @Post(UserRoutes.seedAmount)
-  // async seedUsersAmount(@Body() dto: SeederAmountDto) {
-  //   const seedResp = await this.userService.seedCustom(dto.amount);
-  //   return seedResp;
-  // }
-
-  // @Post(UserRoutes.seedFriendAmount)
-  // async seedOnFriendAmount(@Body() dto: SeederAmountDto) {
-  //   const seedResp = await this.userService.seedCustom(dto.amount);
-  //   return seedResp;
-  // }
 }

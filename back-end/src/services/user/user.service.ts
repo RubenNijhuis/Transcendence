@@ -23,10 +23,6 @@ import { DeleteResult, Repository, TypeORMError, UpdateResult } from "typeorm";
 import * as bcrypt from "bcrypt";
 import { createHash, Hash } from "crypto";
 
-// dtos
-import { SetUserDto } from "src/dtos/user/set-user.dto";
-import { UsernameDto } from "src/dtos/auth/username.dto";
-import { intraIDDto } from "src/dtos/auth/intraID.dto";
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
 import { ConfigService } from "@nestjs/config";
 /**
@@ -180,14 +176,19 @@ export class UserService {
     }
   }
 
-  async setUser(intraID: string, SetUserDto: SetUserDto): Promise<User> {
+  async setUser(
+    intraID: string,
+    username: string,
+    color: string,
+    description: string
+  ): Promise<User> {
     try {
       const user: User = await this.findUserByintraId(intraID);
       const query = {
         isInitialized: true,
-        username: SetUserDto.username,
-        color: SetUserDto.color,
-        description: SetUserDto.description
+        username: username,
+        color: color,
+        description: description
       };
 
       if (user.isInitialized) return null;
@@ -230,11 +231,11 @@ export class UserService {
   }
 
   async setRefreshToken(
-    intraID: intraIDDto,
+    intraID: string,
     token: string
   ): Promise<UpdateResult> {
     try {
-      const user: User = await this.findUserByintraId(intraID.intraID);
+      const user: User = await this.findUserByintraId(intraID);
       const hashedToken: string = createHash("sha256")
         .update(token)
         .digest("hex");

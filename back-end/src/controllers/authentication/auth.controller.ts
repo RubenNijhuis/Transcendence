@@ -116,7 +116,7 @@ export class AuthController {
           const intraIDDto = { intraID };
 
           await this.userService.setRefreshToken(
-            intraIDDto,
+            intraIDDto.intraID,
             tokens.refreshToken
           );
 
