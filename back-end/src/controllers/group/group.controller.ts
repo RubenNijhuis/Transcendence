@@ -39,6 +39,7 @@ import { AccessTokenGuard } from "src/guards/accessToken.guard";
 import User from "src/entities/user/user.entity";
 import { BanUserDto } from "src/dtos/record/ban-user.dto";
 import { RecordService } from "src/services/record/record.service";
+import { UnBanUserDto } from "src/dtos/record/unban-user.dto";
 
 ////////////////////////////////////////////////////////////
 
@@ -280,6 +281,23 @@ export class GroupController {
 
       await this.recordService.banUser(user.uid, banUserDto);
       const ret = { message: "User banned!" };
+      return ret;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  @Post("unbanUser")
+  @UsePipes(ValidationPipe)
+  @UseGuards(AccessTokenGuard)
+  async unbanUser(@Req() req: Request, @Body() unbanUserDto: UnBanUserDto) {
+    try {
+      // Get UID through access token
+      const intraID = req.user["intraID"];
+      const user: User = await this.userService.findUserByintraId(intraID);
+
+      await this.recordService.unbanUser(user.uid, unbanUserDto);
+      const ret = { message: "User unbanned!" };
       return ret;
     } catch (err) {
       throw err;

@@ -8,6 +8,7 @@ import { GroupService } from "src/services/group/group.service";
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
 import { check } from "prettier";
 import { exec } from "child_process";
+import { UnBanUserDto } from "src/dtos/record/unban-user.dto";
 
 @Injectable()
 export class RecordService {
@@ -68,6 +69,30 @@ export class RecordService {
     }
   }
 
+  async unbanUser(adminId : string, unbanUserDto : UnBanUserDto)
+  {
+    const adminUser: GroupUser = await this.groupService.findGroupuserById(adminId, unbanUserDto.groupId);
+    if (adminUser.permissions == 0)
+      throw errorHandler(
+            Error(),
+            "You are not allowed to unban this user",
+            HttpStatus.FORBIDDEN
+          );  
+    const userRecord: Record = await this.getRecordByUserId(unbanUserDto.userId, unbanUserDto.groupId);
+    if (!userRecord)
+      throw errorHandler(
+          Error(),
+          "This user is not banned/muted",
+          HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    await this.recordRepository
+      .createQueryBuilder("record")
+      .delete()
+      .where({ groupId: unbanUserDto.groupId })
+      .andWhere({ userId: unbanUserDto.userId })
+      .execute();
+  }
+
   async isUserBanned(userId: string, groupId: string) {
     const userRecord: Record = await this.getRecordByUserId(userId, groupId);
     if (!userRecord) return false;
@@ -75,7 +100,6 @@ export class RecordService {
     const timeUntilUnban: number =
       userRecord.createdTime.valueOf() + userRecord.timeToBan * 1000;
     const timeOfDay: number = new Date().getTime(); //TODO: leak?
-    console.log("unban:", timeUntilUnban, "timenow", timeOfDay);
     if (timeUntilUnban >= timeOfDay) return true;
     await this.recordRepository
       .createQueryBuilder("record")
