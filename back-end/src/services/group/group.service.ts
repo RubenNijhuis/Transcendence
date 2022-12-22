@@ -82,9 +82,7 @@ export class GroupService {
       let i = 0;
       const groups: Group[] = [];
       while (i < groupUsers.length) {
-        const group: Group = await this.groupRepository.findOne({
-          where: { uid: groupUsers[i].groupId }
-        });
+        const group: Group = await this.getGroup(userId, groupUsers[i].groupId);
 
         console.log("✅", groupUsers[i].groupId);
         groups.push(group);
