@@ -25,6 +25,7 @@ services:
     volumes:
       - ./back-end:/app
       - backend_node_module:/app/node_modules
+      - /app/node_modules/bcrypt
       - ../shared:/shared
     ports:
       - "3000:3000" # Main API
