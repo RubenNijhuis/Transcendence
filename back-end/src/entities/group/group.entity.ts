@@ -37,7 +37,7 @@ export class Group {
 
   @OneToMany((type) => GroupUser, (groupuser) => groupuser.group)
   @JoinTable()
-  users: GroupUser[];
+  members: GroupUser[];
 
   @OneToMany((type) => Message, (message) => message.group, {
     nullable: true

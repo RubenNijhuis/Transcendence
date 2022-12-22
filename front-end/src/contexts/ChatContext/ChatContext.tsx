@@ -48,30 +48,23 @@ interface IChatProvider {
 
 const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
     const [activeChat, setActiveChat] = useState<Chat.Group.Instance>(null!);
-
-    const [directChats, setDirectChats] = useState<Chat.Group.Instance[]>(
-        null!
-    );
-    const [groupChats, setGroupChats] = useState<Chat.Group.Instance[]>(null!);
+    const [directChats, setDirectChats] = useState<Chat.Group.Instance[]>([]);
+    const [groupChats, setGroupChats] = useState<Chat.Group.Instance[]>([]);
 
     ////////////////////////////////////////////////////////////
 
     const { user } = useUser();
 
-    // TODO: remove because it is debug
-    const { profiles } = useFakeData();
-
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
-        if (!user || !profiles) return;
+        if (!user) return;
 
         const chatAggregator = async () => {
-            const retrievedGroupChats: Chat.Group.Instance[] = await getChatsByUsername(user.uid);
+            const retrievedGroupChats: Chat.Group.Instance[] =
+                await getChatsByUsername(user.uid);
 
-            console.log(retrievedGroupChats);
-
-            const members = getMembersFromGroupChats(retrievedGroupChats);
+            const members = await getMembersFromGroupChats(retrievedGroupChats);
             const messages = getMessagesFromGroupChats(retrievedGroupChats);
             bindMembersToMessages(members, messages);
 
@@ -82,13 +75,12 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
 
             const firstDM = getFirstDM(retrievedGroupChats);
 
-            firstDM === null
-                ? setActiveChat(retrievedGroupChats[0])
-                : setActiveChat(firstDM);
+            console.log("active chat", retrievedGroupChats[0]);
+            setActiveChat(retrievedGroupChats[0]);
         };
 
         chatAggregator();
-    }, [user, profiles]);
+    }, [user]);
 
     ////////////////////////////////////////////////////////////
 

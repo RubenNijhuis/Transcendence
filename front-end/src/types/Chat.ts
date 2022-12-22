@@ -8,7 +8,7 @@ namespace Chat {
         export enum ContentType {
             Simple,
             Picture,
-            InvitePlay
+            GameInvite
         }
 
         // General type
@@ -41,25 +41,36 @@ namespace Chat {
             senderID: Profile.ProfileID;
             sender: Profile.Instance;
             id: number;
-            group_id: number;
-            read_by: Profile.Instance[];
+            uid: number;
         }
     }
 
+    export interface Member {
+        id: number;
+        groupId: string
+        memberId: string;
+        user: Profile.Instance
+        permissions: Chat.Group.Permission;
+    }
+    
     export namespace Group {
         export enum Type {
             DM,
             Group
         }
 
+        export enum Permission {
+            Standard,
+            Admin
+        }
+
         export interface Instance {
-            group_id: number;
-            name: string | null;
-            owner: Profile.Instance;
-            administrators: Profile.Instance[];
-            members: Profile.Instance[];
+            uid: string;
             messages: Message.Instance[];
+            name: string;
+            owner: string;
             protected: boolean;
+            members: Chat.Member[];
             internal_id: number;
         }
     }

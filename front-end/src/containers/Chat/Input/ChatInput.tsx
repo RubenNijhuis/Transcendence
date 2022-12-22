@@ -7,12 +7,13 @@ import { Profile, Game, Chat, Match } from "../../../types";
 // UI
 import { Container, SelectTypeIcon, SelectionBox } from "./ChatInput.style";
 import Asset from "../../../components/Asset";
+import { sendMessage } from "../../../proxies/chat/sendMessage";
 
 ////////////////////////////////////////////////////////////
 
 interface IMessageTypeSelect {
     sender: Profile.Instance;
-    groupchat: Chat.Group.Instance;
+    chat: Chat.Group.Instance;
     messageType: Chat.Message.ContentType;
     setMessageType: React.Dispatch<
         React.SetStateAction<Chat.Message.ContentType>
@@ -24,7 +25,7 @@ interface IMessageTypeSelect {
 
 const MessageTypeSelect = ({
     sender,
-    groupchat,
+    chat,
     messageType,
     setMessageType,
     setMessageContent
@@ -41,9 +42,9 @@ const MessageTypeSelect = ({
             setMessageContent({ content: "" });
         else if (type === Chat.Message.ContentType.Picture)
             setMessageContent({ alt: "", url: "" });
-        else if (type === Chat.Message.ContentType.InvitePlay)
+        else if (type === Chat.Message.ContentType.GameInvite)
             setMessageContent({
-                opponent: groupchat.members[0],
+                opponent: chat.members[0].user,
                 user: sender,
                 accepted: false,
                 game_type: Match.GameType.Classic
@@ -81,7 +82,7 @@ const MessageTypeSelect = ({
                 <span
                     onClick={() =>
                         handleChatTypeChange(
-                            Chat.Message.ContentType.InvitePlay
+                            Chat.Message.ContentType.GameInvite
                         )
                     }
                 >
@@ -156,24 +157,24 @@ const PictureMessageInput = ({
     );
 };
 
-interface IInvitePlayMessageInput {
+interface IGameInviteMessageInput {
     content: Chat.Message.GameInvite;
     setContent: React.Dispatch<React.SetStateAction<Chat.Message.GameInvite>>;
 }
 
-const InvitePlayMessageInput = ({
+const GameInviteMessageInput = ({
     content,
     setContent
-}: IInvitePlayMessageInput): JSX.Element => {
+}: IGameInviteMessageInput): JSX.Element => {
     return <div className="invite-message-input"></div>;
 };
 
 interface IChatInput {
     user: Profile.Instance;
-    groupchat: Chat.Group.Instance;
+    chat: Chat.Group.Instance;
 }
 
-const ChatInput = ({ user, groupchat }: IChatInput): JSX.Element => {
+const ChatInput = ({ user, chat }: IChatInput): JSX.Element => {
     const [messageType, setMessageType] = useState<Chat.Message.ContentType>(
         Chat.Message.ContentType.Simple
     );
@@ -187,7 +188,13 @@ const ChatInput = ({ user, groupchat }: IChatInput): JSX.Element => {
 
     const handleMessageSend = (): void => {
         setMessageType(Chat.Message.ContentType.Simple);
-        setMessageContent({ content: "" });
+        setMessageContent({ content: "pee pee" });
+        console.log(chat);
+        sendMessage({
+            group_id: chat.uid,
+            content_type: messageType,
+            content: messageContent
+        });
     };
 
     ////////////////////////////////////////////////////////////
@@ -218,8 +225,8 @@ const ChatInput = ({ user, groupchat }: IChatInput): JSX.Element => {
                         />
                     )}
 
-                    {messageType === Chat.Message.ContentType.InvitePlay && (
-                        <InvitePlayMessageInput
+                    {messageType === Chat.Message.ContentType.GameInvite && (
+                        <GameInviteMessageInput
                             content={messageContent as Chat.Message.GameInvite}
                             setContent={
                                 setMessageContent as React.Dispatch<
@@ -234,7 +241,7 @@ const ChatInput = ({ user, groupchat }: IChatInput): JSX.Element => {
                 </button>
                 <MessageTypeSelect
                     sender={user}
-                    groupchat={groupchat}
+                    chat={chat}
                     setMessageContent={setMessageContent}
                     messageType={messageType}
                     setMessageType={setMessageType}

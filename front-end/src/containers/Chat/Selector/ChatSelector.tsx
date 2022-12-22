@@ -21,7 +21,7 @@ import { useUser } from "../../../contexts/UserContext";
 ////////////////////////////////////////////////////////////
 
 interface IMemberList {
-    members: Profile.Instance[];
+    members: Chat.Member[];
 }
 
 /**
@@ -30,12 +30,15 @@ interface IMemberList {
 const MemberList = ({ members }: IMemberList): JSX.Element => {
     return (
         <ul>
-            {members.map(({ img_url, username, uid }) => (
-                <li className="profile" key={uid}>
-                    <Asset url={img_url} alt="profile" />
-                    <span>{username}</span>
-                </li>
-            ))}
+            {members.map(({ user }) => {
+                const { img_url, uid, username } = user;
+                return (
+                    <li className="profile" key={uid}>
+                        <Asset url={img_url} alt="profile" />
+                        <span>{username}</span>
+                    </li>
+                );
+            })}
         </ul>
     );
 };
@@ -49,8 +52,9 @@ const ChatTypeSelector = ({
     activeType,
     setActiveType
 }: IChatTypeSelector): JSX.Element => {
-    const handleChatTypeSelect = (type: Chat.Group.Type): void => {
-        setActiveType(type);
+    const isActiveChatSelect = (type: Chat.Group.Type): string => {
+        if (type === activeType) return "active";
+        else return "";
     };
 
     ////////////////////////////////////////////////////////////
@@ -58,19 +62,19 @@ const ChatTypeSelector = ({
     return (
         <ChatTypeSelectorContainer>
             <div
-                className={`chat-type ${
-                    activeType === Chat.Group.Type.DM ? "active" : null
-                }`}
-                onClick={() => handleChatTypeSelect(Chat.Group.Type.DM)}
+                className={`chat-type ${isActiveChatSelect(
+                    Chat.Group.Type.DM
+                )}`}
+                onClick={() => setActiveType(Chat.Group.Type.DM)}
             >
                 <Heading type={3}>DM</Heading>
             </div>
             <div className="divider" />
             <div
-                className={`chat-type ${
-                    activeType === Chat.Group.Type.Group ? "active" : null
-                }`}
-                onClick={() => handleChatTypeSelect(Chat.Group.Type.Group)}
+                className={`chat-type ${isActiveChatSelect(
+                    Chat.Group.Type.Group
+                )}`}
+                onClick={() => setActiveType(Chat.Group.Type.Group)}
             >
                 <Heading type={3}>Groups</Heading>
             </div>
@@ -109,17 +113,15 @@ const DirectMessages = ({
 
     useEffect(() => {
         setSelectedChatId(0);
+
         switch (selectedChatType) {
             case Chat.Group.Type.DM:
                 setSelectedChatList(directChats);
-                setSelectedChat(directChats[0]);
+                if (directChats.length !== 0) setSelectedChat(directChats[0]);
                 break;
             case Chat.Group.Type.Group:
-                setSelectedChatList(groupChats);
+                if (groupChats.length !== 0) setSelectedChatList(groupChats);
                 setSelectedChat(groupChats[0]);
-                break;
-            default:
-                setSelectedChatList(directChats);
                 break;
         }
     }, [selectedChatType]);
@@ -129,9 +131,9 @@ const DirectMessages = ({
     return (
         <DirectMessageList>
             {selectedChatList &&
-                selectedChatList.map(({ members, internal_id }) => {
-                    const otherMembers: Profile.Instance[] = members.filter(
-                        (member) => member.username !== user!.username
+                selectedChatList.map(({ name, members, internal_id }) => {
+                    const otherMembers: Chat.Member[] = members.filter(
+                        (member) => member.user.username !== user!.username
                     );
 
                     const isActive = internal_id === selectedChatId;
@@ -142,6 +144,13 @@ const DirectMessages = ({
                             onClick={() => handleChatSelection(internal_id)}
                             active={isActive}
                         >
+                            <>
+                                {members.length > 2 ? (
+                                    name
+                                ) : (
+                                    <MemberList members={otherMembers} />
+                                )}
+                            </>
                             <MemberList members={otherMembers} />
                         </DirectMessageEntry>
                     );
@@ -164,7 +173,7 @@ const ChatSelector = ({
     setSelectedChat
 }: IChatSelector): JSX.Element => {
     const [selectedChatType, setSelectedChatType] = useState<Chat.Group.Type>(
-        Chat.Group.Type.DM
+        Chat.Group.Type.Group
     );
 
     ////////////////////////////////////////////////////////////
@@ -177,14 +186,13 @@ const ChatSelector = ({
             />
 
             <ChatInterface />
-            {selectedChat && (
-                <DirectMessages
-                    selectedChatType={selectedChatType}
-                    setSelectedChat={setSelectedChat}
-                    directChats={directChats}
-                    groupChats={groupChats}
-                />
-            )}
+
+            <DirectMessages
+                selectedChatType={selectedChatType}
+                setSelectedChat={setSelectedChat}
+                directChats={directChats}
+                groupChats={groupChats}
+            />
         </Container>
     );
 };

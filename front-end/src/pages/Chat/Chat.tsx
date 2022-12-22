@@ -19,12 +19,14 @@ const ChatPage = (): JSX.Element => {
     return (
         <Layout>
             <Container>
-                <ChatSelector
-                    directChats={directChats}
-                    groupChats={groupChats}
-                    selectedChat={activeChat}
-                    setSelectedChat={setActiveChat}
-                />
+                {activeChat && (
+                    <ChatSelector
+                        directChats={directChats}
+                        groupChats={groupChats}
+                        selectedChat={activeChat}
+                        setSelectedChat={setActiveChat}
+                    />
+                )}
 
                 {activeChat && <ChatBox chat={activeChat} />}
             </Container>

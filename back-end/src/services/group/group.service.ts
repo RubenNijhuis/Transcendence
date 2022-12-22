@@ -64,7 +64,7 @@ export class GroupService {
       const messages: Message[] =
         await this.messageService.getAllMessagesByGroupId(groupId);
       if (messages) group.messages = messages;
-      group.users = groupUsers;
+      group.members = groupUsers;
       return group;
     } catch (error: any) {
       return error;
@@ -147,7 +147,7 @@ export class GroupService {
       const newGroup: Group = this.groupRepository.create();
 
       newGroup.owner = owner;
-      newGroup.users = [];
+      newGroup.members = [];
       newGroup.name = name;
       newGroup.protected = false;
 

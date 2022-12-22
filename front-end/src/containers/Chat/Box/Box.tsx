@@ -51,12 +51,12 @@ const ChatTitle = ({ chat, isDmChat, isUnlocked }: IChatTitle): JSX.Element => {
      * If the the amount of members is 2 it means it a DM
      * Therefore we can change the interface from 'Chat' to 'other user name'
      */
-    const otherMember: Profile.Instance = chat.members
-        .filter((member: Profile.Instance) => member.uid !== user.uid)
-        .shift() as Profile.Instance;
+    const otherMember: Chat.Member = chat.members
+        .filter((member: Chat.Member) => member.user.uid !== user.uid)
+        .shift() as Chat.Member;
 
     const chatTitle: string = (
-        isDmChat ? otherMember.username : chat.name
+        isDmChat ? otherMember.user.username : chat.name
     ) as string;
 
     ////////////////////////////////////////////////////////////
@@ -67,12 +67,16 @@ const ChatTitle = ({ chat, isDmChat, isUnlocked }: IChatTitle): JSX.Element => {
     };
 
     const isAdministrator = () => {
-        for (const member of chat.administrators) {
-            if (member.uid === user.uid) return true;
+        for (const member of chat.members) {
+            if (
+                member.permissions === Chat.Group.Permission.Admin &&
+                member.user.uid === user.uid
+            )
+                return true;
         }
-            
+
         return false;
-    }
+    };
 
     ////////////////////////////////////////////////////////////
 
@@ -81,8 +85,8 @@ const ChatTitle = ({ chat, isDmChat, isUnlocked }: IChatTitle): JSX.Element => {
             <div className="title">
                 {isDmChat && (
                     <Asset
-                        alt={`${otherMember.username} profile`}
-                        url={otherMember.img_url}
+                        alt={`${otherMember.user.username} profile`}
+                        url={otherMember.user.img_url}
                     />
                 )}
                 <Heading type={3}>{chatTitle}</Heading>
@@ -110,7 +114,7 @@ const PasswordInput = ({ activeChat, setIsUnlocked }: IPasswordInput) => {
     const sendPassword = async () => {
         try {
             // const verifyResponse = await verifyPassword(
-            //     activeChat.group_id,
+            //     activeChat.uid,
             //     passwordText.value
             // );
 
@@ -153,6 +157,7 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
     const { user } = useUser();
     const { connection, createConnection, destroyConnectionInstance } =
         useSocket();
+
 
     ////////////////////////////////////////////////////////////
 
@@ -221,7 +226,7 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
                     />
                 )}
             </div>
-            <ChatInput user={user} groupchat={chat} />
+            <ChatInput user={user} chat={chat} />
         </Container>
     );
 };

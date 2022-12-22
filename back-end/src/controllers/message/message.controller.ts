@@ -46,11 +46,10 @@ export class MessageController {
     try {
       // Get UID through access token
       const intraID = req.user["intraID"];
-      const user: User = await this.userService.findUserByintraId(intraID);
+      const sender: User = await this.userService.findUserByintraId(intraID);
 
-      //const userId = "3ec03adf-c7fc-4fa4-b30e-50cf872b8888";
       await this.messageService.createMessage(
-        user.uid,
+        sender.uid,
         createMessageDto.group_id,
         createMessageDto.content,
         createMessageDto.content_type

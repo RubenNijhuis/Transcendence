@@ -26,8 +26,8 @@ export class MessageseederService {
     try {
       const groups: Group[] = await this.groupServ.getGroups();
 
-      for (var i = 0; i < groups.length; i++) {
-        const members: GroupUser[] = groups[i].users;
+      for (let i = 0; i < groups.length; i++) {
+        const members: GroupUser[] = groups[i].members;
 
         for (let j = 0; j < members.length; j++) {
           await this.messageServ.createMessage(

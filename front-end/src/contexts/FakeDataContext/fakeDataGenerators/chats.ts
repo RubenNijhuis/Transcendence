@@ -70,7 +70,7 @@ const generateNewMessageContent = (
 const generateMessage = (
     sender: Profile.Instance,
     receiver: Profile.Instance,
-    group_id: number,
+    uid: number,
     amount: number
 ): Chat.Message.Instance[] => {
     const messages: Chat.Message.Instance[] = [];
@@ -85,8 +85,7 @@ const generateMessage = (
             sender: generateProfile(1)[0],
             senderID: sender.uid,
             id: i,
-            group_id,
-            read_by: []
+            uid
         };
 
         messages.push(newMessage);
@@ -115,11 +114,10 @@ const generateGroupChats = (
 
         const newGroup: Chat.Group.Instance = {
             name: "dikke lul",
-            owner: user,
-            group_id: i,
-            administrators: [user],
+            owner: 'penis',
+            uid: i.toString(),
             internal_id: i,
-            members: members,
+            members: [],
             messages: [],
             protected: randomNum1 !== 1
         };

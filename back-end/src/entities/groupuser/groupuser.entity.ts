@@ -10,7 +10,7 @@ export class GroupUser {
   @Column()
   groupId: string;
 
-  @ManyToOne((type) => Group, (group) => group.users)
+  @ManyToOne((type) => Group, (group) => group.members)
   group: Group;
 
   @Column()

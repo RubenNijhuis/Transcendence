@@ -7,6 +7,12 @@ import { Chat, Profile } from "../../types";
 
 ////////////////////////////////////////////////////////////
 
+interface SendMessagePayload {
+    group_id: string;
+    content: Chat.Message.MessageTypes;
+    content_type: Chat.Message.ContentType;
+}
+
 /**
  * Creates a chat that will be saved in the database
  * @param owner
@@ -14,22 +20,14 @@ import { Chat, Profile } from "../../types";
  * @param users
  * @returns confirmation response
  */
-const createChat = async (
-    owner: Profile.ProfileID,
-    name: string,
-    members: Profile.ProfileID[],
-    password: string
-): Promise<Chat.Group.Instance[]> => {
+const sendMessage = async (
+    messagePayload: SendMessagePayload
+): Promise<number> => {
     try {
-        const route = ApiRoutes.createChat();
-        const body = {
-            owner,
-            name,
-            members,
-            password
-        };
+        const route = ApiRoutes.sendMessage();
+        const body = messagePayload;
 
-        const { data } = await API.post(route, body);
+        const { data } = await API.post<number>(route, body);
 
         return Promise.resolve(data);
     } catch (err) {
@@ -39,4 +37,4 @@ const createChat = async (
 
 ///////////////////////////////////////////////////////////
 
-export { createChat };
+export { sendMessage };

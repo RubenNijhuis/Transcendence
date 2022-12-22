@@ -1,14 +1,22 @@
 // Types
+import { addImagesToProfile } from "../../proxies/profile";
 import { Chat, Profile } from "../../types";
 
 ////////////////////////////////////////////////////////////
 
-const getMembersFromGroupChats = (
+const getMembersFromGroupChats = async (
     chats: Chat.Group.Instance[]
-): Profile.Instance[][] => {
-    const members: Profile.Instance[][] = [];
+): Promise<Chat.Member[][]> => {
+    const members: Chat.Member[][] = [];
 
     for (const chat of chats) {
+        for (let member of chat.members) {
+
+            member.user = await addImagesToProfile(member.user, {
+                profile: true,
+                banner: false,
+            });
+        }
         members.push(chat.members);
     }
 
@@ -21,6 +29,9 @@ const getMessagesFromGroupChats = (
     const messages: Chat.Message.Instance[][] = [];
 
     for (const chat of chats) {
+        for (let message of chat.messages) {
+            message.content = JSON.parse(message.content as unknown as string);
+        }
         messages.push(chat.messages);
     }
 
@@ -29,18 +40,18 @@ const getMessagesFromGroupChats = (
 
 const findMemberByProfileID = (
     id: Profile.ProfileID,
-    members: Profile.Instance[]
-): Profile.Instance => {
+    members: Chat.Member[]
+): Chat.Member => {
     // Could return undefined but should always find it anyway so what gives
     const profile = members.find((member) => {
-        return member.uid === id;
-    }) as Profile.Instance;
+        return member.user.uid === id;
+    }) as Chat.Member;
 
     return profile;
 };
 
 const bindMembersToMessages = (
-    members: Profile.Instance[][],
+    members: Chat.Member[][],
     totalMessages: Chat.Message.Instance[][]
 ): void => {
     for (let i = 0; i < totalMessages.length; i++) {
@@ -50,7 +61,7 @@ const bindMembersToMessages = (
             const message = messageList[j];
             const { senderID } = message;
 
-            message.sender = findMemberByProfileID(senderID, members[i]);
+            message.sender = findMemberByProfileID(senderID, members[i]).user;
         }
     }
 };

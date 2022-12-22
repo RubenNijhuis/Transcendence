@@ -170,11 +170,11 @@ export class GroupController {
       const group: Group = await this.groupService.createGroup(
         user.uid,
         createGroupDto.name,
-        createGroupDto.users,
+        createGroupDto.members,
         createGroupDto.password
       );
       const groupId: string = group.uid;
-      const users: string[] = createGroupDto.users;
+      const users: string[] = createGroupDto.members;
       const owner: string = user.uid;
 
       await this.groupService.addMembers(user.uid, groupId, users);
