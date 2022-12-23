@@ -17,7 +17,7 @@ export class GroupUser {
   memberId: string;
 
   @ManyToOne((type) => User, (user) => user.groups)
-  user: User;
+  profile: User;
 
   @Column()
   permissions: number;

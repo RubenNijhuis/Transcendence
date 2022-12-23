@@ -58,7 +58,7 @@ export class GroupService {
         const member: User = await this.userService.findUsersById(
           groupUsers[i].memberId
         );
-        groupUsers[i].user = member;
+        groupUsers[i].profile = member;
       }
 
       const messages: Message[] =
@@ -83,8 +83,6 @@ export class GroupService {
       const groups: Group[] = [];
       while (i < groupUsers.length) {
         const group: Group = await this.getGroup(userId, groupUsers[i].groupId);
-
-        console.log("✅", groupUsers[i].groupId);
         groups.push(group);
         i++;
       }
@@ -194,7 +192,7 @@ export class GroupService {
         const groupuser = this.groupuserRepository.create();
 
         groupuser.group = group;
-        groupuser.user = await this.userService.findUsersByIdNoFilter(member);
+        groupuser.profile = await this.userService.findUsersByIdNoFilter(member);
         groupuser.groupId = groupId;
         groupuser.memberId = member;
         groupuser.permissions = 0;
@@ -217,7 +215,7 @@ export class GroupService {
       const groupuser = this.groupuserRepository.create();
 
       groupuser.group = group;
-      groupuser.user = await this.userService.findUsersByIdNoFilter(owner);
+      groupuser.profile = await this.userService.findUsersByIdNoFilter(owner);
       groupuser.groupId = groupId;
       groupuser.memberId = owner;
       groupuser.permissions = 2;
