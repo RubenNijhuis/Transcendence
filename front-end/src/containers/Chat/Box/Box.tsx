@@ -52,11 +52,11 @@ const ChatTitle = ({ chat, isDmChat, isUnlocked }: IChatTitle): JSX.Element => {
      * Therefore we can change the interface from 'Chat' to 'other user name'
      */
     const otherMember: Chat.Member = chat.members
-        .filter((member: Chat.Member) => member.user.uid !== user.uid)
+        .filter((member: Chat.Member) => member.profile.uid !== user.uid)
         .shift() as Chat.Member;
 
     const chatTitle: string = (
-        isDmChat ? otherMember.user.username : chat.name
+        isDmChat ? otherMember.profile.username : chat.name
     ) as string;
 
     ////////////////////////////////////////////////////////////
@@ -68,11 +68,11 @@ const ChatTitle = ({ chat, isDmChat, isUnlocked }: IChatTitle): JSX.Element => {
 
     const isAdministrator = () => {
         for (const member of chat.members) {
-            if (
-                member.permissions === Chat.Group.Permission.Admin &&
-                member.user.uid === user.uid
-            )
-                return true;
+            const memberIsAnAdmin =
+                member.permissions === Chat.Group.Permission.Admin;
+            const memberIsUser = member.profile.uid === user.uid;
+
+            if (memberIsUser && memberIsAnAdmin) return true;
         }
 
         return false;
@@ -85,8 +85,8 @@ const ChatTitle = ({ chat, isDmChat, isUnlocked }: IChatTitle): JSX.Element => {
             <div className="title">
                 {isDmChat && (
                     <Asset
-                        alt={`${otherMember.user.username} profile`}
-                        url={otherMember.user.img_url}
+                        alt={`${otherMember.profile.username} profile`}
+                        url={otherMember.profile.img_url}
                     />
                 )}
                 <Heading type={3}>{chatTitle}</Heading>
@@ -158,7 +158,6 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
     const { connection, createConnection, destroyConnectionInstance } =
         useSocket();
 
-
     ////////////////////////////////////////////////////////////
 
     useEffect(() => {
@@ -183,7 +182,6 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
     }, [connection]);
 
     const sendMessage = () => {
-        console.log(chat);
         connection.emit("sendMessage", chat);
     };
 

@@ -44,7 +44,7 @@ const MessageTypeSelect = ({
             setMessageContent({ alt: "", url: "" });
         else if (type === Chat.Message.ContentType.GameInvite)
             setMessageContent({
-                opponent: chat.members[0].user,
+                opponent: chat.members[0].profile,
                 user: sender,
                 accepted: false,
                 game_type: Match.GameType.Classic
@@ -186,15 +186,16 @@ const ChatInput = ({ user, chat }: IChatInput): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
-    const handleMessageSend = (): void => {
-        setMessageType(Chat.Message.ContentType.Simple);
-        setMessageContent({ content: "pee pee" });
-        console.log(chat);
-        sendMessage({
-            group_id: chat.uid,
-            content_type: messageType,
-            content: messageContent
-        });
+    const handleMessageSend = async () => {
+        try {
+            sendMessage({
+                group_id: chat.uid,
+                content_type: messageType,
+                content: messageContent
+            });
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     ////////////////////////////////////////////////////////////

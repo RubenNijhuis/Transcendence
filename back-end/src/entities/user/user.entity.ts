@@ -4,11 +4,11 @@ import {
   Generated,
   JoinTable,
   OneToMany,
-  PrimaryColumn,
   PrimaryGeneratedColumn
 } from "typeorm";
 import GroupUser from "../groupuser/groupuser.entity";
-@Entity() // need to have a token to search on
+
+@Entity()
 export class User {
   @PrimaryGeneratedColumn()
   index: number;
@@ -112,17 +112,8 @@ export class User {
   })
   tfa_key: string;
 
-  @OneToMany((type) => GroupUser, (groupuser) => groupuser.user)
+  @OneToMany(() => GroupUser, (groupuser) => groupuser.profile)
   @JoinTable()
   groups: GroupUser[];
-  // @ManyToMany(type => User)
-  // @JoinTable({ joinColumn: { name: 'users_id_1' } })
-  // friendsrequests: User[];
-  // @ManyToMany(type => User)
-  // @JoinTable({ joinColumn: { name: 'users_id_1' } })
-  // friends: User[];
-  // @ManyToMany(type => User)
-  // @JoinTable({ joinColumn: { name: 'users_id_1' } })
-  // Blocked: User[];
 }
 export default User;

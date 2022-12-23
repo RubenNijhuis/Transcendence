@@ -64,6 +64,7 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
             const retrievedGroupChats: Chat.Group.Instance[] =
                 await getChatsByUsername(user.uid);
 
+            console.log(retrievedGroupChats);
             const members = await getMembersFromGroupChats(retrievedGroupChats);
             const messages = getMessagesFromGroupChats(retrievedGroupChats);
             bindMembersToMessages(members, messages);
@@ -75,7 +76,6 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
 
             const firstDM = getFirstDM(retrievedGroupChats);
 
-            console.log("active chat", retrievedGroupChats[0]);
             setActiveChat(retrievedGroupChats[0]);
         };
 

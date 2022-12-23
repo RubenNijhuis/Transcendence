@@ -102,12 +102,15 @@ const ProfilePage = (): JSX.Element => {
         }
     };
 
+    /**
+     * Settings the profile in the state. Will set the user if there isn't a name in the url
+     */
     const handleSetProfile = async (): Promise<Profile.Instance> => {
         if (profileName !== undefined) {
             try {
                 const imageSelect: Request.Payload.ImageSelect = {
                     profile: true,
-                    banner: true,
+                    banner: true
                 };
 
                 const returnedProfile = await getProfileByUsername(

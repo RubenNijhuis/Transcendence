@@ -52,7 +52,7 @@ const ChatSettings = ({ chat, user }: IChatSettings): JSX.Element => {
 
     useEffect(() => {
         for (const member of chat.members) {
-            if (member.user.uid !== user.uid) {
+            if (member.profile.uid !== user.uid) {
                 console.log(member);
             }
         }
@@ -67,17 +67,17 @@ const ChatSettings = ({ chat, user }: IChatSettings): JSX.Element => {
             </div>
             <ul className="member-list">
                 {chat.members.map((item) => {
-                    if (item.user.uid === user.uid) return;
+                    if (item.profile.uid === user.uid) return;
 
                     return (
-                        <li className="member" key={item.user.uid}>
+                        <li className="member" key={item.profile.uid}>
                             <div className="profile">
-                                <Asset url={item.user.img_url} alt={item.user.username} />
-                                <span>{item.user.username}</span>
+                                <Asset url={item.profile.img_url} alt={item.profile.username} />
+                                <span>{item.profile.username}</span>
                             </div>
                             <div className="actions">
                                 <div className="ban">
-                                    <button onClick={() => banMember(item.user.uid)}>
+                                    <button onClick={() => banMember(item.profile.uid)}>
                                         Ban
                                     </button>
                                     <input
@@ -91,7 +91,7 @@ const ChatSettings = ({ chat, user }: IChatSettings): JSX.Element => {
                                 <div className="divider" />
                                 <div className="mute">
                                     <button
-                                        onClick={() => muteMember(item.user.uid)}
+                                        onClick={() => muteMember(item.profile.uid)}
                                     >
                                         Mute
                                     </button>
@@ -108,7 +108,7 @@ const ChatSettings = ({ chat, user }: IChatSettings): JSX.Element => {
                                     <>
                                         <button
                                             onClick={() =>
-                                                makeMemberAdmin(item.user.uid)
+                                                makeMemberAdmin(item.profile.uid)
                                             }
                                             className="admin"
                                         >

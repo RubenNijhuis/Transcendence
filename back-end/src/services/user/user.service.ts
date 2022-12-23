@@ -72,12 +72,15 @@ export class UserService {
 
   async getUsersSortedOnElo(): Promise<User[]> {
     try {
-      const returnedUser: User[] = await this.userRepository.find({
+      const returnedUsers: User[] = await this.userRepository.find({
         order: {
           elo: "DESC"
         }
       });
-      return Promise.resolve(returnedUser);
+      const filteredUsers = returnedUsers.map((profile) =>
+        this.filterUser(profile)
+      );
+      return Promise.resolve(filteredUsers);
     } catch (err) {
       throw err;
     }
@@ -230,10 +233,7 @@ export class UserService {
     }
   }
 
-  async setRefreshToken(
-    intraID: string,
-    token: string
-  ): Promise<UpdateResult> {
+  async setRefreshToken(intraID: string, token: string): Promise<UpdateResult> {
     try {
       const user: User = await this.findUserByintraId(intraID);
       const hashedToken: string = createHash("sha256")

@@ -7,9 +7,6 @@ import Layout from "../../components/Layout";
 import Podium from "../../containers/Leaderboard/Podium";
 import RankingList from "../../containers/Leaderboard/RankingList";
 
-// DEBUG
-import { useFakeData } from "../../contexts/FakeDataContext";
-
 // Proxy
 import { getLeaderboard } from "../../proxies/leaderboard";
 
@@ -26,14 +23,19 @@ const Leaderboard = (): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
-    const { leaderBoard } = useFakeData(); //Do I delete this?
-
-    ////////////////////////////////////////////////////////////
-
     useEffect(() => {
-        setLeaderboard(leaderBoard);
-        getLeaderboard().then(setLeaderboard).catch(console.log);
-    }, [leaderBoard]);
+        if (leaderboard !== null) return;
+        const retrieveLeaderboard = async () => {
+            try {
+                const retrievedLeaderboard = await getLeaderboard();
+                console.log(retrievedLeaderboard);
+                setLeaderboard(retrievedLeaderboard);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        retrieveLeaderboard();
+    }, []);
 
     ////////////////////////////////////////////////////////////
 

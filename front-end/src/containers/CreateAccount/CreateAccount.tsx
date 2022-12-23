@@ -1,12 +1,16 @@
+// React
+import { useState } from "react";
+
 // UI
 import Button from "../../components/Button";
 import Heading from "../../components/Heading";
+import ColorPicker from "../../components/ColorPicker";
 
 // Styling
 import {
     CreateAccountForm,
     StyledError,
-    StyledInput,
+    StyledInput
 } from "./CreateAccount.style";
 
 // Box slider
@@ -16,7 +20,6 @@ import Slide from "../../components/BoxSlider/Slide/Slide";
 // Routes
 import ApiRoutes from "../../config/ApiRoutes";
 
-// DEBUG
 import { useFormInput } from "../../components/Form/hooks";
 
 // Context
@@ -24,8 +27,6 @@ import { useUser } from "../../contexts/UserContext";
 
 // Business logic
 import { handleAccountCreation, handleImageUpload } from "./CreateAccount.bl";
-import { useState } from "react";
-import ColorPicker from "../../components/ColorPicker";
 
 ////////////////////////////////////////////////////////////
 
@@ -55,6 +56,9 @@ const CreateAccount = (): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
+    /**
+     * Send account detals to back-end for account creation
+     */
     const sendAccountDetails = async () => {
         try {
             const user = await handleAccountCreation({
@@ -71,15 +75,13 @@ const CreateAccount = (): JSX.Element => {
 
     const handleColorPicker = (input: string) => {
         setColor(input);
-    }
+    };
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
     };
 
-    const slideChangeEffect = () => {
-        console.log("slide change!");
-    };
+    const slideChangeEffect = () => {};
 
     ////////////////////////////////////////////////////////////
 
@@ -128,11 +130,12 @@ const CreateAccount = (): JSX.Element => {
                 </Slide>
                 <Slide>
                     <StyledInput>
-                        <label style={{color: color}}>
-                            Choose a Color
-                        </label>
+                        <label style={{ color: color }}>Choose a Color</label>
                         {error && <ErrorMessage message={error} />}
-                        <ColorPicker color={color} handler={handleColorPicker} />
+                        <ColorPicker
+                            color={color}
+                            handler={handleColorPicker}
+                        />
                     </StyledInput>
                 </Slide>
                 <Slide>

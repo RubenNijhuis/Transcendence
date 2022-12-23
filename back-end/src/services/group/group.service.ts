@@ -1,25 +1,37 @@
+// Nestjs
 import { forwardRef, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+
 import { DeleteResult, Repository } from "typeorm";
+
+// Crypto
 import * as bcrypt from "bcrypt";
 import { createHash } from "crypto";
 
+// Entitity
+import { User } from "src/entities";
 import Group from "src/entities/group/group.entity";
 import GroupUser from "../../entities/groupuser/groupuser.entity";
 import Message from "src/entities/message/message.entity";
+
+// Services
 import { UserService } from "../user/user.service";
 import { MessageService } from "../message/message.service";
+
+// Error handler
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
 
+// Dto's
 import { MakeAdminDto } from "src/dtos/group/make-admin.dto";
 import { EditMembersDto } from "src/dtos/group/edit-members.dto";
 import { EditOwnerDto } from "src/dtos/group/edit-owner.dto";
 import { CreateGroupDto } from "../../dtos/group/create-group.dto";
 import { SetPasswordDto } from "../../dtos/group/set-password.dto";
-import { User } from "src/entities";
 import { RemoveGroupDto } from "src/dtos/group/remove-group.dto";
 import { ValidatePasswordDto } from "src/dtos/group/validate-password";
 import { SetPermissionDto } from "src/dtos/group/set-permission.dto";
+
+////////////////////////////////////////////////////////////
 
 @Injectable()
 export class GroupService {
@@ -32,6 +44,8 @@ export class GroupService {
     @Inject(forwardRef(() => MessageService))
     private readonly messageService: MessageService
   ) {}
+
+  ////////////////////////////////////////////////////////////
 
   // only used for debug purposes
   async getGroups(): Promise<Group[]> {
@@ -78,7 +92,6 @@ export class GroupService {
         .where({ memberId: userId })
         .getMany();
 
-      // Doet dit niet exact hetzlefde als de vorige code?
       let i = 0;
       const groups: Group[] = [];
       while (i < groupUsers.length) {
@@ -106,8 +119,7 @@ export class GroupService {
     }
   }
 
-  // TODO: return type and no one liners pls
-  async findGroupuserById(userId: string, groupId: string) {
+  async findGroupuserById(userId: string, groupId: string): Promise<GroupUser> {
     const groupuser: GroupUser = await this.groupuserRepository
       .createQueryBuilder("groupuser")
       .where({ groupId })
@@ -116,7 +128,7 @@ export class GroupService {
     return groupuser;
   }
 
-  async hashPassword(input: string) {
+  async hashPassword(input: string): Promise<string> {
     const hash1 = createHash("sha256").update(input).digest("hex");
     const saltOrRounds = 10;
     const password: string = await bcrypt.hash(hash1, saltOrRounds);
@@ -165,11 +177,13 @@ export class GroupService {
     }
   }
 
-  async removeGroup(owner: string, removeGroupDto: RemoveGroupDto) {
+  async removeGroup(
+    owner: string,
+    removeGroupDto: RemoveGroupDto
+  ): Promise<void> {
     try {
       const group: Group = await this.findGroupById(removeGroupDto.groupId);
 
-      // This needs to be taken from access token
       if (group.owner !== owner) return;
 
       this.groupRepository
@@ -182,7 +196,11 @@ export class GroupService {
     }
   }
 
-  async addMembers(owner: string, groupId: string, users: string[]) {
+  async addMembers(
+    owner: string,
+    groupId: string,
+    users: string[]
+  ): Promise<void> {
     try {
       const group: Group = await this.findGroupById(groupId);
       if (owner !== group.owner) return;
@@ -192,7 +210,9 @@ export class GroupService {
         const groupuser = this.groupuserRepository.create();
 
         groupuser.group = group;
-        groupuser.profile = await this.userService.findUsersByIdNoFilter(member);
+        groupuser.profile = await this.userService.findUsersByIdNoFilter(
+          member
+        );
         groupuser.groupId = groupId;
         groupuser.memberId = member;
         groupuser.permissions = 0;
@@ -208,17 +228,18 @@ export class GroupService {
   }
 
   // TODO: rename to set owner
-  async addOwner(groupId: string, owner: string) {
+  async setOwner(groupId: string, owner: string) {
     try {
       const group: Group = await this.findGroupById(groupId);
 
       const groupuser = this.groupuserRepository.create();
 
+      // TODO: can't these be set inmediatly in the create?
       groupuser.group = group;
       groupuser.profile = await this.userService.findUsersByIdNoFilter(owner);
       groupuser.groupId = groupId;
       groupuser.memberId = owner;
-      groupuser.permissions = 2;
+      groupuser.permissions = 2; // TODO: Use an enum svp
 
       return this.groupuserRepository.save(groupuser);
     } catch (err) {
@@ -230,32 +251,62 @@ export class GroupService {
     }
   }
 
+  /**
+   * Checks if two passwords match
+   * @param formerPassword
+   * @param newPassword
+   * @returns boolean
+   */
+  async passwordsMatch(
+    formerPassword: string,
+    newPassword: string
+  ): Promise<boolean> {
+    try {
+      const hashedFormerPassword: string = await this.hashPassword(
+        formerPassword
+      );
+      const hashedPasswordFromDto: string = await this.hashPassword(
+        newPassword
+      );
+
+      // Get the has from the original password
+      const isMatch = await bcrypt.compare(
+        hashedFormerPassword,
+        hashedPasswordFromDto
+      );
+
+      return isMatch;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   async setPassword(owner: string, setPasswordDto: SetPasswordDto) {
     try {
       // Get group from db
       const group: Group = await this.findGroupById(setPasswordDto.id);
-      if (!group) return console.error("group doesn't exist"); //error lol
-      if (owner !== group.owner)
+      //error lol
+      if (!group) {
+        return console.error("group doesn't exist");
+      }
+      if (owner !== group.owner) {
         return console.error("no permission to do this");
+      }
+
       /**
        * If there is already a previous password we compare the new password
        * to the former. If they match we return an error as a password
        * should always be new.
        */
       if (group.password !== null) {
-        const formerPassword = group.password;
-        const hashedFormerPassword: string = await this.hashPassword(
-          formerPassword
-        );
-        const hashedPasswordFromDto: string = await this.hashPassword(
+        const isMatch = this.passwordsMatch(
+          group.password,
           setPasswordDto.password
         );
-        // Get the has from the original password
-        const isMatch = await bcrypt.compare(
-          hashedFormerPassword,
-          hashedPasswordFromDto
-        );
-        if (isMatch) return console.error("error lol");
+
+        if (isMatch) {
+          return console.error("error lol");
+        }
       }
 
       const newPassword = await this.hashPassword(setPasswordDto.password);

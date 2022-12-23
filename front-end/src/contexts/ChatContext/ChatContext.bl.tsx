@@ -11,8 +11,7 @@ const getMembersFromGroupChats = async (
 
     for (const chat of chats) {
         for (let member of chat.members) {
-
-            member.user = await addImagesToProfile(member.user, {
+            member.profile = await addImagesToProfile(member.profile, {
                 profile: true,
                 banner: false,
             });
@@ -44,7 +43,7 @@ const findMemberByProfileID = (
 ): Chat.Member => {
     // Could return undefined but should always find it anyway so what gives
     const profile = members.find((member) => {
-        return member.user.uid === id;
+        return member.profile.uid === id;
     }) as Chat.Member;
 
     return profile;
@@ -61,7 +60,7 @@ const bindMembersToMessages = (
             const message = messageList[j];
             const { senderID } = message;
 
-            message.sender = findMemberByProfileID(senderID, members[i]).user;
+            message.sender = findMemberByProfileID(senderID, members[i]).profile;
         }
     }
 };

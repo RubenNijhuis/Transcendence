@@ -9,7 +9,12 @@ import { UserModule } from "../user/user.module";
 
 @Module({
   imports: [UserModule, ConfigModule.forRoot()],
-  providers: [AuthService, JwtService, RefreshTokenStrategy, AccessTokenStrategy],
+  providers: [
+    AuthService,
+    JwtService,
+    RefreshTokenStrategy,
+    AccessTokenStrategy
+  ],
   controllers: [AuthController]
 })
 export class AuthModule {}

@@ -49,7 +49,7 @@ namespace Chat {
         id: number;
         groupId: string
         memberId: string;
-        user: Profile.Instance
+        profile: Profile.Instance
         permissions: Chat.Group.Permission;
     }
     

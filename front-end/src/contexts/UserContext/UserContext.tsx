@@ -5,8 +5,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { Profile } from "../../types";
 
 // Debug
-import Logger, { LogTypes } from "../../modules/Logger";
-import { generateProfile } from "../FakeDataContext/fakeDataGenerators";
 import { getFriendsByUsername } from "../../proxies/friend";
 
 ///////////////////////////////////////////////////////////
@@ -45,8 +43,6 @@ const UserProvider = ({
         if (!user) return;
 
         const getFriends = async () => {
-            Logger(LogTypes.AUTH, "User context", "User object", user);
-    
             const retrievedFriends = await getFriendsByUsername(user.username)
             setFriends(retrievedFriends);
         }

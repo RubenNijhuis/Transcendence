@@ -46,7 +46,7 @@ export class GroupseederService {
           pass
         );
         await this.groupServ.addMembers(users[i].uid, group.uid, members);
-        await this.groupServ.addOwner(group.uid, users[i].uid);
+        await this.groupServ.setOwner(group.uid, users[i].uid);
       }
     } catch (err) {
       throw err;

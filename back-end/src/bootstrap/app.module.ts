@@ -10,12 +10,12 @@ import { AuthModule } from "src/modules/authentication/auth.module";
 import { MessageModule } from "src/modules/message/message.module";
 import { GroupModule } from "src/modules/group/group.module";
 import { TfaModule } from "src/modules/tfa/tfa.module";
-import { RecordModule } from "src/modules/record/record.module"
+import { RecordModule } from "src/modules/record/record.module";
 import { MatchHistoryModule } from "src/modules/matchhistory/matchhistory.module";
 import { SeederModule } from "src/modules/seeder/seeder.module";
-import { WebSocketModule } from "src/modules/websocket/websocket.module";
+import { ChatModule } from "src/modules/chat/chat.module";
 import { BlockListModule } from "src/modules/blocklist/blocklist.module";
-
+import { GameModule } from "src/modules/game/game.module";
 
 @Module({
   imports: [
@@ -31,9 +31,10 @@ import { BlockListModule } from "src/modules/blocklist/blocklist.module";
     RecordModule,
     MatchHistoryModule,
     SeederModule,
-    WebSocketModule,
+    GameModule,
+    // ChatModule,
     PassportModule.register({ session: true }),
-	BlockListModule,
+    BlockListModule
   ],
   controllers: [],
   providers: []

@@ -4,6 +4,7 @@ import ApiRoutes from "../../config/ApiRoutes";
 
 // Types
 import { Profile } from "../../types";
+import { addImagesToProfile } from "../profile";
 
 ////////////////////////////////////////////////////////////
 
@@ -16,6 +17,13 @@ const getLeaderboard = async (): Promise<Profile.Instance[]> => {
         const route = ApiRoutes.getLeaderboard();
 
         const { data } = await API.get<Profile.Instance[]>(route);
+
+        for (let profile of data) {
+            profile = await addImagesToProfile(profile, {
+                profile: true,
+                banner: false
+            });
+        }
 
         return Promise.resolve(data);
     } catch (err) {

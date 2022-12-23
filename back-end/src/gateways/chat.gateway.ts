@@ -1,11 +1,25 @@
 import {
+  ConnectedSocket,
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer
 } from "@nestjs/websockets";
-import { Socket, Server } from "socket.io";
-import { Logger } from "@nestjs/common";
+import { Server, Socket } from "socket.io";
+
+// Services
+import { GroupService } from "src/services/group/group.service";
+import { UserService } from "src/services/user/user.service";
+import { MessageService } from "src/services/message/message.service";
+
+// Room manager
+import RoomManager from "./RoomManager";
+
+interface JoinRoomPayload {
+  groupId: string;
+}
+
+////////////////////////////////////////////////////////////
 
 @WebSocketGateway(3002, {
   cors: {
@@ -15,21 +29,44 @@ import { Logger } from "@nestjs/common";
 })
 export class ChatSocketGateway {
   @WebSocketServer()
-  server: Server;
+  connection: Server;
 
-  private logger: Logger = new Logger("ChatSocketGateway");
+  private roomManager: RoomManager;
 
-  afterInit(server: Server) {
-    this.logger.log("Initialized");
+  constructor(
+    private readonly groupService: GroupService,
+    private readonly userService: UserService,
+    private readonly messageService: MessageService
+  ) {
+    this.roomManager = new RoomManager(this.connection);
   }
+
+  ////////////////////////////////////////////////////////////
 
   @SubscribeMessage("connectionCheck")
   healthCheck(): void {
-    this.server.emit("connectionCheck", true);
+    this.connection.emit("connectionCheck", true);
   }
 
-  @SubscribeMessage("newMessage")
-  newMessage(@MessageBody() message: string): void {
-    this.server.emit("newMessage", message);
+  @SubscribeMessage("joinRoom")
+  async joinRoom(
+    @MessageBody() joinRoomPayload: JoinRoomPayload,
+    @ConnectedSocket() client: Socket
+  ): Promise<void> {
+    const group = await this.groupService.findGroupById(
+      joinRoomPayload.groupId
+    );
+
+    if (!group) client.emit("error", "Group/Chat not found by id");
+
+    this.roomManager.addClientToRoom(group.uid, client);
   }
+
+  //   @SubscribeMessage("sendMessage")
+  //   async newMessage(
+  //     @MessageBody() sendMessagePayload: SendMessagePayload,
+  //     @ConnectedSocket() client: Socket
+  //   ): Promise<void> {
+  //     this.roomManager.
+  //   }
 }

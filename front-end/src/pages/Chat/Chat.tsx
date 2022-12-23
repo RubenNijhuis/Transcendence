@@ -8,6 +8,7 @@ import { Container } from "./Chat.style";
 
 // Context
 import { useChat } from "../../contexts/ChatContext";
+import Heading from "../../components/Heading";
 
 ///////////////////////////////////////////////////////////
 
@@ -16,8 +17,17 @@ const ChatPage = (): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
+    console.log(activeChat);
+
     return (
         <Layout>
+            {/* If no chats have been created yet. We display a message */}
+            {!activeChat && (
+                <>
+                    <Heading type={2}>No chats retrieved from database</Heading>
+                    <p>Go touch grass</p>
+                </>
+            )}
             <Container>
                 {activeChat && (
                     <ChatSelector

@@ -16,7 +16,6 @@ import {
 import { Request } from "express";
 
 // DTO's
-import { EditOwnerDto } from "src/dtos/group";
 import { SetPermissionDto } from "src/dtos/group/set-permission.dto";
 import { EditMembersDto } from "src/dtos/group/edit-members.dto";
 import { CreateGroupDto } from "../../dtos/group/create-group.dto";
@@ -52,18 +51,7 @@ export class GroupController {
     private readonly recordService: RecordService
   ) {}
 
-  ////////////////////////////////////////////////////////////
-  // uid - user -> [groups] (main call)
-  // uid - group -> group
-
-  // main call
-  // 1. alle groups
-  // per group
-  // - alle messages
-  // - alle users -> voledige account
-
-  // TOE VOEGEN USERS
-  // users -> range functie voor users aanvragen met [uid]
+  ////////////////////////////////////////////////////////
 
   // PREFIX MAKEN VOOR PARAMETER CALLS
   @Get("")
@@ -181,7 +169,7 @@ export class GroupController {
 
       // TODO: why does the owner need to be set if it's done
       // in the create group service func?
-      await this.groupService.addOwner(groupId, owner);
+      await this.groupService.setOwner(groupId, owner);
 
       return HttpStatus.OK;
     } catch (err) {

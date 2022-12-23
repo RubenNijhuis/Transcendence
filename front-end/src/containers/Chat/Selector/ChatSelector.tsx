@@ -30,8 +30,8 @@ interface IMemberList {
 const MemberList = ({ members }: IMemberList): JSX.Element => {
     return (
         <ul>
-            {members.map(({ user }) => {
-                const { img_url, uid, username } = user;
+            {members.map(({ profile }) => {
+                const { img_url, uid, username } = profile;
                 return (
                     <li className="profile" key={uid}>
                         <Asset url={img_url} alt="profile" />
@@ -47,7 +47,9 @@ interface IChatTypeSelector {
     activeType: Chat.Group.Type;
     setActiveType: React.Dispatch<React.SetStateAction<Chat.Group.Type>>;
 }
-
+/**
+ * UI Box that let's the user switch between the dm's and groups
+ */
 const ChatTypeSelector = ({
     activeType,
     setActiveType
@@ -89,6 +91,9 @@ interface IDirectMessageList {
     setSelectedChat: React.Dispatch<React.SetStateAction<Chat.Group.Instance>>;
 }
 
+/**
+ * My bad awful name for the component but displays the list of groups or dms
+ */
 const DirectMessages = ({
     selectedChatType,
     directChats,
@@ -133,7 +138,7 @@ const DirectMessages = ({
             {selectedChatList &&
                 selectedChatList.map(({ name, members, internal_id }) => {
                     const otherMembers: Chat.Member[] = members.filter(
-                        (member) => member.user.username !== user!.username
+                        (member) => member.profile.username !== user!.username
                     );
 
                     const isActive = internal_id === selectedChatId;
@@ -166,6 +171,9 @@ interface IChatSelector {
     setSelectedChat: React.Dispatch<React.SetStateAction<Chat.Group.Instance>>;
 }
 
+/**
+ * Container component that lets you select a chat
+ */
 const ChatSelector = ({
     directChats,
     groupChats,
