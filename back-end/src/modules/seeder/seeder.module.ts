@@ -27,6 +27,6 @@ import Group from "src/entities/group/group.entity";
     GroupModule
   ],
   controllers: [SeederController],
-  providers: [UserSeederService, FriendSeederService, GroupseederService],
+  providers: [UserSeederService, FriendSeederService, GroupseederService]
 })
 export class SeederModule {}
