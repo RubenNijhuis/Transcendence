@@ -1,4 +1,5 @@
 import { forwardRef, Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { MessageController } from "src/controllers/message/message.controller";
 import Message from "src/entities/message/message.entity";
@@ -8,7 +9,13 @@ import { RecordModule } from "../record/record.module";
 import { UserModule } from "../user/user.module";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Message]), forwardRef(() => GroupModule), RecordModule, UserModule],
+  imports: [
+    TypeOrmModule.forFeature([Message]),
+    ConfigModule.forRoot(),
+    forwardRef(() => GroupModule),
+    RecordModule,
+    UserModule
+  ],
   controllers: [MessageController],
   providers: [MessageService],
   exports: [MessageService]

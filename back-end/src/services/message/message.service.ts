@@ -1,12 +1,5 @@
-import {
-  forwardRef,
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable
-} from "@nestjs/common";
+import { forwardRef, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { CreateMessageDto } from "src/dtos/group/create-message.dto";
 import Group from "src/entities/group/group.entity";
 import Message from "src/entities/message/message.entity";
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
@@ -18,18 +11,18 @@ import { RecordService } from "../record/record.service";
 export class MessageService {
   constructor(
     @InjectRepository(Message)
-    private readonly chatRepository: Repository<Message>,
+    private readonly messageRepository: Repository<Message>,
     @Inject(forwardRef(() => GroupService))
     private readonly groupService: GroupService,
     private readonly recordService: RecordService
   ) {}
 
   getAllMessages() {
-    return this.chatRepository.find();
+    return this.messageRepository.find();
   }
 
   async getAllMessagesByGroupId(id: string): Promise<Message[]> {
-    const allMessages: Message[] = await this.chatRepository
+    const allMessages: Message[] = await this.messageRepository
       .createQueryBuilder("message")
       .where({ groupId: id })
       .getMany();
@@ -54,8 +47,8 @@ export class MessageService {
         content_type: content_type,
         sender: null
       };
-      const newChat = this.chatRepository.create(query);
-      return this.chatRepository.save(newChat);
+      const newChat = this.messageRepository.create(query);
+      return this.messageRepository.save(newChat);
     } catch (err) {
       throw errorHandler(err, "something", HttpStatus.FORBIDDEN);
     }

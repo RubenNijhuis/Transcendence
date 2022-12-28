@@ -2,7 +2,7 @@
 import { forwardRef, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 
-import { DeleteResult, Repository } from "typeorm";
+import { Repository } from "typeorm";
 
 // Crypto
 import * as bcrypt from "bcrypt";
@@ -22,10 +22,7 @@ import { MessageService } from "../message/message.service";
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
 
 // Dto's
-import { MakeAdminDto } from "src/dtos/group/make-admin.dto";
 import { EditMembersDto } from "src/dtos/group/edit-members.dto";
-import { EditOwnerDto } from "src/dtos/group/edit-owner.dto";
-import { CreateGroupDto } from "../../dtos/group/create-group.dto";
 import { SetPasswordDto } from "../../dtos/group/set-password.dto";
 import { RemoveGroupDto } from "src/dtos/group/remove-group.dto";
 import { ValidatePasswordDto } from "src/dtos/group/validate-password";
@@ -61,7 +58,7 @@ export class GroupService {
     return this.groupRepository.findOne({ where: { uid } });
   }
 
-  async getGroup(userId: string, groupId: string) {
+  async getGroup(groupId: string) {
     try {
       const group: Group = await this.findGroupById(groupId);
       const groupUsers: GroupUser[] = await this.groupuserRepository
@@ -95,7 +92,7 @@ export class GroupService {
       let i = 0;
       const groups: Group[] = [];
       while (i < groupUsers.length) {
-        const group: Group = await this.getGroup(userId, groupUsers[i].groupId);
+        const group: Group = await this.getGroup(groupUsers[i].groupId);
         groups.push(group);
         i++;
       }
