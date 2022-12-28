@@ -2,10 +2,10 @@ import { IsNotEmpty } from "class-validator";
 
 export class SetPermissionDto {
   @IsNotEmpty()
-  user: string;
+  targetUser: string;
 
   @IsNotEmpty()
-  group: string;
+  groupId: string;
 
   @IsNotEmpty()
   level: number;

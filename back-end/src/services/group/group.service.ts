@@ -21,13 +21,6 @@ import { MessageService } from "../message/message.service";
 // Error handler
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
 
-// Dto's
-import { EditMembersDto } from "src/dtos/group/edit-members.dto";
-import { SetPasswordDto } from "../../dtos/group/set-password.dto";
-import { RemoveGroupDto } from "src/dtos/group/remove-group.dto";
-import { ValidatePasswordDto } from "src/dtos/group/validate-password";
-import { SetPermissionDto } from "src/dtos/group/set-permission.dto";
-
 ////////////////////////////////////////////////////////////
 
 @Injectable()
@@ -174,19 +167,16 @@ export class GroupService {
     }
   }
 
-  async removeGroup(
-    owner: string,
-    removeGroupDto: RemoveGroupDto
-  ): Promise<void> {
+  async removeGroup(owner: string, groupId: string): Promise<void> {
     try {
-      const group: Group = await this.findGroupById(removeGroupDto.groupId);
+      const group: Group = await this.findGroupById(groupId);
 
       if (group.owner !== owner) return;
 
       this.groupRepository
         .createQueryBuilder("group")
         .delete()
-        .where({ id: removeGroupDto.groupId })
+        .where({ id: groupId })
         .execute();
     } catch (error: any) {
       throw error;
@@ -262,14 +252,12 @@ export class GroupService {
       const hashedFormerPassword: string = await this.hashPassword(
         formerPassword
       );
-      const hashedPasswordFromDto: string = await this.hashPassword(
-        newPassword
-      );
+      const hashedNewPassword: string = await this.hashPassword(newPassword);
 
       // Get the has from the original password
       const isMatch = await bcrypt.compare(
         hashedFormerPassword,
-        hashedPasswordFromDto
+        hashedNewPassword
       );
 
       return isMatch;
@@ -278,10 +266,10 @@ export class GroupService {
     }
   }
 
-  async setPassword(owner: string, setPasswordDto: SetPasswordDto) {
+  async setPassword(owner: string, groupId: string, newPassword: string) {
     try {
       // Get group from db
-      const group: Group = await this.findGroupById(setPasswordDto.id);
+      const group: Group = await this.findGroupById(groupId);
       //error lol
       if (!group) {
         return console.error("group doesn't exist");
@@ -296,25 +284,22 @@ export class GroupService {
        * should always be new.
        */
       if (group.password !== null) {
-        const isMatch = this.passwordsMatch(
-          group.password,
-          setPasswordDto.password
-        );
+        const isMatch = this.passwordsMatch(group.password, newPassword);
 
         if (isMatch) {
           return console.error("error lol");
         }
       }
 
-      const newPassword = await this.hashPassword(setPasswordDto.password);
+      const newPasswordHashed = await this.hashPassword(newPassword);
 
       // Update the password in the database
       await this.groupRepository
         .createQueryBuilder()
         .update()
-        .set({ password: newPassword })
+        .set({ password: newPasswordHashed })
         .where({
-          id: setPasswordDto.id
+          id: groupId
         })
         .execute();
     } catch (err) {
@@ -326,16 +311,12 @@ export class GroupService {
     }
   }
 
-  async validatePassword(
-    validatePasswordDto: ValidatePasswordDto
-  ): Promise<boolean> {
+  async validatePassword(groupId: string, password: string): Promise<boolean> {
     try {
       let isPasswordValid = false;
 
-      const hash: string = await this.hashPassword(
-        validatePasswordDto.password
-      );
-      const group: Group = await this.findGroupById(validatePasswordDto.id);
+      const hash: string = await this.hashPassword(password);
+      const group: Group = await this.findGroupById(groupId);
 
       isPasswordValid = await bcrypt.compare(hash, group.password);
 
@@ -353,29 +334,28 @@ export class GroupService {
   // E.g remove members and a cleanup function that runs after
   async removeMembers(
     owner: string,
-    editMembersDto: EditMembersDto
+    groupId: string,
+    members: string[]
   ): Promise<void> {
     try {
       // What is `i`? "I don't know.. didn't write this" -Jules
       let i: number;
       let isRemovable = true;
-      for (const member of editMembersDto.users) {
+      for (const member of members) {
         if (member === owner) {
           isRemovable = false;
         }
         this.groupuserRepository
           .createQueryBuilder("groupuser")
           .delete()
-          .where({ groupId: editMembersDto.groupId })
+          .where({ groupId: groupId })
           .andWhere({ userId: member })
           .execute();
       }
 
-      const size: number = await this.getGroupSize(editMembersDto.groupId);
+      const size: number = await this.getGroupSize(groupId);
       if (size == i || isRemovable) {
-        const groupId = editMembersDto.groupId;
-        const removegroupDto: RemoveGroupDto = { groupId, owner };
-        this.removeGroup(owner, removegroupDto);
+        this.removeGroup(owner, groupId);
       }
     } catch (err) {
       throw errorHandler(
@@ -386,18 +366,23 @@ export class GroupService {
     }
   }
 
-  async setPermission(owner: string, setPermissionDto: SetPermissionDto) {
+  async setPermission(
+    owner: string,
+    groupId: string,
+    userId: string,
+    level: number
+  ) {
     try {
       const groupuser: GroupUser = await this.groupuserRepository
         .createQueryBuilder("groupuser")
-        .where({ groupId: setPermissionDto.group })
-        .andWhere({ userId: setPermissionDto.user })
+        .where({ groupId: groupId })
+        .andWhere({ userId: userId })
         .getOne();
 
-      const group: Group = await this.findGroupById(setPermissionDto.group);
+      const group: Group = await this.findGroupById(groupId);
 
       if (groupuser && group.owner === owner) {
-        groupuser.permissions = setPermissionDto.level;
+        groupuser.permissions = level;
       }
 
       return this.groupuserRepository.save(groupuser);

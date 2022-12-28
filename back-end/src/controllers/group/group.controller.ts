@@ -104,7 +104,11 @@ export class GroupController {
       const intraID = req.user["intraID"];
       const user: User = await this.userService.findUserByintraId(intraID);
 
-      await this.groupService.setPassword(user.uid, setPasswordDto);
+      await this.groupService.setPassword(
+        user.uid,
+        setPasswordDto.groupId,
+        setPasswordDto.password
+      );
       return HttpStatus.OK;
     } catch (err) {
       throw err;
@@ -118,7 +122,10 @@ export class GroupController {
     @Body() validatePasswordDto: ValidatePasswordDto
   ): Promise<boolean> {
     try {
-      return await this.groupService.validatePassword(validatePasswordDto);
+      return await this.groupService.validatePassword(
+        validatePasswordDto.groupId,
+        validatePasswordDto.password
+      );
     } catch (err) {
       throw err;
     }
@@ -183,7 +190,7 @@ export class GroupController {
       const intraID = req.user["intraID"];
       const user: User = await this.userService.findUserByintraId(intraID);
 
-      await this.groupService.removeGroup(user.uid, removeGroupDto);
+      await this.groupService.removeGroup(user.uid, removeGroupDto.groupId);
       return HttpStatus.OK;
     } catch (err) {
       throw err;
@@ -226,7 +233,11 @@ export class GroupController {
       const intraID = req.user["intraID"];
       const user: User = await this.userService.findUserByintraId(intraID);
 
-      await this.groupService.removeMembers(user.uid, editMembersDto);
+      await this.groupService.removeMembers(
+        user.uid,
+        editMembersDto.groupId,
+        editMembersDto.users
+      );
       return HttpStatus.OK;
     } catch (err) {
       throw err;
@@ -245,7 +256,12 @@ export class GroupController {
       const intraID = req.user["intraID"];
       const user: User = await this.userService.findUserByintraId(intraID);
 
-      await this.groupService.setPermission(user.uid, setPermissionDto);
+      await this.groupService.setPermission(
+        user.uid,
+        setPermissionDto.groupId,
+        setPermissionDto.targetUser,
+        setPermissionDto.level
+      );
       return HttpStatus.OK;
     } catch (err) {
       throw err;
