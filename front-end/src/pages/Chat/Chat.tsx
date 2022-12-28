@@ -17,8 +17,6 @@ const ChatPage = (): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
-    console.log(activeChat);
-
     return (
         <Layout>
             {/* If no chats have been created yet. We display a message */}

@@ -33,7 +33,6 @@ class RoomManager {
   }
 
   // Profile /////////////////////////////////////////////////
-
   addProfile(profile: Match.PlayerProfile): void {
     this.profiles.push(profile);
   }
@@ -42,7 +41,7 @@ class RoomManager {
     const profileIndex = this.profiles.findIndex((item) => {
       return item.uid === uid;
     });
-    console.log(this.profiles.slice(profileIndex, 1));
+    this.profiles.slice(profileIndex, 1);
   }
 
   removeProfileBySocketId(socketId: string) {
@@ -53,7 +52,6 @@ class RoomManager {
   }
 
   // Rooms ///////////////////////////////////////////////////
-
   removeClientFromRoom(roomID: string, connection: Socket): void {
     connection.leave(roomID);
   }
@@ -73,6 +71,20 @@ class RoomManager {
     });
 
     return this.rooms[roomIndex].profiles;
+  }
+
+  getRoomByProfileUid(profileUID: string): Room.Instance {
+    let returnedRoom: Room.Instance;
+
+    for (const room of this.rooms) {
+      for (const member of room.profiles) {
+        if (member.uid === profileUID) {
+          return room;
+        }
+      }
+    }
+
+    return returnedRoom;
   }
 
   calculateELODiff(elo1: number, elo2: number): boolean {

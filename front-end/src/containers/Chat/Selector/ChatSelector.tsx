@@ -6,7 +6,7 @@ import Asset from "../../../components/Asset";
 import Heading from "../../../components/Heading";
 
 // Types
-import { Profile, Chat } from "../../../types";
+import { Chat } from "../../../types";
 
 // Stylinh
 import {
