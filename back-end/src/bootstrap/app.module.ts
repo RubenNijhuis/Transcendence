@@ -31,8 +31,8 @@ import { GameModule } from "src/modules/game/game.module";
     RecordModule,
     MatchHistoryModule,
     SeederModule,
-    GameModule,
-    // ChatModule,
+    // GameModule,
+    ChatModule,
     PassportModule.register({ session: true }),
     BlockListModule
   ],

@@ -29,23 +29,22 @@ interface JoinRoomPayload {
 })
 export class ChatSocketGateway {
   @WebSocketServer()
-  connection: Server;
+  server: Server;
 
   private roomManager: RoomManager;
-
   constructor(
     private readonly groupService: GroupService,
     private readonly userService: UserService,
     private readonly messageService: MessageService
   ) {
-    this.roomManager = new RoomManager(this.connection);
+    this.roomManager = new RoomManager(this.server);
   }
 
   ////////////////////////////////////////////////////////////
 
   @SubscribeMessage("connectionCheck")
   healthCheck(): void {
-    this.connection.emit("connectionCheck", true);
+    this.server.emit("connectionCheck", true);
   }
 
   @SubscribeMessage("joinRoom")
@@ -53,13 +52,13 @@ export class ChatSocketGateway {
     @MessageBody() joinRoomPayload: JoinRoomPayload,
     @ConnectedSocket() client: Socket
   ): Promise<void> {
-    const group = await this.groupService.findGroupById(
-      joinRoomPayload.groupId
-    );
+    // const group = await this.groupService.findGroupById(
+    //   joinRoomPayload.groupId
+    // );
 
-    if (!group) client.emit("error", "Group/Chat not found by id");
+    // if (!group) client.emit("error", "Group/Chat not found by id");
 
-    this.roomManager.addClientToRoom(group.uid, client);
+    this.roomManager.addClientToRoom(joinRoomPayload.groupId, client);
   }
 
   //   @SubscribeMessage("sendMessage")

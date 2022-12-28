@@ -28,7 +28,6 @@ const Leaderboard = (): JSX.Element => {
         const retrieveLeaderboard = async () => {
             try {
                 const retrievedLeaderboard = await getLeaderboard();
-                console.log(retrievedLeaderboard);
                 setLeaderboard(retrievedLeaderboard);
             } catch (err) {
                 console.error(err);

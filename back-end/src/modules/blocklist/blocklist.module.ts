@@ -1,17 +1,25 @@
+// Nestjs
 import { Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
+
+// Entities
 import { User } from "src/entities";
+import BlockList from "../../entities/blocklist/blocklist.entity";
+
+// Blocklist
 import { BlocklistService } from "src/services/blocklist/blocklist.service";
 import { BlockListController } from "../../controllers/blocklist/blocklist.controller";
-import BlockList from "../../entities/blocklist/blocklist.entity";
+
+// User module
 import { UserModule } from "../user/user.module";
+
+///////////////////////////////////////////////////////////
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
     TypeOrmModule.forFeature([BlockList]),
-	UserModule,
+    UserModule
   ],
   controllers: [BlockListController],
   providers: [BlocklistService],
