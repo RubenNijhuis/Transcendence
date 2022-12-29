@@ -38,12 +38,17 @@ export class AuthService {
   // TODO: abstract axios into a proxy library
   // And also should this be async
   // TODO: dont return any type
-  getUserData(bearerToken: string): Promise<any> {
-    return Axios.get(this.configService.get("INTRA_GET_ME_URL"), {
-      headers: {
-        Authorization: `Bearer ${bearerToken}`
+  async getUserData(bearerToken: string): Promise<any> {
+    const userDataFromAuthParty = await Axios.get(
+      this.configService.get("INTRA_GET_ME_URL"),
+      {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`
+        }
       }
-    });
+    );
+
+    return userDataFromAuthParty;
   }
 
   jwtDecodeUsername(jwt: string): string {

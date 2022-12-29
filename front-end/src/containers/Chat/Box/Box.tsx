@@ -150,6 +150,10 @@ interface IChatBox {
 const ChatBox = ({ chat }: IChatBox): JSX.Element => {
     const [isUnlocked, setIsUnlocked] = useState<boolean>(false);
 
+    const [connectionMessages, setConnectionMessages] = useState<
+        Chat.Message.Instance[]
+    >([]);
+
     ////////////////////////////////////////////////////////
 
     const isDmChat = chat.members.length === 2;
@@ -166,7 +170,6 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
 
     ////////////////////////////////////////////////////////
 
-    // TODO: Abstract into business logic part
     useEffect(() => {
         createConnection(SocketType.Type.Chat);
     }, [chat]);
@@ -185,16 +188,25 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
         };
     }, [connection]);
 
-    const sendMessage = () => {
-        connection.emit("sendMessage", chat);
-    };
-
     ////////////////////////////////////////////////////////
 
     const setupConnections = (socket: SocketType.Instance) => {
-        socket.on(SocketRoutes.chat.receiveMessage(), (res) => {
-            console.log(res);
-        });
+        socket.on(
+            SocketRoutes.chat.receiveMessage(),
+            (newMessage: Chat.Message.Instance) => {
+                if (!newMessage) return;
+
+                const sender = chat.members.find(
+                    (member) => member.memberId === newMessage.senderID
+                );
+                console.log("found sender based on id", sender);
+                if (!sender) return;
+
+                newMessage.sender = sender.profile;
+
+                setConnectionMessages((prev) => [...prev, newMessage]);
+            }
+        );
     };
 
     const removeConnections = (socket: SocketType.Instance) => {
@@ -210,17 +222,20 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
                 isDmChat={isDmChat}
                 isUnlocked={isUnlocked}
             />
-            <Button onClick={sendMessage}>Send standard message</Button>
             <div className="chat-content">
-                {isUnlocked &&
-                    chat.messages.map((message, count) => (
-                        <ChatElement
-                            key={count}
-                            message={message}
-                            isDm={isDmChat}
-                            fromUser={message.sender.uid === user.uid}
-                        />
-                    ))}
+                {isUnlocked && (
+                    <>
+                        {[...chat.messages, ...connectionMessages].reverse().map((message) => (
+                            <ChatElement
+                                key={message.uid}
+                                message={message}
+                                isDm={isDmChat}
+                                fromUser={message.sender.uid === user.uid}
+                            />
+                        ))}
+                    </>
+                )}
+
                 {!isUnlocked && (
                     <PasswordInput
                         setIsUnlocked={setIsUnlocked}

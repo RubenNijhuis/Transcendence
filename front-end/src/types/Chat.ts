@@ -32,20 +32,20 @@ namespace Chat {
             game_type: Match.GameType;
             accepted: boolean;
         }
-
+        
         // Message interface
         export interface Instance {
+            groupId: string;
+            uid: number;
             content: MessageTypes;
             content_type: Message.ContentType;
-            timestamp: string;
+            createdDate: string;
             senderID: Profile.ProfileID;
             sender: Profile.Instance;
-            id: number;
-            uid: number;
         }
     }
 
-    export interface Member {
+    export interface Member{
         id: number;
         groupId: string
         memberId: string;

@@ -87,6 +87,8 @@ class RoomManager {
       data: null
     };
 
+    this._members.set(memberID, newMember);
+
     return newMember;
   }
 

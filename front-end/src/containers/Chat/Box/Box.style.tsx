@@ -40,6 +40,8 @@ const Container = styled.div`
     }
 
     .chat-content {
+        display: flex;
+        flex-direction: column-reverse;
         overscroll-behavior: contain;
         position: relative;
         padding: calc(${magicNum} / 4);

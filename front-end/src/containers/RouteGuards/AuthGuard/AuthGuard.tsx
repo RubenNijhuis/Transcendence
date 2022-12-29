@@ -52,7 +52,7 @@ const AuthGuard = () => {
                     setUser(profile);
                     return;
                 } catch (err) {
-                    // redirectToLogin();
+                    redirectToLogin();
                 }
             }
         };

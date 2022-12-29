@@ -79,12 +79,12 @@ const generateMessage = (
         const rand: number = randomNum(0, 3);
 
         const newMessage: Chat.Message.Instance = {
+            groupId: randomNum(0, 10000).toString(),
             content: generateNewMessageContent(sender, receiver, rand),
             content_type: rand,
-            timestamp: new Date().toString(),
+            createdDate: new Date().toString(),
             sender: generateProfile(1)[0],
             senderID: sender.uid,
-            id: i,
             uid
         };
 
@@ -114,7 +114,7 @@ const generateGroupChats = (
 
         const newGroup: Chat.Group.Instance = {
             name: "dikke lul",
-            owner: 'penis',
+            owner: "penis",
             uid: i.toString(),
             internal_id: i,
             members: [],

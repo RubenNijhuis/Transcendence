@@ -88,10 +88,6 @@ export class ChatSocketGateway {
     @ConnectedSocket() client: Socket
   ): Promise<void> {
     const member = this._roomManager.getMemberByConnectionID(client.id);
-    if (!member) {
-      client.emit("register", { status: false });
-      return;
-    }
 
     const room = await this.groupService.findGroupById(joinRoomPayload.roomID);
     if (!room) {
@@ -112,12 +108,6 @@ export class ChatSocketGateway {
 
     // TODO: check if member isn't muted in the chat
 
-    // Confirm to them that they registered
-    if (!member) {
-      client.emit("register", { status: false });
-      return;
-    }
-
     // If the member isn't part of a room then we block them from sending a message
     if (member.roomID === "unset") {
       client.emit("failure", {
@@ -127,14 +117,16 @@ export class ChatSocketGateway {
     }
 
     // Add the message to the database
-    this.messageService.createMessage(
+    const messageSaveResponse = await this.messageService.createMessage(
       member.uid,
       member.roomID,
       sendMessagePayload.content,
       sendMessagePayload.content_type
     );
 
+    delete messageSaveResponse["group"];
+
     // Send message to all other room members
-    client.emit("newMessage", sendMessagePayload.content);
+    client.emit("receiveMessage", messageSaveResponse);
   }
 }
