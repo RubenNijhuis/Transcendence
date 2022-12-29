@@ -69,7 +69,7 @@ export class UsersController {
     return await this.userService.getUsers();
   }
 
-  //@UseGuards(AccessTokenGuard)
+  @UseGuards(AccessTokenGuard)
   @Get("getLeaderboard")
   async getLeaderboard() {
     return await this.userService.getUsersSortedOnElo();
@@ -127,7 +127,6 @@ export class UsersController {
     }
   }
 
-  // TODO: set user must not update username if user is initialized
   @Post("setUser")
   @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
@@ -137,6 +136,10 @@ export class UsersController {
   ): Promise<any> {
     try {
       const intraID = req.user["intraID"];
+      const user: User = await this.userService.findUserByintraId(intraID);
+
+      if (!user || user.isInitialized === true) return;
+
       const setUserResp = await this.userService.setUser(
         intraID,
         SetUserDto.username,

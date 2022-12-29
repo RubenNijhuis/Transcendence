@@ -43,6 +43,8 @@ import { UnBanUserDto } from "src/dtos/record/unban-user.dto";
 ////////////////////////////////////////////////////////////
 
 @Controller("group")
+@UsePipes(ValidationPipe)
+@UseGuards(AccessTokenGuard)
 export class GroupController {
   constructor(
     private readonly groupService: GroupService,
@@ -55,8 +57,6 @@ export class GroupController {
 
   // PREFIX MAKEN VOOR PARAMETER CALLS
   @Get("")
-  @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
   async getAll(): Promise<any> {
     try {
       return await this.groupService.getGroups();
@@ -66,8 +66,6 @@ export class GroupController {
   }
 
   @Get("groups/:groupId")
-  @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
   async getGroup(@Param("groupId") groupId: string): Promise<any> {
     try {
       return await this.groupService.getGroup(groupId);
@@ -77,8 +75,6 @@ export class GroupController {
   }
 
   @Get("chats/:userId")
-  @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
   async getGroupsByUserId(
     @Req() req: Request,
     @Param("userId") userId: string
@@ -93,8 +89,6 @@ export class GroupController {
   }
 
   @Post("setPassword")
-  @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
   async setPassword(
     @Req() req: Request,
     @Body() setPasswordDto: SetPasswordDto
@@ -116,8 +110,6 @@ export class GroupController {
   }
 
   @Post("validatePassword")
-  @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
   async validatePassword(
     @Body() validatePasswordDto: ValidatePasswordDto
   ): Promise<boolean> {
@@ -145,8 +137,6 @@ export class GroupController {
   // }
 
   @Post("createGroup")
-  @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
   async createGroup(
     @Req() req: Request,
     @Body() createGroupDto: CreateGroupDto
@@ -179,8 +169,6 @@ export class GroupController {
   }
 
   @Post("removeGroup")
-  @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
   async removeGroup(
     @Req() req: Request,
     @Body() removeGroupDto: RemoveGroupDto
@@ -198,8 +186,6 @@ export class GroupController {
   }
   // TODO: when with access token the uid can be taken from that no need to bring it with the dto
   @Post("addMembers")
-  @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
   async addMembers(
     @Req() req: Request,
     @Body() editMembersDto: EditMembersDto
@@ -222,8 +208,6 @@ export class GroupController {
   }
 
   @Post("removeMembers")
-  @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
   async removeMembers(
     @Req() req: Request,
     @Body() editMembersDto: EditMembersDto
@@ -244,8 +228,6 @@ export class GroupController {
     }
   }
 
-  @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
   @Post("setPermission")
   async setPermission(
     @Req() req: Request,
@@ -269,8 +251,6 @@ export class GroupController {
   }
 
   @Post("banUser")
-  @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
   async banUser(@Req() req: Request, @Body() banUserDto: BanUserDto) {
     try {
       // Get UID through access token
@@ -286,8 +266,6 @@ export class GroupController {
   }
 
   @Post("unbanUser")
-  @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
   async unbanUser(@Req() req: Request, @Body() unbanUserDto: UnBanUserDto) {
     try {
       // Get UID through access token

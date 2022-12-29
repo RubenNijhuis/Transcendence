@@ -12,9 +12,9 @@ import { Socket, Server } from "socket.io";
 import { Logger } from "@nestjs/common";
 
 // Game elements
-import GameManager from "./GameManager/GameManager";
-import RoomManager from "../RoomManager";
-import { Match } from "./GameManager/types";
+import GameManager from "../utils/GameManager/GameManager";
+import RoomManager from "../utils/RoomManager";
+import { Match } from "../utils/GameManager/types";
 
 @WebSocketGateway(3001, {
   cors: {
@@ -24,27 +24,27 @@ import { Match } from "./GameManager/types";
 })
 export class GameSocketGateway {
   @WebSocketServer()
-  connection: Server;
+  private _server: Server;
 
   ////////////////////////////////////////////////////////////
 
-  private logger: Logger = new Logger("GameSocketGateway");
-  private manager: GameManager;
-  private roomManager: RoomManager;
+  private _gameManager: GameManager;
+  private _roomManager: RoomManager;
 
   // Misc handelers //////////////////////////////////////////
 
+  constructor() {
+    this._roomManager = new RoomManager(this._server);
+  }
+
   afterInit() {
     // Init managers
-    this.roomManager = new RoomManager(this.connection);
-    this.manager = new GameManager(this.connection);
-
-    this.manager.run();
+    this._roomManager = new RoomManager(this._server);
+    // this._gameManager = new GameManager(this._roomManager);
   }
 
   handleDisconnect(client: Socket) {
-    this.logger.log("DISCONNECT");
-    this.roomManager.removeProfileByUid(client.id);
+    this._roomManager.removeMemberByConnectionID(client.id);
   }
 
   // Game connection handelers ///////////////////////////////
@@ -54,43 +54,6 @@ export class GameSocketGateway {
     @MessageBody() matchPayload: Match.Request,
     @ConnectedSocket() client: Socket
   ) {
-    const { profile } = matchPayload;
-    const roomID = "Bla"; // Needs to be generated somehow
-
-    profile.connection = client;
-
-    if (matchPayload.scoreType === Match.ScoreType.Friendly) {
-    }
-
-    // Attach socket to profile object
-    this.roomManager.addClientToRoom(roomID, client);
-
-    // Send status update
-    this.connection.to(roomID).emit("gameStatus", { gameStatus: "joinedRoom" }); // TODO: config names should be in a config file
-
-    // TODO: setting numbers should be in a config file
-    // If room is full we update the game status
-    const roomSize = this.roomManager.getRoomSize(roomID);
-    if (roomSize === 2) {
-      this.connection
-        .to(roomID)
-        .emit("gameStatus", { gameStatus: "startGame" }); // TODO: config names should be in a config file
-    }
-  }
-
-  @SubscribeMessage("joinMatch")
-  joinMatch(
-    @MessageBody() gameRequest: Match.Request,
-    @ConnectedSocket() client: Socket
-  ) {
-    // Attach socket to profile object
-    gameRequest.profile.connection = client;
-
-    this.roomManager.joinQue(client, gameRequest.profile);
-
-    // Send status update
-    client.emit("gameStatus", { gameStatus: "in queue" });
-
-    this.roomManager.checkIfMatchable(gameRequest.profile);
+    console.log("temp");
   }
 }

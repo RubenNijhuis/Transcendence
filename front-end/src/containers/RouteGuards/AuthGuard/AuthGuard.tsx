@@ -7,7 +7,7 @@ import PageRoutes from "../../../config/PageRoutes";
 
 // Store
 import StoreId from "../../../config/StoreId";
-import { getItem } from "../../../modules/Store";
+import * as Store from "../../../modules/Store";
 
 // Auth check
 import { useAuth } from "../../../contexts/AuthContext";
@@ -32,8 +32,8 @@ const AuthGuard = () => {
 
     useEffect(() => {
         const checkLetThrough = async () => {
-            const refreshToken = getItem<string>(StoreId.refreshToken);
-            const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
+            const refreshToken = Store.getItem<string>(StoreId.refreshToken);
+            const inLoginProcess = Store.getItem<boolean>(StoreId.loginProcess);
 
             if (inLoginProcess) {
                 navigate(PageRoutes.profile);

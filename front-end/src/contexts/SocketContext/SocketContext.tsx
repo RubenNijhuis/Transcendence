@@ -2,13 +2,17 @@
 import React, { createContext, useContext, useState } from "react";
 
 // Socket Library
-import { io } from "socket.io-client";
+import { io, ManagerOptions } from "socket.io-client";
 
 // Api
 import SocketRoutes from "../../config/SocketRoutes";
 
 // Types
 import { SocketType } from "../../types";
+
+import * as Store from "../../modules/Store";
+import StoreId from "../../config/StoreId";
+import { useUser } from "../UserContext";
 
 ///////////////////////////////////////////////////////////
 
@@ -33,21 +37,40 @@ const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
 
     ////////////////////////////////////////////////////////////
 
+    // DEBUG for back-end to see who is connection
+    const { user } = useUser();
+
+    ////////////////////////////////////////////////////////////
+
     const createConnection = (socketType: SocketType.Type) => {
+        const accessToken = Store.getItem<string>(StoreId.refreshToken);
+
+        if (!accessToken) return;
+
         if (connection !== null) {
             connection.close();
         }
 
-        const options = { path: SocketRoutes.path(socketType) };
-        const newSocket: SocketType.Instance = io(
-            SocketRoutes.baseUrl(),
-            options
-        );
+        const newSocket: SocketType.Instance = io(SocketRoutes.baseUrl(), {
+            path: SocketRoutes.path(socketType),
+            query: {
+                accessToken,
+                uid: user.uid
+            }
+        });
+
+        /**
+         * DEBUG console error if any failure happens, 
+         * setup a more decentralizes system where
+         * components can hook into errors 
+        */
+        newSocket.on("failure", console.error);
 
         setConnection(newSocket);
     };
 
     const destroyConnectionInstance = () => {
+        connection.removeAllListeners();
         connection.close();
     };
 
