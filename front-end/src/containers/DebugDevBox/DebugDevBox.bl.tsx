@@ -33,14 +33,14 @@ const makeFriends = async (user: Profile.Instance) => {
 const handleTokenRefresh = async () => {
     const storeRefreshToken = getItem<string>(StoreId.refreshToken);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     if (!storeRefreshToken) {
         console.error(`\nRefresh access token failed\nNo refresh in the store`);
         return;
     }
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     try {
         const newTokens = await refreshAuthToken(storeRefreshToken);

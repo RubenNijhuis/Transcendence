@@ -30,7 +30,7 @@ const ModalProvider = ({ children }: IModalProvider): JSX.Element => {
     const [allowClose, setAllowClose] = useState<boolean>(true);
     const [modalElement, setModalElement] = useState<React.ReactNode>(null!);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     useEffect(() => {
         const bodyElement = document.getElementsByTagName("body")[0];
@@ -42,7 +42,7 @@ const ModalProvider = ({ children }: IModalProvider): JSX.Element => {
         }
     }, [modalActive]);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const value: ModalContextType = {
         modalActive,
@@ -52,7 +52,7 @@ const ModalProvider = ({ children }: IModalProvider): JSX.Element => {
         setAllowClose,
     };
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <ModalContext.Provider value={value}>

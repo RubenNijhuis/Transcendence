@@ -14,7 +14,7 @@ const MatchMakingStatus = (): JSX.Element => {
         Match.Status.Queue
     );
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <MatchMakingStatusContainer>{matchStatus}</MatchMakingStatusContainer>

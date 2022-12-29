@@ -2,10 +2,10 @@
 import React, { createContext, useContext, useState } from "react";
 
 // Socket Library
-import { io, ManagerOptions } from "socket.io-client";
+import { io } from "socket.io-client";
 
 // Api
-import SocketRoutes from "../../config/SocketRoutes";
+import * as SocketRoutes from "../../config/SocketRoutes";
 
 // Types
 import { SocketType } from "../../types";
@@ -35,12 +35,15 @@ interface ISocketProvider {
 const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
     const [connection, setConnection] = useState<SocketType.Instance>(null!);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
-    // DEBUG for back-end to see who is connection
+    /**
+     * DEBUG
+     * user uid will be given in socket handshake 
+     */
     const { user } = useUser();
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const createConnection = (socketType: SocketType.Type) => {
         const accessToken = Store.getItem<string>(StoreId.refreshToken);
@@ -51,8 +54,8 @@ const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
             connection.close();
         }
 
-        const newSocket: SocketType.Instance = io(SocketRoutes.baseUrl(), {
-            path: SocketRoutes.path(socketType),
+        const newSocket: SocketType.Instance = io(SocketRoutes.base.url(), {
+            path: SocketRoutes.base.path(socketType),
             query: {
                 accessToken,
                 uid: user.uid
@@ -60,10 +63,10 @@ const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
         });
 
         /**
-         * DEBUG console error if any failure happens, 
+         * DEBUG console error if any failure happens,
          * setup a more decentralizes system where
-         * components can hook into errors 
-        */
+         * components can hook into errors
+         */
         newSocket.on("failure", console.error);
 
         setConnection(newSocket);
@@ -74,7 +77,7 @@ const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
         connection.close();
     };
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const value: SocketContextType = {
         connection,
@@ -82,7 +85,7 @@ const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
         destroyConnectionInstance
     };
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <SocketContext.Provider value={value}>

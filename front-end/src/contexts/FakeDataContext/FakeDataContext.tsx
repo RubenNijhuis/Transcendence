@@ -31,11 +31,11 @@ const FakeDataProvider = ({ children }: IFakeDataProvider): JSX.Element => {
     const [leaderBoard, setLeaderBoard] = useState<Profile.Instance[]>(null!);
     const [matchHistory, setMatchHistory] = useState<Match.Record[]>(null!);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const { user } = useUser();
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     useEffect(() => {
         if (!user) return;
@@ -48,7 +48,7 @@ const FakeDataProvider = ({ children }: IFakeDataProvider): JSX.Element => {
         setMatchHistory(matchResults);
     }, [user]);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const value: FakeDataContextType = {
         profiles,
@@ -56,7 +56,7 @@ const FakeDataProvider = ({ children }: IFakeDataProvider): JSX.Element => {
         matchHistory
     };
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <FakeDataContext.Provider value={value}>

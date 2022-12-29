@@ -3,7 +3,7 @@ import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { JwtService } from "@nestjs/jwt";
 import { Request } from "express";
-import { PayloadType } from "src/types/auth";
+import { JwtPayload } from "src/types/auth";
 // import { AuthService } from 'src/services/authentication/auth.service'
 
 @Injectable()
@@ -15,14 +15,14 @@ export class AccessTokenStrategy extends PassportStrategy(
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: process.env.JWT_ACCESS_SECRET,
-      passReqToCallback: true //yes??
+      passReqToCallback: true
     });
   }
 
   validate(req: Request, payload: any) {
     const accessToken = req.get("Authorization").replace("Bearer", "").trim();
-    const decodedJwt = this.jwtService.decode(accessToken) as PayloadType;
+    const decodedJwt = this.jwtService.decode(accessToken) as JwtPayload;
     const intraID: string = decodedJwt.intraID;
-    return { ...payload, intraID};
+    return { ...payload, intraID };
   }
 }

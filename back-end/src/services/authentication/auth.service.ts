@@ -10,9 +10,9 @@ import { UpdateResult } from "typeorm";
 import { createHash } from "crypto";
 
 // Types
-import { AuthTokenType, PayloadType } from "src/types/auth";
+import { AuthTokenType, JwtPayload } from "src/types/auth";
 
-const jwt = require("jsonwebtoken");
+import * as jwt from "jsonwebtoken";
 
 @Injectable()
 export class AuthService {
@@ -47,7 +47,7 @@ export class AuthService {
   }
 
   jwtDecodeUsername(jwt: string): string {
-    const { intraID } = this.jwtService.decode(jwt) as PayloadType;
+    const { intraID } = this.jwtService.decode(jwt) as JwtPayload;
     return intraID;
   }
 
@@ -103,9 +103,9 @@ export class AuthService {
       throw new ForbiddenException("Access Denied: Not a valid Token");
 
     //****    decode token to get intraID
-    const decoded: PayloadType = this.jwtService.decode(
+    const decoded: JwtPayload = this.jwtService.decode(
       refreshToken
-    ) as PayloadType;
+    ) as JwtPayload;
 
     if (!decoded) throw new ForbiddenException("Access Denied: Cannot decode");
 

@@ -12,7 +12,7 @@ interface IAsset {
 const Asset = ({ url, alt, className }: IAsset): JSX.Element => {
     let classTag = "asset";
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     if (className !== undefined) {
         classTag += ` ${className}`;
@@ -22,7 +22,7 @@ const Asset = ({ url, alt, className }: IAsset): JSX.Element => {
         console.error(`No className specified for alt: ${alt}`);
     }
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <Container className={classTag}>

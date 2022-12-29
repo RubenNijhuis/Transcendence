@@ -21,7 +21,7 @@ import { Container } from "./Leaderboard.style";
 const Leaderboard = (): JSX.Element => {
     const [leaderboard, setLeaderboard] = useState<Profile.Instance[]>(null!);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     useEffect(() => {
         if (leaderboard !== null) return;
@@ -36,7 +36,7 @@ const Leaderboard = (): JSX.Element => {
         retrieveLeaderboard();
     }, []);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <Layout>

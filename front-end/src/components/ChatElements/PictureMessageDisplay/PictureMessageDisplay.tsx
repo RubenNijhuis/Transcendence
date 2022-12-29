@@ -40,7 +40,7 @@ const PictureMessageDisplay = ({
     const formattedMessage: Chat.Message.Picture =
         message.content as Chat.Message.Picture;
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <Container fromUser={fromUser}>

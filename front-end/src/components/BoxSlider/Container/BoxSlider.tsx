@@ -20,7 +20,7 @@ const BoxSlider = ({ children, onSlideChange }: IBoxSlider): JSX.Element => {
     const [activeSlide, setActiveSlide] = useState<number>(0);
     const boxSlidesContainerRef = useRef<HTMLDivElement>(null!);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const changeSlide = (amount: number): void => {
         // Amount must not go below 0 or higher than amount slides
@@ -36,13 +36,13 @@ const BoxSlider = ({ children, onSlideChange }: IBoxSlider): JSX.Element => {
         onSlideChange();
     };
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     useEffect(() => {
         setAmountSlides(boxSlidesContainerRef.current.childNodes.length);
     }, [children, setAmountSlides]);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <Container>

@@ -39,11 +39,11 @@ const CreateGroupChat = ({ setModalActive }: ICreateGroupChat): JSX.Element => {
     const searchList = useFormInput("");
     const password = useFormInput("");
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const { user, friends } = useUser();
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const toggleSelected = (friend: Profile.Instance): void => {
         const isSelected: boolean = checkIfProfileIsSelected(friend.uid);
@@ -89,7 +89,7 @@ const CreateGroupChat = ({ setModalActive }: ICreateGroupChat): JSX.Element => {
         }
     };
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <CreateGroupChatContainer>
@@ -152,7 +152,7 @@ const CreateGroupChat = ({ setModalActive }: ICreateGroupChat): JSX.Element => {
 const CreateGroup = (): JSX.Element => {
     const { setModalActive, modalActive, setModalElement } = useModal();
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     /**
      * We set the modal component with its closing function
@@ -162,7 +162,7 @@ const CreateGroup = (): JSX.Element => {
         setModalActive(true);
     }
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <Container>

@@ -25,7 +25,7 @@ interface ICanvas {
 const Canvas = ({ canvasRef }: ICanvas): JSX.Element => {
     const canvasContainerRef = useRef<HTMLDivElement>(null!);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     useEffect(() => {
         if (canvasRef.current === null) return;
@@ -37,7 +37,7 @@ const Canvas = ({ canvasRef }: ICanvas): JSX.Element => {
         canvasRef.current.height = canvasContainer.offsetHeight;
     }, [canvasRef]);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <Container ref={canvasContainerRef} style={{ display: "none" }}>

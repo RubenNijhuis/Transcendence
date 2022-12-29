@@ -19,7 +19,7 @@ import { LoginConfirmPayload } from "src/types/auth";
  * the login process and the handling of authentication
  * tokens
  */
-@Controller("Auth")
+@Controller("auth")
 export class AuthController {
   inject: [ConfigService, UserService];
   constructor(

@@ -1,3 +1,4 @@
+// Nestjs
 import {
   ConnectedSocket,
   MessageBody,
@@ -5,18 +6,23 @@ import {
   WebSocketGateway,
   WebSocketServer
 } from "@nestjs/websockets";
+
+// Socket stuff
 import { Server, Socket } from "socket.io";
 
 // Services
 import { GroupService } from "src/services/group/group.service";
 import { UserService } from "src/services/user/user.service";
 import { MessageService } from "src/services/message/message.service";
+import { AuthService } from "src/services/authentication/auth.service";
 
 // Room manager
 import RoomManager from "../utils/RoomManager";
 
 // Message Payload types
 import * as Payload from "../utils/PayloadTypes";
+import { JwtService } from "@nestjs/jwt";
+import { JwtPayload } from "src/types/auth";
 
 ////////////////////////////////////////////////////////////
 
@@ -39,31 +45,35 @@ export class ChatSocketGateway {
   constructor(
     private readonly groupService: GroupService,
     private readonly userService: UserService,
-    private readonly messageService: MessageService
+    private readonly messageService: MessageService,
+    private readonly jwtService: JwtService
   ) {
     this._roomManager = new RoomManager(this._server);
   }
 
   ////////////////////////////////////////////////////////////
 
-  handleConnection(client: Socket) {
-    const authToken = client.handshake.query.accessToken;
-
-    // TODO: Get the profile uid based on the data in the access token;
-    const uid = client.handshake.query.uid as string;
-
-    if (!uid) {
-      client.emit("failure", "DEBUG No uid specified during handshake");
-    }
+  async handleConnection(client: Socket): Promise<void> {
+    const authToken = client.handshake.query.accessToken as string;
     if (!authToken) {
       client.emit("failure", "No auth token specified during handshake");
       client.disconnect();
     }
 
-    this._roomManager.createMember(uid, client);
+    // TODO: check way to remove as keyword. I think it's bad :(
+    const tokenPayload = this.jwtService.decode(authToken) as JwtPayload;
 
-    // Could be used to streamline room manager library
-    client.data.uid = uid;
+    const userFromJwt = await this.userService.findUserByintraId(
+      tokenPayload.intraID
+    );
+
+    if (!userFromJwt) {
+      client.emit("failure", "DEBUG No uid specified during handshake");
+      client.disconnect();
+    }
+
+    const uid = userFromJwt.uid;
+    this._roomManager.createMember(uid, client);
   }
 
   handleDisconnect(client: Socket): void {
@@ -90,6 +100,7 @@ export class ChatSocketGateway {
     }
 
     this._roomManager.addMemberToRoom(member, joinRoomPayload.roomID);
+    client.emit("failure", `Joined room ${joinRoomPayload.roomID}`);
   }
 
   @SubscribeMessage("sendMessage")

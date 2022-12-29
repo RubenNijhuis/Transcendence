@@ -15,7 +15,7 @@ import Heading from "../../components/Heading";
 const ChatPage = (): JSX.Element => {
     const { activeChat, setActiveChat, directChats, groupChats } = useChat();
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <Layout>

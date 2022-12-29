@@ -1,11 +1,6 @@
 import User from "src/entities/user/user.entity";
 
 type JwtPayload = {
-  sub: string;
-  username: string;
-};
-
-type PayloadType = {
   intraID: string;
 };
 
@@ -21,4 +16,4 @@ interface LoginConfirmPayload {
   TWOfaEnabled: boolean;
 }
 
-export { AuthTokenType, PayloadType, JwtPayload, LoginConfirmPayload };
+export { AuthTokenType, JwtPayload, LoginConfirmPayload };

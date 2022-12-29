@@ -50,11 +50,11 @@ const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [tfaEnabled, setTfaEnabled] = useState<boolean>(false);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const { user, setUser } = useUser();
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     /**
      * The authentication state will update
@@ -107,7 +107,7 @@ const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
     //     checkAuthTokenStatus();
     // }, []);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const value: AuthContextType = {
         signIn,
@@ -120,7 +120,7 @@ const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
         setLoggedIn
     };
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -7,12 +7,6 @@ import { useUser } from "../UserContext";
 // Types
 import { Chat } from "../../types";
 
-// Generators DEBUG
-import {
-    generateGroupChats,
-    generateProfile
-} from "../FakeDataContext/fakeDataGenerators";
-
 // Business logic
 import {
     bindMembersToMessages,
@@ -22,8 +16,7 @@ import {
     getMessagesFromGroupChats
 } from "./ChatContext.bl";
 
-// Debug data
-import { useFakeData } from "../FakeDataContext";
+// Requests
 import { getChatsByUsername } from "../../proxies/chat";
 
 ///////////////////////////////////////////////////////////
@@ -51,11 +44,11 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
     const [directChats, setDirectChats] = useState<Chat.Group.Instance[]>([]);
     const [groupChats, setGroupChats] = useState<Chat.Group.Instance[]>([]);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const { user } = useUser();
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     useEffect(() => {
         if (!user) return;
@@ -70,10 +63,9 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
 
             const [categorizedDirectChats, categorizedGroupChats] =
                 categorizeChats(retrievedGroupChats);
+
             setDirectChats(categorizedDirectChats);
             setGroupChats(categorizedGroupChats);
-
-            const firstDM = getFirstDM(retrievedGroupChats);
 
             setActiveChat(retrievedGroupChats[0]);
         };
@@ -81,7 +73,7 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
         chatAggregator();
     }, [user]);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const value: ChatContextType = {
         activeChat,
@@ -91,7 +83,7 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
         groupChats
     };
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <ChatContext.Provider value={value}>{children}</ChatContext.Provider>

@@ -38,7 +38,7 @@ const ChatElement = ({
 }: IChatElement): JSX.Element => {
     const contentType: Chat.Message.ContentType = message.content_type;
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     /**
      * IMPORTANT: must be in the same order as the content
@@ -54,7 +54,7 @@ const ChatElement = ({
         <InviteMessageDisplay fromUser={fromUser} message={message} />,
     ];
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <ChatElementContainer>

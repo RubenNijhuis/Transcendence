@@ -37,7 +37,7 @@ const UserProvider = ({
     const [friends, setFriends] = useState<Profile.Instance[]>([]);
     const [blocked, setBlocked] = useState<Profile.Instance[]>([]);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     useEffect(() => {
         if (!user) return;
@@ -49,7 +49,7 @@ const UserProvider = ({
         getFriends()
     }, [user]);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const value: UserContextType = {
         user,
@@ -62,7 +62,7 @@ const UserProvider = ({
         setBlocked,
     };
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <UserContext.Provider value={value}>{children}</UserContext.Provider>

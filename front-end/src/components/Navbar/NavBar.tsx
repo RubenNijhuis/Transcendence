@@ -81,7 +81,7 @@ const NavBar = (): JSX.Element => {
     const { isLoggedIn } = useAuth();
     const { user } = useUser();
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <Container>

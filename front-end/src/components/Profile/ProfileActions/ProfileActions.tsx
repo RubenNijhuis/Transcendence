@@ -31,7 +31,7 @@ import { Container, ProfileStatusDisplay } from "./ProfileActions.style";
 const ProfileActivityStatus = (): JSX.Element => {
     let activityElement: ReactElement = <></>;
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const rand = randomNum(0, 2);
 
@@ -43,7 +43,7 @@ const ProfileActivityStatus = (): JSX.Element => {
         activityElement = <span className="playing">Playing</span>;
     }
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <ProfileStatusDisplay activity={rand}>
@@ -63,11 +63,11 @@ const ProfileActions = ({ profile }: IProfileActions): JSX.Element => {
     const [requestButtonText, setRequestButtonText] =
         useState<string>("Add friend");
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const { user } = useUser();
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const toggleFriendship = async () => {
         const username = user.username;
@@ -92,7 +92,7 @@ const ProfileActions = ({ profile }: IProfileActions): JSX.Element => {
         }
     };
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     useEffect(() => {
         const getFriendStatus = async () => {
@@ -124,7 +124,7 @@ const ProfileActions = ({ profile }: IProfileActions): JSX.Element => {
         getFriendStatus();
     }, []);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <Container isFriend={isFriend}>

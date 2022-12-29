@@ -28,7 +28,7 @@ const AuthGuard = () => {
     const { setUser } = useUser();
     const navigate = useNavigate();
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     useEffect(() => {
         const checkLetThrough = async () => {
@@ -52,7 +52,7 @@ const AuthGuard = () => {
                     setUser(profile);
                     return;
                 } catch (err) {
-                    redirectToLogin();
+                    // redirectToLogin();
                 }
             }
         };

@@ -57,7 +57,7 @@ const ProfileSettings = () => {
     const { tfaEnabled } = useAuth();
     const { setModalElement, setModalActive } = useModal();
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const renderTFAModal = () => {
         setModalElement(<TwoFactorAuthentication />);
@@ -70,7 +70,7 @@ const ProfileSettings = () => {
 
     // }
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     /**
      * It's a bit weird but closing modals must be done through
@@ -86,7 +86,7 @@ const ProfileSettings = () => {
         setModalActive(false);
     }, [tfaEnabled]);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <Container>

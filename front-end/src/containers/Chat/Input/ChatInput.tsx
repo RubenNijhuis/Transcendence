@@ -3,11 +3,12 @@ import React, { useState } from "react";
 
 // Types
 import { Profile, Game, Chat, Match } from "../../../types";
+import * as SocketRoutes from "../../../config/SocketRoutes";
 
 // UI
 import { Container, SelectTypeIcon, SelectionBox } from "./ChatInput.style";
 import Asset from "../../../components/Asset";
-import { sendMessage } from "../../../proxies/chat/sendMessage";
+import { useSocket } from "../../../contexts/SocketContext";
 
 ////////////////////////////////////////////////////////////
 
@@ -32,7 +33,7 @@ const MessageTypeSelect = ({
 }: IMessageTypeSelect): JSX.Element => {
     const [chatTypeSelected, setChatTypeSelected] = useState<boolean>(false);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const handleChatTypeChange = (type: Chat.Message.ContentType): void => {
         if (type === messageType) return;
@@ -51,7 +52,7 @@ const MessageTypeSelect = ({
             });
     };
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <div
@@ -92,6 +93,8 @@ const MessageTypeSelect = ({
         </div>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 interface ISimpleMessageInput {
     content: Chat.Message.Simple;
@@ -157,6 +160,8 @@ const PictureMessageInput = ({
     );
 };
 
+////////////////////////////////////////////////////////////
+
 interface IGameInviteMessageInput {
     content: Chat.Message.GameInvite;
     setContent: React.Dispatch<React.SetStateAction<Chat.Message.GameInvite>>;
@@ -168,6 +173,8 @@ const GameInviteMessageInput = ({
 }: IGameInviteMessageInput): JSX.Element => {
     return <div className="invite-message-input"></div>;
 };
+
+////////////////////////////////////////////////////////////
 
 interface IChatInput {
     user: Profile.Instance;
@@ -184,21 +191,29 @@ const ChatInput = ({ user, chat }: IChatInput): JSX.Element => {
             content: ""
         });
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
+
+    const { connection } = useSocket();
+
+    ////////////////////////////////////////////////////////
 
     const handleMessageSend = async () => {
-        try {
-            sendMessage({
-                group_id: chat.uid,
-                content_type: messageType,
-                content: messageContent
-            });
-        } catch (err) {
-            console.error(err);
-        }
+        connection.emit(SocketRoutes.chat.sendMessage(), {
+            messageType,
+            messageContent
+        });
+        // try {
+        //     sendMessage({
+        //         group_id: chat.uid,
+        //         content_type: messageType,
+        //         content: messageContent
+        //     });
+        // } catch (err) {
+        //     console.error(err);
+        // }
     };
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <Container>

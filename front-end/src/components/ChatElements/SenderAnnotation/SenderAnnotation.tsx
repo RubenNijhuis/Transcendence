@@ -17,7 +17,7 @@ interface ISenderAnnotation {
 const SenderAnnotation = ({ sender }: ISenderAnnotation): JSX.Element => {
     const { user } = useUser();
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <Container fromUser={sender.uid === user.uid}>

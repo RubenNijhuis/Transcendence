@@ -22,7 +22,7 @@ import { Profile } from "../../../types";
 import { useUser } from "../../../contexts/UserContext";
 
 // Socket
-import SocketRoutes from "../../../config/SocketRoutes";
+import * as SocketRoutes from "../../../config/SocketRoutes";
 import { useSocket } from "../../../contexts/SocketContext";
 
 // Form hooks
@@ -45,7 +45,7 @@ const ChatTitle = ({ chat, isDmChat, isUnlocked }: IChatTitle): JSX.Element => {
 
     const { setModalActive, setModalElement } = useModal();
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     /**
      * If the the amount of members is 2 it means it a DM
@@ -59,7 +59,7 @@ const ChatTitle = ({ chat, isDmChat, isUnlocked }: IChatTitle): JSX.Element => {
         isDmChat ? otherMember.profile.username : chat.name
     ) as string;
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const openSettingsPanel = () => {
         setModalElement(<ChatSettings chat={chat} user={user} />);
@@ -78,7 +78,7 @@ const ChatTitle = ({ chat, isDmChat, isUnlocked }: IChatTitle): JSX.Element => {
         return false;
     };
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <div className="chat-title">
@@ -109,7 +109,7 @@ const PasswordInput = ({ activeChat, setIsUnlocked }: IPasswordInput) => {
     const passwordText = useFormInput("");
     const [passwordError, setPasswordError] = useState<boolean>(false);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const sendPassword = async () => {
         try {
@@ -129,7 +129,7 @@ const PasswordInput = ({ activeChat, setIsUnlocked }: IPasswordInput) => {
         }
     };
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <PasswordLayer>
@@ -150,7 +150,7 @@ interface IChatBox {
 const ChatBox = ({ chat }: IChatBox): JSX.Element => {
     const [isUnlocked, setIsUnlocked] = useState<boolean>(false);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const isDmChat = chat.members.length === 2;
 
@@ -158,13 +158,13 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
     const { connection, createConnection, destroyConnectionInstance } =
         useSocket();
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     useEffect(() => {
         setIsUnlocked(!chat.protected);
     }, [chat.protected, chat]);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     // TODO: Abstract into business logic part
     useEffect(() => {
@@ -174,6 +174,10 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
     useEffect(() => {
         if (!connection) return;
         setupConnections(connection);
+
+        connection.emit("joinRoom", {
+            roomID: chat.uid
+        });
 
         return () => {
             removeConnections(connection);
@@ -185,7 +189,7 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
         connection.emit("sendMessage", chat);
     };
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const setupConnections = (socket: SocketType.Instance) => {
         socket.on(SocketRoutes.chat.receiveMessage(), (res) => {
@@ -197,7 +201,7 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
         socket.off(SocketRoutes.chat.receiveMessage());
     };
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <Container>

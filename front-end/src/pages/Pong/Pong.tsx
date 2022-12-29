@@ -7,7 +7,7 @@ import { Socket } from "socket.io-client";
 // UI
 import Button from "../../components/Button";
 import Layout from "../../components/Layout";
-import SocketRoutes from "../../config/SocketRoutes";
+import * as SocketRoutes from "../../config/SocketRoutes";
 
 // Game logic
 import Canvas from "../../containers/PongGame";
@@ -26,18 +26,18 @@ import Match from "../../types/Match";
 const Pong = (): JSX.Element => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     let Manager: GameManager;
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const { connection, createConnection, destroyConnectionInstance } =
         useSocket();
 
     // const { user } = useUser();
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     // TODO: Abstract into business logic part
     useEffect(() => {
@@ -61,10 +61,10 @@ const Pong = (): JSX.Element => {
         Manager = new GameManager(canvasRef.current, gameSettings);
 
         if (!connection) return;
-        setupConnections(connection);
+        // setupConnections(connection);
 
         return () => {
-            removeConnections(connection);
+            // removeConnections(connection);
             destroyConnectionInstance();
         };
     }, [connection]);
@@ -82,28 +82,28 @@ const Pong = (): JSX.Element => {
         connection.emit("joinMatch", gameRequest);
     };
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
-    const setupConnections = (socket: Socket) => {
-        socket.on("gameStatus", (res) => console.log(res));
-        socket.on(SocketRoutes.game.updateBall(), Manager.updateBall);
-        socket.on(SocketRoutes.game.updateOpponent(), Manager.updateOpponent);
-        socket.on(SocketRoutes.game.updateScore(), Manager.updateScore);
-        socket.on(
-            SocketRoutes.game.updateMatchStatus(),
-            Manager.updateMatchStatus
-        );
-    };
+    // const setupConnections = (socket: Socket) => {
+    //     socket.on("gameStatus", (res) => console.log(res));
+    //     socket.on(SocketRoutes.game.updateBall(), Manager.updateBall);
+    //     socket.on(SocketRoutes.game.updateOpponent(), Manager.updateOpponent);
+    //     socket.on(SocketRoutes.game.updateScore(), Manager.updateScore);
+    //     socket.on(
+    //         SocketRoutes.game.updateMatchStatus(),
+    //         Manager.updateMatchStatus
+    //     );
+    // };
 
-    const removeConnections = (socket: Socket) => {
-        socket.off("gameStatus");
-        socket.off(SocketRoutes.game.updateBall());
-        socket.off(SocketRoutes.game.updateOpponent());
-        socket.off(SocketRoutes.game.updateScore());
-        socket.off(SocketRoutes.game.updateMatchStatus());
-    };
+    // const removeConnections = (socket: Socket) => {
+    //     socket.off("gameStatus");
+    //     socket.off(SocketRoutes.game.updateBall());
+    //     socket.off(SocketRoutes.game.updateOpponent());
+    //     socket.off(SocketRoutes.game.updateScore());
+    //     socket.off(SocketRoutes.game.updateMatchStatus());
+    // };
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <Layout>

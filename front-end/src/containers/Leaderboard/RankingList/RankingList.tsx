@@ -43,7 +43,7 @@ const RankingList = ({ rankings }: IRankingList): JSX.Element => {
     // Remove first three because of podium
     const filteredRankingList = rankings.slice(3, rankings.length);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <EntryList>

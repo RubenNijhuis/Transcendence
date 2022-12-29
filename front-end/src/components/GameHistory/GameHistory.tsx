@@ -64,11 +64,11 @@ const GameHistory = ({ player, matches }: IGameHistory): JSX.Element => {
     const [selectedPage, setSelectedPage] = useState<number>(0);
     const [matchesPage, setMatchesPage] = useState<Match.Record[]>(null!);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const paginatedMatches = paginateArray<Match.Record>(matches, 8);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const handlePageChange = (amountPageChange: number): void => {
         if (
@@ -80,13 +80,13 @@ const GameHistory = ({ player, matches }: IGameHistory): JSX.Element => {
         }
     };
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     useEffect(() => {
         setMatchesPage(paginatedMatches[0]);
     }, [setMatchesPage]);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <Container>

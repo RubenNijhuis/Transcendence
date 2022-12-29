@@ -47,7 +47,7 @@ const ProfilePage = (): JSX.Element => {
         null!
     );
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     // Temp debug data
     const { matchHistory } = useFakeData();
@@ -65,7 +65,7 @@ const ProfilePage = (): JSX.Element => {
      */
     const { profileName } = useParams();
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     const handleLoginProcess = async () => {
         const apiToken = getValueFromUrl(window.location.href, "code");
@@ -127,7 +127,7 @@ const ProfilePage = (): JSX.Element => {
         return Promise.resolve(user);
     };
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     /**
      * Setting profile/user effect
@@ -172,7 +172,7 @@ const ProfilePage = (): JSX.Element => {
         getProfileFriends();
     }, [selectedProfile]);
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <Layout>

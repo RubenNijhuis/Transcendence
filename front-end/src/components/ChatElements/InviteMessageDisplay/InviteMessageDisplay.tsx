@@ -48,7 +48,7 @@ const InviteMessageDisplay = ({
     const formattedContent: Chat.Message.GameInvite =
         message.content as Chat.Message.GameInvite;
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
     return (
         <Container fromUser={fromUser}>
