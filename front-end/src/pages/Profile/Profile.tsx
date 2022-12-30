@@ -1,5 +1,5 @@
 // React
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 // UI
 import Layout from "../../components/Layout";
@@ -12,17 +12,11 @@ import { ProfileDisplay } from "../../components/Profile";
 import { useAuth } from "../../contexts/AuthContext";
 import { useUser } from "../../contexts/UserContext";
 
-// Types
-import * as Request from "../../types/Request";
-import * as Profile from "../../types/Profile";
-
 // DEBUG
 import { useFakeData } from "../../contexts/FakeDataContext";
 
 // API
 import { useParams } from "react-router-dom";
-import { getProfileByUsername } from "../../proxies/profile";
-import { getFriendsByUsername } from "../../proxies/friend";
 import { getValueFromUrl } from "../../utils/string";
 
 // Store
@@ -38,142 +32,82 @@ import FriendList from "../../components/FriendsList";
 import { ProfileDetailsContainer } from "./Profile.style";
 import TwoFactorAuthentication from "../../containers/TwoFactorAuthentication";
 
+// Business logic
+import { useProfileFriends, useGetSelectedProfile } from "./Profile.bl";
+
 ////////////////////////////////////////////////////////////
 
 const ProfilePage = (): JSX.Element => {
-    const [selectedProfile, setSelectedProfile] = useState<Profile.Instance>(
-        null!
-    );
-    const [profileFriends, setProfileFriends] = useState<Profile.Instance[]>(
-        []
-    );
+    const { profileName } = useParams();
+    const { user, setUser } = useUser();
+    const selectedProfile = useGetSelectedProfile(user, profileName);
+    const profileFriends = useProfileFriends(selectedProfile);
+    const { signIn } = useAuth();
 
     ////////////////////////////////////////////////////////
 
     // Temp debug data
     const { matchHistory } = useFakeData();
 
-    // Local profile
-    const { signIn } = useAuth();
-    const { user, setUser } = useUser();
-
     // Create account modal
     const { setModalActive, setModalElement, setAllowClose } = useModal();
 
-    /**
-     * The `username` in the url '/profile/:username' if not
-     * specified will default to undefined
-     */
-    const { profileName } = useParams();
-
     ////////////////////////////////////////////////////////
 
+    /**
+     * Handle login process will attempt to retrieve the user in one of three ways
+     * 1. Let the user set up their profile
+     * 2. Let the user fully login using 2fa
+     * 3. No 2fa is set and the account has already been created
+     */
     const handleLoginProcess = async () => {
         const apiToken = getValueFromUrl(window.location.href, "code");
 
         try {
-            // TODO: setup should get 2fa
-            /**
-             * Option 1 - open 2fa modal
-             * Option 2 - reroute to other page and after that reroute to here and reGET user
-             */
             const { profile, shouldCreateUser, TWOfaEnabled } = await signIn(
                 apiToken
             );
-
-            if (TWOfaEnabled === true) {
-                setModalElement(<TwoFactorAuthentication />);
-                setAllowClose(false);
-                setModalActive(true);
-            }
-
-            if (profile) {
-                setUser(profile);
-                setItem(StoreId.loginProcess, false);
-                return;
-            }
 
             if (shouldCreateUser) {
                 setModalElement(<CreateAccount />);
                 setAllowClose(false);
                 setModalActive(true);
-            }
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    /**
-     * Settings the profile in the state. Will set the user if there isn't a name in the url
-     */
-    const handleSetProfile = async (): Promise<
-        Profile.Instance | undefined
-    > => {
-        try {
-            if (profileName === undefined) return Promise.resolve(user);
-
-            const imageSelect: Request.Payload.ImageSelect = {
-                profile: true,
-                banner: true
-            };
-
-            const returnedProfile = await getProfileByUsername(
-                profileName,
-                imageSelect
-            );
-
-            return Promise.resolve(returnedProfile);
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    ////////////////////////////////////////////////////////
-
-    /**
-     * Setting profile/user effect
-     */
-    useEffect(() => {
-        const runProfileSetup = async () => {
-            // Bit of a forced reset but it is pretty harmless
-            setModalActive(false);
-
-            const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
-
-            if (user === null && inLoginProcess) {
-                handleLoginProcess();
                 return;
             }
 
-            const profileToBeSet = await handleSetProfile();
-            if (profileToBeSet) {
-                setSelectedProfile(profileToBeSet);
+            /**
+             * If 2fa is enabled we retrieve the user from there
+             */
+            if (TWOfaEnabled === true) {
+                setModalElement(<TwoFactorAuthentication />);
+                setAllowClose(false);
+                setModalActive(true);
+                return;
             }
-        };
-        runProfileSetup();
-    }, [user, profileName]);
 
-    /**
-     * Retrieving friends effect
-     */
+            if (profile !== null) {
+                setUser(profile);
+                setItem(StoreId.loginProcess, false);
+                return;
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    ///////////////////////////////////////////////////////
+
     useEffect(() => {
-        // Returns page to the top to make it seem like a page reload
-        window.scrollTo(0, 0);
-        if (!selectedProfile) return;
+        if (user) return;
 
-        const getProfileFriends = async () => {
-            try {
-                const retrievedFriends = await getFriendsByUsername(
-                    selectedProfile.username
-                );
-                setProfileFriends(retrievedFriends);
-                console.log(retrievedFriends);
-            } catch (err) {
-                console.error(err);
-            }
-        };
-        getProfileFriends();
-    }, [selectedProfile]);
+        // Bit of a forced reset but it is pretty harmless
+        setModalActive(false);
+
+        const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
+        if (inLoginProcess) {
+            handleLoginProcess();
+        }
+    }, [user]);
 
     ////////////////////////////////////////////////////////
 
