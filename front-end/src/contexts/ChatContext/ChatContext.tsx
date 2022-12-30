@@ -11,7 +11,6 @@ import * as Chat from "../../types/Chat";
 import {
     bindMembersToMessages,
     categorizeChats,
-    getFirstDM,
     getMembersFromGroupChats,
     getMessagesFromGroupChats
 } from "./ChatContext.bl";
@@ -22,8 +21,10 @@ import { getChatsByUsername } from "../../proxies/chat";
 ///////////////////////////////////////////////////////////
 
 interface ChatContextType {
-    activeChat: Chat.Group.Instance;
-    setActiveChat: React.Dispatch<React.SetStateAction<Chat.Group.Instance>>;
+    activeChat: Chat.Group.Instance | null;
+    setActiveChat: React.Dispatch<
+        React.SetStateAction<Chat.Group.Instance | null>
+    >;
 
     directChats: Chat.Group.Instance[];
     groupChats: Chat.Group.Instance[];
@@ -40,7 +41,9 @@ interface IChatProvider {
 }
 
 const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
-    const [activeChat, setActiveChat] = useState<Chat.Group.Instance>(null!);
+    const [activeChat, setActiveChat] = useState<Chat.Group.Instance | null>(
+        null
+    );
     const [directChats, setDirectChats] = useState<Chat.Group.Instance[]>([]);
     const [groupChats, setGroupChats] = useState<Chat.Group.Instance[]>([]);
 

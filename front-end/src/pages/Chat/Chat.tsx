@@ -19,22 +19,12 @@ const ChatPage = (): JSX.Element => {
 
     return (
         <Layout>
-            {/* If no chats/groups have been created yet.*/}
-            {!activeChat && (
-                <>
-                    <Heading type={2}>No chats retrieved from database</Heading>
-                    <p>Go touch grass</p>
-                </>
-            )}
             <Container>
-                {activeChat && (
-                    <ChatSelector
-                        directChats={directChats}
-                        groupChats={groupChats}
-                        selectedChat={activeChat}
-                        setSelectedChat={setActiveChat}
-                    />
-                )}
+                <ChatSelector
+                    directChats={directChats}
+                    groupChats={groupChats}
+                    setSelectedChat={setActiveChat}
+                />
 
                 {activeChat && <ChatBox chat={activeChat} />}
             </Container>

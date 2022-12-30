@@ -7,7 +7,7 @@ import { useModal } from "../../../contexts/ModalContext";
 import { useUser } from "../../../contexts/UserContext";
 
 // Types
-import * as Profile from "../../../types/Profile"
+import * as Profile from "../../../types/Profile";
 
 // UI
 import Button from "../../../components/Button";
@@ -80,9 +80,15 @@ const CreateGroupChat = ({ setModalActive }: ICreateGroupChat): JSX.Element => {
     };
 
     const createGroupChat = async () => {
+        console.log(setSelectedFriends);
         try {
             const selectedFriendsUIDS = selectedFriends.map((item) => item.uid);
-            await createChat(user.uid, groupName.value, selectedFriendsUIDS, password.value);
+            await createChat(
+                user.uid,
+                groupName.value,
+                selectedFriendsUIDS,
+                password.value
+            );
             setModalActive(false);
         } catch (err) {
             console.error(err);
@@ -160,7 +166,7 @@ const CreateGroup = (): JSX.Element => {
     const openCreateGroup = () => {
         setModalElement(<CreateGroupChat setModalActive={setModalActive} />);
         setModalActive(true);
-    }
+    };
 
     ////////////////////////////////////////////////////////////
 

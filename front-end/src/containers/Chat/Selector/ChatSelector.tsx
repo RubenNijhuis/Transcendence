@@ -93,7 +93,9 @@ interface IDirectMessageList {
     selectedChatType: Chat.Group.Type;
     directChats: Chat.Group.Instance[];
     groupChats: Chat.Group.Instance[];
-    setSelectedChat: React.Dispatch<React.SetStateAction<Chat.Group.Instance>>;
+    setSelectedChat: React.Dispatch<
+        React.SetStateAction<Chat.Group.Instance | null>
+    >;
 }
 
 /**
@@ -177,14 +179,14 @@ const ChatGroupList = ({
 interface IChatSelector {
     directChats: Chat.Group.Instance[];
     groupChats: Chat.Group.Instance[];
-    selectedChat: Chat.Group.Instance;
-    setSelectedChat: React.Dispatch<React.SetStateAction<Chat.Group.Instance>>;
+    setSelectedChat: React.Dispatch<
+        React.SetStateAction<Chat.Group.Instance | null>
+    >;
 }
 
 const ChatSelector = ({
     directChats,
     groupChats,
-    selectedChat,
     setSelectedChat
 }: IChatSelector): JSX.Element => {
     const [selectedChatType, setSelectedChatType] = useState<Chat.Group.Type>(
@@ -195,19 +197,22 @@ const ChatSelector = ({
 
     return (
         <Container>
-            <ChatTypeSelector
-                activeType={selectedChatType}
-                setActiveType={setSelectedChatType}
-            />
-
             <ChatInterface />
 
-            <ChatGroupList
-                selectedChatType={selectedChatType}
-                setSelectedChat={setSelectedChat}
-                directChats={directChats}
-                groupChats={groupChats}
-            />
+            {(directChats.length || groupChats.length) && (
+                <>
+                    <ChatTypeSelector
+                        activeType={selectedChatType}
+                        setActiveType={setSelectedChatType}
+                    />
+                    <ChatGroupList
+                        selectedChatType={selectedChatType}
+                        setSelectedChat={setSelectedChat}
+                        directChats={directChats}
+                        groupChats={groupChats}
+                    />
+                </>
+            )}
         </Container>
     );
 };
