@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 
 // Types
-import { Chat, SocketType } from "../../../types";
+import * as Chat from "../../../types/Chat";
+import * as SocketType from "../../../types/Socket";
 
 // UI
 import ChatElement from "../../../components/ChatElements";
@@ -16,7 +17,7 @@ import ChatSettings from "../Settings";
 import { Container, PasswordLayer } from "./Box.style";
 
 // Types
-import { Profile } from "../../../types";
+import * as Profile from "../../../types/Profile";
 
 // User
 import { useUser } from "../../../contexts/UserContext";
@@ -197,7 +198,8 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
                 if (!newMessage) return;
 
                 const sender = chat.members.find(
-                    (member) => member.memberId === newMessage.senderID
+                    (member: Chat.Member) =>
+                        member.memberId === newMessage.senderID
                 );
                 console.log("found sender based on id", sender);
                 if (!sender) return;
@@ -225,14 +227,20 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
             <div className="chat-content">
                 {isUnlocked && (
                     <>
-                        {[...chat.messages, ...connectionMessages].reverse().map((message) => (
-                            <ChatElement
-                                key={message.uid}
-                                message={message}
-                                isDm={isDmChat}
-                                fromUser={message.sender.uid === user.uid}
-                            />
-                        ))}
+                        {[...chat.messages, ...connectionMessages]
+                            .reverse()
+                            .map((message) => {
+                                return (
+                                    <ChatElement
+                                        key={message.id}
+                                        message={message}
+                                        isDm={isDmChat}
+                                        fromUser={
+                                            message.sender.uid === user.uid
+                                        }
+                                    />
+                                );
+                            })}
                     </>
                 )}
 
@@ -243,7 +251,7 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
                     />
                 )}
             </div>
-            <ChatInput user={user} chat={chat} />
+            {isUnlocked && <ChatInput user={user} chat={chat} />}
         </Container>
     );
 };

@@ -1,9 +1,18 @@
-// UI
+// React
 import { useEffect, useState } from "react";
+
+// UI
 import Asset from "../../../components/Asset";
-import { useFormInput } from "../../../components/Form/hooks";
 import Heading from "../../../components/Heading";
-import { Chat, Profile } from "../../../types";
+
+// Forms
+import { useFormInput } from "../../../components/Form/hooks";
+
+// Types
+import * as Chat  from "../../../types/Chat";
+import * as Profile from "../../../types/Profile";
+
+// Styling
 import { Container } from "./Settings.style";
 
 ///////////////////////////////////////////////////////////

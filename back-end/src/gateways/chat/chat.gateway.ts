@@ -38,7 +38,7 @@ export class ChatSocketGateway {
 
   ////////////////////////////////////////////////////////////
 
-  private _roomManager: RoomManager;
+  private roomManager: RoomManager;
 
   ////////////////////////////////////////////////////////////
 
@@ -48,7 +48,7 @@ export class ChatSocketGateway {
     private readonly messageService: MessageService,
     private readonly jwtService: JwtService
   ) {
-    this._roomManager = new RoomManager(this._server);
+    this.roomManager = new RoomManager(this._server);
   }
 
   ////////////////////////////////////////////////////////////
@@ -60,7 +60,6 @@ export class ChatSocketGateway {
       client.disconnect();
     }
 
-    // TODO: check way to remove as keyword. I think it's bad :(
     const tokenPayload = this.jwtService.decode(authToken) as JwtPayload;
 
     const userFromJwt = await this.userService.findUserByintraId(
@@ -68,16 +67,16 @@ export class ChatSocketGateway {
     );
 
     if (!userFromJwt) {
-      client.emit("failure", "DEBUG No uid specified during handshake");
+      client.emit("failure", "No user found by with token");
       client.disconnect();
     }
 
     const uid = userFromJwt.uid;
-    this._roomManager.createMember(uid, client);
+    this.roomManager.createMember(uid, client);
   }
 
   handleDisconnect(client: Socket): void {
-    this._roomManager.removeMemberByConnectionID(client.id);
+    this.roomManager.removeMemberByConnectionID(client.id);
   }
 
   ////////////////////////////////////////////////////////////
@@ -87,7 +86,7 @@ export class ChatSocketGateway {
     @MessageBody() joinRoomPayload: Payload.JoinRoom,
     @ConnectedSocket() client: Socket
   ): Promise<void> {
-    const member = this._roomManager.getMemberByConnectionID(client.id);
+    const member = this.roomManager.getMemberByConnectionID(client.id);
 
     const room = await this.groupService.findGroupById(joinRoomPayload.roomID);
     if (!room) {
@@ -95,8 +94,7 @@ export class ChatSocketGateway {
       return;
     }
 
-    this._roomManager.addMemberToRoom(member, joinRoomPayload.roomID);
-    client.emit("failure", `Joined room ${joinRoomPayload.roomID}`);
+    this.roomManager.addMemberToRoom(member, joinRoomPayload.roomID);
   }
 
   @SubscribeMessage("sendMessage")
@@ -104,7 +102,7 @@ export class ChatSocketGateway {
     @MessageBody() sendMessagePayload: Payload.NewMessage,
     @ConnectedSocket() client: Socket
   ): Promise<void> {
-    const member = this._roomManager.getMemberByConnectionID(client.id);
+    const member = this.roomManager.getMemberByConnectionID(client.id);
 
     // TODO: check if member isn't muted in the chat
 

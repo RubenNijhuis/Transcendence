@@ -3,7 +3,7 @@ import StoreId from "../../config/StoreId";
 import { setItem } from "../../modules/Store";
 
 // Types
-import { Request } from "../../types";
+import * as Request from "../../types/Request";
 
 // Proxies
 import { setDefaultAuthHeader } from "../instances/apiInstance";

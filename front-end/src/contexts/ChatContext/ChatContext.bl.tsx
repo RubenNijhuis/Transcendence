@@ -1,6 +1,9 @@
-// Types
+// API Proxies
 import { addImagesToProfile } from "../../proxies/profile";
-import { Chat, Profile } from "../../types";
+
+// Types
+import * as Chat from "../../types/Chat";
+import * as Profile from "../../types/Profile";
 
 ////////////////////////////////////////////////////////////
 
@@ -13,7 +16,7 @@ const getMembersFromGroupChats = async (
         for (let member of chat.members) {
             member.profile = await addImagesToProfile(member.profile, {
                 profile: true,
-                banner: false,
+                banner: false
             });
         }
         members.push(chat.members);
@@ -38,7 +41,7 @@ const getMessagesFromGroupChats = (
 };
 
 const findMemberByProfileID = (
-    id: Profile.ProfileID,
+    id: Profile.ID,
     members: Chat.Member[]
 ): Chat.Member => {
     // Could return undefined but should always find it anyway so what gives
@@ -60,7 +63,10 @@ const bindMembersToMessages = (
             const message = messageList[j];
             const { senderID } = message;
 
-            message.sender = findMemberByProfileID(senderID, members[i]).profile;
+            message.sender = findMemberByProfileID(
+                senderID,
+                members[i]
+            ).profile;
         }
     }
 };
@@ -115,5 +121,5 @@ export {
     findMemberByProfileID,
     bindMembersToMessages,
     getFirstDM,
-    categorizeChats,
+    categorizeChats
 };

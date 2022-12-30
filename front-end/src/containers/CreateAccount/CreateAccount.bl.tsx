@@ -3,7 +3,8 @@ import { createUser } from "../../proxies/user";
 import { uploadImage } from "../../proxies/profile";
 
 // Types
-import { Request, Profile } from "../../types";
+import * as Request from "../../types/Request";
+import * as Profile from "../../types/Profile";
 
 ////////////////////////////////////////////////////////////
 

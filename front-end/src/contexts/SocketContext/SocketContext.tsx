@@ -8,11 +8,11 @@ import { io } from "socket.io-client";
 import * as SocketRoutes from "../../config/SocketRoutes";
 
 // Types
-import { SocketType } from "../../types";
+import * as SocketType from "../../types/Socket";
 
+// Store
 import * as Store from "../../modules/Store";
 import StoreId from "../../config/StoreId";
-import { useUser } from "../UserContext";
 
 ///////////////////////////////////////////////////////////
 
@@ -37,14 +37,6 @@ const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
 
     ////////////////////////////////////////////////////////
 
-    /**
-     * DEBUG
-     * user uid will be given in socket handshake 
-     */
-    const { user } = useUser();
-
-    ////////////////////////////////////////////////////////
-
     const createConnection = (socketType: SocketType.Type) => {
         const accessToken = Store.getItem<string>(StoreId.refreshToken);
 
@@ -57,8 +49,7 @@ const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
         const newSocket: SocketType.Instance = io(SocketRoutes.base.url(), {
             path: SocketRoutes.base.path(socketType),
             query: {
-                accessToken,
-                uid: user.uid
+                accessToken
             }
         });
 

@@ -6,7 +6,7 @@ import { getItem, setItem } from "../../modules/Store";
 import StoreId from "../../config/StoreId";
 
 // Types
-import { Request } from "../../types";
+import * as Request from "../../types/Request";
 
 // User
 import { useUser } from "../UserContext";

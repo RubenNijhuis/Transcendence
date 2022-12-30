@@ -5,7 +5,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { useUser } from "../UserContext";
 
 // Types
-import { Chat } from "../../types";
+import * as Chat from "../../types/Chat";
 
 // Business logic
 import {

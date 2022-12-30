@@ -1,81 +1,76 @@
-import Match from "./Match";
-import Profile from "./Profile";
+import * as Match from "./Match";
+import * as Profile from "./Profile";
 
 ////////////////////////////////////////////////////////////
 
-namespace Chat {
-    export namespace Message {
-        export enum ContentType {
-            Simple,
-            Picture,
-            GameInvite
-        }
+export namespace Message {
+    export type Types = Simple | Picture | GameInvite;
 
-        // General type
-        export type MessageTypes = Simple | Picture | GameInvite;
-
-        // How we define a simple message
-        export interface Simple {
-            content: string;
-        }
-
-        // How we define a picture message
-        export interface Picture {
-            url: string;
-            alt: string;
-        }
-
-        // Game invite
-        export interface GameInvite {
-            opponent: Profile.Instance;
-            user: Profile.Instance;
-            game_type: Match.GameType;
-            accepted: boolean;
-        }
-        
-        // Message interface
-        export interface Instance {
-            groupId: string;
-            uid: number;
-            content: MessageTypes;
-            content_type: Message.ContentType;
-            createdDate: string;
-            senderID: Profile.ProfileID;
-            sender: Profile.Instance;
-        }
+    export enum ContentType {
+        Simple,
+        Picture,
+        GameInvite
     }
 
-    export interface Member{
+    // General type
+
+    // How we define a simple message
+    export interface Simple {
+        content: string;
+    }
+
+    // How we define a picture message
+    export interface Picture {
+        url: string;
+        alt: string;
+    }
+
+    // Game invite
+    export interface GameInvite {
+        opponent: Profile.Instance;
+        user: Profile.Instance;
+        game_type: Match.GameType;
+        accepted: boolean;
+    }
+
+    // Message interface
+    export interface Instance {
+        groupId: string;
         id: number;
-        groupId: string
-        memberId: string;
-        profile: Profile.Instance
-        permissions: Chat.Group.Permission;
-    }
-    
-    export namespace Group {
-        export enum Type {
-            DM,
-            Group
-        }
-
-        export enum Permission {
-            Standard,
-            Admin
-        }
-
-        export interface Instance {
-            uid: string;
-            messages: Message.Instance[];
-            name: string;
-            owner: string;
-            protected: boolean;
-            members: Chat.Member[];
-            internal_id: number;
-        }
+        content: Message.Types;
+        content_type: Message.ContentType;
+        createdDate: string;
+        senderID: Profile.ID;
+        sender: Profile.Instance;
     }
 }
 
-////////////////////////////////////////////////////////////
+export interface Member {
+    id: number;
+    groupId: string;
+    memberId: string;
+    profile: Profile.Instance;
+    permissions: Group.Permission;
+}
 
-export default Chat;
+export namespace Group {
+    export enum Type {
+        DM,
+        Group
+    }
+
+    export enum Permission {
+        Standard,
+        Admin
+    }
+
+    export interface Instance {
+        uid: string;
+        messages: Message.Instance[];
+        name: string;
+        owner: string;
+        protected: boolean;
+        members: Member[];
+        internal_id: number;
+    }
+}

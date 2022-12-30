@@ -5,7 +5,10 @@ import { get_img_url } from "./utils";
 import randomNum from "../../../utils/numbers/randomIntFromRange";
 
 // Types
-import { Profile, Game, Chat, Match } from "../../../types";
+import * as Chat from "../../../types/Chat";
+import * as Game from "../../../types/Game";
+import * as Match from "../../../types/Match";
+import * as Profile from "../../../types/Profile";
 
 // Utils
 import { generateProfile } from "./profile";
@@ -53,8 +56,8 @@ const generateNewMessageContent = (
     sender: Profile.Instance,
     receiver: Profile.Instance,
     type: Chat.Message.ContentType
-): Chat.Message.MessageTypes => {
-    let messageContent: Chat.Message.MessageTypes = null!;
+): Chat.Message.Types => {
+    let messageContent: Chat.Message.Types = null!;
 
     const messageTypeToGeneratorTable = [
         generateSimpleMessage(),
@@ -85,7 +88,7 @@ const generateMessage = (
             createdDate: new Date().toString(),
             sender: generateProfile(1)[0],
             senderID: sender.uid,
-            uid
+            id: i
         };
 
         messages.push(newMessage);

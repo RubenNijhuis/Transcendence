@@ -33,25 +33,22 @@ const DirectMessageEntry = styled.li<{ active: boolean }>`
 
     background-color: ${({ active }) => (active ? mainColor : backgroundColor)};
 
-    .profile {
+    .heading {
+        margin-bottom: calc(${magicNum} / 4);
+        color: ${({ active }) => (active ? backgroundColor : mainColor)};
+    }
+
+    ul {
         display: flex;
-        flex-direction: row;
         align-items: center;
-        margin-bottom: calc(${magicNum} / 8);
-
-        &:last-child {
-            margin-bottom: 0;
-        }
-
-        span {
-            color: ${({ active }) => (active ? lightTextColor : darkTextColor)};
-        }
-
-        .asset {
-            margin-right: calc(${magicNum} / 4);
-            width: calc(${magicNum} / 4 * 3);
-            height: calc(${magicNum} / 4 * 3);
-            border-radius: 6px;
+        list-style-type: none;
+        .profile {
+            .asset {
+                margin-right: calc(${magicNum} / 4);
+                width: calc(${magicNum} / 4 * 3);
+                height: calc(${magicNum} / 4 * 3);
+                border-radius: 6px;
+            }
         }
     }
 `;

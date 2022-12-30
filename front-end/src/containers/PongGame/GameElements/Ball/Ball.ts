@@ -1,4 +1,4 @@
-import { Game } from "../../../../types";
+import * as Game from "../../../../types/Game";
 
 class Ball {
     positionX: number;

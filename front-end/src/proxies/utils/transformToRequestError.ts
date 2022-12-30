@@ -2,7 +2,7 @@
 import { AxiosError } from "axios";
 
 // Types
-import { Request } from "../../types";
+import * as Request from "../../types/Request";
 
 ///////////////////////////////////////////////////////////
 

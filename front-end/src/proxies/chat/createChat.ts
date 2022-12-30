@@ -3,7 +3,8 @@ import { API } from "../instances/apiInstance";
 import ApiRoutes from "../../config/ApiRoutes";
 
 // Types
-import { Chat, Profile } from "../../types";
+import * as Chat from "../../types/Chat";
+import * as Profile from "../../types/Profile";
 
 ////////////////////////////////////////////////////////////
 
@@ -15,9 +16,9 @@ import { Chat, Profile } from "../../types";
  * @returns confirmation response
  */
 const createChat = async (
-    owner: Profile.ProfileID,
+    owner: Profile.ID,
     name: string,
-    members: Profile.ProfileID[],
+    members: Profile.ID[],
     password: string
 ): Promise<Chat.Group.Instance[]> => {
     try {

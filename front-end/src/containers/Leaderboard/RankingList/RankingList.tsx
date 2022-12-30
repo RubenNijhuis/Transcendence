@@ -2,7 +2,7 @@
 import { EntryList, Entry, ProfileData, GameData } from "./RankingList.style";
 
 // Types
-import { Profile } from "../../../types";
+import * as Profile from "../../../types/Profile";
 
 // Routing
 import { Link } from "react-router-dom";
@@ -47,8 +47,8 @@ const RankingList = ({ rankings }: IRankingList): JSX.Element => {
 
     return (
         <EntryList>
-            {filteredRankingList.map((profile) => (
-                <RankEntry profile={profile} key={profile.uid} />
+            {filteredRankingList.map((profile, count) => (
+                <RankEntry profile={profile} key={count} />
             ))}
         </EntryList>
     );

@@ -3,7 +3,7 @@ import { API } from "../instances/apiInstance";
 import ApiRoutes from "../../config/ApiRoutes";
 
 // Types
-import { Chat } from "../../types";
+import * as Chat from "../../types/Chat";
 
 ////////////////////////////////////////////////////////////
 

@@ -1,4 +1,4 @@
-// basic nest functionallity
+// Nestjs
 import {
   BadRequestException,
   Body,
@@ -17,24 +17,18 @@ import {
 } from "@nestjs/common";
 import { Request, Response } from "express";
 
-// dtos
+// Dto's
 import { UsernameDto } from "src/dtos/auth/username.dto";
 import { SetTfaDto } from "src/dtos/auth/setTfa.dto";
-import { SetUserDto } from "src/dtos/user/set-user.dto"; // TODO: is this one still used?
+import { SetUserDto } from "src/dtos/user/set-user.dto";
 
-// user functionalities
+// Services
 import { UserService } from "src/services/user/user.service";
 
-// seeding config
-import { seederConfig } from "src/configs/seeder/seeder.config";
-
-// seeding entity
-import { UserSeeder } from "src/database/seeds/user-create.seed";
-
-// user entity
+// Entities
 import User from "../../entities/user/user.entity";
 
-// image upload and download
+// Image handling
 import {
   bannerOptions,
   deleteFiles,
@@ -43,11 +37,13 @@ import {
 import { FileInterceptor } from "@nestjs/platform-express";
 import { readdirSync } from "fs";
 
-// guards
+// Guards
 import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
 import { SetDescriptionDto } from "src/dtos/user/description.dto";
 import { SetcolorDto } from "src/dtos/user/color.dto";
+
+////////////////////////////////////////////////////////////
 
 /**
  * The user controller will act as the first entry point for user related api calls.
@@ -63,6 +59,8 @@ import { SetcolorDto } from "src/dtos/user/color.dto";
 @Controller("user")
 export class UsersController {
   constructor(private readonly userService: UserService) {}
+
+  ////////////////////////////////////////////////////////////
 
   @Get("")
   async getUsers() {
@@ -91,25 +89,28 @@ export class UsersController {
       }
 
       const dirname = `/app/upload/${imageType}/`;
-      let imgPath: string = dirname;
+      let imgPath = dirname;
 
       const files = readdirSync(dirname).filter((file) => {
         return file.startsWith(`${intraId}.`);
       });
 
       if (files.length === 0) {
-        imgPath += "standard.png"; // in case nothing has been uploaded, if it ever gets optional?? it is 😡
+        imgPath += "standard.png";
       } else {
-        imgPath += files[0]; // always takes the first one since there should only be 1 (one) file per user
+        /**
+         * Always takes the first one since there should
+         * only be 1 (one) file per user
+         */
+        imgPath += files[0];
       }
 
+      /**
+       * TODO: send image as base 64 buffer to back-end so
+       * it doesn't have to be converted on the front-end
+       **/
       // const imgAsBuffer = ""
       // const imgBuffer = new Buffer(imgAsBuffer, 'base64');
-
-      /**
-       * Trying to send image as base 64 so it doesn't
-       * have to be handled on the front-end
-       */
       return res.sendFile(imgPath);
     } catch (err) {
       throw err;
@@ -132,7 +133,7 @@ export class UsersController {
   @UseGuards(AccessTokenGuard)
   async setUser(
     @Req() req: Request,
-    @Body() SetUserDto: SetUserDto
+    @Body() setUserDto: SetUserDto
   ): Promise<any> {
     try {
       const intraID = req.user["intraID"];
@@ -142,9 +143,9 @@ export class UsersController {
 
       const setUserResp = await this.userService.setUser(
         intraID,
-        SetUserDto.username,
-        SetUserDto.color,
-        SetUserDto.description
+        setUserDto.username,
+        setUserDto.color,
+        setUserDto.description
       );
 
       return this.userService.filterUser(setUserResp);

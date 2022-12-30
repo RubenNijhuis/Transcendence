@@ -2,24 +2,21 @@
 import { useEffect, useRef } from "react";
 
 // Sockets
-import { Socket } from "socket.io-client";
+import { useSocket } from "../../contexts/SocketContext";
+import * as SocketRoutes from "../../config/SocketRoutes";
 
 // UI
 import Button from "../../components/Button";
 import Layout from "../../components/Layout";
-import * as SocketRoutes from "../../config/SocketRoutes";
 
 // Game logic
 import Canvas from "../../containers/PongGame";
 import GameManager from "../../containers/PongGame/GameLogic/GameManager";
 import MatchMakingStatus from "../../containers/PongGame/MatchMakingStatus";
 
-// Sockets
-import { useSocket } from "../../contexts/SocketContext";
-// import { useUser } from "@contexts/UserContext";
-
-import SocketType from "../../types/Socket";
-import Match from "../../types/Match";
+// Types
+import * as SocketType from "../../types/Socket";
+import * as Match from "../../types/Match";
 
 ////////////////////////////////////////////////////////////
 

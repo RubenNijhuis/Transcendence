@@ -4,7 +4,7 @@ import {
     lightTextColor,
     magicNum,
     mainColor,
-    smallRadius,
+    smallRadius
 } from "../../../styles/StylingConstants";
 
 ///////////////////////////////////////////////////////////
@@ -55,54 +55,6 @@ const Container = styled.div`
         }
     }
 
-    .picture-message-input {
-        position: relative;
-        height: 100%;
-
-        .img-preview {
-            border-radius: ${smallRadius} ${smallRadius} 0 ${smallRadius};
-            overflow: hidden;
-            position: absolute;
-            background-color: black;
-            height: 500px;
-            width: 500px;
-            bottom: 0;
-            max-width: 100%;
-            max-height: calc(${magicNum} * 4);
-
-            img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-        }
-
-        .picture-input {
-            padding: calc(${magicNum} / 4);
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-
-            label,
-            input {
-                position: relative;
-                width: 100%;
-            }
-
-            input {
-                border: none;
-                border-radius: 100px;
-            }
-
-            label {
-                font-weight: bold;
-                display: block;
-                color: white;
-                text-shadow: 0px 0px 4px #000000;
-            }
-        }
-    }
-
     .message-type-select {
         background-color: rgba(0, 0, 0, 0.1);
         border-radius: 0px 100px 100px 0px;
@@ -111,6 +63,59 @@ const Container = styled.div`
 
         span {
             font-size: 12px;
+        }
+    }
+`;
+
+const StyledPictureInput = styled.div`
+    position: relative;
+    height: 100%;
+
+    .img-preview {
+        position: absolute;
+        bottom: 0;
+
+        width: 500px;
+        max-width: 100%;
+
+        max-height: calc(${magicNum} * 4);
+        height: 500px;
+
+        border-radius: ${smallRadius} ${smallRadius} 0 ${smallRadius};
+        background-color: black;
+    }
+
+    .img-settings {
+        padding: calc(${magicNum} / 4);
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+
+        .picture-input {
+            margin-bottom: calc(${magicNum} / 4);
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        label,
+        input {
+            position: relative;
+            width: 100%;
+        }
+
+        input {
+            padding: 6px 9px;
+            border: none;
+            border-radius: 100px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            color: white;
+            text-shadow: 0px 0px 4px #000000;
         }
     }
 `;
@@ -157,4 +162,4 @@ const SelectionBox = styled.div<{ selected: boolean }>`
 
 ///////////////////////////////////////////////////////////
 
-export { Container, SelectTypeIcon, SelectionBox };
+export { Container, SelectTypeIcon, SelectionBox, StyledPictureInput };

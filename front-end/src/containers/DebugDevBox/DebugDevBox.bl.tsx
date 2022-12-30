@@ -8,7 +8,7 @@ import { API } from "../../proxies/instances/apiInstance";
 import { updateAuthTokens } from "../../proxies/utils";
 
 // Types
-import { Profile } from "../../types";
+import * as Profile from "../../types/Profile";
 
 ////////////////////////////////////////////////////////////
 

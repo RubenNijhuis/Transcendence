@@ -2,7 +2,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Types
-import { Game, Profile, Match } from "../../types";
+import * as Profile from "../../types/Profile";
+import * as Match from "../../types/Match";
+import * as Game from "../../types/Game";
 
 // Data generation
 import { generateGameResult, generateProfile } from "./fakeDataGenerators";

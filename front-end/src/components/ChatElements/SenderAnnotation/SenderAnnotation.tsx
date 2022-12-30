@@ -1,5 +1,5 @@
 // Types
-import { Profile } from "../../../types";
+import * as Profile from "../../../types/Profile";
 
 // UI
 import Asset from "../../Asset";

@@ -6,12 +6,13 @@ import Heading from "../../components/Heading";
 import Layout from "../../components/Layout";
 import Podium from "../../containers/Leaderboard/Podium";
 import RankingList from "../../containers/Leaderboard/RankingList";
+import { useUser } from "../../contexts/UserContext";
 
 // Proxy
 import { getLeaderboard } from "../../proxies/leaderboard";
 
 // Types
-import { Profile } from "../../types";
+import * as Profile from "../../types/Profile";
 
 // Styling
 import { Container } from "./Leaderboard.style";
@@ -23,9 +24,13 @@ const Leaderboard = (): JSX.Element => {
 
     ////////////////////////////////////////////////////////
 
+    const { user } = useUser();
+
+    ////////////////////////////////////////////////////////
+
     useEffect(() => {
-        if (leaderboard !== null) return;
-        const retrieveLeaderboard = async () => {
+        if (!user) return;
+        const fetchLeaderboard = async () => {
             try {
                 const retrievedLeaderboard = await getLeaderboard();
                 setLeaderboard(retrievedLeaderboard);
@@ -33,8 +38,8 @@ const Leaderboard = (): JSX.Element => {
                 console.error(err);
             }
         };
-        retrieveLeaderboard();
-    }, []);
+        fetchLeaderboard();
+    }, [user]);
 
     ////////////////////////////////////////////////////////
 

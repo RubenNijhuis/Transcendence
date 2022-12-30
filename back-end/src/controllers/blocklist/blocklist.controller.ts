@@ -20,8 +20,11 @@ export class BlockListController {
   }
 
   @Get("isBlock/:username/:blocked")
-  async getBlock(@Param('username') username: string, @Param('blocked') blocked: string): Promise<boolean> {
-	try {
+  async getBlock(
+    @Param("username") username: string,
+    @Param("blocked") blocked: string
+  ): Promise<boolean> {
+    try {
       const isBlocked: boolean = await this.blocklistService.isBlock(
         username,
         blocked
@@ -36,7 +39,9 @@ export class BlockListController {
   @Post("addBlock")
   async addBlock(@Body() createBlockDto: CreateBlockDto): Promise<BlockList> {
     try {
-      const addblock: BlockList = await this.blocklistService.blockPerson(createBlockDto);
+      const addblock: BlockList = await this.blocklistService.blockPerson(
+        createBlockDto
+      );
 
       return addblock;
     } catch (error) {

@@ -1,5 +1,5 @@
 // Types
-import { Chat } from "../../../types";
+import * as Chat from "../../../types/Chat";
 
 // UI
 import Asset from "../../Asset";

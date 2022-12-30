@@ -19,7 +19,7 @@ const ChatPage = (): JSX.Element => {
 
     return (
         <Layout>
-            {/* If no chats have been created yet. We display a message */}
+            {/* If no chats/groups have been created yet.*/}
             {!activeChat && (
                 <>
                     <Heading type={2}>No chats retrieved from database</Heading>

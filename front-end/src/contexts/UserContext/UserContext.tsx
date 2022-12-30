@@ -2,7 +2,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Types
-import { Profile } from "../../types";
+import * as Profile from "../../types/Profile";
 
 // Debug
 import { getFriendsByUsername } from "../../proxies/friend";
@@ -45,6 +45,8 @@ const UserProvider = ({
         const getFriends = async () => {
             const retrievedFriends = await getFriendsByUsername(user.username)
             setFriends(retrievedFriends);
+
+            // const retrievedBlocked = await getBlockedProfilesByUs
         }
         getFriends()
     }, [user]);

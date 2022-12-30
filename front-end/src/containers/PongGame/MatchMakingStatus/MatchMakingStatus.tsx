@@ -2,7 +2,8 @@
 import { useState } from "react";
 
 // Types
-import { Game, Match } from "../../../types";
+import * as Game from "../../../types/Game";
+import * as Match from "../../../types/Match";
 
 // Style
 import { MatchMakingStatusContainer } from "./MatchMakingStatus.style";

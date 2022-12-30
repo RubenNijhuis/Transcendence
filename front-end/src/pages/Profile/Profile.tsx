@@ -13,7 +13,8 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useUser } from "../../contexts/UserContext";
 
 // Types
-import { Profile, Request } from "../../types";
+import * as Request from "../../types/Request";
+import * as Profile from "../../types/Profile";
 
 // DEBUG
 import { useFakeData } from "../../contexts/FakeDataContext";
@@ -44,7 +45,7 @@ const ProfilePage = (): JSX.Element => {
         null!
     );
     const [profileFriends, setProfileFriends] = useState<Profile.Instance[]>(
-        null!
+        []
     );
 
     ////////////////////////////////////////////////////////
@@ -105,26 +106,26 @@ const ProfilePage = (): JSX.Element => {
     /**
      * Settings the profile in the state. Will set the user if there isn't a name in the url
      */
-    const handleSetProfile = async (): Promise<Profile.Instance> => {
-        if (profileName !== undefined) {
-            try {
-                const imageSelect: Request.Payload.ImageSelect = {
-                    profile: true,
-                    banner: true
-                };
+    const handleSetProfile = async (): Promise<
+        Profile.Instance | undefined
+    > => {
+        try {
+            if (profileName === undefined) return Promise.resolve(user);
 
-                const returnedProfile = await getProfileByUsername(
-                    profileName,
-                    imageSelect
-                );
+            const imageSelect: Request.Payload.ImageSelect = {
+                profile: true,
+                banner: true
+            };
 
-                return Promise.resolve(returnedProfile);
-            } catch (err) {
-                console.error(err);
-            }
+            const returnedProfile = await getProfileByUsername(
+                profileName,
+                imageSelect
+            );
+
+            return Promise.resolve(returnedProfile);
+        } catch (err) {
+            console.error(err);
         }
-
-        return Promise.resolve(user);
     };
 
     ////////////////////////////////////////////////////////
@@ -145,10 +146,9 @@ const ProfilePage = (): JSX.Element => {
             }
 
             const profileToBeSet = await handleSetProfile();
-            setSelectedProfile(profileToBeSet);
-
-            // Returns page to the top
-            window.scrollTo(0, 0);
+            if (profileToBeSet) {
+                setSelectedProfile(profileToBeSet);
+            }
         };
         runProfileSetup();
     }, [user, profileName]);
@@ -157,6 +157,8 @@ const ProfilePage = (): JSX.Element => {
      * Retrieving friends effect
      */
     useEffect(() => {
+        // Returns page to the top to make it seem like a page reload
+        window.scrollTo(0, 0);
         if (!selectedProfile) return;
 
         const getProfileFriends = async () => {
@@ -165,6 +167,7 @@ const ProfilePage = (): JSX.Element => {
                     selectedProfile.username
                 );
                 setProfileFriends(retrievedFriends);
+                console.log(retrievedFriends);
             } catch (err) {
                 console.error(err);
             }

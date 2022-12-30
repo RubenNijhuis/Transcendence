@@ -11,7 +11,8 @@ import ProfileActions from "../ProfileActions";
 import { Container } from "./ProfileDisplay.style";
 
 // Types
-import { Profile, Match } from "../../../types";
+import * as Match from "../../../types/Match";
+import * as Profile from "../../../types/Profile";
 
 // User
 import { useUser } from "../../../contexts/UserContext";

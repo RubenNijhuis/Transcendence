@@ -2,11 +2,14 @@
 import React, { useState } from "react";
 
 // Types
-import { Profile, Game, Chat, Match } from "../../../types";
+import * as Profile from "../../../types/Profile";
+import * as Game from "../../../types/Game";
+import * as Chat from "../../../types/Chat";
+import * as Match from "../../../types/Match";
 import * as SocketRoutes from "../../../config/SocketRoutes";
 
 // UI
-import { Container, SelectTypeIcon, SelectionBox } from "./ChatInput.style";
+import { Container, SelectTypeIcon, SelectionBox, StyledPictureInput } from "./ChatInput.style";
 import Asset from "../../../components/Asset";
 import { useSocket } from "../../../contexts/SocketContext";
 
@@ -20,7 +23,7 @@ interface IMessageTypeSelect {
         React.SetStateAction<Chat.Message.ContentType>
     >;
     setMessageContent: React.Dispatch<
-        React.SetStateAction<Chat.Message.MessageTypes>
+        React.SetStateAction<Chat.Message.Types>
     >;
 }
 
@@ -125,38 +128,42 @@ const PictureMessageInput = ({
     setContent
 }: IPictureMessageInput): JSX.Element => {
     return (
-        <div className="picture-message-input">
+        <StyledPictureInput>
             <div
                 className="img-preview"
                 style={{ maxWidth: "100%", overflow: "hidden" }}
             >
                 {content.url && <Asset url={content.url} alt={content.alt} />}
             </div>
-            <div className="picture-input">
-                <label>Url</label>
-                <input
-                    className="img-alt-input"
-                    value={content.url}
-                    onChange={(e) =>
-                        setContent((prevState) => ({
-                            ...prevState,
-                            url: e.target.value
-                        }))
-                    }
-                />
-                <label>Alt</label>
-                <input
-                    className="img-alt-input"
-                    value={content.alt}
-                    onChange={(e) =>
-                        setContent((prevState) => ({
-                            ...prevState,
-                            alt: e.target.value
-                        }))
-                    }
-                />
+            <div className="img-settings">
+                <div className="picture-input">
+                    <label>Url</label>
+                    <input
+                        className="img-alt-input"
+                        value={content.url}
+                        onChange={(e) =>
+                            setContent((prevState) => ({
+                                ...prevState,
+                                url: e.target.value
+                            }))
+                        }
+                    />
+                </div>
+                <div className="picture-input">
+                    <label>Alt</label>
+                    <input
+                        className="img-alt-input"
+                        value={content.alt}
+                        onChange={(e) =>
+                            setContent((prevState) => ({
+                                ...prevState,
+                                alt: e.target.value
+                            }))
+                        }
+                    />
+                </div>
             </div>
-        </div>
+        </StyledPictureInput>
     );
 };
 
@@ -187,7 +194,7 @@ const ChatInput = ({ user, chat }: IChatInput): JSX.Element => {
     );
 
     const [messageContent, setMessageContent] =
-        useState<Chat.Message.MessageTypes>({
+        useState<Chat.Message.Types>({
             content: ""
         });
 
@@ -202,15 +209,10 @@ const ChatInput = ({ user, chat }: IChatInput): JSX.Element => {
             content: messageContent,
             content_type: messageType
         });
-        // try {
-        //     sendMessage({
-        //         group_id: chat.uid,
-        //         content_type: messageType,
-        //         content: messageContent
-        //     });
-        // } catch (err) {
-        //     console.error(err);
-        // }
+
+        // Reset input field
+        setMessageType(Chat.Message.ContentType.Simple);
+        setMessageContent({ content: "" });
     };
 
     ////////////////////////////////////////////////////////

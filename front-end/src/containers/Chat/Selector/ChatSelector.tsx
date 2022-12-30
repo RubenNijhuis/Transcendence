@@ -1,22 +1,24 @@
 // React
 import { useEffect, useState } from "react";
 
+// Contexts
+import { useUser } from "../../../contexts/UserContext";
+
 // UI
 import Asset from "../../../components/Asset";
 import Heading from "../../../components/Heading";
+import ChatInterface from "../CreateGroup";
 
 // Types
-import { Chat } from "../../../types";
+import * as Chat from "../../../types/Chat";
 
-// Stylinh
+// Styling
 import {
     ChatTypeSelectorContainer,
     Container,
     DirectMessageEntry,
     DirectMessageList
 } from "./ChatSelector.style";
-import ChatInterface from "../CreateGroup";
-import { useUser } from "../../../contexts/UserContext";
 
 ////////////////////////////////////////////////////////////
 
@@ -31,17 +33,18 @@ const MemberList = ({ members }: IMemberList): JSX.Element => {
     return (
         <ul>
             {members.map(({ profile }) => {
-                const { img_url, uid, username } = profile;
+                const { img_url, uid } = profile;
                 return (
                     <li className="profile" key={uid}>
                         <Asset url={img_url} alt="profile" />
-                        <span>{username}</span>
                     </li>
                 );
             })}
         </ul>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 interface IChatTypeSelector {
     activeType: Chat.Group.Type;
@@ -84,6 +87,8 @@ const ChatTypeSelector = ({
     );
 };
 
+////////////////////////////////////////////////////////////
+
 interface IDirectMessageList {
     selectedChatType: Chat.Group.Type;
     directChats: Chat.Group.Instance[];
@@ -92,9 +97,10 @@ interface IDirectMessageList {
 }
 
 /**
- * My bad awful name for the component but displays the list of groups or dms
+ * My bad awful name for the component but
+ * displays the list of groups or dms
  */
-const DirectMessages = ({
+const ChatGroupList = ({
     selectedChatType,
     directChats,
     groupChats,
@@ -135,34 +141,38 @@ const DirectMessages = ({
 
     return (
         <DirectMessageList>
-            {selectedChatList &&
-                selectedChatList.map(({ name, members, internal_id }) => {
-                    const otherMembers: Chat.Member[] = members.filter(
-                        (member) => member.profile.username !== user!.username
-                    );
+            {selectedChatList.map(({ name, members, internal_id }) => {
+                const otherMembers: Chat.Member[] = members.filter(
+                    (member) => member.profile.username !== user!.username
+                );
 
-                    const isActive = internal_id === selectedChatId;
+                const isSelectedChat = internal_id === selectedChatId;
+                const isDm = members.length <= 2;
 
-                    return (
-                        <DirectMessageEntry
-                            key={internal_id}
-                            onClick={() => handleChatSelection(internal_id)}
-                            active={isActive}
-                        >
-                            <>
-                                {members.length > 2 ? (
-                                    name
-                                ) : (
-                                    <MemberList members={otherMembers} />
-                                )}
-                            </>
-                            <MemberList members={otherMembers} />
-                        </DirectMessageEntry>
-                    );
-                })}
+                /**
+                 * If it's a dm we display the other members name.
+                 * Ortherwise the group name
+                 */
+                const chatGroupName = isDm
+                    ? otherMembers[0].profile.username
+                    : name;
+
+                return (
+                    <DirectMessageEntry
+                        key={internal_id}
+                        onClick={() => handleChatSelection(internal_id)}
+                        active={isSelectedChat}
+                    >
+                        <Heading type={5}>{chatGroupName}</Heading>
+                        <MemberList members={otherMembers} />
+                    </DirectMessageEntry>
+                );
+            })}
         </DirectMessageList>
     );
 };
+
+////////////////////////////////////////////////////////////
 
 interface IChatSelector {
     directChats: Chat.Group.Instance[];
@@ -171,9 +181,6 @@ interface IChatSelector {
     setSelectedChat: React.Dispatch<React.SetStateAction<Chat.Group.Instance>>;
 }
 
-/**
- * Container component that lets you select a chat
- */
 const ChatSelector = ({
     directChats,
     groupChats,
@@ -195,7 +202,7 @@ const ChatSelector = ({
 
             <ChatInterface />
 
-            <DirectMessages
+            <ChatGroupList
                 selectedChatType={selectedChatType}
                 setSelectedChat={setSelectedChat}
                 directChats={directChats}

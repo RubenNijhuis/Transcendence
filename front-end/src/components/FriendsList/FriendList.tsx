@@ -1,6 +1,6 @@
 // Types
 import { Link } from "react-router-dom";
-import { Profile } from "../../types";
+import * as Profile from "../../types/Profile";
 
 // UI
 import Asset from "../Asset";
@@ -40,13 +40,11 @@ const FriendList = ({ friends }: IFriendList) => {
     return (
         <Container>
             <Heading type={3}>Friends</Heading>
-            {friends && (
-                <ul className="friends-list">
-                    {friends.map((friend) => (
-                        <FriendEntry friend={friend} key={friend.uid} />
-                    ))}
-                </ul>
-            )}
+            <ul className="friends-list">
+                {friends.map((friend) => (
+                    <FriendEntry friend={friend} key={friend.uid} />
+                ))}
+            </ul>
         </Container>
     );
 };

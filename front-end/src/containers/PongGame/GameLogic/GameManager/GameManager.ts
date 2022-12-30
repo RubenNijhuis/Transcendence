@@ -1,5 +1,7 @@
-// Elements
-import { Game } from "../../../../types";
+// Types
+import * as Game from "../../../../types/Game";
+
+// Game elements
 import { Ball, Bat } from "../../GameElements";
 import PowerUps from "../PowerUps";
 

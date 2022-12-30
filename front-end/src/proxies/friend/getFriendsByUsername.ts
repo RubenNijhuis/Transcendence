@@ -3,7 +3,8 @@ import { API } from "../instances/apiInstance";
 import ApiRoutes from "../../config/ApiRoutes";
 
 // Types
-import { Profile, Request } from "../../types";
+import * as Request from "../../types/Request";
+import * as Profile from "../../types/Profile";
 
 // Proxies
 import { addImagesToProfile, getProfileByUsername } from "../profile";

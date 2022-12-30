@@ -19,7 +19,7 @@ const Asset = ({ url, alt, className }: IAsset): JSX.Element => {
     }
 
     if (alt.length === 0) {
-        console.error(`No className specified for alt: ${alt}`);
+        console.error(`No alt specified for image`);
     }
 
     ////////////////////////////////////////////////////////

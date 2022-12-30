@@ -2,9 +2,12 @@
 import { API } from "../instances/apiInstance";
 import ApiRoutes from "../../config/ApiRoutes";
 
-// Types
-import { Profile, Request } from "../../types";
+// API Requests
 import { addImagesToProfile } from "../profile/addImagesToProfile";
+
+// Types
+import * as Request from "../../types/Request";
+import * as Profile from "../../types/Profile";
 
 /////////////////////////////////////////////////////////////
 

@@ -2,7 +2,7 @@
 import { confirmLogin } from "../../proxies/auth";
 
 // Types
-import { Request } from "../../types";
+import * as Request from "../../types/Request";
 
 // Routing
 import PageRoutes from "../../config/PageRoutes";

@@ -14,7 +14,9 @@ import {
 import { Link } from "react-router-dom";
 
 // Types
-import { Game, Profile } from "../../types";
+import * as Game from "../../types/Game";
+import * as Profile from "../../types/Profile";
+import * as Match from "../../types/Match";
 
 // UI
 import Heading from "../Heading";
@@ -23,7 +25,6 @@ import Button from "../Button";
 
 // Utils
 import { paginateArray } from "../../utils/array";
-import Match from "../../types/Match";
 
 ////////////////////////////////////////////////////////////
 

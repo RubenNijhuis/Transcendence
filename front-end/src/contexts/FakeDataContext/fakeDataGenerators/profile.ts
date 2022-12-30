@@ -4,7 +4,7 @@ import { get_img_url } from "./utils";
 import randomNum from "../../../utils/numbers/randomIntFromRange";
 
 // Types
-import { Profile } from "../../../types";
+import * as Profile from "../../../types/Profile"
 
 const names = [
     "RelaxZest",

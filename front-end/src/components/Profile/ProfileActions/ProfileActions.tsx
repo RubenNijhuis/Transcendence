@@ -10,11 +10,11 @@ import {
     removeFriend,
     getIsFriend,
     isRequested,
-    removeFriendRequest,
+    removeFriendRequest
 } from "../../../proxies/friend";
 
 // Types
-import { Profile } from "../../../types";
+import * as Profile from "../../../types/Profile";
 
 // Utils
 import randomNum from "../../../utils/numbers/randomIntFromRange";
@@ -78,14 +78,12 @@ const ProfileActions = ({ profile }: IProfileActions): JSX.Element => {
                 await removeFriend(username, friendname);
                 setIsFriend(false);
                 setRequestButtonText("Add friend");
-            } else {
-                if (requestedFriendship === true) {
-                    setRequestButtonText("Remove friendship request");
-                    await removeFriendRequest(username, friendname);
-                }
+            } else if (!isFriend && !requestedFriendship) {
                 await sendFriendRequest(username, friendname);
                 setRequestButtonText("Friendship requested");
-                setIsFriend(true);
+            } else if (!isFriend && requestedFriendship) {
+                setRequestButtonText("Remove friendship request");
+                await removeFriendRequest(username, friendname);
             }
         } catch (err) {
             console.error(err);
@@ -103,7 +101,7 @@ const ProfileActions = ({ profile }: IProfileActions): JSX.Element => {
                 const isFriend = await getIsFriend(username, friendname);
                 setIsFriend(isFriend);
 
-                if (isFriend === true) {
+                if (isFriend) {
                     setRequestButtonText("Remove friend");
                     return;
                 }

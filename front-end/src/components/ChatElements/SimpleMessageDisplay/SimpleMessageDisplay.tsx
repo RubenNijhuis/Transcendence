@@ -1,5 +1,5 @@
 // Types
-import { Chat } from "../../../types";
+import * as Chat from "../../../types/Chat";
 
 // Styling
 import styled from "styled-components";

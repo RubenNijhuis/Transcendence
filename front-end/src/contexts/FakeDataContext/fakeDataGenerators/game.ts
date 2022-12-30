@@ -1,5 +1,6 @@
 // Types
-import { Match, Profile } from "../../../types";
+import * as Profile from "../../../types/Profile";
+import * as Match from "../../../types/Match";
 
 // Random int
 import randomNum from "../../../utils/numbers/randomIntFromRange";

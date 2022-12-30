@@ -5,7 +5,7 @@ import { API, apiRequestConfig } from "../instances/apiInstance";
 import { addImagesToProfile } from "../profile/addImagesToProfile";
 
 // Types
-import { Profile } from "../../types";
+import * as Profile from "../../types/Profile";
 
 ////////////////////////////////////////////////////////////
 
