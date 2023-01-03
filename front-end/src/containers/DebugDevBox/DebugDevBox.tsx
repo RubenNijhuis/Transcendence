@@ -27,9 +27,9 @@ const DebugDevBox = (): JSX.Element => {
             <Box>
                 <Heading type={4}>Store</Heading>
                 <Button onClick={handleClearStorage}>Clear store</Button>
-                <Button onClick={handleTokenRefresh}>
+                {/* <Button onClick={handleTokenRefresh}>
                     Refresh access token
-                </Button>
+                </Button> */}
                 <Heading type={4}>Fake data generation</Heading>
                 <Button onClick={() => fillDBwithChats(user)}>
                     Generate chats for user

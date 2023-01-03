@@ -13,6 +13,7 @@ import * as SocketType from "../../types/Socket";
 // Store
 import * as Store from "../../modules/Store";
 import StoreId from "../../config/StoreId";
+import { useUser } from "../UserContext";
 
 ///////////////////////////////////////////////////////////
 
@@ -37,16 +38,21 @@ const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
 
     ////////////////////////////////////////////////////////
 
-    const createConnection = (socketType: SocketType.Type) => {
-        const accessToken = Store.getItem<string>(StoreId.refreshToken);
+    const { user } = useUser();
 
+    ////////////////////////////////////////////////////////
+
+    const createConnection = (socketType: SocketType.Type) => {
+        if (!user) return;
+        
+        const accessToken = Store.getItem<string>(StoreId.refreshToken);
         if (!accessToken) return;
 
         if (connection !== null) {
             connection.close();
         }
 
-        const newSocket: SocketType.Instance = io(SocketRoutes.base.url(), {
+        const newSocket: SocketType.Instance = io(SocketRoutes.base.url, {
             path: SocketRoutes.base.path(socketType),
             query: {
                 accessToken

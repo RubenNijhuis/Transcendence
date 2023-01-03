@@ -23,12 +23,13 @@ const Container = styled.div`
         margin: auto;
         padding: calc(${magicNum} / 4) calc(${magicNum} / 2);
 
-        background-color: ${mainColor};
-        border-radius: ${mediumRadius};
+        background-color: ${backgroundColor};
+        border: black solid 4px;
+        box-shadow: 10px 10px 0px 0px grey;
     }
 
     .logo {
-        color: ${lightTextColor};
+        color: black;
         font-size: 24px;
         font-weight: 700;
         text-decoration: none;
@@ -59,7 +60,7 @@ const Container = styled.div`
                     padding: calc(${magicNum} / 4) calc(${magicNum} / 2);
                     border-radius: 100px;
 
-                    color: ${lightTextColor};
+                    color: black;
                     font-weight: 700;
                     letter-spacing: 0.5px;
 
@@ -115,7 +116,7 @@ const NavLinksContainer = styled.ul`
 
         a {
             position: relative;
-            color: ${lightTextColor};
+            color: black;
             font-size: 18px;
             font-weight: 600;
             text-decoration: none;
@@ -146,7 +147,7 @@ const NavLinksContainer = styled.ul`
             }
 
             &:visited {
-                color: ${lightTextColor};
+                color: black;
             }
 
             &:last {

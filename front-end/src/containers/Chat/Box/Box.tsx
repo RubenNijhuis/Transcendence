@@ -166,20 +166,23 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
     ////////////////////////////////////////////////////////
 
     useEffect(() => {
+        // Only allow viewing of messages when the chat is unlocked
         setIsUnlocked(!chat.protected);
     }, [chat.protected, chat]);
 
     ////////////////////////////////////////////////////////
 
     useEffect(() => {
+        // Setup the socket connnection to retrieve real-time messages
         createConnection(SocketType.Type.Chat);
+        setConnectionMessages([]);
     }, [chat]);
 
     useEffect(() => {
         if (!connection) return;
         setupConnections(connection);
 
-        connection.emit("joinRoom", {
+        connection.emit(SocketRoutes.room.joinRoom, {
             roomID: chat.uid
         });
 
@@ -193,7 +196,7 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
 
     const setupConnections = (socket: SocketType.Instance) => {
         socket.on(
-            SocketRoutes.chat.receiveMessage(),
+            SocketRoutes.chat.receiveMessage,
             (newMessage: Chat.Message.Instance) => {
                 if (!newMessage) return;
 
@@ -201,7 +204,7 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
                     (member: Chat.Member) =>
                         member.memberId === newMessage.senderID
                 );
-                console.log("found sender based on id", sender);
+
                 if (!sender) return;
 
                 newMessage.sender = sender.profile;
@@ -212,7 +215,7 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
     };
 
     const removeConnections = (socket: SocketType.Instance) => {
-        socket.off(SocketRoutes.chat.receiveMessage());
+        socket.off(SocketRoutes.chat.receiveMessage);
     };
 
     ////////////////////////////////////////////////////////

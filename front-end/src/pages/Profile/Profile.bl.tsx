@@ -35,7 +35,9 @@ export const useGetSelectedProfile = (
     );
 
     useEffect(() => {
-        if (username === undefined) {
+        if (!user) return;
+        
+        if (username === undefined || username === user.username) {
             setSelectedProfile(user);
             return;
         }

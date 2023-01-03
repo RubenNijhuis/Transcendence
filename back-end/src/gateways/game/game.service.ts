@@ -10,6 +10,7 @@ import { Repository } from "typeorm";
 // dtos
 import { ConfigService } from "@nestjs/config";
 import { Injectable } from "@nestjs/common";
+import { Member } from "../utils/RoomManager/types";
 
 /**
  *
@@ -37,4 +38,32 @@ export class GameService {
       return Promise.reject(false);
     }
   }
+
+  findAnotherPlayer = (
+    player: Member.Instance,
+    opponents: Member.Instance[],
+    evaluation: (
+      player: Member.Instance,
+      potentialOpponent: Member.Instance
+    ) => boolean
+  ): Member.Instance | null => {
+    const selectedOpponent = null;
+
+    // Remove the player from the list if it is there
+    opponents = opponents.filter((member) => member.uid !== player.uid);
+
+    // Go through all opponents
+    for (const potentialOpponent of opponents) {
+      // Check if the opponent is valid
+      const isValidOpponent = evaluation(player, potentialOpponent);
+
+      // If so we return it
+      if (isValidOpponent) {
+        return potentialOpponent;
+      }
+    }
+
+    // Return the default one if no valid one was found
+    return selectedOpponent;
+  };
 }

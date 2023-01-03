@@ -46,7 +46,7 @@ class RoomManager {
    * @returns a member if found otherwise null
    */
   getMemberByConnectionID(connectionID: Member.ID): Member.Instance | null {
-    for (const [memberID, member] of this._members) {
+    for (const [, member] of this._members) {
       if (member.connection.id === connectionID) {
         return member;
       }
@@ -68,6 +68,8 @@ class RoomManager {
       members: new Map<Member.ID, Member.Instance>(),
       data: null
     };
+
+    this._rooms.set(roomID, newRoom);
 
     return newRoom;
   }
@@ -103,14 +105,15 @@ class RoomManager {
    */
   addMemberToRoom(
     memberToAdd: Member.ID | Member.Instance | Member.Instance[],
-    roomID: Room.ID,
-    connection?: Socket
+    roomID: Room.ID
   ): void {
     let member: Member.Instance[];
     let roomToAddMemberTo = this.getRoomByID(roomID);
 
     // Create the room if it doesn't exist yet
-    if (!roomToAddMemberTo) roomToAddMemberTo = this.createRoom(roomID);
+    if (!roomToAddMemberTo) {
+      roomToAddMemberTo = this.createRoom(roomID);
+    }
 
     /**
      * Due to overloading we have multiple ways
@@ -120,9 +123,6 @@ class RoomManager {
       member = memberToAdd as Member.Instance[];
     } else if (typeof memberToAdd === "object") {
       member = [memberToAdd];
-    } else {
-      if (!connection) return;
-      member = [this.createMember(memberToAdd, connection)];
     }
 
     /**
@@ -130,9 +130,6 @@ class RoomManager {
      * list and update their internal data
      */
     for (const newMemberOfRoom of member) {
-      console.log(
-        `Moving member with: ${newMemberOfRoom.uid} with old room id ${newMemberOfRoom.roomID} to ${roomID}`
-      );
       // Remove them from any room they could still be in
       if (newMemberOfRoom.roomID !== "unset") {
         this.removeMemberFromRoom(newMemberOfRoom);
@@ -163,6 +160,8 @@ class RoomManager {
     let roomToRemoveID: Room.ID;
     let memberList: Member.Instance[];
 
+    ////////////////////////////////////////////////////////
+
     /**
      * Due to overloading we have multiple ways
      * to assign the variables
@@ -182,6 +181,8 @@ class RoomManager {
 
       memberList = [retrievedMember];
     }
+
+    ////////////////////////////////////////////////////////
 
     const roomToRemoveMemberFrom = this.getRoomByID(roomToRemoveID);
     if (!roomToRemoveMemberFrom) return;
@@ -226,7 +227,7 @@ class RoomManager {
    * @param connectionID
    */
   removeMemberByConnectionID(connectionID: string): void {
-    for (const [memberID, member] of this._members) {
+    for (const [, member] of this._members) {
       if (member.connection.id === connectionID) {
         this.removeMemberByMemberID(member.uid);
       }

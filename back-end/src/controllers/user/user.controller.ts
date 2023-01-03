@@ -60,7 +60,7 @@ import { SetcolorDto } from "src/dtos/user/color.dto";
 export class UsersController {
   constructor(private readonly userService: UserService) {}
 
-  ////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
 
   @Get("")
   async getUsers() {
@@ -143,7 +143,7 @@ export class UsersController {
 
       const setUserResp = await this.userService.setUser(
         intraID,
-        setUserDto.username,
+        setUserDto.username.toLowerCase(),
         setUserDto.color,
         setUserDto.description
       );

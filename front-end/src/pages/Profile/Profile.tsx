@@ -98,10 +98,11 @@ const ProfilePage = (): JSX.Element => {
     ///////////////////////////////////////////////////////
 
     useEffect(() => {
-        if (user) return;
-
-        // Bit of a forced reset but it is pretty harmless
-        setModalActive(false);
+        if (user) {
+            // Reset the create account modal after account creation
+            setModalActive(false);
+            return;
+        }
 
         const inLoginProcess = getItem<boolean>(StoreId.loginProcess);
         if (inLoginProcess) {

@@ -8,22 +8,26 @@
 
 // Config //////////////////////////////////////////////////
 export const base = {
-    url: () => `ws://localhost:8080`,
+    url: `ws://localhost:8080`,
     path: (route: string) => `/ws/${route}/socket.io`,
-    connectionCheck: () => `connectionCheck`
+    connectionCheck: `connectionCheck`
 };
 
 // Game /////////////////////////////////////////////////////
 export const game = {
-    newBallPosition: () => `newBallPosition`,
-    opponentProfile: () => `opponentProfile`,
-    scoreChange: () => `scoreChange`,
-    newMatchStatus: () => `newMatchStatus`,
-    sendPlayerPostion: () => `playerPosition`
+    newBallPosition: `newBallPosition`,
+    opponentProfile: `opponentProfile`,
+    scoreChange: `scoreChange`,
+    newMatchStatus: `newMatchStatus`,
+    sendPlayerPostion: `playerPosition`
 };
 
 // chat ////////////////////////////////////////////////////
 export const chat = {
-    sendMessage: () => `sendMessage`,
-    receiveMessage: () => `receiveMessage`
+    sendMessage: `sendMessage`,
+    receiveMessage: `receiveMessage`
+};
+
+export const room = {
+    joinRoom: `joinRoom`
 };

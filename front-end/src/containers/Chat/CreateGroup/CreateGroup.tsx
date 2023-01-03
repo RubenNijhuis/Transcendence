@@ -39,11 +39,11 @@ const CreateGroupChat = ({ setModalActive }: ICreateGroupChat): JSX.Element => {
     const searchList = useFormInput("");
     const password = useFormInput("");
 
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
 
     const { user, friends } = useUser();
 
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
 
     const toggleSelected = (friend: Profile.Instance): void => {
         const isSelected: boolean = checkIfProfileIsSelected(friend.uid);
@@ -80,7 +80,7 @@ const CreateGroupChat = ({ setModalActive }: ICreateGroupChat): JSX.Element => {
     };
 
     const createGroupChat = async () => {
-        console.log(setSelectedFriends);
+        console.log("Selected friends", setSelectedFriends);
         try {
             const selectedFriendsUIDS = selectedFriends.map((item) => item.uid);
             await createChat(
@@ -95,7 +95,18 @@ const CreateGroupChat = ({ setModalActive }: ICreateGroupChat): JSX.Element => {
         }
     };
 
-    ////////////////////////////////////////////////////////////
+    if (friends.length === 0) {
+        return (
+            <CreateGroupChatContainer>
+                <Heading type={3}>
+                    You don't have any friends to create a group with
+                </Heading>
+                <Button onClick={() => setModalActive(false)}>Close</Button>
+            </CreateGroupChatContainer>
+        );
+    }
+
+    //////////////////////////////////////////////////////////
 
     return (
         <CreateGroupChatContainer>
@@ -158,7 +169,7 @@ const CreateGroupChat = ({ setModalActive }: ICreateGroupChat): JSX.Element => {
 const CreateGroup = (): JSX.Element => {
     const { setModalActive, modalActive, setModalElement } = useModal();
 
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
 
     /**
      * We set the modal component with its closing function
@@ -168,7 +179,7 @@ const CreateGroup = (): JSX.Element => {
         setModalActive(true);
     };
 
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
 
     return (
         <Container>

@@ -14,14 +14,13 @@ import { Server, Socket } from "socket.io";
 import { GroupService } from "src/services/group/group.service";
 import { UserService } from "src/services/user/user.service";
 import { MessageService } from "src/services/message/message.service";
-import { AuthService } from "src/services/authentication/auth.service";
+import { JwtService } from "@nestjs/jwt";
 
 // Room manager
 import RoomManager from "../utils/RoomManager";
 
 // Message Payload types
-import * as Payload from "../utils/PayloadTypes";
-import { JwtService } from "@nestjs/jwt";
+import * as Payload from "../utils/Payloads";
 import { JwtPayload } from "src/types/auth";
 
 ////////////////////////////////////////////////////////////
@@ -36,11 +35,11 @@ export class ChatSocketGateway {
   @WebSocketServer()
   private _server: Server;
 
-  ////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
 
   private roomManager: RoomManager;
 
-  ////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
 
   constructor(
     private readonly groupService: GroupService,
@@ -51,7 +50,7 @@ export class ChatSocketGateway {
     this.roomManager = new RoomManager(this._server);
   }
 
-  ////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
 
   async handleConnection(client: Socket): Promise<void> {
     const authToken = client.handshake.query.accessToken as string;
@@ -66,7 +65,7 @@ export class ChatSocketGateway {
       tokenPayload.intraID
     );
 
-    if (!userFromJwt) {
+    if (!userFromJwt || !userFromJwt.uid) {
       client.emit("failure", "No user found by with token");
       client.disconnect();
     }
@@ -79,11 +78,11 @@ export class ChatSocketGateway {
     this.roomManager.removeMemberByConnectionID(client.id);
   }
 
-  ////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
 
   @SubscribeMessage("joinRoom")
   async joinRoom(
-    @MessageBody() joinRoomPayload: Payload.JoinRoom,
+    @MessageBody() joinRoomPayload: Payload.Chat.JoinRoom,
     @ConnectedSocket() client: Socket
   ): Promise<void> {
     const member = this.roomManager.getMemberByConnectionID(client.id);
@@ -99,11 +98,10 @@ export class ChatSocketGateway {
 
   @SubscribeMessage("sendMessage")
   async newMessage(
-    @MessageBody() sendMessagePayload: Payload.NewMessage,
+    @MessageBody() sendMessagePayload: Payload.Chat.NewMessage,
     @ConnectedSocket() client: Socket
   ): Promise<void> {
     const member = this.roomManager.getMemberByConnectionID(client.id);
-
     // TODO: check if member isn't muted in the chat
 
     // If the member isn't part of a room then we block them from sending a message

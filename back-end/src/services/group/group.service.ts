@@ -35,7 +35,7 @@ export class GroupService {
     private readonly messageService: MessageService
   ) {}
 
-  ////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
 
   // only used for debug purposes
   async getGroups(): Promise<Group[]> {

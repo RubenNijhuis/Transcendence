@@ -205,7 +205,7 @@ const ChatInput = ({ user, chat }: IChatInput): JSX.Element => {
     ////////////////////////////////////////////////////////
 
     const handleMessageSend = async () => {
-        connection.emit(SocketRoutes.chat.sendMessage(), {
+        connection.emit(SocketRoutes.chat.sendMessage, {
             content: messageContent,
             content_type: messageType
         });
