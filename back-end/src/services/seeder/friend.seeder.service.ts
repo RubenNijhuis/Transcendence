@@ -101,11 +101,7 @@ export class FriendSeederService {
             // console.log("new friend index: ", newFriend.index);
             // get username of random index
             // add new friend to friends && exclude list
-            const query = {
-              username: user.username,
-              friendname: newFriend.username
-            };
-            this.friendsServ.addFriend(query);
+            this.friendsServ.addFriend(user.intraId, newFriend.username);
             excludeList.push(newFriend.index);
           }
         }
