@@ -122,7 +122,10 @@ const ProfilePage = (): JSX.Element => {
                     />
 
                     <ProfileDetailsContainer>
-                        <FriendList friends={profileFriends} />
+                        <FriendList
+                            friends={profileFriends}
+                            withFriendRequests={user.username === selectedProfile.username}
+                        />
                         <GameHistory
                             player={selectedProfile}
                             matches={matchHistory}

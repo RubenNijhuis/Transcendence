@@ -30,6 +30,8 @@ import { DeleteResult } from "typeorm";
 export class FriendlistController {
   constructor(private readonly friendlistService: FriendlistService) {}
 
+  //////////////////////////////////////////////////////////
+
   @Get("getFriends/:username")
   async getFriends(@Param("username") username: string) {
     try {

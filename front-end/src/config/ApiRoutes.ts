@@ -20,15 +20,15 @@ const ApiRoutes = {
         `/friends/getfriends/${username}`,
     getFriend: () => `/friends/getfriend`,
     removeFriend: () => `/friends/removeFriend`,
+    getIsFriend: (username: string, friendname: string) =>
+        `/friends/isFriend/${username}/${friendname}`,
 
     sendFriendRequest: () => `/friendrequest/sendrequest`,
-    getFriendRequests: () => `/friendrequests/`,
+    acceptFriendRequest: (friendname: string) => `/addFriend/${friendname}`,
+    getFriendRequestsByUsername: (username: string) => `/getRequested/${username}`,
     isRequested: (username: string, requested: string) =>
         `/friendrequest/isRequested/${username}/${requested}`,
     removeFriendRequest: () => `/friendrequest/remove`,
-
-    getIsFriend: (username: string, friendname: string) =>
-        `/friends/isFriend/${username}/${friendname}`,
     // Friend //////////////////////////////////////////////////
 
     // Profile /////////////////////////////////////////////////
@@ -69,19 +69,19 @@ const ApiRoutes = {
     confirmTFA: () => `/tfa/google2fa/authenticate`,
     // TFAuthentication //////////////////////////////////////////
 
-	//Settings
-	updateDescription: () => `/user/updateDescription`,
-	updateColor: () => `/user/updateColor`,
-	addBlock: () => `/block/addBlock`,
-	unBlock: () => `/block/unBlock`,
-	isBlock: (username: string, blockname: string) => `/block/isBlock/${username}/${blockname}`,
-	isFriend: (username: string, friendname: string) => `/friends/isFriend/${username}/${friendname}`,
-	addFriend: () => `/friends/addFriend`,
-	unFriend: () => `/friends/removeFriend`
+    //Settings
+    updateDescription: () => `/user/updateDescription`,
+    updateColor: () => `/user/updateColor`,
+    addBlock: () => `/block/addBlock`,
+    unBlock: () => `/block/unBlock`,
+    isBlock: (username: string, blockname: string) =>
+        `/block/isBlock/${username}/${blockname}`,
+    isFriend: (username: string, friendname: string) =>
+        `/friends/isFriend/${username}/${friendname}`,
+    addFriend: () => `/friends/addFriend`,
+    unFriend: () => `/friends/removeFriend`
 
-	//Settings
-
-
+    //Settings
 };
 
 export default ApiRoutes;

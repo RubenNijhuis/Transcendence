@@ -6,7 +6,7 @@ import {
 import { CreateTables1661971166323 } from "src/database/migrations/1661971166323-CreateTables";
 import { BlockList } from "src/entities/blocklist/blocklist.entity";
 import { FriendList } from "src/entities/friendlist/friendlist.entity";
-import FriendRequests from "src/entities/friendrequest/friendrequest.entity";
+import FriendRequests from "src/entities/friendrequests/friendrequests.entity";
 import { User } from "src/entities/user/user.entity";
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {

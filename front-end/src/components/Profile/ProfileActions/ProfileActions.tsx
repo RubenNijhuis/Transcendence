@@ -82,8 +82,8 @@ const ProfileActions = ({ profile }: IProfileActions): JSX.Element => {
                 await sendFriendRequest(username, friendname);
                 setRequestButtonText("Friendship requested");
             } else if (!isFriend && requestedFriendship) {
-                setRequestButtonText("Remove friendship request");
                 await removeFriendRequest(username, friendname);
+                setRequestButtonText("Remove friendship request");
             }
         } catch (err) {
             console.error(err);
