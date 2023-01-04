@@ -1,11 +1,22 @@
 // Nestjs
-import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards
+} from "@nestjs/common";
+
+import { Request } from "express";
 
 // DTO
 import { CreateFriendsDto } from "src/dtos/friendlist/create-friend.dto";
 
 // Types
 import { FriendList } from "src/entities";
+import { AccessTokenGuard } from "src/guards/accessToken.guard";
 
 // Service
 import { FriendlistService } from "src/services/friendlist/friendlist.service";
@@ -20,11 +31,9 @@ export class FriendlistController {
   constructor(private readonly friendlistService: FriendlistService) {}
 
   @Get("getFriends/:username")
-  async getFriends(@Param('username') username: string) {
+  async getFriends(@Param("username") username: string) {
     try {
-      const friendsList = await this.friendlistService.getFriends(
-        username
-      );
+      const friendsList = await this.friendlistService.getFriends(username);
 
       return friendsList;
     } catch (err) {
@@ -33,7 +42,10 @@ export class FriendlistController {
   }
 
   @Get("isFriend/:username/:friendname")
-  async isFriend(@Param("username") username: string, @Param("friendname") friendname: string): Promise<boolean> {
+  async isFriend(
+    @Param("username") username: string,
+    @Param("friendname") friendname: string
+  ): Promise<boolean> {
     try {
       const isFriend: boolean = await this.friendlistService.isFriend(
         username,
@@ -46,13 +58,17 @@ export class FriendlistController {
     }
   }
 
+  @UseGuards(AccessTokenGuard)
   @Post("addFriend")
   async addFriend(
-    @Body() createfriendsDto: CreateFriendsDto
+    @Param("friendname") friendname: string,
+    @Req() req: Request
   ): Promise<FriendList> {
     try {
+      const intraID = req.user["intraID"];
       const addFriendResp: FriendList = await this.friendlistService.addFriend(
-        createfriendsDto
+        intraID,
+        friendname
       );
 
       return addFriendResp;
@@ -66,10 +82,11 @@ export class FriendlistController {
     @Body() createfriendsDto: CreateFriendsDto
   ): Promise<DeleteResult> {
     try {
-      const removeFriendResp: DeleteResult = await this.friendlistService.removeFriend(
-        createfriendsDto.username,
-        createfriendsDto.friendname
-      );
+      const removeFriendResp: DeleteResult =
+        await this.friendlistService.removeFriend(
+          createfriendsDto.username,
+          createfriendsDto.friendname
+        );
 
       return removeFriendResp;
     } catch (err) {

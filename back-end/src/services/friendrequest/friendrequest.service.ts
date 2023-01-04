@@ -57,10 +57,15 @@ export class FriendrequestService {
   }
 
   async sendRequest(
-    createrequestDto: CreateRequestDto
+    username: string,
+    requested: string
   ): Promise<FriendRequests> {
-    const newEntry: FriendRequests =
-      this.friendrequestRepository.create(createrequestDto);
+    const query = {
+      username: username,
+      requested: requested
+    };
+
+    const newEntry: FriendRequests = this.friendrequestRepository.create(query);
     const saveResponse: FriendRequests =
       await this.friendrequestRepository.save(newEntry);
     return saveResponse;

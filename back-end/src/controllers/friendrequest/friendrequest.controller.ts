@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { CreateRequestDto } from "src/dtos/friendrequest/create-request.dto";
 import { FriendrequestService } from "src/services/friendrequest/friendrequest.service";
 
@@ -39,7 +39,10 @@ export class FriendRequestController {
   @Post("sendRequest")
   async sendrequest(@Body() requestDto: CreateRequestDto) {
     try {
-      return await this.friendrequestService.sendRequest(requestDto);
+      return await this.friendrequestService.sendRequest(
+        requestDto.username,
+        requestDto.requested
+      );
     } catch (err) {
       throw err;
     }
