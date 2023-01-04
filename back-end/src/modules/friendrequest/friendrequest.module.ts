@@ -21,9 +21,11 @@ import { UserModule } from "../user/user.module";
   imports: [
     TypeOrmModule.forFeature([User]),
     TypeOrmModule.forFeature([FriendRequest]),
+    FriendRequestModule,
     UserModule
   ],
   controllers: [FriendRequestController],
-  providers: [FriendrequestService]
+  providers: [FriendrequestService],
+  exports: [FriendrequestService]
 })
 export class FriendRequestModule {}
