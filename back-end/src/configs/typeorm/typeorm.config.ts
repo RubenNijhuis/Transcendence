@@ -6,7 +6,7 @@ import {
 import { CreateTables1661971166323 } from "src/database/migrations/1661971166323-CreateTables";
 import { BlockList } from "src/entities/blocklist/blocklist.entity";
 import { FriendList } from "src/entities/friendlist/friendlist.entity";
-import FriendRequests from "src/entities/friendrequests/friendrequests.entity";
+import FriendRequest from "src/entities/friendrequest/friendrequest.entity";
 import { User } from "src/entities/user/user.entity";
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
@@ -22,7 +22,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       username: configService.get<string>("DB_USER"),
       password: configService.get<string>("DB_PASS"),
       database: configService.get<string>("DB_NAME"),
-      entities: [User, FriendList, BlockList, FriendRequests],
+      entities: [User, FriendList, BlockList, FriendRequest],
       migrations: [CreateTables1661971166323],
       synchronize: true,
       logging: true,

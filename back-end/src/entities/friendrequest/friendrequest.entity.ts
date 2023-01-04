@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class FriendRequest {
@@ -9,7 +9,7 @@ export class FriendRequest {
   id: number;
 
   @Column({
-    name: "users",
+    name: "username",
     nullable: true
   })
   username: string;

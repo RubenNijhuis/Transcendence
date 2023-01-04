@@ -2,19 +2,19 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeleteResult, Repository } from "typeorm";
 import { CreateRequestDto } from "../../dtos/friendrequest/create-request.dto";
-import FriendRequests from "../../entities/friendrequest/friendrequest.entity";
+import FriendRequest from "../../entities/friendrequest/friendrequest.entity";
 import { UserService } from "../user/user.service";
 
 @Injectable()
 export class FriendrequestService {
   inject: [UserService];
   constructor(
-    @InjectRepository(FriendRequests)
-    private readonly friendrequestRepository: Repository<FriendRequests>,
+    @InjectRepository(FriendRequest)
+    private readonly friendrequestRepository: Repository<FriendRequest>,
     private readonly userService: UserService
   ) {}
 
-  private async filterOutput(username: string, requests: FriendRequests[]) {
+  private async filterOutput(username: string, requests: FriendRequest[]) {
     const filteredRequests = [];
 
     for (const item of requests) {
@@ -28,7 +28,7 @@ export class FriendrequestService {
   }
 
   async getRequests(username: string) {
-    const requests: FriendRequests[] = await this.friendrequestRepository
+    const requests: FriendRequest[] = await this.friendrequestRepository
       .createQueryBuilder("friend_requests")
       .where("requested = :username", { username })
       .getMany();
@@ -36,7 +36,7 @@ export class FriendrequestService {
   }
 
   async getRequested(username: string) {
-    const requested: FriendRequests[] = await this.friendrequestRepository
+    const requested: FriendRequest[] = await this.friendrequestRepository
       .createQueryBuilder("friend_requests")
       .where("username = :username", { username })
       .getMany();
@@ -46,7 +46,7 @@ export class FriendrequestService {
   async isRequested(username: string, requested: string): Promise<boolean> {
     let ret = false;
 
-    const request: FriendRequests = await this.friendrequestRepository
+    const request: FriendRequest = await this.friendrequestRepository
       .createQueryBuilder("friend_requests")
       .where("username = :username", { username })
       .andWhere("requested = :requested", { requested })
@@ -59,15 +59,16 @@ export class FriendrequestService {
   async sendRequest(
     username: string,
     requested: string
-  ): Promise<FriendRequests> {
+  ): Promise<FriendRequest> {
     const query = {
       username: username,
       requested: requested
     };
 
-    const newEntry: FriendRequests = this.friendrequestRepository.create(query);
-    const saveResponse: FriendRequests =
-      await this.friendrequestRepository.save(newEntry);
+    const newEntry: FriendRequest = this.friendrequestRepository.create(query);
+    const saveResponse: FriendRequest = await this.friendrequestRepository.save(
+      newEntry
+    );
     return saveResponse;
   }
 

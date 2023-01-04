@@ -8,7 +8,7 @@ import { DeleteResult, Repository } from "typeorm";
 // Types
 import { FriendList, User } from "src/entities";
 
-// Dtos
+// Service
 import { UserService } from "../user/user.service";
 
 ////////////////////////////////////////////////////////////
