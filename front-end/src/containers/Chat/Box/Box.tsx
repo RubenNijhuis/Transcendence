@@ -160,27 +160,24 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
     const isDmChat = chat.members.length === 2;
 
     const { user } = useUser();
-    const { connection, createConnection, destroyConnectionInstance } =
-        useSocket();
+    const { connection } = useSocket();
 
     ////////////////////////////////////////////////////////
 
     useEffect(() => {
-        // Only allow viewing of messages when the chat is unlocked
         setIsUnlocked(!chat.protected);
+        setConnectionMessages([]);
+
+        
     }, [chat.protected, chat]);
 
     ////////////////////////////////////////////////////////
 
     useEffect(() => {
-        // Setup the socket connnection to retrieve real-time messages
-        createConnection(SocketType.Type.Chat);
-        setConnectionMessages([]);
-    }, [chat]);
-
-    useEffect(() => {
         if (!connection) return;
         setupConnections(connection);
+
+
 
         connection.emit(SocketRoutes.room.joinRoom, {
             roomID: chat.uid
@@ -188,13 +185,13 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
 
         return () => {
             removeConnections(connection);
-            destroyConnectionInstance();
         };
     }, [connection]);
 
     ////////////////////////////////////////////////////////
 
     const setupConnections = (socket: SocketType.Instance) => {
+        // On receive a message
         socket.on(
             SocketRoutes.chat.receiveMessage,
             (newMessage: Chat.Message.Instance) => {

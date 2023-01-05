@@ -125,15 +125,13 @@ const ChatGroupList = ({
     };
 
     useEffect(() => {
-        setSelectedChatId(0);
-
         switch (selectedChatType) {
             case Chat.Group.Type.DM:
                 setSelectedChatList(directChats);
-                if (directChats.length !== 0) setSelectedChat(directChats[0]);
+                setSelectedChat(directChats[0]);
                 break;
             case Chat.Group.Type.Group:
-                if (groupChats.length !== 0) setSelectedChatList(groupChats);
+                setSelectedChatList(groupChats);
                 setSelectedChat(groupChats[0]);
                 break;
         }
@@ -199,7 +197,7 @@ const ChatSelector = ({
         <Container>
             <ChatInterface />
 
-            {(directChats.length || groupChats.length) && (
+            {directChats.length || groupChats.length ? (
                 <>
                     <ChatTypeSelector
                         activeType={selectedChatType}
@@ -212,7 +210,7 @@ const ChatSelector = ({
                         groupChats={groupChats}
                     />
                 </>
-            )}
+            ) : null}
         </Container>
     );
 };

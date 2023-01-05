@@ -12,22 +12,22 @@ import { UserService } from "../user/user.service";
 @Injectable()
 export class UserSeederService {
   inject: [UserService];
-  constructor(private readonly userServ: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
   // inserts number amount of users in database
   async seedCustom(amount: number): Promise<User[]> {
     try {
       for (let i = 0; i < amount; i++) {
         const genIntraId = randUserName();
-        await this.userServ.createUser(genIntraId);
-        await this.userServ.setUser(
+        await this.userService.createUser(genIntraId);
+        await this.userService.setUser(
           genIntraId,
           randFullName(),
           randColor(),
           randParagraph()
         );
       }
-      return this.userServ.getUsers();
+      return this.userService.getUsers();
     } catch (err) {
       console.error(err);
       throw errorHandler(

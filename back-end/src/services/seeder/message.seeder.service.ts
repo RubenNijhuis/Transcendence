@@ -13,9 +13,9 @@ import { CreateMessageDto } from "src/dtos/group";
 export class MessageseederService {
   inject: [GroupService, UserService, FriendlistService];
   constructor(
-    private readonly groupServ: GroupService,
-    private readonly messageServ: MessageService,
-    private readonly userServ: UserService
+    private readonly groupService: GroupService,
+    private readonly messageService: MessageService,
+    private readonly userService: UserService
   ) {}
 
   private randomNum(min: number, max: number): number {
@@ -24,13 +24,13 @@ export class MessageseederService {
 
   async seedMessages() {
     try {
-      const groups: Group[] = await this.groupServ.getGroups();
+      const groups: Group[] = await this.groupService.getGroups();
 
       for (let i = 0; i < groups.length; i++) {
         const members: GroupUser[] = groups[i].members;
 
         for (let j = 0; j < members.length; j++) {
-          await this.messageServ.createMessage(
+          await this.messageService.createMessage(
             members[j].memberId,
             groups[i].uid,
             "lol",

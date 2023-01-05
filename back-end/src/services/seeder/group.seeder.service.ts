@@ -12,8 +12,8 @@ import { EditOwnerDto } from "src/dtos/group";
 export class GroupseederService {
   inject: [GroupService, UserService, FriendlistService];
   constructor(
-    private readonly groupServ: GroupService,
-    private readonly userServ: UserService
+    private readonly groupService: GroupService,
+    private readonly userService: UserService
   ) {}
 
   private randomNum(min: number, max: number): number {
@@ -22,7 +22,7 @@ export class GroupseederService {
 
   async seedGroups() {
     try {
-      const users: User[] = await this.userServ.getUsers();
+      const users: User[] = await this.userService.getUsers();
       const usersIds: string[] = users.map((u) => {
         return u.uid;
       });
@@ -39,14 +39,14 @@ export class GroupseederService {
         const pass: string = passwords[num];
 
         // console.log("members: [", members, "]", ", pass: [", pass, "], num: ", num);
-        const group: Group = await this.groupServ.createGroup(
+        const group: Group = await this.groupService.createGroup(
           users[i].uid,
           randoName,
           members,
           pass
         );
-        await this.groupServ.addMembers(users[i].uid, group.uid, members);
-        await this.groupServ.setOwner(group.uid, users[i].uid);
+        await this.groupService.addMembers(users[i].uid, group.uid, members);
+        await this.groupService.setOwner(group.uid, users[i].uid);
       }
     } catch (err) {
       throw err;

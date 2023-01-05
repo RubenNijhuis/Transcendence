@@ -19,7 +19,6 @@ const Container = styled.div`
     background-color: ${mainColor};
 
     .banner {
-        width: 100%;
         height: 100%;
         aspect-ratio: 9/4;
 

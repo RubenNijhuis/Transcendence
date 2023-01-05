@@ -8,8 +8,8 @@ import { UserService } from "../user/user.service";
 export class FriendSeederService {
   inject: [FriendlistService, UserService];
   constructor(
-    private readonly userServ: UserService,
-    private readonly friendsServ: FriendlistService
+    private readonly userService: UserService,
+    private readonly friendsService: FriendlistService
   ) {}
 
   private randomNum(min: number, max: number): number {
@@ -21,7 +21,7 @@ export class FriendSeederService {
 
     for (let i = 0; i < friends.length; i++) {
       indexes.push(
-        (await this.userServ.findUserByUsername(friends[i].username)).index
+        (await this.userService.findUserByUsername(friends[i].username)).index
       );
     }
     return indexes;
@@ -52,7 +52,7 @@ export class FriendSeederService {
 
     for (let i = 0; i < users.length; i++) {
       const user: User = users[i];
-      const friends: string[] = await this.friendsServ.getFriends(
+      const friends: string[] = await this.friendsService.getFriends(
         user.username
       );
       const entry = {
@@ -68,14 +68,14 @@ export class FriendSeederService {
   // makes friend connections with users
   async seedFriends() {
     try {
-      const users: User[] = await this.userServ.getUsers();
+      const users: User[] = await this.userService.getUsers();
       const filteredUsers: User[] = this.filterUsers(users);
       const maxFriends: number = filteredUsers.length - 1; // minus 1 for the user itself
 
       // loop trough users
       for (let i = 0; i < filteredUsers.length; i++) {
         const user: User = filteredUsers[i];
-        const currentFriends = await this.friendsServ.getFriends(user.username);
+        const currentFriends = await this.friendsService.getFriends(user.username);
         const targetAmount: number = this.randomNum(0, maxFriends - 1);
         const excludeList: number[] = await this.getFriendIndexes(
           currentFriends
@@ -101,7 +101,7 @@ export class FriendSeederService {
             // console.log("new friend index: ", newFriend.index);
             // get username of random index
             // add new friend to friends && exclude list
-            this.friendsServ.addFriend(user.intraId, newFriend.username);
+            this.friendsService.addFriend(user.uid, newFriend.username);
             excludeList.push(newFriend.index);
           }
         }

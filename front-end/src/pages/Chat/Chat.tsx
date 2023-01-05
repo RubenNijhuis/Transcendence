@@ -1,3 +1,6 @@
+// React
+import { useEffect } from "react";
+
 // UI
 import Layout from "../../components/Layout";
 import ChatSelector from "../../containers/Chat/Selector";
@@ -8,12 +11,26 @@ import { Container } from "./Chat.style";
 
 // Context
 import { useChat } from "../../contexts/ChatContext";
-import Heading from "../../components/Heading";
+import { useSocket } from "../../contexts/SocketContext";
+
+import * as SocketType from "../../types/Socket";
 
 ///////////////////////////////////////////////////////////
 
 const ChatPage = (): JSX.Element => {
     const { activeChat, setActiveChat, directChats, groupChats } = useChat();
+
+    ////////////////////////////////////////////////////////
+
+    const { connection, createConnection, destroyConnectionInstance } =
+        useSocket();
+
+    ////////////////////////////////////////////////////////
+
+    useEffect(() => {
+        // Setup the socket connnection to retrieve real-time messages
+        createConnection(SocketType.Type.Chat);
+    }, []);
 
     ////////////////////////////////////////////////////////
 
