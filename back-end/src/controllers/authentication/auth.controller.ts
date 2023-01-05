@@ -110,6 +110,7 @@ export class AuthController {
           await this.userService.setRefreshToken(user.uid, tokens.refreshToken);
 
           returnedPayload.profile = this.userService.filterUser(user);
+          returnedPayload.authToken = tokens;
         }
       }
 

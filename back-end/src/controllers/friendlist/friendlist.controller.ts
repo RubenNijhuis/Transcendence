@@ -37,9 +37,9 @@ export class FriendlistController {
   @Get("getFriends/:username")
   async getFriends(@Req() req: Request) {
     try {
-      const intraID: string = req.user["uid"];
-      console.log("---------------------- INTRAID: ", intraID);
-      const friendsList = await this.friendlistService.getFriends(intraID);
+      const uid: string = req.user["uid"];
+      console.log("---------------------- uid: ", uid);
+      const friendsList = await this.friendlistService.getFriends(uid);
 
       return friendsList;
     } catch (err) {
@@ -71,9 +71,9 @@ export class FriendlistController {
     @Req() req: Request
   ): Promise<FriendList> {
     try {
-      const intraID: string = req.user["intraID"];
+      const uid: string = req.user["uid"];
       const addFriendResp: FriendList = await this.friendlistService.addFriend(
-        intraID,
+        uid,
         friendname
       );
 

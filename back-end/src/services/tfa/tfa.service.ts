@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { authenticator } from "otplib";
 import { toDataURL } from "qrcode";
-import { intraIDDto } from "src/dtos/auth/intraID.dto";
 import { TfaDto } from "src/dtos/auth/tfa.dto";
 import { UserService } from "../user/user.service";
 import { createCipheriv, randomBytes, scrypt } from "crypto";
@@ -34,7 +33,7 @@ export class TfaService {
   ) {}
 
   async isTfaValid(tfaDto: TfaDto) {
-    const ret = await this.usersService.findUserByUidNoFilter(tfaDto.intraID);
+    const ret = await this.usersService.findUserByUidNoFilter(tfaDto.uid);
     //you can only confirm if the secret is set
     if (!ret || !ret.tfaSecret || !ret.tfa_iv || !ret.tfa_key) throw TypeError;
 
@@ -48,10 +47,8 @@ export class TfaService {
     return res;
   }
 
-  async generateTfaSecret(intraIDdto: intraIDDto) {
-    const ret = await this.usersService.findUserByUidNoFilter(
-      intraIDdto.intraID
-    );
+  async generateTfaSecret(uid: string) {
+    const ret = await this.usersService.findUserByUidNoFilter(uid);
     if (!ret || ret.isTfaEnabled === false) {
       throw TypeError;
     }
@@ -73,7 +70,7 @@ export class TfaService {
     if (!ret.tfaSecret) {
       secret = authenticator.generateSecret();
       var pw = encrypt(secret, key, iv);
-      this.usersService.update2faSecret(intraIDdto.intraID, pw);
+      this.usersService.update2faSecret(uid, pw);
     } else secret = decrypt(ret.tfaSecret, key, iv);
 
     //use secret to make the data for the qr

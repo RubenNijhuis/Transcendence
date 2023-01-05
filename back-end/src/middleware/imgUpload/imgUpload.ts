@@ -22,7 +22,7 @@ export const deleteFiles = (path, id, uploadedFile) => {
 
 export const getFileName = (req, file, cb) => {
   const extention: string = file.originalname.split(".").reverse()[0];
-  cb(null, `${req.user.intraID}.${extention}`);
+  cb(null, `${req.user.uid}.${extention}`);
 };
 
 export const imgFilter = (req, file, cb) => {

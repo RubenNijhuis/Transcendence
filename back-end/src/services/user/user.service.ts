@@ -267,12 +267,9 @@ export class UserService {
   // is deze functie niet hetzelde als set2faSecret? je update in beiden de 2fa
   // als ze iets anders doen, graag vermelden in de functie naam, anders eentje deleten
   // thanks :) - zeno
-  async update2faSecret(
-    intraID: string,
-    secret: string
-  ): Promise<UpdateResult> {
+  async update2faSecret(uid: string, secret: string): Promise<UpdateResult> {
     try {
-      const user: User = await this.findUserByUidNoFilter(intraID);
+      const user: User = await this.findUserByUidNoFilter(uid);
 
       return await this.userRepository
         .createQueryBuilder()
@@ -333,9 +330,9 @@ export class UserService {
     }
   }
 
-  async setTFAiv(intraID: string, tfa_iv: string): Promise<UpdateResult> {
+  async setTFAiv(uid: string, tfa_iv: string): Promise<UpdateResult> {
     try {
-      const user: User = await this.findUserByUidNoFilter(intraID);
+      const user: User = await this.findUserByUidNoFilter(uid);
 
       return await this.userRepository
         .createQueryBuilder()
@@ -353,9 +350,9 @@ export class UserService {
     }
   }
 
-  async setTFAkey(intraID: string, tfa_key: string): Promise<UpdateResult> {
+  async setTFAkey(uid: string, tfa_key: string): Promise<UpdateResult> {
     try {
-      const user: User = await this.findUserByUidNoFilter(intraID);
+      const user: User = await this.findUserByUidNoFilter(uid);
 
       return await this.userRepository
         .createQueryBuilder()

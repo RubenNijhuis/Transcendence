@@ -62,8 +62,8 @@ export class FriendlistService {
     return ret;
   }
 
-  async addFriend(intraID: string, friendname: string): Promise<FriendList> {
-    const user: User = await this.userService.findUserByintraId(intraID);
+  async addFriend(uid: string, friendname: string): Promise<FriendList> {
+    const user: User = await this.userService.findUserByUid(uid);
     const username: string = user.username;
     const query = {
       username: username,
