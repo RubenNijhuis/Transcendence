@@ -3,6 +3,7 @@ import {
   Controller,
   HttpStatus,
   Post,
+  Req,
   Res,
   UnauthorizedException,
   UseGuards
@@ -10,8 +11,7 @@ import {
 import { TfaService } from "src/services/tfa/tfa.service";
 import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
 import { TfaDto } from "src/dtos/auth/tfa.dto";
-import { Response } from "express";
-import { intraIDDto } from "src/dtos/auth/intraID.dto";
+import { Request, Response } from "express";
 
 @Controller("tfa")
 export class TfaController {
@@ -19,9 +19,10 @@ export class TfaController {
 
   @Post("google2fa")
   @UseGuards(Jwt2faStrategy)
-  async google2fa(@Body() userDto: intraIDDto) {
+  async google2fa(@Req() req: Request) {
     try {
-      const res = await this.tfaService.generateTfaSecret(userDto);
+      const uid: string = req.user["uid"];
+      const res = await this.tfaService.generateTfaSecret(uid);
       console.log("Google 2FA: ", res);
       return res;
     } catch (error) {

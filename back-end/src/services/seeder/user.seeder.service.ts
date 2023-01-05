@@ -18,8 +18,8 @@ export class UserSeederService {
   async seedCustom(amount: number): Promise<User[]> {
     try {
       for (let i = 0; i < amount; i++) {
-        let genIntraId = randUserName();
-        await this.userServ.createUser(genIntraId, "lolo");
+        const genIntraId = randUserName();
+        await this.userServ.createUser(genIntraId);
         await this.userServ.setUser(
           genIntraId,
           randFullName(),

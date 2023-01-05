@@ -81,9 +81,9 @@ export class UsersController {
     @Res() res: Response
   ) {
     try {
-      const { intraId } = await this.userService.findUserByUsername(username);
+      const { uid } = await this.userService.findUserByUsername(username);
 
-      if (!intraId) throw new BadRequestException("Unable to find user");
+      if (!uid) throw new BadRequestException("Unable to find user");
       if (imageType !== "banner" && imageType !== "profile") {
         throw new BadRequestException("Invalid image type");
       }
@@ -92,7 +92,7 @@ export class UsersController {
       let imgPath = dirname;
 
       const files = readdirSync(dirname).filter((file) => {
-        return file.startsWith(`${intraId}.`);
+        return file.startsWith(`${uid}.`);
       });
 
       if (files.length === 0) {
@@ -136,13 +136,13 @@ export class UsersController {
     @Body() setUserDto: SetUserDto
   ): Promise<any> {
     try {
-      const intraID = req.user["intraID"];
-      const user: User = await this.userService.findUserByintraId(intraID);
+      const uid = req.user["uid"];
+      const user: User = await this.userService.findUserByUid(uid);
 
       if (!user || user.isInitialized === true) return;
 
       const setUserResp = await this.userService.setUser(
-        intraID,
+        user.intraId,
         setUserDto.username.toLowerCase(),
         setUserDto.color,
         setUserDto.description
@@ -206,9 +206,9 @@ export class UsersController {
     @UploadedFile() file: Express.Multer.File
   ) {
     const path = "/app/upload/banner/";
-    const id: string = req.user["intraID"];
+    const uid: string = req.user["uid"];
 
-    deleteFiles(path, id, file.filename);
+    deleteFiles(path, uid, file.filename);
     return HttpStatus.OK;
   }
 
@@ -221,9 +221,9 @@ export class UsersController {
   ) {
     // Remove left over files
     const path = "/app/upload/profile/";
-    const id: string = req.user["intraID"];
+    const uid: string = req.user["uid"];
 
-    deleteFiles(path, id, file.filename);
+    deleteFiles(path, uid, file.filename);
     return HttpStatus.OK;
   }
 }

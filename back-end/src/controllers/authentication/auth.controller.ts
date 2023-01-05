@@ -12,7 +12,7 @@ import * as bcrypt from "bcrypt";
 import { createHash } from "crypto";
 import { JwtService } from "@nestjs/jwt";
 import User from "src/entities/user/user.entity";
-import { LoginConfirmPayload } from "src/types/auth";
+import { AuthTokenType, LoginConfirmPayload } from "src/types/auth";
 
 /**
  * The auth controller handles everything related to
@@ -85,43 +85,40 @@ export class AuthController {
       // The third party UID
       const intraID = userData.data.id;
 
-      // Create the tokens to be used for authentication
-      const tokens = await this.authService.getTokens(intraID);
-      returnedPayload.authToken = tokens;
-
       // Check if the user already exists
       const user: User = await this.userService.findUserByintraId(intraID);
 
       if (!user) {
-        const hash = createHash("sha256")
-          .update(tokens.refreshToken)
-          .digest("hex");
-        // TODO: add this to some kind of encryption service
-        const saltorounds: string =
-          this.configService.get<string>("SALT_OR_ROUNDS");
-        const numsalt: number = +saltorounds;
-        const encrypted_token = await bcrypt.hash(hash, numsalt);
-
-        await this.userService.createUser(intraID, encrypted_token);
-
+        const new_user: User = await this.userService.createUser(intraID);
+        const tokens: AuthTokenType = await this.authService.getTokens(
+          new_user.uid
+        );
+        returnedPayload.authToken = tokens;
+        const encrypted_token: string =
+          await this.authService.createEncryptedToken(tokens);
+        await this.userService.setRefreshToken(new_user.uid, encrypted_token);
         returnedPayload.shouldCreateUser = true;
-      }
+      } else {
+        // if there is a user dont create on else do
+        // in both cases an authtoken needs to be added
+        const tokens: AuthTokenType = await this.authService.getTokens(
+          user.uid
+        );
 
-      if (user) {
-        if (!user.isInitialized) returnedPayload.shouldCreateUser = true;
+        if (user.isTfaEnabled === true) {
+          returnedPayload.TWOfaEnabled = true;
+        }
+
+        if (!user.isInitialized) {
+          returnedPayload.shouldCreateUser = true;
+        }
 
         if (user.isInitialized) {
-          if (user.isTfaEnabled === true) returnedPayload.TWOfaEnabled = true;
-
-          const intraIDDto = { intraID };
-
-          await this.userService.setRefreshToken(
-            intraIDDto.intraID,
-            tokens.refreshToken
-          );
-
           returnedPayload.profile = this.userService.filterUser(user);
         }
+
+        await this.userService.setRefreshToken(user.uid, tokens.refreshToken);
+        returnedPayload.authToken = tokens;
       }
 
       return returnedPayload;
@@ -140,7 +137,9 @@ export class AuthController {
   @Get("refresh")
   async refreshTokens(@Req() req: Request) {
     const refreshToken = req.user["refreshToken"];
-    const refreshTokenRes = await this.authService.refreshTokens(refreshToken);
+    const refreshTokenRes = await this.authService.isValidRefreshToken(
+      refreshToken
+    );
 
     return refreshTokenRes;
   }

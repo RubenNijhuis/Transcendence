@@ -35,6 +35,17 @@ export class AuthService {
     });
   }
 
+  // create a token based on input
+  // to be used as token to insert in user
+  async createEncryptedToken(tokens: AuthTokenType): Promise<string> {
+    const hash = createHash("sha256").update(tokens.refreshToken).digest("hex");
+    // TODO: add this to some kind of encryption service
+    const saltorounds: string =
+      this.configService.get<string>("SALT_OR_ROUNDS");
+    const numsalt: number = +saltorounds;
+    return await bcrypt.hash(hash, numsalt);
+  }
+
   // TODO: abstract axios into a proxy library
   // And also should this be async
   // TODO: dont return any type
@@ -52,8 +63,8 @@ export class AuthService {
   }
 
   jwtDecodeUsername(jwt: string): string {
-    const { intraID } = this.jwtService.decode(jwt) as JwtPayload;
-    return intraID;
+    const { uid } = this.jwtService.decode(jwt) as JwtPayload;
+    return uid;
   }
 
   /**
@@ -61,14 +72,14 @@ export class AuthService {
    * refreshed everytime the website is reloaded. You could theoretically
    * steal the token and use it forever?
    */
-  async getTokens(intraID: string): Promise<AuthTokenType> {
+  async getTokens(uid: string): Promise<AuthTokenType> {
     try {
       const returnedPayload: AuthTokenType = {
         accessToken: "",
         refreshToken: ""
       };
 
-      const tokenPayload = { intraID };
+      const tokenPayload = { uid };
 
       const jwtAccessSecret =
         this.configService.get<string>("JWT_ACCESS_SECRET");
@@ -98,7 +109,8 @@ export class AuthService {
   }
 
   //TODO: remove all extra info after access denied in the throw errors. Could be used to figure out how the program works
-  async refreshTokens(refreshToken: string): Promise<AuthTokenType> {
+  // checks if refresh token is valid and replaces it (for now everytime)
+  async isValidRefreshToken(refreshToken: string): Promise<AuthTokenType> {
     //****    verify if it's a valid refresh token
     const secret: string = this.configService.get<string>("JWT_REFRESH_SECRET");
 
@@ -107,7 +119,7 @@ export class AuthService {
     if (!isValidRefToken)
       throw new ForbiddenException("Access Denied: Not a valid Token");
 
-    //****    decode token to get intraID
+    //****    decode token to get uid
     const decoded: JwtPayload = this.jwtService.decode(
       refreshToken
     ) as JwtPayload;
@@ -116,9 +128,7 @@ export class AuthService {
 
     try {
       //****  get user by intraid to see if person exists
-      const user: User = await this.userService.findUserByintraId(
-        decoded.intraID
-      );
+      const user: User = await this.userService.findUserByUid(decoded.uid);
 
       if (!user || !user.refreshToken)
         throw new ForbiddenException("Access Denied: No user in database");
@@ -131,11 +141,10 @@ export class AuthService {
         throw new ForbiddenException("Access Denied: Not a match");
 
       //****  update token in the backend
-      const tokens: AuthTokenType = await this.getTokens(decoded.intraID);
+      const tokens: AuthTokenType = await this.getTokens(decoded.uid);
 
-      const intraIDDto = { intraID: decoded.intraID };
       const addUser: UpdateResult = await this.userService.setRefreshToken(
-        intraIDDto.intraID,
+        user.uid,
         tokens.refreshToken
       );
       if (!addUser)

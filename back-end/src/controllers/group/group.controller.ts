@@ -80,8 +80,8 @@ export class GroupController {
     @Param("userId") userId: string
   ) {
     // Get UID through access token
-    const intraID = req.user["intraID"];
-    const user: User = await this.userService.findUserByintraId(intraID);
+    const uid = req.user["uid"];
+    const user: User = await this.userService.findUserByUid(uid);
 
     if (user.uid !== userId) return HttpStatus.CONFLICT;
 
@@ -95,8 +95,8 @@ export class GroupController {
   ): Promise<any> {
     try {
       // Get UID through access token
-      const intraID = req.user["intraID"];
-      const user: User = await this.userService.findUserByintraId(intraID);
+      const uid = req.user["uid"];
+      const user: User = await this.userService.findUserByUid(uid);
 
       await this.groupService.setPassword(
         user.uid,
@@ -143,8 +143,8 @@ export class GroupController {
   ) {
     try {
       // Get UID through access token
-      const intraID = req.user["intraID"];
-      const user: User = await this.userService.findUserByintraId(intraID);
+      const uid = req.user["uid"];
+      const user: User = await this.userService.findUserByUid(uid);
 
       const group: Group = await this.groupService.createGroup(
         user.uid,
@@ -175,8 +175,8 @@ export class GroupController {
   ) {
     try {
       // Get UID through access token
-      const intraID = req.user["intraID"];
-      const user: User = await this.userService.findUserByintraId(intraID);
+      const uid = req.user["uid"];
+      const user: User = await this.userService.findUserByUid(uid);
 
       await this.groupService.removeGroup(user.uid, removeGroupDto.groupId);
       return HttpStatus.OK;
@@ -192,8 +192,8 @@ export class GroupController {
   ) {
     try {
       // Get UID through access token
-      const intraID = req.user["intraID"];
-      const user: User = await this.userService.findUserByintraId(intraID);
+      const uid = req.user["uid"];
+      const user: User = await this.userService.findUserByUid(uid);
 
       // TODO: add user uid to add members func
       await this.groupService.addMembers(
@@ -214,8 +214,8 @@ export class GroupController {
   ) {
     try {
       // Get UID through access token
-      const intraID = req.user["intraID"];
-      const user: User = await this.userService.findUserByintraId(intraID);
+      const uid = req.user["uid"];
+      const user: User = await this.userService.findUserByUid(uid);
 
       await this.groupService.removeMembers(
         user.uid,
@@ -235,8 +235,8 @@ export class GroupController {
   ) {
     try {
       // Get UID through access token
-      const intraID = req.user["intraID"];
-      const user: User = await this.userService.findUserByintraId(intraID);
+      const uid = req.user["uid"];
+      const user: User = await this.userService.findUserByUid(uid);
 
       await this.groupService.setPermission(
         user.uid,
@@ -254,8 +254,8 @@ export class GroupController {
   async banUser(@Req() req: Request, @Body() banUserDto: BanUserDto) {
     try {
       // Get UID through access token
-      const intraID = req.user["intraID"];
-      const user: User = await this.userService.findUserByintraId(intraID);
+      const uid = req.user["uid"];
+      const user: User = await this.userService.findUserByUid(uid);
 
       await this.recordService.banUser(user.uid, banUserDto);
       const ret = { message: "User banned!" };
@@ -269,8 +269,8 @@ export class GroupController {
   async unbanUser(@Req() req: Request, @Body() unbanUserDto: UnBanUserDto) {
     try {
       // Get UID through access token
-      const intraID = req.user["intraID"];
-      const user: User = await this.userService.findUserByintraId(intraID);
+      const uid = req.user["uid"];
+      const user: User = await this.userService.findUserByUid(uid);
 
       await this.recordService.unbanUser(user.uid, unbanUserDto);
       const ret = { message: "User unbanned!" };

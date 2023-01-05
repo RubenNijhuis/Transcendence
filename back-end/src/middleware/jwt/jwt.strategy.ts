@@ -25,7 +25,7 @@ export class Jwt2faStrategy extends PassportStrategy(Strategy, "jwt-2fa") {
     );
 
     if (user) {
-      return { userId: user.intraId };
+      return { userId: user.uid };
     }
     return { userId: "niks" };
   }

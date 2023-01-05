@@ -2,7 +2,7 @@ import { IsNotEmpty } from "class-validator";
 
 export class IntraDto {
   @IsNotEmpty()
-  intraID: string;
+  uid: string;
 
   @IsNotEmpty()
   username: string;

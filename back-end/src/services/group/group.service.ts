@@ -59,7 +59,7 @@ export class GroupService {
         .where({ groupId: groupId })
         .getMany();
       for (let i = 0; i < groupUsers.length; i++) {
-        const member: User = await this.userService.findUsersById(
+        const member: User = await this.userService.findUserByUid(
           groupUsers[i].memberId
         );
         groupUsers[i].profile = member;
@@ -133,11 +133,11 @@ export class GroupService {
   ) {
     try {
       for (const member of users) {
-        const user: User = await this.userService.findUsersByIdNoFilter(member);
+        const user: User = await this.userService.findUserByUidNoFilter(member);
 
         if (!user) throw console.error("user doesn't exist");
 
-        const owner: User = await this.userService.findUsersByIdNoFilter(
+        const owner: User = await this.userService.findUserByUidNoFilter(
           member
         );
 
@@ -197,7 +197,7 @@ export class GroupService {
         const groupuser = this.groupuserRepository.create();
 
         groupuser.group = group;
-        groupuser.profile = await this.userService.findUsersByIdNoFilter(
+        groupuser.profile = await this.userService.findUserByUidNoFilter(
           member
         );
         groupuser.groupId = groupId;
@@ -223,7 +223,7 @@ export class GroupService {
 
       // TODO: can't these be set inmediatly in the create?
       groupuser.group = group;
-      groupuser.profile = await this.userService.findUsersByIdNoFilter(owner);
+      groupuser.profile = await this.userService.findUserByUidNoFilter(owner);
       groupuser.groupId = groupId;
       groupuser.memberId = owner;
       groupuser.permissions = 2; // TODO: Use an enum svp

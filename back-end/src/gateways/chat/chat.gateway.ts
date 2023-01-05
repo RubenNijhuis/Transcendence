@@ -61,9 +61,7 @@ export class ChatSocketGateway {
 
     const tokenPayload = this.jwtService.decode(authToken) as JwtPayload;
 
-    const userFromJwt = await this.userService.findUserByintraId(
-      tokenPayload.intraID
-    );
+    const userFromJwt = await this.userService.findUserByUid(tokenPayload.uid);
 
     if (!userFromJwt || !userFromJwt.uid) {
       client.emit("failure", "No user found by with token");

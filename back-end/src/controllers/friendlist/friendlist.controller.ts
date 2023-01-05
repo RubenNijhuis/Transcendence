@@ -32,10 +32,14 @@ export class FriendlistController {
 
   //////////////////////////////////////////////////////////
 
+  @UseGuards(AccessTokenGuard)
+  //  @Get("getFriends")
   @Get("getFriends/:username")
-  async getFriends(@Param("username") username: string) {
+  async getFriends(@Req() req: Request) {
     try {
-      const friendsList = await this.friendlistService.getFriends(username);
+      const uid: string = req.user["uid"];
+      console.log("---------------------- uid: ", uid);
+      const friendsList = await this.friendlistService.getFriends(uid);
 
       return friendsList;
     } catch (err) {
@@ -67,9 +71,9 @@ export class FriendlistController {
     @Req() req: Request
   ): Promise<FriendList> {
     try {
-      const intraID = req.user["intraID"];
+      const uid: string = req.user["uid"];
       const addFriendResp: FriendList = await this.friendlistService.addFriend(
-        intraID,
+        uid,
         friendname
       );
 
