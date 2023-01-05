@@ -198,8 +198,6 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
         socket.on(
             SocketRoutes.chat.receiveMessage,
             (newMessage: Chat.Message.Instance) => {
-                if (!newMessage) return;
-
                 const sender = chat.members.find(
                     (member: Chat.Member) =>
                         member.memberId === newMessage.senderID
@@ -208,7 +206,7 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
                 if (!sender) return;
 
                 newMessage.sender = sender.profile;
-
+                console.log(newMessage);
                 setConnectionMessages((prev) => [...prev, newMessage]);
             }
         );

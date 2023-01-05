@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import {
+    backgroundColor,
     lightTextColor,
     magicNum,
-    smallRadius,
+    mainColor,
+    smallRadius
 } from "../../styles/StylingConstants";
 
 ///////////////////////////////////////////////////////////
@@ -19,6 +21,28 @@ const Container = styled.div`
         gap: calc(${magicNum} / 4);
 
         list-style-type: none;
+    }
+
+    .friend-requests {
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            span {
+                color: ${backgroundColor}
+            }
+
+            button {
+                background-color: ${backgroundColor};
+                color: ${mainColor}
+            }
+
+            .asset {
+                width: calc(${magicNum});
+                height: calc(${magicNum});
+            }
+        }
     }
 `;
 

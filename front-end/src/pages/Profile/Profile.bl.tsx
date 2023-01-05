@@ -21,7 +21,7 @@ export const useProfileFriends = (
     useEffect(() => {
         if (!profile) return;
         getFriendsByUsername(profile.username).then(setProfileFriends);
-    }, []);
+    }, [profile]);
 
     return profileFriends;
 };

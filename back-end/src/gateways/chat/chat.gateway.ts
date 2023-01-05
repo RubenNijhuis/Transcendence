@@ -94,6 +94,13 @@ export class ChatSocketGateway {
     }
 
     this.roomManager.addMemberToRoom(member, joinRoomPayload.roomID);
+
+    // Tell the members of the room who is online
+    const roomMembers = this.roomManager.getRoomMembers(joinRoomPayload.roomID);
+    const roomMembersUIDs = roomMembers.map((roomMember) => roomMember.uid);
+    this._server
+      .to(joinRoomPayload.roomID)
+      .emit("onlineMembers", { members: roomMembersUIDs });
   }
 
   @SubscribeMessage("sendMessage")
@@ -123,6 +130,6 @@ export class ChatSocketGateway {
     delete messageSaveResponse["group"];
 
     // Send message to all other room members
-    client.emit("receiveMessage", messageSaveResponse);
+    this._server.to(member.roomID).emit("receiveMessage", messageSaveResponse);
   }
 }

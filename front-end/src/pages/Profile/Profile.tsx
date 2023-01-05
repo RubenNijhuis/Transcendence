@@ -38,10 +38,17 @@ import { useProfileFriends, useGetSelectedProfile } from "./Profile.bl";
 ////////////////////////////////////////////////////////////
 
 const ProfilePage = (): JSX.Element => {
+    // Find the user to be displayed
     const { profileName } = useParams();
-    const { user, setUser } = useUser();
+
+    // The user context
+    const { user, setUser, setFriends } = useUser();
+
+    // Profile to be displayed
     const selectedProfile = useGetSelectedProfile(user, profileName);
     const profileFriends = useProfileFriends(selectedProfile);
+
+    // Auth
     const { signIn } = useAuth();
 
     ////////////////////////////////////////////////////////
@@ -73,22 +80,21 @@ const ProfilePage = (): JSX.Element => {
                 setAllowClose(false);
                 setModalActive(true);
                 return;
-            }
-
-            /**
-             * If 2fa is enabled we retrieve the user from there
-             */
-            if (TWOfaEnabled === true) {
+            } else if (TWOfaEnabled) {
                 setModalElement(<TwoFactorAuthentication />);
                 setAllowClose(false);
                 setModalActive(true);
                 return;
-            }
-
-            if (profile !== null) {
+            } else if (profile) {
                 setUser(profile);
                 setItem(StoreId.loginProcess, false);
                 return;
+            } else {
+                console.error("No authentication method was chosen", {
+                    profile,
+                    shouldCreateUser,
+                    TWOfaEnabled
+                });
             }
         } catch (err) {
             console.error(err);
@@ -101,6 +107,12 @@ const ProfilePage = (): JSX.Element => {
         if (user) {
             // Reset the create account modal after account creation
             setModalActive(false);
+            if (selectedProfile) {
+                if (selectedProfile.username === user.username) {
+                    setFriends(profileFriends);
+                }
+            }
+
             return;
         }
 
@@ -124,7 +136,9 @@ const ProfilePage = (): JSX.Element => {
                     <ProfileDetailsContainer>
                         <FriendList
                             friends={profileFriends}
-                            withFriendRequests={user.username === selectedProfile.username}
+                            withFriendRequests={
+                                user.username === selectedProfile.username
+                            }
                         />
                         <GameHistory
                             player={selectedProfile}

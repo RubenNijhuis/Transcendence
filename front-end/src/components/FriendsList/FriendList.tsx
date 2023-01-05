@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useUser } from "../../contexts/UserContext";
 import { acceptFriendRequest } from "../../proxies/friend/acceptFriendRequests";
-import { getFriendRequestsByUsername } from "../../proxies/friend/getFriendRequestsByUsername";
+import { getRequested } from "../../proxies/friend/getRequested";
 import * as Profile from "../../types/Profile";
 
 // UI
@@ -55,8 +55,9 @@ const FriendRequestEntry = ({ friend, setFriendRequests }: IFriendRequest) => {
     };
 
     return (
-        <div>
+        <div className="item">
             <Asset url={friend.img_url} alt={friend.username} />
+            <span>{friend.username}</span>
             <Button onClick={() => resolveFriendRequest(friend.username)}>
                 Accept friend request
             </Button>
@@ -80,9 +81,11 @@ const FriendList = ({ friends, withFriendRequests }: IFriendList) => {
         if (!withFriendRequests) return;
         const getFriendRequests = async () => {
             try {
-                const retrievedFriendRequests =
-                    await getFriendRequestsByUsername(user.username);
+                const retrievedFriendRequests = await getRequested(
+                    user.username
+                );
                 setFriendRequests(retrievedFriendRequests);
+                console.log(retrievedFriendRequests);
             } catch (err) {
                 console.error(err);
             }
@@ -95,14 +98,18 @@ const FriendList = ({ friends, withFriendRequests }: IFriendList) => {
         <Container>
             <Heading type={3}>Friends</Heading>
             {withFriendRequests && (
-                <ul className="friend-requests">
-                    {friendRequests.map((friend) => (
-                        <FriendRequestEntry
-                            friend={friend}
-                            setFriendRequests={setFriendRequests}
-                        />
-                    ))}
-                </ul>
+                <div>
+                    <Heading type={3}>Requests</Heading>
+                    <ul className="friend-requests">
+                        {friendRequests.map((friend) => (
+                            <FriendRequestEntry
+                                key={friend.uid}
+                                friend={friend}
+                                setFriendRequests={setFriendRequests}
+                            />
+                        ))}
+                    </ul>
+                </div>
             )}
             <ul className="friends-list">
                 {friends.map((friend) => (

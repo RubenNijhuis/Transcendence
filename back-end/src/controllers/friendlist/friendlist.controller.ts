@@ -61,7 +61,7 @@ export class FriendlistController {
   }
 
   @UseGuards(AccessTokenGuard)
-  @Post("addFriend")
+  @Post("addFriend/:friendname")
   async addFriend(
     @Param("friendname") friendname: string,
     @Req() req: Request

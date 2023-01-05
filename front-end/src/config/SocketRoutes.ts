@@ -8,7 +8,7 @@
 
 // Config //////////////////////////////////////////////////
 export const base = {
-    url: `ws://localhost:8080`,
+    url: `/`,
     path: (route: string) => `/ws/${route}/socket.io`,
     connectionCheck: `connectionCheck`
 };

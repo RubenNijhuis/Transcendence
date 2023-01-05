@@ -16,11 +16,11 @@ import { addImagesToProfile } from "../profile";
  * @param username
  * @returns array of profile id's
  */
-const getFriendRequestsByUsername = async (
+const getRequested = async (
     username: string
 ): Promise<Profile.Instance[]> => {
     try {
-        const route = ApiRoutes.getFriendRequestsByUsername(username);
+        const route = ApiRoutes.getRequested(username);
         const { data } = await API.get<Profile.Instance[]>(route);
 
         const profilesWithImages: Profile.Instance[] = [];
@@ -47,4 +47,4 @@ const getFriendRequestsByUsername = async (
 
 ///////////////////////////////////////////////////////////
 
-export { getFriendRequestsByUsername };
+export { getRequested };
