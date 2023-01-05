@@ -1,14 +1,7 @@
 // random generators for seeding
-import {
-  randColor,
-  randFullName,
-  randNumber,
-  randParagraph,
-  randUserName
-} from "@ngneat/falso";
 
 // status and basic injectable
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { HttpStatus, Injectable } from "@nestjs/common";
 
 // typeorm sql injection library
 import { InjectRepository } from "@nestjs/typeorm";
@@ -17,11 +10,11 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/entities";
 
 // typeorm repository manipulation
-import { DeleteResult, Repository, TypeORMError, UpdateResult } from "typeorm";
+import { DeleteResult, Repository, UpdateResult } from "typeorm";
 
 // hashing libraries - thanks angi
 import * as bcrypt from "bcrypt";
-import { createHash, Hash } from "crypto";
+import { createHash } from "crypto";
 
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
 import { ConfigService } from "@nestjs/config";
@@ -95,7 +88,7 @@ export class UserService {
     }
   }
 
-  async findUsersById(uid: string): Promise<User> {
+  async findUserByUid(uid: string): Promise<User> {
     try {
       const ret: User = await this.userRepository.findOne({ where: { uid } });
       return this.filterUser(ret);
@@ -104,7 +97,7 @@ export class UserService {
     }
   }
 
-  async findUsersByIdNoFilter(uid: string): Promise<User> {
+  async findUserByUidNoFilter(uid: string): Promise<User> {
     try {
       const ret: User = await this.userRepository.findOne({ where: { uid } });
       return ret;
@@ -156,12 +149,11 @@ export class UserService {
     return users;
   }
 
-  async createUser(intraID: string, refreshToken: string): Promise<User> {
+  async createUser(intraID: string): Promise<User> {
     try {
       if (await this.findUserByintraId(intraID)) return null;
       const query = {
-        intraId: intraID,
-        refreshToken: refreshToken
+        intraId: intraID
       };
 
       const newUser: User = this.userRepository.create(query);
@@ -233,9 +225,9 @@ export class UserService {
     }
   }
 
-  async setRefreshToken(intraID: string, token: string): Promise<UpdateResult> {
+  async setRefreshToken(uid: string, token: string): Promise<UpdateResult> {
     try {
-      const user: User = await this.findUserByintraId(intraID);
+      const user: User = await this.findUserByUid(uid);
       const hashedToken: string = createHash("sha256")
         .update(token)
         .digest("hex");
@@ -280,7 +272,7 @@ export class UserService {
     secret: string
   ): Promise<UpdateResult> {
     try {
-      const user: User = await this.findUsersByIdNoFilter(intraID);
+      const user: User = await this.findUserByUidNoFilter(intraID);
 
       return await this.userRepository
         .createQueryBuilder()
@@ -343,7 +335,7 @@ export class UserService {
 
   async setTFAiv(intraID: string, tfa_iv: string): Promise<UpdateResult> {
     try {
-      const user: User = await this.findUsersByIdNoFilter(intraID);
+      const user: User = await this.findUserByUidNoFilter(intraID);
 
       return await this.userRepository
         .createQueryBuilder()
@@ -363,7 +355,7 @@ export class UserService {
 
   async setTFAkey(intraID: string, tfa_key: string): Promise<UpdateResult> {
     try {
-      const user: User = await this.findUsersByIdNoFilter(intraID);
+      const user: User = await this.findUserByUidNoFilter(intraID);
 
       return await this.userRepository
         .createQueryBuilder()
@@ -383,7 +375,7 @@ export class UserService {
 
   async getTFAiv(intraId: string): Promise<string> {
     try {
-      const user: User = await this.findUsersByIdNoFilter(intraId);
+      const user: User = await this.findUserByUidNoFilter(intraId);
       return user.tfa_iv;
     } catch (err) {
       throw err;
@@ -391,7 +383,7 @@ export class UserService {
   }
   async getTFAkey(intraId: string): Promise<string> {
     try {
-      const user: User = await this.findUsersByIdNoFilter(intraId);
+      const user: User = await this.findUserByUidNoFilter(intraId);
       return user.tfa_key;
     } catch (err) {
       throw err;
@@ -410,7 +402,7 @@ export class UserService {
   // FUNCTION IS NOT YET USED
   async setTfaOption(uid: string): Promise<UpdateResult> {
     try {
-      const user: User = await this.findUsersByIdNoFilter(uid);
+      const user: User = await this.findUserByUidNoFilter(uid);
 
       //console.log(user.isTfaEnabled, " ", !user.isTfaEnabled);
       return await this.userRepository

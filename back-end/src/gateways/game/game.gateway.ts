@@ -65,7 +65,7 @@ export class GameSocketGateway {
     const tokenPayload = this.jwtService.decode(authToken) as JwtPayload;
 
     const userFromJwt = await this.userService.findUserByintraId(
-      tokenPayload.intraID
+      tokenPayload.uid
     );
 
     if (!userFromJwt) {

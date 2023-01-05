@@ -1,7 +1,7 @@
 import User from "src/entities/user/user.entity";
 
 type JwtPayload = {
-  intraID: string;
+  uid: string;
 };
 
 interface AuthTokenType {

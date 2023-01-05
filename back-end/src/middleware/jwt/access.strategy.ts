@@ -22,7 +22,7 @@ export class AccessTokenStrategy extends PassportStrategy(
   validate(req: Request, payload: any) {
     const accessToken = req.get("Authorization").replace("Bearer", "").trim();
     const decodedJwt = this.jwtService.decode(accessToken) as JwtPayload;
-    const intraID: string = decodedJwt.intraID;
-    return { ...payload, intraID };
+    const uid: string = decodedJwt.uid;
+    return { ...payload, uid };
   }
 }
