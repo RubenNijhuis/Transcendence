@@ -87,6 +87,7 @@ export class AuthController {
 
       // Check if the user already exists
       const user: User = await this.userService.findUserByintraId(intraID);
+
       if (!user) {
         const new_user: User = await this.userService.createUser(intraID);
         const tokens: AuthTokenType = await this.authService.getTokens(
@@ -98,20 +99,26 @@ export class AuthController {
         await this.userService.setRefreshToken(new_user.uid, encrypted_token);
         returnedPayload.shouldCreateUser = true;
       } else {
-        if (!user.isInitialized) returnedPayload.shouldCreateUser = true;
+        // if there is a user dont create on else do
+        // in both cases an authtoken needs to be added
+        const tokens: AuthTokenType = await this.authService.getTokens(
+          user.uid
+        );
+
+        if (user.isTfaEnabled === true) {
+          returnedPayload.TWOfaEnabled = true;
+        }
+
+        if (!user.isInitialized) {
+          returnedPayload.shouldCreateUser = true;
+        }
 
         if (user.isInitialized) {
-          if (user.isTfaEnabled === true) returnedPayload.TWOfaEnabled = true;
-
-          const tokens: AuthTokenType = await this.authService.getTokens(
-            user.uid
-          );
-
-          await this.userService.setRefreshToken(user.uid, tokens.refreshToken);
-
           returnedPayload.profile = this.userService.filterUser(user);
-          returnedPayload.authToken = tokens;
         }
+
+        await this.userService.setRefreshToken(user.uid, tokens.refreshToken);
+        returnedPayload.authToken = tokens;
       }
 
       return returnedPayload;

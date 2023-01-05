@@ -16,7 +16,7 @@ import { useUser } from "../../contexts/UserContext";
 import { useFakeData } from "../../contexts/FakeDataContext";
 
 // API
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getValueFromUrl } from "../../utils/string";
 
 // Store
@@ -34,6 +34,8 @@ import TwoFactorAuthentication from "../../containers/TwoFactorAuthentication";
 
 // Business logic
 import { useProfileFriends, useGetSelectedProfile } from "./Profile.bl";
+import PageRoutes from "../../config/PageRoutes";
+import * as Store from "../../modules/Store";
 
 ////////////////////////////////////////////////////////////
 
@@ -43,6 +45,9 @@ const ProfilePage = (): JSX.Element => {
     const selectedProfile = useGetSelectedProfile(user, profileName);
     const profileFriends = useProfileFriends(selectedProfile);
     const { signIn } = useAuth();
+
+    // Navigation if there was a login error
+    const navigate = useNavigate();
 
     ////////////////////////////////////////////////////////
 
@@ -64,6 +69,13 @@ const ProfilePage = (): JSX.Element => {
         const apiToken = getValueFromUrl(window.location.href, "code");
 
         try {
+            if (!apiToken) {
+                Store.clearAll();
+                navigate(PageRoutes.whenNotLoggedIn);
+                throw Error(
+                    "No token found in the url. This either means there is anissue with the third party or the application didn't handle it correctly"
+                );
+            }
             const { profile, shouldCreateUser, TWOfaEnabled } = await signIn(
                 apiToken
             );
@@ -124,7 +136,9 @@ const ProfilePage = (): JSX.Element => {
                     <ProfileDetailsContainer>
                         <FriendList
                             friends={profileFriends}
-                            withFriendRequests={user.username === selectedProfile.username}
+                            withFriendRequests={
+                                user.username === selectedProfile.username
+                            }
                         />
                         <GameHistory
                             player={selectedProfile}
