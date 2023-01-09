@@ -15,8 +15,8 @@ import { UserService } from "src/services/user/user.service";
 import { DeleteResult } from "typeorm";
 import { CreateBlockDto } from "../../dtos/blocklist/create-blocklist.dto";
 
-@UseGuards(AccessTokenGuard)
 @Controller("blocklist")
+@UseGuards(AccessTokenGuard)
 export class BlockListController {
   constructor(
     private readonly blocklistService: BlocklistService,
@@ -36,14 +36,17 @@ export class BlockListController {
     }
   }
 
-  @Get("isBlock/:username/:blocked")
+  @Get("isBlock/:blocked")
   async getBlock(
-    @Param("username") username: string,
-    @Param("blocked") blocked: string
+    @Param("blocked") blocked: string,
+    @Req() req: Request
   ): Promise<boolean> {
     try {
+      const uid: string = req.user["uid"];
+      const user: User = await this.userService.findUserByUid(uid);
+
       const isBlocked: boolean = await this.blocklistService.isBlock(
-        username,
+        user.username,
         blocked
       );
 
@@ -53,11 +56,17 @@ export class BlockListController {
     }
   }
 
-  @Post("addBlock")
-  async addBlock(@Body() createBlockDto: CreateBlockDto): Promise<BlockList> {
+  @Post("addBlock/:block")
+  async addBlock(
+    @Param("block") block: string,
+    @Req() req: Request
+  ): Promise<BlockList> {
     try {
+      const uid: string = req.user["uid"];
+      const user: User = await this.userService.findUserByUid(uid);
       const addblock: BlockList = await this.blocklistService.blockPerson(
-        createBlockDto
+        user.username,
+        block
       );
 
       return addblock;
