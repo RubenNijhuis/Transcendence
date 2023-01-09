@@ -1,10 +1,15 @@
-// Types
+// React
 import { useEffect, useState } from "react";
+
+// Routing
 import { Link } from "react-router-dom";
-import { useUser } from "../../contexts/UserContext";
+
+// Types
+import * as Profile from "../../types/Profile";
+
+// Proxies
 import { acceptFriendRequest } from "../../proxies/friend/acceptFriendRequests";
 import { getRequested } from "../../proxies/friend/getRequested";
-import * as Profile from "../../types/Profile";
 
 // UI
 import Asset from "../Asset";
@@ -92,8 +97,7 @@ const FriendList = ({ friends, withFriendRequests }: IFriendList) => {
 
     return (
         <Container>
-            <Heading type={3}>Friends</Heading>
-            {withFriendRequests && (
+            {withFriendRequests && friendRequests.length ? (
                 <div>
                     <Heading type={3}>Requests</Heading>
                     <ul className="friend-requests">
@@ -106,7 +110,8 @@ const FriendList = ({ friends, withFriendRequests }: IFriendList) => {
                         ))}
                     </ul>
                 </div>
-            )}
+            ) : null}
+            <Heading type={3}>Friends</Heading>
             <ul className="friends-list">
                 {friends.map((friend) => (
                     <FriendEntry friend={friend} key={friend.uid} />

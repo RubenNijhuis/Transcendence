@@ -80,7 +80,9 @@ export class UsersController {
     @Res() res: Response
   ) {
     try {
-      const { uid } = await this.userService.findUserByUsername(username);
+      const user = await this.userService.findUserByUsername(username);
+
+      const uid = user.uid;
 
       if (!uid) throw new BadRequestException("Unable to find user");
       if (imageType !== "banner" && imageType !== "profile") {

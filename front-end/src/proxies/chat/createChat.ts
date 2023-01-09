@@ -23,12 +23,15 @@ const createChat = async (
 ): Promise<Chat.Group.Instance[]> => {
     try {
         const route = ApiRoutes.createChat();
-        const body = {
+        let body: any = {
             owner,
             name,
-            members,
-            password
+            members
         };
+
+        if (password && password.length > 1) {
+            body.password = password;
+        }
 
         const { data } = await API.post(route, body);
 

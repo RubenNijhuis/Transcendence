@@ -80,7 +80,6 @@ const CreateGroupChat = ({ setModalActive }: ICreateGroupChat): JSX.Element => {
     };
 
     const createGroupChat = async () => {
-        console.log("Selected friends", setSelectedFriends);
         try {
             const selectedFriendsUIDS = selectedFriends.map((item) => item.uid);
             await createChat(

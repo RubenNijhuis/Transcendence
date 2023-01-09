@@ -24,10 +24,11 @@ export class FriendRequestController {
 
   //////////////////////////////////////////////////////////
 
-  @Get("getRequest/:username")
-  async getrequests(@Param("username") username: string) {
+  @Get("getRequest")
+  async getrequests(@Req() req: Request) {
     try {
-      return await this.friendrequestService.getRequests(username);
+      const profile: User = req.user["profile"];
+      return await this.friendrequestService.getRequests(profile.username);
     } catch (err) {
       throw err;
     }

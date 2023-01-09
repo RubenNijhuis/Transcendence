@@ -44,6 +44,7 @@ const UserProvider = ({
         const getFriends = async () => {
             const retrievedFriends = await getFriendsByUsername(user.username);
             setFriends(retrievedFriends);
+            console.log(retrievedFriends);
 
             // const retrievedBlocked = await getBlockedProfilesByUs
         };
