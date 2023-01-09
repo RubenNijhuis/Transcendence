@@ -9,11 +9,10 @@ import ApiRoutes from "../../config/ApiRoutes";
  * @returns boolean
  */
 const getIsFriend = async (
-    username: string,
     friendname: string
 ): Promise<boolean> => {
     try {
-        const route = ApiRoutes.getIsFriend(username, friendname);
+        const route = ApiRoutes.getIsFriend(friendname);
 
         const { data } = await API.get<boolean>(route);
 

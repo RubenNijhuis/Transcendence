@@ -15,7 +15,7 @@ import { Request } from "express";
 // Dto's
 import { CreateMessageDto } from "src/dtos/group/create-message.dto";
 
-// Types
+// Entities
 import User from "src/entities/user/user.entity";
 
 // Guard

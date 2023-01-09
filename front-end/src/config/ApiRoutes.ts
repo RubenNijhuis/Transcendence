@@ -20,8 +20,8 @@ const ApiRoutes = {
         `/friends/getfriends/${username}`,
     getFriend: () => `/friends/getfriend`,
     removeFriend: () => `/friends/removeFriend`,
-    getIsFriend: (username: string, friendname: string) =>
-        `/friends/isFriend/${username}/${friendname}`,
+    getIsFriend: (friendname: string) =>
+        `/friends/isFriend/${friendname}`,
 
     sendFriendRequest: () => `/friendrequest/sendrequest`,
     acceptFriendRequest: (friendname: string) =>

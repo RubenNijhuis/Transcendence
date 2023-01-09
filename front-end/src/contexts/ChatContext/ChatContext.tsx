@@ -21,6 +21,7 @@ import { getChatByGroupId, getChatsByUsername } from "../../proxies/chat";
 
 interface ChatContextType {
     activeChat: Chat.Group.Instance | null;
+    activeChatId: string;
     setActiveChat: React.Dispatch<
         React.SetStateAction<Chat.Group.Instance | null>
     >;
@@ -41,6 +42,7 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
     const [activeChat, setActiveChat] = useState<Chat.Group.Instance | null>(
         null
     );
+    const [activeChatId, setActiveChatId] = useState<string>('');
     const [groupChats, setGroupChats] = useState<Chat.Group.Instance[]>([]);
     const [chatMembers, setChatMembers] = useState<Chat.Member[]>([]);
 
@@ -51,18 +53,18 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
     ////////////////////////////////////////////////////////
 
     useEffect(() => {
-        if (!activeChat) return;
+        if (!activeChatId) return;
 
-        const updateChat = async () =>{
+        const updateChat = async () => {
             try {
-                const newChat = await getChatByGroupId(activeChat.uid);
-                updateChatGroup(newChat)
+                const newChat = await getChatByGroupId(activeChatId);
+                updateChatGroup(newChat);
             } catch (err) {
                 console.error(err);
             }
-        }
+        };
         updateChat();
-    }, [activeChat]);
+    }, [activeChatId]);
 
     useEffect(() => {
         if (!user) return;
@@ -80,7 +82,7 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
             try {
                 const retrievedGroupChats: Chat.Group.Instance[] =
                     await getChatsByUsername();
-                
+
                 console.log(retrievedGroupChats);
 
                 const members = await getMembersFromGroupChats(
@@ -89,12 +91,9 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
                 const messages = getMessagesFromGroupChats(retrievedGroupChats);
                 bindMembersToMessages(members, messages);
 
-                for (let i = 0; i < retrievedGroupChats.length; i++) {
-                    retrievedGroupChats[i].internal_id = i;
-                }
-
                 setChatMembers(members.flat());
                 setGroupChats(retrievedGroupChats);
+                setActiveChatId(retrievedGroupChats[0].uid)
             } catch (err) {
                 console.error(err);
             }
@@ -103,9 +102,7 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
         chatAggregator();
     }, [user]);
 
-    const updateChatGroup = (
-        updatedGroup: Chat.Group.Instance
-    ): void => {
+    const updateChatGroup = (updatedGroup: Chat.Group.Instance): void => {
         setGroupChats((prev) => {
             let updatedChats = prev;
 

@@ -8,17 +8,31 @@ import {
   UseGuards
 } from "@nestjs/common";
 import { Request } from "express";
+
+// Entities
 import { BlockList, User } from "src/entities";
+
+// Guards
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
+
+// Service
 import { BlocklistService } from "src/services/blocklist/blocklist.service";
 import { UserService } from "src/services/user/user.service";
+
+// DB
 import { DeleteResult } from "typeorm";
+
+// Dtos
 import { CreateBlockDto } from "../../dtos/blocklist/create-blocklist.dto";
+
+////////////////////////////////////////////////////////////
 
 @Controller("blocklist")
 @UseGuards(AccessTokenGuard)
 export class BlockListController {
   constructor(private readonly blocklistService: BlocklistService) {}
+
+  ////////////////////////////////////////////////////////
 
   @Get("getBlocked")
   async getBlocked(@Req() req: Request) {

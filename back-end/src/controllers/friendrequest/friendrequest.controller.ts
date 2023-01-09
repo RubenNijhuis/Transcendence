@@ -7,9 +7,17 @@ import {
   UseGuards,
   Req
 } from "@nestjs/common";
+
+// Dto
 import { CreateRequestDto } from "src/dtos/friendrequest/create-request.dto";
+
+// Entities
 import { User } from "src/entities";
+
+// Guards
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
+
+// Service
 import { FriendrequestService } from "src/services/friendrequest/friendrequest.service";
 
 // Requests

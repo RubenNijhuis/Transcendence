@@ -25,18 +25,19 @@ import { ValidatePasswordDto } from "src/dtos/group/validate-password";
 
 // Entities
 import Group from "src/entities/group/group.entity";
+import User from "src/entities/user/user.entity";
 
 // Service
 import { GroupService } from "src/services/group/group.service";
+import { RecordService } from "src/services/record/record.service";
 
 // Guards
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
 
-// Types
-import User from "src/entities/user/user.entity";
+// Dtos
 import { BanUserDto } from "src/dtos/record/ban-user.dto";
-import { RecordService } from "src/services/record/record.service";
 import { UnBanUserDto } from "src/dtos/record/unban-user.dto";
+
 
 ////////////////////////////////////////////////////////////
 
@@ -159,7 +160,6 @@ export class GroupController {
     }
   }
 
-  // TODO: when with access token the uid can be taken from that no need to bring it with the dto
   @Post("addMembers")
   async addMembers(
     @Req() req: Request,

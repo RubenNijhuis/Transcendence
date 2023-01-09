@@ -94,11 +94,10 @@ const ProfileActions = ({ profile }: IProfileActions): JSX.Element => {
 
     useEffect(() => {
         const getFriendStatus = async () => {
-            const username = user.username;
             const friendname = profile.username;
 
             try {
-                const isFriend = await getIsFriend(username, friendname);
+                const isFriend = await getIsFriend(friendname);
                 setIsFriend(isFriend);
 
                 if (isFriend) {

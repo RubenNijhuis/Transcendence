@@ -47,14 +47,16 @@ export class FriendlistController {
     }
   }
 
-  @Get("isFriend/:username/:friendname")
+  @Get("isFriend/:friendname")
   async isFriend(
-    @Param("username") username: string,
-    @Param("friendname") friendname: string
+    @Param("friendname") friendname: string,
+    @Req() req: Request
   ): Promise<boolean> {
     try {
+      const profile: User = req.user["profile"];
+
       const isFriend: boolean = await this.friendlistService.isFriend(
-        username,
+        profile.username,
         friendname
       );
 
@@ -71,6 +73,7 @@ export class FriendlistController {
   ): Promise<FriendList> {
     try {
       const profile: User = req.user["profile"];
+
       const addFriendResp: FriendList = await this.friendlistService.addFriend(
         profile.uid,
         friendname

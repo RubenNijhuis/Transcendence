@@ -8,15 +8,27 @@ import {
   UnauthorizedException,
   UseGuards
 } from "@nestjs/common";
-import { TfaService } from "src/services/tfa/tfa.service";
-import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
-import { TfaDto } from "src/dtos/auth/tfa.dto";
 import { Request, Response } from "express";
+
+// Service
+import { TfaService } from "src/services/tfa/tfa.service";
+
+// Strategy
+import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
+
+// dto
+import { TfaDto } from "src/dtos/auth/tfa.dto";
+
+// Entities
 import { User } from "src/entities";
+
+////////////////////////////////////////////////////////////
 
 @Controller("tfa")
 export class TfaController {
   constructor(private readonly tfaService: TfaService) {}
+
+  ////////////////////////////////////////////////////////
 
   @Post("google2fa")
   @UseGuards(Jwt2faStrategy)
