@@ -88,11 +88,10 @@ export class GroupController {
   ): Promise<any> {
     try {
       // Get UID through access token
-      const uid = req.user["uid"];
-      const user: User = await this.userService.findUserByUid(uid);
+      const profile = req.user["profile"];
 
       await this.groupService.setPassword(
-        user.uid,
+        profile.uid,
         setPasswordDto.groupId,
         setPasswordDto.password
       );
@@ -136,20 +135,19 @@ export class GroupController {
   ) {
     try {
       // Get UID through access token
-      const uid = req.user["uid"];
-      const user: User = await this.userService.findUserByUid(uid);
+      const profile = req.user["profile"];
 
       const group: Group = await this.groupService.createGroup(
-        user.uid,
+        profile.uid,
         createGroupDto.name,
         createGroupDto.members,
         createGroupDto.password
       );
       const groupId: string = group.uid;
       const users: string[] = createGroupDto.members;
-      const owner: string = user.uid;
+      const owner: string = profile.uid;
 
-      await this.groupService.addMembers(user.uid, groupId, users);
+      await this.groupService.addMembers(profile.uid, groupId, users);
 
       // TODO: why does the owner need to be set if it's done
       // in the create group service func?
@@ -168,10 +166,9 @@ export class GroupController {
   ) {
     try {
       // Get UID through access token
-      const uid = req.user["uid"];
-      const user: User = await this.userService.findUserByUid(uid);
+      const profile = req.user["profile"];
 
-      await this.groupService.removeGroup(user.uid, removeGroupDto.groupId);
+      await this.groupService.removeGroup(profile.uid, removeGroupDto.groupId);
       return HttpStatus.OK;
     } catch (err) {
       throw err;
