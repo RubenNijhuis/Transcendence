@@ -18,7 +18,7 @@ const fillDBwithUsers = (): void => {};
 
 const fillDBwithChats = (user: Profile.Instance): void => {};
 
-const makeFriends = async (user: Profile.Instance) => {
+const makeFriends = async () => {
     try {
         const makeFriendResp = await API.post("/seeder/amount", {
             amount: 10,

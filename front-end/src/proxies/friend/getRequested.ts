@@ -16,11 +16,9 @@ import { addImagesToProfile } from "../profile";
  * @param username
  * @returns array of profile id's
  */
-const getRequested = async (
-    username: string
-): Promise<Profile.Instance[]> => {
+const getRequested = async (): Promise<Profile.Instance[]> => {
     try {
-        const route = ApiRoutes.getRequested(username);
+        const route = ApiRoutes.getRequested();
         const { data } = await API.get<Profile.Instance[]>(route);
 
         const profilesWithImages: Profile.Instance[] = [];

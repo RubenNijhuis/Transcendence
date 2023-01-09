@@ -1,10 +1,28 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+  Req
+} from "@nestjs/common";
 import { CreateRequestDto } from "src/dtos/friendrequest/create-request.dto";
+import { User } from "src/entities";
+import { AccessTokenGuard } from "src/guards/accessToken.guard";
 import { FriendrequestService } from "src/services/friendrequest/friendrequest.service";
 
+// Requests
+import { Request } from "express";
+
+////////////////////////////////////////////////////////////
+
 @Controller("friendrequest")
+@UseGuards(AccessTokenGuard)
 export class FriendRequestController {
   constructor(private readonly friendrequestService: FriendrequestService) {}
+
+  //////////////////////////////////////////////////////////
 
   @Get("getRequest/:username")
   async getrequests(@Param("username") username: string) {
@@ -15,22 +33,29 @@ export class FriendRequestController {
     }
   }
 
-  @Get("getRequested/:username")
-  async getrequested(@Param("username") username: string) {
+  @Get("getRequested")
+  async getrequested(@Req() req: Request) {
     try {
-      return await this.friendrequestService.getRequested(username);
+      const profile: User = req.user["profile"];
+
+      return await this.friendrequestService.getRequested(profile.username);
     } catch (err) {
       throw err;
     }
   }
 
-  @Get("isRequested/:username/:requested")
+  @Get("isRequested/:requested")
   async isRequested(
+    @Req() req: Request,
     @Param("username") username: string,
     @Param("requested") requested: string
   ): Promise<boolean> {
     try {
-      return await this.friendrequestService.isRequested(username, requested);
+      const profile: User = req.user["profile"];
+      return await this.friendrequestService.isRequested(
+        profile.username,
+        requested
+      );
     } catch (err) {
       throw err;
     }

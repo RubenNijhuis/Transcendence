@@ -106,10 +106,7 @@ const ProfileActions = ({ profile }: IProfileActions): JSX.Element => {
                     return;
                 }
 
-                const friendRequestStatus = await isRequested(
-                    username,
-                    friendname
-                );
+                const friendRequestStatus = await isRequested(friendname);
 
                 if (friendRequestStatus === true) {
                     setRequestedFriendship(true);
