@@ -37,8 +37,12 @@ export class FriendlistController {
   async getFriends(@Req() req: Request) {
     try {
       const profile: User = req.user["profile"];
-      const friendsList = await this.friendlistService.getFriends(profile.uid);
-
+      const friendsList = await this.friendlistService.getFriends(
+        profile.username
+      );
+      console.log("-------------------------------------------00000");
+      console.log("friends: ", friendsList);
+      console.log("-------------------------------------------00000");
       return friendsList;
     } catch (err) {
       throw err;

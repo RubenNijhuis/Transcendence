@@ -79,8 +79,10 @@ export class FriendrequestService {
       .createQueryBuilder("friend_request")
       .delete()
       .from("friend_request")
-      .where("username = :username", { username })
-      .andWhere("requested = :requested", { requested })
+      .where("username = :username OR requested = :username", { username })
+      .andWhere("requested = :requested OR username = :requested", {
+        requested
+      })
       .execute();
 
     return removeResponse;
