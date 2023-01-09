@@ -75,15 +75,11 @@ const FriendList = ({ friends, withFriendRequests }: IFriendList) => {
         []
     );
 
-    const { user } = useUser();
-
     useEffect(() => {
         if (!withFriendRequests) return;
         const getFriendRequests = async () => {
             try {
-                const retrievedFriendRequests = await getRequested(
-                    user.username
-                );
+                const retrievedFriendRequests = await getRequested();
                 setFriendRequests(retrievedFriendRequests);
                 console.log(retrievedFriendRequests);
             } catch (err) {

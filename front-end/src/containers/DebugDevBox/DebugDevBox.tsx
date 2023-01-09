@@ -8,7 +8,7 @@ import {
     handleTokenRefresh,
     fillDBwithChats,
     fillDBwithUsers,
-    makeFriends,
+    makeFriends
 } from "./DebugDevBox.bl";
 import { useUser } from "../../contexts/UserContext";
 
@@ -36,9 +36,7 @@ const DebugDevBox = (): JSX.Element => {
                 </Button>
                 <Button onClick={fillDBwithUsers}>Generate profiles</Button>
                 <Heading type={4}>Misc</Heading>
-                <Button onClick={() => makeFriends(user)}>
-                    Generate friends for user
-                </Button>
+                <Button onClick={makeFriends}>Generate friends for user</Button>
             </Box>
         </Container>
     );

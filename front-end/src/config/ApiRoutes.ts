@@ -24,10 +24,11 @@ const ApiRoutes = {
         `/friends/isFriend/${username}/${friendname}`,
 
     sendFriendRequest: () => `/friendrequest/sendrequest`,
-    acceptFriendRequest: (friendname: string) => `/friends/addFriend/${friendname}`,
-    getRequested: (username: string) => `/friendrequest/getrequest/${username}`,
-    isRequested: (username: string, requested: string) =>
-        `/friendrequest/isRequested/${username}/${requested}`,
+    acceptFriendRequest: (friendname: string) =>
+        `/friends/addFriend/${friendname}`,
+    getRequested: () => `/friendrequest/getrequest`,
+    isRequested: (requested: string) =>
+        `/friendrequest/isRequested/${requested}`,
     removeFriendRequest: () => `/friendrequest/remove`,
     // Friend //////////////////////////////////////////////////
 
