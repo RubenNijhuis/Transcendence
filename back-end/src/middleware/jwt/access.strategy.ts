@@ -24,11 +24,16 @@ export class AccessTokenStrategy extends PassportStrategy(
   }
 
   async validate(req: Request, payload: any) {
-    const accessToken = req.get("Authorization").replace("Bearer", "").trim();
-    const decodedJwt = this.jwtService.decode(accessToken) as JwtPayload;
-    const uid: string = decodedJwt.uid;
-    const user = await this.userService.findUserByUid(uid);
+    try {
+      const accessToken = req.get("Authorization").replace("Bearer", "").trim();
+      const decodedJwt = this.jwtService.decode(accessToken) as JwtPayload;
 
-    return { ...payload, uid, profile: user };
+      const uid: string = decodedJwt.uid;
+      const user = await this.userService.findUserByUid(uid);
+
+      return { ...payload, uid, profile: user };
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
