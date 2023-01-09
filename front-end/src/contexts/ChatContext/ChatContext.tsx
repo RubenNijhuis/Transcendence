@@ -80,12 +80,18 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
             try {
                 const retrievedGroupChats: Chat.Group.Instance[] =
                     await getChatsByUsername();
+                
+                console.log(retrievedGroupChats);
 
                 const members = await getMembersFromGroupChats(
                     retrievedGroupChats
                 );
                 const messages = getMessagesFromGroupChats(retrievedGroupChats);
                 bindMembersToMessages(members, messages);
+
+                for (let i = 0; i < retrievedGroupChats.length; i++) {
+                    retrievedGroupChats[i].internal_id = i;
+                }
 
                 setChatMembers(members.flat());
                 setGroupChats(retrievedGroupChats);

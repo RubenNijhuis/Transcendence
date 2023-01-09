@@ -118,9 +118,26 @@ const ChatGroupList = ({
     ////////////////////////////////////////////////////////
 
     const handleChatSelection = (id: number): void => {
+        console.log(id);
         setSelectedChat(selectedChatList[id]);
         setSelectedChatId(id);
     };
+
+    useEffect(() => {
+        console.log(selectedChatType);
+        setSelectedChatList(() => {
+            const chats = groupChats.filter((item) => {
+                console.log(item);
+                if (selectedChatType === Chat.Group.Type.DM) {
+                    return item.members.length === 2;
+                } else {
+                    return item.members.length > 2;
+                }
+            });
+            console.log(chats);
+            return chats;
+        });
+    }, [selectedChatType]);
 
     ////////////////////////////////////////////////////////
 
@@ -171,7 +188,7 @@ const ChatSelector = ({
     setSelectedChat
 }: IChatSelector): JSX.Element => {
     const [selectedChatType, setSelectedChatType] = useState<Chat.Group.Type>(
-        Chat.Group.Type.Group
+        Chat.Group.Type.DM
     );
 
     ////////////////////////////////////////////////////////

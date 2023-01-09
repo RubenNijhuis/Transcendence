@@ -18,11 +18,14 @@ export class Group {
   index: number;
 
   @Column()
-  owner: string;
+  name: string;
 
   @Column()
   @Generated("uuid")
   uid: string;
+
+  @Column()
+  owner: string;
 
   @Column({
     nullable: true
@@ -32,20 +35,17 @@ export class Group {
   @Column()
   protected: boolean;
 
-  @Column()
-  name: string;
-
-  @OneToMany((type) => GroupUser, (groupuser) => groupuser.group)
+  @OneToMany(() => GroupUser, (groupuser) => groupuser.group)
   @JoinTable()
   members: GroupUser[];
 
-  @OneToMany((type) => Message, (message) => message.group, {
+  @OneToMany(() => Message, (message) => message.group, {
     nullable: true
   })
   @JoinTable()
   messages: Message[];
 
-  @OneToMany((type) => Record, (record) => record.group)
+  @OneToMany(() => Record, (record) => record.group)
   @JoinTable()
   records: Record[];
 }

@@ -36,7 +36,7 @@ export const useGetSelectedProfile = (
 
     useEffect(() => {
         if (!user) return;
-        
+
         if (username === undefined || username === user.username) {
             setSelectedProfile(user);
             return;
@@ -47,7 +47,11 @@ export const useGetSelectedProfile = (
             banner: true
         };
 
-        getProfileByUsername(username, imageSelect).then(setSelectedProfile);
+        if (username) {
+            getProfileByUsername(username, imageSelect).then(
+                setSelectedProfile
+            );
+        }
     }, [user, username]);
 
     return selectedProfile;

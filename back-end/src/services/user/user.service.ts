@@ -99,7 +99,9 @@ export class UserService {
 
   async findUserByUidNoFilter(uid: string): Promise<User> {
     try {
-      const ret: User = await this.userRepository.findOne({ where: { uid } });
+      const ret: User = await this.userRepository.findOneOrFail({
+        where: { uid }
+      });
       return ret;
     } catch (err) {
       throw err;
@@ -108,7 +110,7 @@ export class UserService {
 
   async findUserByintraId(intraId: string): Promise<User> {
     try {
-      const returnedUser: User = await this.userRepository.findOne({
+      const returnedUser: User = await this.userRepository.findOneOrFail({
         where: { intraId }
       });
       return returnedUser;
@@ -180,7 +182,7 @@ export class UserService {
     try {
       const user: User = await this.findUserByintraId(intraID);
       const query = {
-        isInitialized: true,
+        isInitialized: false,
         username: username,
         color: color,
         description: description

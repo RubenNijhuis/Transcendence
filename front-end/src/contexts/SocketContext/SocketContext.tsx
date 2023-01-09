@@ -65,7 +65,7 @@ const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
          * components can hook into errors
          */
         newSocket.on("failure", console.error);
-
+        console.log(newSocket);
         setConnection(newSocket);
     };
 

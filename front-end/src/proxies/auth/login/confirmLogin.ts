@@ -26,7 +26,7 @@ const confirmLogin = async (
         if (data.profile) {
             data.profile = await addImagesToProfile(data.profile, {
                 profile: true,
-                banner: true,
+                banner: true
             });
         }
 

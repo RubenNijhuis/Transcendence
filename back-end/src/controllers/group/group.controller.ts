@@ -130,6 +130,7 @@ export class GroupController {
         createGroupDto.members,
         createGroupDto.password
       );
+
       const groupId: string = group.uid;
       const users: string[] = createGroupDto.members;
       const owner: string = profile.uid;
@@ -161,6 +162,7 @@ export class GroupController {
       throw err;
     }
   }
+
   // TODO: when with access token the uid can be taken from that no need to bring it with the dto
   @Post("addMembers")
   async addMembers(

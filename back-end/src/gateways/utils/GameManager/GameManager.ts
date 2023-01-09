@@ -144,7 +144,7 @@ export default GameManager;
 //         if (pongball.positionX - pongball.radius < 0) {
 //             this.player2Score++;
 //             this.powerUp.power = false;
-//             if (this.powerUp.hit == true) {
+//             if (this.powerUp.hit === true) {
 //                 this.powerUp.hit = false;
 //                 this.powerUp.positionX = this.powerUp.getPositionX(4);
 //                 this.powerUp.positionY = this.powerUp.getPositionY(3);
@@ -156,7 +156,7 @@ export default GameManager;
 //         if (pongball.positionX + pongball.radius > this.canvas.width) {
 //             this.player1Score++;
 //             this.powerUp.power = false;
-//             if (this.powerUp.hit == true) {
+//             if (this.powerUp.hit === true) {
 //                 this.powerUp.hit = false;
 //                 this.powerUp.positionX = this.powerUp.getPositionX(4);
 //                 this.powerUp.positionY = this.powerUp.getPositionY(3);

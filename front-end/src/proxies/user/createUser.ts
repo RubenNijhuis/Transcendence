@@ -22,7 +22,7 @@ const createUser = async (
     try {
         const route = ApiRoutes.createUser();
         const { data } = await API.post<Profile.Instance>(route, userData);
-
+        
         const profile = await addImagesToProfile(data, {
             profile: true,
             banner: true,

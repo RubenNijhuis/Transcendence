@@ -29,7 +29,7 @@ export class AccessTokenStrategy extends PassportStrategy(
       const decodedJwt = this.jwtService.decode(accessToken) as JwtPayload;
 
       const uid: string = decodedJwt.uid;
-      const user = await this.userService.findUserByUid(uid);
+      const user = await this.userService.findUserByUidNoFilter(uid);
 
       return { ...payload, uid, profile: user };
     } catch (err) {

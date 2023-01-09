@@ -82,15 +82,14 @@ export class GroupService {
         .where({ memberId: userId })
         .getMany();
 
-      let i = 0;
-      const groups: Group[] = [];
-      while (i < groupUsers.length) {
-        const group: Group = await this.getGroup(groupUsers[i].groupId);
-        groups.push(group);
-        i++;
+      const groupsList: Group[] = [];
+
+      for (const profile of groupUsers) {
+        const retrievedgroup: Group = await this.getGroup(profile.groupId);
+        groupsList.push(retrievedgroup);
       }
 
-      return groups;
+      return groupsList;
     } catch (err) {
       return err;
     }
@@ -128,20 +127,12 @@ export class GroupService {
   async createGroup(
     owner: string,
     name: string,
-    users: string[],
-    password: string
+    members: string[],
+    password: string | null
   ) {
     try {
-      for (const member of users) {
-        const user: User = await this.userService.findUserByUidNoFilter(member);
-
-        if (!user) throw console.error("user doesn't exist");
-
-        const owner: User = await this.userService.findUserByUidNoFilter(
-          member
-        );
-
-        if (!owner) throw console.error("owner doesn't exist");
+      for (const member of members) {
+        await this.userService.findUserByUidNoFilter(member);
       }
 
       const newGroup: Group = this.groupRepository.create();
@@ -151,10 +142,9 @@ export class GroupService {
       newGroup.name = name;
       newGroup.protected = false;
 
-      if (password !== null) {
+      if (password && password.length > 0) {
         newGroup.protected = true;
-        const hashedPassword: string = await this.hashPassword(password);
-        newGroup.password = hashedPassword;
+        newGroup.password = await this.hashPassword(password);
       }
 
       return this.groupRepository.save(newGroup);
@@ -192,11 +182,12 @@ export class GroupService {
       const group: Group = await this.findGroupById(groupId);
       if (owner !== group.owner) return;
       for (const member of users) {
-        if (member == group.owner) continue;
+        if (member === group.owner) continue;
 
         const groupuser = this.groupuserRepository.create();
 
         groupuser.group = group;
+        console.log("❌", member);
         groupuser.profile = await this.userService.findUserByUidNoFilter(
           member
         );
@@ -270,7 +261,7 @@ export class GroupService {
     try {
       // Get group from db
       const group: Group = await this.findGroupById(groupId);
-      //error lol
+      //error lol HEEL GRAPPIG MAN
       if (!group) {
         return console.error("group doesn't exist");
       }
@@ -354,7 +345,7 @@ export class GroupService {
       }
 
       const size: number = await this.getGroupSize(groupId);
-      if (size == i || isRemovable) {
+      if (size === i || isRemovable) {
         this.removeGroup(owner, groupId);
       }
     } catch (err) {

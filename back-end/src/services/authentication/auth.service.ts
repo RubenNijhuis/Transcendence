@@ -139,7 +139,7 @@ export class AuthService {
       const hash = createHash("sha256").update(refreshToken).digest("hex");
       const isMatch: boolean = await bcrypt.compare(hash, user.refreshToken);
 
-      if (isMatch == false)
+      if (isMatch === false)
         throw new ForbiddenException("Access Denied: Not a match");
 
       //****  update token in the backend

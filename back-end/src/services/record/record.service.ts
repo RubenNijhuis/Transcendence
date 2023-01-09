@@ -36,7 +36,7 @@ export class RecordService {
         adminId,
         banUserDto.groupId
       );
-      if (admin.permissions == 0)
+      if (admin.permissions === 0)
         throw errorHandler(
           Error(),
           "Not permitted to Ban users",
@@ -48,7 +48,7 @@ export class RecordService {
           banUserDto.groupId
         );
         // TODO: this checks whether the user is already banned or not, maybe better solution?
-        if (record.type == 1)
+        if (record.type === 1)
           throw errorHandler(
             Error(),
             "User is already banned",
@@ -69,22 +69,27 @@ export class RecordService {
     }
   }
 
-  async unbanUser(adminId : string, unbanUserDto : UnBanUserDto)
-  {
-    const adminUser: GroupUser = await this.groupService.findGroupuserById(adminId, unbanUserDto.groupId);
-    if (adminUser.permissions == 0)
+  async unbanUser(adminId: string, unbanUserDto: UnBanUserDto) {
+    const adminUser: GroupUser = await this.groupService.findGroupuserById(
+      adminId,
+      unbanUserDto.groupId
+    );
+    if (adminUser.permissions === 0)
       throw errorHandler(
-            Error(),
-            "You are not allowed to unban this user",
-            HttpStatus.FORBIDDEN
-          );  
-    const userRecord: Record = await this.getRecordByUserId(unbanUserDto.userId, unbanUserDto.groupId);
+        Error(),
+        "You are not allowed to unban this user",
+        HttpStatus.FORBIDDEN
+      );
+    const userRecord: Record = await this.getRecordByUserId(
+      unbanUserDto.userId,
+      unbanUserDto.groupId
+    );
     if (!userRecord)
       throw errorHandler(
-          Error(),
-          "This user is not banned/muted",
-          HttpStatus.INTERNAL_SERVER_ERROR
-        );
+        Error(),
+        "This user is not banned/muted",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     await this.recordRepository
       .createQueryBuilder("record")
       .delete()
@@ -96,7 +101,7 @@ export class RecordService {
   async isUserBanned(userId: string, groupId: string) {
     const userRecord: Record = await this.getRecordByUserId(userId, groupId);
     if (!userRecord) return false;
-    if (userRecord.type == 1) return true;
+    if (userRecord.type === 1) return true;
     const timeUntilUnban: number =
       userRecord.createdTime.valueOf() + userRecord.timeToBan * 1000;
     const timeOfDay: number = new Date().getTime(); //TODO: leak?

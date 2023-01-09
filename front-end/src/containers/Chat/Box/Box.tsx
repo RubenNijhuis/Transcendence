@@ -178,7 +178,6 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
     useEffect(() => {
         if (!connection) return;
         setupConnections(connection);
-
         connection.emit(SocketRoutes.room.joinRoom, {
             roomID: chat.uid
         });
@@ -186,7 +185,7 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
         return () => {
             removeConnections(connection);
         };
-    }, [connection]);
+    }, [connection, chat]);
 
     ////////////////////////////////////////////////////////
 
