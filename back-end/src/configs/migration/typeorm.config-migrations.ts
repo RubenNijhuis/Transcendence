@@ -16,6 +16,6 @@ export const typeOrmConfig = new DataSource({
   password: configService.get<string>("DB_PASS"),
   database: configService.get<string>("DB_NAME"),
   entities: [User, FriendList, BlockList, FriendRequest],
-  migrations: [CreateTables1661971166323],
-  migrationsRun: true
+  migrations: [],
+  migrationsRun: false
 });

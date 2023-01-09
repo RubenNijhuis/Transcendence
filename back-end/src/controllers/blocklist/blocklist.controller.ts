@@ -1,17 +1,34 @@
-import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
-import { BlockList } from "src/entities";
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards
+} from "@nestjs/common";
+import { Request } from "express";
+import { BlockList, User } from "src/entities";
+import { AccessTokenGuard } from "src/guards/accessToken.guard";
 import { BlocklistService } from "src/services/blocklist/blocklist.service";
+import { UserService } from "src/services/user/user.service";
 import { DeleteResult } from "typeorm";
 import { CreateBlockDto } from "../../dtos/blocklist/create-blocklist.dto";
 
-@Controller("block")
+@UseGuards(AccessTokenGuard)
+@Controller("blocklist")
 export class BlockListController {
-  constructor(private readonly blocklistService: BlocklistService) {}
+  constructor(
+    private readonly blocklistService: BlocklistService,
+    private readonly userService: UserService
+  ) {}
 
-  @Get("getBlocked/:username")
-  async getBlocked(@Param("username") username: string) {
+  @Get("getBlocked")
+  async getBlocked(@Req() req: Request) {
     try {
-      const blockedList = await this.blocklistService.getBlocked(username);
+      const uid: string = req.user["uid"];
+      const user: User = await this.userService.findUserByUid(uid);
+      const blockedList = await this.blocklistService.getBlocked(user.username);
 
       return blockedList;
     } catch (error) {

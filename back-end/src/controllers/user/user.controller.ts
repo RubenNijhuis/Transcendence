@@ -136,7 +136,7 @@ export class UsersController {
     @Body() setUserDto: SetUserDto
   ): Promise<any> {
     try {
-      const uid = req.user["uid"];
+      const uid: string = req.user["uid"];
       const user: User = await this.userService.findUserByUid(uid);
 
       if (!user || user.isInitialized === true) return;

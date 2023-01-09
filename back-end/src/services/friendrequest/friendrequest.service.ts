@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeleteResult, Repository } from "typeorm";
-import { CreateRequestDto } from "../../dtos/friendrequest/create-request.dto";
 import FriendRequest from "../../entities/friendrequest/friendrequest.entity";
 import { UserService } from "../user/user.service";
 
@@ -29,7 +28,7 @@ export class FriendrequestService {
 
   async getRequests(username: string) {
     const requests: FriendRequest[] = await this.friendrequestRepository
-      .createQueryBuilder("friend_requests")
+      .createQueryBuilder("friend_request")
       .where("requested = :username", { username })
       .getMany();
     return await this.filterOutput(username, requests);
@@ -37,7 +36,7 @@ export class FriendrequestService {
 
   async getRequested(username: string) {
     const requested: FriendRequest[] = await this.friendrequestRepository
-      .createQueryBuilder("friend_requests")
+      .createQueryBuilder("friend_request")
       .where("username = :username", { username })
       .getMany();
     return await this.filterOutput(username, requested);
@@ -47,7 +46,7 @@ export class FriendrequestService {
     let ret = false;
 
     const request: FriendRequest = await this.friendrequestRepository
-      .createQueryBuilder("friend_requests")
+      .createQueryBuilder("friend_request")
       .where("username = :username", { username })
       .andWhere("requested = :requested", { requested })
       .getOne();
@@ -77,10 +76,10 @@ export class FriendrequestService {
     requested: string
   ): Promise<DeleteResult> {
     const removeResponse: DeleteResult = await this.friendrequestRepository
-      .createQueryBuilder("friend_requests")
+      .createQueryBuilder("friend_request")
       .delete()
-      .from("friend_list")
-      .where("users = :username", { username })
+      .from("friend_request")
+      .where("username = :username", { username })
       .andWhere("requested = :requested", { requested })
       .execute();
 
