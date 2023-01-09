@@ -71,55 +71,11 @@ const bindMembersToMessages = (
     }
 };
 
-/**
- * Will return the id of the first chat that is a direct message
- * Otherwise return the first chat id which is zero
- */
-const getFirstDM = (
-    chats: Chat.Group.Instance[]
-): Chat.Group.Instance | null => {
-    for (const chat of chats) {
-        if (chat.members.length === 2) {
-            return chat;
-        }
-    }
-
-    return null;
-};
-
-const categorizeChats = (
-    chats: Chat.Group.Instance[]
-): [Chat.Group.Instance[], Chat.Group.Instance[]] => {
-    const directChats: Chat.Group.Instance[] = [];
-    const groupChats: Chat.Group.Instance[] = [];
-
-    let amountDirectChats = 0;
-    let amountGroupChats = 0;
-
-    for (const chat of chats) {
-        const isDmChat = chat.members.length === 2;
-
-        isDmChat ? directChats.push(chat) : groupChats.push(chat);
-
-        if (isDmChat) {
-            directChats[amountDirectChats].internal_id = amountDirectChats;
-        } else {
-            groupChats[amountGroupChats].internal_id = amountGroupChats;
-        }
-
-        isDmChat ? amountDirectChats++ : amountGroupChats++;
-    }
-
-    return [directChats, groupChats];
-};
-
 ////////////////////////////////////////////////////////////
 
 export {
     getMembersFromGroupChats,
     getMessagesFromGroupChats,
     findMemberByProfileID,
-    bindMembersToMessages,
-    getFirstDM,
-    categorizeChats
+    bindMembersToMessages
 };

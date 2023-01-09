@@ -18,12 +18,11 @@ import * as SocketType from "../../types/Socket";
 ///////////////////////////////////////////////////////////
 
 const ChatPage = (): JSX.Element => {
-    const { activeChat, setActiveChat, directChats, groupChats } = useChat();
+    const { activeChat, setActiveChat, groupChats } = useChat();
 
     ////////////////////////////////////////////////////////
 
-    const { connection, createConnection, destroyConnectionInstance } =
-        useSocket();
+    const { createConnection } = useSocket();
 
     ////////////////////////////////////////////////////////
 
@@ -38,7 +37,6 @@ const ChatPage = (): JSX.Element => {
         <Layout>
             <Container>
                 <ChatSelector
-                    directChats={directChats}
                     groupChats={groupChats}
                     setSelectedChat={setActiveChat}
                 />

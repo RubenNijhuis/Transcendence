@@ -9,13 +9,15 @@ import * as Chat from "../../types/Chat";
 
 /**
  * Retrieves all chats from a user
- * @param username
+ * @param groupId
  * @returns
  */
-const getChatsByUsername = async (): Promise<Chat.Group.Instance[]> => {
+const getChatByGroupId = async (
+    groupId: string
+): Promise<Chat.Group.Instance> => {
     try {
-        const route = ApiRoutes.getChatsById();
-        const { data } = await API.get<Chat.Group.Instance[]>(route);
+        const route = ApiRoutes.getChatsByGroupId(groupId);
+        const { data } = await API.get<Chat.Group.Instance>(route);
 
         return Promise.resolve(data);
     } catch (err) {
@@ -25,4 +27,4 @@ const getChatsByUsername = async (): Promise<Chat.Group.Instance[]> => {
 
 ///////////////////////////////////////////////////////////
 
-export { getChatsByUsername };
+export { getChatByGroupId };

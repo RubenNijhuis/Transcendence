@@ -19,7 +19,7 @@ const checkTokenValidity = async (
 ): Promise<Request.Response.TokenValidity> => {
     try {
         const authToken = await refreshAuthToken(refreshToken);
-
+        
         updateAuthTokens(authToken);
 
         const profileFromToken = await getUserByAccessToken(
