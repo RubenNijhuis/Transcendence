@@ -107,13 +107,9 @@ export class AuthController {
 
         if (user.isTfaEnabled === true) {
           returnedPayload.TWOfaEnabled = true;
-        }
-
-        if (!user.isInitialized) {
+        } else if (!user.isInitialized) {
           returnedPayload.shouldCreateUser = true;
-        }
-
-        if (user.isInitialized) {
+        } else if (user.isInitialized) {
           returnedPayload.profile = this.userService.filterUser(user);
         }
 
@@ -144,7 +140,6 @@ export class AuthController {
     return refreshTokenRes;
   }
 
-  // TODO: this should be in the user controller
   /**
    * Returns a user from the database using the authentication token
    * @param req
@@ -153,10 +148,8 @@ export class AuthController {
   @UseGuards(AccessTokenGuard)
   @Get("getUserFromAccessToken")
   async getUserByID(@Req() req: Request) {
-    const intraID: string = req.user["intraID"];
-    const user = await this.userService.findUserByintraId(intraID);
-
-    const newUser = this.userService.filterUser(user);
-    return newUser;
+    const uid: string = req.user["uid"];
+    const user = await this.userService.findUserByUid(uid);
+    return user;
   }
 }

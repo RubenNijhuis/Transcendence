@@ -128,8 +128,10 @@ export class AuthService {
 
     try {
       //****  get user by intraid to see if person exists
-      const user: User = await this.userService.findUserByUid(decoded.uid);
-
+      const user: User = await this.userService.findUserByUidNoFilter(
+        decoded.uid
+      );
+      console.log(user, refreshToken);
       if (!user || !user.refreshToken)
         throw new ForbiddenException("Access Denied: No user in database");
 

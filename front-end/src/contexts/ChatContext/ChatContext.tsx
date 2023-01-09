@@ -10,13 +10,12 @@ import * as Chat from "../../types/Chat";
 // Business logic
 import {
     bindMembersToMessages,
-    categorizeChats,
     getMembersFromGroupChats,
     getMessagesFromGroupChats
 } from "./ChatContext.bl";
 
 // Requests
-import { getChatsByUsername } from "../../proxies/chat";
+import { getChatByGroupId, getChatsByUsername } from "../../proxies/chat";
 
 ///////////////////////////////////////////////////////////
 
@@ -25,8 +24,6 @@ interface ChatContextType {
     setActiveChat: React.Dispatch<
         React.SetStateAction<Chat.Group.Instance | null>
     >;
-
-    directChats: Chat.Group.Instance[];
     groupChats: Chat.Group.Instance[];
 }
 
@@ -44,8 +41,8 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
     const [activeChat, setActiveChat] = useState<Chat.Group.Instance | null>(
         null
     );
-    const [directChats, setDirectChats] = useState<Chat.Group.Instance[]>([]);
     const [groupChats, setGroupChats] = useState<Chat.Group.Instance[]>([]);
+    const [chatMembers, setChatMembers] = useState<Chat.Member[]>([]);
 
     ////////////////////////////////////////////////////////
 
@@ -54,35 +51,73 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
     ////////////////////////////////////////////////////////
 
     useEffect(() => {
+        if (!activeChat) return;
+
+        const updateChat = async () =>{
+            try {
+                const newChat = await getChatByGroupId(activeChat.uid);
+                updateChatGroup(newChat)
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        updateChat();
+    }, [activeChat]);
+
+    useEffect(() => {
         if (!user) return;
 
+        /**
+         * Chat page
+         * Get all chats
+         * Bind members to messages
+         * set groupchats and members
+         *
+         *
+         */
+
         const chatAggregator = async () => {
-            const retrievedGroupChats: Chat.Group.Instance[] =
-                await getChatsByUsername(user.uid);
+            try {
+                const retrievedGroupChats: Chat.Group.Instance[] =
+                    await getChatsByUsername();
 
-            const members = await getMembersFromGroupChats(retrievedGroupChats);
-            const messages = getMessagesFromGroupChats(retrievedGroupChats);
-            bindMembersToMessages(members, messages);
+                const members = await getMembersFromGroupChats(
+                    retrievedGroupChats
+                );
+                const messages = getMessagesFromGroupChats(retrievedGroupChats);
+                bindMembersToMessages(members, messages);
 
-            const [categorizedDirectChats, categorizedGroupChats] =
-                categorizeChats(retrievedGroupChats);
-
-            setDirectChats(categorizedDirectChats);
-            setGroupChats(categorizedGroupChats);
-
-            setActiveChat(retrievedGroupChats[0]);
+                setChatMembers(members.flat());
+                setGroupChats(retrievedGroupChats);
+            } catch (err) {
+                console.error(err);
+            }
         };
 
         chatAggregator();
     }, [user]);
+
+    const updateChatGroup = (
+        updatedGroup: Chat.Group.Instance
+    ): void => {
+        setGroupChats((prev) => {
+            let updatedChats = prev;
+
+            for (let group of prev) {
+                if (group.uid === updatedGroup.uid) {
+                    group = updatedGroup;
+                }
+            }
+
+            return updatedChats;
+        });
+    };
 
     ////////////////////////////////////////////////////////
 
     const value: ChatContextType = {
         activeChat,
         setActiveChat,
-
-        directChats,
         groupChats
     };
 

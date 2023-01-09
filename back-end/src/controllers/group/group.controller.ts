@@ -74,18 +74,11 @@ export class GroupController {
     }
   }
 
-  @Get("chats/:userId")
-  async getGroupsByUserId(
-    @Req() req: Request,
-    @Param("userId") userId: string
-  ) {
-    // Get UID through access token
+  @Get("chats")
+  async getGroupsByUserId(@Req() req: Request) {
     const uid = req.user["uid"];
-    const user: User = await this.userService.findUserByUid(uid);
 
-    if (user.uid !== userId) return HttpStatus.CONFLICT;
-
-    return await this.groupService.getGroupsByUserId(userId);
+    return await this.groupService.getGroupsByUserId(uid);
   }
 
   @Post("setPassword")

@@ -91,7 +91,6 @@ const ChatTypeSelector = ({
 
 interface IDirectMessageList {
     selectedChatType: Chat.Group.Type;
-    directChats: Chat.Group.Instance[];
     groupChats: Chat.Group.Instance[];
     setSelectedChat: React.Dispatch<
         React.SetStateAction<Chat.Group.Instance | null>
@@ -104,7 +103,6 @@ interface IDirectMessageList {
  */
 const ChatGroupList = ({
     selectedChatType,
-    directChats,
     groupChats,
     setSelectedChat
 }: IDirectMessageList): JSX.Element => {
@@ -123,19 +121,6 @@ const ChatGroupList = ({
         setSelectedChat(selectedChatList[id]);
         setSelectedChatId(id);
     };
-
-    useEffect(() => {
-        switch (selectedChatType) {
-            case Chat.Group.Type.DM:
-                setSelectedChatList(directChats);
-                setSelectedChat(directChats[0]);
-                break;
-            case Chat.Group.Type.Group:
-                setSelectedChatList(groupChats);
-                setSelectedChat(groupChats[0]);
-                break;
-        }
-    }, [selectedChatType]);
 
     ////////////////////////////////////////////////////////
 
@@ -175,7 +160,6 @@ const ChatGroupList = ({
 ////////////////////////////////////////////////////////////
 
 interface IChatSelector {
-    directChats: Chat.Group.Instance[];
     groupChats: Chat.Group.Instance[];
     setSelectedChat: React.Dispatch<
         React.SetStateAction<Chat.Group.Instance | null>
@@ -183,7 +167,6 @@ interface IChatSelector {
 }
 
 const ChatSelector = ({
-    directChats,
     groupChats,
     setSelectedChat
 }: IChatSelector): JSX.Element => {
@@ -197,7 +180,7 @@ const ChatSelector = ({
         <Container>
             <ChatInterface />
 
-            {directChats.length || groupChats.length ? (
+            {groupChats && (
                 <>
                     <ChatTypeSelector
                         activeType={selectedChatType}
@@ -206,11 +189,10 @@ const ChatSelector = ({
                     <ChatGroupList
                         selectedChatType={selectedChatType}
                         setSelectedChat={setSelectedChat}
-                        directChats={directChats}
                         groupChats={groupChats}
                     />
                 </>
-            ) : null}
+            )}
         </Container>
     );
 };

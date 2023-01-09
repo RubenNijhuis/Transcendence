@@ -13,6 +13,9 @@ import Asset from "../../../components/Asset";
 import Button from "../../../components/Button";
 import ChatSettings from "../Settings";
 
+// Modal
+import { useModal } from "../../../contexts/ModalContext";
+
 // Styling
 import { Container, PasswordLayer } from "./Box.style";
 
@@ -30,8 +33,7 @@ import { useSocket } from "../../../contexts/SocketContext";
 import { useFormInput } from "../../../components/Form/hooks";
 
 // Proxies
-import { verifyPassword } from "../../../proxies/chat";
-import { useModal } from "../../../contexts/ModalContext";
+import { verifyPassword, getChatByGroupId } from "../../../proxies/chat";
 
 ////////////////////////////////////////////////////////////
 
@@ -67,13 +69,15 @@ const ChatTitle = ({ chat, isDmChat, isUnlocked }: IChatTitle): JSX.Element => {
         setModalActive(true);
     };
 
-    const isAdministrator = () => {
+    const isAdministrator = (memberUid: string) => {
         for (const member of chat.members) {
             const memberIsAnAdmin =
                 member.permissions === Chat.Group.Permission.Admin;
-            const memberIsUser = member.profile.uid === user.uid;
+            const memberIsUser = member.profile.uid === memberUid;
 
-            if (memberIsUser && memberIsAnAdmin) return true;
+            if (memberIsUser && memberIsAnAdmin) {
+                return true;
+            }
         }
 
         return false;
@@ -92,7 +96,7 @@ const ChatTitle = ({ chat, isDmChat, isUnlocked }: IChatTitle): JSX.Element => {
                 )}
                 <Heading type={3}>{chatTitle}</Heading>
             </div>
-            {isUnlocked && isAdministrator() && (
+            {isUnlocked && isAdministrator(user.uid) && (
                 <div className="settings">
                     <button onClick={openSettingsPanel}>Settings</button>
                 </div>
@@ -167,8 +171,6 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
     useEffect(() => {
         setIsUnlocked(!chat.protected);
         setConnectionMessages([]);
-
-        
     }, [chat.protected, chat]);
 
     ////////////////////////////////////////////////////////
@@ -176,8 +178,6 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
     useEffect(() => {
         if (!connection) return;
         setupConnections(connection);
-
-
 
         connection.emit(SocketRoutes.room.joinRoom, {
             roomID: chat.uid
