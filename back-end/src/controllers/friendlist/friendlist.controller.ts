@@ -40,7 +40,9 @@ export class FriendlistController {
       const friendsList = await this.friendlistService.getFriends(
         profile.username
       );
-
+      console.log("-------------------------------------------00000");
+      console.log("friends: ", friendsList);
+      console.log("-------------------------------------------00000");
       return friendsList;
     } catch (err) {
       throw err;
