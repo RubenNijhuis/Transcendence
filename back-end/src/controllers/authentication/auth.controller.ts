@@ -86,9 +86,20 @@ export class AuthController {
       const intraID = userData.data.id;
 
       // Check if the user already exists
-      const user: User = await this.userService.findUserByintraId(intraID);
+
+      const user: User | null = await this.userService
+        .findUserByintraId(intraID)
+        .then((val) => {
+          return val;
+        })
+        .catch(() => {
+          return null;
+        });
+
+      console.log("CONFIRM: ", user);
 
       if (!user) {
+        console.log("wtf");
         const new_user: User = await this.userService.createUser(intraID);
         const tokens: AuthTokenType = await this.authService.getTokens(
           new_user.uid
@@ -110,7 +121,7 @@ export class AuthController {
         } else if (!user.isInitialized) {
           returnedPayload.shouldCreateUser = true;
         } else if (user.isInitialized) {
-          returnedPayload.profile = this.userService.filterUser(user);
+          returnedPayload.profile = this.userService.filterProfile(user);
         }
 
         await this.userService.setRefreshToken(user.uid, tokens.refreshToken);

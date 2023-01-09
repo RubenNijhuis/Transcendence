@@ -13,7 +13,7 @@ export class BlocklistService {
     private readonly userService: UserService
   ) {}
 
-  private async filterOutput(username: string, blocked: BlockList[]) {
+  async filterBlocklist(username: string, blocked: BlockList[]) {
     const filteredFriends = [];
 
     for (const block of blocked) {
@@ -22,16 +22,18 @@ export class BlocklistService {
       if (name === username) name = block.username;
       filteredFriends.push(name);
     }
-    const ret = await this.userService.getUsersOnUsernames(filteredFriends);
+    const ret = this.userService.filterProfiles(
+      await this.userService.getUsersOnUsernames(filteredFriends)
+    );
     return ret;
   }
 
-  async getBlocked(username: string) {
+  async getBlocked(username: string): Promise<BlockList[]> {
     const blocked: BlockList[] = await this.blocklistRepository
       .createQueryBuilder("block_list")
       .where({ username })
       .getMany();
-    return this.filterOutput(username, blocked);
+    return blocked;
   }
 
   async isBlock(username: string, blockname: string): Promise<boolean> {

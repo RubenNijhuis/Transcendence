@@ -39,18 +39,27 @@ export class UserService {
     private readonly configService: ConfigService
   ) {}
 
-  filterUser(user: User): User {
-    const newUser: User = user;
+  filterProfile(profile: User): User {
+    const new_profile: User = profile;
 
-    if (!newUser) return null;
+    if (!new_profile) return null;
 
-    delete newUser.intraId;
-    delete newUser.index;
-    delete newUser.isInitialized;
-    delete newUser.refreshToken;
-    delete newUser.tfaSecret;
+    delete new_profile.intraId;
+    delete new_profile.index;
+    delete new_profile.isInitialized;
+    delete new_profile.refreshToken;
+    delete new_profile.tfaSecret;
 
-    return newUser;
+    return new_profile;
+  }
+
+  filterProfiles(profiles: User[]): User[] {
+    const filtered_profiles = [];
+
+    for (const profile of profiles) {
+      filtered_profiles.push(this.filterProfile(profile));
+    }
+    return filtered_profiles;
   }
 
   // only used for debug purposes
@@ -71,7 +80,7 @@ export class UserService {
         }
       });
       const filteredUsers = returnedUsers.map((profile) =>
-        this.filterUser(profile)
+        this.filterProfile(profile)
       );
       return Promise.resolve(filteredUsers);
     } catch (err) {
@@ -90,8 +99,7 @@ export class UserService {
 
   async findUserByUid(uid: string): Promise<User> {
     try {
-      const ret: User = await this.userRepository.findOne({ where: { uid } });
-      return this.filterUser(ret);
+      return await this.userRepository.findOne({ where: { uid } });
     } catch (err) {
       throw err;
     }
@@ -143,20 +151,30 @@ export class UserService {
   }
 
   async getUsersOnUsernames(usernames: string[]) {
-    const users = [];
+    const profiles: User[] = [];
 
-    for (let i = 0; i < usernames.length; i++) {
-      users.push(this.filterUser(await this.findUserByUsername(usernames[i])));
+    for (const username of usernames) {
+      profiles.push(await this.findUserByUsername(username));
     }
-    return users;
+    return profiles;
   }
 
   async createUser(intraID: string): Promise<User> {
     try {
-      if (await this.findUserByintraId(intraID)) return null;
+      const res = await this.findUserByintraId(intraID)
+        .then((val) => {
+          return val;
+        })
+        .catch(() => {
+          return null;
+        });
+
+      if (res) return null;
       const query = {
         intraId: intraID
       };
+
+      console.log("createuser check result: ", res);
 
       const newUser: User = this.userRepository.create(query);
       // var testUser: User;
@@ -182,7 +200,7 @@ export class UserService {
     try {
       const user: User = await this.findUserByintraId(intraID);
       const query = {
-        isInitialized: false,
+        isInitialized: true,
         username: username,
         color: color,
         description: description
@@ -271,7 +289,7 @@ export class UserService {
   // thanks :) - zeno
   async update2faSecret(uid: string, secret: string): Promise<UpdateResult> {
     try {
-      const user: User = await this.findUserByUidNoFilter(uid);
+      const user: User = await this.findUserByUid(uid);
 
       return await this.userRepository
         .createQueryBuilder()
@@ -334,7 +352,7 @@ export class UserService {
 
   async setTFAiv(uid: string, tfa_iv: string): Promise<UpdateResult> {
     try {
-      const user: User = await this.findUserByUidNoFilter(uid);
+      const user: User = await this.findUserByUid(uid);
 
       return await this.userRepository
         .createQueryBuilder()
@@ -354,7 +372,7 @@ export class UserService {
 
   async setTFAkey(uid: string, tfa_key: string): Promise<UpdateResult> {
     try {
-      const user: User = await this.findUserByUidNoFilter(uid);
+      const user: User = await this.findUserByUid(uid);
 
       return await this.userRepository
         .createQueryBuilder()
@@ -372,17 +390,17 @@ export class UserService {
     }
   }
 
-  async getTFAiv(intraId: string): Promise<string> {
+  async getTFAiv(uid: string): Promise<string> {
     try {
-      const user: User = await this.findUserByUidNoFilter(intraId);
+      const user: User = await this.findUserByUid(uid);
       return user.tfa_iv;
     } catch (err) {
       throw err;
     }
   }
-  async getTFAkey(intraId: string): Promise<string> {
+  async getTFAkey(uid: string): Promise<string> {
     try {
-      const user: User = await this.findUserByUidNoFilter(intraId);
+      const user: User = await this.findUserByUid(uid);
       return user.tfa_key;
     } catch (err) {
       throw err;
@@ -401,7 +419,7 @@ export class UserService {
   // FUNCTION IS NOT YET USED
   async setTfaOption(uid: string): Promise<UpdateResult> {
     try {
-      const user: User = await this.findUserByUidNoFilter(uid);
+      const user: User = await this.findUserByUid(uid);
 
       //console.log(user.isTfaEnabled, " ", !user.isTfaEnabled);
       return await this.userRepository

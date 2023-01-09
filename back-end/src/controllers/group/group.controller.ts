@@ -28,8 +28,6 @@ import Group from "src/entities/group/group.entity";
 
 // Service
 import { GroupService } from "src/services/group/group.service";
-import { UserService } from "src/services/user/user.service";
-import { MessageService } from "src/services/message/message.service";
 
 // Guards
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
@@ -48,8 +46,6 @@ import { UnBanUserDto } from "src/dtos/record/unban-user.dto";
 export class GroupController {
   constructor(
     private readonly groupService: GroupService,
-    private readonly userService: UserService,
-    private readonly messageService: MessageService,
     private readonly recordService: RecordService
   ) {}
 

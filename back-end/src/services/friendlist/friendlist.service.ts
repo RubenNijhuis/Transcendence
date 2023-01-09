@@ -24,7 +24,7 @@ export class FriendlistService {
     private readonly friendrequestService: FriendrequestService
   ) {}
 
-  private async filterOutput(username: string, friends: FriendList[]) {
+  async filterFriendlist(username: string, friends: FriendList[]) {
     const filteredFriends = [];
 
     for (const friend of friends) {
@@ -33,18 +33,20 @@ export class FriendlistService {
       if (name === username) name = friend.username;
       filteredFriends.push(name);
     }
-    const ret = await this.userService.getUsersOnUsernames(filteredFriends);
+    const ret = this.userService.filterProfiles(
+      await this.userService.getUsersOnUsernames(filteredFriends)
+    );
     return ret;
   }
 
   // moet nog requests uit db halen
-  async getFriends(username: string) {
+  async getFriends(username: string): Promise<FriendList[]> {
     const friends: FriendList[] = await this.friendlistRepository
       .createQueryBuilder("friend_lists")
       .where("username = :username OR friendname = :username", { username })
       .getMany();
 
-    return await this.filterOutput(username, friends);
+    return friends;
   }
 
   async isFriend(username: string, friendname: string): Promise<boolean> {

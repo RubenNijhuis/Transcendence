@@ -18,19 +18,20 @@ import { CreateBlockDto } from "../../dtos/blocklist/create-blocklist.dto";
 @Controller("blocklist")
 @UseGuards(AccessTokenGuard)
 export class BlockListController {
-  constructor(
-    private readonly blocklistService: BlocklistService,
-    private readonly userService: UserService
-  ) {}
+  constructor(private readonly blocklistService: BlocklistService) {}
 
   @Get("getBlocked")
   async getBlocked(@Req() req: Request) {
     try {
       const profile: User = req.user["profile"];
-      const user: User = await this.userService.findUserByUid(profile.uid);
-      const blockedList = await this.blocklistService.getBlocked(user.username);
+      const blockedList = await this.blocklistService.getBlocked(
+        profile.username
+      );
 
-      return blockedList;
+      return await this.blocklistService.filterBlocklist(
+        profile.username,
+        blockedList
+      );
     } catch (error) {
       throw error;
     }

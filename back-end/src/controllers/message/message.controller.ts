@@ -23,17 +23,13 @@ import { AccessTokenGuard } from "src/guards/accessToken.guard";
 
 // Services
 import { MessageService } from "src/services/message/message.service";
-import { UserService } from "src/services/user/user.service";
 
 ////////////////////////////////////////////////////////////
 
 @Controller("message")
 @UseGuards(AccessTokenGuard)
 export class MessageController {
-  constructor(
-    private readonly messageService: MessageService,
-    private readonly userService: UserService
-  ) {}
+  constructor(private readonly messageService: MessageService) {}
 
   //////////////////////////////////////////////////////////
 
@@ -46,10 +42,9 @@ export class MessageController {
     try {
       // Get UID through access token
       const profile: User = req.user["profile"];
-      const sender: User = await this.userService.findUserByUid(profile.uid);
 
       await this.messageService.createMessage(
-        sender.uid,
+        profile.uid,
         createMessageDto.group_id,
         createMessageDto.content,
         createMessageDto.content_type

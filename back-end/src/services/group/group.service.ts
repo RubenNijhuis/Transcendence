@@ -132,7 +132,7 @@ export class GroupService {
   ) {
     try {
       for (const member of members) {
-        await this.userService.findUserByUidNoFilter(member);
+        await this.userService.findUserByUid(member);
       }
 
       const newGroup: Group = this.groupRepository.create();
@@ -188,9 +188,7 @@ export class GroupService {
 
         groupuser.group = group;
         console.log("❌", member);
-        groupuser.profile = await this.userService.findUserByUidNoFilter(
-          member
-        );
+        groupuser.profile = await this.userService.findUserByUid(member);
         groupuser.groupId = groupId;
         groupuser.memberId = member;
         groupuser.permissions = 0;
@@ -214,7 +212,7 @@ export class GroupService {
 
       // TODO: can't these be set inmediatly in the create?
       groupuser.group = group;
-      groupuser.profile = await this.userService.findUserByUidNoFilter(owner);
+      groupuser.profile = await this.userService.findUserByUid(owner);
       groupuser.groupId = groupId;
       groupuser.memberId = owner;
       groupuser.permissions = 2; // TODO: Use an enum svp

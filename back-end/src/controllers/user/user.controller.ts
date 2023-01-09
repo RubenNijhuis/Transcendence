@@ -123,7 +123,7 @@ export class UsersController {
     try {
       const user: User = await this.userService.findUserByUsername(username);
 
-      return this.userService.filterUser(user);
+      return this.userService.filterProfile(user);
     } catch (err) {
       throw err;
     }
@@ -146,7 +146,7 @@ export class UsersController {
         setUserDto.description
       );
 
-      return this.userService.filterUser(setUserResp);
+      return this.userService.filterProfile(setUserResp);
     } catch (err) {
       throw err;
     }

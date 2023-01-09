@@ -13,7 +13,7 @@ export class FriendrequestService {
     private readonly userService: UserService
   ) {}
 
-  private async filterOutput(username: string, requests: FriendRequest[]) {
+  async filterFriendrequests(username: string, requests: FriendRequest[]) {
     const filteredRequests = [];
 
     for (const item of requests) {
@@ -22,7 +22,9 @@ export class FriendrequestService {
       if (name === username) name = item.username;
       filteredRequests.push(name);
     }
-    const ret = await this.userService.getUsersOnUsernames(filteredRequests);
+    const ret = this.userService.filterProfiles(
+      await this.userService.getUsersOnUsernames(filteredRequests)
+    );
     return ret;
   }
 
@@ -31,7 +33,7 @@ export class FriendrequestService {
       .createQueryBuilder("friend_request")
       .where("requested = :username", { username })
       .getMany();
-    return await this.filterOutput(username, requests);
+    return requests;
   }
 
   async getRequested(username: string) {
@@ -39,7 +41,7 @@ export class FriendrequestService {
       .createQueryBuilder("friend_request")
       .where("username = :username", { username })
       .getMany();
-    return await this.filterOutput(username, requested);
+    return requested;
   }
 
   async isRequested(username: string, requested: string): Promise<boolean> {

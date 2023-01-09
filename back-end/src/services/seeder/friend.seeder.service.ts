@@ -1,5 +1,5 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
-import { User } from "src/entities";
+import { FriendList, User } from "src/entities";
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
 import { FriendlistService } from "../friendlist/friendlist.service";
 import { UserService } from "../user/user.service";
@@ -52,13 +52,18 @@ export class FriendSeederService {
 
     for (let i = 0; i < users.length; i++) {
       const user: User = users[i];
-      const friends: string[] = await this.friendsService.getFriends(
+      const filtered_friends: string[] = [];
+      const friends: FriendList[] = await this.friendsService.getFriends(
         user.username
       );
+
+      for (const friend of friends) {
+        filtered_friends.push(friend.username);
+      }
       const entry = {
         username: user.username,
         amount: friends.length,
-        friends: friends
+        friends: filtered_friends
       };
       ret.push(entry);
     }
@@ -75,7 +80,9 @@ export class FriendSeederService {
       // loop trough users
       for (let i = 0; i < filteredUsers.length; i++) {
         const user: User = filteredUsers[i];
-        const currentFriends = await this.friendsService.getFriends(user.username);
+        const currentFriends = await this.friendsService.getFriends(
+          user.username
+        );
         const targetAmount: number = this.randomNum(0, maxFriends - 1);
         const excludeList: number[] = await this.getFriendIndexes(
           currentFriends

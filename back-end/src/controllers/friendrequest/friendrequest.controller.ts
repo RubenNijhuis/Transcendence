@@ -28,7 +28,10 @@ export class FriendRequestController {
   async getrequests(@Req() req: Request) {
     try {
       const profile: User = req.user["profile"];
-      return await this.friendrequestService.getRequests(profile.username);
+      return await this.friendrequestService.filterFriendrequests(
+        profile.username,
+        await this.friendrequestService.getRequests(profile.username)
+      );
     } catch (err) {
       throw err;
     }
@@ -39,7 +42,10 @@ export class FriendRequestController {
     try {
       const profile: User = req.user["profile"];
 
-      return await this.friendrequestService.getRequested(profile.username);
+      return await this.friendrequestService.filterFriendrequests(
+        profile.username,
+        await this.friendrequestService.getRequested(profile.username)
+      );
     } catch (err) {
       throw err;
     }
@@ -48,7 +54,6 @@ export class FriendRequestController {
   @Get("isRequested/:requested")
   async isRequested(
     @Req() req: Request,
-    @Param("username") username: string,
     @Param("requested") requested: string
   ): Promise<boolean> {
     try {

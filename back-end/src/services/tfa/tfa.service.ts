@@ -33,7 +33,7 @@ export class TfaService {
   ) {}
 
   async isTfaValid(tfaDto: TfaDto) {
-    const ret = await this.usersService.findUserByUidNoFilter(tfaDto.uid);
+    const ret = await this.usersService.findUserByUid(tfaDto.uid);
     //you can only confirm if the secret is set
     if (!ret || !ret.tfaSecret || !ret.tfa_iv || !ret.tfa_key) throw TypeError;
 
@@ -48,7 +48,7 @@ export class TfaService {
   }
 
   async generateTfaSecret(uid: string) {
-    const ret = await this.usersService.findUserByUidNoFilter(uid);
+    const ret = await this.usersService.findUserByUid(uid);
     if (!ret || ret.isTfaEnabled === false) {
       throw TypeError;
     }
