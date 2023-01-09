@@ -69,6 +69,7 @@ export class FriendlistService {
       username: username,
       friendname: friendname
     };
+    console.log("addfriend");
     await this.friendrequestService.removeRequest(username, friendname); // remove request
     const newEntry: FriendList = this.friendlistRepository.create(query);
     const saveResponse: FriendList = await this.friendlistRepository.save(
