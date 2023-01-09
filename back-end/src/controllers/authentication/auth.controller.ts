@@ -148,9 +148,7 @@ export class AuthController {
   @UseGuards(AccessTokenGuard)
   @Get("getUserFromAccessToken")
   async getUserByID(@Req() req: Request) {
-    const uid: string = req.user["uid"];
-    console.log(req.user);
-    const user = await this.userService.findUserByUid(uid);
-    return user;
+    const profile: User = req.user["profile"];
+    return profile;
   }
 }

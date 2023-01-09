@@ -76,9 +76,9 @@ export class GroupController {
 
   @Get("chats")
   async getGroupsByUserId(@Req() req: Request) {
-    const uid = req.user["uid"];
+    const profile: User = req.user["profile"];
 
-    return await this.groupService.getGroupsByUserId(uid);
+    return await this.groupService.getGroupsByUserId(profile.uid);
   }
 
   @Post("setPassword")
@@ -114,19 +114,6 @@ export class GroupController {
       throw err;
     }
   }
-
-  // @Get(":uid/messages")
-  // @UsePipes(ValidationPipe)
-  // @UseGuards(AccessTokenGuard)
-  // async getMessagesFromGroup(@Param("uid") uid: string) {
-  //   try {
-  //     const messagesFromGroup =
-  //       await this.messageService.getAllMessagesByGroupId(uid);
-  //     return messagesFromGroup;
-  //   } catch (err) {
-  //     throw err;
-  //   }
-  // }
 
   @Post("createGroup")
   async createGroup(
@@ -182,12 +169,11 @@ export class GroupController {
   ) {
     try {
       // Get UID through access token
-      const uid = req.user["uid"];
-      const user: User = await this.userService.findUserByUid(uid);
+      const profile: User = req.user["profile"];
 
       // TODO: add user uid to add members func
       await this.groupService.addMembers(
-        user.uid,
+        profile.uid,
         editMembersDto.groupId,
         editMembersDto.users
       );
@@ -204,11 +190,10 @@ export class GroupController {
   ) {
     try {
       // Get UID through access token
-      const uid = req.user["uid"];
-      const user: User = await this.userService.findUserByUid(uid);
+      const profile: User = req.user["profile"];
 
       await this.groupService.removeMembers(
-        user.uid,
+        profile.uid,
         editMembersDto.groupId,
         editMembersDto.users
       );
@@ -225,11 +210,10 @@ export class GroupController {
   ) {
     try {
       // Get UID through access token
-      const uid = req.user["uid"];
-      const user: User = await this.userService.findUserByUid(uid);
+      const profile: User = req.user["profile"];
 
       await this.groupService.setPermission(
-        user.uid,
+        profile.uid,
         setPermissionDto.groupId,
         setPermissionDto.targetUser,
         setPermissionDto.level
@@ -244,10 +228,9 @@ export class GroupController {
   async banUser(@Req() req: Request, @Body() banUserDto: BanUserDto) {
     try {
       // Get UID through access token
-      const uid = req.user["uid"];
-      const user: User = await this.userService.findUserByUid(uid);
+      const profile: User = req.user["profile"];
 
-      await this.recordService.banUser(user.uid, banUserDto);
+      await this.recordService.banUser(profile.uid, banUserDto);
       const ret = { message: "User banned!" };
       return ret;
     } catch (err) {
@@ -259,10 +242,9 @@ export class GroupController {
   async unbanUser(@Req() req: Request, @Body() unbanUserDto: UnBanUserDto) {
     try {
       // Get UID through access token
-      const uid = req.user["uid"];
-      const user: User = await this.userService.findUserByUid(uid);
+      const profile: User = req.user["profile"];
 
-      await this.recordService.unbanUser(user.uid, unbanUserDto);
+      await this.recordService.unbanUser(profile.uid, unbanUserDto);
       const ret = { message: "User unbanned!" };
       return ret;
     } catch (err) {

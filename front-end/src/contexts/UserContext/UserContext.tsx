@@ -29,7 +29,7 @@ const useUser = () => useContext(UserContext);
 ///////////////////////////////////////////////////////////
 
 const UserProvider = ({
-    children,
+    children
 }: {
     children: React.ReactNode;
 }): JSX.Element => {
@@ -42,12 +42,12 @@ const UserProvider = ({
     useEffect(() => {
         if (!user) return;
         const getFriends = async () => {
-            const retrievedFriends = await getFriendsByUsername(user.username)
+            const retrievedFriends = await getFriendsByUsername(user.username);
             setFriends(retrievedFriends);
 
             // const retrievedBlocked = await getBlockedProfilesByUs
-        }
-        getFriends()
+        };
+        getFriends();
     }, [user]);
 
     ////////////////////////////////////////////////////////
@@ -60,7 +60,7 @@ const UserProvider = ({
         setFriends,
 
         blocked,
-        setBlocked,
+        setBlocked
     };
 
     ////////////////////////////////////////////////////////

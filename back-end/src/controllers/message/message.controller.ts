@@ -28,6 +28,7 @@ import { UserService } from "src/services/user/user.service";
 ////////////////////////////////////////////////////////////
 
 @Controller("message")
+@UseGuards(AccessTokenGuard)
 export class MessageController {
   constructor(
     private readonly messageService: MessageService,
@@ -38,15 +39,14 @@ export class MessageController {
 
   @Post("create")
   @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
   async createMessage(
     @Req() req: Request,
     @Body() createMessageDto: CreateMessageDto
   ) {
     try {
       // Get UID through access token
-      const uid = req.user["uid"];
-      const sender: User = await this.userService.findUserByUid(uid);
+      const profile: User = req.user["profile"];
+      const sender: User = await this.userService.findUserByUid(profile.uid);
 
       await this.messageService.createMessage(
         sender.uid,

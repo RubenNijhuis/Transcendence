@@ -57,6 +57,7 @@ import { SetcolorDto } from "src/dtos/user/color.dto";
  */
 
 @Controller("user")
+@UseGuards(AccessTokenGuard)
 export class UsersController {
   constructor(private readonly userService: UserService) {}
 
@@ -67,13 +68,11 @@ export class UsersController {
     return await this.userService.getUsers();
   }
 
-  @UseGuards(AccessTokenGuard)
   @Get("getLeaderboard")
   async getLeaderboard() {
     return await this.userService.getUsersSortedOnElo();
   }
 
-  @UseGuards(AccessTokenGuard)
   @Get("get-img/:imageType/:username")
   async getImg(
     @Param("imageType") imageType: string,
@@ -130,19 +129,17 @@ export class UsersController {
 
   @Post("setUser")
   @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
   async setUser(
     @Req() req: Request,
     @Body() setUserDto: SetUserDto
   ): Promise<any> {
     try {
-      const uid: string = req.user["uid"];
-      const user: User = await this.userService.findUserByUid(uid);
+      const profile: User = req.user["profile"];
 
-      if (!user || user.isInitialized === true) return;
+      if (!profile || profile.isInitialized === true) return;
 
       const setUserResp = await this.userService.setUser(
-        user.intraId,
+        profile.intraId,
         setUserDto.username.toLowerCase(),
         setUserDto.color,
         setUserDto.description
@@ -169,7 +166,6 @@ export class UsersController {
 
   @Post("enable2fa")
   @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
   async turnon2fa(@Body() dto: SetTfaDto) {
     try {
       await this.userService.setTfaOption(dto.uid);
@@ -180,7 +176,6 @@ export class UsersController {
 
   @Post("updateDescription")
   @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
   async updateDescription(@Body() dto: SetDescriptionDto) {
     try {
       await this.userService.setDescription(dto.username, dto.description);
@@ -191,7 +186,6 @@ export class UsersController {
 
   @Post("updateColor")
   @UsePipes(ValidationPipe)
-  @UseGuards(AccessTokenGuard)
   async updateColor(@Body() dto: SetcolorDto) {
     console.log("color:", dto.color);
     try {
@@ -202,21 +196,19 @@ export class UsersController {
   }
 
   @Post("upload-banner-pic")
-  @UseGuards(AccessTokenGuard)
   @UseInterceptors(FileInterceptor("file", bannerOptions))
   async uploadBannerFile(
     @Req() req: Request,
     @UploadedFile() file: Express.Multer.File
   ) {
     const path = "/app/upload/banner/";
-    const uid: string = req.user["uid"];
+    const profile: User = req.user["profile"];
 
-    deleteFiles(path, uid, file.filename);
+    deleteFiles(path, profile.uid, file.filename);
     return HttpStatus.OK;
   }
 
   @Post("upload-profile-pic")
-  @UseGuards(AccessTokenGuard)
   @UseInterceptors(FileInterceptor("file", profileOptions))
   async uploadProfileFile(
     @Req() req: Request,
@@ -224,9 +216,9 @@ export class UsersController {
   ) {
     // Remove left over files
     const path = "/app/upload/profile/";
-    const uid: string = req.user["uid"];
+    const profile: User = req.user["profile"];
 
-    deleteFiles(path, uid, file.filename);
+    deleteFiles(path, profile.uid, file.filename);
     return HttpStatus.OK;
   }
 }

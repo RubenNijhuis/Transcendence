@@ -12,6 +12,7 @@ import { TfaService } from "src/services/tfa/tfa.service";
 import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
 import { TfaDto } from "src/dtos/auth/tfa.dto";
 import { Request, Response } from "express";
+import { User } from "src/entities";
 
 @Controller("tfa")
 export class TfaController {
@@ -21,8 +22,8 @@ export class TfaController {
   @UseGuards(Jwt2faStrategy)
   async google2fa(@Req() req: Request) {
     try {
-      const uid: string = req.user["uid"];
-      const res = await this.tfaService.generateTfaSecret(uid);
+      const profile: User = req.user["profile"];
+      const res = await this.tfaService.generateTfaSecret(profile.uid);
       console.log("Google 2FA: ", res);
       return res;
     } catch (error) {

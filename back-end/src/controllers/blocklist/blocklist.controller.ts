@@ -26,8 +26,8 @@ export class BlockListController {
   @Get("getBlocked")
   async getBlocked(@Req() req: Request) {
     try {
-      const uid: string = req.user["uid"];
-      const user: User = await this.userService.findUserByUid(uid);
+      const profile: User = req.user["profile"];
+      const user: User = await this.userService.findUserByUid(profile.uid);
       const blockedList = await this.blocklistService.getBlocked(user.username);
 
       return blockedList;
@@ -42,11 +42,10 @@ export class BlockListController {
     @Req() req: Request
   ): Promise<boolean> {
     try {
-      const uid: string = req.user["uid"];
-      const user: User = await this.userService.findUserByUid(uid);
+      const profile: User = req.user["profile"];
 
       const isBlocked: boolean = await this.blocklistService.isBlock(
-        user.username,
+        profile.username,
         blocked
       );
 
@@ -62,10 +61,9 @@ export class BlockListController {
     @Req() req: Request
   ): Promise<BlockList> {
     try {
-      const uid: string = req.user["uid"];
-      const user: User = await this.userService.findUserByUid(uid);
+      const profile: User = req.user["profile"];
       const addblock: BlockList = await this.blocklistService.blockPerson(
-        user.username,
+        profile.username,
         block
       );
 

@@ -15,7 +15,7 @@ import { Request } from "express";
 import { CreateFriendsDto } from "src/dtos/friendlist/create-friend.dto";
 
 // Types
-import { FriendList } from "src/entities";
+import { FriendList, User } from "src/entities";
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
 
 // Service
@@ -27,19 +27,17 @@ import { DeleteResult } from "typeorm";
 ////////////////////////////////////////////////////////////
 
 @Controller("friends")
+@UseGuards(AccessTokenGuard)
 export class FriendlistController {
   constructor(private readonly friendlistService: FriendlistService) {}
 
   //////////////////////////////////////////////////////////
 
-  @UseGuards(AccessTokenGuard)
-  //  @Get("getFriends")
   @Get("getFriends/:username")
   async getFriends(@Req() req: Request) {
     try {
-      const uid: string = req.user["uid"];
-      console.log("---------------------- uid: ", uid);
-      const friendsList = await this.friendlistService.getFriends(uid);
+      const profile: User = req.user["profile"];
+      const friendsList = await this.friendlistService.getFriends(profile.uid);
 
       return friendsList;
     } catch (err) {
@@ -64,16 +62,15 @@ export class FriendlistController {
     }
   }
 
-  @UseGuards(AccessTokenGuard)
   @Post("addFriend/:friendname")
   async addFriend(
     @Param("friendname") friendname: string,
     @Req() req: Request
   ): Promise<FriendList> {
     try {
-      const uid: string = req.user["uid"];
+      const profile: User = req.user["profile"];
       const addFriendResp: FriendList = await this.friendlistService.addFriend(
-        uid,
+        profile.uid,
         friendname
       );
 
