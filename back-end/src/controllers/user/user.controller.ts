@@ -169,6 +169,7 @@ export class UsersController {
 
   @Post("enable2fa")
   @UsePipes(ValidationPipe)
+  @UseGuards(AccessTokenGuard)
   async turnon2fa(@Body() dto: SetTfaDto) {
     try {
       await this.userService.setTfaOption(dto.uid);
@@ -179,6 +180,7 @@ export class UsersController {
 
   @Post("updateDescription")
   @UsePipes(ValidationPipe)
+  @UseGuards(AccessTokenGuard)
   async updateDescription(@Body() dto: SetDescriptionDto) {
     try {
       await this.userService.setDescription(dto.username, dto.description);
@@ -189,6 +191,7 @@ export class UsersController {
 
   @Post("updateColor")
   @UsePipes(ValidationPipe)
+  @UseGuards(AccessTokenGuard)
   async updateColor(@Body() dto: SetcolorDto) {
     console.log("color:", dto.color);
     try {
