@@ -1,16 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { User } from "src/entities";
 import { randBird } from "@ngneat/falso";
-import { FriendlistService } from "../friendlist/friendlist.service";
 import { GroupService } from "../group/group.service";
 import { UserService } from "../user/user.service";
 import Group from "src/entities/group/group.entity";
-import { EditMembersDto } from "src/dtos/group/edit-members.dto";
-import { EditOwnerDto } from "src/dtos/group";
 
 @Injectable()
 export class GroupseederService {
-  inject: [GroupService, UserService, FriendlistService];
+  inject: [GroupService, UserService];
   constructor(
     private readonly groupService: GroupService,
     private readonly userService: UserService

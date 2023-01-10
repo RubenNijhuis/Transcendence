@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { forwardRef, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeleteResult, Repository } from "typeorm";
 import BlockList from "../../entities/blocklist/blocklist.entity";
@@ -10,6 +10,7 @@ export class BlocklistService {
   constructor(
     @InjectRepository(BlockList)
     private readonly blocklistRepository: Repository<BlockList>,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService
   ) {}
 
@@ -65,13 +66,24 @@ export class BlocklistService {
     username: string,
     blockname: string
   ): Promise<DeleteResult> {
-    const removeFriendResponse: DeleteResult = await this.blocklistRepository
+    const removeBlockResponse: DeleteResult = await this.blocklistRepository
       .createQueryBuilder("block_list")
       .delete()
       .from("block_list")
       .where({ username })
       .andWhere({ blockname })
       .execute();
-    return removeFriendResponse;
+    return removeBlockResponse;
+  }
+
+  async removePerson(username: string) {
+    const removeBlockResponse: DeleteResult = await this.blocklistRepository
+      .createQueryBuilder("block_list")
+      .delete()
+      .from("block_list")
+      .where({ username })
+      .orWhere({ blockname: username })
+      .execute();
+    return removeBlockResponse;
   }
 }

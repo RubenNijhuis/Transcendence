@@ -18,7 +18,6 @@ import {
 import { Request, Response } from "express";
 
 // Dto's
-import { UsernameDto } from "src/dtos/auth/username.dto";
 import { SetTfaDto } from "src/dtos/auth/setTfa.dto";
 import { SetUserDto } from "src/dtos/user/set-user.dto";
 
@@ -153,11 +152,11 @@ export class UsersController {
   }
 
   @Post("remove")
-  @UsePipes(ValidationPipe)
-  @UseGuards(Jwt2faStrategy)
-  async removeUser(@Req() req: Request, @Body() dto: UsernameDto) {
+  @UseGuards(AccessTokenGuard)
+  async removeUser(@Req() req: Request) {
     try {
-      const removeUserResp = await this.userService.removeUser(dto.username);
+      const profile: User = req.user["profile"];
+      const removeUserResp = await this.userService.removeUser(profile);
 
       return removeUserResp;
     } catch (err) {

@@ -1,7 +1,7 @@
 // random generators for seeding
 
 // status and basic injectable
-import { HttpStatus, Injectable } from "@nestjs/common";
+import { HttpStatus, Inject, Injectable } from "@nestjs/common";
 
 // typeorm sql injection library
 import { InjectRepository } from "@nestjs/typeorm";
@@ -18,6 +18,11 @@ import { createHash } from "crypto";
 
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
 import { ConfigService } from "@nestjs/config";
+import { GroupService } from "../group/group.service";
+import { FriendlistService } from "../friendlist/friendlist.service";
+import { BlocklistService } from "../blocklist/blocklist.service";
+import { FriendrequestService } from "../friendrequest/friendrequest.service";
+import { MatchHistoryService } from "../matchhistory/matchhistory.service";
 /**
  * IMPORTANT: createUser wordt niet aangeroepen in de frontend
  * dus ik heb de path verwijderd.
@@ -33,10 +38,23 @@ import { ConfigService } from "@nestjs/config";
  */
 @Injectable()
 export class UserService {
+  inject: [
+    GroupService,
+    UserService,
+    FriendlistService,
+    FriendrequestService,
+    BlocklistService,
+    MatchHistoryService
+  ];
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly groupService: GroupService,
+    private readonly friendlistService: FriendlistService,
+    private readonly friendrequestService: FriendrequestService,
+    private readonly blocklistService: BlocklistService,
+    private readonly matchhistoryService: MatchHistoryService
   ) {}
 
   filterProfile(profile: User): User {
@@ -227,12 +245,21 @@ export class UserService {
     }
   }
 
-  async removeUser(username: string): Promise<DeleteResult> {
+  async removeUser(profile: User): Promise<DeleteResult> {
     try {
+      const username: string = profile.username;
+
+      await this.blocklistService.removePerson(username);
+      await this.friendlistService.removePerson(username);
+      await this.friendrequestService.removePerson(username);
+      await this.groupService.removePerson(profile.uid);
+      await this.matchhistoryService.removeRecords(profile.uid);
+      //      await this.messageService.removeRecords(profile.uid);
+
       const result: DeleteResult = await this.userRepository
-        .createQueryBuilder("Users")
+        .createQueryBuilder("user")
         .delete()
-        .from("users")
+        .from("user")
         .where("username =:username", { username })
         .execute();
       return result;

@@ -4,11 +4,10 @@ import { MatchHistoryController } from "src/controllers/matchhistory/matchhistor
 import MatchHistory from "src/entities/matchhistory/matchhistory.entity";
 import { MatchHistoryService } from "src/services/matchhistory/matchhistory.service";
 
-
 @Module({
   imports: [TypeOrmModule.forFeature([MatchHistory])],
   controllers: [MatchHistoryController],
   providers: [MatchHistoryService],
-  exports: []
+  exports: [MatchHistoryService]
 })
 export class MatchHistoryModule {}

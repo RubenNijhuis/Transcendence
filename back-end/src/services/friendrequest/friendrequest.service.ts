@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { forwardRef, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeleteResult, Repository } from "typeorm";
 import FriendRequest from "../../entities/friendrequest/friendrequest.entity";
@@ -10,6 +10,7 @@ export class FriendrequestService {
   constructor(
     @InjectRepository(FriendRequest)
     private readonly friendrequestRepository: Repository<FriendRequest>,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService
   ) {}
 
@@ -88,5 +89,17 @@ export class FriendrequestService {
       .execute();
 
     return removeResponse;
+  }
+
+  async removePerson(username: string) {
+    const removeFriendResponse: DeleteResult =
+      await this.friendrequestRepository
+        .createQueryBuilder("friend_request")
+        .delete()
+        .from("friend_request")
+        .where({ username })
+        .orWhere({ requested: username })
+        .execute();
+    return removeFriendResponse;
   }
 }

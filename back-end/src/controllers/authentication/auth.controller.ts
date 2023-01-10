@@ -74,60 +74,47 @@ export class AuthController {
           refreshToken: null
         }
       };
-
-      /*
-       * Takes the given code and uses it too give a token we
-       * can use to get the third party profile data
-       */
       const { data } = await this.authService.getBearerToken(token);
       const userData = await this.authService.getUserData(data.access_token);
-
-      // The third party UID
       const intraID = userData.data.id;
 
-      // Check if the user already exists
-
-      const user: User | null = await this.userService
+      const tokens: AuthTokenType = await this.userService
         .findUserByintraId(intraID)
-        .then((val) => {
-          return val;
+        .then(async (profile) => {
+          // if user exists
+          const tokens: AuthTokenType = await this.authService.getTokens(
+            profile.uid
+          );
+          if (profile.isTfaEnabled === true) {
+            returnedPayload.TWOfaEnabled = true;
+          } else if (!profile.isInitialized) {
+            returnedPayload.shouldCreateUser = true;
+          } else if (profile.isInitialized) {
+            returnedPayload.profile = this.userService.filterProfile(profile);
+          }
+          await this.userService.setRefreshToken(
+            profile.uid,
+            tokens.refreshToken
+          );
+          return tokens;
         })
-        .catch(() => {
-          return null;
+        .catch(async () => {
+          // if user doesnt exist
+          const new_profile = await this.userService.createUser(intraID);
+          const tokens: AuthTokenType = await this.authService.getTokens(
+            new_profile.uid
+          );
+          const encrypted_token: string =
+            await this.authService.createEncryptedToken(tokens);
+          await this.userService.setRefreshToken(
+            new_profile.uid,
+            encrypted_token
+          );
+          returnedPayload.shouldCreateUser = true;
+          return tokens;
         });
 
-      console.log("CONFIRM: ", user);
-
-      if (!user) {
-        console.log("wtf");
-        const new_user: User = await this.userService.createUser(intraID);
-        const tokens: AuthTokenType = await this.authService.getTokens(
-          new_user.uid
-        );
-        returnedPayload.authToken = tokens;
-        const encrypted_token: string =
-          await this.authService.createEncryptedToken(tokens);
-        await this.userService.setRefreshToken(new_user.uid, encrypted_token);
-        returnedPayload.shouldCreateUser = true;
-      } else {
-        // if there is a user dont create on else do
-        // in both cases an authtoken needs to be added
-        const tokens: AuthTokenType = await this.authService.getTokens(
-          user.uid
-        );
-
-        if (user.isTfaEnabled === true) {
-          returnedPayload.TWOfaEnabled = true;
-        } else if (!user.isInitialized) {
-          returnedPayload.shouldCreateUser = true;
-        } else if (user.isInitialized) {
-          returnedPayload.profile = this.userService.filterProfile(user);
-        }
-
-        await this.userService.setRefreshToken(user.uid, tokens.refreshToken);
-        returnedPayload.authToken = tokens;
-      }
-
+      returnedPayload.authToken = tokens;
       return returnedPayload;
     } catch (err) {
       throw err;

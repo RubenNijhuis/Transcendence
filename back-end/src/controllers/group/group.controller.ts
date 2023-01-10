@@ -144,6 +144,7 @@ export class GroupController {
   }
 
   @Post("removeGroup")
+  @UsePipes(ValidationPipe)
   async removeGroup(
     @Req() req: Request,
     @Body() removeGroupDto: RemoveGroupDto
@@ -152,8 +153,10 @@ export class GroupController {
       // Get UID through access token
       const profile = req.user["profile"];
 
-      await this.groupService.removeGroup(profile.uid, removeGroupDto.groupId);
-      return HttpStatus.OK;
+      return await this.groupService.removeGroup(
+        profile.uid,
+        removeGroupDto.groupId
+      );
     } catch (err) {
       throw err;
     }

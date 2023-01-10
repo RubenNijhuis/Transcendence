@@ -12,9 +12,9 @@ import { UserModule } from "../user/user.module";
   imports: [
     TypeOrmModule.forFeature([Message]),
     ConfigModule.forRoot(),
-    forwardRef(() => GroupModule),
     RecordModule,
-    UserModule
+    forwardRef(() => UserModule),
+    forwardRef(() => GroupModule)
   ],
   controllers: [MessageController],
   providers: [MessageService],

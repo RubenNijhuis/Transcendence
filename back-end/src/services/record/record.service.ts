@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from "@nestjs/common";
+import { forwardRef, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { BanUserDto } from "src/dtos/record/ban-user.dto";
 import GroupUser from "src/entities/groupuser/groupuser.entity";
@@ -15,6 +15,7 @@ export class RecordService {
   constructor(
     @InjectRepository(Record)
     private readonly recordRepository: Repository<Record>,
+    @Inject(forwardRef(() => GroupService))
     private readonly groupService: GroupService
   ) {}
 
