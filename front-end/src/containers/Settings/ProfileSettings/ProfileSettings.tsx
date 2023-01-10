@@ -55,18 +55,18 @@ const Container = styled.section`
 
 const ProfileSettings = () => {
     const { tfaEnabled } = useAuth();
-    const { setModalElement, setModalActive } = useModal();
+    const { setModalElement, openModal } = useModal();
 
     ////////////////////////////////////////////////////////
 
     const renderTFAModal = () => {
         setModalElement(<TwoFactorAuthentication />);
-        setModalActive(true);
+        openModal(true);
     };
 
     // const uploadProfilePicture = () => {
     //     setModalElement(<UploadProfilePicture />);
-    //     setModalActive(true);
+    //     openModal(true);
 
     // }
 
@@ -83,7 +83,7 @@ const ProfileSettings = () => {
      * close the modal if it's updated :)
      */
     useEffect(() => {
-        setModalActive(false);
+        openModal(false);
     }, [tfaEnabled]);
 
     ////////////////////////////////////////////////////////

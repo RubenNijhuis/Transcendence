@@ -62,7 +62,7 @@ const ProfilePage = (): JSX.Element => {
     const { matchHistory } = useFakeData();
 
     // Create account modal
-    const { setModalActive, setModalElement, setAllowClose } = useModal();
+    const { openModal, setModalElement, setAllowClose } = useModal();
 
     ////////////////////////////////////////////////////////
 
@@ -90,12 +90,12 @@ const ProfilePage = (): JSX.Element => {
             if (shouldCreateUser) {
                 setModalElement(<CreateAccount />);
                 setAllowClose(false);
-                setModalActive(true);
+                openModal(true);
                 return;
             } else if (TWOfaEnabled) {
                 setModalElement(<TwoFactorAuthentication />);
                 setAllowClose(false);
-                setModalActive(true);
+                openModal(true);
                 return;
             } else if (profile) {
                 setUser(profile);
@@ -118,7 +118,7 @@ const ProfilePage = (): JSX.Element => {
     useEffect(() => {
         if (user) {
             // Reset the create account modal after account creation
-            setModalActive(false);
+            openModal(false);
             if (selectedProfile) {
                 if (selectedProfile.username === user.username) {
                     setFriends(profileFriends);

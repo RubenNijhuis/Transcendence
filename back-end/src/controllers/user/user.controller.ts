@@ -137,6 +137,7 @@ export class UsersController {
   ): Promise<any> {
     try {
       const profile: User = req.user["profile"];
+
       if (!profile || profile.isInitialized === true) return;
 
       const setUserResp = await this.userService.setUser(

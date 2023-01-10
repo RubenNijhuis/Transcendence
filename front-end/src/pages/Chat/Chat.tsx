@@ -19,7 +19,7 @@ import { useUser } from "../../contexts/UserContext";
 ///////////////////////////////////////////////////////////
 
 const ChatPage = (): JSX.Element => {
-    const { activeChat, setActiveChat, groupChats } = useChat();
+    const { activeChatId, setActiveChatId, groupChats } = useChat();
 
     ////////////////////////////////////////////////////////
 
@@ -31,7 +31,6 @@ const ChatPage = (): JSX.Element => {
     useEffect(() => {
         // Setup the socket connnection to retrieve real-time messages
         createConnection(SocketType.Type.Chat);
-        
     }, [user]);
 
     ////////////////////////////////////////////////////////
@@ -41,10 +40,10 @@ const ChatPage = (): JSX.Element => {
             <Container>
                 <ChatSelector
                     groupChats={groupChats}
-                    setSelectedChat={setActiveChat}
+                    setSelectedChat={setActiveChatId}
                 />
 
-                {activeChat && <ChatBox chat={activeChat} />}
+                {activeChatId && <ChatBox />}
             </Container>
         </Layout>
     );

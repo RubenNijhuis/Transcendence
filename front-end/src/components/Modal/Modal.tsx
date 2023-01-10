@@ -11,12 +11,12 @@ import {
 ///////////////////////////////////////////////////////////
 
 interface ICloseButton {
-    setModalActive: React.Dispatch<React.SetStateAction<boolean>>;
+    openModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CloseButton = ({ setModalActive }: ICloseButton) => {
+const CloseButton = ({ openModal }: ICloseButton) => {
     return (
-        <CloseButtonContainer onClick={() => setModalActive(false)}>
+        <CloseButtonContainer onClick={() => openModal(false)}>
             <span>
                 <GrFormClose />
             </span>
@@ -27,19 +27,19 @@ const CloseButton = ({ setModalActive }: ICloseButton) => {
 interface IModal {
     children: React.ReactNode;
     allowClose: boolean;
-    setModalActive: React.Dispatch<React.SetStateAction<boolean>>;
+    openModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Modal = ({
     children,
-    setModalActive,
+    openModal,
     allowClose,
 }: IModal): JSX.Element => {
     return (
         <Container>
             <ElementContainer>
                 {children}
-                {allowClose && <CloseButton setModalActive={setModalActive} />}
+                {allowClose && <CloseButton openModal={openModal} />}
             </ElementContainer>
         </Container>
     );

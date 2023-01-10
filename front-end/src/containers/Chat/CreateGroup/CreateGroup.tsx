@@ -28,10 +28,10 @@ import { GrFormSearch, GrFormClose } from "react-icons/gr";
 ///////////////////////////////////////////////////////////
 
 interface ICreateGroupChat {
-    setModalActive: React.Dispatch<React.SetStateAction<boolean>>;
+    openModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CreateGroupChat = ({ setModalActive }: ICreateGroupChat): JSX.Element => {
+const CreateGroupChat = ({ openModal }: ICreateGroupChat): JSX.Element => {
     const [selectedFriends, setSelectedFriends] = useState<Profile.Instance[]>(
         []
     );
@@ -82,14 +82,13 @@ const CreateGroupChat = ({ setModalActive }: ICreateGroupChat): JSX.Element => {
     const createGroupChat = async () => {
         try {
             const selectedFriendsUIDS = selectedFriends.map((item) => item.uid);
-            console.log(selectedFriendsUIDS);
             await createChat(
                 user.uid,
                 groupName.value,
                 selectedFriendsUIDS,
                 password.value
             );
-            setModalActive(false);
+            openModal(false);
         } catch (err) {
             console.error(err);
         }
@@ -101,7 +100,7 @@ const CreateGroupChat = ({ setModalActive }: ICreateGroupChat): JSX.Element => {
                 <Heading type={3}>
                     You don't have any friends to create a group with
                 </Heading>
-                <Button onClick={() => setModalActive(false)}>Close</Button>
+                <Button onClick={() => openModal(false)}>Close</Button>
             </CreateGroupChatContainer>
         );
     }
@@ -167,7 +166,7 @@ const CreateGroupChat = ({ setModalActive }: ICreateGroupChat): JSX.Element => {
 };
 
 const CreateGroup = (): JSX.Element => {
-    const { setModalActive, modalActive, setModalElement } = useModal();
+    const { openModal, modalActive, setModalElement } = useModal();
 
     //////////////////////////////////////////////////////////
 
@@ -175,8 +174,8 @@ const CreateGroup = (): JSX.Element => {
      * We set the modal component with its closing function
      */
     const openCreateGroup = () => {
-        setModalElement(<CreateGroupChat setModalActive={setModalActive} />);
-        setModalActive(true);
+        setModalElement(<CreateGroupChat openModal={openModal} />);
+        openModal(true);
     };
 
     //////////////////////////////////////////////////////////

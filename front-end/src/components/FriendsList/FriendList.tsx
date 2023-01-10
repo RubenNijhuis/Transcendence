@@ -86,7 +86,6 @@ const FriendList = ({ friends, withFriendRequests }: IFriendList) => {
             try {
                 const retrievedFriendRequests = await getRequested();
                 setFriendRequests(retrievedFriendRequests);
-                console.log(retrievedFriendRequests);
             } catch (err) {
                 console.error(err);
             }

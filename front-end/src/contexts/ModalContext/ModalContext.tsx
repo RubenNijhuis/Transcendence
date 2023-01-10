@@ -8,7 +8,7 @@ import Modal from "../../components/Modal";
 
 interface ModalContextType {
     modalActive: boolean;
-    setModalActive: React.Dispatch<React.SetStateAction<boolean>>;
+    openModal: React.Dispatch<React.SetStateAction<boolean>>;
 
     setAllowClose: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -26,7 +26,7 @@ interface IModalProvider {
 }
 
 const ModalProvider = ({ children }: IModalProvider): JSX.Element => {
-    const [modalActive, setModalActive] = useState<boolean>(false);
+    const [modalActive, openModal] = useState<boolean>(false);
     const [allowClose, setAllowClose] = useState<boolean>(true);
     const [modalElement, setModalElement] = useState<React.ReactNode>(null!);
 
@@ -46,7 +46,7 @@ const ModalProvider = ({ children }: IModalProvider): JSX.Element => {
 
     const value: ModalContextType = {
         modalActive,
-        setModalActive,
+        openModal,
 
         setModalElement,
         setAllowClose,
@@ -58,7 +58,7 @@ const ModalProvider = ({ children }: IModalProvider): JSX.Element => {
         <ModalContext.Provider value={value}>
             {children}
             {modalActive && (
-                <Modal setModalActive={setModalActive} allowClose={allowClose}>
+                <Modal openModal={openModal} allowClose={allowClose}>
                     {modalElement}
                 </Modal>
             )}

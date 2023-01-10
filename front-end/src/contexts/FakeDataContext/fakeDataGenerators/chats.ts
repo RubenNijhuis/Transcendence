@@ -119,7 +119,6 @@ const generateGroupChats = (
             name: "dikke lul",
             owner: "penis",
             uid: i.toString(),
-            internal_id: i,
             members: [],
             messages: [],
             protected: randomNum1 !== 1

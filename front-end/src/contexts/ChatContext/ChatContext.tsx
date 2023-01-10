@@ -20,11 +20,8 @@ import { getChatByGroupId, getChatsByUsername } from "../../proxies/chat";
 ///////////////////////////////////////////////////////////
 
 interface ChatContextType {
-    activeChat: Chat.Group.Instance | null;
-    activeChatId: string;
-    setActiveChat: React.Dispatch<
-        React.SetStateAction<Chat.Group.Instance | null>
-    >;
+    activeChatId: string | null;
+    setActiveChatId: React.Dispatch<React.SetStateAction<string | null>>;
     groupChats: Chat.Group.Instance[];
 }
 
@@ -39,10 +36,7 @@ interface IChatProvider {
 }
 
 const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
-    const [activeChat, setActiveChat] = useState<Chat.Group.Instance | null>(
-        null
-    );
-    const [activeChatId, setActiveChatId] = useState<string>('');
+    const [activeChatId, setActiveChatId] = useState<string | null>(null);
     const [groupChats, setGroupChats] = useState<Chat.Group.Instance[]>([]);
     const [chatMembers, setChatMembers] = useState<Chat.Member[]>([]);
 
@@ -53,8 +47,8 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
     ////////////////////////////////////////////////////////
 
     useEffect(() => {
+        console.log(activeChatId)
         if (!activeChatId) return;
-
         const updateChat = async () => {
             try {
                 const newChat = await getChatByGroupId(activeChatId);
@@ -83,8 +77,6 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
                 const retrievedGroupChats: Chat.Group.Instance[] =
                     await getChatsByUsername();
 
-                console.log(retrievedGroupChats);
-
                 const members = await getMembersFromGroupChats(
                     retrievedGroupChats
                 );
@@ -93,7 +85,6 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
 
                 setChatMembers(members.flat());
                 setGroupChats(retrievedGroupChats);
-                setActiveChatId(retrievedGroupChats[0].uid)
             } catch (err) {
                 console.error(err);
             }
@@ -119,8 +110,8 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
     ////////////////////////////////////////////////////////
 
     const value: ChatContextType = {
-        activeChat,
-        setActiveChat,
+        activeChatId,
+        setActiveChatId,
         groupChats
     };
 

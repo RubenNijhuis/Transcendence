@@ -34,19 +34,20 @@ import { useFormInput } from "../../../components/Form/hooks";
 
 // Proxies
 import { verifyPassword, getChatByGroupId } from "../../../proxies/chat";
+import { useChat } from "../../../contexts/ChatContext";
 
 ////////////////////////////////////////////////////////////
 
 interface IChatTitle {
     chat: Chat.Group.Instance;
     isDmChat: boolean;
-    isUnlocked: boolean;
+    isLocked: boolean;
 }
 
-const ChatTitle = ({ chat, isDmChat, isUnlocked }: IChatTitle): JSX.Element => {
+const ChatTitle = ({ chat, isDmChat, isLocked }: IChatTitle): JSX.Element => {
     const { user } = useUser();
 
-    const { setModalActive, setModalElement } = useModal();
+    const { openModal, setModalElement } = useModal();
 
     ////////////////////////////////////////////////////////
 
@@ -66,7 +67,7 @@ const ChatTitle = ({ chat, isDmChat, isUnlocked }: IChatTitle): JSX.Element => {
 
     const openSettingsPanel = () => {
         setModalElement(<ChatSettings chat={chat} user={user} />);
-        setModalActive(true);
+        openModal(true);
     };
 
     const isAdministrator = (memberUid: string) => {
@@ -96,7 +97,7 @@ const ChatTitle = ({ chat, isDmChat, isUnlocked }: IChatTitle): JSX.Element => {
                 )}
                 <Heading type={3}>{chatTitle}</Heading>
             </div>
-            {isUnlocked && isAdministrator(user.uid) && (
+            {isLocked && isAdministrator(user.uid) && (
                 <div className="settings">
                     <button onClick={openSettingsPanel}>Settings</button>
                 </div>
@@ -106,11 +107,11 @@ const ChatTitle = ({ chat, isDmChat, isUnlocked }: IChatTitle): JSX.Element => {
 };
 
 interface IPasswordInput {
-    setIsUnlocked: React.Dispatch<React.SetStateAction<boolean>>;
-    activeChat: Chat.Group.Instance;
+    setIsLocked: React.Dispatch<React.SetStateAction<boolean>>;
+    chatUid: string;
 }
 
-const PasswordInput = ({ activeChat, setIsUnlocked }: IPasswordInput) => {
+const PasswordInput = ({ chatUid, setIsLocked }: IPasswordInput) => {
     const passwordText = useFormInput("");
     const [passwordError, setPasswordError] = useState<boolean>(false);
 
@@ -118,17 +119,16 @@ const PasswordInput = ({ activeChat, setIsUnlocked }: IPasswordInput) => {
 
     const sendPassword = async () => {
         try {
-            // const verifyResponse = await verifyPassword(
-            //     activeChat.uid,
-            //     passwordText.value
-            // );
+            const verifyResponse = await verifyPassword(
+                chatUid,
+                passwordText.value
+            );
 
-            // if (verifyResponse === false) {
-            //     setPasswordError(false);
-            //     return;
-            // }
-
-            setIsUnlocked(true);
+            if (verifyResponse === false) {
+                setPasswordError(false);
+                return;
+            }
+            setIsLocked(true);
         } catch (err) {
             console.error(err);
         }
@@ -148,12 +148,10 @@ const PasswordInput = ({ activeChat, setIsUnlocked }: IPasswordInput) => {
     );
 };
 
-interface IChatBox {
-    chat: Chat.Group.Instance;
-}
-
-const ChatBox = ({ chat }: IChatBox): JSX.Element => {
-    const [isUnlocked, setIsUnlocked] = useState<boolean>(false);
+const ChatBox = (): JSX.Element => {
+    const [chat, setChat] = useState<Chat.Group.Instance>(null!);
+    const [isLocked, setIsLocked] = useState<boolean>(false);
+    const [isDmChat, setIsDmChat] = useState<boolean>(false);
 
     const [connectionMessages, setConnectionMessages] = useState<
         Chat.Message.Instance[]
@@ -161,22 +159,28 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
 
     ////////////////////////////////////////////////////////
 
-    const isDmChat = chat.members.length === 2;
-
+    const { activeChatId, groupChats } = useChat();
     const { user } = useUser();
     const { connection } = useSocket();
 
     ////////////////////////////////////////////////////////
 
     useEffect(() => {
-        setIsUnlocked(!chat.protected);
+        const activeChat = groupChats.find(
+            (item) => item.uid === activeChatId
+        ) as Chat.Group.Instance;
+        setChat(activeChat);
+        setIsDmChat(activeChat.members.length === 2);
+
+        setIsLocked(activeChat.protected);
         setConnectionMessages([]);
-    }, [chat.protected, chat]);
+    }, []);
 
     ////////////////////////////////////////////////////////
 
     useEffect(() => {
         if (!connection) return;
+        if (!chat) return;
         setupConnections(connection);
         connection.emit(SocketRoutes.room.joinRoom, {
             roomID: chat.uid
@@ -216,39 +220,44 @@ const ChatBox = ({ chat }: IChatBox): JSX.Element => {
 
     return (
         <Container>
-            <ChatTitle
-                chat={chat}
-                isDmChat={isDmChat}
-                isUnlocked={isUnlocked}
-            />
-            <div className="chat-content">
-                {isUnlocked && (
-                    <>
-                        {[...chat.messages, ...connectionMessages]
-                            .reverse()
-                            .map((message) => {
-                                return (
-                                    <ChatElement
-                                        key={message.id}
-                                        message={message}
-                                        isDm={isDmChat}
-                                        fromUser={
-                                            message.sender.uid === user.uid
-                                        }
-                                    />
-                                );
-                            })}
-                    </>
-                )}
-
-                {!isUnlocked && (
-                    <PasswordInput
-                        setIsUnlocked={setIsUnlocked}
-                        activeChat={chat}
+            {chat && (
+                <>
+                    <ChatTitle
+                        chat={chat}
+                        isDmChat={isDmChat}
+                        isLocked={isLocked}
                     />
-                )}
-            </div>
-            {isUnlocked && <ChatInput user={user} chat={chat} />}
+                    <div className="chat-content">
+                        {!isLocked && (
+                            <>
+                                {[...chat.messages, ...connectionMessages]
+                                    .reverse()
+                                    .map((message) => {
+                                        return (
+                                            <ChatElement
+                                                key={message.id}
+                                                message={message}
+                                                isDm={isDmChat}
+                                                fromUser={
+                                                    message.sender.uid ===
+                                                    user.uid
+                                                }
+                                            />
+                                        );
+                                    })}
+                            </>
+                        )}
+
+                        {isLocked && (
+                            <PasswordInput
+                                setIsLocked={setIsLocked}
+                                chatUid={chat.uid}
+                            />
+                        )}
+                    </div>
+                    {!isLocked && <ChatInput user={user} chat={chat} />}
+                </>
+            )}
         </Container>
     );
 };

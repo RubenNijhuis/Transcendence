@@ -71,6 +71,5 @@ export namespace Group {
         owner: string;
         protected: boolean;
         members: Member[];
-        internal_id: number;
     }
 }
