@@ -35,6 +35,7 @@ import { useFormInput } from "../../../components/Form/hooks";
 // Proxies
 import { verifyPassword, getChatByGroupId } from "../../../proxies/chat";
 import { useChat } from "../../../contexts/ChatContext";
+import { bindMembersToMessages, getMembersFromGroupChats, getMessagesFromGroupChats } from "../../../contexts/ChatContext/ChatContext.bl";
 
 ////////////////////////////////////////////////////////////
 
@@ -159,22 +160,38 @@ const ChatBox = (): JSX.Element => {
 
     ////////////////////////////////////////////////////////
 
-    const { activeChatId, groupChats } = useChat();
+    const { activeChatId, updateChatGroup } = useChat();
     const { user } = useUser();
     const { connection } = useSocket();
 
     ////////////////////////////////////////////////////////
 
     useEffect(() => {
-        const activeChat = groupChats.find(
-            (item) => item.uid === activeChatId
-        ) as Chat.Group.Instance;
-        setChat(activeChat);
-        setIsDmChat(activeChat.members.length === 2);
+        if (!activeChatId) return;
+        const updateChat = async () => {
+            try {
+                const newRetrievedChat = await getChatByGroupId(activeChatId);
 
-        setIsLocked(activeChat.protected);
-        setConnectionMessages([]);
-    }, []);
+                const members = await getMembersFromGroupChats(
+                    [newRetrievedChat]
+                );
+                const messages = getMessagesFromGroupChats([newRetrievedChat]);
+                bindMembersToMessages(members, messages);
+
+                updateChatGroup(newRetrievedChat);
+                
+                setChat(newRetrievedChat);
+                setIsDmChat(newRetrievedChat.members.length === 2);
+        
+                setIsLocked(newRetrievedChat.protected);
+                setConnectionMessages([]);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        updateChat();
+    }, [activeChatId]);
 
     ////////////////////////////////////////////////////////
 

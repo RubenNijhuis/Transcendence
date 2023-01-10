@@ -23,6 +23,7 @@ interface ChatContextType {
     activeChatId: string | null;
     setActiveChatId: React.Dispatch<React.SetStateAction<string | null>>;
     groupChats: Chat.Group.Instance[];
+    updateChatGroup: (updatedGroup: Chat.Group.Instance) => void;
 }
 
 const ChatContext = createContext<ChatContextType>(null!);
@@ -47,30 +48,7 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
     ////////////////////////////////////////////////////////
 
     useEffect(() => {
-        console.log(activeChatId)
-        if (!activeChatId) return;
-        const updateChat = async () => {
-            try {
-                const newChat = await getChatByGroupId(activeChatId);
-                updateChatGroup(newChat);
-            } catch (err) {
-                console.error(err);
-            }
-        };
-        updateChat();
-    }, [activeChatId]);
-
-    useEffect(() => {
         if (!user) return;
-
-        /**
-         * Chat page
-         * Get all chats
-         * Bind members to messages
-         * set groupchats and members
-         *
-         *
-         */
 
         const chatAggregator = async () => {
             try {
@@ -112,7 +90,8 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
     const value: ChatContextType = {
         activeChatId,
         setActiveChatId,
-        groupChats
+        groupChats,
+        updateChatGroup
     };
 
     ////////////////////////////////////////////////////////

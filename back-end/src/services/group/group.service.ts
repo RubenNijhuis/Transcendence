@@ -212,7 +212,6 @@ export class GroupService {
     }
   }
 
-  // TODO: rename to set owner
   async setOwner(groupId: string, owner: string) {
     try {
       const group: Group = await this.findGroupById(groupId);

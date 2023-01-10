@@ -122,6 +122,10 @@ export class UsersController {
     try {
       const user: User = await this.userService.findUserByUsername(username);
 
+      if (!user.isInitialized) {
+        return HttpStatus.NOT_FOUND;
+      }
+
       return this.userService.filterProfile(user);
     } catch (err) {
       throw err;

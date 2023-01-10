@@ -51,7 +51,7 @@ const ApiRoutes = {
     getChatsByGroupId: (id: string) => `/group/groups/${id}`,
 
     createChat: () => `/group/createGroup`,
-    verifyPassword: (id: string) => `/group/${id}`,
+    verifyPassword: () => `/group/validatePassword`,
     sendMessage: () => `/message/create`,
     // Chat ////////////////////////////////////////////////////
 

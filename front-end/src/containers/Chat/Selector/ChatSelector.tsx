@@ -131,40 +131,45 @@ const ChatGroupList = ({
             });
             return chats;
         });
-    }, [selectedChatType]);
+    }, [selectedChatType, groupChats]);
 
     ////////////////////////////////////////////////////////
 
     return (
-        <DirectMessageList>
-            {selectedChatList.map(({ name, members, uid }) => {
-                const otherMembers: Chat.Member[] = members.filter(
-                    (member) => member.profile.username !== user!.username
-                );
+        <>
+            {selectedChatList.length && (
+                <DirectMessageList>
+                    {selectedChatList.map(({ name, members, uid }) => {
+                        const otherMembers: Chat.Member[] = members.filter(
+                            (member) =>
+                                member.profile.username !== user!.username
+                        );
 
-                const isSelectedChat = uid === activeChatId;
-                const isDm = members.length <= 2;
+                        const isSelectedChat = uid === activeChatId;
+                        const isDm = members.length <= 2;
 
-                /**
-                 * If it's a dm we display the other members name.
-                 * Ortherwise the group name
-                 */
-                const chatGroupName = isDm
-                    ? otherMembers[0].profile.username
-                    : name;
+                        /**
+                         * If it's a dm we display the other members name.
+                         * Ortherwise the group name
+                         */
+                        const chatGroupName = isDm
+                            ? otherMembers[0].profile.username
+                            : name;
 
-                return (
-                    <DirectMessageEntry
-                        key={uid}
-                        onClick={() => handleChatSelection(uid)}
-                        active={isSelectedChat}
-                    >
-                        <Heading type={5}>{chatGroupName}</Heading>
-                        <MemberList members={otherMembers} />
-                    </DirectMessageEntry>
-                );
-            })}
-        </DirectMessageList>
+                        return (
+                            <DirectMessageEntry
+                                key={uid}
+                                onClick={() => handleChatSelection(uid)}
+                                active={isSelectedChat}
+                            >
+                                <Heading type={5}>{chatGroupName}</Heading>
+                                <MemberList members={otherMembers} />
+                            </DirectMessageEntry>
+                        );
+                    })}
+                </DirectMessageList>
+            )}
+        </>
     );
 };
 

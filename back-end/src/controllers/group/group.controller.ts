@@ -102,10 +102,12 @@ export class GroupController {
     @Body() validatePasswordDto: ValidatePasswordDto
   ): Promise<boolean> {
     try {
-      return await this.groupService.validatePassword(
+      const isCorrectPassword = await this.groupService.validatePassword(
         validatePasswordDto.groupId,
         validatePasswordDto.password
       );
+
+      return isCorrectPassword;
     } catch (err) {
       throw err;
     }
