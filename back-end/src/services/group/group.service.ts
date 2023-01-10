@@ -137,6 +137,9 @@ export class GroupService {
       }
 
       const newGroup: Group = this.groupRepository.create();
+      console.log("CREATE GROUP\n\n");
+      console.log("groupname: ", name);
+      console.log("password: ", password);
 
       newGroup.owner = owner;
       newGroup.members = [];
@@ -312,11 +315,12 @@ export class GroupService {
     try {
       let isPasswordValid = false;
 
-      const hash: string = await this.hashPassword(password);
+      const hash = createHash("sha256").update(password).digest("hex");
       const group: Group = await this.findGroupById(groupId);
 
       isPasswordValid = await bcrypt.compare(hash, group.password);
 
+      console.log("valid pass: ", isPasswordValid);
       return isPasswordValid;
     } catch (err) {
       throw errorHandler(
