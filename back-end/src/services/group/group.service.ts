@@ -2,7 +2,7 @@
 import { forwardRef, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 
-import { Repository } from "typeorm";
+import { DeleteResult, Repository } from "typeorm";
 
 // Crypto
 import * as bcrypt from "bcrypt";
@@ -30,6 +30,7 @@ export class GroupService {
     private readonly groupRepository: Repository<Group>,
     @InjectRepository(GroupUser)
     private readonly groupuserRepository: Repository<GroupUser>,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     @Inject(forwardRef(() => MessageService))
     private readonly messageService: MessageService
@@ -157,17 +158,25 @@ export class GroupService {
     }
   }
 
-  async removeGroup(owner: string, groupId: string): Promise<void> {
+  async removeGroup(
+    owner: string,
+    groupId: string
+  ): Promise<DeleteResult | null> {
     try {
       const group: Group = await this.findGroupById(groupId);
+      console.log("BEFORE Group: ", group);
 
-      if (group.owner !== owner) return;
+      if (group.owner !== owner) return null;
 
-      this.groupRepository
+      const ret = await this.groupRepository
         .createQueryBuilder("group")
         .delete()
-        .where({ id: groupId })
+        .where({ uid: groupId })
         .execute();
+
+      const test: Group = await this.findGroupById(groupId);
+      console.log("AFTER Group: ", test);
+      return ret;
     } catch (error: any) {
       throw error;
     }
@@ -382,5 +391,13 @@ export class GroupService {
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
+  }
+
+  async removePerson(uid: string) {
+    await this.groupRepository
+      .createQueryBuilder("group")
+      .delete()
+      .where({ owner: uid })
+      .execute();
   }
 }

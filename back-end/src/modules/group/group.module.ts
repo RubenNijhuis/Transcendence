@@ -13,7 +13,7 @@ import { ConfigModule } from "@nestjs/config";
   imports: [
     TypeOrmModule.forFeature([Group, GroupUser]),
     ConfigModule.forRoot(),
-    UserModule,
+    forwardRef(() => UserModule),
     forwardRef(() => MessageModule),
     forwardRef(() => RecordModule)
   ],

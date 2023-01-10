@@ -9,8 +9,7 @@ export class MatchHistoryService {
   constructor(
     @InjectRepository(MatchHistory)
     private readonly matchHistoryRepository: Repository<MatchHistory>
-  )
-  {}
+  ) {}
 
   getAllMatches() {
     return this.matchHistoryRepository.find();
@@ -22,15 +21,14 @@ export class MatchHistoryService {
 
   async findMatchesByUserId(id: string) {
     try {
-        const matches: MatchHistory[] = await this.matchHistoryRepository
-          .createQueryBuilder()
-          .where({ playerOne: id })
-          .orWhere({ playerTwo: id })
-          .getMany();
-          return matches;
-    }
-    catch(err) {
-        return err;
+      const matches: MatchHistory[] = await this.matchHistoryRepository
+        .createQueryBuilder()
+        .where({ playerOne: id })
+        .orWhere({ playerTwo: id })
+        .getMany();
+      return matches;
+    } catch (err) {
+      return err;
     }
   }
 
@@ -39,5 +37,14 @@ export class MatchHistoryService {
       this.matchHistoryRepository.create(createRecordDto);
 
     return this.matchHistoryRepository.save(newRecord);
+  }
+
+  async removeRecords(uid: string) {
+    await this.matchHistoryRepository
+      .createQueryBuilder()
+      .delete()
+      .where({ playerOne: uid })
+      .orWhere({ playerTwo: uid })
+      .execute();
   }
 }

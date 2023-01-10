@@ -10,13 +10,17 @@ export class GroupUser {
   @Column()
   groupId: string;
 
-  @ManyToOne((type) => Group, (group) => group.members)
+  @ManyToOne(() => Group, (group) => group.members, {
+    onDelete: "CASCADE"
+  })
   group: Group;
 
   @Column()
   memberId: string;
 
-  @ManyToOne((type) => User, (user) => user.groups)
+  @ManyToOne(() => User, (user) => user.groups, {
+    onDelete: "CASCADE"
+  })
   profile: User;
 
   @Column()

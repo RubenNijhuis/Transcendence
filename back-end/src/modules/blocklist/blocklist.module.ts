@@ -1,5 +1,5 @@
 // Nestjs
-import { Module } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 // Entities
@@ -17,9 +17,8 @@ import { UserModule } from "../user/user.module";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
-    TypeOrmModule.forFeature([BlockList]),
-    UserModule
+    TypeOrmModule.forFeature([User, BlockList]),
+    forwardRef(() => UserModule)
   ],
   controllers: [BlockListController],
   providers: [BlocklistService],

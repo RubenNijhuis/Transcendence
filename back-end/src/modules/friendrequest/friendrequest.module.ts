@@ -1,5 +1,5 @@
 // Nestjs
-import { Module } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 // Entitites
@@ -19,10 +19,9 @@ import { UserModule } from "../user/user.module";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
-    TypeOrmModule.forFeature([FriendRequest]),
+    TypeOrmModule.forFeature([User, FriendRequest]),
     FriendRequestModule,
-    UserModule
+    forwardRef(() => UserModule)
   ],
   controllers: [FriendRequestController],
   providers: [FriendrequestService],

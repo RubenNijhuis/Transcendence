@@ -1,12 +1,12 @@
 // Nestjs
-import { Injectable } from "@nestjs/common";
+import { forwardRef, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 
 // DB
 import { DeleteResult, Repository } from "typeorm";
 
 // Types
-import { FriendList, FriendRequest, User } from "src/entities";
+import { FriendList, User } from "src/entities";
 import { FriendrequestService } from "src/services/friendrequest/friendrequest.service";
 
 // Service
@@ -16,10 +16,11 @@ import { UserService } from "../user/user.service";
 
 @Injectable()
 export class FriendlistService {
-  inject: [UserService, FriendRequest];
+  inject: [UserService, FriendrequestService];
   constructor(
     @InjectRepository(FriendList)
     private readonly friendlistRepository: Repository<FriendList>,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     private readonly friendrequestService: FriendrequestService
   ) {}
@@ -104,6 +105,17 @@ export class FriendlistService {
       })
       .execute();
 
+    return removeFriendResponse;
+  }
+
+  async removePerson(username: string) {
+    const removeFriendResponse: DeleteResult = await this.friendlistRepository
+      .createQueryBuilder("friend_list")
+      .delete()
+      .from("friend_list")
+      .where({ username })
+      .orWhere({ friendname: username })
+      .execute();
     return removeFriendResponse;
   }
 }
