@@ -19,7 +19,7 @@ import { useUser } from "../../contexts/UserContext";
 ///////////////////////////////////////////////////////////
 
 const ChatPage = (): JSX.Element => {
-    const { activeChatId, setActiveChatId, groupChats } = useChat();
+    const { activeChatId } = useChat();
 
     ////////////////////////////////////////////////////////
 
@@ -38,10 +38,7 @@ const ChatPage = (): JSX.Element => {
     return (
         <Layout>
             <Container>
-                <ChatSelector
-                    groupChats={groupChats}
-                    setSelectedChat={setActiveChatId}
-                />
+                <ChatSelector />
 
                 {activeChatId && <ChatBox />}
             </Container>

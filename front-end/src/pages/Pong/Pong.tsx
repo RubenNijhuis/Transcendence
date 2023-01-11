@@ -17,12 +17,14 @@ import MatchMakingStatus from "../../containers/PongGame/MatchMakingStatus";
 // Types
 import * as SocketType from "../../types/Socket";
 import * as Match from "../../types/Match";
+import { useUser } from "../../contexts/UserContext";
 
 ////////////////////////////////////////////////////////////
 
 const Pong = (): JSX.Element => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
+    const { user } = useUser();
     ////////////////////////////////////////////////////////
 
     let Manager: GameManager;
@@ -38,8 +40,9 @@ const Pong = (): JSX.Element => {
 
     // TODO: Abstract into business logic part
     useEffect(() => {
+        console.log("TESt");
         createConnection(SocketType.Type.Game);
-    }, []);
+    }, [user]);
 
     useEffect(() => {
         if (canvasRef.current === null) return;

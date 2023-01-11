@@ -93,7 +93,6 @@ const ChatTypeSelector = ({
 interface IDirectMessageList {
     selectedChatType: Chat.Group.Type;
     groupChats: Chat.Group.Instance[];
-    setSelectedChat: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 /**
@@ -102,8 +101,7 @@ interface IDirectMessageList {
  */
 const ChatGroupList = ({
     selectedChatType,
-    groupChats,
-    setSelectedChat
+    groupChats
 }: IDirectMessageList): JSX.Element => {
     const [selectedChatList, setSelectedChatList] = useState<
         Chat.Group.Instance[]
@@ -175,18 +173,12 @@ const ChatGroupList = ({
 
 ////////////////////////////////////////////////////////////
 
-interface IChatSelector {
-    groupChats: Chat.Group.Instance[];
-    setSelectedChat: React.Dispatch<React.SetStateAction<string | null>>;
-}
-
-const ChatSelector = ({
-    groupChats,
-    setSelectedChat
-}: IChatSelector): JSX.Element => {
+const ChatSelector = (): JSX.Element => {
     const [selectedChatType, setSelectedChatType] = useState<Chat.Group.Type>(
         Chat.Group.Type.DM
     );
+
+    const { groupChats } = useChat();
 
     ////////////////////////////////////////////////////////
 
@@ -202,7 +194,6 @@ const ChatSelector = ({
                     />
                     <ChatGroupList
                         selectedChatType={selectedChatType}
-                        setSelectedChat={setSelectedChat}
                         groupChats={groupChats}
                     />
                 </>
