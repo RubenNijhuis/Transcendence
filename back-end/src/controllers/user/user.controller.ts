@@ -57,17 +57,18 @@ import { SetcolorDto } from "src/dtos/user/color.dto";
  */
 
 @Controller("user")
-@UseGuards(AccessTokenGuard)
 export class UsersController {
   constructor(private readonly userService: UserService) {}
 
   //////////////////////////////////////////////////////////
 
+  @UseGuards(AccessTokenGuard)
   @Get("")
   async getUsers() {
     return await this.userService.getUsers();
   }
 
+  @UseGuards(AccessTokenGuard)
   @Get("getLeaderboard")
   async getLeaderboard() {
     return await this.userService.getUsersSortedOnElo();
@@ -106,6 +107,7 @@ export class UsersController {
     return new StreamableFile(file);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Get(":username")
   async findUsersById(@Param("username") username: string) {
     try {
@@ -121,6 +123,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(AccessTokenGuard)
   @Post("setUser")
   @UsePipes(ValidationPipe)
   async setUser(
@@ -145,6 +148,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(AccessTokenGuard)
   @Post("remove")
   @UseGuards(AccessTokenGuard)
   async removeUser(@Req() req: Request) {
@@ -158,6 +162,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(AccessTokenGuard)
   @Post("enable2fa")
   @UsePipes(ValidationPipe)
   async turnon2fa(@Body() dto: SetTfaDto) {
@@ -168,6 +173,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(AccessTokenGuard)
   @Post("updateDescription")
   @UsePipes(ValidationPipe)
   async updateDescription(@Body() dto: SetDescriptionDto) {
@@ -178,6 +184,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(AccessTokenGuard)
   @Post("updateColor")
   @UsePipes(ValidationPipe)
   async updateColor(@Body() dto: SetcolorDto) {
@@ -189,6 +196,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(AccessTokenGuard)
   @Post("upload-banner-pic")
   @UseInterceptors(FileInterceptor("file", bannerOptions))
   async uploadBannerFile(
@@ -202,6 +210,7 @@ export class UsersController {
     return HttpStatus.OK;
   }
 
+  @UseGuards(AccessTokenGuard)
   @Post("upload-profile-pic")
   @UseInterceptors(FileInterceptor("file", profileOptions))
   async uploadProfileFile(

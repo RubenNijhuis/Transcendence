@@ -124,9 +124,9 @@ const ChatGroupList = ({
         setSelectedChatList(() => {
             const chats = groupChats.filter((item) => {
                 if (selectedChatType === Chat.Group.Type.DM) {
-                    return item.members.length === 2;
+                    return item.size === Chat.Group.Type.DM;
                 } else {
-                    return item.members.length > 2;
+                    return item.size === Chat.Group.Type.Group;
                 }
             });
             return chats;

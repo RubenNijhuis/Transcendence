@@ -1,14 +1,28 @@
+// Nestjs
 import { forwardRef, HttpStatus, Inject, Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
+
+// Dtos
 import { BanUserDto } from "src/dtos/record/ban-user.dto";
+import { UnBanUserDto } from "src/dtos/record/unban-user.dto";
+
+// Entitities
 import GroupUser from "src/entities/groupuser/groupuser.entity";
 import Record from "src/entities/record/record.entity";
+
+// TypeORM
 import { Repository } from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
+
+// Servies
 import { GroupService } from "src/services/group/group.service";
+
+// Error Handler
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
-import { check } from "prettier";
-import { exec } from "child_process";
-import { UnBanUserDto } from "src/dtos/record/unban-user.dto";
+
+// Types
+import { MessagePermission } from "src/types/chat";
+
+////////////////////////////////////////////////////////////
 
 @Injectable()
 export class RecordService {
@@ -18,6 +32,8 @@ export class RecordService {
     @Inject(forwardRef(() => GroupService))
     private readonly groupService: GroupService
   ) {}
+
+  //////////////////////////////////////////////////////////
 
   getAllRecords() {
     return this.recordRepository.find();
@@ -70,6 +86,14 @@ export class RecordService {
     }
   }
 
+  isRecordFinished(record: Record): boolean {
+    const timeUntilUnban =
+      record.createdTime.valueOf() + record.timeToBan * 1000;
+    const timeOfDay: number = new Date().getTime();
+
+    return timeUntilUnban >= timeOfDay;
+  }
+
   async unbanUser(adminId: string, unbanUserDto: UnBanUserDto) {
     const adminUser: GroupUser = await this.groupService.findGroupuserById(
       adminId,
@@ -100,19 +124,20 @@ export class RecordService {
   }
 
   async isUserBanned(userId: string, groupId: string) {
-    const userRecord: Record = await this.getRecordByUserId(userId, groupId);
-    if (!userRecord) return false;
-    if (userRecord.type === 1) return true;
-    const timeUntilUnban: number =
-      userRecord.createdTime.valueOf() + userRecord.timeToBan * 1000;
-    const timeOfDay: number = new Date().getTime(); //TODO: leak?
-    if (timeUntilUnban >= timeOfDay) return true;
-    await this.recordRepository
-      .createQueryBuilder("record")
-      .delete()
-      .where({ groupId: groupId })
-      .andWhere({ userId: userId })
-      .execute();
-    return false;
+    const record: Record = await this.getRecordByUserId(userId, groupId);
+
+    if (!record) return false;
+
+    if (this.isRecordFinished(record)) {
+      await this.recordRepository
+        .createQueryBuilder("record")
+        .delete()
+        .where({ groupId: groupId })
+        .andWhere({ userId: userId })
+        .execute();
+      return false;
+    }
+
+    return true;
   }
 }

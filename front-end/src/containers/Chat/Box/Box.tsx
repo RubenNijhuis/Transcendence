@@ -45,11 +45,10 @@ import {
 
 interface IChatTitle {
     chat: Chat.Group.Instance;
-    isDmChat: boolean;
     isLocked: boolean;
 }
 
-const ChatTitle = ({ chat, isDmChat, isLocked }: IChatTitle): JSX.Element => {
+const ChatTitle = ({ chat, isLocked }: IChatTitle): JSX.Element => {
     const { user } = useUser();
 
     const { openModal, setModalElement } = useModal();
@@ -65,7 +64,9 @@ const ChatTitle = ({ chat, isDmChat, isLocked }: IChatTitle): JSX.Element => {
         .shift() as Chat.Member;
 
     const chatTitle: string = (
-        isDmChat ? otherMember.profile.username : chat.name
+        chat.size === Chat.Group.Type.DM
+            ? otherMember.profile.username
+            : chat.name
     ) as string;
 
     ////////////////////////////////////////////////////////
@@ -94,7 +95,7 @@ const ChatTitle = ({ chat, isDmChat, isLocked }: IChatTitle): JSX.Element => {
     return (
         <div className="chat-title">
             <div className="title">
-                {isDmChat && (
+                {chat.size === Chat.Group.Type.DM && (
                     <Asset
                         alt={`${otherMember.profile.username} profile`}
                         url={otherMember.profile.img_url}
@@ -244,7 +245,6 @@ const ChatBox = (): JSX.Element => {
                 <>
                     <ChatTitle
                         chat={chat}
-                        isDmChat={isDmChat}
                         isLocked={isLocked}
                     />
                     <div className="chat-content">

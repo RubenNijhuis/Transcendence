@@ -71,5 +71,6 @@ export namespace Group {
         owner: string;
         protected: boolean;
         members: Member[];
+        size: Group.Type;
     }
 }

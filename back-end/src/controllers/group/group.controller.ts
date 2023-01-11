@@ -51,7 +51,6 @@ export class GroupController {
 
   ////////////////////////////////////////////////////////
 
-  // PREFIX MAKEN VOOR PARAMETER CALLS
   @Get("")
   async getAll(): Promise<any> {
     try {
@@ -64,7 +63,11 @@ export class GroupController {
   @Get("groups/:groupId")
   async getGroup(@Param("groupId") groupId: string): Promise<any> {
     try {
-      return await this.groupService.getGroup(groupId);
+      const group: Group = await this.groupService.getGroup(groupId);
+
+      // TODO: set in service
+      delete group.password;
+      return group;
     } catch (err) {
       throw err;
     }
@@ -74,7 +77,16 @@ export class GroupController {
   async getGroupsByUserId(@Req() req: Request) {
     const profile: User = req.user["profile"];
 
-    return await this.groupService.getGroupsByUserId(profile.uid);
+    const groups: Group[] = await this.groupService.getGroupsByUserId(
+      profile.uid
+    );
+
+    // TODO: set in service
+    for (const group of groups) {
+      delete group.password;
+    }
+
+    return groups;
   }
 
   @Post("setPassword")
@@ -85,12 +97,17 @@ export class GroupController {
     try {
       // Get UID through access token
       const profile = req.user["profile"];
+      const group: Group = await this.groupService.getGroup(
+        setPasswordDto.groupId
+      );
+
+      if (group.owner !== profile.uid) return;
 
       await this.groupService.setPassword(
-        profile.uid,
         setPasswordDto.groupId,
         setPasswordDto.password
       );
+
       return HttpStatus.OK;
     } catch (err) {
       throw err;
@@ -99,9 +116,25 @@ export class GroupController {
 
   @Post("validatePassword")
   async validatePassword(
+    @Req() req: Request,
     @Body() validatePasswordDto: ValidatePasswordDto
   ): Promise<boolean> {
     try {
+      const profile = req.user["profile"];
+
+      const group: Group = await this.groupService.getGroup(
+        validatePasswordDto.groupId
+      );
+
+      if (!group) return;
+
+      const userIsInGroup = group.members.findIndex(
+        (member) => member.profile.uid === profile.uid
+      );
+
+      // The profile must be in the group
+      if (!userIsInGroup || profile.uid !== group.owner) return;
+
       const isCorrectPassword = await this.groupService.validatePassword(
         validatePasswordDto.groupId,
         validatePasswordDto.password
@@ -119,7 +152,6 @@ export class GroupController {
     @Body() createGroupDto: CreateGroupDto
   ) {
     try {
-      // Get UID through access token
       const profile = req.user["profile"];
 
       const group: Group = await this.groupService.createGroup(
@@ -131,13 +163,8 @@ export class GroupController {
 
       const groupId: string = group.uid;
       const users: string[] = createGroupDto.members;
-      const owner: string = profile.uid;
 
       await this.groupService.addMembers(profile.uid, groupId, users);
-
-      // TODO: why does the owner need to be set if it's done
-      // in the create group service func?
-      await this.groupService.setOwner(groupId, owner);
 
       return HttpStatus.OK;
     } catch (err) {
@@ -152,13 +179,11 @@ export class GroupController {
     @Body() removeGroupDto: RemoveGroupDto
   ) {
     try {
-      // Get UID through access token
       const profile = req.user["profile"];
 
-      return await this.groupService.removeGroup(
-        profile.uid,
-        removeGroupDto.groupId
-      );
+      await this.groupService.removeGroup(profile.uid, removeGroupDto.groupId);
+
+      return HttpStatus.OK;
     } catch (err) {
       throw err;
     }
@@ -170,15 +195,14 @@ export class GroupController {
     @Body() editMembersDto: EditMembersDto
   ) {
     try {
-      // Get UID through access token
       const profile: User = req.user["profile"];
 
-      // TODO: add user uid to add members func
       await this.groupService.addMembers(
         profile.uid,
         editMembersDto.groupId,
         editMembersDto.users
       );
+
       return HttpStatus.OK;
     } catch (err) {
       throw err;
@@ -191,7 +215,6 @@ export class GroupController {
     @Body() editMembersDto: EditMembersDto
   ) {
     try {
-      // Get UID through access token
       const profile: User = req.user["profile"];
 
       await this.groupService.removeMembers(
@@ -199,6 +222,7 @@ export class GroupController {
         editMembersDto.groupId,
         editMembersDto.users
       );
+
       return HttpStatus.OK;
     } catch (err) {
       throw err;
@@ -211,7 +235,6 @@ export class GroupController {
     @Body() setPermissionDto: SetPermissionDto
   ) {
     try {
-      // Get UID through access token
       const profile: User = req.user["profile"];
 
       await this.groupService.setPermission(
@@ -220,6 +243,7 @@ export class GroupController {
         setPermissionDto.targetUser,
         setPermissionDto.level
       );
+
       return HttpStatus.OK;
     } catch (err) {
       throw err;
@@ -229,12 +253,11 @@ export class GroupController {
   @Post("banUser")
   async banUser(@Req() req: Request, @Body() banUserDto: BanUserDto) {
     try {
-      // Get UID through access token
       const profile: User = req.user["profile"];
 
       await this.recordService.banUser(profile.uid, banUserDto);
-      const ret = { message: "User banned!" };
-      return ret;
+
+      return HttpStatus.OK;
     } catch (err) {
       throw err;
     }
@@ -243,12 +266,11 @@ export class GroupController {
   @Post("unbanUser")
   async unbanUser(@Req() req: Request, @Body() unbanUserDto: UnBanUserDto) {
     try {
-      // Get UID through access token
       const profile: User = req.user["profile"];
 
       await this.recordService.unbanUser(profile.uid, unbanUserDto);
-      const ret = { message: "User unbanned!" };
-      return ret;
+
+      return HttpStatus.OK;
     } catch (err) {
       throw err;
     }

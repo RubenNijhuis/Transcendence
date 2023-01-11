@@ -6,9 +6,11 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 import Group from "../group/group.entity";
-import User from "../user/user.entity";
 
+// Types
 import { MessagePermission } from "../../types/chat";
+
+////////////////////////////////////////////////////////////
 
 @Entity()
 export class Record {
@@ -18,14 +20,14 @@ export class Record {
   @Column()
   groupId: string;
 
-  @ManyToOne((type) => Group, (group) => group.records)
+  @ManyToOne(() => Group, (group) => group.records)
   group: Group;
 
   @Column()
   userId: string;
 
   @Column()
-  type: MessagePermission; //TODO: type 1 = ban; type2 = mute
+  type: MessagePermission;
 
   @CreateDateColumn({
     nullable: true
@@ -37,5 +39,7 @@ export class Record {
   })
   timeToBan: number; //in seconds
 }
+
+////////////////////////////////////////////////////////////
 
 export default Record;

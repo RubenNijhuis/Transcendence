@@ -268,31 +268,8 @@ export class GroupService {
     }
   }
 
-  async setPassword(owner: string, groupId: string, newPassword: string) {
+  async setPassword(groupId: string, newPassword: string) {
     try {
-      // Get group from db
-      const group: Group = await this.findGroupById(groupId);
-      //error lol HEEL GRAPPIG MAN
-      if (!group) {
-        return console.error("group doesn't exist");
-      }
-      if (owner !== group.owner) {
-        return console.error("no permission to do this");
-      }
-
-      /**
-       * If there is already a previous password we compare the new password
-       * to the former. If they match we return an error as a password
-       * should always be new.
-       */
-      if (group.password !== null) {
-        const isMatch = this.passwordsMatch(group.password, newPassword);
-
-        if (isMatch) {
-          return console.error("error lol");
-        }
-      }
-
       const newPasswordHashed = await this.hashPassword(newPassword);
 
       // Update the password in the database

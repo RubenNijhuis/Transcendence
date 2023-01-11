@@ -15,6 +15,7 @@ import { GroupService } from "src/services/group/group.service";
 import { UserService } from "src/services/user/user.service";
 import { MessageService } from "src/services/message/message.service";
 import { JwtService } from "@nestjs/jwt";
+import { RecordService } from "src/services/record/record.service";
 
 // Room manager
 import RoomManager from "../utils/RoomManager";
@@ -44,6 +45,7 @@ export class ChatSocketGateway {
   constructor(
     private readonly groupService: GroupService,
     private readonly userService: UserService,
+    private readonly recordService: RecordService,
     private readonly messageService: MessageService,
     private readonly jwtService: JwtService
   ) {
@@ -87,7 +89,9 @@ export class ChatSocketGateway {
 
     const room = await this.groupService.findGroupById(joinRoomPayload.roomID);
     if (!room) {
-      client.emit("failure", { status: "Unable to find room with that ID" });
+      client.emit("failure", {
+        status: `Unable to find room with id ${member.roomID}`
+      });
       return;
     }
 
@@ -107,12 +111,23 @@ export class ChatSocketGateway {
     @ConnectedSocket() client: Socket
   ): Promise<void> {
     const member = this.roomManager.getMemberByConnectionID(client.id);
-    // TODO: check if member isn't muted in the chat
 
     // If the member isn't part of a room then we block them from sending a message
     if (member.roomID === "unset") {
       client.emit("failure", {
         status: "No room joined before sending message"
+      });
+      return;
+    }
+
+    const isAllowedToSendMessage = this.recordService.isUserBanned(
+      member.uid,
+      member.roomID
+    );
+
+    if (!isAllowedToSendMessage) {
+      client.emit("failure", {
+        status: `${member.uid} is not allowed to send messages to ${member.roomID}`
       });
       return;
     }
@@ -125,6 +140,7 @@ export class ChatSocketGateway {
       sendMessagePayload.content_type
     );
 
+    // Remove unnessary data response object
     delete messageSaveResponse["group"];
 
     // Send message to all other room members

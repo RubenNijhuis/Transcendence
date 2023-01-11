@@ -61,6 +61,14 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
                 const messages = getMessagesFromGroupChats(retrievedGroupChats);
                 bindMembersToMessages(members, messages);
 
+                for (const group of retrievedGroupChats) {
+                    if (group.members.length === 2) {
+                        group.size = Chat.Group.Type.DM;
+                    } else {
+                        group.size = Chat.Group.Type.Group;
+                    }
+                }
+
                 setChatMembers(members.flat());
                 setGroupChats(retrievedGroupChats);
             } catch (err) {
