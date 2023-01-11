@@ -1,16 +1,28 @@
+// Nestjs
 import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
+
+// Env
 import { env } from "node:process";
+
+// Express
 import * as session from "express-session";
+
+// Auth
 import * as passport from "passport";
+
+// Cors
 import { corsConfig, pipenConfig, sessionConfig } from "src/configs";
+
+// Setup
 import { AppModule } from "./bootstrap/app.module";
+
+////////////////////////////////////////////////////////////
 
 async function bootstrap() {
   const app: NestExpressApplication = await NestFactory.create(AppModule);
   const port = Number(env.PORT);
 
-  // Enable cors so the front-end can communicate
   app.enableCors(corsConfig);
   app.useGlobalPipes(pipenConfig);
   app.use(session(sessionConfig));
@@ -28,5 +40,7 @@ async function bootstrap() {
     console.log("[WEB]", String(env.BASE_URL));
   });
 }
+
+////////////////////////////////////////////////////////////
 
 bootstrap();

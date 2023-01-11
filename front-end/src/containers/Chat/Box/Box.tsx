@@ -35,7 +35,11 @@ import { useFormInput } from "../../../components/Form/hooks";
 // Proxies
 import { verifyPassword, getChatByGroupId } from "../../../proxies/chat";
 import { useChat } from "../../../contexts/ChatContext";
-import { bindMembersToMessages, getMembersFromGroupChats, getMessagesFromGroupChats } from "../../../contexts/ChatContext/ChatContext.bl";
+import {
+    bindMembersToMessages,
+    getMembersFromGroupChats,
+    getMessagesFromGroupChats
+} from "../../../contexts/ChatContext/ChatContext.bl";
 
 ////////////////////////////////////////////////////////////
 
@@ -172,23 +176,23 @@ const ChatBox = (): JSX.Element => {
             try {
                 const newRetrievedChat = await getChatByGroupId(activeChatId);
 
-                const members = await getMembersFromGroupChats(
-                    [newRetrievedChat]
-                );
+                const members = await getMembersFromGroupChats([
+                    newRetrievedChat
+                ]);
                 const messages = getMessagesFromGroupChats([newRetrievedChat]);
                 bindMembersToMessages(members, messages);
 
                 updateChatGroup(newRetrievedChat);
-                
+
                 setChat(newRetrievedChat);
                 setIsDmChat(newRetrievedChat.members.length === 2);
-        
+
                 setIsLocked(newRetrievedChat.protected);
                 setConnectionMessages([]);
             } catch (err) {
                 console.error(err);
             }
-        }
+        };
 
         updateChat();
     }, [activeChatId]);
@@ -196,8 +200,8 @@ const ChatBox = (): JSX.Element => {
     ////////////////////////////////////////////////////////
 
     useEffect(() => {
-        if (!connection) return;
-        if (!chat) return;
+        if (!connection || !chat) return;
+
         setupConnections(connection);
         connection.emit(SocketRoutes.room.joinRoom, {
             roomID: chat.uid
@@ -223,7 +227,6 @@ const ChatBox = (): JSX.Element => {
                 if (!sender) return;
 
                 newMessage.sender = sender.profile;
-                console.log(newMessage);
                 setConnectionMessages((prev) => [...prev, newMessage]);
             }
         );

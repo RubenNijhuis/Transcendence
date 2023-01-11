@@ -17,17 +17,8 @@ const getProfileBannerByUsername = async (
 ): Promise<string> => {
     try {
         const route = ApiRoutes.getProfileBannerByUsername(username);
-        const config: apiRequestConfig = {
-            responseType: "arraybuffer",
-        };
-
-        const { data } = await API.get(route, config);
-
-        // Image transform
-        const buffer = Buffer.from(data, "binary").toString("base64");
-        const toBase64String = `data:image/png;base64,${buffer}`;
-
-        return Promise.resolve(toBase64String);
+        
+        return Promise.resolve(route);
     } catch (err) {
         return Promise.reject(err);
     }

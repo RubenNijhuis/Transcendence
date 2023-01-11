@@ -9,6 +9,7 @@ import {
   Post,
   Req,
   Res,
+  StreamableFile,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -34,7 +35,7 @@ import {
   profileOptions
 } from "src/middleware/imgUpload/imgUpload";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { readdirSync } from "fs";
+import { createReadStream, readdirSync } from "fs";
 
 // Guards
 import { Jwt2faStrategy } from "src/middleware/jwt/jwt.strategy";
@@ -72,49 +73,37 @@ export class UsersController {
     return await this.userService.getUsersSortedOnElo();
   }
 
-  @Get("get-img/:imageType/:username")
-  async getImg(
+  @Get("img/:imageType/:username")
+  async returnImg(
+    @Res({ passthrough: true }) res: Response,
     @Param("imageType") imageType: string,
-    @Param("username") username: string,
-    @Res() res: Response
-  ) {
-    try {
-      const user = await this.userService.findUserByUsername(username);
-
-      const uid = user.uid;
-
-      if (!uid) throw new BadRequestException("Unable to find user");
-      if (imageType !== "banner" && imageType !== "profile") {
-        throw new BadRequestException("Invalid image type");
-      }
-
-      const dirname = `/app/upload/${imageType}/`;
-      let imgPath = dirname;
-
-      const files = readdirSync(dirname).filter((file) => {
-        return file.startsWith(`${uid}.`);
-      });
-
-      if (files.length === 0) {
-        imgPath += "standard.png";
-      } else {
-        /**
-         * Always takes the first one since there should
-         * only be 1 (one) file per user
-         */
-        imgPath += files[0];
-      }
-
-      /**
-       * TODO: send image as base 64 buffer to back-end so
-       * it doesn't have to be converted on the front-end
-       **/
-      // const imgAsBuffer = ""
-      // const imgBuffer = new Buffer(imgAsBuffer, 'base64');
-      return res.sendFile(imgPath);
-    } catch (err) {
-      throw err;
+    @Param("username") username: string
+  ): Promise<StreamableFile> {
+    if (imageType !== "banner" && imageType !== "profile") {
+      throw new BadRequestException("Invalid image type");
     }
+
+    const user = await this.userService.findUserByUsername(username);
+
+    if (!user || user.isInitialized === false)
+      throw new BadRequestException("Unable to find user");
+
+    const dirname = `/app/upload/${imageType}/`;
+    let imgPath = dirname;
+
+    const files = readdirSync(dirname).filter((file) => {
+      return file.startsWith(`${user.uid}.`);
+    });
+
+    imgPath += files.length === 0 ? "standard.png" : files[0];
+
+    const file = createReadStream(imgPath);
+
+    res.set({
+      "Content-Type": "image/jpeg"
+    });
+
+    return new StreamableFile(file);
   }
 
   @Get(":username")

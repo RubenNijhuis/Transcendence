@@ -146,6 +146,8 @@ export class GroupService {
       newGroup.name = name;
       newGroup.protected = false;
 
+      console.log(newGroup);
+
       if (password && password.length > 0) {
         newGroup.protected = true;
         newGroup.password = await this.hashPassword(password);

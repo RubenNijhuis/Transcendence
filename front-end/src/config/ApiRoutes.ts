@@ -20,8 +20,7 @@ const ApiRoutes = {
         `/friends/getfriends/${username}`,
     getFriend: () => `/friends/getfriend`,
     removeFriend: () => `/friends/removeFriend`,
-    getIsFriend: (friendname: string) =>
-        `/friends/isFriend/${friendname}`,
+    getIsFriend: (friendname: string) => `/friends/isFriend/${friendname}`,
 
     sendFriendRequest: () => `/friendrequest/sendrequest`,
     acceptFriendRequest: (friendname: string) =>
@@ -36,9 +35,9 @@ const ApiRoutes = {
     getProfileByUsername: (username: string) => `/user/${username}`,
 
     getProfileImageByUsername: (username: string) =>
-        `/user/get-img/profile/${username}`,
+        `/api/user/img/profile/${username}`,
     getProfileBannerByUsername: (username: string) =>
-        `/user/get-img/banner/${username}`,
+        `/api/user/img/banner/${username}`,
     // Profile /////////////////////////////////////////////////
 
     // Account creation ////////////////////////////////////////
