@@ -55,9 +55,13 @@ export class FriendlistService {
 
     const friend: FriendList = await this.friendlistRepository
       .createQueryBuilder("friend_list")
-      .where("username = :username OR friendname = :username", { username })
-      .andWhere("friendname = :friendname OR username = :friendname", {
+      .where("username = :username AND friendname = :friendname", {
+        username,
         friendname
+      })
+      .orWhere("username = :friendname AND friendname = :username", {
+        friendname,
+        username
       })
       .getOne();
 
