@@ -5,10 +5,9 @@ import { JwtModule } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 // Entities
-import { BlockList, FriendList, FriendRequest, User } from "src/entities";
+import { BlockList, FriendList, User } from "src/entities";
 import Group from "src/entities/group/group.entity";
 import GroupUser from "src/entities/groupuser/groupuser.entity";
-import MatchHistory from "src/entities/matchhistory/matchhistory.entity";
 import Message from "src/entities/message/message.entity";
 import Record from "src/entities/record/record.entity";
 
@@ -36,13 +35,11 @@ import { UserModule } from "../user/user.module";
     TypeOrmModule.forFeature([
       User,
       FriendList,
-      FriendRequest,
       BlockList,
       Group,
       GroupUser,
       Message,
-      Record,
-      MatchHistory
+      Record
     ]),
     ConfigModule.forRoot(),
     UserModule,

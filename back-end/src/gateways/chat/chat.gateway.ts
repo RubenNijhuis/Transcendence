@@ -26,7 +26,7 @@ import { JwtPayload } from "src/types/auth";
 
 ////////////////////////////////////////////////////////////
 
-@WebSocketGateway(3002, {
+@WebSocketGateway(3001, {
   cors: {
     origin: "*",
     credentials: false

@@ -29,8 +29,8 @@ services:
       - ../shared:/shared
     ports:
       - "3000:3000" # Main API
-      - "3001:3001" # Game Socket
-      - "3002:3002" # Chat Socket
+      - "3001:3001" # Chat Socket
+      - "3002:3002" # Game Socket
     depends_on:
       - database
 

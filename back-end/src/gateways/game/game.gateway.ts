@@ -28,7 +28,7 @@ import { GameService } from "./game.service";
 
 ////////////////////////////////////////////////////////////
 
-@WebSocketGateway(3001, {
+@WebSocketGateway(3002, {
   cors: {
     origin: "*",
     credentials: false
