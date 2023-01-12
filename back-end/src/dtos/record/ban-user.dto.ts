@@ -7,9 +7,6 @@ export class BanUserDto {
   @IsNotEmpty()
   groupId: string;
 
-  @IsNotEmpty()
-  type: number;
-
   @IsOptional()
   timeToBan: number;
 }
