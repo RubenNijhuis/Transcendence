@@ -9,6 +9,7 @@ import { User } from "src/entities";
 
 // Gateways
 import { GameSocketGateway } from "src/gateways/game/game.gateway";
+import { GameService } from "src/gateways/game/game.service";
 
 // Services
 
@@ -25,7 +26,7 @@ import { UserModule } from "../user/user.module";
     JwtModule
   ],
   controllers: [],
-  providers: [GameSocketGateway],
+  providers: [GameSocketGateway, GameService],
   exports: []
 })
 export class GameModule {}
