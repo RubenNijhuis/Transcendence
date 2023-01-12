@@ -19,9 +19,9 @@ export class FriendSeederService {
   async getFriendIndexes(friends): Promise<number[]> {
     const indexes: number[] = [];
 
-    for (let i = 0; i < friends.length; i++) {
+    for (const friend of friends) {
       indexes.push(
-        (await this.userService.findUserByUsername(friends[i].username)).index
+        (await this.userService.findUserByUsername(friend.username)).index
       );
     }
     return indexes;
@@ -50,8 +50,7 @@ export class FriendSeederService {
   private async formulateResponse(users: User[]) {
     const ret = [];
 
-    for (let i = 0; i < users.length; i++) {
-      const user: User = users[i];
+    for (const user of users) {
       const filtered_friends: string[] = [];
       const friends: FriendList[] = await this.friendsService.getFriends(
         user.username

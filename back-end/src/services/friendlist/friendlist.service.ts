@@ -59,7 +59,7 @@ export class FriendlistService {
         username,
         friendname
       })
-      .orWhere("friendname = :username AND username = :friendname", {
+      .orWhere("username = :friendname AND friendname = :username", {
         friendname,
         username
       })

@@ -50,8 +50,14 @@ export class FriendrequestService {
 
     const request: FriendRequest = await this.friendrequestRepository
       .createQueryBuilder("friend_request")
-      .where("username = :username", { username })
-      .andWhere("requested = :requested", { requested })
+      .where("username = :username AND requested = :requested", {
+        requested,
+        username
+      })
+      .orWhere("username = :requested AND requested = :username", {
+        requested,
+        username
+      })
       .getOne();
 
     if (request) ret = true;
@@ -82,9 +88,13 @@ export class FriendrequestService {
       .createQueryBuilder("friend_request")
       .delete()
       .from("friend_request")
-      .where("username = :username OR requested = :username", { username })
-      .andWhere("requested = :requested OR username = :requested", {
-        requested
+      .where("username = :username AND requested = :requested", {
+        requested,
+        username
+      })
+      .orWhere("username = :requested AND requested = :username", {
+        requested,
+        username
       })
       .execute();
 
