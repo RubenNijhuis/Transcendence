@@ -7,7 +7,7 @@ import Modal from "../../components/Modal";
 ////////////////////////////////////////////////////////////
 
 interface ModalContextType {
-    modalActive: boolean;
+    modalOpen: boolean;
     openModal: React.Dispatch<React.SetStateAction<boolean>>;
 
     setAllowClose: React.Dispatch<React.SetStateAction<boolean>>;
@@ -26,7 +26,7 @@ interface IModalProvider {
 }
 
 const ModalProvider = ({ children }: IModalProvider): JSX.Element => {
-    const [modalActive, openModal] = useState<boolean>(false);
+    const [modalOpen, openModal] = useState<boolean>(false);
     const [allowClose, setAllowClose] = useState<boolean>(true);
     const [modalElement, setModalElement] = useState<React.ReactNode>(null!);
 
@@ -35,21 +35,21 @@ const ModalProvider = ({ children }: IModalProvider): JSX.Element => {
     useEffect(() => {
         const bodyElement = document.getElementsByTagName("body")[0];
 
-        if (modalActive) {
+        if (modalOpen) {
             bodyElement.style.overflow = "hidden";
         } else {
             bodyElement.style.overflow = "scroll";
         }
-    }, [modalActive]);
+    }, [modalOpen]);
 
     ////////////////////////////////////////////////////////
 
     const value: ModalContextType = {
-        modalActive,
+        modalOpen,
         openModal,
 
         setModalElement,
-        setAllowClose,
+        setAllowClose
     };
 
     ////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ const ModalProvider = ({ children }: IModalProvider): JSX.Element => {
     return (
         <ModalContext.Provider value={value}>
             {children}
-            {modalActive && (
+            {modalOpen && (
                 <Modal openModal={openModal} allowClose={allowClose}>
                     {modalElement}
                 </Modal>

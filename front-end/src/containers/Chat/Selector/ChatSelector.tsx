@@ -59,8 +59,7 @@ const ChatTypeSelector = ({
     setActiveType
 }: IChatTypeSelector): JSX.Element => {
     const isActiveChatSelect = (type: Chat.Group.Type): string => {
-        if (type === activeType) return "active";
-        else return "";
+        return type === activeType ? "active" : "";
     };
 
     ////////////////////////////////////////////////////////
@@ -92,7 +91,6 @@ const ChatTypeSelector = ({
 
 interface IDirectMessageList {
     selectedChatType: Chat.Group.Type;
-    groupChats: Chat.Group.Instance[];
 }
 
 /**
@@ -100,8 +98,7 @@ interface IDirectMessageList {
  * displays the list of groups or dms
  */
 const ChatGroupList = ({
-    selectedChatType,
-    groupChats
+    selectedChatType
 }: IDirectMessageList): JSX.Element => {
     const [selectedChatList, setSelectedChatList] = useState<
         Chat.Group.Instance[]
@@ -110,7 +107,7 @@ const ChatGroupList = ({
     ////////////////////////////////////////////////////////
 
     const { user } = useUser();
-    const { setActiveChatId, activeChatId } = useChat();
+    const { setActiveChatId, activeChatId, groupChats } = useChat();
 
     ////////////////////////////////////////////////////////
 
@@ -137,22 +134,22 @@ const ChatGroupList = ({
         <>
             {selectedChatList.length && (
                 <DirectMessageList>
-                    {selectedChatList.map(({ name, members, uid }) => {
+                    {selectedChatList.map(({ name, members, uid, size }) => {
                         const otherMembers: Chat.Member[] = members.filter(
                             (member) =>
                                 member.profile.username !== user!.username
                         );
 
                         const isSelectedChat = uid === activeChatId;
-                        const isDm = members.length <= 2;
 
                         /**
                          * If it's a dm we display the other members name.
                          * Ortherwise the group name
                          */
-                        const chatGroupName = isDm
-                            ? otherMembers[0].profile.username
-                            : name;
+                        const chatGroupName =
+                            size === Chat.Group.Type.DM
+                                ? otherMembers[0].profile.username
+                                : name;
 
                         return (
                             <DirectMessageEntry
@@ -192,10 +189,7 @@ const ChatSelector = (): JSX.Element => {
                         activeType={selectedChatType}
                         setActiveType={setSelectedChatType}
                     />
-                    <ChatGroupList
-                        selectedChatType={selectedChatType}
-                        groupChats={groupChats}
-                    />
+                    <ChatGroupList selectedChatType={selectedChatType} />
                 </>
             )}
         </Container>

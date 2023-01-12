@@ -23,6 +23,7 @@ interface ChatContextType {
     activeChatId: string | null;
     setActiveChatId: React.Dispatch<React.SetStateAction<string | null>>;
     groupChats: Chat.Group.Instance[];
+    addGroupChat: (newGroup: Chat.Group.Instance) => void;
     updateChatGroup: (updatedGroup: Chat.Group.Instance) => void;
 }
 
@@ -54,7 +55,6 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
             try {
                 const retrievedGroupChats: Chat.Group.Instance[] =
                     await getChatsByUsername();
-
                 const members = await getMembersFromGroupChats(
                     retrievedGroupChats
                 );
@@ -93,13 +93,32 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
         });
     };
 
+    const addGroupChat = (newGroup: Chat.Group.Instance): void => {
+        const asyncMiddle = async () => {
+            const members = await getMembersFromGroupChats([newGroup]);
+            const messages = getMessagesFromGroupChats([newGroup]);
+            bindMembersToMessages(members, messages);
+
+            for (const group of [newGroup]) {
+                if (group.members.length === 2) {
+                    group.size = Chat.Group.Type.DM;
+                } else {
+                    group.size = Chat.Group.Type.Group;
+                }
+            }
+            setGroupChats((prev) => [...prev, newGroup]);
+        };
+        asyncMiddle();
+    };
+
     ////////////////////////////////////////////////////////
 
     const value: ChatContextType = {
         activeChatId,
         setActiveChatId,
         groupChats,
-        updateChatGroup
+        updateChatGroup,
+        addGroupChat
     };
 
     ////////////////////////////////////////////////////////

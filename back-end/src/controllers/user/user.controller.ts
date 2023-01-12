@@ -188,7 +188,6 @@ export class UsersController {
   @Post("updateColor")
   @UsePipes(ValidationPipe)
   async updateColor(@Body() dto: SetcolorDto) {
-    console.log("color:", dto.color);
     try {
       await this.userService.setColor(dto.username, dto.color);
     } catch (err) {

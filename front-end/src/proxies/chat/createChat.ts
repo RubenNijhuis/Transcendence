@@ -20,7 +20,7 @@ const createChat = async (
     name: string,
     members: Profile.ID[],
     password: string
-): Promise<Chat.Group.Instance[]> => {
+): Promise<Chat.Group.Instance> => {
     try {
         const route = ApiRoutes.createChat();
         let body: any = {

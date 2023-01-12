@@ -132,7 +132,7 @@ const ProfilePage = (): JSX.Element => {
         if (inLoginProcess) {
             handleLoginProcess();
         }
-    }, [user]);
+    }, [user, profileName]);
 
     ////////////////////////////////////////////////////////
 

@@ -4,7 +4,7 @@ import {
     lightTextColor,
     magicNum,
     mainColor,
-    smallRadius,
+    smallRadius
 } from "../../../styles/StylingConstants";
 
 const Container = styled.div`
@@ -20,7 +20,7 @@ const Container = styled.div`
 
         display: flex;
         justify-content: space-between;
-        
+
         .title {
             display: flex;
             align-items: center;
@@ -67,6 +67,7 @@ const PasswordLayer = styled.div`
     .error {
         border: solid 2px red;
         padding: 8px 19px;
+        margin-bottom: calc(${magicNum} / 4);
         border-radius: ${smallRadius};
     }
 

@@ -13,10 +13,11 @@ import PageRoutes from "../../../config/PageRoutes";
 
 interface IRankEntry {
     profile: Profile.Instance;
+    rank: number;
 }
 
-const RankEntry = ({ profile }: IRankEntry) => {
-    const { rank, img_url, username, wins } = profile;
+const RankEntry = ({ profile, rank }: IRankEntry) => {
+    const { img_url, username, wins } = profile;
 
     return (
         <Entry>
@@ -48,7 +49,7 @@ const RankingList = ({ rankings }: IRankingList): JSX.Element => {
     return (
         <EntryList>
             {filteredRankingList.map((profile, count) => (
-                <RankEntry profile={profile} key={count} />
+                <RankEntry profile={profile} key={count} rank={count + 3}/>
             ))}
         </EntryList>
     );

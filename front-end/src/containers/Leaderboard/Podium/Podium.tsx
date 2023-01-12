@@ -1,5 +1,5 @@
 // Types
-import * as Profile from "../../../types/Profile"
+import * as Profile from "../../../types/Profile";
 
 // Routing
 import PageRoutes from "../../../config/PageRoutes";
@@ -23,20 +23,20 @@ const Podium = ({ rankings }: IPodium): JSX.Element => {
     // Swap pos 1 and 2 in array
     [formattedRankings[0], formattedRankings[1]] = [
         formattedRankings[1],
-        formattedRankings[0],
+        formattedRankings[0]
     ];
 
     ////////////////////////////////////////////////////////
 
     return (
         <PodiumContainer>
-            {formattedRankings.map(({ img_url, username, rank }, count) => (
-                <PodiumPosition pos={rank} key={count}>
+            {formattedRankings.map(({ img_url, username }, count) => (
+                <PodiumPosition pos={count + 1} key={count}>
                     <Link
                         to={PageRoutes.profileWithUsername(username)}
                         className="finalist"
                     >
-                        <Crown rank={rank} />
+                        <Crown rank={count + 1} />
                         <Asset
                             url={img_url}
                             className="profile-img"

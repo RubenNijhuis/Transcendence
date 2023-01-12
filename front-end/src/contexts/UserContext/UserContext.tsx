@@ -41,7 +41,6 @@ const UserProvider = ({
 
     useEffect(() => {
         if (!user) return;
-        console.log(user);
         const getFriends = async () => {
             const retrievedFriends = await getFriendsByUsername(user.username);
             setFriends(retrievedFriends);

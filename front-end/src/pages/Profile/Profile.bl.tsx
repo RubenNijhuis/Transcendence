@@ -20,7 +20,9 @@ export const useProfileFriends = (
 
     useEffect(() => {
         if (!profile) return;
-        getFriendsByUsername(profile.username).then(setProfileFriends);
+        getFriendsByUsername(profile.username).then(res => {
+            setProfileFriends(res)
+        });
     }, [profile]);
 
     return profileFriends;
@@ -47,11 +49,9 @@ export const useGetSelectedProfile = (
             banner: true
         };
 
-        if (username) {
-            getProfileByUsername(username, imageSelect).then(
-                setSelectedProfile
-            );
-        }
+        getProfileByUsername(username, imageSelect).then(res => {
+            setSelectedProfile(res);
+        });
     }, [user, username]);
 
     return selectedProfile;

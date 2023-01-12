@@ -95,7 +95,6 @@ export class GroupController {
     @Body() setPasswordDto: SetPasswordDto
   ): Promise<any> {
     try {
-      // Get UID through access token
       const profile = req.user["profile"];
       const group: Group = await this.groupService.getGroup(
         setPasswordDto.groupId
@@ -128,12 +127,12 @@ export class GroupController {
 
       if (!group) return;
 
-      const userIsInGroup = group.members.findIndex(
-        (member) => member.profile.uid === profile.uid
-      );
+      //   const userIsInGroup = group.members.findIndex(
+      //     (member) => member.profile.uid === profile.uid
+      //   );
 
       // The profile must be in the group
-      if (!userIsInGroup || profile.uid !== group.owner) return;
+      //   if (!userIsInGroup || profile.uid !== group.owner) return;
 
       const isCorrectPassword = await this.groupService.validatePassword(
         validatePasswordDto.groupId,
@@ -150,7 +149,7 @@ export class GroupController {
   async createGroup(
     @Req() req: Request,
     @Body() createGroupDto: CreateGroupDto
-  ) {
+  ): Promise<Group> {
     try {
       const profile = req.user["profile"];
 
@@ -165,8 +164,11 @@ export class GroupController {
       const users: string[] = createGroupDto.members;
 
       await this.groupService.addMembers(profile.uid, groupId, users);
+      await this.groupService.setOwner(profile.uid, groupId);
 
-      return HttpStatus.OK;
+      const createdGroup = await this.groupService.getGroup(groupId);
+      delete createGroupDto.password;
+      return createdGroup;
     } catch (err) {
       throw err;
     }
@@ -202,7 +204,6 @@ export class GroupController {
         editMembersDto.groupId,
         editMembersDto.users
       );
-
       return HttpStatus.OK;
     } catch (err) {
       throw err;

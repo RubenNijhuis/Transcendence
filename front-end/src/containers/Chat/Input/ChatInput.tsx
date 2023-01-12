@@ -207,6 +207,19 @@ const ChatInput = ({ user, chat }: IChatInput): JSX.Element => {
     const handleMessageSend = async () => {
         if (!connection) return;
 
+        if (messageType === Chat.Message.ContentType.Simple) {
+            const message = messageContent as Chat.Message.Simple;
+            if (message.content.length === 0) {
+                return;
+            }
+        }
+        else if (messageType === Chat.Message.ContentType.Picture) {
+            const message = messageContent as Chat.Message.Picture;
+            if (message.url.length === 0 || message.alt.length === 0) {
+                return;
+            }
+        }
+
         connection.emit(SocketRoutes.chat.sendMessage, {
             content: messageContent,
             content_type: messageType

@@ -34,12 +34,11 @@ export class FriendlistController {
   //////////////////////////////////////////////////////////
 
   @Get("getFriends/:username")
-  async getFriends(@Req() req: Request) {
+  async getFriends(@Param("username") username: string, @Req() req: Request) {
     try {
-      const profile: User = req.user["profile"];
       const friendsList = await this.friendlistService.filterFriendlist(
-        profile.username,
-        await this.friendlistService.getFriends(profile.username)
+        username,
+        await this.friendlistService.getFriends(username)
       );
       return friendsList;
     } catch (err) {

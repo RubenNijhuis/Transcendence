@@ -55,11 +55,17 @@ export class FriendlistService {
 
     const friend: FriendList = await this.friendlistRepository
       .createQueryBuilder("friend_list")
-      .where("username = :username OR friendname = :username", { username })
-      .andWhere("friendname = :friendname OR username = :friendname", {
+      .where("username = :username AND friendname = :friendname", {
+        username,
         friendname
       })
+      .orWhere("friendname = :username AND username = :friendname", {
+        friendname,
+        username
+      })
       .getOne();
+
+    console.log("❌", friend);
 
     if (friend) ret = true;
     return ret;
@@ -77,7 +83,6 @@ export class FriendlistService {
       return;
     }
 
-    console.log("addfriend");
     await this.friendrequestService.removeRequest(username, friendname); // remove request
     const newEntry: FriendList = this.friendlistRepository.create(query);
     const saveResponse: FriendList = await this.friendlistRepository.save(

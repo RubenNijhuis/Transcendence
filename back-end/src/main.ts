@@ -19,7 +19,7 @@ import { AppModule } from "./bootstrap/app.module";
 
 ////////////////////////////////////////////////////////////
 
-async function bootstrap() {
+const bootstrap = async () => {
   const app: NestExpressApplication = await NestFactory.create(AppModule);
   const port = Number(env.PORT);
 
@@ -29,17 +29,12 @@ async function bootstrap() {
   app.setGlobalPrefix("api");
   app.use(passport.initialize());
   app.use(passport.session());
-  passport.serializeUser((user, done) => {
-    done(null, user);
-  });
-  passport.deserializeUser((user, done) => {
-    // why does this fix the "Error: Failed to serialize user into session"?
-    done(null, user);
-  });
+  passport.serializeUser((user, done) => done(null, user));
+  passport.deserializeUser((user, done) => done(null, user));
   await app.listen(port, () => {
     console.log("[WEB]", String(env.BASE_URL));
   });
-}
+};
 
 ////////////////////////////////////////////////////////////
 

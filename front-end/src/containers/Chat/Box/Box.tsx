@@ -19,9 +19,6 @@ import { useModal } from "../../../contexts/ModalContext";
 // Styling
 import { Container, PasswordLayer } from "./Box.style";
 
-// Types
-import * as Profile from "../../../types/Profile";
-
 // User
 import { useUser } from "../../../contexts/UserContext";
 
@@ -131,10 +128,10 @@ const PasswordInput = ({ chatUid, setIsLocked }: IPasswordInput) => {
             );
 
             if (verifyResponse === false) {
-                setPasswordError(false);
+                setPasswordError(true);
                 return;
             }
-            setIsLocked(true);
+            setIsLocked(!verifyPassword);
         } catch (err) {
             console.error(err);
         }
@@ -144,10 +141,10 @@ const PasswordInput = ({ chatUid, setIsLocked }: IPasswordInput) => {
 
     return (
         <PasswordLayer>
+            <Heading type={3}>Please put in the password for this chat</Heading>
             {passwordError && (
                 <div className="error">The password is incorrect</div>
             )}
-            <Heading type={3}>Please put in the password for this chat</Heading>
             <input type="password" {...passwordText} />
             <Button onClick={sendPassword}>Verify password</Button>
         </PasswordLayer>
@@ -243,10 +240,7 @@ const ChatBox = (): JSX.Element => {
         <Container>
             {chat && (
                 <>
-                    <ChatTitle
-                        chat={chat}
-                        isLocked={isLocked}
-                    />
+                    <ChatTitle chat={chat} isLocked={isLocked} />
                     <div className="chat-content">
                         {!isLocked && (
                             <>

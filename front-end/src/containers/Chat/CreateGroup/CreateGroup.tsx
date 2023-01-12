@@ -8,6 +8,7 @@ import { useUser } from "../../../contexts/UserContext";
 
 // Types
 import * as Profile from "../../../types/Profile";
+import * as Chat from "../../../types/Chat";
 
 // UI
 import Button from "../../../components/Button";
@@ -24,14 +25,19 @@ import { createChat } from "../../../proxies/chat";
 
 // Icons
 import { GrFormSearch, GrFormClose } from "react-icons/gr";
+import { useChat } from "../../../contexts/ChatContext";
 
 ///////////////////////////////////////////////////////////
 
 interface ICreateGroupChat {
     openModal: React.Dispatch<React.SetStateAction<boolean>>;
+    addGroupChat: (newGroup: Chat.Group.Instance) => void;
 }
 
-const CreateGroupChat = ({ openModal }: ICreateGroupChat): JSX.Element => {
+const CreateGroupChat = ({
+    openModal,
+    addGroupChat
+}: ICreateGroupChat): JSX.Element => {
     const [selectedFriends, setSelectedFriends] = useState<Profile.Instance[]>(
         []
     );
@@ -42,6 +48,8 @@ const CreateGroupChat = ({ openModal }: ICreateGroupChat): JSX.Element => {
     //////////////////////////////////////////////////////////
 
     const { user, friends } = useUser();
+
+    console.log(friends);
 
     //////////////////////////////////////////////////////////
 
@@ -82,12 +90,13 @@ const CreateGroupChat = ({ openModal }: ICreateGroupChat): JSX.Element => {
     const createGroupChat = async () => {
         try {
             const selectedFriendsUIDS = selectedFriends.map((item) => item.uid);
-            await createChat(
+            const newGroup = await createChat(
                 user.uid,
                 groupName.value,
                 selectedFriendsUIDS,
                 password.value
             );
+            addGroupChat(newGroup);
             openModal(false);
         } catch (err) {
             console.error(err);
@@ -166,15 +175,22 @@ const CreateGroupChat = ({ openModal }: ICreateGroupChat): JSX.Element => {
 };
 
 const CreateGroup = (): JSX.Element => {
-    const { openModal, modalActive, setModalElement } = useModal();
+    const { openModal, setModalElement } = useModal();
 
     //////////////////////////////////////////////////////////
+
+    const { addGroupChat } = useChat();
 
     /**
      * We set the modal component with its closing function
      */
     const openCreateGroup = () => {
-        setModalElement(<CreateGroupChat openModal={openModal} />);
+        setModalElement(
+            <CreateGroupChat
+                openModal={openModal}
+                addGroupChat={addGroupChat}
+            />
+        );
         openModal(true);
     };
 

@@ -20,6 +20,7 @@ import { MessageService } from "../message/message.service";
 
 // Error handler
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
+import { PermissionLevel } from "src/types/group";
 
 ////////////////////////////////////////////////////////////
 
@@ -137,16 +138,11 @@ export class GroupService {
       }
 
       const newGroup: Group = this.groupRepository.create();
-      console.log("CREATE GROUP\n\n");
-      console.log("groupname: ", name);
-      console.log("password: ", password);
 
       newGroup.owner = owner;
       newGroup.members = [];
       newGroup.name = name;
       newGroup.protected = false;
-
-      console.log(newGroup);
 
       if (password && password.length > 0) {
         newGroup.protected = true;
@@ -169,7 +165,6 @@ export class GroupService {
   ): Promise<DeleteResult | null> {
     try {
       const group: Group = await this.findGroupById(groupId);
-      console.log("BEFORE Group: ", group);
 
       if (group.owner !== owner) return null;
 
@@ -179,8 +174,6 @@ export class GroupService {
         .where({ uid: groupId })
         .execute();
 
-      const test: Group = await this.findGroupById(groupId);
-      console.log("AFTER Group: ", test);
       return ret;
     } catch (error: any) {
       throw error;
@@ -195,17 +188,18 @@ export class GroupService {
     try {
       const group: Group = await this.findGroupById(groupId);
       if (owner !== group.owner) return;
+
       for (const member of users) {
         if (member === group.owner) continue;
 
         const groupuser = this.groupuserRepository.create();
 
         groupuser.group = group;
-        console.log("❌", member);
         groupuser.profile = await this.userService.findUserByUid(member);
         groupuser.groupId = groupId;
         groupuser.memberId = member;
-        groupuser.permissions = 0;
+        groupuser.permissions = PermissionLevel.Default;
+
         this.groupuserRepository.save(groupuser);
       }
     } catch (err) {
@@ -217,18 +211,17 @@ export class GroupService {
     }
   }
 
-  async setOwner(groupId: string, owner: string) {
+  async setOwner(owner: string, groupId: string) {
     try {
       const group: Group = await this.findGroupById(groupId);
 
       const groupuser = this.groupuserRepository.create();
 
-      // TODO: can't these be set inmediatly in the create?
       groupuser.group = group;
       groupuser.profile = await this.userService.findUserByUid(owner);
       groupuser.groupId = groupId;
       groupuser.memberId = owner;
-      groupuser.permissions = 2; // TODO: Use an enum svp
+      groupuser.permissions = PermissionLevel.Owner;
 
       return this.groupuserRepository.save(groupuser);
     } catch (err) {
@@ -299,7 +292,6 @@ export class GroupService {
 
       isPasswordValid = await bcrypt.compare(hash, group.password);
 
-      console.log("valid pass: ", isPasswordValid);
       return isPasswordValid;
     } catch (err) {
       throw errorHandler(
@@ -318,7 +310,6 @@ export class GroupService {
     members: string[]
   ): Promise<void> {
     try {
-      // What is `i`? "I don't know.. didn't write this" -Jules
       let i: number;
       let isRemovable = true;
       for (const member of members) {
