@@ -25,6 +25,7 @@ import { JwtService } from "@nestjs/jwt";
 import * as Payload from "../utils/Payloads";
 import { JwtPayload } from "src/types/auth";
 import { GameService } from "./game.service";
+import { forwardRef, Inject } from "@nestjs/common";
 
 ////////////////////////////////////////////////////////////
 
@@ -46,6 +47,7 @@ export class GameSocketGateway {
   // Misc handelers //////////////////////////////////////////
 
   constructor(
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly gameService: GameService
