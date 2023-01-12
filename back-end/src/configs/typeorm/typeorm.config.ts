@@ -25,7 +25,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       entities: [User, FriendList, BlockList, FriendRequest],
       migrations: [CreateTables1661971166323],
       synchronize: true,
-      logging: true,
+      logging: false,
       autoLoadEntities: true,
       migrationsRun: false
     };
