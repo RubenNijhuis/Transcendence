@@ -1,7 +1,7 @@
 enum PermissionLevel {
-  Owner,
+  Default,
   Admin,
-  Default
+  Owner
 }
 
 export { PermissionLevel };

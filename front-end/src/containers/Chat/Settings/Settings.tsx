@@ -9,27 +9,15 @@ import Heading from "../../../components/Heading";
 import { useFormInput } from "../../../components/Form/hooks";
 
 // Types
-import * as Chat  from "../../../types/Chat";
+import * as Chat from "../../../types/Chat";
 import * as Profile from "../../../types/Profile";
 
 // Styling
 import { Container } from "./Settings.style";
+import { banMember, muteMember } from "../../../proxies/chat";
+import { makeAdmin } from "../../../proxies/chat/makeAdmin";
 
 ///////////////////////////////////////////////////////////
-
-interface IMemberUpdate {
-    member: Profile.Instance;
-    mute: {
-        shouldMute: boolean;
-        time: number;
-    };
-    ban: {
-        shouldBan: boolean;
-    };
-    permission: {
-        shouldUpdate: boolean;
-    };
-}
 
 interface IChatSettings {
     chat: Chat.Group.Instance;
@@ -37,24 +25,20 @@ interface IChatSettings {
 }
 
 const ChatSettings = ({ chat, user }: IChatSettings): JSX.Element => {
-    const [memberUpdates, setMemberUpdates] = useState<IMemberUpdate[]>([]);
     const muteTime = useFormInput("");
-    const banTime = useFormInput("");
 
     ///////////////////////////////////////////////////////////
 
-    const banMember = (uid: string) => {};
-
-    const muteMember = (uid: string) => {
-        console.log(muteTime.value);
+    const runBanMember = (uid: string) => {
+        banMember(chat.uid, uid);
     };
 
-    const makeMemberAdmin = (uid: string) => {};
+    const runMuteMember = (uid: string) => {
+        muteMember(chat.uid, uid, parseInt(muteTime.value));
+    };
 
-    const runMemberUpdate = () => {
-        for (const update of memberUpdates) {
-            console.log(update);
-        }
+    const runMakeMemberAdmin = (uid: string) => {
+        makeAdmin(chat.uid, uid);
     };
 
     ///////////////////////////////////////////////////////////
@@ -81,26 +65,28 @@ const ChatSettings = ({ chat, user }: IChatSettings): JSX.Element => {
                     return (
                         <li className="member" key={item.profile.uid}>
                             <div className="profile">
-                                <Asset url={item.profile.img_url} alt={item.profile.username} />
+                                <Asset
+                                    url={item.profile.img_url}
+                                    alt={item.profile.username}
+                                />
                                 <span>{item.profile.username}</span>
                             </div>
                             <div className="actions">
                                 <div className="ban">
-                                    <button onClick={() => banMember(item.profile.uid)}>
+                                    <button
+                                        onClick={() =>
+                                            runBanMember(item.profile.uid)
+                                        }
+                                    >
                                         Ban
                                     </button>
-                                    <input
-                                        type="number"
-                                        {...muteTime}
-                                        placeholder="Time in minutes"
-                                        min="1"
-                                        max="15"
-                                    />
                                 </div>
                                 <div className="divider" />
                                 <div className="mute">
                                     <button
-                                        onClick={() => muteMember(item.profile.uid)}
+                                        onClick={() =>
+                                            runMuteMember(item.profile.uid)
+                                        }
                                     >
                                         Mute
                                     </button>
@@ -113,25 +99,20 @@ const ChatSettings = ({ chat, user }: IChatSettings): JSX.Element => {
                                     />
                                 </div>
                                 <div className="divider" />
-                                {chat.owner === user.uid && (
+                                {item.permissions !== 1 && (
                                     <>
                                         <button
                                             onClick={() =>
-                                                makeMemberAdmin(item.profile.uid)
+                                                runMakeMemberAdmin(
+                                                    item.profile.uid
+                                                )
                                             }
                                             className="admin"
                                         >
                                             Make admin
                                         </button>
-                                        <div className="divider" />
                                     </>
                                 )}
-                                <button
-                                    onClick={runMemberUpdate}
-                                    className="save"
-                                >
-                                    Save
-                                </button>
                             </div>
                         </li>
                     );

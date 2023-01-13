@@ -52,6 +52,10 @@ const ApiRoutes = {
     createChat: () => `/group/createGroup`,
     verifyPassword: () => `/group/validatePassword`,
     sendMessage: () => `/message/create`,
+
+    banMember: () => `/group/banMember`,
+    muteMember: () => `/group/muteMember`,
+    makeAdmin: () => `/group/makeAdmin`,
     // Chat ////////////////////////////////////////////////////
 
     // Leaderboard /////////////////////////////////////////////

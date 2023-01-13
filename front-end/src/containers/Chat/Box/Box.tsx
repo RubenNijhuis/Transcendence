@@ -66,6 +66,8 @@ const ChatTitle = ({ chat, isLocked }: IChatTitle): JSX.Element => {
             : chat.name
     ) as string;
 
+    console.log(chat);
+
     ////////////////////////////////////////////////////////
 
     const openSettingsPanel = () => {
@@ -79,7 +81,7 @@ const ChatTitle = ({ chat, isLocked }: IChatTitle): JSX.Element => {
                 member.permissions === Chat.Group.Permission.Admin;
             const memberIsUser = member.profile.uid === memberUid;
 
-            if (memberIsUser && memberIsAnAdmin) {
+            if (chat.owner === memberUid || (memberIsUser && memberIsAnAdmin)) {
                 return true;
             }
         }
@@ -100,7 +102,7 @@ const ChatTitle = ({ chat, isLocked }: IChatTitle): JSX.Element => {
                 )}
                 <Heading type={3}>{chatTitle}</Heading>
             </div>
-            {isLocked && isAdministrator(user.uid) && (
+            {!isLocked && isAdministrator(user.uid) && (
                 <div className="settings">
                     <button onClick={openSettingsPanel}>Settings</button>
                 </div>
