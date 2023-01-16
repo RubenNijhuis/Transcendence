@@ -77,7 +77,7 @@ export class FriendlistService {
       friendname: friendname
     };
 
-    if (!this.isFriend(username, friendname)) {
+    if ((await this.isFriend(username, friendname)) === true) {
       return;
     }
 

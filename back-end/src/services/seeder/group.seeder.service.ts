@@ -26,11 +26,16 @@ export class GroupseederService {
 
       for (const user of users) {
         const friends: FriendList[] = await this.friendlistService.getFriends(
-          user.uid
+          user.username
         );
         const friendNames: string[] = friends.map((val) => {
-          return val.friendname;
+          if (val.username === user.username) return val.friendname;
+          else return val.username;
         });
+        console.log(
+          "has dupes: ",
+          new Set(friendNames).size !== friendNames.length
+        );
         const friendUids: string[] = (
           await this.userService.getUsersOnUsernames(friendNames)
         ).map((val) => {
@@ -44,7 +49,6 @@ export class GroupseederService {
         const num: number = this.randomNum(0, 2);
         const pass: string = passwords[num];
 
-        // console.log("members: [", members, "]", ", pass: [", pass, "], num: ", num);
         const group: Group = await this.groupService.createGroup(
           user.uid,
           randoName,
@@ -52,11 +56,10 @@ export class GroupseederService {
           pass
         );
         await this.groupService.addMembers(user.uid, group.uid, members);
-        console.log("pre: ", group);
-        await this.groupService.setOwner(group.uid, user.uid);
-        console.log("post");
+        await this.groupService.setOwner(user.uid, group.uid);
       }
-    } catch (err) {
+    } catch (err: any) {
+      console.log(err);
       throw err;
     }
   }

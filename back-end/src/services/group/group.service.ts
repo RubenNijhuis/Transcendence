@@ -26,7 +26,7 @@ import { MessageService } from "../message/message.service";
 
 // Error handler
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
-import { PermissionLevel } from "src/types/group";
+import { GroupPermissionLevel } from "src/types/group";
 
 ////////////////////////////////////////////////////////////
 
@@ -197,7 +197,13 @@ export class GroupService {
   ): Promise<void> {
     try {
       const group: Group = await this.findGroupById(groupId);
-      if (owner !== group.owner) return;
+      if (!group)
+        throw new HttpException(
+          "group does not exist",
+          HttpStatus.UNPROCESSABLE_ENTITY
+        );
+      if (owner !== group.owner)
+        throw new HttpException("Not the owner", HttpStatus.FORBIDDEN);
 
       for (const member of users) {
         if (member === group.owner) continue;
@@ -208,7 +214,7 @@ export class GroupService {
         groupuser.profile = await this.userService.findUserByUid(member);
         groupuser.groupId = groupId;
         groupuser.memberId = member;
-        groupuser.permissions = PermissionLevel.Default;
+        groupuser.permissions = GroupPermissionLevel.Default;
 
         this.groupuserRepository.save(groupuser);
       }
@@ -238,7 +244,7 @@ export class GroupService {
       groupuser.profile = profile;
       groupuser.groupId = groupId;
       groupuser.memberId = owner;
-      groupuser.permissions = PermissionLevel.Owner;
+      groupuser.permissions = GroupPermissionLevel.Owner;
 
       return await this.groupuserRepository.save(groupuser);
     } catch (err) {
@@ -353,27 +359,36 @@ export class GroupService {
   async setPermission(
     owner: string,
     groupId: string,
-    userId: string,
-    level: number
+    memberId: string,
+    level: GroupPermissionLevel
   ) {
-    const groupuser: GroupUser = await this.groupuserRepository
-      .createQueryBuilder("groupuser")
-      .where({ groupId: groupId })
-      .andWhere({ userId: userId })
-      .getOne();
+    try {
+      const groupuser: GroupUser = await this.groupuserRepository
+        .createQueryBuilder()
+        .where({ groupId })
+        .andWhere({ memberId })
+        .getOne();
 
-    const group: Group = await this.findGroupById(groupId);
+      const group: Group = await this.findGroupById(groupId);
 
-    if (!groupuser && group.owner !== owner) {
-      throw new HttpException("forbidden", HttpStatus.FORBIDDEN);
+      if (!groupuser && group.owner !== owner) {
+        throw new HttpException("forbidden", HttpStatus.FORBIDDEN);
+      }
+      return await this.groupuserRepository
+        .createQueryBuilder()
+        .update(groupuser)
+        .set({ permissions: level })
+        .where({ groupId })
+        .andWhere({ memberId })
+        .returning("*")
+        .execute();
+    } catch (err) {
+      throw errorHandler(
+        err,
+        "Failed to remove adminstatus from user",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
-
-    return await this.groupuserRepository
-      .createQueryBuilder("groupuser")
-      .where({ groupId: groupId })
-      .andWhere({ userId: userId })
-      .update({ permissions: level })
-      .execute();
   }
 
   async removePerson(uid: string) {

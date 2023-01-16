@@ -38,6 +38,7 @@ import { AccessTokenGuard } from "src/guards/accessToken.guard";
 import { BanUserDto } from "src/dtos/record/ban-user.dto";
 import { UnBanUserDto } from "src/dtos/record/unban-user.dto";
 import { MessagePermission } from "src/types/chat";
+import { IsBannedDto } from "src/dtos/group/is-banned";
 
 ////////////////////////////////////////////////////////////
 
@@ -66,8 +67,8 @@ export class GroupController {
     try {
       const group: Group = await this.groupService.getGroup(groupId);
 
-      // TODO: set in service
       delete group.password;
+
       return group;
     } catch (err) {
       throw err;
@@ -82,7 +83,6 @@ export class GroupController {
       profile.uid
     );
 
-    // TODO: set in service
     for (const group of groups) {
       delete group.password;
     }
@@ -246,14 +246,67 @@ export class GroupController {
     }
   }
 
-  @Post("banUser")
-  async banUser(@Req() req: Request, @Body() banUserDto: BanUserDto) {
+  @Post("muteMember")
+  async muteMember(@Req() req: Request, @Body() muteMemberDto: BanUserDto) {
     try {
       const profile: User = req.user["profile"];
 
       await this.recordService.setRecord(
         profile.uid,
-        banUserDto.userId,
+        muteMemberDto.memberId,
+        muteMemberDto.groupId,
+        MessagePermission.Mute,
+        muteMemberDto.timeToBan
+      );
+
+      return HttpStatus.OK;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  @Post("unMuteMember")
+  async unMuteMember(
+    @Req() req: Request,
+    @Body() unMuteMemberDto: UnBanUserDto
+  ) {
+    try {
+      const profile: User = req.user["profile"];
+
+      await this.recordService.removeBanOrMute(
+        profile.uid,
+        unMuteMemberDto.groupId,
+        unMuteMemberDto.groupId
+      );
+
+      return HttpStatus.OK;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  @Post("isBanned")
+  async isBanned(@Req() req: Request, @Body() isBannedDto: IsBannedDto) {
+    try {
+      const isMemberBanned = await this.recordService.checkBan(
+        isBannedDto.memberId,
+        isBannedDto.groupId
+      );
+
+      return isMemberBanned;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  @Post("banMember")
+  async banMember(@Req() req: Request, @Body() banUserDto: BanUserDto) {
+    try {
+      const profile: User = req.user["profile"];
+
+      await this.recordService.setRecord(
+        profile.uid,
+        banUserDto.memberId,
         banUserDto.groupId,
         MessagePermission.Ban
       );
@@ -263,8 +316,8 @@ export class GroupController {
     }
   }
 
-  @Post("unbanUser")
-  async unbanUser(@Req() req: Request, @Body() unbanUserDto: UnBanUserDto) {
+  @Post("unbanMember")
+  async unbanMember(@Req() req: Request, @Body() unbanUserDto: UnBanUserDto) {
     try {
       const profile: User = req.user["profile"];
 

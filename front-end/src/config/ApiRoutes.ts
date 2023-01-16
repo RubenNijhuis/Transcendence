@@ -54,8 +54,10 @@ const ApiRoutes = {
     sendMessage: () => `/message/create`,
 
     banMember: () => `/group/banMember`,
+    unBanMember: () => `/group/unbanMember`,
+    isMemberBanned: () => `/group/isBanned`,
     muteMember: () => `/group/muteMember`,
-    makeAdmin: () => `/group/makeAdmin`,
+    setPermission: () => `/group/setPermission`,
     // Chat ////////////////////////////////////////////////////
 
     // Leaderboard /////////////////////////////////////////////

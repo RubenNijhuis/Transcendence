@@ -4,6 +4,7 @@ import { verifyPassword } from "./verifyPassword";
 import { getChatByGroupId } from "./getChatByGroupId";
 import { muteMember } from "./muteMember";
 import { banMember } from "./banMember";
+import { setPermission } from "./setPermission";
 
 export {
     createChat,
@@ -11,5 +12,6 @@ export {
     verifyPassword,
     getChatByGroupId,
     muteMember,
-    banMember
+    banMember,
+    setPermission
 };

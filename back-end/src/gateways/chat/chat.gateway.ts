@@ -120,7 +120,7 @@ export class ChatSocketGateway {
       return;
     }
 
-    const isAllowedToSendMessage = this.recordService.isUserBanned(
+    const isAllowedToSendMessage = this.recordService.checkBan(
       member.uid,
       member.roomID
     );

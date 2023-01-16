@@ -49,8 +49,6 @@ const CreateGroupChat = ({
 
     const { user, friends } = useUser();
 
-    console.log(friends);
-
     //////////////////////////////////////////////////////////
 
     const toggleSelected = (friend: Profile.Instance): void => {

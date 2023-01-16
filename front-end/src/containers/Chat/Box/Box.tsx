@@ -66,8 +66,6 @@ const ChatTitle = ({ chat, isLocked }: IChatTitle): JSX.Element => {
             : chat.name
     ) as string;
 
-    console.log(chat);
-
     ////////////////////////////////////////////////////////
 
     const openSettingsPanel = () => {
@@ -116,23 +114,31 @@ interface IPasswordInput {
     chatUid: string;
 }
 
+type PasswordError = { message: string };
+
 const PasswordInput = ({ chatUid, setIsLocked }: IPasswordInput) => {
     const passwordText = useFormInput("");
-    const [passwordError, setPasswordError] = useState<boolean>(false);
+    const [passwordError, setPasswordError] = useState<string | null>(null);
 
     ////////////////////////////////////////////////////////
 
     const sendPassword = async () => {
         try {
+            if (passwordText.value.length === 0) {
+                setPasswordError("Password can not be empty");
+                return;
+            }
+
             const verifyResponse = await verifyPassword(
                 chatUid,
                 passwordText.value
             );
 
             if (verifyResponse === false) {
-                setPasswordError(true);
+                setPasswordError("Password is incorrect");
                 return;
             }
+
             setIsLocked(!verifyPassword);
         } catch (err) {
             console.error(err);
@@ -144,9 +150,7 @@ const PasswordInput = ({ chatUid, setIsLocked }: IPasswordInput) => {
     return (
         <PasswordLayer>
             <Heading type={3}>Please put in the password for this chat</Heading>
-            {passwordError && (
-                <div className="error">The password is incorrect</div>
-            )}
+            {passwordError && <div className="error">{passwordError}</div>}
             <input type="password" {...passwordText} />
             <Button onClick={sendPassword}>Verify password</Button>
         </PasswordLayer>
@@ -180,8 +184,9 @@ const ChatBox = (): JSX.Element => {
                     newRetrievedChat
                 ]);
                 const messages = getMessagesFromGroupChats([newRetrievedChat]);
-                bindMembersToMessages(members, messages);
 
+                bindMembersToMessages(members, messages);
+                newRetrievedChat.members = members.flat();
                 updateChatGroup(newRetrievedChat);
 
                 setChat(newRetrievedChat);

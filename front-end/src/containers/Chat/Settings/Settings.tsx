@@ -15,7 +15,10 @@ import * as Profile from "../../../types/Profile";
 // Styling
 import { Container } from "./Settings.style";
 import { banMember, muteMember } from "../../../proxies/chat";
-import { makeAdmin } from "../../../proxies/chat/makeAdmin";
+import { setPermission } from "../../../proxies/chat";
+import Button from "../../../components/Button";
+import { isMemberBanned } from "../../../proxies/chat/isMemberBanned";
+import { unBanMember } from "../../../proxies/chat/unBanMember";
 
 ///////////////////////////////////////////////////////////
 
@@ -24,31 +27,106 @@ interface IChatSettings {
     user: Profile.Instance;
 }
 
+interface MemberRecord {
+    member: Chat.Member;
+    isBanned: boolean;
+    isMuted: boolean;
+    isAdmin: boolean;
+}
+
 const ChatSettings = ({ chat, user }: IChatSettings): JSX.Element => {
-    const muteTime = useFormInput("");
+    const [memberRecords, setMemberRecords] = useState<MemberRecord[]>([]);
 
     ///////////////////////////////////////////////////////////
 
-    const runBanMember = (uid: string) => {
-        banMember(chat.uid, uid);
+    const toggleBanMember = async (memberRecord: MemberRecord) => {
+        try {
+            if (memberRecord.isBanned) {
+                console.log("getting unbanned");
+                await unBanMember(
+                    memberRecord.member.groupId,
+                    memberRecord.member.memberId
+                );
+            } else {
+                console.log("getting banned");
+                await banMember(
+                    memberRecord.member.groupId,
+                    memberRecord.member.memberId
+                );
+            }
+
+            setMemberRecords((prev) =>
+                prev.map((item) => {
+                    if (item.member.memberId === memberRecord.member.memberId) {
+                        item.isBanned = !item.isBanned;
+                    }
+                    return item;
+                })
+            );
+        } catch (err) {
+            console.error(err);
+        }
     };
 
-    const runMuteMember = (uid: string) => {
-        muteMember(chat.uid, uid, parseInt(muteTime.value));
+    const runMuteMember = async (uid: string) => {
+        try {
+            await muteMember(chat.uid, uid, 15);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
-    const runMakeMemberAdmin = (uid: string) => {
-        makeAdmin(chat.uid, uid);
+    const togglePermission = async (memberRecord: MemberRecord) => {
+        try {
+            if (memberRecord.isAdmin) {
+                await setPermission(
+                    memberRecord.member.memberId,
+                    chat.uid,
+                    Chat.Group.Permission.Standard
+                );
+            } else {
+                await setPermission(
+                    memberRecord.member.memberId,
+                    chat.uid,
+                    Chat.Group.Permission.Admin
+                );
+            }
+
+            setMemberRecords((prev) =>
+                prev.map((item) => {
+                    if (item.member.memberId === memberRecord.member.memberId) {
+                        item.isAdmin = !item.isAdmin;
+                    }
+                    return item;
+                })
+            );
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     ///////////////////////////////////////////////////////////
 
     useEffect(() => {
-        for (const member of chat.members) {
-            if (member.profile.uid !== user.uid) {
-                console.log(member);
+        const runRetrieveRecords = async () => {
+            const recs: MemberRecord[] = [];
+
+            for (const member of chat.members) {
+                if (member.memberId === user.uid) continue;
+
+                const isBanned = await isMemberBanned(
+                    member.memberId,
+                    member.groupId
+                );
+
+                const isAdmin =
+                    member.permissions === Chat.Group.Permission.Admin;
+
+                recs.push({ member, isBanned, isMuted: false, isAdmin });
             }
-        }
+            setMemberRecords(recs);
+        };
+        runRetrieveRecords();
     }, []);
 
     ///////////////////////////////////////////////////////////
@@ -59,60 +137,46 @@ const ChatSettings = ({ chat, user }: IChatSettings): JSX.Element => {
                 <Heading type={2}>Chat Settings</Heading>
             </div>
             <ul className="member-list">
-                {chat.members.map((item) => {
-                    if (item.profile.uid === user.uid) return;
+                {memberRecords.map((record) => {
+                    const { member, isAdmin, isMuted, isBanned } = record;
+                    if (member.profile.uid === user.uid) return;
 
                     return (
-                        <li className="member" key={item.profile.uid}>
+                        <li className="member" key={member.profile.uid}>
                             <div className="profile">
                                 <Asset
-                                    url={item.profile.img_url}
-                                    alt={item.profile.username}
+                                    url={member.profile.img_url}
+                                    alt={member.profile.username}
                                 />
-                                <span>{item.profile.username}</span>
+                                <span>{member.profile.username}</span>
                             </div>
                             <div className="actions">
+                                <Button
+                                    onClick={() => togglePermission(record)}
+                                    className="admin"
+                                >
+                                    {isAdmin ? "Remove admin" : "Add as admin"}
+                                </Button>
+                                <div className="divider" />
                                 <div className="ban">
-                                    <button
-                                        onClick={() =>
-                                            runBanMember(item.profile.uid)
-                                        }
+                                    <Button
+                                        onClick={() => toggleBanMember(record)}
                                     >
-                                        Ban
-                                    </button>
+                                        {isBanned
+                                            ? "Unban member"
+                                            : "Ban member"}
+                                    </Button>
                                 </div>
                                 <div className="divider" />
                                 <div className="mute">
-                                    <button
+                                    <Button
                                         onClick={() =>
-                                            runMuteMember(item.profile.uid)
+                                            runMuteMember(member.profile.uid)
                                         }
                                     >
-                                        Mute
-                                    </button>
-                                    <input
-                                        type="number"
-                                        {...muteTime}
-                                        placeholder="Time in minutes"
-                                        min="1"
-                                        max="15"
-                                    />
+                                        Mute 15 min
+                                    </Button>
                                 </div>
-                                <div className="divider" />
-                                {item.permissions !== 1 && (
-                                    <>
-                                        <button
-                                            onClick={() =>
-                                                runMakeMemberAdmin(
-                                                    item.profile.uid
-                                                )
-                                            }
-                                            className="admin"
-                                        >
-                                            Make admin
-                                        </button>
-                                    </>
-                                )}
                             </div>
                         </li>
                     );

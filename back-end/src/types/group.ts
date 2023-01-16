@@ -1,7 +1,7 @@
-enum PermissionLevel {
+enum GroupPermissionLevel {
   Default,
   Admin,
   Owner
 }
 
-export { PermissionLevel };
+export { GroupPermissionLevel };

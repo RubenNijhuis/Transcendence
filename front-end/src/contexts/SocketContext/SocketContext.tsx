@@ -45,14 +45,14 @@ const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
     ////////////////////////////////////////////////////////
 
     const createConnection = (socketType: SocketType.Type) => {
-        if (!user) return;
-        
-        const accessToken = Store.getItem<string>(StoreId.refreshToken);
-        if (!accessToken) return;
-
         if (connection !== null) {
             connection.close();
         }
+
+        if (!user) return;
+
+        const accessToken = Store.getItem<string>(StoreId.refreshToken);
+        if (!accessToken) return;
 
         const newSocket: SocketType.Instance = io(SocketRoutes.base.url, {
             path: SocketRoutes.base.path(socketType),
@@ -63,7 +63,7 @@ const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
 
         /**
          * DEBUG console error if any failure happens,
-         * setup a more decentralizes system where
+         * setup a more decentralized system where
          * components can hook into errors
          */
         newSocket.on("failure", console.error);

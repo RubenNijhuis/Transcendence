@@ -16,13 +16,21 @@ export class FriendSeederService {
     return Math.floor(Math.random() * (max - min) + min);
   }
 
-  async getFriendIndexes(friends): Promise<number[]> {
+  async getFriendIndexes(
+    friends: FriendList[],
+    username: string
+  ): Promise<number[]> {
     const indexes: number[] = [];
 
     for (const friend of friends) {
-      indexes.push(
-        (await this.userService.findUserByUsername(friend.username)).index
-      );
+      let index: number;
+      if (friend.username == username)
+        index = (await this.userService.findUserByUsername(friend.friendname))
+          .index;
+      else
+        index = (await this.userService.findUserByUsername(friend.username))
+          .index;
+      indexes.push(index);
     }
     return indexes;
   }
@@ -77,39 +85,36 @@ export class FriendSeederService {
       const maxFriends: number = filteredUsers.length - 1; // minus 1 for the user itself
 
       // loop trough users
-      for (let i = 0; i < filteredUsers.length; i++) {
-        const user: User = filteredUsers[i];
-        const currentFriends = await this.friendsService.getFriends(
-          user.username
-        );
+      for (const filteredUser of filteredUsers) {
+        const currentFriends: FriendList[] =
+          await this.friendsService.getFriends(filteredUser.username);
         const targetAmount: number = this.randomNum(0, maxFriends - 1);
         const excludeList: number[] = await this.getFriendIndexes(
-          currentFriends
+          currentFriends,
+          filteredUser.username
         );
 
-        excludeList.push(user.index);
+        excludeList.push(filteredUser.index);
         // if not target amount of friends, add friends until target
-        // console.log("user: ", user.username);
-        if (currentFriends.length < targetAmount) {
-          for (let i = currentFriends.length; i <= targetAmount; i++) {
-            let randomIndex: number;
-            let newFriend: User;
+        // console.log("user: ", filteredUser.username);
+        for (let i = currentFriends.length; i <= targetAmount; i++) {
+          let randomIndex: number;
+          let newFriend: User;
 
-            // get random number which is not in exlude list
-            while (
-              users[(randomIndex = this.randomNum(1, maxFriends + 1))]
-                .isInitialized &&
-              excludeList.includes(users[randomIndex].index)
-            ) {}
-            // eslint-disable-next-line prefer-const
-            newFriend = users[randomIndex];
-            // console.log("excludelist: ", excludeList);
-            // console.log("new friend index: ", newFriend.index);
-            // get username of random index
-            // add new friend to friends && exclude list
-            this.friendsService.addFriend(user.uid, newFriend.username);
-            excludeList.push(newFriend.index);
-          }
+          // get random number which is not in exlude list
+          while (
+            users[(randomIndex = this.randomNum(1, maxFriends + 1))]
+              .isInitialized &&
+            excludeList.includes(users[randomIndex].index)
+          ) {}
+          // eslint-disable-next-line prefer-const
+          newFriend = users[randomIndex];
+          // console.log("excludelist: ", excludeList);
+          // console.log("new friend index: ", newFriend.index);
+          // get username of random index
+          // add new friend to friends && exclude list
+          this.friendsService.addFriend(filteredUser.uid, newFriend.username);
+          excludeList.push(newFriend.index);
         }
       }
       return this.formulateResponse(filteredUsers);

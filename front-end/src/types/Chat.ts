@@ -61,7 +61,8 @@ export namespace Group {
 
     export enum Permission {
         Standard,
-        Admin
+        Admin,
+        Owner
     }
 
     export interface Instance {
