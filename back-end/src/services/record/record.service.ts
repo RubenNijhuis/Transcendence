@@ -14,7 +14,7 @@ import { GroupService } from "src/services/group/group.service";
 
 // Types
 import { MessagePermission } from "src/types/chat";
-import { PermissionLevel } from "src/types/group";
+import { GroupPermissionLevel } from "src/types/group";
 
 ////////////////////////////////////////////////////////////
 
@@ -38,7 +38,7 @@ export class RecordService {
       .createQueryBuilder("record")
       .where({ groupId: groupId })
       .andWhere({ userId: userId })
-      .getOneOrFail();
+      .getOne();
   }
 
   async createRecord(
@@ -108,7 +108,7 @@ export class RecordService {
       );
 
       if (!user || !other) return HttpStatus.BAD_REQUEST;
-      if (user.permissions === PermissionLevel.Default)
+      if (user.permissions === GroupPermissionLevel.Default)
         return HttpStatus.UNAUTHORIZED;
       return null;
     } catch (err) {

@@ -2,7 +2,7 @@ import { IsNotEmpty, IsOptional } from "class-validator";
 
 export class BanUserDto {
   @IsNotEmpty()
-  userId: string;
+  memberId: string;
 
   @IsNotEmpty()
   groupId: string;

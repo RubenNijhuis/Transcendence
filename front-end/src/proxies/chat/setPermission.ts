@@ -2,6 +2,8 @@
 import { API } from "../instances/apiInstance";
 import ApiRoutes from "../../config/ApiRoutes";
 
+import * as Chat from "../../types/Chat";
+
 ////////////////////////////////////////////////////////////
 
 /**
@@ -9,12 +11,17 @@ import ApiRoutes from "../../config/ApiRoutes";
  * @param username
  * @returns
  */
-const makeAdmin = async (memberId: string, groupId: string): Promise<void> => {
+const setPermission = async (
+    memberId: string,
+    groupId: string,
+    GroupPermissionLevel: Chat.Group.Permission
+): Promise<void> => {
     try {
-        const route = ApiRoutes.makeAdmin();
+        const route = ApiRoutes.setPermission();
         const { data } = await API.post(route, {
-            memberId,
-            groupId
+            targetUser: memberId,
+            groupId,
+            level: GroupPermissionLevel
         });
 
         return Promise.resolve(data);
@@ -25,4 +32,4 @@ const makeAdmin = async (memberId: string, groupId: string): Promise<void> => {
 
 ///////////////////////////////////////////////////////////
 
-export { makeAdmin };
+export { setPermission };

@@ -34,7 +34,7 @@ interface IChatElement {
 const ChatElement = ({
     fromUser,
     message,
-    isDm,
+    isDm
 }: IChatElement): JSX.Element => {
     const contentType: Chat.Message.ContentType = message.content_type;
 
@@ -42,7 +42,7 @@ const ChatElement = ({
 
     /**
      * IMPORTANT: must be in the same order as the content
-     * type enum defined in groupchats type file
+     * type enum defined in chats type file
      *
      * [0] SimpleMessage
      * [1] PictureMessage
@@ -51,15 +51,17 @@ const ChatElement = ({
     const messageElements = [
         <SimpleMessageDisplay fromUser={fromUser} message={message} />,
         <PictureMessageDisplay fromUser={fromUser} message={message} />,
-        <InviteMessageDisplay fromUser={fromUser} message={message} />,
+        <InviteMessageDisplay fromUser={fromUser} message={message} />
     ];
+
+    const withAnnotation = !isDm && !fromUser;
 
     ////////////////////////////////////////////////////////
 
     return (
         <ChatElementContainer>
             {messageElements[contentType]}
-            {!isDm && !fromUser && <SenderAnnotation sender={message.sender} />}
+            {withAnnotation && <SenderAnnotation sender={message.sender} />}
         </ChatElementContainer>
     );
 };

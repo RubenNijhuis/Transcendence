@@ -20,7 +20,7 @@ import { MessageService } from "../message/message.service";
 
 // Error handler
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
-import { PermissionLevel } from "src/types/group";
+import { GroupPermissionLevel } from "src/types/group";
 
 ////////////////////////////////////////////////////////////
 
@@ -198,7 +198,7 @@ export class GroupService {
         groupuser.profile = await this.userService.findUserByUid(member);
         groupuser.groupId = groupId;
         groupuser.memberId = member;
-        groupuser.permissions = PermissionLevel.Default;
+        groupuser.permissions = GroupPermissionLevel.Default;
 
         this.groupuserRepository.save(groupuser);
       }
@@ -221,7 +221,7 @@ export class GroupService {
       groupuser.profile = await this.userService.findUserByUid(owner);
       groupuser.groupId = groupId;
       groupuser.memberId = owner;
-      groupuser.permissions = PermissionLevel.Owner;
+      groupuser.permissions = GroupPermissionLevel.Owner;
 
       return this.groupuserRepository.save(groupuser);
     } catch (err) {
@@ -340,14 +340,14 @@ export class GroupService {
   async setPermission(
     owner: string,
     groupId: string,
-    userId: string,
-    level: number
+    memberId: string,
+    level: GroupPermissionLevel
   ) {
     try {
       const groupuser: GroupUser = await this.groupuserRepository
-        .createQueryBuilder("groupuser")
-        .where({ groupId: groupId })
-        .andWhere({ userId: userId })
+        .createQueryBuilder()
+        .where({ groupId })
+        .andWhere({ memberId })
         .getOne();
 
       const group: Group = await this.findGroupById(groupId);
@@ -356,7 +356,14 @@ export class GroupService {
         groupuser.permissions = level;
       }
 
-      return this.groupuserRepository.save(groupuser);
+      return await this.groupuserRepository
+        .createQueryBuilder()
+        .update(groupuser)
+        .set({ permissions: level })
+        .where({ groupId })
+        .andWhere({ memberId })
+        .returning("*")
+        .execute();
     } catch (err) {
       throw errorHandler(
         err,

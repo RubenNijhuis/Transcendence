@@ -1,6 +1,14 @@
+// Types
+import { GroupPermissionLevel } from "src/types/group";
+
+// Typeorm
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+
+// Entities
 import Group from "../group/group.entity";
 import User from "../user/user.entity";
+
+////////////////////////////////////////////////////////////
 
 @Entity()
 export class GroupUser {
@@ -24,7 +32,7 @@ export class GroupUser {
   profile: User;
 
   @Column()
-  permissions: number;
+  permissions: GroupPermissionLevel;
 }
 
 export default GroupUser;

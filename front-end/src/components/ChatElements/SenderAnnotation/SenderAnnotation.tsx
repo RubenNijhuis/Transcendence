@@ -8,6 +8,10 @@ import Asset from "../../Asset";
 import { useUser } from "../../../contexts/UserContext";
 import { Container } from "./SenderAnnotation.style";
 
+// Routing
+import { Link } from "react-router-dom";
+import PageRoutes from "../../../config/PageRoutes";
+
 ////////////////////////////////////////////////////////////
 
 interface ISenderAnnotation {
@@ -20,10 +24,16 @@ const SenderAnnotation = ({ sender }: ISenderAnnotation): JSX.Element => {
     ////////////////////////////////////////////////////////
 
     return (
-        <Container fromUser={sender.uid === user.uid}>
-            <Asset url={sender.img_url} alt={sender.username} className="img" />
-            <span>{sender.username}</span>
-        </Container>
+        <Link to={PageRoutes.profileWithUsername(sender.username)}>
+            <Container fromUser={sender.uid === user.uid}>
+                <Asset
+                    url={sender.img_url}
+                    alt={sender.username}
+                    className="img"
+                />
+                <span>{sender.username}</span>
+            </Container>
+        </Link>
     );
 };
 

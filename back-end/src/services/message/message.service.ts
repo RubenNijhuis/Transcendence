@@ -1,11 +1,22 @@
+// Nestjs
 import { forwardRef, HttpStatus, Inject, Injectable } from "@nestjs/common";
+
+// Typeorm
 import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+
+// Entities
 import Group from "src/entities/group/group.entity";
 import Message from "src/entities/message/message.entity";
+
+// Error Handler
 import { errorHandler } from "src/utils/errorhandler/errorHandler";
-import { Repository } from "typeorm";
+
+// Services
 import { GroupService } from "../group/group.service";
 import { RecordService } from "../record/record.service";
+
+////////////////////////////////////////////////////////////
 
 @Injectable()
 export class MessageService {
@@ -17,14 +28,12 @@ export class MessageService {
     private readonly recordService: RecordService
   ) {}
 
-  getAllMessages() {
-    return this.messageRepository.find();
-  }
+  //////////////////////////////////////////////////////////
 
-  async getAllMessagesByGroupId(id: string): Promise<Message[]> {
+  async getAllMessagesByGroupId(groupId: string): Promise<Message[]> {
     const allMessages: Message[] = await this.messageRepository
       .createQueryBuilder("message")
-      .where({ groupId: id })
+      .where({ groupId })
       .getMany();
     return allMessages;
   }
@@ -37,8 +46,6 @@ export class MessageService {
   ) {
     try {
       const group: Group = await this.groupService.findGroupById(group_id);
-      if (await this.recordService.isUserBanned(senderID, group_id))
-        throw console.error("You are currently still muted");
       const query = {
         group: group,
         groupId: group.uid,
@@ -54,9 +61,3 @@ export class MessageService {
     }
   }
 }
-//  getPostById(id: number) {
-//    const post = this.messages.find(post => post.id === id);
-//    if (post) {
-// 	 return post;
-//    }
-//    throw new HttpException('Post not found', HttpStatus.NOT_FOUND);

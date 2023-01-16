@@ -1,5 +1,9 @@
 import styled from "styled-components";
-import { magicNum, mainColor, smallRadius } from "../../../styles/StylingConstants";
+import {
+    magicNum,
+    mainColor,
+    smallRadius
+} from "../../../styles/StylingConstants";
 
 ///////////////////////////////////////////////////////////
 
@@ -53,16 +57,19 @@ const Container = styled.div`
                     background-color: #21ff21;
                 }
 
-                .mute, .ban {
-                    button {
-                        margin-right: calc(${magicNum} / 4);
-                    }
-
+                .mute,
+                .ban {
                     input {
                         width: calc(${magicNum} * 2);
                         padding: calc(${magicNum} / 8) calc(${magicNum} / 6);
                         border-radius: ${smallRadius};
                         border: none;
+                    }
+                }
+
+                .mute {
+                    input {
+                        margin-left: calc(${magicNum} / 4);
                     }
                 }
 
@@ -72,11 +79,9 @@ const Container = styled.div`
                     border: none;
 
                     &:hover {
-
                     }
                 }
             }
-
         }
     }
 `;
