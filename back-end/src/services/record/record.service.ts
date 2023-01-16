@@ -1,8 +1,6 @@
 // Nestjs
 import { forwardRef, HttpStatus, Inject, Injectable } from "@nestjs/common";
 
-// Dtos
-
 // Entitities
 import GroupUser from "src/entities/groupuser/groupuser.entity";
 import Record from "src/entities/record/record.entity";
@@ -13,8 +11,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 
 // Servies
 import { GroupService } from "src/services/group/group.service";
-
-// Error Handler
 
 // Types
 import { MessagePermission } from "src/types/chat";
@@ -37,19 +33,12 @@ export class RecordService {
     return await this.recordRepository.find();
   }
 
-  async getRecordByUserId(
-    userId: string,
-    groupId: string
-  ): Promise<Record | null> {
-    try {
-      return await this.recordRepository
-        .createQueryBuilder("record")
-        .where({ groupId: groupId })
-        .andWhere({ userId: userId })
-        .getOneOrFail();
-    } catch (error) {
-      return null;
-    }
+  async getRecordByUserId(userId: string, groupId: string): Promise<Record> {
+    return await this.recordRepository
+      .createQueryBuilder("record")
+      .where({ groupId: groupId })
+      .andWhere({ userId: userId })
+      .getOneOrFail();
   }
 
   async createRecord(
