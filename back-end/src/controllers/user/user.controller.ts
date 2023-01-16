@@ -4,6 +4,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpException,
   HttpStatus,
   Param,
   Post,
@@ -143,7 +144,7 @@ export class UsersController {
       );
 
       return this.userService.filterProfile(setUserResp);
-    } catch (err) {
+    } catch (err: any) {
       throw err;
     }
   }

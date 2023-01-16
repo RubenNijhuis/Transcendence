@@ -1,5 +1,11 @@
 // Nestjs
-import { forwardRef, HttpStatus, Inject, Injectable } from "@nestjs/common";
+import {
+  forwardRef,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 
 import { DeleteResult, Repository } from "typeorm";
@@ -49,7 +55,7 @@ export class GroupService {
     }
   }
 
-  findGroupById(uid: string) {
+  findGroupById(uid: string): Promise<Group> {
     return this.groupRepository.findOne({ where: { uid } });
   }
 
@@ -119,7 +125,7 @@ export class GroupService {
     return groupuser;
   }
 
-  async hashPassword(input: string): Promise<string> {
+  private async hashPassword(input: string): Promise<string> {
     const hash1 = createHash("sha256").update(input).digest("hex");
     const saltOrRounds = 10;
     const password: string = await bcrypt.hash(hash1, saltOrRounds);
@@ -134,7 +140,11 @@ export class GroupService {
   ) {
     try {
       for (const member of members) {
-        await this.userService.findUserByUid(member);
+        if (!(await this.userService.findUserByUid(member)))
+          throw new HttpException(
+            "Invalid members",
+            HttpStatus.UNPROCESSABLE_ENTITY
+          );
       }
 
       const newGroup: Group = this.groupRepository.create();
@@ -214,22 +224,25 @@ export class GroupService {
   async setOwner(owner: string, groupId: string) {
     try {
       const group: Group = await this.findGroupById(groupId);
+      const profile: User = await this.userService.findUserByUid(owner);
+
+      if (!group || !profile)
+        throw new HttpException(
+          "invalid group or profile",
+          HttpStatus.UNPROCESSABLE_ENTITY
+        );
 
       const groupuser = this.groupuserRepository.create();
 
       groupuser.group = group;
-      groupuser.profile = await this.userService.findUserByUid(owner);
+      groupuser.profile = profile;
       groupuser.groupId = groupId;
       groupuser.memberId = owner;
       groupuser.permissions = PermissionLevel.Owner;
 
-      return this.groupuserRepository.save(groupuser);
+      return await this.groupuserRepository.save(groupuser);
     } catch (err) {
-      throw errorHandler(
-        err,
-        "Failed to add owner to group",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+      throw err;
     }
   }
 
@@ -343,27 +356,24 @@ export class GroupService {
     userId: string,
     level: number
   ) {
-    try {
-      const groupuser: GroupUser = await this.groupuserRepository
-        .createQueryBuilder("groupuser")
-        .where({ groupId: groupId })
-        .andWhere({ userId: userId })
-        .getOne();
+    const groupuser: GroupUser = await this.groupuserRepository
+      .createQueryBuilder("groupuser")
+      .where({ groupId: groupId })
+      .andWhere({ userId: userId })
+      .getOne();
 
-      const group: Group = await this.findGroupById(groupId);
+    const group: Group = await this.findGroupById(groupId);
 
-      if (groupuser && group.owner === owner) {
-        groupuser.permissions = level;
-      }
-
-      return this.groupuserRepository.save(groupuser);
-    } catch (err) {
-      throw errorHandler(
-        err,
-        "Failed to remove adminstatus from user",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+    if (!groupuser && group.owner !== owner) {
+      throw new HttpException("forbidden", HttpStatus.FORBIDDEN);
     }
+
+    return await this.groupuserRepository
+      .createQueryBuilder("groupuser")
+      .where({ groupId: groupId })
+      .andWhere({ userId: userId })
+      .update({ permissions: level })
+      .execute();
   }
 
   async removePerson(uid: string) {

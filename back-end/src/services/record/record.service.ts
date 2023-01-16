@@ -200,7 +200,7 @@ export class RecordService {
     return true;
   }
 
-  async checkBan(userId: string, groupId: string): Promise<boolean> {
+  async isUserBanned(userId: string, groupId: string): Promise<boolean> {
     const record: Record = await this.getRecordByUserId(userId, groupId);
 
     if (!record) return false;

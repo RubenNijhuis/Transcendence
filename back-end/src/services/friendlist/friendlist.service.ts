@@ -65,8 +65,6 @@ export class FriendlistService {
       })
       .getOne();
 
-    console.log("❌", friend);
-
     if (friend) ret = true;
     return ret;
   }

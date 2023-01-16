@@ -126,7 +126,8 @@ export class GroupController {
         validatePasswordDto.groupId
       );
 
-      if (!group) return;
+      if (!group || this.groupService.findGroupuserById(profile.uid, group.uid))
+        return;
 
       const isCorrectPassword = await this.groupService.validatePassword(
         validatePasswordDto.groupId,
