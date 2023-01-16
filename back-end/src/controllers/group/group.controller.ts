@@ -37,6 +37,7 @@ import { AccessTokenGuard } from "src/guards/accessToken.guard";
 // Dtos
 import { BanUserDto } from "src/dtos/record/ban-user.dto";
 import { UnBanUserDto } from "src/dtos/record/unban-user.dto";
+import { MessagePermission } from "src/types/chat";
 
 ////////////////////////////////////////////////////////////
 
@@ -126,13 +127,6 @@ export class GroupController {
       );
 
       if (!group) return;
-
-      //   const userIsInGroup = group.members.findIndex(
-      //     (member) => member.profile.uid === profile.uid
-      //   );
-
-      // The profile must be in the group
-      //   if (!userIsInGroup || profile.uid !== group.owner) return;
 
       const isCorrectPassword = await this.groupService.validatePassword(
         validatePasswordDto.groupId,
@@ -256,8 +250,12 @@ export class GroupController {
     try {
       const profile: User = req.user["profile"];
 
-      await this.recordService.banUser(profile.uid, banUserDto);
-
+      await this.recordService.setRecord(
+        profile.uid,
+        banUserDto.userId,
+        banUserDto.groupId,
+        MessagePermission.Ban
+      );
       return HttpStatus.OK;
     } catch (err) {
       throw err;
@@ -269,7 +267,11 @@ export class GroupController {
     try {
       const profile: User = req.user["profile"];
 
-      await this.recordService.unbanUser(profile.uid, unbanUserDto);
+      await this.recordService.removeBanOrMute(
+        profile.uid,
+        unbanUserDto.groupId,
+        unbanUserDto.groupId
+      );
 
       return HttpStatus.OK;
     } catch (err) {

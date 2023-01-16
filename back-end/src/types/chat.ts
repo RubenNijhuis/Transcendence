@@ -1,7 +1,6 @@
 enum MessagePermission {
-  Allowed = 0,
-  Ban = 1,
-  Mute = 2
+  Ban = 0,
+  Mute = 1
 }
 
 export { MessagePermission };
