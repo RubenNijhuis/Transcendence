@@ -8,7 +8,7 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 
-import { DeleteResult, Repository } from "typeorm";
+import { DeleteResult, Repository, UpdateResult } from "typeorm";
 
 // Crypto
 import * as bcrypt from "bcrypt";
@@ -319,6 +319,32 @@ export class GroupService {
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
+  }
+
+  /*
+   * checks if uid is owner and sets password to null && protected to false
+   * returns httpstatus unauth if uid is not owner else it returns updateresult
+   */
+  async removePassword(
+    uid: string,
+    groupUid: string
+  ): Promise<UpdateResult | HttpStatus> {
+    const profile: GroupUser = await this.findGroupuserById(uid, groupUid);
+    const query = {
+      password: null,
+      protected: false
+    };
+
+    if (!profile || profile.permissions !== GroupPermissionLevel.Owner)
+      return HttpStatus.UNAUTHORIZED;
+
+    return await this.groupRepository
+      .createQueryBuilder("groupuser")
+      .update()
+      .set(query)
+      .where({ uid: groupUid })
+      .returning("*")
+      .execute();
   }
 
   // TODO: function handles too much, needs to be split

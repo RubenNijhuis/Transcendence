@@ -42,8 +42,8 @@ export class RecordService {
   }
 
   async createRecord(
-    groupUid: string,
     uid: string,
+    groupUid: string,
     type: MessagePermission,
     time?: number,
     date?: Date
@@ -110,7 +110,10 @@ export class RecordService {
       );
 
       if (!user || !other) return HttpStatus.BAD_REQUEST;
-      if (user.permissions === GroupPermissionLevel.Default)
+      if (
+        user.permissions === GroupPermissionLevel.Default ||
+        other.permissions === GroupPermissionLevel.Owner
+      )
         return HttpStatus.UNAUTHORIZED;
       return null;
     } catch (err) {

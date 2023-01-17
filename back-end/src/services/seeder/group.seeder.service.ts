@@ -32,10 +32,6 @@ export class GroupseederService {
         const friendUids: string[] = friends.map((val) => {
           return val.uid;
         });
-        console.log(
-          "has dupes: ",
-          new Set(friendUids).size !== friendUids.length
-        );
 
         const randoName: string = randBird();
         const seed: number = this.randomNum(0, friendUids.length);
