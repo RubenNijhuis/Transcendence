@@ -14,6 +14,7 @@ import {
 const Container = styled.div`
     border-radius: ${smallRadius};
     overflow: hidden;
+    max-width: 100%;
 
     .divider {
         height: 100%;
@@ -42,6 +43,7 @@ const DirectMessageEntry = styled.li<{ active: boolean }>`
         display: flex;
         align-items: center;
         list-style-type: none;
+        overflow-x: scroll;
         .profile {
             .asset {
                 margin-right: calc(${magicNum} / 4);
