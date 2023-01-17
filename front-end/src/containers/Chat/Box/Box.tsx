@@ -4,20 +4,20 @@ import { useEffect, useState } from "react";
 // Types
 import * as Chat from "../../../types/Chat";
 import * as SocketType from "../../../types/Socket";
+import * as Profile from "../../../types/Profile";
 
 // UI
 import ChatElement from "../../../components/ChatElements";
 import ChatInput from "../Input";
 import Heading from "../../../components/Heading";
 import Asset from "../../../components/Asset";
-import Button from "../../../components/Button";
 import ChatSettings from "../Settings";
 
 // Modal
 import { useModal } from "../../../contexts/ModalContext";
 
 // Styling
-import { Container, PasswordLayer } from "./Box.style";
+import { Container } from "./Box.style";
 
 // User
 import { useUser } from "../../../contexts/UserContext";
@@ -26,17 +26,18 @@ import { useUser } from "../../../contexts/UserContext";
 import * as SocketRoutes from "../../../config/SocketRoutes";
 import { useSocket } from "../../../contexts/SocketContext";
 
-// Form hooks
-import { useFormInput } from "../../../components/Form/hooks";
-
 // Proxies
-import { verifyPassword, getChatByGroupId } from "../../../proxies/chat";
+import { getChatByGroupId } from "../../../proxies/chat";
 import { useChat } from "../../../contexts/ChatContext";
 import {
     bindMembersToMessages,
     getMembersFromGroupChats,
     getMessagesFromGroupChats
 } from "../../../contexts/ChatContext/ChatContext.bl";
+import OnlineMembers from "../OnlineMembers";
+import PasswordInput from "../PasswordInput";
+import Button from "../../../components/Button";
+import { backgroundColor, smallRadius } from "../../../styles/StylingConstants";
 
 ////////////////////////////////////////////////////////////
 
@@ -100,60 +101,44 @@ const ChatTitle = ({ chat, isLocked }: IChatTitle): JSX.Element => {
                 )}
                 <Heading type={3}>{chatTitle}</Heading>
             </div>
-            {!isLocked && isAdministrator(user.uid) && (
-                <div className="settings">
-                    <button onClick={openSettingsPanel}>Settings</button>
-                </div>
-            )}
+            {!isLocked &&
+                isAdministrator(user.uid) &&
+                chat.size === Chat.Group.Type.Group && (
+                    <div
+                        className="settings"
+                        style={{
+                            border: `solid 2px ${backgroundColor}`,
+                            borderRadius: `${smallRadius}`
+                        }}
+                    >
+                        <Button onClick={openSettingsPanel}>Settings</Button>
+                    </div>
+                )}
         </div>
     );
 };
 
-interface IPasswordInput {
-    setIsLocked: React.Dispatch<React.SetStateAction<boolean>>;
-    chatUid: string;
+interface IChatContent {
+    messages: Chat.Message.Instance[];
+    isDmChat: boolean;
 }
 
-type PasswordError = { message: string };
-
-const PasswordInput = ({ chatUid, setIsLocked }: IPasswordInput) => {
-    const passwordText = useFormInput("");
-    const [passwordError, setPasswordError] = useState<string | null>(null);
-
-    ////////////////////////////////////////////////////////
-
-    const sendPassword = async () => {
-        try {
-            if (passwordText.value.length === 0) {
-                setPasswordError("Password can not be empty");
-                return;
-            }
-
-            const verifyResponse = await verifyPassword(
-                chatUid,
-                passwordText.value
-            );
-
-            if (verifyResponse === false) {
-                setPasswordError("Password is incorrect");
-                return;
-            }
-
-            setIsLocked(!verifyPassword);
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    ////////////////////////////////////////////////////////
+const ChatContent = ({ messages, isDmChat }: IChatContent) => {
+    const { user } = useUser();
 
     return (
-        <PasswordLayer>
-            <Heading type={3}>Please put in the password for this chat</Heading>
-            {passwordError && <div className="error">{passwordError}</div>}
-            <input type="password" {...passwordText} />
-            <Button onClick={sendPassword}>Verify password</Button>
-        </PasswordLayer>
+        <div className="chat-content">
+            {messages.reverse().map((message) => {
+                return (
+                    <ChatElement
+                        key={message.id}
+                        message={message}
+                        isDm={isDmChat}
+                        fromUser={message.sender.uid === user.uid}
+                    />
+                );
+            })}
+        </div>
     );
 };
 
@@ -162,6 +147,7 @@ const ChatBox = (): JSX.Element => {
     const [isLocked, setIsLocked] = useState<boolean>(false);
     const [isDmChat, setIsDmChat] = useState<boolean>(false);
 
+    const [onlineMembers, setOnlineMembers] = useState<Profile.ID[]>([]);
     const [connectionMessages, setConnectionMessages] = useState<
         Chat.Message.Instance[]
     >([]);
@@ -187,6 +173,13 @@ const ChatBox = (): JSX.Element => {
 
                 bindMembersToMessages(members, messages);
                 newRetrievedChat.members = members.flat();
+
+                if (newRetrievedChat.members.length === 2) {
+                    newRetrievedChat.size = Chat.Group.Type.DM;
+                } else {
+                    newRetrievedChat.size = Chat.Group.Type.Group;
+                }
+
                 updateChatGroup(newRetrievedChat);
 
                 setChat(newRetrievedChat);
@@ -235,6 +228,18 @@ const ChatBox = (): JSX.Element => {
                 setConnectionMessages((prev) => [...prev, newMessage]);
             }
         );
+
+        socket.on(SocketRoutes.room.onlineMembers, (res) => {
+            setOnlineMembers(
+                res.members.filter((item: string) => item !== user.uid)
+            );
+        });
+
+        socket.on("connect", () => {
+            connection.emit(SocketRoutes.room.joinRoom, {
+                roomID: chat.uid
+            });
+        });
     };
 
     const removeConnections = (socket: SocketType.Instance) => {
@@ -248,34 +253,22 @@ const ChatBox = (): JSX.Element => {
             {chat && (
                 <>
                     <ChatTitle chat={chat} isLocked={isLocked} />
-                    <div className="chat-content">
-                        {!isLocked && (
-                            <>
-                                {[...chat.messages, ...connectionMessages]
-                                    .reverse()
-                                    .map((message) => {
-                                        return (
-                                            <ChatElement
-                                                key={message.id}
-                                                message={message}
-                                                isDm={isDmChat}
-                                                fromUser={
-                                                    message.sender.uid ===
-                                                    user.uid
-                                                }
-                                            />
-                                        );
-                                    })}
-                            </>
-                        )}
-
-                        {isLocked && (
-                            <PasswordInput
-                                setIsLocked={setIsLocked}
-                                chatUid={chat.uid}
-                            />
-                        )}
-                    </div>
+                    <OnlineMembers
+                        chatMembers={chat.members}
+                        onlineMembers={onlineMembers}
+                    />
+                    {!isLocked && (
+                        <ChatContent
+                            isDmChat={isDmChat}
+                            messages={[...chat.messages, ...connectionMessages]}
+                        />
+                    )}
+                    {isLocked && (
+                        <PasswordInput
+                            setIsLocked={setIsLocked}
+                            chatUid={chat.uid}
+                        />
+                    )}
                     {!isLocked && <ChatInput user={user} chat={chat} />}
                 </>
             )}

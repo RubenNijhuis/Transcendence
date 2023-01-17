@@ -29,5 +29,6 @@ export const chat = {
 };
 
 export const room = {
-    joinRoom: `joinRoom`
+    joinRoom: `joinRoom`,
+    onlineMembers: `onlineMembers`
 };

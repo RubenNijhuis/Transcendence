@@ -42,16 +42,14 @@ const ChatSettings = ({ chat, user }: IChatSettings): JSX.Element => {
     const toggleBanMember = async (memberRecord: MemberRecord) => {
         try {
             if (memberRecord.isBanned) {
-                console.log("getting unbanned");
                 await unBanMember(
-                    memberRecord.member.groupId,
-                    memberRecord.member.memberId
+                    memberRecord.member.memberId,
+                    memberRecord.member.groupId
                 );
             } else {
-                console.log("getting banned");
                 await banMember(
-                    memberRecord.member.groupId,
-                    memberRecord.member.memberId
+                    memberRecord.member.memberId,
+                    memberRecord.member.groupId
                 );
             }
 
@@ -70,7 +68,7 @@ const ChatSettings = ({ chat, user }: IChatSettings): JSX.Element => {
 
     const runMuteMember = async (uid: string) => {
         try {
-            await muteMember(chat.uid, uid, 15);
+            await muteMember(uid, chat.uid, 15);
         } catch (err) {
             console.error(err);
         }
@@ -113,6 +111,7 @@ const ChatSettings = ({ chat, user }: IChatSettings): JSX.Element => {
 
             for (const member of chat.members) {
                 if (member.memberId === user.uid) continue;
+                if (member.memberId === chat.owner) continue;
 
                 const isBanned = await isMemberBanned(
                     member.memberId,
