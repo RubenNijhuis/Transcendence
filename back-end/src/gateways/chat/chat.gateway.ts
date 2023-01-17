@@ -35,9 +35,6 @@ import { JwtPayload } from "src/types/auth";
 export class ChatSocketGateway {
   @WebSocketServer()
   private _server: Server;
-
-  //////////////////////////////////////////////////////////
-
   private roomManager: RoomManager;
 
   //////////////////////////////////////////////////////////
@@ -75,7 +72,27 @@ export class ChatSocketGateway {
   }
 
   handleDisconnect(client: Socket): void {
+    const member = this.roomManager.getMemberByConnectionID(client.id);
+    let roomID: string;
+
+    if (member) {
+      roomID = member.roomID;
+    }
+
     this.roomManager.removeMemberByConnectionID(client.id);
+
+    // Update if a member left the room
+    if (roomID) {
+      this.sendOnlineMembers(roomID);
+    }
+  }
+
+  sendOnlineMembers(roomID: string): void {
+    if (roomID === "unset") return;
+
+    const roomMembers = this.roomManager.getRoomMembers(roomID);
+    const roomMembersUIDs = roomMembers.map((roomMember) => roomMember.uid);
+    this._server.to(roomID).emit("onlineMembers", { members: roomMembersUIDs });
   }
 
   //////////////////////////////////////////////////////////
@@ -88,6 +105,7 @@ export class ChatSocketGateway {
     const member = this.roomManager.getMemberByConnectionID(client.id);
 
     const room = await this.groupService.findGroupById(joinRoomPayload.roomID);
+
     if (!room) {
       client.emit("failure", {
         status: `Unable to find room with id ${member.roomID}`
@@ -95,14 +113,15 @@ export class ChatSocketGateway {
       return;
     }
 
+    const prevRoomId = member.roomID;
+
+    // Send updated members to the old room
+    this.sendOnlineMembers(prevRoomId);
+
     this.roomManager.addMemberToRoom(member, joinRoomPayload.roomID);
 
-    // Tell the members of the room who is online
-    const roomMembers = this.roomManager.getRoomMembers(joinRoomPayload.roomID);
-    const roomMembersUIDs = roomMembers.map((roomMember) => roomMember.uid);
-    this._server
-      .to(joinRoomPayload.roomID)
-      .emit("onlineMembers", { members: roomMembersUIDs });
+    // Send updated members to the new room
+    this.sendOnlineMembers(joinRoomPayload.roomID);
   }
 
   @SubscribeMessage("sendMessage")
@@ -120,12 +139,17 @@ export class ChatSocketGateway {
       return;
     }
 
-    const isAllowedToSendMessage = this.recordService.checkBan(
+    const isBanned = await this.recordService.checkBan(
       member.uid,
       member.roomID
     );
 
-    if (!isAllowedToSendMessage) {
+    const isMuted = await this.recordService.checkIfMuted(
+      member.uid,
+      member.roomID
+    );
+
+    if (isBanned || isMuted) {
       client.emit("failure", {
         status: `${member.uid} is not allowed to send messages to ${member.roomID}`
       });

@@ -24,16 +24,16 @@ const SenderAnnotation = ({ sender }: ISenderAnnotation): JSX.Element => {
     ////////////////////////////////////////////////////////
 
     return (
-        <Link to={PageRoutes.profileWithUsername(sender.username)}>
-            <Container fromUser={sender.uid === user.uid}>
+        <Container fromUser={sender.uid === user.uid}>
+            <Link to={PageRoutes.profileWithUsername(sender.username)}>
                 <Asset
                     url={sender.img_url}
                     alt={sender.username}
                     className="img"
                 />
                 <span>{sender.username}</span>
-            </Container>
-        </Link>
+            </Link>
+        </Container>
     );
 };
 

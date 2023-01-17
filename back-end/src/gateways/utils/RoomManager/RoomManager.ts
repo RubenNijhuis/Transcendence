@@ -12,6 +12,8 @@ class RoomManager {
     this._members = new Map<Member.ID, Member.Instance>();
     this._rooms = new Map<Room.ID, Room.Instance>();
     this._server = server;
+
+    console.log("✅ Created room manager");
   }
 
   //////////////////////////////////////////////////////////

@@ -98,8 +98,10 @@ const ChatProvider = ({ children }: IChatProvider): JSX.Element => {
             const members = await getMembersFromGroupChats([newGroup]);
             const messages = getMessagesFromGroupChats([newGroup]);
             bindMembersToMessages(members, messages);
+            newGroup.members = members.flat();
 
             for (const group of [newGroup]) {
+                console.log("test");
                 if (group.members.length === 2) {
                     group.size = Chat.Group.Type.DM;
                 } else {

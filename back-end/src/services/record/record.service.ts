@@ -203,7 +203,7 @@ export class RecordService {
 
   async checkBan(userId: string, groupId: string): Promise<boolean> {
     const record: Record = await this.getRecordByUserId(userId, groupId);
-
+    console.log("BAN REC", record);
     if (!record) return false;
 
     if (record.type === MessagePermission.Ban) return true;

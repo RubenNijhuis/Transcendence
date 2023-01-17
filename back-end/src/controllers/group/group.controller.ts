@@ -275,7 +275,7 @@ export class GroupController {
 
       await this.recordService.removeBanOrMute(
         profile.uid,
-        unMuteMemberDto.groupId,
+        unMuteMemberDto.memberId,
         unMuteMemberDto.groupId
       );
 
@@ -323,7 +323,7 @@ export class GroupController {
 
       await this.recordService.removeBanOrMute(
         profile.uid,
-        unbanUserDto.groupId,
+        unbanUserDto.memberId,
         unbanUserDto.groupId
       );
 
