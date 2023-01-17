@@ -26,14 +26,15 @@ export class FriendlistService {
   ) {}
 
   async filterFriendlist(username: string, friends: FriendList[]) {
-    const filteredFriends = [];
+    const filteredFriends = friends.map((val) => {
+      if (val.username === username) return val.friendname;
+      else return val.username;
+    });
+    console.log(
+      "FILTER FRIENDS DUPE: ",
+      new Set(filteredFriends).size !== filteredFriends.length
+    );
 
-    for (const friend of friends) {
-      let name = friend.friendname;
-
-      if (name === username) name = friend.username;
-      filteredFriends.push(name);
-    }
     const ret = this.userService.filterProfiles(
       await this.userService.getUsersOnUsernames(filteredFriends)
     );

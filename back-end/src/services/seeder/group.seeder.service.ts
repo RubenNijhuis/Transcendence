@@ -25,27 +25,21 @@ export class GroupseederService {
       const passwords: string[] = ["", "ass"];
 
       for (const user of users) {
-        const friends: FriendList[] = await this.friendlistService.getFriends(
-          user.username
+        const friends = await this.friendlistService.filterFriendlist(
+          user.username,
+          await this.friendlistService.getFriends(user.username)
         );
-        const friendNames: string[] = friends.map((val) => {
-          if (val.username === user.username) return val.friendname;
-          else return val.username;
+        const friendUids: string[] = friends.map((val) => {
+          return val.uid;
         });
         console.log(
           "has dupes: ",
-          new Set(friendNames).size !== friendNames.length
+          new Set(friendUids).size !== friendUids.length
         );
-        const friendUids: string[] = (
-          await this.userService.getUsersOnUsernames(friendNames)
-        ).map((val) => {
-          return val.uid;
-        });
 
         const randoName: string = randBird();
-        const filteredIds: string[] = friendUids;
-        const seed: number = this.randomNum(0, filteredIds.length);
-        const members: string[] = filteredIds.slice(0, seed);
+        const seed: number = this.randomNum(0, friendUids.length);
+        const members: string[] = friendUids.slice(0, seed);
         const num: number = this.randomNum(0, 2);
         const pass: string = passwords[num];
 

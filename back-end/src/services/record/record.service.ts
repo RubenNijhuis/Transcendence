@@ -48,6 +48,8 @@ export class RecordService {
     time?: number,
     date?: Date
   ): Promise<Record> {
+    if (await this.getRecordByUserId(uid, groupUid))
+      this.deleteRecord(uid, groupUid);
     const query = {
       groupId: groupUid,
       userId: uid,
@@ -137,12 +139,8 @@ export class RecordService {
       if (ret) return ret;
 
       const record: Record = await this.getRecordByUserId(muteUid, groupUid);
-      if (record) {
-        if (record.type === MessagePermission.Ban) {
-          if (type === MessagePermission.Mute) return HttpStatus.BAD_REQUEST;
-        } else {
-          await this.setMuteTime(uid, groupUid, time);
-        }
+      if (record && record.type === MessagePermission.Ban) {
+        if (type === MessagePermission.Mute) return HttpStatus.BAD_REQUEST;
       } else {
         await this.createRecord(muteUid, groupUid, type, time, new Date());
       }
