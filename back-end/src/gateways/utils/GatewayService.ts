@@ -21,9 +21,8 @@ import { UserService } from "src/services/user/user.service";
 @Injectable()
 export class GatewayService {
   constructor(
-    @InjectRepository(User)
-    private readonly jwtService: JwtService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService
   ) {}
 
   async getMemberFromNewConnection(client: Socket): Promise<string> {
@@ -31,7 +30,8 @@ export class GatewayService {
       const connectionType = client.handshake.query.type;
       if (
         connectionType === "EventGateway" ||
-        connectionType === "ChatGateway"
+        connectionType === "ChatGateway" ||
+        connectionType === "GameGateway"
       ) {
         throw new Error("InternalGateway");
       }
@@ -46,7 +46,6 @@ export class GatewayService {
     const tokenPayload = this.jwtService.decode(authToken) as JwtPayload;
     const userFromJwt = await this.userService.findUserByUid(tokenPayload.uid);
 
-    console.log(userFromJwt);
     if (!userFromJwt) {
       throw new Error("No user found by with token");
     }

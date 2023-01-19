@@ -1,7 +1,7 @@
 // Nestjs
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { JwtModule } from "@nestjs/jwt";
+import { JwtModule, JwtService } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 // Entities
@@ -24,7 +24,7 @@ import { UserModule } from "../user/user.module";
     JwtModule
   ],
   controllers: [],
-  providers: [GatewayService, EventSocketGateway],
+  providers: [JwtService, GatewayService, EventSocketGateway],
   exports: []
 })
 export class EventModule {}

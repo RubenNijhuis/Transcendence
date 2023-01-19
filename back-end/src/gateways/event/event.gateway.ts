@@ -63,8 +63,7 @@ export class EventSocketGateway {
         await this.gatewayService.getMemberFromNewConnection(client);
       this.roomManager.createMember(uidFromConnection, client);
     } catch (err) {
-      if (err === "InternalGateway") return;
-      console.log(err);
+      if (err.message === "InternalGateway") return;
       client.emit("failure", err);
       client.disconnect();
     }

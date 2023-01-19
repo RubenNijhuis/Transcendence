@@ -27,7 +27,7 @@ import { JwtService } from "@nestjs/jwt";
 import * as Payload from "../utils/Payloads";
 import { JwtPayload } from "src/types/auth";
 import { GameService } from "./game.service";
-import { forwardRef, Inject } from "@nestjs/common";
+import { ConsoleLogger, forwardRef, Inject } from "@nestjs/common";
 import { GatewayService } from "../utils/GatewayService";
 
 ////////////////////////////////////////////////////////////
@@ -72,6 +72,7 @@ export class GameSocketGateway {
         await this.gatewayService.getMemberFromNewConnection(client);
       this.roomManager.createMember(uidFromConnection, client);
     } catch (err) {
+      if (err.message === "InternalGateway") return;
       client.emit("failure", err);
       client.disconnect();
     }
