@@ -13,6 +13,7 @@ import Record from "src/entities/record/record.entity";
 
 // Gateways
 import { ChatSocketGateway } from "src/gateways/chat/chat.gateway";
+import { GatewayService } from "src/gateways/utils/GatewayService";
 
 // Services
 import { GroupService } from "src/services/group/group.service";
@@ -52,6 +53,7 @@ import { UserModule } from "../user/user.module";
   ],
   controllers: [],
   providers: [
+    GatewayService,
     ConfigService,
     GroupService,
     UserService,

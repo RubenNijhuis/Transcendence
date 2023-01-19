@@ -31,6 +31,7 @@ services:
       - "3000:3000" # Main API
       - "3001:3001" # Chat Socket
       - "3002:3002" # Game Socket
+      - "3003:3003" # Game Socket
     depends_on:
       - database
 

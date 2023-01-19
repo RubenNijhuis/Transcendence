@@ -31,18 +31,9 @@ const Pong = (): JSX.Element => {
 
     ////////////////////////////////////////////////////////
 
-    const { connection, createConnection, destroyConnectionInstance } =
-        useSocket();
-
-    // const { user } = useUser();
+    const { gameConnection } = useSocket();
 
     ////////////////////////////////////////////////////////
-
-    // TODO: Abstract into business logic part
-    useEffect(() => {
-        console.log("TESt");
-        createConnection(SocketType.Type.Game);
-    }, [user]);
 
     useEffect(() => {
         if (canvasRef.current === null) return;
@@ -60,14 +51,9 @@ const Pong = (): JSX.Element => {
 
         Manager = new GameManager(canvasRef.current, gameSettings);
 
-        if (!connection) return;
-        // setupConnections(connection);
-
-        return () => {
-            // removeConnections(connection);
-            destroyConnectionInstance();
-        };
-    }, [connection]);
+        if (!gameConnection) return;
+        // setupConnections(gameConnection);
+    }, [gameConnection]);
 
     const joinMatch = () => {
         const gameRequest = {
@@ -79,7 +65,7 @@ const Pong = (): JSX.Element => {
 
         console.log(gameRequest.profile.uid);
 
-        connection.emit("joinMatch", gameRequest);
+        gameConnection.emit("joinMatch", gameRequest);
     };
 
     ////////////////////////////////////////////////////////

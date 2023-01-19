@@ -1,5 +1,5 @@
 // React stuffs
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 // Socket Library
 import { io } from "socket.io-client";
@@ -20,9 +20,9 @@ import { useUser } from "../UserContext";
 ///////////////////////////////////////////////////////////
 
 interface SocketContextType {
-    connection: SocketType.Instance;
-    createConnection: (socketType: SocketType.Type) => void;
-    destroyConnectionInstance: () => void;
+    eventConnection: SocketType.Instance;
+    chatConnection: SocketType.Instance;
+    gameConnection: SocketType.Instance;
 }
 
 const SocketContext = createContext<SocketContextType>(null!);
@@ -36,7 +36,15 @@ interface ISocketProvider {
 }
 
 const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
-    const [connection, setConnection] = useState<SocketType.Instance>(null!);
+    const [gameConnection, setGameConnection] = useState<SocketType.Instance>(
+        null!
+    );
+    const [eventConnection, setEventConnection] = useState<SocketType.Instance>(
+        null!
+    );
+    const [chatConnection, setChatConnection] = useState<SocketType.Instance>(
+        null!
+    );
 
     ////////////////////////////////////////////////////////
 
@@ -44,13 +52,26 @@ const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
 
     ////////////////////////////////////////////////////////
 
-    const createConnection = (socketType: SocketType.Type) => {
-        if (connection !== null) {
-            connection.close();
-        }
+    useEffect(() => {
+        const accessToken = Store.getItem<string>(StoreId.refreshToken);
+        if (!user || !accessToken) return;
+        console.log("WHAT");
 
-        if (!user) return;
+        createConnection(SocketType.Type.Chat, setChatConnection);
+        createConnection(SocketType.Type.Game, setGameConnection);
+        createConnection(SocketType.Type.Event, setEventConnection);
 
+        // return () => {
+        //     destroyConnection(chatConnection);
+        //     destroyConnection(gameConnection);
+        //     destroyConnection(eventConnection);
+        // };
+    }, [user]);
+
+    const createConnection = (
+        socketType: SocketType.Type,
+        socketSetter: React.Dispatch<React.SetStateAction<SocketType.Instance>>
+    ) => {
         const accessToken = Store.getItem<string>(StoreId.refreshToken);
         if (!accessToken) return;
 
@@ -67,21 +88,19 @@ const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
          * components can hook into errors
          */
         newSocket.on("failure", console.error);
-        console.log(newSocket);
-        setConnection(newSocket);
+        socketSetter(newSocket);
     };
 
-    const destroyConnectionInstance = () => {
-        connection.removeAllListeners();
-        connection.close();
+    const destroyConnection = (socket: SocketType.Instance) => {
+        socket.disconnect();
     };
 
     ////////////////////////////////////////////////////////
 
     const value: SocketContextType = {
-        connection,
-        createConnection,
-        destroyConnectionInstance
+        gameConnection,
+        chatConnection,
+        eventConnection
     };
 
     ////////////////////////////////////////////////////////

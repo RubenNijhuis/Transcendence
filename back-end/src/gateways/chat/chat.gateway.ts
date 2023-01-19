@@ -23,6 +23,7 @@ import RoomManager from "../utils/RoomManager";
 // Message Payload types
 import * as Payload from "../utils/Payloads";
 import { JwtPayload } from "src/types/auth";
+import { GatewayService } from "../utils/GatewayService";
 
 ////////////////////////////////////////////////////////////
 
@@ -41,10 +42,9 @@ export class ChatSocketGateway {
 
   constructor(
     private readonly groupService: GroupService,
-    private readonly userService: UserService,
     private readonly recordService: RecordService,
     private readonly messageService: MessageService,
-    private readonly jwtService: JwtService
+    private readonly gatewayService: GatewayService
   ) {
     this.roomManager = new RoomManager(this._server);
   }
@@ -52,23 +52,14 @@ export class ChatSocketGateway {
   //////////////////////////////////////////////////////////
 
   async handleConnection(client: Socket): Promise<void> {
-    const authToken = client.handshake.query.accessToken as string;
-    if (!authToken) {
-      client.emit("failure", "No auth token specified during handshake");
+    try {
+      const uidFromConnection =
+        await this.gatewayService.getMemberFromNewConnection(client);
+      this.roomManager.createMember(uidFromConnection, client);
+    } catch (err) {
+      client.emit("failure", err);
       client.disconnect();
     }
-
-    const tokenPayload = this.jwtService.decode(authToken) as JwtPayload;
-    const userFromJwt = await this.userService.findUserByUid(tokenPayload.uid);
-
-    if (!userFromJwt) {
-      client.emit("failure", "No user found by with token");
-      client.disconnect();
-      return;
-    }
-
-    const uid = userFromJwt.uid;
-    this.roomManager.createMember(uid, client);
   }
 
   handleDisconnect(client: Socket): void {
@@ -96,6 +87,14 @@ export class ChatSocketGateway {
   }
 
   //////////////////////////////////////////////////////////
+
+  //   @SubscribeMessage("getActive")
+  //   async getActive(
+  //     @MessageBody() uid: string,
+  //     @ConnectedSocket() client: Socket
+  //   ) {
+  //     this._gameRoom.emit();
+  //   }
 
   @SubscribeMessage("joinRoom")
   async joinRoom(

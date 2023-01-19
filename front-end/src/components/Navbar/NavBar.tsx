@@ -1,6 +1,10 @@
+// React
+import { useState } from "react";
+
 // UI
 import Asset from "../Asset";
 import Button from "../Button";
+import DropDown from "../DropDown";
 
 // Icons
 import { FiSettings } from "react-icons/fi";
@@ -22,8 +26,6 @@ import { useUser } from "../../contexts/UserContext";
 // Links
 import { locations, NavLink } from "./NavBar.config";
 import PageRoutes from "../../config/PageRoutes";
-import { useState } from "react";
-import DropDown from "../DropDown";
 
 ////////////////////////////////////////////////////////////
 

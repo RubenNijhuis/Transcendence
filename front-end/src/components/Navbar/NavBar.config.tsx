@@ -17,7 +17,7 @@ const locations: NavLink[] = [
     {
         name: "Pong",
         url: PageRoutes.pong,
-        onlyWhenLoggedIn: false,
+        onlyWhenLoggedIn: true,
     },
     {
         name: "Leaderboard",

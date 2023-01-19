@@ -45,12 +45,16 @@ const Leaderboard = (): JSX.Element => {
 
     return (
         <Layout>
-            {leaderboard && (
+            {leaderboard.length >= 3 ? (
                 <Container>
                     <Heading type={1}>Leaderboard</Heading>
-                    <Podium rankings={leaderboard} />
+                    {/* <Podium rankings={leaderboard} /> */}
                     <RankingList rankings={leaderboard} />
                 </Container>
+            ) : (
+                <Heading type={2}>
+                    There aren't enough players for a leaderboard yet!
+                </Heading>
             )}
         </Layout>
     );

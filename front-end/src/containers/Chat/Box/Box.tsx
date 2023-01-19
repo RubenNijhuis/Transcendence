@@ -156,7 +156,7 @@ const ChatBox = (): JSX.Element => {
 
     const { activeChatId, updateChatGroup } = useChat();
     const { user } = useUser();
-    const { connection } = useSocket();
+    const { chatConnection } = useSocket();
 
     ////////////////////////////////////////////////////////
 
@@ -198,17 +198,17 @@ const ChatBox = (): JSX.Element => {
     ////////////////////////////////////////////////////////
 
     useEffect(() => {
-        if (!connection || !chat) return;
+        if (!chatConnection || !chat) return;
 
-        setupConnections(connection);
-        connection.emit(SocketRoutes.room.joinRoom, {
+        setupConnections(chatConnection);
+        chatConnection.emit(SocketRoutes.room.joinRoom, {
             roomID: chat.uid
         });
 
         return () => {
-            removeConnections(connection);
+            removeConnections(chatConnection);
         };
-    }, [connection, chat]);
+    }, [chatConnection, chat]);
 
     ////////////////////////////////////////////////////////
 
@@ -236,7 +236,7 @@ const ChatBox = (): JSX.Element => {
         });
 
         socket.on("connect", () => {
-            connection.emit(SocketRoutes.room.joinRoom, {
+            chatConnection.emit(SocketRoutes.room.joinRoom, {
                 roomID: chat.uid
             });
         });

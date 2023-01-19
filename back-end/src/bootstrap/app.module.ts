@@ -16,6 +16,7 @@ import { SeederModule } from "src/modules/seeder/seeder.module";
 import { ChatModule } from "src/modules/chat/chat.module";
 import { BlockListModule } from "src/modules/blocklist/blocklist.module";
 import { GameModule } from "src/modules/game/game.module";
+import { EventModule } from "src/modules/event/event.module";
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { GameModule } from "src/modules/game/game.module";
     RecordModule,
     MatchHistoryModule,
     SeederModule,
-    // GameModule,
+    GameModule,
+    EventModule,
     ChatModule,
     PassportModule.register({ session: true }),
     BlockListModule

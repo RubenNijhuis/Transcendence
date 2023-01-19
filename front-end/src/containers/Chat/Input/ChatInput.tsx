@@ -9,7 +9,12 @@ import * as Match from "../../../types/Match";
 import * as SocketRoutes from "../../../config/SocketRoutes";
 
 // UI
-import { Container, SelectTypeIcon, SelectionBox, StyledPictureInput } from "./ChatInput.style";
+import {
+    Container,
+    SelectTypeIcon,
+    SelectionBox,
+    StyledPictureInput
+} from "./ChatInput.style";
 import Asset from "../../../components/Asset";
 import { useSocket } from "../../../contexts/SocketContext";
 
@@ -22,9 +27,7 @@ interface IMessageTypeSelect {
     setMessageType: React.Dispatch<
         React.SetStateAction<Chat.Message.ContentType>
     >;
-    setMessageContent: React.Dispatch<
-        React.SetStateAction<Chat.Message.Types>
-    >;
+    setMessageContent: React.Dispatch<React.SetStateAction<Chat.Message.Types>>;
 }
 
 const MessageTypeSelect = ({
@@ -48,9 +51,7 @@ const MessageTypeSelect = ({
             setMessageContent({ alt: "", url: "" });
         else if (type === Chat.Message.ContentType.GameInvite)
             setMessageContent({
-                opponent: chat.members[0].profile,
-                user: sender,
-                accepted: false,
+                opponent: chat.members[0].profile.uid,
                 game_type: Match.GameType.Classic
             });
     };
@@ -69,29 +70,31 @@ const MessageTypeSelect = ({
                 />
             </SelectTypeIcon>
             <SelectionBox selected={chatTypeSelected}>
-                <span
+                <div
                     onClick={() =>
                         handleChatTypeChange(Chat.Message.ContentType.Simple)
                     }
                 >
-                    Simple
-                </span>
-                <span
+                    <span>Simple</span>
+                </div>
+                <div
                     onClick={() =>
                         handleChatTypeChange(Chat.Message.ContentType.Picture)
                     }
                 >
-                    Picture
-                </span>
-                <span
-                    onClick={() =>
-                        handleChatTypeChange(
-                            Chat.Message.ContentType.GameInvite
-                        )
-                    }
-                >
-                    Invite
-                </span>
+                    <span>Picture</span>
+                </div>
+                {chat.size === Chat.Group.Type.DM && (
+                    <div
+                        onClick={() =>
+                            handleChatTypeChange(
+                                Chat.Message.ContentType.GameInvite
+                            )
+                        }
+                    >
+                        <span>Invite</span>
+                    </div>
+                )}
             </SelectionBox>
         </div>
     );
@@ -193,34 +196,32 @@ const ChatInput = ({ user, chat }: IChatInput): JSX.Element => {
         Chat.Message.ContentType.Simple
     );
 
-    const [messageContent, setMessageContent] =
-        useState<Chat.Message.Types>({
-            content: ""
-        });
+    const [messageContent, setMessageContent] = useState<Chat.Message.Types>({
+        content: ""
+    });
 
     ////////////////////////////////////////////////////////
 
-    const { connection } = useSocket();
+    const { chatConnection } = useSocket();
 
     ////////////////////////////////////////////////////////
 
     const handleMessageSend = async () => {
-        if (!connection) return;
+        if (!chatConnection) return;
 
         if (messageType === Chat.Message.ContentType.Simple) {
             const message = messageContent as Chat.Message.Simple;
             if (message.content.length === 0) {
                 return;
             }
-        }
-        else if (messageType === Chat.Message.ContentType.Picture) {
+        } else if (messageType === Chat.Message.ContentType.Picture) {
             const message = messageContent as Chat.Message.Picture;
             if (message.url.length === 0 || message.alt.length === 0) {
                 return;
             }
         }
 
-        connection.emit(SocketRoutes.chat.sendMessage, {
+        chatConnection.emit(SocketRoutes.chat.sendMessage, {
             content: messageContent,
             content_type: messageType
         });

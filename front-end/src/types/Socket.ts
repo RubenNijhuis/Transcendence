@@ -1,7 +1,7 @@
 import { Socket } from "socket.io-client";
 
 export enum Type {
-    WaitingRoom = "waitingRoom",
+    Event = "event",
     Game = "game",
     Chat = "chat"
 }

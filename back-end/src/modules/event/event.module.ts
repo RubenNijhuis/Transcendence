@@ -8,11 +8,8 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { User } from "src/entities";
 
 // Gateways
-import { GameSocketGateway } from "src/gateways/game/game.gateway";
-import { GameService } from "src/gateways/game/game.service";
+import { EventSocketGateway } from "src/gateways/event/event.gateway";
 import { GatewayService } from "src/gateways/utils/GatewayService";
-
-// Services
 
 // Modules
 import { UserModule } from "../user/user.module";
@@ -27,7 +24,7 @@ import { UserModule } from "../user/user.module";
     JwtModule
   ],
   controllers: [],
-  providers: [GatewayService, GameSocketGateway, GameService],
+  providers: [GatewayService, EventSocketGateway],
   exports: []
 })
-export class GameModule {}
+export class EventModule {}

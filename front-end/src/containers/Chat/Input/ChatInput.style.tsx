@@ -46,6 +46,7 @@ const Container = styled.div`
 
     .simple-message-input {
         height: 100%;
+
         input {
             border: none;
             padding-left: calc(${magicNum} / 4);
@@ -56,12 +57,16 @@ const Container = styled.div`
     }
 
     .message-type-select {
+        position: relative;
         background-color: rgba(0, 0, 0, 0.1);
         border-radius: 0px 100px 100px 0px;
         padding: calc(${magicNum} / 8);
         color: ${lightTextColor};
 
-        span {
+        div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             font-size: 12px;
         }
     }
@@ -150,8 +155,7 @@ const SelectionBox = styled.div<{ selected: boolean }>`
 
     border-radius: 1000px;
 
-    span {
-        display: inline-block;
+    div {
         border-radius: 100px;
         height: calc(${magicNum});
         width: calc(${magicNum});

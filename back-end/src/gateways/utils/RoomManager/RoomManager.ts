@@ -12,8 +12,6 @@ class RoomManager {
     this._members = new Map<Member.ID, Member.Instance>();
     this._rooms = new Map<Room.ID, Room.Instance>();
     this._server = server;
-
-    console.log("✅ Created room manager");
   }
 
   //////////////////////////////////////////////////////////
@@ -49,6 +47,7 @@ class RoomManager {
    */
   getMemberByConnectionID(connectionID: Member.ID): Member.Instance | null {
     for (const [, member] of this._members) {
+      console.log(connectionID, member.connection.id);
       if (member.connection.id === connectionID) {
         return member;
       }

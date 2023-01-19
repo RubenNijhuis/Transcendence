@@ -12,6 +12,7 @@ import {
 
 // UI
 import Button from "../../Button";
+import { useUser } from "../../../contexts/UserContext";
 
 ////////////////////////////////////////////////////////////
 
@@ -50,10 +51,14 @@ const InviteMessageDisplay = ({
 
     ////////////////////////////////////////////////////////
 
+    const { user } = useUser();
+
+    ////////////////////////////////////////////////////////
+
     return (
         <Container fromUser={fromUser}>
             <div className="content">
-                <span>{formattedContent.user.username}</span>
+                <span>{user.username}</span>
                 <p>Is inviting you to play</p>
                 <Button theme="light">Play a game</Button>
             </div>

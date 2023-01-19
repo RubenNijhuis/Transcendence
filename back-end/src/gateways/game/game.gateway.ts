@@ -9,6 +9,8 @@ import {
 
 // Socket stuff
 import { Socket, Server } from "socket.io";
+import * as ClientSocket from "socket.io-client";
+import { io } from "socket.io-client";
 
 // Types
 import { Match } from "../utils/GameManager/types";
@@ -26,6 +28,7 @@ import * as Payload from "../utils/Payloads";
 import { JwtPayload } from "src/types/auth";
 import { GameService } from "./game.service";
 import { forwardRef, Inject } from "@nestjs/common";
+import { GatewayService } from "../utils/GatewayService";
 
 ////////////////////////////////////////////////////////////
 
@@ -40,7 +43,7 @@ export class GameSocketGateway {
   private _server: Server;
 
   //////////////////////////////////////////////////////////
-
+  private _eventConnection: ClientSocket.Socket;
   private gameManager: GameManager;
   private roomManager: RoomManager;
 
@@ -49,34 +52,29 @@ export class GameSocketGateway {
   constructor(
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
-    private readonly jwtService: JwtService,
-    private readonly gameService: GameService
+    private readonly gameService: GameService,
+    private readonly gatewayService: GatewayService
   ) {
     this.roomManager = new RoomManager(this._server);
+
+    this._eventConnection = io("ws://localhost:3003", {
+      query: {
+        type: "EventGateway"
+      }
+    });
   }
 
   //////////////////////////////////////////////////////////
 
   async handleConnection(client: Socket): Promise<void> {
-    const authToken = client.handshake.query.accessToken as string;
-    if (!authToken) {
-      client.emit("failure", "No auth token specified during handshake");
+    try {
+      const uidFromConnection =
+        await this.gatewayService.getMemberFromNewConnection(client);
+      this.roomManager.createMember(uidFromConnection, client);
+    } catch (err) {
+      client.emit("failure", err);
       client.disconnect();
     }
-
-    const tokenPayload = this.jwtService.decode(authToken) as JwtPayload;
-
-    const userFromJwt = await this.userService.findUserByintraId(
-      tokenPayload.uid
-    );
-
-    if (!userFromJwt) {
-      client.emit("failure", "No user found by with token");
-      client.disconnect();
-    }
-
-    const uid = userFromJwt.uid;
-    this.roomManager.createMember(uid, client);
   }
 
   handleDisconnect(client: Socket): void {
@@ -85,8 +83,32 @@ export class GameSocketGateway {
 
   //////////////////////////////////////////////////////////
 
+  @SubscribeMessage("activeStatus")
+  async activeStatus(
+    @MessageBody() activeStatusPayload: Payload.Event.GameStatus
+  ) {
+    const member = this.roomManager.getMemberByID(activeStatusPayload.memberId);
+
+    if (!member) {
+      activeStatusPayload.status = false;
+      activeStatusPayload.gameId = null;
+    } else {
+      if (member.roomID !== "unset") {
+        activeStatusPayload.status = true;
+        activeStatusPayload.gameId = member.roomID;
+      } else {
+        activeStatusPayload.status = false;
+        activeStatusPayload.gameId = null;
+      }
+    }
+
+    this._eventConnection.emit("memberStatus", activeStatusPayload);
+  }
+
+  //////////////////////////////////////////////////////////
+
   @SubscribeMessage("joinQueue")
-  joinQueue(
+  async joinQueue(
     @MessageBody() joinQueuePayload: Payload.Game.JoinQueue,
     @ConnectedSocket() client: Socket
   ) {
@@ -148,13 +170,13 @@ export class GameSocketGateway {
   }
 
   @SubscribeMessage("leaveQueue")
-  leaveQueue(@ConnectedSocket() client: Socket) {
+  async leaveQueue(@ConnectedSocket() client: Socket) {
     const member = this.roomManager.getMemberByConnectionID(client.id);
     this.roomManager.removeMemberFromRoom(member, "QUEUE");
   }
 
   @SubscribeMessage("friendlyMatch")
-  friendlyMatch(
+  async friendlyMatch(
     @MessageBody() matchPayload: Payload.Game.FriendlyMatch,
     @ConnectedSocket() client: Socket
   ) {
@@ -202,7 +224,7 @@ export class GameSocketGateway {
   //////////////////////////////////////////////////////////
 
   @SubscribeMessage("batPositionUpdate")
-  joinGame(
+  async joinGame(
     @MessageBody() batPositionPayload: Payload.Game.BatPositionUpdate,
     @ConnectedSocket() client: Socket
   ) {

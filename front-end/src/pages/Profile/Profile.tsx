@@ -36,6 +36,7 @@ import TwoFactorAuthentication from "../../containers/TwoFactorAuthentication";
 import { useProfileFriends, useGetSelectedProfile } from "./Profile.bl";
 import PageRoutes from "../../config/PageRoutes";
 import * as Store from "../../modules/Store";
+import { useSocket } from "../../contexts/SocketContext";
 
 ////////////////////////////////////////////////////////////
 
@@ -63,6 +64,8 @@ const ProfilePage = (): JSX.Element => {
 
     // Create account modal
     const { openModal, setModalElement, setAllowClose } = useModal();
+
+    const { eventConnection } = useSocket();
 
     ////////////////////////////////////////////////////////
 
@@ -125,6 +128,14 @@ const ProfilePage = (): JSX.Element => {
                 }
             }
 
+            if (selectedProfile && selectedProfile.uid !== user.uid) {
+                if (eventConnection) {
+                    eventConnection.on("memberStatus", (res) =>
+                        console.log(selectedProfile.uid, res)
+                    );
+                    eventConnection.emit("getStatus", selectedProfile.uid);
+                }
+            }
             return;
         }
 
@@ -132,7 +143,7 @@ const ProfilePage = (): JSX.Element => {
         if (inLoginProcess) {
             handleLoginProcess();
         }
-    }, [user, profileName]);
+    }, [user, profileName, eventConnection, selectedProfile]);
 
     ////////////////////////////////////////////////////////
 

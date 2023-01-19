@@ -27,10 +27,8 @@ export namespace Message {
 
     // Game invite
     export interface GameInvite {
-        opponent: Profile.Instance;
-        user: Profile.Instance;
+        opponent: Profile.ID;
         game_type: Match.GameType;
-        accepted: boolean;
     }
 
     // Message interface

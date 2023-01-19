@@ -1,9 +1,3 @@
-/**
- * We'd still to prefer to use namespaces as the
- * file isn't big so far and gives a good preview
- * on all the data that the gateways send over
- */
-
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace Game {
   export interface FriendlyMatch {
@@ -34,5 +28,15 @@ export namespace Chat {
 
   export interface JoinRoom {
     roomID: string;
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-namespace
+export namespace Event {
+  export interface GameStatus {
+    memberId: string;
+    status: boolean;
+    requester: string;
+    gameId: null | string;
   }
 }
