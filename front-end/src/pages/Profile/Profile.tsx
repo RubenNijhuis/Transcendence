@@ -119,23 +119,10 @@ const ProfilePage = (): JSX.Element => {
     ///////////////////////////////////////////////////////
 
     useEffect(() => {
-        if (user) {
+        if (user && selectedProfile) {
             // Reset the create account modal after account creation
             openModal(false);
-            if (selectedProfile) {
-                if (selectedProfile.username === user.username) {
-                    setFriends(profileFriends);
-                }
-            }
-
-            if (selectedProfile && selectedProfile.uid !== user.uid) {
-                if (eventConnection) {
-                    eventConnection.on("memberStatus", (res) =>
-                        console.log(selectedProfile.uid, res)
-                    );
-                    eventConnection.emit("getStatus", selectedProfile.uid);
-                }
-            }
+            setFriends(profileFriends);
             return;
         }
 
@@ -143,7 +130,7 @@ const ProfilePage = (): JSX.Element => {
         if (inLoginProcess) {
             handleLoginProcess();
         }
-    }, [user, profileName, eventConnection, selectedProfile]);
+    }, [user, selectedProfile]);
 
     ////////////////////////////////////////////////////////
 

@@ -115,12 +115,13 @@ export class GameSocketGateway {
   ) {
     const member = this.roomManager.getMemberByConnectionID(client.id);
 
-    this.roomManager.addMemberToRoom(member, "queue");
+    const queueRoomName = `${joinQueuePayload.gameType}-queue`;
+    this.roomManager.addMemberToRoom(member, queueRoomName);
     client.emit("gameStatus", { status: "In Queue", message: "In Queue" });
 
     // Only if there are multiple people in the que do we look for a teammate
     // TODO: if waiting takes too long send a status message
-    const queRoomSize = this.roomManager.getRoomSize("queue");
+    const queRoomSize = this.roomManager.getRoomSize(queueRoomName);
     if (queRoomSize <= 1) {
       client.emit("gameStatus", {
         status: "In Queue",
@@ -130,7 +131,7 @@ export class GameSocketGateway {
     }
 
     // We get all the other members from the queue
-    const queueRoomMembers = this.roomManager.getRoomMembers("queue");
+    const queueRoomMembers = this.roomManager.getRoomMembers(queueRoomName);
 
     // Find a match
     const matchedOpponent = this.gameService.findAnotherPlayer(
@@ -173,7 +174,7 @@ export class GameSocketGateway {
   @SubscribeMessage("leaveQueue")
   async leaveQueue(@ConnectedSocket() client: Socket) {
     const member = this.roomManager.getMemberByConnectionID(client.id);
-    this.roomManager.removeMemberFromRoom(member, "QUEUE");
+    this.roomManager.removeMemberFromRoom(member, member.roomID);
   }
 
   @SubscribeMessage("friendlyMatch")

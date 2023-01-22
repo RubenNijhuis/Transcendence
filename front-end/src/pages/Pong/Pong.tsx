@@ -1,5 +1,6 @@
 // React
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 // Sockets
 import { useSocket } from "../../contexts/SocketContext";
@@ -17,56 +18,68 @@ import MatchMakingStatus from "../../containers/PongGame/MatchMakingStatus";
 // Types
 import * as SocketType from "../../types/Socket";
 import * as Match from "../../types/Match";
+import * as Game from "../../types/Game";
+import * as Profile from "../../types/Profile";
+
+// Context
 import { useUser } from "../../contexts/UserContext";
+import PageRoutes from "../../config/PageRoutes";
 
 ////////////////////////////////////////////////////////////
 
 const Pong = (): JSX.Element => {
+    const [matchMakingState, setMatchMakingState] = useState<Match.Status>(
+        Match.Status.Queue
+    );
+    const [gameType, setGameType] = useState<Game.Type>(Game.Type.Classic);
+    const [matchOpponent, setMatchOpponent] = useState<Profile.Instance | null>(
+        null
+    );
+
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-    const { user } = useUser();
-    ////////////////////////////////////////////////////////
-
     let Manager: GameManager;
 
     ////////////////////////////////////////////////////////
 
+    const location = useLocation();
     const { gameConnection } = useSocket();
 
     ////////////////////////////////////////////////////////
 
     useEffect(() => {
-        if (canvasRef.current === null) return;
+        // TODO: should be done through state
+        const gameTypeString = location.pathname
+            .split(PageRoutes.pong)[1]
+            .slice(1);
+        const gameTypeValue =
+            gameTypeString === "classic"
+                ? Game.Type.Classic
+                : Game.Type.Powered;
 
+        if (canvasRef.current === null) return;
         const context = canvasRef.current.getContext("2d");
 
         if (context === null) return;
 
-        // TODO: get from user database settings or whatever
         const gameSettings = {
-            gameType: Match.GameType.Classic,
+            gameType: gameTypeValue,
             prefferedSide: "left",
             controlSettings: "keyboard"
         };
 
-        Manager = new GameManager(canvasRef.current, gameSettings);
+        Manager = new GameManager(
+            canvasRef.current,
+            gameSettings,
+            gameConnection
+        );
 
-        if (!gameConnection) return;
-        // setupConnections(gameConnection);
-    }, [gameConnection]);
+        // Setup socket stuff
+        gameConnection.emit("joinMatch", { gameType: gameTypeValue });
+    }, [gameConnection, canvasRef]);
 
-    const joinMatch = () => {
-        const gameRequest = {
-            profile: {
-                uid: Date.now().toString(),
-                elo: 100
-            }
-        };
-
-        console.log(gameRequest.profile.uid);
-
-        gameConnection.emit("joinMatch", gameRequest);
-    };
+    // const joinMatch = () => {
+    //     gameConnection.emit("joinMatch", gameRequest);
+    // };
 
     ////////////////////////////////////////////////////////
 
@@ -93,8 +106,10 @@ const Pong = (): JSX.Element => {
 
     return (
         <Layout>
-            <MatchMakingStatus />
-            <Button onClick={joinMatch}>Join match</Button>
+            <MatchMakingStatus
+                status={matchMakingState}
+                opponent={matchOpponent}
+            />
             <Canvas canvasRef={canvasRef} />
         </Layout>
     );

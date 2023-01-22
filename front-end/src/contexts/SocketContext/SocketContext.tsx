@@ -55,7 +55,6 @@ const SocketProvider = ({ children }: ISocketProvider): JSX.Element => {
     useEffect(() => {
         const accessToken = Store.getItem<string>(StoreId.refreshToken);
         if (!user || !accessToken) return;
-        console.log("WHAT");
 
         createConnection(SocketType.Type.Chat, setChatConnection);
         createConnection(SocketType.Type.Game, setGameConnection);

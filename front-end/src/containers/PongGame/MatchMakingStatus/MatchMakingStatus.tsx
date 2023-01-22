@@ -1,24 +1,37 @@
 // React
-import { useState } from "react";
+import Asset from "../../../components/Asset";
+import Heading from "../../../components/Heading";
 
 // Types
-import * as Game from "../../../types/Game";
-import * as Match from "../../../types/Match";
+import * as Profile from "../../../types/Profile";
 
 // Style
-import { MatchMakingStatusContainer } from "./MatchMakingStatus.style";
+import { MatchMakingStatusContainer, Opponent } from "./MatchMakingStatus.style";
 
 ////////////////////////////////////////////////////////////
 
-const MatchMakingStatus = (): JSX.Element => {
-    const [matchStatus, setMatchStatus] = useState<Match.Status.Queue>(
-        Match.Status.Queue
-    );
+interface IMatchMakingStatus {
+    status: string;
+    opponent: Profile.Instance | null;
+}
 
+const MatchMakingStatus = ({
+    status,
+    opponent
+}: IMatchMakingStatus): JSX.Element => {
     ////////////////////////////////////////////////////////
 
     return (
-        <MatchMakingStatusContainer>{matchStatus}</MatchMakingStatusContainer>
+        <MatchMakingStatusContainer>
+            <Heading type={3}>Match making status</Heading>
+            <p>{status}</p>
+            {opponent ? (
+                <Opponent>
+                    <Asset url={opponent.img_url} alt="a" />
+                    <Heading type={4}>{opponent.username}</Heading>
+                </Opponent>
+            ) : null}
+        </MatchMakingStatusContainer>
     );
 };
 

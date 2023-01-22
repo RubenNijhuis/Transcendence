@@ -1,7 +1,7 @@
 const StoreId = {
-    refreshToken: "refresh",
-    accessToken: "access",
-    loginProcess: "login-process",
+    refreshToken: "tr-refresh",
+    accessToken: "tr-access",
+    loginProcess: "tr-login-process",
 };
 
 export default StoreId;

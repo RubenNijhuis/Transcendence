@@ -7,3 +7,8 @@ export interface Score {
     player1: number;
     player2: number;
 }
+
+export enum Type {
+    Classic,
+    Powered
+}

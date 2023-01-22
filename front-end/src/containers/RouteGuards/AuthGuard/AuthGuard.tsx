@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 
 // Router
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import PageRoutes from "../../../config/PageRoutes";
 
 // Store
@@ -27,6 +27,7 @@ const AuthGuard = () => {
     const { isLoggedIn, setLoggedIn } = useAuth();
     const { setUser } = useUser();
     const navigate = useNavigate();
+    const location = useLocation();
 
     ////////////////////////////////////////////////////////
 
@@ -50,6 +51,14 @@ const AuthGuard = () => {
                     const { profile } = await checkTokenValidity(refreshToken);
                     setLoggedIn(true);
                     setUser(profile);
+
+                    if (
+                        location.pathname === PageRoutes.home ||
+                        location.pathname === PageRoutes.login
+                    ) {
+                        navigate(PageRoutes.profile);
+                    }
+
                     return;
                 } catch (err) {
                     console.error(err);

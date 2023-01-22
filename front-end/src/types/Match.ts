@@ -7,7 +7,7 @@ export type ID = string;
 
 export enum Status {
     Queue = "Queue",
-    Matched = "Matches",
+    Matched = "Matched",
     Playing = "Playing"
 }
 

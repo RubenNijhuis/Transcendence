@@ -27,13 +27,10 @@ import NotFound from "../../pages/NotFound";
 const Router = (): JSX.Element => (
     <BrowserRouter>
         <Routes>
-            {/* Public routes */}
-            <Route path={PageRoutes.login} element={<Login />} />
-
             {/* Routes that have to pass through authentication to be loaded */}
             <Route element={<AuthGuard />}>
-                <Route path={PageRoutes.home} element={<Login />} />
-
+                <Route path={PageRoutes.login} element={<Login />} />
+                <Route path={PageRoutes.home} element={<ProfilePage />} />
                 {/* Profile page is rendered in two different ways but same component */}
                 <Route path={PageRoutes.profile} element={<ProfilePage />}>
                     <Route path=":profileName" element={<ProfilePage />} />
@@ -44,7 +41,11 @@ const Router = (): JSX.Element => (
                 {/* Regular private routes */}
                 <Route path={PageRoutes.selectGame} element={<SelectGame />} />
 
-                <Route path={PageRoutes.pong} element={<Pong />} />
+                <Route path={PageRoutes.pong} element={<Pong />}>
+                    <Route path="classic" element={<Pong />} />
+                    <Route path="powered" element={<Pong />} />
+                    <Route path="watch/:watchId" element={<Pong />} />
+                </Route>
 
                 <Route path={PageRoutes.chat} element={<ChatPage />} />
 

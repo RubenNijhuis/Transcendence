@@ -23,7 +23,7 @@ const GameCard = ({
     title,
     description,
     url,
-    cta,
+    cta
 }: IGameCard): JSX.Element => {
     return (
         <AdvancedCard>
@@ -34,7 +34,7 @@ const GameCard = ({
                 <div className="content__container">
                     <Heading type={3}>{title}</Heading>
                     <p>{description}</p>
-                    <Link to={`/play/${url}`}>{cta}</Link>
+                    <Link to={url}>{cta}</Link>
                 </div>
             </div>
         </AdvancedCard>

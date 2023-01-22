@@ -1,5 +1,7 @@
 // Types
 import * as Game from "../../../../types/Game";
+import * as SocketType from "../../../../types/Socket";
+import * as SocketRoutes from "../../../../config/SocketRoutes"
 
 // Game elements
 import { Ball, Bat } from "../../GameElements";
@@ -17,7 +19,11 @@ class GameManager {
     canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;
 
-    constructor(canvas: HTMLCanvasElement, gameSettings: any) {
+    constructor(
+        canvas: HTMLCanvasElement,
+        gameSettings: any,
+        connection: SocketType.Instance
+    ) {
         this.canvas = canvas;
         this.context = canvas.getContext("2d") as CanvasRenderingContext2D;
 
@@ -35,6 +41,8 @@ class GameManager {
             this.context,
             { posX: 0, posY: 0 } /*this.getBatStartingPostion()*/
         );
+
+        connection.on(SocketRoutes.game.newBallPosition, this.updateBall);
 
         // if (gameSettings.powered === true) {
         //     this.powerUps = powerUps;
@@ -59,7 +67,7 @@ class GameManager {
     getMiddleOfBoard(): Game.Position {
         const middle: Game.Position = {
             posX: 0,
-            posY: 0,
+            posY: 0
         };
 
         return middle;
@@ -78,7 +86,7 @@ class GameManager {
     scalePosition(position: Game.Position): Game.Position {
         const scaledPosition: Game.Position = {
             posX: 0,
-            posY: 0,
+            posY: 0
         };
 
         scaledPosition.posX = position.posX + 0;
