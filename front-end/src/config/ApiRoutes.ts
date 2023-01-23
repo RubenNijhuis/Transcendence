@@ -33,6 +33,7 @@ const ApiRoutes = {
 
     // Profile /////////////////////////////////////////////////
     getProfileByUsername: (username: string) => `/user/${username}`,
+    getProfileByUid: (id: string) => `/user/uid/${id}`,
 
     getProfileImageByUsername: (username: string) =>
         `/api/user/img/profile/${username}`,

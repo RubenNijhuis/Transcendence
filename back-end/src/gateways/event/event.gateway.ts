@@ -40,8 +40,6 @@ export class EventSocketGateway {
   //////////////////////////////////////////////////////////
 
   constructor(private readonly gatewayService: GatewayService) {
-    this.roomManager = new RoomManager(this._server);
-
     this._gameConnection = io("ws://localhost:3002", {
       query: {
         type: "EventGateway"
@@ -57,6 +55,10 @@ export class EventSocketGateway {
 
   //////////////////////////////////////////////////////////
 
+  afterInit(): void {
+    this.roomManager = new RoomManager(this._server);
+  }
+
   async handleConnection(client: Socket): Promise<void> {
     try {
       const uidFromConnection =
@@ -64,6 +66,7 @@ export class EventSocketGateway {
       this.roomManager.createMember(uidFromConnection, client);
     } catch (err) {
       if (err.message === "InternalGateway") return;
+
       client.emit("failure", err);
       client.disconnect();
     }

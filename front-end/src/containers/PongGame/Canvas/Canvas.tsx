@@ -40,7 +40,7 @@ const Canvas = ({ canvasRef }: ICanvas): JSX.Element => {
     ////////////////////////////////////////////////////////
 
     return (
-        <Container ref={canvasContainerRef} style={{ display: "none" }}>
+        <Container ref={canvasContainerRef}>
             <StyledCanvas ref={canvasRef} id="pong" width="0px" height="0px" />
         </Container>
     );

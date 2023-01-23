@@ -30,10 +30,6 @@ export class FriendlistService {
       if (val.username === username) return val.friendname;
       else return val.username;
     });
-    // console.log(
-    //   "FILTER FRIENDS DUPE: ",
-    //   new Set(filteredFriends).size !== filteredFriends.length
-    // );
 
     const ret = this.userService.filterProfiles(
       await this.userService.getUsersOnUsernames(filteredFriends)

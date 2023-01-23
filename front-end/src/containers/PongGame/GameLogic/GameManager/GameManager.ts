@@ -1,7 +1,7 @@
 // Types
 import * as Game from "../../../../types/Game";
 import * as SocketType from "../../../../types/Socket";
-import * as SocketRoutes from "../../../../config/SocketRoutes"
+import * as SocketRoutes from "../../../../config/SocketRoutes";
 
 // Game elements
 import { Ball, Bat } from "../../GameElements";
@@ -24,6 +24,11 @@ class GameManager {
         gameSettings: any,
         connection: SocketType.Instance
     ) {
+        if (!connection)
+            throw Error(
+                "No connection supplied in the game manager constructor"
+            );
+
         this.canvas = canvas;
         this.context = canvas.getContext("2d") as CanvasRenderingContext2D;
 

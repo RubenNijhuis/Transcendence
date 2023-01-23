@@ -18,7 +18,7 @@ import { JwtService } from "@nestjs/jwt";
 import { RecordService } from "src/services/record/record.service";
 
 // Room manager
-import RoomManager from "../utils/RoomManager";
+import RoomManager, { Room } from "../utils/RoomManager";
 
 // Message Payload types
 import * as Payload from "../utils/Payloads";
@@ -45,11 +45,13 @@ export class ChatSocketGateway {
     private readonly recordService: RecordService,
     private readonly messageService: MessageService,
     private readonly gatewayService: GatewayService
-  ) {
-    this.roomManager = new RoomManager(this._server);
-  }
+  ) {}
 
   //////////////////////////////////////////////////////////
+
+  afterInit(): void {
+    this.roomManager = new RoomManager(this._server);
+  }
 
   async handleConnection(client: Socket): Promise<void> {
     try {
@@ -80,7 +82,7 @@ export class ChatSocketGateway {
   }
 
   sendOnlineMembers(roomID: string): void {
-    if (roomID === "unset") return;
+    if (roomID === Room.DefaultID) return;
 
     const roomMembers = this.roomManager.getRoomMembers(roomID);
     const roomMembersUIDs = roomMembers.map((roomMember) => roomMember.uid);
@@ -132,7 +134,7 @@ export class ChatSocketGateway {
     const member = this.roomManager.getMemberByConnectionID(client.id);
 
     // If the member isn't part of a room then we block them from sending a message
-    if (member.roomID === "unset") {
+    if (member.roomID === Room.DefaultID) {
       client.emit("failure", {
         status: "No room joined before sending message"
       });

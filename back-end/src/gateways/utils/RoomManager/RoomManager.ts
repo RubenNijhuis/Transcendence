@@ -9,6 +9,8 @@ class RoomManager {
   private readonly _server: Server;
 
   constructor(server: Server) {
+    if (!server) throw Error("No server supplied in room manager constructor");
+
     this._members = new Map<Member.ID, Member.Instance>();
     this._rooms = new Map<Room.ID, Room.Instance>();
     this._server = server;
@@ -47,7 +49,6 @@ class RoomManager {
    */
   getMemberByConnectionID(connectionID: Member.ID): Member.Instance | null {
     for (const [, member] of this._members) {
-      console.log(connectionID, member.connection.id);
       if (member.connection.id === connectionID) {
         return member;
       }
@@ -85,7 +86,7 @@ class RoomManager {
   createMember(memberID: Member.ID, connection: Socket): Member.Instance {
     const newMember: Member.Instance = {
       uid: memberID,
-      roomID: "unset",
+      roomID: Room.DefaultID,
       connection,
       data: null
     };
@@ -132,7 +133,7 @@ class RoomManager {
      */
     for (const newMemberOfRoom of member) {
       // Remove them from any room they could still be in
-      if (newMemberOfRoom.roomID !== "unset") {
+      if (newMemberOfRoom.roomID !== Room.DefaultID) {
         this.removeMemberFromRoom(newMemberOfRoom);
         newMemberOfRoom.connection.leave(newMemberOfRoom.roomID);
       }
@@ -150,7 +151,7 @@ class RoomManager {
 
   /**
    * Removes a member from a room and deletes
-   * the room if it's empty
+   * the room if it's empty.
    * @param memberID
    * @param roomID
    */
@@ -194,7 +195,7 @@ class RoomManager {
 
       // Update the member
       member.connection.leave(roomToRemoveID);
-      member.roomID = "unset";
+      member.roomID = Room.DefaultID;
       this._members.set(member.uid, member);
     }
 
@@ -306,6 +307,31 @@ class RoomManager {
     this._rooms.set(roomID, retrievedFroom);
   }
 
+  /**
+   * Retrieves the member data based on ID
+   * @param memberId
+   * @returns data
+   */
+  getMemberData<T>(memberId: Member.ID): T {
+    const retrievedMember = this.getMemberByID(memberId);
+    if (!retrievedMember) return null;
+
+    return retrievedMember.data;
+  }
+
+  /**
+   * Sets the player data based on ID
+   * @param memberID
+   */
+  setMemberData<T>(memberId: Member.ID, data: T): void {
+    const retrievedMember = this.getMemberByID(memberId);
+    if (!retrievedMember) return;
+
+    retrievedMember.data = data;
+
+    this._members.set(memberId, retrievedMember);
+  }
+
   /// Logging //////////////////////////////////////////////
 
   logRoom(roomID: Room.ID): void {
@@ -320,7 +346,7 @@ class RoomManager {
   logServer(): void {
     const server = this._server;
 
-    console.log(server.sockets.adapter.rooms);
+    console.log("Server object", server.sockets.adapter.rooms);
   }
 
   /// Room internals //////////////

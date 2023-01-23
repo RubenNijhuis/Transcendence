@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 import { Socket } from "socket.io";
 
 ////////////////////////////////////////////////////////////
@@ -18,6 +19,8 @@ namespace Member {
 namespace Room {
   export type ID = string;
 
+  export const DefaultID = "unset";
+
   export interface Instance {
     id: ID;
     members: Map<Member.ID, Member.Instance>;
@@ -27,4 +30,4 @@ namespace Room {
 
 ////////////////////////////////////////////////////////////
 
-export type { Member, Room };
+export { Member, Room };

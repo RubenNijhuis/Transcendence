@@ -1,3 +1,6 @@
+// Nestjs
+import { forwardRef, Inject } from "@nestjs/common";
+
 // Sockets
 import {
   ConnectedSocket,
@@ -13,22 +16,19 @@ import * as ClientSocket from "socket.io-client";
 import { io } from "socket.io-client";
 
 // Types
-import { Match } from "../utils/GameManager/types";
+import * as Match from "../utils/GameManager/types/match";
 
 // Managers
 import GameManager from "../utils/GameManager/GameManager";
-import RoomManager from "../utils/RoomManager";
+import RoomManager, { Room } from "../utils/RoomManager";
 
 // Services
 import { UserService } from "src/services/user/user.service";
-import { JwtService } from "@nestjs/jwt";
+import { GatewayService } from "../utils/GatewayService";
+import { GameService } from "./game.service";
 
 // Message Payload types
 import * as Payload from "../utils/Payloads";
-import { JwtPayload } from "src/types/auth";
-import { GameService } from "./game.service";
-import { ConsoleLogger, forwardRef, Inject } from "@nestjs/common";
-import { GatewayService } from "../utils/GatewayService";
 
 ////////////////////////////////////////////////////////////
 
@@ -55,8 +55,6 @@ export class GameSocketGateway {
     private readonly gameService: GameService,
     private readonly gatewayService: GatewayService
   ) {
-    this.roomManager = new RoomManager(this._server);
-
     this._eventConnection = io("ws://localhost:3003", {
       query: {
         type: "EventGateway"
@@ -66,6 +64,10 @@ export class GameSocketGateway {
 
   //////////////////////////////////////////////////////////
 
+  afterInit(): void {
+    this.roomManager = new RoomManager(this._server);
+  }
+
   async handleConnection(client: Socket): Promise<void> {
     try {
       const uidFromConnection =
@@ -73,6 +75,7 @@ export class GameSocketGateway {
       this.roomManager.createMember(uidFromConnection, client);
     } catch (err) {
       if (err.message === "InternalGateway") return;
+
       client.emit("failure", err);
       client.disconnect();
     }
@@ -94,7 +97,7 @@ export class GameSocketGateway {
       activeStatusPayload.status = false;
       activeStatusPayload.gameId = null;
     } else {
-      if (member.roomID !== "unset") {
+      if (member.roomID !== Room.DefaultID) {
         activeStatusPayload.status = true;
         activeStatusPayload.gameId = member.roomID;
       } else {
@@ -114,19 +117,24 @@ export class GameSocketGateway {
     @ConnectedSocket() client: Socket
   ) {
     const member = this.roomManager.getMemberByConnectionID(client.id);
+    if (!member) {
+      client.emit("failure", "No member found with your socket");
+      return;
+    }
+
+    this.roomManager.setMemberData(member.uid, {
+      gameType: joinQueuePayload.gameType
+    });
 
     const queueRoomName = `${joinQueuePayload.gameType}-queue`;
     this.roomManager.addMemberToRoom(member, queueRoomName);
-    client.emit("gameStatus", { status: "In Queue", message: "In Queue" });
+    client.emit("gameStatus", Match.Status.Queue);
 
-    // Only if there are multiple people in the que do we look for a teammate
+    // If there are multiple people in the que do we look for a teammate
     // TODO: if waiting takes too long send a status message
     const queRoomSize = this.roomManager.getRoomSize(queueRoomName);
     if (queRoomSize <= 1) {
-      client.emit("gameStatus", {
-        status: "In Queue",
-        message: "Waiting for another player"
-      });
+      client.emit("gameStatus", Match.Status.NoMatch);
       return;
     }
 
@@ -138,8 +146,9 @@ export class GameSocketGateway {
       member,
       queueRoomMembers,
       (player, opponent) => {
-        // Let anyone match at the moment
-        // Could add checks for blocked
+        // TOOD: add checks for blocked
+        if (player.data.gameType === opponent.data.gameType) return true;
+
         return true;
       }
     );
@@ -147,9 +156,7 @@ export class GameSocketGateway {
     // If no match was found do something here
     // TODO: only run after a certain amount of time
     if (!matchedOpponent) {
-      client.emit("matchStatus", {
-        status: "No match found"
-      });
+      client.emit("matchStatus", Match.Status.NoMatch);
       return;
     }
 
@@ -158,17 +165,13 @@ export class GameSocketGateway {
     this.roomManager.addMemberToRoom([member, matchedOpponent], newRoomName);
 
     // Send the opponent data to each player
-    // TODO: let game this.roomManager do this
-    member.connection.emit("newMessage", matchedOpponent.uid);
-    matchedOpponent.connection.emit("newMessage", member.uid);
+    member.connection.emit("matchedWith", matchedOpponent.uid);
+    matchedOpponent.connection.emit("matchedWith", member.uid);
 
     this.roomManager.logServer();
 
     // Send new game status to players
-    this._server.to(newRoomName).emit("gameStatus", {
-      status: "MATCHED",
-      message: "Matched"
-    });
+    this._server.to(newRoomName).emit("gameStatus", Match.Status.Matched);
   }
 
   @SubscribeMessage("leaveQueue")
@@ -188,10 +191,7 @@ export class GameSocketGateway {
     // We get all the other members from the queue
     const queRoomSize = this.roomManager.getRoomSize("queue");
     if (queRoomSize <= 1) {
-      client.emit("gameStatus", {
-        status: "In Queue",
-        message: "Waiting for the other player"
-      });
+      client.emit("gameStatus", Match.Status.NoMatch);
       return;
     }
 
@@ -217,10 +217,7 @@ export class GameSocketGateway {
     friend.connection.emit("matchedWith", member.uid);
 
     // Send new game status to players
-    this._server.to(newRoomName).emit("gameStatus", {
-      status: "MATCHED",
-      message: "Matched"
-    });
+    this._server.to(newRoomName).emit("gameStatus", Match.Status.Matched);
   }
 
   //////////////////////////////////////////////////////////

@@ -6,9 +6,11 @@ import * as Profile from "./Profile";
 export type ID = string;
 
 export enum Status {
-    Queue = "Queue",
-    Matched = "Matched",
-    Playing = "Playing"
+    Queue,
+    NoMatch,
+    Matched,
+    Playing,
+    Finished
 }
 
 export enum GameType {

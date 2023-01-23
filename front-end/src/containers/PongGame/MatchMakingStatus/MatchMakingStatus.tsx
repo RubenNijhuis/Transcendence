@@ -4,6 +4,7 @@ import Heading from "../../../components/Heading";
 
 // Types
 import * as Profile from "../../../types/Profile";
+import * as Match from "../../../types/Match";
 
 // Style
 import { MatchMakingStatusContainer, Opponent } from "./MatchMakingStatus.style";
@@ -11,7 +12,7 @@ import { MatchMakingStatusContainer, Opponent } from "./MatchMakingStatus.style"
 ////////////////////////////////////////////////////////////
 
 interface IMatchMakingStatus {
-    status: string;
+    status: Match.Status;
     opponent: Profile.Instance | null;
 }
 
@@ -24,7 +25,7 @@ const MatchMakingStatus = ({
     return (
         <MatchMakingStatusContainer>
             <Heading type={3}>Match making status</Heading>
-            <p>{status}</p>
+            {/* <p>{status}</p> */}
             {opponent ? (
                 <Opponent>
                     <Asset url={opponent.img_url} alt="a" />

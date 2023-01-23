@@ -110,9 +110,25 @@ export class UsersController {
 
   @UseGuards(AccessTokenGuard)
   @Get(":username")
-  async findUsersById(@Param("username") username: string) {
+  async findUsersByUsername(@Param("username") username: string) {
     try {
       const user: User = await this.userService.findUserByUsername(username);
+
+      if (!user.isInitialized) {
+        return HttpStatus.NOT_FOUND;
+      }
+
+      return this.userService.filterProfile(user);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get("uid/:id")
+  async findUsersById(@Param("id") id: string) {
+    try {
+      const user: User = await this.userService.findUserByUid(id);
 
       if (!user.isInitialized) {
         return HttpStatus.NOT_FOUND;

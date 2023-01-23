@@ -1,5 +1,5 @@
 const renderWithStrict = false;
-const debugDevBoxActive = true;
+const debugDevBoxActive = false;
 
 ////////////////////////////////////////////////////////////
 

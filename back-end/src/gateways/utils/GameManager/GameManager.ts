@@ -1,6 +1,12 @@
+// Connections
 import { Server } from "socket.io";
+
+// Game instance
 import GameInstance from "./GameInstance";
-import { Game, Match } from "./types";
+
+// Types
+import * as Game from "./types/game";
+import * as Match from "./types/match";
 
 class GameManager {
   isRunning: boolean;

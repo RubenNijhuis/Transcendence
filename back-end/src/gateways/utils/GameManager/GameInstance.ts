@@ -1,8 +1,16 @@
+// Connections
 import { Socket } from "socket.io";
+
+// User type
 import { User } from "src/entities";
+
+// Game objects
 import Ball from "./Ball";
 import Bat from "./Bat";
-import { Game, Match } from "./types";
+
+// Types
+import * as Game from "./types/game";
+import * as Match from "./types/match";
 
 class GameInstance {
   ball: Ball;
@@ -31,7 +39,7 @@ class GameInstance {
 
   // update game data
   render(): void {
-    if (this.status === Match.Status.Starting) {
+    if (this.status === Match.Status.Playing) {
       this.status = Match.Status.Playing;
     }
 
@@ -39,7 +47,7 @@ class GameInstance {
   }
 
   setupGame(): void {
-    this.status = Match.Status.Setup;
+    this.status = Match.Status.Playing;
   }
 
   // retrieve ball pos
