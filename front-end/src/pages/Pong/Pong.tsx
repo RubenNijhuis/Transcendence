@@ -79,9 +79,13 @@ const Pong = (): JSX.Element => {
             gameConnection
         );
 
-        gameConnection.on("gameStatus", (res: Match.Status) =>
-            setMatchMakingState(res)
-        );
+        gameConnection.on("gameStatus", (res: Match.Status) => {
+            setMatchMakingState(res);
+        });
+
+        gameConnection.on("newBatPosition", (res: any) => {
+            console.log(res);
+        });
 
         gameConnection.on("matchedWith", (res: Profile.ID) => {
             getProfileByUid(res, { profile: true, banner: false })
@@ -90,9 +94,13 @@ const Pong = (): JSX.Element => {
         });
 
         gameConnection.emit("joinQueue", { gameType });
+        
+        setTimeout(() => {
+            gameConnection.emit("newBatPosition", { posX: 20 });
+        }, 3000);
 
         return () => {
-            // Manager.closeConnection();
+            gameConnection.removeAllListeners();
         };
     }, [gameConnection, canvasRef]);
 

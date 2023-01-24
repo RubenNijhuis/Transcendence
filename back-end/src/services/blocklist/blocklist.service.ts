@@ -29,15 +29,21 @@ export class BlocklistService {
     return ret;
   }
 
-  async getBlockedUid(username: string) {
+  async getBlockedUid(uid: string): Promise<string[]> {
+    const usernameFromUid = (await this.userService.findUserByUid(uid)).uid;
+
     const list = await this.filterBlocklist(
-      username,
-      await this.getBlocked(username)
+      usernameFromUid,
+      await this.getBlocked(usernameFromUid)
     );
+
     const ret: string[] = [];
+
     for (let i = 0; i < list.length; i++) {
       ret.push(list[i].uid);
     }
+
+    return ret;
   }
 
   async getBlocked(username: string): Promise<BlockList[]> {

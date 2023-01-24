@@ -11,6 +11,8 @@ import { User } from "src/entities";
 import { GameSocketGateway } from "src/gateways/game/game.gateway";
 import { GameService } from "src/gateways/game/game.service";
 import { GatewayService } from "src/gateways/utils/GatewayService";
+import { BlockListModule } from "../blocklist/blocklist.module";
+import { MatchHistoryModule } from "../matchhistory/matchhistory.module";
 
 // Services
 
@@ -24,6 +26,8 @@ import { UserModule } from "../user/user.module";
     TypeOrmModule.forFeature([User]),
     ConfigModule.forRoot(),
     UserModule,
+    BlockListModule,
+    MatchHistoryModule,
     JwtModule
   ],
   controllers: [],

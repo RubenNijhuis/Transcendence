@@ -9,7 +9,9 @@ class RoomManager {
   private readonly _server: Server;
 
   constructor(server: Server) {
-    if (!server) throw Error("No server supplied in room manager constructor");
+    if (!server) {
+      throw Error("No server instance supplied in room manager constructor");
+    }
 
     this._members = new Map<Member.ID, Member.Instance>();
     this._rooms = new Map<Room.ID, Room.Instance>();

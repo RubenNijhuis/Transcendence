@@ -1,5 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace Game {
+  export interface WatchMatch {
+    gameId: string;
+  }
   export interface FriendlyMatch {
     friendId: string;
   }

@@ -1,8 +1,13 @@
+// Nestjs
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { PassportModule } from "@nestjs/passport";
+
+// Config
 import { envConfig, typeOrmAsyncConfig } from "src/configs";
+
+// Modules
 import { UserModule } from "src/modules/user/user.module";
 import { FriendlistModule } from "src/modules/friendlist/friendlist.module";
 import { FriendRequestModule } from "src/modules/friendrequest/friendrequest.module";

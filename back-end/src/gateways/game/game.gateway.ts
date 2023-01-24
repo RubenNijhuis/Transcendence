@@ -29,6 +29,8 @@ import { GameService } from "./game.service";
 
 // Message Payload types
 import * as Payload from "../utils/Payloads";
+import { MatchHistoryService } from "src/services/matchhistory/matchhistory.service";
+import { BlocklistService } from "src/services/blocklist/blocklist.service";
 
 ////////////////////////////////////////////////////////////
 
@@ -52,6 +54,8 @@ export class GameSocketGateway {
   constructor(
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
+    private readonly matchHistoryService: MatchHistoryService,
+    private readonly blockListService: BlocklistService,
     private readonly gameService: GameService,
     private readonly gatewayService: GatewayService
   ) {
@@ -66,6 +70,10 @@ export class GameSocketGateway {
 
   afterInit(): void {
     this.roomManager = new RoomManager(this._server);
+    this.gameManager = new GameManager(this._server, this.roomManager);
+
+    // Will infinitely run
+    this.gameManager.run();
   }
 
   async handleConnection(client: Socket): Promise<void> {
@@ -141,15 +149,25 @@ export class GameSocketGateway {
     // We get all the other members from the queue
     const queueRoomMembers = this.roomManager.getRoomMembers(queueRoomName);
 
+    const blockedProfilesByMember = await this.blockListService.getBlockedUid(
+      member.uid
+    );
+
     // Find a match
     const matchedOpponent = this.gameService.findAnotherPlayer(
       member,
       queueRoomMembers,
       (player, opponent) => {
-        // TOOD: add checks for blocked
-        if (player.data.gameType === opponent.data.gameType) return true;
+        const gameTypesMatch = player.data.gameType === opponent.data.gameType;
+        const isNotBlockedByPlaer = !blockedProfilesByMember.includes(
+          opponent.uid
+        );
 
-        return true;
+        if (gameTypesMatch && isNotBlockedByPlaer) {
+          return true;
+        }
+
+        return false;
       }
     );
 
@@ -168,10 +186,32 @@ export class GameSocketGateway {
     member.connection.emit("matchedWith", matchedOpponent.uid);
     matchedOpponent.connection.emit("matchedWith", member.uid);
 
-    this.roomManager.logServer();
-
     // Send new game status to players
     this._server.to(newRoomName).emit("gameStatus", Match.Status.Matched);
+
+    this.gameManager.createGame(newRoomName);
+  }
+
+  @SubscribeMessage("watchMatch")
+  async watchMatch(
+    @MessageBody() watchMatchPayload: Payload.Game.WatchMatch,
+    @ConnectedSocket() client: Socket
+  ) {
+    const member = this.roomManager.getMemberByConnectionID(client.id);
+
+    if (!member) {
+      client.emit("failure", "No member found with your id");
+      return;
+    }
+
+    const matchRoom = this.roomManager.getRoomByID(watchMatchPayload.gameId);
+
+    if (!matchRoom) {
+      client.emit("failure", "No match found by that ID");
+      return;
+    }
+
+    // this.gameManager.addViewerToRoom(member);
   }
 
   @SubscribeMessage("leaveQueue")
@@ -222,14 +262,17 @@ export class GameSocketGateway {
 
   //////////////////////////////////////////////////////////
 
-  @SubscribeMessage("batPositionUpdate")
+  @SubscribeMessage("newBatPosition")
   async joinGame(
     @MessageBody() batPositionPayload: Payload.Game.BatPositionUpdate,
     @ConnectedSocket() client: Socket
   ) {
     const member = this.roomManager.getMemberByConnectionID(client.id);
-    console.log(
-      `New bat position update from ${member.uid} in room ${member.roomID} data: ${batPositionPayload}`
+
+    this.gameManager.updateBatPosition(
+      member.uid,
+      member.roomID,
+      batPositionPayload.posX
     );
   }
 }

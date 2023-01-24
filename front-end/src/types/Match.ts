@@ -9,6 +9,7 @@ export enum Status {
     Queue,
     NoMatch,
     Matched,
+    Setup,
     Playing,
     Finished
 }

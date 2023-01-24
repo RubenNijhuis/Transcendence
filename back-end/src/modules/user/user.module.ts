@@ -1,18 +1,29 @@
+// Nestjs
 import { forwardRef, Module } from "@nestjs/common";
-import { UserService } from "../../services/user/user.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { BlockList, FriendList, FriendRequest, User } from "src/entities";
 import { ConfigModule } from "@nestjs/config";
 import { PassportModule } from "@nestjs/passport";
 import { JwtModule } from "@nestjs/jwt";
+
+// Services
+import { UserService } from "../../services/user/user.service";
+import { BlockList, FriendList, FriendRequest, User } from "src/entities";
+
+// Controller
 import { UsersController } from "src/controllers/user/user.controller";
+
+// Entities
 import Group from "src/entities/group/group.entity";
+import MatchHistory from "src/entities/matchhistory/matchhistory.entity";
+
+// Modules
 import { FriendlistModule } from "../friendlist/friendlist.module";
 import { BlockListModule } from "../blocklist/blocklist.module";
 import { GroupModule } from "../group/group.module";
 import { FriendRequestModule } from "../friendrequest/friendrequest.module";
-import MatchHistory from "src/entities/matchhistory/matchhistory.entity";
 import { MatchHistoryModule } from "../matchhistory/matchhistory.module";
+
+////////////////////////////////////////////////////////////
 
 @Module({
   imports: [

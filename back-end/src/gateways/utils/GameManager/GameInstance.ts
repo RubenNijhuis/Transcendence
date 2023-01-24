@@ -1,8 +1,9 @@
 // Connections
-import { Socket } from "socket.io";
+import { Server, Socket } from "socket.io";
 
 // User type
 import { User } from "src/entities";
+import { Member, Room } from "../RoomManager";
 
 // Game objects
 import Ball from "./Ball";
@@ -13,49 +14,101 @@ import * as Game from "./types/game";
 import * as Match from "./types/match";
 
 class GameInstance {
-  ball: Ball;
-  player1Bat: Bat;
-  player2Bat: Bat;
+  private readonly ball: Ball;
+  private readonly player1Bat: Bat;
+  private readonly player2Bat: Bat;
 
-  player1Profile: User;
-  player2Profile: User;
+  private readonly player1Profile: Member.Instance;
+  private readonly player2Profile: Member.Instance;
 
-  finished: boolean;
-  status: Match.Status;
+  private finished: boolean;
+  private status: Match.Status;
 
-  roomID: string;
-  connection: Socket;
+  private roomID: string;
+  private connection: Server;
 
-  constructor(connection: Socket, roomID: string) {
+  constructor(connection: Server, room: Room.Instance) {
     this.ball = new Ball();
     this.player1Bat = new Bat();
     this.player2Bat = new Bat();
 
     this.connection = connection;
-    this.roomID = roomID;
+    this.roomID = room.id;
 
-    this.setupGame();
+    const members = [...room.members.values()];
+    this.player1Profile = members[0];
+    this.player2Profile = members[1];
   }
 
-  // update game data
+  /**
+   * has a point been scored
+   * - update game status to new round and reset game objects
+   *
+   * has a powerup been hit
+   * - update game status to powerup for the player
+   *
+   * has a game finished
+   * - set game state to finished and update game state for players
+   *
+   * optional
+   * has a member disconnected
+   * - finish game and set win score to player who didnt disconnect
+   */
   render(): void {
-    if (this.status === Match.Status.Playing) {
-      this.status = Match.Status.Playing;
+    if (this.pointScored() && !lastRound) {
+      this.newRound();
+    } else {
+      this.finishGame();
+      return;
     }
 
-    // updateBallPos();
+    if (this.hitPowerUp()) {
+      this.enablePowerup();
+    }
+
+    if (this.finished) {
+      this.finishGame();
+      return;
+    }
+
+    this.ball.updatePosition();
   }
 
-  setupGame(): void {
-    this.status = Match.Status.Playing;
+  getId(): string {
+    return this.roomID;
+  }
+
+  updateBatPosition(playerUid: string, newPosX: number): void {
+    console.log(
+      playerUid,
+      newPosX,
+      this.player1Profile.uid,
+      this.player2Profile.uid
+    );
+    if (
+      playerUid !== this.player1Profile.uid &&
+      playerUid !== this.player2Profile.uid
+    )
+      return;
+
+    if (playerUid === this.player1Profile.uid) {
+      this.player1Bat.position.posX = newPosX;
+    } else if (playerUid === this.player2Profile.uid) {
+      this.player2Bat.position.posX = newPosX;
+    }
+
+    this.connection.to(this.roomID).emit("newBatPosition", {
+      playerUid,
+      newPosX
+    });
   }
 
   // retrieve ball pos
-  getBallPos(): Game.Position {
+  private getBallPos(): Game.Position {
     return this.ball.getPosition();
   }
 
-  getPlayersPos(): [
+  private getPlayersPos(): [
     { id: string; pos: Game.Position },
     { id: string; pos: Game.Position }
   ] {
@@ -84,3 +137,148 @@ class GameInstance {
 }
 
 export default GameInstance;
+
+//     const resetGame = () => {
+//         this.player1Bat.reset();
+//         this.player2Bat.reset();
+
+//         this.pongBall.reset();
+//     }
+
+//     const checkGame = (pongball: Ball) => {
+//         this.checkIfBallHitsSide(pongball);
+//         this.checkIfBallHitsBats(pongball);
+//         this.checkIfBallHitsPowerUp();
+//         this.checkIfGameIsFinished();
+//     }
+
+//     const checkIfBallHitsBats(pongball: Ball) {
+//         // Check if left bat is hit
+//         if (
+//             pongball.positionX <=
+//             this.player1Bat.positionX + this.player1Bat.width + pongball.radius
+//         ) {
+//             if (
+//                 pongball.positionY >
+//                     this.player1Bat.positionY - this.player1Bat.height / 2 &&
+//                 pongball.positionY <
+//                     this.player1Bat.positionY + this.player1Bat.height / 2
+//             ) {
+//                 var relativeIntersectY =
+//                     this.player1Bat.positionY - pongball.positionY;
+//                 var normalizedRelativeIntersectionY =
+//                     relativeIntersectY / (this.player1Bat.height / 2);
+//                 var bounceAngle =
+//                     normalizedRelativeIntersectionY * ((5 * Math.PI) / 12);
+//                 pongball.velocityX = -pongball.velocityX;
+//                 pongball.velocityY = pongball.velocity * -Math.sin(bounceAngle);
+//                 pongball.velocity = this.canvas.width / 270;
+//                 this.powerUp.turn = 0;
+//             }
+//         }
+//         // Check if right bat is hit
+//         if (
+//             pongball.positionX >=
+//             this.player2Bat.positionX - pongball.radius - this.player1Bat.width
+//         ) {
+//             if (
+//                 pongball.positionY >
+//                     this.player2Bat.positionY - this.player2Bat.height / 2 &&
+//                 pongball.positionY <
+//                     this.player2Bat.positionY + this.player2Bat.height / 2
+//             ) {
+//                 var relativeIntersectY =
+//                     this.player2Bat.positionY - pongball.positionY;
+//                 var normalizedRelativeIntersectionY =
+//                     relativeIntersectY / (this.player2Bat.height / 2);
+//                 var bounceAngle =
+//                     normalizedRelativeIntersectionY * ((5 * Math.PI) / 12);
+//                 pongball.velocityX = -pongball.velocityX;
+//                 pongball.velocityY = -pongball.velocity * Math.sin(bounceAngle);
+//                 pongball.velocity = this.canvas.width / 270;
+//                 this.powerUp.turn = 1;
+//             }
+//         }
+//     }
+
+//     checkIfBallHitsSide(pongball: Ball) {
+//         // Checks if left side of the field is hit
+//         if (pongball.positionX - pongball.radius < 0) {
+//             this.player2Score++;
+//             this.powerUp.power = false;
+//             if (this.powerUp.hit === true) {
+//                 this.powerUp.hit = false;
+//                 this.powerUp.positionX = this.powerUp.getPositionX(4);
+//                 this.powerUp.positionY = this.powerUp.getPositionY(3);
+//             }
+//             this.powerUp.powerTaken = false;
+//             this.resetGame();
+//         }
+//         // Checks if right side of the field is hit
+//         if (pongball.positionX + pongball.radius > this.canvas.width) {
+//             this.player1Score++;
+//             this.powerUp.power = false;
+//             if (this.powerUp.hit === true) {
+//                 this.powerUp.hit = false;
+//                 this.powerUp.positionX = this.powerUp.getPositionX(4);
+//                 this.powerUp.positionY = this.powerUp.getPositionY(3);
+//             }
+//             this.powerUp.powerTaken = false;
+//             this.resetGame();
+//         }
+//     }
+
+//     checkIfBallHitsPowerUp() {
+//         if (
+//             this.pongBall.positionX + this.pongBall.radius >=
+//                 this.powerUp.positionX &&
+//             this.pongBall.positionX + this.pongBall.radius <=
+//                 this.powerUp.positionX + this.powerUp.width &&
+//             this.pongBall.positionY + this.pongBall.radius >=
+//                 this.powerUp.positionY &&
+//             this.pongBall.positionY + this.pongBall.radius <=
+//                 this.powerUp.positionY + this.powerUp.height
+//         ) {
+//             this.powerUp.hit = true;
+//             this.powerUp.power = true;
+//         }
+//         if (
+//             this.pongBall.positionX - this.pongBall.radius >=
+//                 this.powerUp.positionX &&
+//             this.pongBall.positionX - this.pongBall.radius <=
+//                 this.powerUp.positionX + this.powerUp.width &&
+//             this.pongBall.positionY + this.pongBall.radius >=
+//                 this.powerUp.positionY &&
+//             this.pongBall.positionY + this.pongBall.radius <=
+//                 this.powerUp.positionY + this.powerUp.height
+//         ) {
+//             this.powerUp.hit = true;
+//             this.powerUp.power = true;
+//         }
+//         if (
+//             this.pongBall.positionX - this.pongBall.radius >=
+//                 this.powerUp.positionX &&
+//             this.pongBall.positionX - this.pongBall.radius <=
+//                 this.powerUp.positionX + this.powerUp.width &&
+//             this.pongBall.positionY - this.pongBall.radius >=
+//                 this.powerUp.positionY &&
+//             this.pongBall.positionY - this.pongBall.radius <=
+//                 this.powerUp.positionY + this.powerUp.height
+//         ) {
+//             this.powerUp.hit = true;
+//             this.powerUp.power = true;
+//         }
+//         if (
+//             this.pongBall.positionX + this.pongBall.radius >=
+//                 this.powerUp.positionX &&
+//             this.pongBall.positionX + this.pongBall.radius <=
+//                 this.powerUp.positionX + this.powerUp.width &&
+//             this.pongBall.positionY - this.pongBall.radius >=
+//                 this.powerUp.positionY &&
+//             this.pongBall.positionY - this.pongBall.radius <=
+//                 this.powerUp.positionY + this.powerUp.height
+//         ) {
+//             this.powerUp.hit = true;
+//             this.powerUp.power = true;
+//         }
+//     }
