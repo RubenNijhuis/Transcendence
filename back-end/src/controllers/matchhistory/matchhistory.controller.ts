@@ -1,9 +1,22 @@
-import { Body, Controller, Get, Post, Param } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Param,
+  UseGuards,
+  Req
+} from "@nestjs/common";
+import { Request } from "express";
 import { CreateRecordDto } from "src/dtos/matchhistory/create-record.dto";
+import { User } from "src/entities";
+import MatchHistory from "src/entities/matchhistory/matchhistory.entity";
+import { AccessTokenGuard } from "src/guards/accessToken.guard";
 
 import { MatchHistoryService } from "src/services/matchhistory/matchhistory.service";
 
 @Controller("matchhistory")
+@UseGuards(AccessTokenGuard)
 export class MatchHistoryController {
   constructor(private readonly matchHistoryService: MatchHistoryService) {}
 
@@ -12,20 +25,27 @@ export class MatchHistoryController {
     return await this.matchHistoryService.getAllMatches();
   }
 
-  @Get("getmatches/:uid")
-  async getMatchByUserID(@Param("uid") uid: string) {
+  @Get("getmatches")
+  async getMatchByUserID(@Req() req: Request): Promise<MatchHistory[]> {
     try {
-      return await this.matchHistoryService.findMatchesByUserId(uid);
+      const profile: User = req.user["profile"];
+      return await this.matchHistoryService.findMatchesByUserId(profile.uid);
     } catch (error) {
       throw error;
     }
   }
 
   @Post("createRecord")
-  async createRecord(@Body() createRecordDto: CreateRecordDto) {
+  async createRecord(@Body() dto: CreateRecordDto) {
     try {
-      await this.matchHistoryService.createRecord(createRecordDto);
-      const ret = { message: "Record set !" };
+      const ret = await this.matchHistoryService.createRecord(
+        dto.playerOne,
+        dto.playerTwo,
+        dto.scoreOne,
+        dto.scoreTwo,
+        dto.scoreType,
+        dto.gameType
+      );
       return ret;
     } catch (error) {
       throw error;

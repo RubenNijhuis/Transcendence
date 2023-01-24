@@ -19,7 +19,7 @@ export class MatchHistoryService {
     return this.matchHistoryRepository.findOne({ where: { id } });
   }
 
-  async findMatchesByUserId(id: string) {
+  async findMatchesByUserId(id: string): Promise<MatchHistory[]> {
     try {
       const matches: MatchHistory[] = await this.matchHistoryRepository
         .createQueryBuilder()
@@ -32,15 +32,29 @@ export class MatchHistoryService {
     }
   }
 
-  createRecord(createRecordDto: CreateRecordDto) {
-    const newRecord: MatchHistory =
-      this.matchHistoryRepository.create(createRecordDto);
+  async createRecord(
+    playerOne: string,
+    playerTwo: string,
+    scoreOne: number,
+    scoreTwo: number,
+    scoreType: number,
+    gameType: number
+  ) {
+    const query = {
+      playerOne: playerOne,
+      playerTwo: playerTwo,
+      scoreOne: scoreOne,
+      scoreTwo: scoreTwo,
+      scoreType: scoreType,
+      gameType: gameType
+    };
 
-    return this.matchHistoryRepository.save(newRecord);
+    const newRecord: MatchHistory = this.matchHistoryRepository.create(query);
+    return await this.matchHistoryRepository.save(newRecord);
   }
 
   async removeRecords(uid: string) {
-    await this.matchHistoryRepository
+    return await this.matchHistoryRepository
       .createQueryBuilder()
       .delete()
       .where({ playerOne: uid })

@@ -29,6 +29,17 @@ export class BlocklistService {
     return ret;
   }
 
+  async getBlockedUid(username: string) {
+    const list = await this.filterBlocklist(
+      username,
+      await this.getBlocked(username)
+    );
+    const ret: string[] = [];
+    for (let i = 0; i < list.length; i++) {
+      ret.push(list[i].uid);
+    }
+  }
+
   async getBlocked(username: string): Promise<BlockList[]> {
     const blocked: BlockList[] = await this.blocklistRepository
       .createQueryBuilder("block_list")
