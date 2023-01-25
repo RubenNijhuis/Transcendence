@@ -6,12 +6,14 @@ class Ball {
     x: number;
     y: number;
   };
+  acceleration: number;
   radius: number;
 
   constructor(radius: number) {
     this.position = { posX: 0, posY: 0 };
+    this.acceleration = 1; // for now starting velocity will be 1
     this.velocity = {
-      x: this.decideDirection(1), // for now starting velocity will be 1
+      x: this.decideDirection(this.acceleration),
       y: 0
     };
     this.radius = radius;

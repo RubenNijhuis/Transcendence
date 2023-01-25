@@ -33,12 +33,17 @@ class Bat {
     };
   }
 
-  wallCollisionBatUp() {
-    if (this.position.posY - this.size.y / 2 <= 0) return true;
-    else return false;
+  updatePostition(direction: number, arena: Game.Dimentions) {
+    if (this.checkCollisions(direction, arena.height)) return;
+    this.position.posY += direction;
   }
-  wallCollisionBatDown(height: number) {
-    if (this.position.posY + this.size.y / 2 >= height) return true;
+
+  checkCollisions(direction: number, height: number) {
+    if (
+      this.position.posY + direction - this.size.y / 2 <= 0 ||
+      this.position.posY + direction + this.size.y / 2 >= height
+    )
+      return true;
     else return false;
   }
 }
