@@ -17,10 +17,12 @@ class GameInstance {
   private readonly ball: Ball;
   private readonly player1Bat: Bat;
   private readonly player2Bat: Bat;
+  private readonly arena: Game.Dimentions;
 
   private readonly player1Profile: Member.Instance;
   private readonly player2Profile: Member.Instance;
 
+  private score: Game.Score;
   private finished: boolean;
   private status: Match.Status;
 
@@ -28,10 +30,17 @@ class GameInstance {
   private connection: Server;
 
   constructor(connection: Server, room: Room.Instance) {
-    this.ball = new Ball();
+    /*//////////////////////////// ARENA WIDTH & HEIGHT ///////////////////////////*/
+    this.arena = {
+      width: 100,
+      height: 50
+    };
+
+    this.ball = new Ball(this.arena.width / 75); // this will determine the ball radius
     this.player1Bat = new Bat();
     this.player2Bat = new Bat();
 
+    this.score = { player1: 0, player2: 0 };
     this.connection = connection;
     this.roomID = room.id;
 
@@ -53,10 +62,14 @@ class GameInstance {
    * optional
    * has a member disconnected
    * - finish game and set win score to player who didnt disconnect
+   *
+   * NEED
+   * - Need canvas width&height for calculations
+   *   we could also asume a basic size and resize on client side
    */
   render(): void {
     if (this.pointScored() && !lastRound) {
-      this.newRound();
+      this.resetGame();
     } else {
       this.finishGame();
       return;
@@ -134,16 +147,18 @@ class GameInstance {
   getGameStatus(): Match.Status {
     return this.status;
   }
+
+  /*///////////////////////////////// GAMELOGIC ////////////////////////////////*/
+
+  private resetGame(): void {
+    this.player1Bat.reset(this.arena);
+    this.player2Bat.reset(this.arena);
+
+    this.ball.reset(this.arena);
+  }
 }
 
 export default GameInstance;
-
-//     const resetGame = () => {
-//         this.player1Bat.reset();
-//         this.player2Bat.reset();
-
-//         this.pongBall.reset();
-//     }
 
 //     const checkGame = (pongball: Ball) => {
 //         this.checkIfBallHitsSide(pongball);

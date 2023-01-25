@@ -1,8 +1,7 @@
-import { HttpStatus, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import MatchHistory from "src/entities/matchhistory/matchhistory.entity";
-import { CreateRecordDto } from "src/dtos/matchhistory/create-record.dto";
 
 @Injectable()
 export class MatchHistoryService {

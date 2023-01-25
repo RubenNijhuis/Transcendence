@@ -1,3 +1,8 @@
+export type Dimentions = {
+  width: number;
+  height: number;
+};
+
 export type Position = {
   posX: number;
   posY: number;

@@ -25,6 +25,22 @@ class Bat {
   getPosition(): Game.Position {
     return this.position;
   }
+
+  reset(arena: Game.Dimentions): void {
+    this.position = {
+      posX: 0,
+      posY: arena.height / 2
+    };
+  }
+
+  wallCollisionBatUp() {
+    if (this.position.posY - this.size.y / 2 <= 0) return true;
+    else return false;
+  }
+  wallCollisionBatDown(height: number) {
+    if (this.position.posY + this.size.y / 2 >= height) return true;
+    else return false;
+  }
 }
 
 export default Bat;
