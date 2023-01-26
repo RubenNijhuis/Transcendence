@@ -14,17 +14,22 @@ class PowerUp {
   arena: Dimentions;
 
   constructor(arena: Dimentions) {
+    if (!arena) {
+      throw new Error("No arena specified during creation");
+    }
+
     this.turn = 0;
     this.hit = false;
+    this.arena = arena;
     this.position = { posX: this.getPositionX(6), posY: this.getPositionY(3) };
     this.power = false;
     this.powerTaken = false;
     this.extraBall = false;
     this.color = ["yellow", "Green", "Red"];
-    this.arena = arena;
   }
 
   getPositionX(max: number) {
+    console.log("powerup", max, this.arena);
     const randomNum = Math.floor(Math.random() * max);
     const x = [
       this.arena.width * 0.6,
