@@ -72,12 +72,15 @@ class GameInstance {
    */
   render(): void {
     // get random powerup
+    this.checkIfBallHitsPowerUp();
     // update positions
     if (
       this.score.player1 !== this.maxScore ||
       this.score.player2 !== this.maxScore
     ) {
       this.ball.updatePosition(this.arena);
+			if (this.powerUp.extraBall)
+				this.powerUp.extraBall.
     }
     // check game
     this.checkGame();
@@ -94,6 +97,8 @@ class GameInstance {
       this.player1Profile.uid,
       this.player2Profile.uid
     );
+    let posX: number;
+
     if (
       playerUid !== this.player1Profile.uid &&
       playerUid !== this.player2Profile.uid
@@ -101,14 +106,16 @@ class GameInstance {
       return;
 
     if (playerUid === this.player1Profile.uid) {
-      this.player1Bat.position.posX = newPosX;
+      this.player1Bat.updatePostition(newPosX, this.arena);
+      posX = this.player1Bat.getPosition();
     } else if (playerUid === this.player2Profile.uid) {
-      this.player2Bat.position.posX = newPosX;
+      this.player2Bat.updatePostition(newPosX, this.arena);
+      posX = this.player2Bat.getPosition();
     }
 
     this.connection.to(this.roomID).emit("newBatPosition", {
       playerUid,
-      newPosX
+      posX
     });
   }
 
@@ -230,7 +237,7 @@ class GameInstance {
     }
   }
 
-  checkIfBallHitsPowerUp() {
+  private checkIfBallHitsPowerUp(): void {
     if (
       this.ball.position.posX + this.ball.radius >=
         this.powerUp.position.posX &&
