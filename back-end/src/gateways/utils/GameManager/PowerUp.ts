@@ -25,6 +25,7 @@ class PowerUp {
     this.power = false;
     this.powerTaken = false;
     this.extraBall = false;
+    this.size = { width: 10, height: 10 };
     this.color = ["yellow", "Green", "Red"];
   }
 
