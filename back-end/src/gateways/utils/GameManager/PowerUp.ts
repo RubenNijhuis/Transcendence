@@ -22,6 +22,8 @@ class PowerUp {
     this.extraBall = false;
     this.color = ["yellow", "Green", "Red"];
     this.arena = arena;
+    this.size.width = this.arena.width / 20;
+    this.size.height = this.arena.width / 20;
   }
 
   getPositionX(max: number) {
@@ -54,16 +56,16 @@ class PowerUp {
   }
 
   bigBatPower(player1: Bat, player2: Bat, ball: Ball) {
-    if (this.turn === 0) player1.size.x = this.arena.width / 4;
-    if (this.turn === 1) player2.size.x = this.arena.width / 5;
+    if (this.turn === 0) player1.size.width = this.arena.width / 4;
+    if (this.turn === 1) player2.size.width = this.arena.width / 5;
     ball.velocity.y *= 1.3;
     ball.velocity.x *= 1.3;
   }
 
   smallBatPower(player1: Bat, player2: Bat) {
-    if (this.turn === 0) player2.size.x = this.arena.width / 10;
+    if (this.turn === 0) player2.size.width = this.arena.width / 10;
     if (this.turn === 1) {
-      player1.size.x = this.arena.width / 10;
+      player1.size.width = this.arena.width / 10;
     }
   }
 
@@ -89,14 +91,24 @@ class PowerUp {
       else this.duplicateBallPower(ballpower);
     }
     if (!this.powerTaken) {
-      player1.size.x = this.arena.width / 7;
-      player2.size.x = this.arena.width / 7;
+      player1.size.width = this.arena.width / 7;
+      player2.size.width = this.arena.width / 7;
       ball.radius = this.arena.width / 75;
       this.extraBall = false;
       ballpower.velocity.x = ball.velocity.x;
       ballpower.velocity.y = ball.velocity.y;
       ballpower.reset(this.arena);
     }
+  }
+
+  reset(): void {
+    this.power = false;
+    if (this.hit === true) {
+      this.hit = false;
+      this.position.posX = this.getPositionX(4);
+      this.position.posY = this.getPositionY(3);
+    }
+    this.powerTaken = false;
   }
 }
 

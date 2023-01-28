@@ -71,16 +71,15 @@ class GameInstance {
    *   we could also asume a basic size and resize on client side
    */
   render(): void {
-    // get random powerup
-    this.checkIfBallHitsPowerUp();
+    // get random powerup... where does it assign the powerup?
     // update positions
     if (
       this.score.player1 !== this.maxScore ||
       this.score.player2 !== this.maxScore
     ) {
       this.ball.updatePosition(this.arena);
-			if (this.powerUp.extraBall)
-				this.powerUp.extraBall.
+      //			if (this.powerUp.extraBall)
+      //				this.powerUp.extraBall.
     }
     // check game
     this.checkGame();
@@ -150,63 +149,46 @@ class GameInstance {
   private resetGame(): void {
     this.player1Bat.reset(this.arena);
     this.player2Bat.reset(this.arena);
-
+    this.powerUp.reset();
     this.ball.reset(this.arena);
   }
 
   private checkGame(): void {
     this.checkIfBallHitsSide();
     this.checkIfBallHitsBats();
-    this.checkIfBallHitsPowerUp();
+    if (
+      this.calcIntersect(this.ball.position, this.ball.radius, this.powerUp)
+    ) {
+      this.powerUp.hit = true;
+      this.powerUp.power = true;
+    }
     this.checkIfGameIsFinished();
   }
 
+  private calcBounce(ball: Ball, bat: Bat): void {
+    const relativeIntersectY = bat.position.posY - ball.position.posY;
+    const normalizedRelativeIntersectionY =
+      relativeIntersectY / (bat.size.width / 2);
+    const bounceAngle = normalizedRelativeIntersectionY * ((5 * Math.PI) / 12);
+    ball.velocity.x = -ball.velocity.x;
+    ball.velocity.y = -ball.acceleration * Math.sin(bounceAngle);
+    ball.acceleration = this.arena.width / 270;
+  }
+
   private checkIfBallHitsBats(): void {
-    // Check if left bat is hit
+    // Check p1 hit ball
     if (
-      this.ball.position.posX <=
-      this.player1Bat.position.posX + this.player1Bat.size.x + this.ball.radius
+      this.calcIntersect(this.ball.position, this.ball.radius, this.player1Bat)
     ) {
-      if (
-        this.ball.position.posY >
-          this.player1Bat.position.posY - this.player1Bat.size.y / 2 &&
-        this.ball.position.posY <
-          this.player1Bat.position.posY + this.player1Bat.size.y / 2
-      ) {
-        const relativeIntersectY =
-          this.player1Bat.position.posY - this.ball.position.posY;
-        const normalizedRelativeIntersectionY =
-          relativeIntersectY / (this.player1Bat.size.y / 2);
-        const bounceAngle =
-          normalizedRelativeIntersectionY * ((5 * Math.PI) / 12);
-        this.ball.velocity.x = -this.ball.velocity.x;
-        this.ball.velocity.y = this.ball.acceleration * -Math.sin(bounceAngle);
-        this.ball.acceleration = this.arena.width / 270;
-        this.powerUp.turn = 0;
-      }
+      this.calcBounce(this.ball, this.player1Bat);
+      this.powerUp.turn = 0;
     }
-    // Check if right bat is hit
+    // check if p2 hit ball
     if (
-      this.ball.position.posX >=
-      this.player2Bat.position.posX - this.ball.radius - this.player1Bat.size.x
+      this.calcIntersect(this.ball.position, this.ball.radius, this.player2Bat)
     ) {
-      if (
-        this.ball.position.posY >
-          this.player2Bat.position.posY - this.player1Bat.size.y / 2 &&
-        this.ball.position.posY <
-          this.player2Bat.position.posY + this.player1Bat.size.y / 2
-      ) {
-        const relativeIntersectY =
-          this.player2Bat.position.posY - this.ball.position.posY;
-        const normalizedRelativeIntersectionY =
-          relativeIntersectY / (this.player1Bat.size.y / 2);
-        const bounceAngle =
-          normalizedRelativeIntersectionY * ((5 * Math.PI) / 12);
-        this.ball.velocity.x = -this.ball.velocity.x;
-        this.ball.velocity.y = -this.ball.acceleration * Math.sin(bounceAngle);
-        this.ball.acceleration = this.arena.width / 270;
-        this.powerUp.turn = 1;
-      }
+      this.calcBounce(this.ball, this.player2Bat);
+      this.powerUp.turn = 1;
     }
   }
 
@@ -214,82 +196,40 @@ class GameInstance {
     // Checks if left side of the field is hit
     if (this.ball.position.posX - this.ball.radius < 0) {
       this.score.player2++;
-      this.powerUp.power = false;
-      if (this.powerUp.hit === true) {
-        this.powerUp.hit = false;
-        this.powerUp.position.posX = this.powerUp.getPositionX(4);
-        this.powerUp.position.posY = this.powerUp.getPositionY(3);
-      }
-      this.powerUp.powerTaken = false;
       this.resetGame();
     }
     // Checks if right side of the field is hit
     if (this.ball.position.posX + this.ball.radius > this.arena.width) {
       this.score.player1++;
-      this.powerUp.power = false;
-      if (this.powerUp.hit === true) {
-        this.powerUp.hit = false;
-        this.powerUp.position.posX = this.powerUp.getPositionX(4);
-        this.powerUp.position.posY = this.powerUp.getPositionY(3);
-      }
-      this.powerUp.powerTaken = false;
       this.resetGame();
     }
   }
 
-  private checkIfBallHitsPowerUp(): void {
+  private calcIntersect(
+    ballPos: Game.Position,
+    ballRad: number,
+    rect: PowerUp | Bat
+  ): boolean {
+    const circDistX = Math.abs(ballPos.posX - rect.position.posX);
+    const circDistY = Math.abs(ballPos.posY - rect.position.posY);
+
     if (
-      this.ball.position.posX + this.ball.radius >=
-        this.powerUp.position.posX &&
-      this.ball.position.posX + this.ball.radius <=
-        this.powerUp.position.posX + this.powerUp.size.width &&
-      this.ball.position.posY + this.ball.radius >=
-        this.powerUp.position.posY &&
-      this.ball.position.posY + this.ball.radius <=
-        this.powerUp.position.posY + this.powerUp.size.height
+      circDistX > rect.size.width / 2 + ballRad ||
+      circDistY > rect.size.height / 2 + ballRad
     ) {
-      this.powerUp.hit = true;
-      this.powerUp.power = true;
+      return false;
     }
-    if (
-      this.ball.position.posX - this.ball.radius >=
-        this.powerUp.position.posX &&
-      this.ball.position.posX - this.ball.radius <=
-        this.powerUp.position.posX + this.powerUp.size.width &&
-      this.ball.position.posY + this.ball.radius >=
-        this.powerUp.position.posY &&
-      this.ball.position.posY + this.ball.radius <=
-        this.powerUp.position.posY + this.powerUp.size.height
-    ) {
-      this.powerUp.hit = true;
-      this.powerUp.power = true;
+
+    if (circDistX <= rect.size.width / 2 || circDistY <= rect.size.height / 2) {
+      return true;
     }
-    if (
-      this.ball.position.posX - this.ball.radius >=
-        this.powerUp.position.posX &&
-      this.ball.position.posX - this.ball.radius <=
-        this.powerUp.position.posX + this.powerUp.size.width &&
-      this.ball.position.posY - this.ball.radius >=
-        this.powerUp.position.posY &&
-      this.ball.position.posY - this.ball.radius <=
-        this.powerUp.position.posY + this.powerUp.size.height
-    ) {
-      this.powerUp.hit = true;
-      this.powerUp.power = true;
-    }
-    if (
-      this.ball.position.posX + this.ball.radius >=
-        this.powerUp.position.posX &&
-      this.ball.position.posX + this.ball.radius <=
-        this.powerUp.position.posX + this.powerUp.size.width &&
-      this.ball.position.posY - this.ball.radius >=
-        this.powerUp.position.posY &&
-      this.ball.position.posY - this.ball.radius <=
-        this.powerUp.position.posY + this.powerUp.size.height
-    ) {
-      this.powerUp.hit = true;
-      this.powerUp.power = true;
-    }
+
+    const cornerDistance_sq =
+      (circDistX - rect.size.width / 2) ^
+      (2 + (circDistY - rect.size.height / 2)) ^
+      2;
+
+    return cornerDistance_sq <= (ballRad ^ 2);
   }
 
   private checkIfGameIsFinished(): void {

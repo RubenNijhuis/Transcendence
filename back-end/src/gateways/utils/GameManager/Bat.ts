@@ -2,10 +2,7 @@ import * as Game from "./types/game";
 
 class Bat {
   position: Game.Position;
-  size: {
-    x: number;
-    y: number;
-  };
+  size: Game.Dimentions;
 
   constructor() {
     this.position = {
@@ -13,8 +10,8 @@ class Bat {
       posY: 0
     };
     this.size = {
-      x: 10,
-      y: 100
+      width: 10,
+      height: 100
     };
   }
 
@@ -39,7 +36,8 @@ class Bat {
   }
 
   checkCollisions(x: number, width: number) {
-    if (x - this.size.y / 2 <= 0 || x + this.size.y / 2 >= width) return true;
+    if (x - this.size.width / 2 <= 0 || x + this.size.width / 2 >= width)
+      return true;
     else return false;
   }
 }
