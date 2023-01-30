@@ -15,6 +15,7 @@ import * as Match from "./types/match";
 
 class GameInstance {
   private readonly ball: Ball;
+  private readonly extraBall: Ball;
   private readonly player1Bat: Bat;
   private readonly player2Bat: Bat;
   private readonly powerUp: PowerUp;
@@ -38,6 +39,7 @@ class GameInstance {
     };
 
     this.ball = new Ball(this.arena.width / 75); // this will determine the ball radius
+    this.extraBall = new Ball(this.arena.width / 75); // this will determine the ball radius
     this.player1Bat = new Bat();
     this.player2Bat = new Bat();
     this.powerUp = new PowerUp(this.arena);
@@ -78,11 +80,10 @@ class GameInstance {
       this.score.player2 !== this.maxScore
     ) {
       this.ball.updatePosition(this.arena);
-      //			if (this.powerUp.extraBall)
-      //				this.powerUp.extraBall.
+      if (this.powerUp.extraBall) this.checkGame(this.extraBall);
     }
     // check game
-    this.checkGame();
+    this.checkGame(this.ball);
   }
 
   getId(): string {
@@ -153,9 +154,9 @@ class GameInstance {
     this.ball.reset(this.arena);
   }
 
-  private checkGame(): void {
-    this.checkIfBallHitsSide();
-    this.checkIfBallHitsBats();
+  private checkGame(ball: Ball): void {
+    this.checkIfBallHitsSide(ball);
+    this.checkIfBallHitsBats(ball);
     if (
       this.calcIntersect(this.ball.position, this.ball.radius, this.powerUp)
     ) {
@@ -175,31 +176,27 @@ class GameInstance {
     ball.acceleration = this.arena.width / 270;
   }
 
-  private checkIfBallHitsBats(): void {
+  private checkIfBallHitsBats(ball: Ball): void {
     // Check p1 hit ball
-    if (
-      this.calcIntersect(this.ball.position, this.ball.radius, this.player1Bat)
-    ) {
-      this.calcBounce(this.ball, this.player1Bat);
+    if (this.calcIntersect(ball.position, ball.radius, this.player1Bat)) {
+      this.calcBounce(ball, this.player1Bat);
       this.powerUp.turn = 0;
     }
     // check if p2 hit ball
-    if (
-      this.calcIntersect(this.ball.position, this.ball.radius, this.player2Bat)
-    ) {
-      this.calcBounce(this.ball, this.player2Bat);
+    if (this.calcIntersect(ball.position, ball.radius, this.player2Bat)) {
+      this.calcBounce(ball, this.player2Bat);
       this.powerUp.turn = 1;
     }
   }
 
-  private checkIfBallHitsSide(): void {
+  private checkIfBallHitsSide(ball: Ball): void {
     // Checks if left side of the field is hit
-    if (this.ball.position.posX - this.ball.radius < 0) {
+    if (ball.position.posX - ball.radius < 0) {
       this.score.player2++;
       this.resetGame();
     }
     // Checks if right side of the field is hit
-    if (this.ball.position.posX + this.ball.radius > this.arena.width) {
+    if (ball.position.posX + ball.radius > this.arena.width) {
       this.score.player1++;
       this.resetGame();
     }
