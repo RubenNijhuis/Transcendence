@@ -206,7 +206,7 @@ const ChatBox = (): JSX.Element => {
         });
 
         return () => {
-            removeConnections(chatConnection);
+            chatConnection.removeAllListeners();
         };
     }, [chatConnection, chat]);
 

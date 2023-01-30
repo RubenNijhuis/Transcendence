@@ -24,18 +24,27 @@ class GameManager {
         gameSettings: any,
         connection: SocketType.Instance
     ) {
-        if (!connection)
+        if (!connection) {
             throw Error(
                 "No connection supplied in the game manager constructor"
             );
+        }
+
+        if (!gameSettings) {
+            throw Error(
+                "No game settings supplied in the game manager constructor"
+            );
+        }
+
+        if (!canvas) {
+            throw Error("No canvas supplied in the game manager constructor");
+        }
 
         this.canvas = canvas;
         this.context = canvas.getContext("2d") as CanvasRenderingContext2D;
 
         this.player1Score = 0;
         this.player2Score = 0;
-
-        this.context = undefined!;
 
         this.ball = new Ball(this.context, this.getMiddleOfBoard(), 10);
         this.player1Bat = new Bat(
