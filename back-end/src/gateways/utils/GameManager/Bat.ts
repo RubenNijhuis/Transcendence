@@ -2,10 +2,7 @@ import * as Game from "./types/game";
 
 class Bat {
   position: Game.Position;
-  size: {
-    x: number;
-    y: number;
-  };
+  size: Game.Dimentions;
 
   constructor() {
     this.position = {
@@ -13,8 +10,8 @@ class Bat {
       posY: 0
     };
     this.size = {
-      x: 10,
-      y: 100
+      width: 10,
+      height: 100
     };
   }
 
@@ -22,8 +19,8 @@ class Bat {
     this.position = pos;
   }
 
-  getPosition(): Game.Position {
-    return this.position;
+  getPosition(): number {
+    return this.position.posX;
   }
 
   reset(arena: Game.Dimentions): void {
@@ -33,16 +30,13 @@ class Bat {
     };
   }
 
-  updatePostition(direction: number, arena: Game.Dimentions) {
-    if (this.checkCollisions(direction, arena.height)) return;
-    this.position.posY += direction;
+  updatePostition(newX: number, arena: Game.Dimentions) {
+    if (this.checkCollisions(newX, arena.width)) return;
+    this.position.posX += newX;
   }
 
-  checkCollisions(direction: number, height: number) {
-    if (
-      this.position.posY + direction - this.size.y / 2 <= 0 ||
-      this.position.posY + direction + this.size.y / 2 >= height
-    )
+  checkCollisions(x: number, width: number) {
+    if (x - this.size.width / 2 <= 0 || x + this.size.width / 2 >= width)
       return true;
     else return false;
   }

@@ -28,11 +28,11 @@ const useUser = () => useContext(UserContext);
 
 ///////////////////////////////////////////////////////////
 
-const UserProvider = ({
-    children
-}: {
+interface IUserProvider {
     children: React.ReactNode;
-}): JSX.Element => {
+}
+
+const UserProvider = ({ children }: IUserProvider): JSX.Element => {
     const [user, setUser] = useState<Profile.Instance>(null!);
     const [friends, setFriends] = useState<Profile.Instance[]>([]);
     const [blocked, setBlocked] = useState<Profile.Instance[]>([]);
