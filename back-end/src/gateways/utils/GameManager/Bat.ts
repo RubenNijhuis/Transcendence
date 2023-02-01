@@ -4,14 +4,11 @@ class Bat {
   position: Game.Position;
   size: Game.Dimentions;
 
-  constructor() {
-    this.position = {
-      posX: 0,
-      posY: 0
-    };
+  constructor(position: Game.Position, sizeX: number, sizeY: number) {
+    this.position = position;
     this.size = {
-      width: 10,
-      height: 100
+      width: sizeX,
+      height: sizeY
     };
   }
 

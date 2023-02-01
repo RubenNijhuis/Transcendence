@@ -25,6 +25,38 @@ import * as Profile from "../../types/Profile";
 import { useUser } from "../../contexts/UserContext";
 import { getProfileByUsername } from "../../proxies/profile";
 import { getProfileByUid } from "../../proxies/profile/getProfileByUid";
+import { Bat } from "../../containers/PongGame/GameElements";
+
+const keyPressListener = (gameManager: GameManager) => {
+    // Function to be run on key event
+    const updateBats = (e: KeyboardEvent) => {
+        // Value of keyboard
+        let splitValue = "";
+
+        // Keyboard event type
+        const keyboardType = e.code.substring(0, 5);
+
+        if (keyboardType === "Arrow") {
+            splitValue = e.code.split("Arrow")[1];
+        } else {
+            splitValue = e.code.split("Key")[1];
+        }
+
+        const PlayerBat: Bat = gameManager.playerBat;
+
+        if (splitValue === "W" && !PlayerBat.wallCollisionBatUp()) {
+            PlayerBat.updatePosition(gameManager.scaleViewInput("1vh"), true);
+        }
+
+        if (splitValue === "S" && !PlayerBat.wallCollisionBatDown()) {
+            PlayerBat.updatePosition(gameManager.scaleViewInput("1vh"), false);
+        }
+    };
+
+    // Keylogger
+    window.addEventListener("keydown", updateBats);
+    window.addEventListener("keyup", updateBats);
+};
 
 ////////////////////////////////////////////////////////////
 
@@ -110,10 +142,8 @@ const Pong = (): JSX.Element => {
             Manager.updateBall(res.posX, res.posY);
         });
 
-        setTimeout(() => {
-            console.log(":(");
-            gameConnection.emit("newBatPosition", { posX: "20vh" });
-        }, 3000);
+        // Respond to keypresses
+        keyPressListener(Manager);
 
         return () => {
             gameConnection.removeAllListeners();

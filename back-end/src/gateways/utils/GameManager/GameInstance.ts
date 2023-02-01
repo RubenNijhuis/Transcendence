@@ -39,8 +39,23 @@ class GameInstance {
 
     this.ball = new Ball(this.scaleViewInput("5vh"));
     this.extraBall = new Ball(this.arena.width * (100 / 30));
-    this.player1Bat = new Bat();
-    this.player2Bat = new Bat();
+    const bat1pos = {
+      posX: this.scaleViewInput("10vw"),
+      posY: this.scaleViewInput("50vh")
+    };
+
+    const bat2pos = {
+      posX: this.arena.width - this.scaleViewInput("10vw"),
+      posY: this.scaleViewInput("50vh")
+    };
+
+    const batSize = {
+      posX: this.scaleViewInput("1vw"),
+      posY: this.scaleViewInput("20vh")
+    };
+
+    this.player1Bat = new Bat(bat1pos, batSize.posX, batSize.posY);
+    this.player2Bat = new Bat(bat2pos, batSize.posX, batSize.posY);
     this.powerUp = new PowerUp(this.arena);
 
     this.score = { player1: 0, player2: 0 };

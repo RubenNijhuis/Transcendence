@@ -10,7 +10,8 @@ import PowerUps from "../PowerUps";
 class GameManager {
     player1Score: number;
     player2Score: number;
-    playerBat: number;
+    playerBatPos: number;
+    playerBat: Bat;
 
     ball: Ball;
     player1Bat: Bat;
@@ -54,20 +55,42 @@ class GameManager {
 
         const leftSideBat = this.scaleViewInput("10vw");
         const rightSideBat = this.scaleViewInput("90vw");
-        this.player1Bat = new Bat(this.context, {
-            posY: this.canvasHeigth / 2,
-            posX: leftSideBat
-        });
-        this.player2Bat = new Bat(this.context, {
-            posY: this.canvasHeigth / 2,
-            posX: rightSideBat
-        });
 
-        this.playerBat = 0;
+        const bat1pos = {
+            posX: this.scaleViewInput("10vw"),
+            posY: this.scaleViewInput("50vh")
+        };
+
+        const bat2pos = {
+            posX: this.canvasWidth - this.scaleViewInput("10vw"),
+            posY: this.scaleViewInput("50vh")
+        };
+
+        const batSize = {
+            posX: this.scaleViewInput("1vw"),
+            posY: this.scaleViewInput("20vh")
+        };
+
+        this.player1Bat = new Bat(
+            this.context,
+            bat1pos,
+            batSize.posX,
+            batSize.posY
+        );
+        this.player2Bat = new Bat(
+            this.context,
+            bat2pos,
+            batSize.posX,
+            batSize.posY
+        );
+
+        this.playerBat = this.player1Bat;
+        this.playerBatPos = 0;
     }
 
     setPlayerPosition(pos: number): void {
-        this.playerBat = pos;
+        this.playerBat = pos === 0 ? this.player1Bat : this.player2Bat;
+        this.playerBatPos = pos;
     }
 
     // Service
@@ -104,7 +127,7 @@ class GameManager {
     updateBall(posX: string, posY: string) {
         const newPosX = this.scaleViewInput(posX);
         const newPosY = this.scaleViewInput(posY);
-        
+
         const newPosition: Game.Position = {
             posX: newPosX,
             posY: newPosY
@@ -116,7 +139,7 @@ class GameManager {
     updateOpponentBat(pos: string) {
         const scaledValue = this.scaleViewInput(pos);
 
-        if (this.playerBat === 1) {
+        if (this.playerBatPos === 1) {
             this.player2Bat.positionX = scaledValue;
         } else {
             this.player1Bat.positionX = scaledValue;
