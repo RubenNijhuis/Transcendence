@@ -37,7 +37,7 @@ class GameInstance {
       height: 900
     };
 
-    this.ball = new Ball(this.arena.width * (100 / 30));
+    this.ball = new Ball(this.scaleViewInput("5vh"));
     this.extraBall = new Ball(this.arena.width * (100 / 30));
     this.player1Bat = new Bat();
     this.player2Bat = new Bat();
@@ -74,12 +74,23 @@ class GameInstance {
   render(): void {
     // get random powerup... where does it assign the powerup?
     // update positions
-    if (
-      this.score.player1 !== this.maxScore ||
-      this.score.player2 !== this.maxScore
-    ) {
-      this.ball.updatePosition(this.arena);
-      if (this.powerUp.extraBall) this.checkGame(this.extraBall);
+    // if (
+    //   this.score.player1 === this.maxScore ||
+    //   this.score.player2 === this.maxScore
+    // ) {
+    //   return;
+    // }
+    this.ball.updatePosition(this.arena);
+
+    const { posX, posY } = this.ball.getPosition();
+
+    this.connection.to(this.roomID).emit("newBallPosition", {
+      posX: this.inputToScaled(posX, "vw"),
+      posY: this.inputToScaled(posY, "vh")
+    });
+
+    if (this.powerUp.extraBall) {
+      this.checkGame(this.extraBall);
     }
     // check game
     this.checkGame(this.ball);
@@ -89,14 +100,31 @@ class GameInstance {
     return this.roomID;
   }
 
-  updateBatPosition(playerUid: string, newPosX: number): void {
-    console.log(
-      playerUid,
-      newPosX,
-      this.player1Profile.uid,
-      this.player2Profile.uid
-    );
-    let posX: number;
+  // Service
+  scaleViewInput(position: string): number {
+    const num = parseFloat(position.slice(0, -2));
+
+    if (position.includes("vw")) return this.arena.width * (num / 100);
+    else if (position.includes("vh")) return this.arena.height * (num / 100);
+
+    return 0;
+  }
+
+  // Service
+  inputToScaled(position: number, type: string): string {
+    let scaledValue = 0;
+
+    if (type === "vw") {
+      scaledValue = (position / this.arena.width) * 100;
+    } else {
+      scaledValue = (position / this.arena.height) * 100;
+    }
+
+    return `${scaledValue}${type}`;
+  }
+
+  updateBatPosition(playerUid: string, posX: string): void {
+    const newPosX = this.scaleViewInput(posX);
 
     if (
       playerUid !== this.player1Profile.uid &&
@@ -106,10 +134,8 @@ class GameInstance {
 
     if (playerUid === this.player1Profile.uid) {
       this.player1Bat.updatePostition(newPosX, this.arena);
-      posX = this.player1Bat.getPosition();
     } else if (playerUid === this.player2Profile.uid) {
       this.player2Bat.updatePostition(newPosX, this.arena);
-      posX = this.player2Bat.getPosition();
     }
 
     this.connection.to(this.roomID).emit("newBatPosition", {
@@ -191,11 +217,13 @@ class GameInstance {
   private checkIfBallHitsSide(ball: Ball): void {
     // Checks if left side of the field is hit
     if (ball.position.posX - ball.radius < 0) {
+      console.log("pee pee", ball.position, ball.radius);
       this.score.player2++;
       this.resetGame();
     }
     // Checks if right side of the field is hit
     if (ball.position.posX + ball.radius > this.arena.width) {
+      console.log("poo poo");
       this.score.player1++;
       this.resetGame();
     }

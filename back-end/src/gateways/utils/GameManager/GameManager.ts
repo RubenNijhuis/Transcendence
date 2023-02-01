@@ -55,7 +55,7 @@ class GameManager {
     // Start managing games
   }
 
-  updateBatPosition(playerUid: string, roomID: Room.ID, newPosX: number): void {
+  updateBatPosition(playerUid: string, roomID: Room.ID, newPosX: string): void {
     this.games.find((game) => {
       console.log(game.getId(), roomID);
       if (game.getId() === roomID) {
@@ -67,7 +67,6 @@ class GameManager {
   async runGames(games: GameInstance[]): Promise<void> {
     // Adds the delay
     const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
-
     // Keep looping as long as there are games
     while (games.length > 0) {
       // Go through each game

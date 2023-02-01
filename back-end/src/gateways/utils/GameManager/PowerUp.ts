@@ -25,6 +25,7 @@ class PowerUp {
     this.power = false;
     this.powerTaken = false;
     this.extraBall = false;
+    this.size = { width: 10, height: 10 };
     this.color = ["yellow", "Green", "Red"];
     this.arena = arena;
     this.size.width = this.arena.width * (100 / 30);

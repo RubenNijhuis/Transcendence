@@ -3,12 +3,13 @@ export namespace Game {
   export interface WatchMatch {
     gameId: string;
   }
+    
   export interface FriendlyMatch {
     friendId: string;
   }
 
   export interface BatPositionUpdate {
-    posX: number;
+    posX: string;
   }
 
   export interface JoinQueue {

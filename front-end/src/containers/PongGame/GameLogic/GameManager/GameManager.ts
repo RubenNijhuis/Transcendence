@@ -10,17 +10,19 @@ import PowerUps from "../PowerUps";
 class GameManager {
     player1Score: number;
     player2Score: number;
+    playerBat: number;
 
     ball: Ball;
     player1Bat: Bat;
     player2Bat: Bat;
     // powerUps: PowerUps;
 
-    canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;
+    canvasWidth: number;
+    canvasHeigth: number;
 
     constructor(
-        canvas: HTMLCanvasElement,
+        context: CanvasRenderingContext2D,
         gameSettings: any,
         connection: SocketType.Instance
     ) {
@@ -36,52 +38,43 @@ class GameManager {
             );
         }
 
-        if (!canvas) {
+        if (!context) {
             throw Error("No canvas supplied in the game manager constructor");
         }
 
-        this.canvas = canvas;
-        this.context = canvas.getContext("2d") as CanvasRenderingContext2D;
+        this.context = context;
 
         this.player1Score = 0;
         this.player2Score = 0;
 
-        this.ball = new Ball(this.context, this.getMiddleOfBoard(), 10);
-        this.player1Bat = new Bat(
-            this.context,
-            { posX: 0, posY: 0 } /*this.getBatStartingPostion()*/
-        );
-        this.player2Bat = new Bat(
-            this.context,
-            { posX: 0, posY: 0 } /*this.getBatStartingPostion()*/
-        );
+        this.canvasHeigth = this.context.canvas.height;
+        this.canvasWidth = this.context.canvas.width;
 
-        connection.on(SocketRoutes.game.newBallPosition, this.updateBall);
+        this.ball = new Ball(this.context, this.getMiddleOfBoard(), 20);
 
-        // if (gameSettings.powered === true) {
-        //     this.powerUps = powerUps;
-        // }
+        const leftSideBat = this.scaleViewInput("10vw");
+        const rightSideBat = this.scaleViewInput("90vw");
+        this.player1Bat = new Bat(this.context, {
+            posY: this.canvasHeigth / 2,
+            posX: leftSideBat
+        });
+        this.player2Bat = new Bat(this.context, {
+            posY: this.canvasHeigth / 2,
+            posX: rightSideBat
+        });
 
-        // // Start drawing the game
-        // drawGame(canvasRef.current, context);
+        this.playerBat = 0;
     }
 
-    // Service
-    displayText() {
-        this.context.font = "30px Arial";
-        this.context.textAlign = "center";
-        this.context.fillText(
-            `${this.player1Score} - ${this.player2Score}`,
-            this.canvas.clientWidth / 2,
-            100
-        );
+    setPlayerPosition(pos: number): void {
+        this.playerBat = pos;
     }
 
     // Service
     getMiddleOfBoard(): Game.Position {
         const middle: Game.Position = {
-            posX: 0,
-            posY: 0
+            posX: this.context.canvas.width / 2,
+            posY: this.context.canvas.height / 2
         };
 
         return middle;
@@ -92,42 +85,54 @@ class GameManager {
         this.player1Bat.reset();
         this.player2Bat.reset();
 
-        const middleOfBoard = this.getMiddleOfBoard();
-        this.ball.reset(middleOfBoard);
+        this.ball.setPosition(this.getMiddleOfBoard());
     }
 
     // Service
-    scalePosition(position: Game.Position): Game.Position {
-        const scaledPosition: Game.Position = {
-            posX: 0,
-            posY: 0
+    scaleViewInput(position: string): number {
+        const num = parseFloat(position.slice(0, -2));
+
+        if (position.includes("vw")) {
+            return this.canvasWidth * (num / 100);
+        } else if (position.includes("vh")) {
+            return this.canvasHeigth * (num / 100);
+        }
+
+        return 0;
+    }
+
+    updateBall(posX: string, posY: string) {
+        const newPosX = this.scaleViewInput(posX);
+        const newPosY = this.scaleViewInput(posY);
+        
+        const newPosition: Game.Position = {
+            posX: newPosX,
+            posY: newPosY
         };
 
-        scaledPosition.posX = position.posX + 0;
-        scaledPosition.posY = position.posY + 0;
-
-        return scaledPosition;
+        this.ball.setPosition(newPosition);
     }
 
-    // From BE to FE
-    updateBall(position: Game.Position) {
-        const scaledValue = this.scalePosition(position);
+    updateOpponentBat(pos: string) {
+        const scaledValue = this.scaleViewInput(pos);
 
-        this.ball.setPosition(scaledValue);
+        if (this.playerBat === 1) {
+            this.player2Bat.positionX = scaledValue;
+        } else {
+            this.player1Bat.positionX = scaledValue;
+        }
     }
 
-    startGame() {}
-
-    updateOpponent() {}
-
-    updatePowerUps() {}
-
-    updateScore() {}
-
-    updateMatchStatus() {}
-
-    // From BE to FE
-    sendPlayerBatPosition() {}
+    startGame() {
+        const drawLoop = () => {
+            requestAnimationFrame(drawLoop);
+            this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeigth);
+            this.player1Bat.draw();
+            this.player2Bat.draw();
+            this.ball.draw();
+        };
+        drawLoop();
+    }
 }
 
 export default GameManager;

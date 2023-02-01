@@ -184,6 +184,8 @@ export class GameSocketGateway {
 
     // Send the opponent data to each player
     member.connection.emit("matchedWith", matchedOpponent.uid);
+    member.connection.emit("playPosition", 0);
+    matchedOpponent.connection.emit("playPosition", 1);
     matchedOpponent.connection.emit("matchedWith", member.uid);
 
     // Send new game status to players
@@ -211,7 +213,8 @@ export class GameSocketGateway {
       return;
     }
 
-    // this.gameManager.addViewerToRoom(member);
+    this.roomManager.addMemberToRoom(member, watchMatchPayload.gameId);
+    this.roomManager.setMemberData(member.uid, { watch: true });
   }
 
   @SubscribeMessage("leaveQueue")

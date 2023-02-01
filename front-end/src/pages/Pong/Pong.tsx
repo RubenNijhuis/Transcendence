@@ -73,18 +73,29 @@ const Pong = (): JSX.Element => {
             controlSettings: "keyboard"
         };
 
-        Manager = new GameManager(
-            canvasRef.current,
-            gameSettings,
-            gameConnection
-        );
+        Manager = new GameManager(context, gameSettings, gameConnection);
+
+        Manager.startGame();
 
         gameConnection.on("gameStatus", (res: Match.Status) => {
             setMatchMakingState(res);
+
+            switch (res) {
+                case Match.Status.Playing:
+                    Manager.startGame();
+                    break;
+                case Match.Status.Finished:
+                    break;
+                // Manager.finishGame();
+            }
         });
 
+        gameConnection.on("playPosition", (res) =>
+            Manager.setPlayerPosition(res.posX)
+        );
         gameConnection.on("newBatPosition", (res: any) => {
-            console.log(res);
+            // if (res.playerUid !== user)
+            Manager.updateOpponentBat(res.posX);
         });
 
         gameConnection.on("matchedWith", (res: Profile.ID) => {
@@ -94,9 +105,14 @@ const Pong = (): JSX.Element => {
         });
 
         gameConnection.emit("joinQueue", { gameType });
-        
+
+        gameConnection.on("newBallPosition", (res: any) => {
+            Manager.updateBall(res.posX, res.posY);
+        });
+
         setTimeout(() => {
-            gameConnection.emit("newBatPosition", { posX: 20 });
+            console.log(":(");
+            gameConnection.emit("newBatPosition", { posX: "20vh" });
         }, 3000);
 
         return () => {

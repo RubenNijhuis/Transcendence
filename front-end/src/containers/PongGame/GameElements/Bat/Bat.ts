@@ -23,8 +23,8 @@ class Bat {
 
         this.context = context;
 
-        this.width = 130;
-        this.height = 7;
+        this.width = 7;
+        this.height = 130;
 
         this.color = "#1e1e1e";
     }
