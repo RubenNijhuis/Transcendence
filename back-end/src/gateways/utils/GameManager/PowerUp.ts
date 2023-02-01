@@ -27,8 +27,8 @@ class PowerUp {
     this.extraBall = false;
     this.color = ["yellow", "Green", "Red"];
     this.arena = arena;
-    this.size.width = this.arena.width / 20;
-    this.size.height = this.arena.width / 20;
+    this.size.width = this.arena.width * (100 / 30);
+    this.size.height = this.arena.width * (100 / 30);
   }
 
   getPositionX(max: number) {

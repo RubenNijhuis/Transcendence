@@ -32,14 +32,13 @@ class GameInstance {
   private connection: Server;
 
   constructor(connection: Server, room: Room.Instance) {
-    /*//////////////////////////// ARENA WIDTH & HEIGHT ///////////////////////////*/
     this.arena = {
-      width: 100,
-      height: 50
+      width: 1600,
+      height: 900
     };
 
-    this.ball = new Ball(this.arena.width / 75); // this will determine the ball radius
-    this.extraBall = new Ball(this.arena.width / 75); // this will determine the ball radius
+    this.ball = new Ball(this.arena.width * (100 / 30));
+    this.extraBall = new Ball(this.arena.width * (100 / 30));
     this.player1Bat = new Bat();
     this.player2Bat = new Bat();
     this.powerUp = new PowerUp(this.arena);
