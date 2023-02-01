@@ -38,9 +38,10 @@ class Ball {
       posY: arena.height / 2
     };
     this.velocity = {
-      x: this.decideDirection(this.velocity.x),
+      x: this.decideDirection(1),
       y: 0
     };
+    this.acceleration = 1;
   }
 
   updatePosition(arena: Game.Dimentions) {

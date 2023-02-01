@@ -39,12 +39,12 @@ class GameInstance {
 
     this.ball = new Ball(this.scaleViewInput("5vh"));
     this.extraBall = new Ball(this.arena.width * (100 / 30));
-    const bat1pos = {
+    const bat1pos: Game.Position = {
       posX: this.scaleViewInput("10vw"),
       posY: this.scaleViewInput("50vh")
     };
 
-    const bat2pos = {
+    const bat2pos: Game.Position = {
       posX: this.arena.width - this.scaleViewInput("10vw"),
       posY: this.scaleViewInput("50vh")
     };
@@ -104,9 +104,9 @@ class GameInstance {
       posY: this.inputToScaled(posY, "vh")
     });
 
-    if (this.powerUp.extraBall) {
-      this.checkGame(this.extraBall);
-    }
+    //if (this.powerUp.extraBall) {
+    //  this.checkGame(this.extraBall);
+    // }
     // check game
     this.checkGame(this.ball);
   }
@@ -197,12 +197,12 @@ class GameInstance {
   private checkGame(ball: Ball): void {
     this.checkIfBallHitsSide(ball);
     this.checkIfBallHitsBats(ball);
-    if (
-      this.calcIntersect(this.ball.position, this.ball.radius, this.powerUp)
-    ) {
-      this.powerUp.hit = true;
-      this.powerUp.power = true;
-    }
+    //if (
+    //  this.calcIntersect(this.ball.position, this.ball.radius, this.powerUp)
+    //) {
+    //  this.powerUp.hit = true;
+    //  this.powerUp.power = true;
+    //}
     this.checkIfGameIsFinished();
   }
 
@@ -213,17 +213,19 @@ class GameInstance {
     const bounceAngle = normalizedRelativeIntersectionY * ((5 * Math.PI) / 12);
     ball.velocity.x = -ball.velocity.x;
     ball.velocity.y = -ball.acceleration * Math.sin(bounceAngle);
-    ball.acceleration = this.arena.width / 270;
+    ball.acceleration = 0;
   }
 
   private checkIfBallHitsBats(ball: Ball): void {
     // Check p1 hit ball
     if (this.calcIntersect(ball.position, ball.radius, this.player1Bat)) {
+      console.log("bat1 hit, ", this.player1Bat.position);
       this.calcBounce(ball, this.player1Bat);
       this.powerUp.turn = 0;
     }
     // check if p2 hit ball
     if (this.calcIntersect(ball.position, ball.radius, this.player2Bat)) {
+      console.log("bat2 hit, ", this.player2Bat.position);
       this.calcBounce(ball, this.player2Bat);
       this.powerUp.turn = 1;
     }
@@ -231,14 +233,12 @@ class GameInstance {
 
   private checkIfBallHitsSide(ball: Ball): void {
     // Checks if left side of the field is hit
-    if (ball.position.posX - ball.radius < 0) {
-      console.log("pee pee", ball.position, ball.radius);
+    if (ball.position.posX - ball.radius <= 0) {
       this.score.player2++;
       this.resetGame();
     }
     // Checks if right side of the field is hit
-    if (ball.position.posX + ball.radius > this.arena.width) {
-      console.log("poo poo");
+    if (ball.position.posX + ball.radius >= this.arena.width) {
       this.score.player1++;
       this.resetGame();
     }

@@ -22,7 +22,7 @@ class Bat {
 
   reset(arena: Game.Dimentions): void {
     this.position = {
-      posX: 0,
+      posX: this.position.posX,
       posY: arena.height / 2
     };
   }
