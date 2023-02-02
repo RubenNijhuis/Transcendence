@@ -2,15 +2,15 @@
 import * as Game from "../../../../types/Game";
 import * as SocketType from "../../../../types/Socket";
 import * as SocketRoutes from "../../../../config/SocketRoutes";
-
+import * as Profile from "../../../../types/Profile";
 // Game elements
 import { Ball, Bat } from "../../GameElements";
 import PowerUps from "../PowerUps";
+import { Socket } from "socket.io-client";
 
 class GameManager {
     player1Score: number;
     player2Score: number;
-    playerBatPos: number;
     playerBat: Bat;
 
     ball: Ball;
@@ -21,6 +21,8 @@ class GameManager {
     context: CanvasRenderingContext2D;
     canvasWidth: number;
     canvasHeigth: number;
+
+    connection: Socket;
 
     constructor(
         context: CanvasRenderingContext2D,
@@ -45,17 +47,22 @@ class GameManager {
 
         this.context = context;
 
+        this.player1Bat = null!; // I dont care about the rules
+        this.player2Bat = null!;
+        this.playerBat = null!
+
+        this.connection = connection;
+
         this.player1Score = 0;
         this.player2Score = 0;
 
         this.canvasHeigth = this.context.canvas.height;
         this.canvasWidth = this.context.canvas.width;
 
-        this.ball = new Ball(this.context, this.getMiddleOfBoard(), 20);
+        this.ball = new Ball(this.context, this.getMiddleOfBoard(), this.scaleViewInput("2.5vh"));
+    }
 
-        const leftSideBat = this.scaleViewInput("10vw");
-        const rightSideBat = this.scaleViewInput("90vw");
-
+    setPlayers(playerOne: Profile.Instance, playerTwo: Profile.Instance): void {
         const bat1pos = {
             posX: this.scaleViewInput("10vw"),
             posY: this.scaleViewInput("50vh")
@@ -67,30 +74,20 @@ class GameManager {
         };
 
         const batSize = {
-            posX: this.scaleViewInput("1vw"),
-            posY: this.scaleViewInput("20vh")
+            width: this.scaleViewInput("1vw"),
+            height: this.scaleViewInput("20vh")
         };
 
-        this.player1Bat = new Bat(
-            this.context,
-            bat1pos,
-            batSize.posX,
-            batSize.posY
-        );
-        this.player2Bat = new Bat(
-            this.context,
-            bat2pos,
-            batSize.posX,
-            batSize.posY
-        );
+        this.player1Bat = new Bat(this.context, bat1pos, batSize);
+        this.player1Bat.playerUid = playerOne.uid;
 
-        this.playerBat = this.player1Bat;
-        this.playerBatPos = 0;
+        this.player2Bat = new Bat(this.context, bat2pos, batSize);
+        this.player2Bat.playerUid = playerTwo.uid;
     }
 
-    setPlayerPosition(pos: number): void {
-        this.playerBat = pos === 0 ? this.player1Bat : this.player2Bat;
-        this.playerBatPos = pos;
+    setActivePlayer(whichOne: number) {
+        console.log(whichOne);
+        this.playerBat = whichOne === 0 ? this.player1Bat : this.player2Bat;
     }
 
     // Service
@@ -103,7 +100,6 @@ class GameManager {
         return middle;
     }
 
-    // Service
     resetGame() {
         this.player1Bat.reset();
         this.player2Bat.reset();
@@ -111,7 +107,6 @@ class GameManager {
         this.ball.setPosition(this.getMiddleOfBoard());
     }
 
-    // Service
     scaleViewInput(position: string): number {
         const num = parseFloat(position.slice(0, -2));
 
@@ -136,13 +131,37 @@ class GameManager {
         this.ball.setPosition(newPosition);
     }
 
-    updateOpponentBat(pos: string) {
-        const scaledValue = this.scaleViewInput(pos);
+    // Service
+    inputToScaled(position: number, type: string): string {
+        let scaledValue = 0;
 
-        if (this.playerBatPos === 1) {
-            this.player2Bat.positionX = scaledValue;
+        if (type === "vw") {
+            scaledValue = (position / this.canvasWidth) * 100;
         } else {
+            scaledValue = (position / this.canvasHeigth) * 100;
+        }
+
+        return `${scaledValue}${type}`;
+    }
+
+    updatePlayerBat(directionUp: boolean) {
+        if (directionUp) {
+            this.playerBat.updatePosition(this.scaleViewInput("1vh"), true);
+        } else {
+            this.playerBat.updatePosition(this.scaleViewInput("1vh"), false);
+        }
+
+        this.connection.emit("newBatPosition", {
+            posX: this.inputToScaled(this.playerBat.positionX, "vh")
+        });
+    }
+
+    updateBat(pos: string, playerUid: string) {
+        const scaledValue = this.scaleViewInput(pos);
+        if (this.player1Bat.playerUid === playerUid) {
             this.player1Bat.positionX = scaledValue;
+        } else if (this.player2Bat.playerUid === playerUid) {
+            this.player2Bat.positionX = scaledValue;
         }
     }
 

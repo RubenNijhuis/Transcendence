@@ -183,13 +183,16 @@ export class GameSocketGateway {
     this.roomManager.addMemberToRoom([member, matchedOpponent], newRoomName);
 
     // Send the opponent data to each player
-    member.connection.emit("matchedWith", matchedOpponent.uid);
-    member.connection.emit("playPosition", 0);
-    matchedOpponent.connection.emit("playPosition", 1);
-    matchedOpponent.connection.emit("matchedWith", member.uid);
+    this.roomManager.setRoomData(newRoomName, {
+      playerOne: member.uid,
+      playerTwo: matchedOpponent.uid
+    });
 
     // Send new game status to players
-    this._server.to(newRoomName).emit("gameStatus", Match.Status.Matched);
+    this._server.to(newRoomName).emit("gameConfig", {
+      status: Match.Status.Matched,
+      players: [member.uid, matchedOpponent.uid]
+    });
 
     this.gameManager.createGame(newRoomName);
   }
@@ -215,6 +218,8 @@ export class GameSocketGateway {
 
     this.roomManager.addMemberToRoom(member, watchMatchPayload.gameId);
     this.roomManager.setMemberData(member.uid, { watch: true });
+
+    client.emit("watchGameSetup", matchRoom.data);
   }
 
   @SubscribeMessage("leaveQueue")

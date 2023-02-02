@@ -16,7 +16,7 @@ class Ball {
         this.size = size;
         this.position = position;
         this.context = context;
-        this.radius = size / 2;
+        this.radius = size;
         this.color = "#1e1e1e";
     }
 

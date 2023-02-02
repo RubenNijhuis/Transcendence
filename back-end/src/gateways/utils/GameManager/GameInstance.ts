@@ -37,7 +37,7 @@ class GameInstance {
       height: 900
     };
 
-    this.ball = new Ball(this.scaleViewInput("5vh"));
+    this.ball = new Ball(this.scaleViewInput("2.5vh"));
     this.extraBall = new Ball(this.arena.width * (100 / 30));
     const bat1pos: Game.Position = {
       posX: this.scaleViewInput("10vw"),
@@ -272,7 +272,7 @@ class GameInstance {
   }
 
   private checkIfGameIsFinished(): void {
-    //If one of the player's score exeeds maxScore, the game is over
+    // If one of the player's score exeeds maxScore, the game is over
     if (
       this.score.player1 >= this.maxScore ||
       this.score.player2 >= this.maxScore

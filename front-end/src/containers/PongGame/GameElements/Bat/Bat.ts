@@ -4,6 +4,8 @@ class Bat {
     positionX: number;
     positionY: number;
 
+    playerUid: string;
+
     startX: number;
     startY: number;
 
@@ -17,8 +19,7 @@ class Bat {
     constructor(
         context: CanvasRenderingContext2D,
         position: Game.Position,
-        sizeX: number,
-        sizeY: number
+        size: { width: number; height: number }
     ) {
         this.startX = position.posX;
         this.startY = position.posY;
@@ -28,10 +29,11 @@ class Bat {
 
         this.context = context;
 
-        this.width = sizeX;
-        this.height = sizeY;
+        this.width = size.width;
+        this.height = size.height;
 
         this.color = "#1e1e1e";
+        this.playerUid = "";
     }
 
     draw() {
@@ -64,13 +66,19 @@ class Bat {
     }
 
     wallCollisionBatUp() {
-        if (this.positionY - this.height / 2 <= 0) return true;
-        else return false;
+        if (this.positionY - this.height / 2 <= 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     wallCollisionBatDown() {
-        if (this.positionY + this.height / 2 >= this.context.canvas.height) return true;
-        else return false;
+        if (this.positionY + this.height / 2 >= this.context.canvas.height) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 

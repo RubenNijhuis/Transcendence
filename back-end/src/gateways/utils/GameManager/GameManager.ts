@@ -57,7 +57,6 @@ class GameManager {
 
   updateBatPosition(playerUid: string, roomID: Room.ID, newPosX: string): void {
     this.games.find((game) => {
-      console.log(game.getId(), roomID);
       if (game.getId() === roomID) {
         game.updateBatPosition(playerUid, newPosX);
       }

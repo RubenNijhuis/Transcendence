@@ -45,11 +45,11 @@ const keyPressListener = (gameManager: GameManager) => {
         const PlayerBat: Bat = gameManager.playerBat;
 
         if (splitValue === "W" && !PlayerBat.wallCollisionBatUp()) {
-            PlayerBat.updatePosition(gameManager.scaleViewInput("1vh"), true);
+            gameManager.updatePlayerBat(true);
         }
 
         if (splitValue === "S" && !PlayerBat.wallCollisionBatDown()) {
-            PlayerBat.updatePosition(gameManager.scaleViewInput("1vh"), false);
+            gameManager.updatePlayerBat(false);
         }
     };
 
@@ -64,9 +64,7 @@ const Pong = (): JSX.Element => {
     const [matchMakingState, setMatchMakingState] = useState<Match.Status>(
         Match.Status.Queue
     );
-    const [matchOpponent, setMatchOpponent] = useState<Profile.Instance | null>(
-        null
-    );
+    const [players, setPlayers] = useState<Profile.Instance[]>([]);
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     let Manager: GameManager;
@@ -75,6 +73,7 @@ const Pong = (): JSX.Element => {
 
     const location = useLocation();
     const { gameConnection } = useSocket();
+    const { user } = useUser();
 
     ////////////////////////////////////////////////////////
 
@@ -107,7 +106,8 @@ const Pong = (): JSX.Element => {
 
         Manager = new GameManager(context, gameSettings, gameConnection);
 
-        Manager.startGame();
+        // EMITS
+        gameConnection.emit("joinQueue", { gameType });
 
         gameConnection.on("gameStatus", (res: Match.Status) => {
             setMatchMakingState(res);
@@ -122,21 +122,39 @@ const Pong = (): JSX.Element => {
             }
         });
 
-        gameConnection.on("playPosition", (res) =>
-            Manager.setPlayerPosition(res.posX)
-        );
         gameConnection.on("newBatPosition", (res: any) => {
-            // if (res.playerUid !== user)
-            Manager.updateOpponentBat(res.posX);
+            Manager.updateBat(res.posX, res.playerUid);
         });
 
-        gameConnection.on("matchedWith", (res: Profile.ID) => {
-            getProfileByUid(res, { profile: true, banner: false })
-                .then(setMatchOpponent)
-                .catch(console.error);
+        gameConnection.on("gameConfig", async (res) => {
+            try {
+                const playerOne = await getProfileByUid(res.players[0], {
+                    profile: true,
+                    banner: false
+                });
+                const playerTwo = await getProfileByUid(res.players[1], {
+                    profile: true,
+                    banner: false
+                });
+
+                Manager.setPlayers(playerOne, playerTwo);
+
+                if (playerOne.uid === user.uid) {
+                    Manager.setActivePlayer(0);
+                } else if (playerTwo.uid === user.uid) {
+                    Manager.setActivePlayer(1);
+                }
+
+                setPlayers([playerOne, playerTwo]);
+                setMatchMakingState(res.state);
+
+                Manager.startGame();
+            } catch (err) {
+                console.error(err);
+            }
         });
 
-        gameConnection.emit("joinQueue", { gameType });
+        gameConnection.on("watchGameSetup", console.log);
 
         gameConnection.on("newBallPosition", (res: any) => {
             Manager.updateBall(res.posX, res.posY);
@@ -147,6 +165,8 @@ const Pong = (): JSX.Element => {
 
         return () => {
             gameConnection.removeAllListeners();
+            window.removeEventListener("keydown", () => {});
+            window.removeEventListener("keyup", () => {});
         };
     }, [gameConnection, canvasRef]);
 
@@ -154,10 +174,7 @@ const Pong = (): JSX.Element => {
 
     return (
         <Layout>
-            <MatchMakingStatus
-                status={matchMakingState}
-                opponent={matchOpponent}
-            />
+            <MatchMakingStatus status={matchMakingState} players={players} />
             <Canvas canvasRef={canvasRef} />
         </Layout>
     );
