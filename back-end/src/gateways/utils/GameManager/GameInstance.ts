@@ -213,8 +213,8 @@ class GameInstance {
       relativeIntersectY / (bat.size.width / 2);
     const bounceAngle = normalizedRelativeIntersectionY * ((5 * Math.PI) / 12);
     ball.velocity.x = -ball.velocity.x;
-    ball.velocity.y = -ball.acceleration * Math.sin(bounceAngle);
-    ball.acceleration = 0;
+    ball.acceleration = 1;
+    ball.velocity.y = -ball.acceleration * 1.5;
   }
 
   private checkIfBallHitsBats(ball: Ball): void {
