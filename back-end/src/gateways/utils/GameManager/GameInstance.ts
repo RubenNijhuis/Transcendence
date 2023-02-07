@@ -138,8 +138,9 @@ class GameInstance {
     return `${scaledValue}${type}`;
   }
 
-  updateBatPosition(playerUid: string, posX: string): void {
-    const newPosX = this.scaleViewInput(posX);
+  updateBatPosition(playerUid: string, posY: string): void {
+    const newPosY = this.scaleViewInput(posY);
+    console.log(posY);
 
     if (
       playerUid !== this.player1Profile.uid &&
@@ -148,14 +149,14 @@ class GameInstance {
       return;
 
     if (playerUid === this.player1Profile.uid) {
-      this.player1Bat.updatePostition(newPosX, this.arena);
+      this.player1Bat.updatePostition(newPosY, this.arena);
     } else if (playerUid === this.player2Profile.uid) {
-      this.player2Bat.updatePostition(newPosX, this.arena);
+      this.player2Bat.updatePostition(newPosY, this.arena);
     }
 
     this.connection.to(this.roomID).emit("newBatPosition", {
       playerUid,
-      posX
+      posY
     });
   }
 

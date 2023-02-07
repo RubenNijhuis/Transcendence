@@ -49,7 +49,7 @@ class GameManager {
 
         this.player1Bat = null!; // I dont care about the rules
         this.player2Bat = null!;
-        this.playerBat = null!
+        this.playerBat = null!;
 
         this.connection = connection;
 
@@ -59,7 +59,11 @@ class GameManager {
         this.canvasHeigth = this.context.canvas.height;
         this.canvasWidth = this.context.canvas.width;
 
-        this.ball = new Ball(this.context, this.getMiddleOfBoard(), this.scaleViewInput("2.5vh"));
+        this.ball = new Ball(
+            this.context,
+            this.getMiddleOfBoard(),
+            this.scaleViewInput("2.5vh")
+        );
     }
 
     setPlayers(playerOne: Profile.Instance, playerTwo: Profile.Instance): void {
@@ -86,7 +90,6 @@ class GameManager {
     }
 
     setActivePlayer(whichOne: number) {
-        console.log(whichOne);
         this.playerBat = whichOne === 0 ? this.player1Bat : this.player2Bat;
     }
 
@@ -151,17 +154,20 @@ class GameManager {
             this.playerBat.updatePosition(this.scaleViewInput("1vh"), false);
         }
 
+        const newPosY = this.inputToScaled(this.playerBat.positionY, "vh");
+        console.log(newPosY);
+
         this.connection.emit("newBatPosition", {
-            posX: this.inputToScaled(this.playerBat.positionX, "vh")
+            posY: newPosY
         });
     }
 
     updateBat(pos: string, playerUid: string) {
         const scaledValue = this.scaleViewInput(pos);
         if (this.player1Bat.playerUid === playerUid) {
-            this.player1Bat.positionX = scaledValue;
+            this.player1Bat.positionY = scaledValue;
         } else if (this.player2Bat.playerUid === playerUid) {
-            this.player2Bat.positionX = scaledValue;
+            this.player2Bat.positionY = scaledValue;
         }
     }
 

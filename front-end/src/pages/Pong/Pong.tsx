@@ -123,7 +123,8 @@ const Pong = (): JSX.Element => {
         });
 
         gameConnection.on("newBatPosition", (res: any) => {
-            Manager.updateBat(res.posX, res.playerUid);
+            console.log(res);
+            Manager.updateBat(res.posY, res.playerUid);
         });
 
         gameConnection.on("gameConfig", async (res) => {

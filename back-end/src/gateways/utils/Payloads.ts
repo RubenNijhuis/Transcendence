@@ -9,7 +9,7 @@ export namespace Game {
   }
 
   export interface BatPositionUpdate {
-    posX: string;
+    posY: string;
   }
 
   export interface JoinQueue {

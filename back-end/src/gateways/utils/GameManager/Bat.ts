@@ -27,9 +27,9 @@ class Bat {
     };
   }
 
-  updatePostition(newX: number, arena: Game.Dimentions) {
-    if (this.checkCollisions(newX, arena.width)) return;
-    this.position.posX += newX;
+  updatePostition(newY: number, arena: Game.Dimentions) {
+    if (this.checkCollisions(newY, arena.width)) return;
+    this.position.posY = newY;
   }
 
   checkCollisions(x: number, width: number) {

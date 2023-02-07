@@ -276,11 +276,10 @@ export class GameSocketGateway {
     @ConnectedSocket() client: Socket
   ) {
     const member = this.roomManager.getMemberByConnectionID(client.id);
-
     this.gameManager.updateBatPosition(
       member.uid,
       member.roomID,
-      batPositionPayload.posX
+      batPositionPayload.posY
     );
   }
 }

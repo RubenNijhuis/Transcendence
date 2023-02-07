@@ -55,10 +55,10 @@ class GameManager {
     // Start managing games
   }
 
-  updateBatPosition(playerUid: string, roomID: Room.ID, newPosX: string): void {
+  updateBatPosition(playerUid: string, roomID: Room.ID, newPosY: string): void {
     this.games.find((game) => {
       if (game.getId() === roomID) {
-        game.updateBatPosition(playerUid, newPosX);
+        game.updateBatPosition(playerUid, newPosY);
       }
     });
   }
