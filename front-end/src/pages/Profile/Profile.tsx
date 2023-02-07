@@ -11,6 +11,7 @@ import { ProfileDisplay } from "../../components/Profile";
 // Contexts
 import { useAuth } from "../../contexts/AuthContext";
 import { useUser } from "../../contexts/UserContext";
+import { useSocket } from "../../contexts/SocketContext";
 
 // DEBUG
 import { useFakeData } from "../../contexts/FakeDataContext";
@@ -34,9 +35,6 @@ import TwoFactorAuthentication from "../../containers/TwoFactorAuthentication";
 
 // Business logic
 import { useProfileFriends, useGetSelectedProfile } from "./Profile.bl";
-import PageRoutes from "../../config/PageRoutes";
-import * as Store from "../../modules/Store";
-import { useSocket } from "../../contexts/SocketContext";
 
 ////////////////////////////////////////////////////////////
 
@@ -53,9 +51,6 @@ const ProfilePage = (): JSX.Element => {
 
     // Auth
     const { signIn } = useAuth();
-
-    // Navigation if there was a login error
-    const navigate = useNavigate();
 
     ////////////////////////////////////////////////////////
 
@@ -79,13 +74,6 @@ const ProfilePage = (): JSX.Element => {
         const apiToken = getValueFromUrl(window.location.href, "code");
 
         try {
-            if (!apiToken) {
-                Store.clearAll();
-                navigate(PageRoutes.whenNotLoggedIn);
-                throw Error(
-                    "No token found in the url. This either means there is anissue with the third party or the application didn't handle it correctly"
-                );
-            }
             const { profile, shouldCreateUser, TWOfaEnabled } = await signIn(
                 apiToken
             );

@@ -44,8 +44,8 @@ const Router = (): JSX.Element => (
                 <Route path={PageRoutes.pong} element={<Pong />}>
                     <Route path="classic" element={<Pong />} />
                     <Route path="powered" element={<Pong />} />
-                    <Route path="watch/:watchId" element={<Pong />} />
                 </Route>
+                <Route path="watch/:watchId" element={<Pong />} />
 
                 <Route path={PageRoutes.chat} element={<ChatPage />} />
 

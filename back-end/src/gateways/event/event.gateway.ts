@@ -103,6 +103,9 @@ export class EventSocketGateway {
 
     if (!requester) return;
 
-    requester.connection.emit("memberStatus", memberStatusPayload.status);
+    requester.connection.emit("memberStatus", {
+      status: memberStatusPayload.status,
+      gameId: memberStatusPayload.gameId
+    });
   }
 }

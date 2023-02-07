@@ -1,5 +1,8 @@
 // React
 import { ReactElement, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import PageRoutes from "../../../config/PageRoutes";
+import { useSocket } from "../../../contexts/SocketContext";
 
 // User
 import { useUser } from "../../../contexts/UserContext";
@@ -28,8 +31,30 @@ import { Container, ProfileStatusDisplay } from "./ProfileActions.style";
 
 ////////////////////////////////////////////////////////////
 
-const ProfileActivityStatus = (): JSX.Element => {
+const ProfileActivityStatus = ({
+    profile
+}: {
+    profile: Profile.Instance;
+}): JSX.Element => {
+    const [watchId, setWatchId] = useState<string>("");
+    // const { user } = useUser();
+    const { eventConnection } = useSocket();
+
     let activityElement: ReactElement = <></>;
+
+    useEffect(() => {
+        if (!eventConnection) return;
+
+        eventConnection.on("memberStatus", (res) => {
+            if (res.status) {
+                setWatchId(res.gameId);
+            }
+        });
+        eventConnection.emit("getStatus", profile.uid);
+        return () => {
+            eventConnection.removeListener("memberStatus");
+        };
+    }, []);
 
     ////////////////////////////////////////////////////////
 
@@ -48,6 +73,11 @@ const ProfileActivityStatus = (): JSX.Element => {
     return (
         <ProfileStatusDisplay activity={rand}>
             <div>{activityElement}</div>
+            {watchId ? (
+                <Link to={`/watch/${watchId}`} state={{ watchId }}>
+                    Watch game
+                </Link>
+            ) : null}
         </ProfileStatusDisplay>
     );
 };
@@ -129,7 +159,7 @@ const ProfileActions = ({ profile }: IProfileActions): JSX.Element => {
                 <div className="header">
                     <Heading type={3}>Status</Heading>
                 </div>
-                <ProfileActivityStatus />
+                <ProfileActivityStatus profile={profile} />
             </div>
         </Container>
     );

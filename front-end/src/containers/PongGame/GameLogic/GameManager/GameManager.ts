@@ -26,18 +26,11 @@ class GameManager {
 
     constructor(
         context: CanvasRenderingContext2D,
-        gameSettings: any,
         connection: SocketType.Instance
     ) {
         if (!connection) {
             throw Error(
                 "No connection supplied in the game manager constructor"
-            );
-        }
-
-        if (!gameSettings) {
-            throw Error(
-                "No game settings supplied in the game manager constructor"
             );
         }
 
