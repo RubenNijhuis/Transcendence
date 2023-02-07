@@ -60,18 +60,32 @@ const keyPressListener = (gameManager: GameManager) => {
 
 ////////////////////////////////////////////////////////////
 
+const ScoreBoard = ({ score }: { score: [number, number] }) => {
+    return (
+        <div style={{display: "flex", fontSize: '24px', justifyContent: "center"}}>
+            <span>{score[0]}</span> - <span>{score[1]}</span>
+        </div>
+    );
+};
+
 const Pong = (): JSX.Element => {
     const [matchMakingState, setMatchMakingState] = useState<Match.Status>(
         Match.Status.Queue
     );
     const [players, setPlayers] = useState<Profile.Instance[]>([]);
+    const [score, setScore] = useState<[number, number]>([0, 0]);
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     let Manager: GameManager;
 
     ////////////////////////////////////////////////////////
 
+    interface WatchPongState {
+        watchId: string | null;
+    }
+
     const location = useLocation();
+    const locState = location.state as WatchPongState;
     const { gameConnection } = useSocket();
     const { user } = useUser();
 
@@ -90,24 +104,22 @@ const Pong = (): JSX.Element => {
 
     useEffect(() => {
         if (!gameConnection) return;
+        if (canvasRef.current === null) return;
+
+        const context = canvasRef.current.getContext("2d");
+        if (context === null) return;
 
         const gameType = getGameTypeFromLocation(location.pathname);
 
-        if (canvasRef.current === null) return;
-        const context = canvasRef.current.getContext("2d");
+        if (locState && locState.watchId !== null) {
+            gameConnection.emit("watchMatch", {
+                gameId: locState.watchId
+            });
+        } else {
+            gameConnection.emit("joinQueue", { gameType });
+        }
 
-        if (context === null) return;
-
-        const gameSettings = {
-            gameType,
-            prefferedSide: "left",
-            controlSettings: "keyboard"
-        };
-
-        Manager = new GameManager(context, gameSettings, gameConnection);
-
-        // EMITS
-        gameConnection.emit("joinQueue", { gameType });
+        Manager = new GameManager(context, gameConnection);
 
         gameConnection.on("gameStatus", (res: Match.Status) => {
             setMatchMakingState(res);
@@ -123,7 +135,6 @@ const Pong = (): JSX.Element => {
         });
 
         gameConnection.on("newBatPosition", (res: any) => {
-            console.log(res);
             Manager.updateBat(res.posY, res.playerUid);
         });
 
@@ -157,6 +168,8 @@ const Pong = (): JSX.Element => {
 
         gameConnection.on("watchGameSetup", console.log);
 
+        gameConnection.on("scoreUpdate", setScore);
+
         gameConnection.on("newBallPosition", (res: any) => {
             Manager.updateBall(res.posX, res.posY);
         });
@@ -176,6 +189,7 @@ const Pong = (): JSX.Element => {
     return (
         <Layout>
             <MatchMakingStatus status={matchMakingState} players={players} />
+            <ScoreBoard score={score} />
             <Canvas canvasRef={canvasRef} />
         </Layout>
     );

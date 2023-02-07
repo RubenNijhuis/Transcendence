@@ -28,6 +28,8 @@ const MatchMakingStatus = ({
     return (
         <MatchMakingStatusContainer>
             <Heading type={3}>Match making status</Heading>
+            <div className="players">
+
             {players?.length === 2 ? (
                 <>
                     <Opponent>
@@ -40,6 +42,7 @@ const MatchMakingStatus = ({
                     </Opponent>
                 </>
             ) : null}
+            </div>
         </MatchMakingStatusContainer>
     );
 };

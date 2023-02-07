@@ -219,7 +219,10 @@ export class GameSocketGateway {
     this.roomManager.addMemberToRoom(member, watchMatchPayload.gameId);
     this.roomManager.setMemberData(member.uid, { watch: true });
 
-    client.emit("watchGameSetup", matchRoom.data);
+    client.emit("gameConfig", {
+      players: [matchRoom.data.playerOne, matchRoom.data.playerTwo],
+      status: Match.Status.Matched
+    });
   }
 
   @SubscribeMessage("leaveQueue")

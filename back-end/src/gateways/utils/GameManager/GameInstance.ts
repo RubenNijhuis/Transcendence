@@ -89,12 +89,12 @@ class GameInstance {
   render(): void {
     // get random powerup... where does it assign the powerup?
     // update positions
-    // if (
-    //   this.score.player1 === this.maxScore ||
-    //   this.score.player2 === this.maxScore
-    // ) {
-    //   return;
-    // }
+    if (
+      this.score.player1 === this.maxScore ||
+      this.score.player2 === this.maxScore
+    ) {
+      return;
+    }
     this.ball.updatePosition(this.arena);
 
     const { posX, posY } = this.ball.getPosition();
@@ -220,13 +220,11 @@ class GameInstance {
   private checkIfBallHitsBats(ball: Ball): void {
     // Check p1 hit ball
     if (this.calcIntersect(ball.position, ball.radius, this.player1Bat)) {
-      console.log("bat1 hit, ", this.player1Bat.position);
       this.calcBounce(ball, this.player1Bat);
       this.powerUp.turn = 0;
     }
     // check if p2 hit ball
     if (this.calcIntersect(ball.position, ball.radius, this.player2Bat)) {
-      console.log("bat2 hit, ", this.player2Bat.position);
       this.calcBounce(ball, this.player2Bat);
       this.powerUp.turn = 1;
     }
