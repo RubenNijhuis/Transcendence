@@ -21,13 +21,14 @@ import {
     lightTextColor,
     magicNum,
     mainColor,
-    smallRadius,
+    smallRadius
 } from "../../../styles/StylingConstants";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import UploadColor from "./Color/UploadColor";
 import ChangeBanStatus from "./Ban";
 import ChangeFriends from "./Friends";
+import { useUser } from "../../../contexts/UserContext";
 
 // TODO: in style file
 const Container = styled.section`
@@ -48,7 +49,6 @@ const Container = styled.section`
             color: ${lightTextColor};
         }
     }
-
 `;
 
 ////////////////////////////////////////////////////////////
@@ -56,11 +56,12 @@ const Container = styled.section`
 const ProfileSettings = () => {
     const { tfaEnabled } = useAuth();
     const { setModalElement, openModal } = useModal();
+    const { user } = useUser();
 
     ////////////////////////////////////////////////////////
 
     const renderTFAModal = () => {
-        setModalElement(<TwoFactorAuthentication />);
+        setModalElement(<TwoFactorAuthentication user={user} />);
         openModal(true);
     };
 
@@ -104,9 +105,9 @@ const ProfileSettings = () => {
                 <UploadColor />
                 <ChangeBanStatus />
                 <ChangeFriends />
-				<Button theme="dark" onClick={renderTFAModal}>
-					Turn {tfaEnabled ? "off" : "on"} 2 factor authentication
-				</Button>
+                <Button theme="dark" onClick={renderTFAModal}>
+                    Turn {tfaEnabled ? "off" : "on"} 2 factor authentication
+                </Button>
             </div>
         </Container>
     );

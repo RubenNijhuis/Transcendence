@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpStatus,
   Post,
   Req,
@@ -21,6 +22,7 @@ import { TfaDto } from "src/dtos/auth/tfa.dto";
 
 // Entities
 import { User } from "src/entities";
+import { AccessTokenGuard } from "src/guards/accessToken.guard";
 
 ////////////////////////////////////////////////////////////
 
@@ -30,11 +32,12 @@ export class TfaController {
 
   ////////////////////////////////////////////////////////
 
-  @Post("google2fa")
+  @UseGuards(AccessTokenGuard)
   @UseGuards(Jwt2faStrategy)
+  @Get("google2fa")
   async google2fa(@Req() req: Request) {
+    const profile: User = req.user["profile"];
     try {
-      const profile: User = req.user["profile"];
       const res = await this.tfaService.generateTfaSecret(profile.uid);
       console.log("Google 2FA: ", res);
       return res;
@@ -44,6 +47,7 @@ export class TfaController {
   }
 
   @Post("google2fa/authenticate")
+  @UseGuards(AccessTokenGuard)
   @UseGuards(Jwt2faStrategy)
   async authenticate(@Res() res: Response, @Body() tfaDto: TfaDto) {
     const isCodeValid = await this.tfaService.isTfaValid(tfaDto);

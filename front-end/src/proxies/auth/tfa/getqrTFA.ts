@@ -4,14 +4,11 @@ import { API } from "../../instances/apiInstance";
 
 ////////////////////////////////////////////////////////////
 
-const getqrTFA = async (intraID: string): Promise<string> => {
+const getqrTFA = async (): Promise<string> => {
     try {
         const route = ApiRoutes.getqrTFA();
-        const body = {
-            intraID,
-        };
 
-        const { data } = await API.post(route, body);
+        const { data } = await API.get(route);
 
         return Promise.resolve(data);
     } catch (err) {
