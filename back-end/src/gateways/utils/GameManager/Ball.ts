@@ -9,11 +9,11 @@ class Ball {
   acceleration: number;
   radius: number;
 
-  constructor(radius: number) {
-    this.position = { posX: 0, posY: 0 };
-    this.acceleration = 1; // for now starting velocity will be 1
+  constructor(radius: number, pos: Game.Position) {
+    this.position = pos;
+    this.acceleration = 10;
     this.velocity = {
-      x: this.decideDirection(this.acceleration),
+      x: this.decideDirection(this.acceleration * 2),
       y: 0
     };
     this.radius = radius;
@@ -37,11 +37,11 @@ class Ball {
       posX: arena.width / 2,
       posY: arena.height / 2
     };
+    this.acceleration = 10;
     this.velocity = {
-      x: this.decideDirection(1),
+      x: this.decideDirection(this.acceleration * 2),
       y: 0
     };
-    this.acceleration = 1;
   }
 
   updatePosition(arena: Game.Dimentions) {

@@ -60,7 +60,7 @@ const keyPressListener = (gameManager: GameManager) => {
 
 ////////////////////////////////////////////////////////////
 
-const ScoreBoard = ({ score }: { score: [number, number] }) => {
+const ScoreBoard = ({ score }: { score: [number, number] }): JSX.Element => {
     return (
         <div style={{display: "flex", fontSize: '24px', justifyContent: "center"}}>
             <span>{score[0]}</span> - <span>{score[1]}</span>
@@ -139,6 +139,7 @@ const Pong = (): JSX.Element => {
         });
 
         gameConnection.on("gameConfig", async (res) => {
+            console.log(res);
             try {
                 const playerOne = await getProfileByUid(res.players[0], {
                     profile: true,

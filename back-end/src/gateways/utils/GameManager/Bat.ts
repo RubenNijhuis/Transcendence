@@ -21,10 +21,7 @@ class Bat {
   }
 
   reset(arena: Game.Dimentions): void {
-    this.position = {
-      posX: this.position.posX,
-      posY: arena.height / 2
-    };
+    this.position.posY = arena.height / 2;
   }
 
   updatePostition(newY: number, arena: Game.Dimentions) {
