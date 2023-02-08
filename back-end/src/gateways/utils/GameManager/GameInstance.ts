@@ -28,7 +28,7 @@ class GameInstance {
   private status: Match.Status;
   private readonly maxScore: number;
 
-  private roomID: string;
+private roomID: string;
   private connection: Server;
 
   constructor(connection: Server, room: Room.Instance) {
@@ -37,8 +37,13 @@ class GameInstance {
       height: 900
     };
 
-    this.ball = new Ball(this.scaleViewInput("2.5vh"));
-    this.extraBall = new Ball(this.arena.width * (100 / 30));
+    const center: Game.Position = {
+      posX: this.scaleViewInput("50vw"),
+      posY: this.scaleViewInput("50vh")
+    };
+
+    this.ball = new Ball(this.scaleViewInput("2.5vh"), center);
+    this.extraBall = new Ball(this.arena.width * (100 / 30), center);
     const bat1pos: Game.Position = {
       posX: this.scaleViewInput("10vw"),
       posY: this.scaleViewInput("50vh")
@@ -89,12 +94,12 @@ class GameInstance {
   render(): void {
     // get random powerup... where does it assign the powerup?
     // update positions
-    if (
-      this.score.player1 === this.maxScore ||
-      this.score.player2 === this.maxScore
-    ) {
-      return;
-    }
+    // if (
+    //   this.score.player1 === this.maxScore ||
+    //   this.score.player2 === this.maxScore
+    // ) {
+    //   return;
+    // }
     this.ball.updatePosition(this.arena);
 
     const { posX, posY } = this.ball.getPosition();
@@ -140,7 +145,6 @@ class GameInstance {
 
   updateBatPosition(playerUid: string, posY: string): void {
     const newPosY = this.scaleViewInput(posY);
-    console.log(posY);
 
     if (
       playerUid !== this.player1Profile.uid &&
@@ -189,8 +193,13 @@ class GameInstance {
   /*///////////////////////////////// GAMELOGIC ////////////////////////////////*/
 
   private resetGame(): void {
+    const [player1, player2] = this.getPlayersPos();
     this.player1Bat.reset(this.arena);
+    this.connection.to(this.roomID).emit("newBatPosition", { playerUid: player1.id, posY: this.inputToScaled(player1.pos.posY, 'vh') });
+
     this.player2Bat.reset(this.arena);
+    this.connection.to(this.roomID).emit("newBatPosition", { playerUid: player2.id, posY: this.inputToScaled(player2.pos.posY, 'vh') });
+
     this.powerUp.reset();
     this.ball.reset(this.arena);
   }
@@ -210,11 +219,18 @@ class GameInstance {
   private calcBounce(ball: Ball, bat: Bat): void {
     const relativeIntersectY = bat.position.posY - ball.position.posY;
     const normalizedRelativeIntersectionY =
-      relativeIntersectY / (bat.size.width / 2);
-    const bounceAngle = normalizedRelativeIntersectionY * ((5 * Math.PI) / 12);
+      relativeIntersectY / (bat.size.height / 2);
+    const bounceAngle = normalizedRelativeIntersectionY * 75;
+    if (normalizedRelativeIntersectionY != 0 || bounceAngle != 0)
+      console.log("intersect: ", normalizedRelativeIntersectionY, ", bounce angle: ", bounceAngle, "\nbatY: ", bat.position.posY , ", ballY: ", ball.position.posY);
+    if (ball.velocity.x <= 40 && ball.velocity.x >= -40) {
+      if (ball.velocity.x > 0)
+        ball.velocity.x = ball.velocity.x + ball.acceleration;
+      else
+        ball.velocity.x = ball.velocity.x - ball.acceleration;
+    }
     ball.velocity.x = -ball.velocity.x;
-    ball.velocity.y = -ball.acceleration * Math.sin(bounceAngle);
-    ball.acceleration = 0;
+    ball.velocity.y = ball.acceleration * Math.sin(bounceAngle);
   }
 
   private checkIfBallHitsBats(ball: Ball): void {
@@ -235,11 +251,17 @@ class GameInstance {
     if (ball.position.posX - ball.radius <= 0) {
       this.score.player2++;
       this.resetGame();
+      this.connection
+        .to(this.roomID)
+        .emit("scoreUpdate", [this.score.player1, this.score.player2]);
     }
     // Checks if right side of the field is hit
     if (ball.position.posX + ball.radius >= this.arena.width) {
       this.score.player1++;
       this.resetGame();
+      this.connection
+        .to(this.roomID)
+        .emit("scoreUpdate", [this.score.player1, this.score.player2]);
     }
   }
 

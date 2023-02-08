@@ -130,6 +130,17 @@ export class GameSocketGateway {
       return;
     }
 
+    // If already in game
+    if (member.roomID !== Room.DefaultID) {
+      const matchRoom = this.roomManager.getRoomByID(member.roomID);
+
+        client.emit("gameConfig", {
+          players: [matchRoom.data.playerOne, matchRoom.data.playerTwo],
+          status: Match.Status.Matched
+        });
+      return;
+    }
+
     this.roomManager.setMemberData(member.uid, {
       gameType: joinQueuePayload.gameType
     });
@@ -279,6 +290,11 @@ export class GameSocketGateway {
     @ConnectedSocket() client: Socket
   ) {
     const member = this.roomManager.getMemberByConnectionID(client.id);
+
+    if (!member) {
+      client.emit("failure", "No member found with your connection");
+      return;
+    }
     this.gameManager.updateBatPosition(
       member.uid,
       member.roomID,

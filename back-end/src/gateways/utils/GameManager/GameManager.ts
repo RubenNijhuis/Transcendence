@@ -19,6 +19,8 @@ import * as Match from "./types/match";
  * Updating game state (score, powerups)
  */
 
+let runnner = 0;
+
 class GameManager {
   private readonly roomManager: RoomManager;
   private readonly deltaTime: number;
@@ -64,6 +66,7 @@ class GameManager {
   }
 
   async runGames(games: GameInstance[]): Promise<void> {
+    this.isRunning = true;
     // Adds the delay
     const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
     // Keep looping as long as there are games

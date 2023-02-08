@@ -142,13 +142,12 @@ class GameManager {
 
     updatePlayerBat(directionUp: boolean) {
         if (directionUp) {
-            this.playerBat.updatePosition(this.scaleViewInput("1vh"), true);
+            this.playerBat.updatePosition(this.scaleViewInput("2vh"), true);
         } else {
-            this.playerBat.updatePosition(this.scaleViewInput("1vh"), false);
+            this.playerBat.updatePosition(this.scaleViewInput("2vh"), false);
         }
 
         const newPosY = this.inputToScaled(this.playerBat.positionY, "vh");
-        console.log(newPosY);
 
         this.connection.emit("newBatPosition", {
             posY: newPosY
