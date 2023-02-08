@@ -4,11 +4,10 @@ import { API } from "../../instances/apiInstance";
 
 ////////////////////////////////////////////////////////////
 
-const confirmTFA = async (intraID: string, tfaCode: string): Promise<any> => {
+const confirmTFA = async (tfaCode: string): Promise<any> => {
     try {
         const route = ApiRoutes.confirmTFA();
         const config = {
-            intraID,
             tfaCode
         };
 

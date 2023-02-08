@@ -49,8 +49,16 @@ export class TfaController {
   @Post("google2fa/authenticate")
   @UseGuards(AccessTokenGuard)
   @UseGuards(Jwt2faStrategy)
-  async authenticate(@Res() res: Response, @Body() tfaDto: TfaDto) {
-    const isCodeValid = await this.tfaService.isTfaValid(tfaDto);
+  async authenticate(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() tfaDto: TfaDto
+  ) {
+    const profile: User = req.user["profile"];
+    const isCodeValid = await this.tfaService.isTfaValid(
+      profile.uid,
+      tfaDto.tfaCode
+    );
     if (isCodeValid === false) {
       throw new UnauthorizedException("Wrong authentication code");
     }

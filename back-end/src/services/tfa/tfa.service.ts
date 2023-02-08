@@ -32,8 +32,8 @@ export class TfaService {
     private readonly configService: ConfigService
   ) {}
 
-  async isTfaValid(tfaDto: TfaDto) {
-    const ret = await this.usersService.findUserByUid(tfaDto.uid);
+  async isTfaValid(uid: string, code: string) {
+    const ret = await this.usersService.findUserByUid(uid);
     //you can only confirm if the secret is set
     if (!ret || !ret.tfaSecret || !ret.tfa_iv || !ret.tfa_key) throw TypeError;
 
@@ -43,7 +43,7 @@ export class TfaService {
     const pw = decrypt(ret.tfaSecret, key, iv);
 
     //check if decrypted code is valid
-    const res = authenticator.check(tfaDto.tfaCode, pw);
+    const res = authenticator.check(code, pw);
     return res;
   }
 

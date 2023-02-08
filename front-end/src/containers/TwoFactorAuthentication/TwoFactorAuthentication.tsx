@@ -71,7 +71,7 @@ const TwoFactorAuthentication = ({user}: {user: Profile.Instance} ) => {
 
     const ConfirmTFA = async () => {
         try {
-            const input = await confirmTFA(user.uid, result);
+            const input = await confirmTFA(result);
 
             Logger(
                 LogTypes.AUTH,
