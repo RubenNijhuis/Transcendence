@@ -20,14 +20,12 @@ import { Container, QrCodeContainer } from "./TwoFactorAuthentication.style";
 //tfa input
 import AuthCode, { AuthCodeRef } from "react-auth-code-input";
 
+import * as Profile from "../../types/Profile";
+
 ////////////////////////////////////////////////////////////
 
-const TwoFactorAuthentication = () => {
+const TwoFactorAuthentication = ({user}: {user: Profile.Instance} ) => {
     const [QRlink, setQRLink] = useState<string>(null!);
-
-    ////////////////////////////////////////////////////////
-
-    const { user } = useUser();
 
     ////////////////////////////////////////////////////////
 
@@ -56,7 +54,7 @@ const TwoFactorAuthentication = () => {
 
     const GetTFAqr = async () => {
         try {
-            const getqrResponse = await getqrTFA(user.uid);
+            const getqrResponse = await getqrTFA();
 
             setQRLink(getqrResponse);
 
@@ -85,10 +83,6 @@ const TwoFactorAuthentication = () => {
             console.error(err);
         }
     };
-
-    ////////////////////////////////////////////////////////
-
-    useEffect(() => console.log(user), [user]);
 
     ////////////////////////////////////////////////////////
 

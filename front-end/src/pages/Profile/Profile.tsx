@@ -78,13 +78,16 @@ const ProfilePage = (): JSX.Element => {
                 apiToken
             );
 
+            console.log(profile, shouldCreateUser, TWOfaEnabled);
+
             if (shouldCreateUser) {
                 setModalElement(<CreateAccount />);
                 setAllowClose(false);
                 openModal(true);
                 return;
             } else if (TWOfaEnabled) {
-                setModalElement(<TwoFactorAuthentication />);
+                setUser(profile);
+                setModalElement(<TwoFactorAuthentication user={profile}/>);
                 setAllowClose(false);
                 openModal(true);
                 return;
