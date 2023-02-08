@@ -22,6 +22,7 @@ class Ball {
 
     draw() {
         this.context.beginPath();
+        this.context.fillStyle = this.color;
         this.context.arc(
             this.position.posX,
             this.position.posY,
@@ -30,7 +31,6 @@ class Ball {
             Math.PI * 2,
             false
         );
-        this.context.fillStyle = this.color;
         this.context.fill();
         this.context.closePath();
     }

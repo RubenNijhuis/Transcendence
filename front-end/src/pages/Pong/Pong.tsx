@@ -1,6 +1,6 @@
 // React
 import { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // Routing
 import PageRoutes from "../../config/PageRoutes";
@@ -69,13 +69,14 @@ const ScoreBoard = ({ score }: { score: [number, number] }): JSX.Element => {
 };
 
 const Pong = (): JSX.Element => {
-    const [matchMakingState, setMatchMakingState] = useState<Match.Status>(
+    const [matchState, setMatchState] = useState<Match.Status>(
         Match.Status.Queue
     );
     const [players, setPlayers] = useState<Profile.Instance[]>([]);
     const [score, setScore] = useState<[number, number]>([0, 0]);
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const navigate = useNavigate();
     let Manager: GameManager;
 
     ////////////////////////////////////////////////////////
@@ -103,6 +104,14 @@ const Pong = (): JSX.Element => {
     };
 
     useEffect(() => {
+        if (matchState === Match.Status.Finished) {
+            setTimeout(() => {
+                navigate(PageRoutes.profile);
+            }, 3000);
+        }
+    }, [matchState]);
+
+    useEffect(() => {
         if (!gameConnection) return;
         if (canvasRef.current === null) return;
 
@@ -122,21 +131,27 @@ const Pong = (): JSX.Element => {
         Manager = new GameManager(context, gameConnection);
 
         gameConnection.on("gameStatus", (res: Match.Status) => {
-            setMatchMakingState(res);
+            setMatchState(res);
 
             switch (res) {
                 case Match.Status.Playing:
                     Manager.startGame();
-                    break;
-                case Match.Status.Finished:
-                    break;
-                // Manager.finishGame();
             }
         });
 
         gameConnection.on("newBatPosition", (res: any) => {
             Manager.updateBat(res.posY, res.playerUid);
         });
+
+        gameConnection.on("powerUpActivated", (res) => {
+            Manager.activatePowerUp(res.uid, res.size)            
+        });
+
+        gameConnection.on("powerUp", (res) => {
+            const { posX, posY, size } = res;
+
+            Manager.placePowerup(posX, posY, size);
+        })
 
         gameConnection.on("gameConfig", async (res) => {
             console.log(res);
@@ -159,7 +174,7 @@ const Pong = (): JSX.Element => {
                 }
 
                 setPlayers([playerOne, playerTwo]);
-                setMatchMakingState(res.state);
+                setMatchState(res.state);
 
                 Manager.startGame();
             } catch (err) {
@@ -189,8 +204,14 @@ const Pong = (): JSX.Element => {
 
     return (
         <Layout>
-            <MatchMakingStatus status={matchMakingState} players={players} />
+            <MatchMakingStatus status={matchState} players={players} />
             <ScoreBoard score={score} />
+
+            {matchState === Match.Status.Finished ?
+                <div style={{textAlign: "center"}}>
+                    {score[0] === 5 ? players[0].username : players[1].username} won the game!
+                </div>
+            : null}
             <Canvas canvasRef={canvasRef} />
         </Layout>
     );

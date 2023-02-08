@@ -3,9 +3,11 @@ import * as Game from "../../../../types/Game";
 import * as SocketType from "../../../../types/Socket";
 import * as SocketRoutes from "../../../../config/SocketRoutes";
 import * as Profile from "../../../../types/Profile";
+
 // Game elements
 import { Ball, Bat } from "../../GameElements";
-import PowerUps from "../PowerUps";
+import PowerUp from "../PowerUp";
+
 import { Socket } from "socket.io-client";
 
 class GameManager {
@@ -16,7 +18,7 @@ class GameManager {
     ball: Ball;
     player1Bat: Bat;
     player2Bat: Bat;
-    // powerUps: PowerUps;
+    powerUp: PowerUp | null;
 
     context: CanvasRenderingContext2D;
     canvasWidth: number;
@@ -51,6 +53,8 @@ class GameManager {
 
         this.canvasHeigth = this.context.canvas.height;
         this.canvasWidth = this.context.canvas.width;
+
+        this.powerUp = null;
 
         this.ball = new Ball(
             this.context,
@@ -170,8 +174,29 @@ class GameManager {
             this.player1Bat.draw();
             this.player2Bat.draw();
             this.ball.draw();
+            if (this.powerUp !== null) {
+                this.powerUp.draw();
+            }
         };
         drawLoop();
+    }
+
+    activatePowerUp(uid: string, size: string) {
+        const scaledSize = this.scaleViewInput(size);
+
+        if (this.player1Bat.playerUid === uid) {
+            this.player1Bat.height = scaledSize;
+        } else if (this.player2Bat.playerUid === uid) {
+            this.player2Bat.height = scaledSize;
+        }
+    }
+
+    placePowerup(posX: string, posY: string, size: string) {
+        const scaledPosX = this.scaleViewInput(posX);
+        const scaledPosY = this.scaleViewInput(posY);
+        const scaledSize = this.scaleViewInput(size);
+
+        this.powerUp = new PowerUp(this.context, {posX: scaledPosX, posY: scaledPosY}, scaledSize)
     }
 }
 

@@ -19,8 +19,6 @@ import * as Match from "./types/match";
  * Updating game state (score, powerups)
  */
 
-let runnner = 0;
-
 class GameManager {
   private readonly roomManager: RoomManager;
   private readonly deltaTime: number;
@@ -50,7 +48,7 @@ class GameManager {
     setInterval(() => {
       if (this.isRunning === true) return;
       if (this.games.length > 0) {
-        this.runGames(this.games);
+        this.runGames();
       }
     }, 1000);
 
@@ -65,18 +63,18 @@ class GameManager {
     });
   }
 
-  async runGames(games: GameInstance[]): Promise<void> {
+  async runGames(): Promise<void> {
     this.isRunning = true;
     // Adds the delay
     const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
-    // Keep looping as long as there are games
-    while (games.length > 0) {
+    // Keep looping as long as there are this.games
+    while (this.games.length > 0) {
       // Go through each game
-      for (let i = 0; i < games.length; i++) {
-        games[i].render();
+      for (let i = 0; i < this.games.length; i++) {
+        this.games[i].render();
 
-        // Check every loop which games are finished
-        // this.removeGamesFromRunning(games);
+        // Check every loop which this.games are finished
+        this.removeGamesFromRunning(this.games);
       }
       // Add delay
       await delay(this.deltaTime);
@@ -86,8 +84,7 @@ class GameManager {
   createGame(roomID: Room.ID): void {
     const room = this.roomManager.getRoomByID(roomID);
     this.server.to(roomID).emit("gameStatus", Match.Status.Setup);
-
-    const newGame = new GameInstance(this.server, room);
+    const newGame = new GameInstance(this.server, room, this.roomManager);
     this.games.push(newGame);
   }
 
@@ -95,6 +92,11 @@ class GameManager {
     this.games = games.filter((game) => {
       return game.getGameStatus() !== Match.Status.Finished;
     });
+
+
+    if (this.games.length === 0) {
+      this.isRunning = false;
+    }
   }
 }
 

@@ -38,6 +38,7 @@ class Bat {
 
     draw() {
         this.context.beginPath();
+        this.context.fillStyle = "black";
         this.context.fillRect(
             this.positionX - this.width / 2,
             this.positionY - this.height / 2,

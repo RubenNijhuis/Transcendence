@@ -1,8 +1,9 @@
 // Connections
+import { emit } from "process";
 import { Server } from "socket.io";
 
 // User type
-import { Member, Room } from "../RoomManager";
+import RoomManager, { Member, Room } from "../RoomManager";
 
 // Game objects
 import Ball from "./Ball";
@@ -15,7 +16,6 @@ import * as Match from "./types/match";
 
 class GameInstance {
   private readonly ball: Ball;
-  private readonly extraBall: Ball;
   private readonly player1Bat: Bat;
   private readonly player2Bat: Bat;
   private readonly powerUp: PowerUp;
@@ -28,10 +28,21 @@ class GameInstance {
   private status: Match.Status;
   private readonly maxScore: number;
 
-private roomID: string;
+  private roomID: string;
   private connection: Server;
 
-  constructor(connection: Server, room: Room.Instance) {
+  roomManager: RoomManager;
+
+  room: Room.Instance;
+
+  constructor(
+    connection: Server,
+    room: Room.Instance,
+    roomManager: RoomManager
+  ) {
+    this.roomManager = roomManager;
+    this.status = Match.Status.Playing;
+    this.room = room;
     this.arena = {
       width: 1600,
       height: 900
@@ -43,7 +54,8 @@ private roomID: string;
     };
 
     this.ball = new Ball(this.scaleViewInput("2.5vh"), center);
-    this.extraBall = new Ball(this.arena.width * (100 / 30), center);
+    this.powerUp = new PowerUp(this.arena, this.scaleViewInput("5vh"));
+    // this.extraBall = new Ball(this.scaleViewInput("2.5vh"), center);
     const bat1pos: Game.Position = {
       posX: this.scaleViewInput("10vw"),
       posY: this.scaleViewInput("50vh")
@@ -61,12 +73,11 @@ private roomID: string;
 
     this.player1Bat = new Bat(bat1pos, batSize.posX, batSize.posY);
     this.player2Bat = new Bat(bat2pos, batSize.posX, batSize.posY);
-    this.powerUp = new PowerUp(this.arena);
 
     this.score = { player1: 0, player2: 0 };
     this.connection = connection;
     this.roomID = room.id;
-    this.maxScore = 10; // should get this from hame mode I think
+    this.maxScore = 5; // should get this from hame mode I think
 
     const members = [...room.members.values()];
     this.player1Profile = members[0];
@@ -93,13 +104,16 @@ private roomID: string;
    */
   render(): void {
     // get random powerup... where does it assign the powerup?
-    // update positions
-    // if (
-    //   this.score.player1 === this.maxScore ||
-    //   this.score.player2 === this.maxScore
-    // ) {
-    //   return;
-    // }
+
+    if (this.status === Match.Status.Finished) return;
+
+    if (this.powerUp.placed === false) {
+      this.connection.to(this.roomID).emit("powerUp", {
+        size: this.inputToScaled(this.powerUp.size.height, "vh"),
+        posX: this.inputToScaled(this.powerUp.position.posX, "vw"),
+        posY: this.inputToScaled(this.powerUp.position.posY, "vh")
+      });
+    }
     this.ball.updatePosition(this.arena);
 
     const { posX, posY } = this.ball.getPosition();
@@ -109,9 +123,6 @@ private roomID: string;
       posY: this.inputToScaled(posY, "vh")
     });
 
-    //if (this.powerUp.extraBall) {
-    //  this.checkGame(this.extraBall);
-    // }
     // check game
     this.checkGame(this.ball);
   }
@@ -195,10 +206,16 @@ private roomID: string;
   private resetGame(): void {
     const [player1, player2] = this.getPlayersPos();
     this.player1Bat.reset(this.arena);
-    this.connection.to(this.roomID).emit("newBatPosition", { playerUid: player1.id, posY: this.inputToScaled(player1.pos.posY, 'vh') });
+    this.connection.to(this.roomID).emit("newBatPosition", {
+      playerUid: player1.id,
+      posY: this.inputToScaled(player1.pos.posY, "vh")
+    });
 
     this.player2Bat.reset(this.arena);
-    this.connection.to(this.roomID).emit("newBatPosition", { playerUid: player2.id, posY: this.inputToScaled(player2.pos.posY, 'vh') });
+    this.connection.to(this.roomID).emit("newBatPosition", {
+      playerUid: player2.id,
+      posY: this.inputToScaled(player2.pos.posY, "vh")
+    });
 
     this.powerUp.reset();
     this.ball.reset(this.arena);
@@ -207,12 +224,41 @@ private roomID: string;
   private checkGame(ball: Ball): void {
     this.checkIfBallHitsSide(ball);
     this.checkIfBallHitsBats(ball);
-    //if (
-    //  this.calcIntersect(this.ball.position, this.ball.radius, this.powerUp)
-    //) {
-    //  this.powerUp.hit = true;
-    //  this.powerUp.power = true;
-    //}
+    if (
+      this.calcIntersect(this.ball.position, this.ball.radius, this.powerUp)
+    ) {
+      // powerup emit
+      if (ball.velocity.x > 0) {
+        this.connection.to(this.roomID).emit("powerUpActivated", {
+          uid: this.player1Profile.uid,
+          size: "50vh"
+        });
+        this.player1Bat.size.height = this.scaleViewInput("50vh");
+        this.connection.to(this.roomID).emit("powerUpActivated", {
+          uid: this.player2Profile.uid,
+          size: "20vh"
+        });
+        this.player2Bat.size.height = this.scaleViewInput("20vh");
+      } else {
+        this.connection.to(this.roomID).emit("powerUpActivated", {
+          uid: this.player1Profile.uid,
+          size: "20vh"
+        });
+        this.player1Bat.size.height = this.scaleViewInput("20vh");
+        this.connection.to(this.roomID).emit("powerUpActivated", {
+          uid: this.player2Profile.uid,
+          size: "50vh"
+        });
+        this.player2Bat.size.height = this.scaleViewInput("50vh");
+      }
+
+      this.powerUp.reset();
+      this.connection.to(this.roomID).emit("powerUp", {
+        size: this.inputToScaled(this.powerUp.size.height, "vh"),
+        posX: this.inputToScaled(this.powerUp.position.posX, "vw"),
+        posY: this.inputToScaled(this.powerUp.position.posY, "vh")
+      });
+    }
     this.checkIfGameIsFinished();
   }
 
@@ -220,29 +266,25 @@ private roomID: string;
     const relativeIntersectY = bat.position.posY - ball.position.posY;
     const normalizedRelativeIntersectionY =
       relativeIntersectY / (bat.size.height / 2);
-    const bounceAngle = normalizedRelativeIntersectionY * 75;
-    if (normalizedRelativeIntersectionY != 0 || bounceAngle != 0)
-      console.log("intersect: ", normalizedRelativeIntersectionY, ", bounce angle: ", bounceAngle, "\nbatY: ", bat.position.posY , ", ballY: ", ball.position.posY);
+    const bounceAngle = normalizedRelativeIntersectionY * ((5 * Math.PI) / 12);
     if (ball.velocity.x <= 40 && ball.velocity.x >= -40) {
       if (ball.velocity.x > 0)
         ball.velocity.x = ball.velocity.x + ball.acceleration;
-      else
-        ball.velocity.x = ball.velocity.x - ball.acceleration;
+      else ball.velocity.x = ball.velocity.x - ball.acceleration;
     }
+
     ball.velocity.x = -ball.velocity.x;
-    ball.velocity.y = ball.acceleration * Math.sin(bounceAngle);
+    ball.velocity.y = Math.abs(ball.velocity.x) * -Math.sin(bounceAngle);
   }
 
   private checkIfBallHitsBats(ball: Ball): void {
     // Check p1 hit ball
     if (this.calcIntersect(ball.position, ball.radius, this.player1Bat)) {
       this.calcBounce(ball, this.player1Bat);
-      this.powerUp.turn = 0;
     }
     // check if p2 hit ball
     if (this.calcIntersect(ball.position, ball.radius, this.player2Bat)) {
       this.calcBounce(ball, this.player2Bat);
-      this.powerUp.turn = 1;
     }
   }
 
@@ -299,6 +341,11 @@ private roomID: string;
       this.score.player2 >= this.maxScore
     ) {
       this.status = Match.Status.Finished;
+      this.connection.to(this.roomID).emit("gameStatus", this.status);
+
+      const members = this.roomManager.getRoomMembers(this.roomID);
+      this.roomManager.removeMemberFromRoom(members);
+      this.roomManager.logAllRooms();
     }
   }
 }
