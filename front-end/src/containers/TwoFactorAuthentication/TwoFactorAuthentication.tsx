@@ -5,9 +5,6 @@ import { useEffect, useState, useRef } from "react";
 import Asset from "../../components/Asset";
 import Button from "../../components/Button";
 
-// User
-import { useUser } from "../../contexts/UserContext";
-
 // Debug
 import Logger, { LogTypes } from "../../modules/Logger";
 
@@ -17,17 +14,24 @@ import { toggle2FA, confirmTFA, getqrTFA } from "../../proxies/auth";
 // Styling
 import { Container, QrCodeContainer } from "./TwoFactorAuthentication.style";
 
+import { useUser } from "../../contexts/UserContext";
+
 //tfa input
 import AuthCode, { AuthCodeRef } from "react-auth-code-input";
+
+import { addImagesToProfile } from "../../proxies/profile";
 
 import * as Profile from "../../types/Profile";
 
 ////////////////////////////////////////////////////////////
 
-const TwoFactorAuthentication = ({user}: {user: Profile.Instance} ) => {
+const TwoFactorAuthentication = ({ user, showToggle}: { user: Profile.Instance, showToggle: boolean} ) => {
     const [QRlink, setQRLink] = useState<string>(null!);
+    const [error, setError] = useState<string | null>(null);
 
     ////////////////////////////////////////////////////////
+
+    const { setUser } = useUser();
 
     const [result, setResult] = useState<string>(null!);
     const AuthInputRef = useRef<AuthCodeRef>(null);
@@ -71,15 +75,11 @@ const TwoFactorAuthentication = ({user}: {user: Profile.Instance} ) => {
 
     const ConfirmTFA = async () => {
         try {
-            const input = await confirmTFA(result);
-
-            Logger(
-                LogTypes.AUTH,
-                "Settings page",
-                "Confirm TFA response",
-                input
-            );
+            const userProfile = await confirmTFA(result);
+            const updatedProfile = await addImagesToProfile(userProfile, { profile: true, banner: true });
+            setUser(updatedProfile);
         } catch (err) {
+            setError("Code incorrect");
             console.error(err);
         }
     };
@@ -88,12 +88,18 @@ const TwoFactorAuthentication = ({user}: {user: Profile.Instance} ) => {
 
     return (
         <Container>
-            <Button theme="dark" onClick={handle2faChange}>
-                Turn on 2fa
-            </Button>
-            <Button theme="dark" onClick={GetTFAqr}>
-                get qr
-            </Button>
+            {
+                showToggle ? 
+                    (<>
+                        <Button theme="dark" onClick={handle2faChange}>
+                            {user.isTfaEnabled ? "turn off" : "turn on"} on 2fa
+                        </Button>
+                        <Button theme="dark" onClick={GetTFAqr}>
+                            get qr
+                            </Button>
+                    </>
+                    ) : null
+            }
             <Button theme="dark" onClick={ConfirmTFA}>
                 confirm
             </Button>
@@ -106,6 +112,7 @@ const TwoFactorAuthentication = ({user}: {user: Profile.Instance} ) => {
             <QrCodeContainer>
                 {QRlink && <Asset url={QRlink} alt="qr code" />}
             </QrCodeContainer>
+            {error !== null ? <span>{error}</span> : null}
         </Container>
     );
 };

@@ -16,19 +16,16 @@ export class MatchHistory {
 
   @Column()
   scoreTwo: number;
-  
+
   @Column({
-    nullable: true,
+    nullable: true
   })
   eloGainOne: number;
 
   @Column({
-    nullable: true,
+    nullable: true
   })
   eloGainTwo: number;
-
-  @Column()
-  scoreType: number;
 
   @Column()
   gameType: number;

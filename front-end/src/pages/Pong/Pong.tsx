@@ -1,3 +1,4 @@
+
 // React
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -104,6 +105,7 @@ const Pong = (): JSX.Element => {
     };
 
     useEffect(() => {
+        if (!gameConnection) return;
         if (matchState === Match.Status.Finished) {
             setTimeout(() => {
                 navigate(PageRoutes.profile);
@@ -136,6 +138,18 @@ const Pong = (): JSX.Element => {
             switch (res) {
                 case Match.Status.Playing:
                     Manager.startGame();
+                    break;
+                case Match.Status.Finished:
+                    if (user.uid === Manager.player1Bat.playerUid) {
+                        console.log(Manager.player1Bat.playerUid, Manager.player2Bat.playerUid, Manager.score, gameType);
+                            gameConnection.emit("createMatchRecord", {
+                                playerOne: Manager.player1Bat.playerUid,
+                                playerTwo: Manager.player2Bat.playerUid,
+                                scoreOne: Manager.score[0],
+                                scoreTwo: Manager.score[1],
+                                gameType: getGameTypeFromLocation(location.pathname)
+                            })
+                    }
             }
         });
 
@@ -154,7 +168,6 @@ const Pong = (): JSX.Element => {
         })
 
         gameConnection.on("gameConfig", async (res) => {
-            console.log(res);
             try {
                 const playerOne = await getProfileByUid(res.players[0], {
                     profile: true,
@@ -173,6 +186,7 @@ const Pong = (): JSX.Element => {
                     Manager.setActivePlayer(1);
                 }
 
+                console.log("config", playerOne, playerTwo)
                 setPlayers([playerOne, playerTwo]);
                 setMatchState(res.state);
 
@@ -184,7 +198,11 @@ const Pong = (): JSX.Element => {
 
         gameConnection.on("watchGameSetup", console.log);
 
-        gameConnection.on("scoreUpdate", setScore);
+        gameConnection.on("scoreUpdate", (res) => {
+            setScore(res);
+
+            Manager.setScore(res[0], res[1]);
+        });
 
         gameConnection.on("newBallPosition", (res: any) => {
             Manager.updateBall(res.posX, res.posY);

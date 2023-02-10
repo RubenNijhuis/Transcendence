@@ -11,6 +11,8 @@ import * as Request from "../../types/Request";
 // User
 import { useUser } from "../UserContext";
 
+import PageRoutes from "../../config/PageRoutes";
+
 // Business logic
 import { redirectToLogin, signIn, signOut } from "./AuthContext.bl";
 
@@ -117,7 +119,7 @@ const AuthProvider = ({ children }: IAuthProvider): JSX.Element => {
         setTfaEnabled,
 
         isLoggedIn,
-        setLoggedIn
+        setLoggedIn,
     };
 
     ////////////////////////////////////////////////////////

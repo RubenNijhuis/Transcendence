@@ -73,6 +73,7 @@ const ProfilePage = (): JSX.Element => {
     const handleLoginProcess = async () => {
         const apiToken = getValueFromUrl(window.location.href, "code");
 
+        if (!apiToken) return;
         try {
             const { profile, shouldCreateUser, TWOfaEnabled } = await signIn(
                 apiToken
@@ -86,8 +87,7 @@ const ProfilePage = (): JSX.Element => {
                 openModal(true);
                 return;
             } else if (TWOfaEnabled) {
-                setUser(profile);
-                setModalElement(<TwoFactorAuthentication user={profile}/>);
+                setModalElement(<TwoFactorAuthentication user={profile} showToggle={false}/>);
                 setAllowClose(false);
                 openModal(true);
                 return;
@@ -113,6 +113,7 @@ const ProfilePage = (): JSX.Element => {
         if (user && selectedProfile) {
             // Reset the create account modal after account creation
             openModal(false);
+            setAllowClose(true);
             setFriends(profileFriends);
             return;
         }

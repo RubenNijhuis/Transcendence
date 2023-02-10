@@ -25,6 +25,7 @@ import { UserModule } from "../user/user.module";
   imports: [
     TypeOrmModule.forFeature([User]),
     ConfigModule.forRoot(),
+    MatchHistoryModule,
     UserModule,
     BlockListModule,
     MatchHistoryModule,

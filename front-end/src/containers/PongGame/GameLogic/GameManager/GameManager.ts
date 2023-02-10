@@ -19,6 +19,7 @@ class GameManager {
     player1Bat: Bat;
     player2Bat: Bat;
     powerUp: PowerUp | null;
+    score: [number, number];
 
     context: CanvasRenderingContext2D;
     canvasWidth: number;
@@ -41,6 +42,7 @@ class GameManager {
         }
 
         this.context = context;
+        this.score = [0, 0];
 
         this.player1Bat = null!; // I dont care about the rules
         this.player2Bat = null!;
@@ -61,6 +63,10 @@ class GameManager {
             this.getMiddleOfBoard(),
             this.scaleViewInput("2.5vh")
         );
+    }
+
+    setScore(one: number, two: number) {
+        this.score = [one, two];
     }
 
     setPlayers(playerOne: Profile.Instance, playerTwo: Profile.Instance): void {

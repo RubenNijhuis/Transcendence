@@ -134,10 +134,10 @@ export class GameSocketGateway {
     if (member.roomID !== Room.DefaultID) {
       const matchRoom = this.roomManager.getRoomByID(member.roomID);
 
-        client.emit("gameConfig", {
-          players: [matchRoom.data.playerOne, matchRoom.data.playerTwo],
-          status: Match.Status.Matched
-        });
+      client.emit("gameConfig", {
+        players: [matchRoom.data.playerOne, matchRoom.data.playerTwo],
+        status: Match.Status.Matched
+      });
       return;
     }
 
@@ -205,7 +205,7 @@ export class GameSocketGateway {
       players: [member.uid, matchedOpponent.uid]
     });
 
-    this.gameManager.createGame(newRoomName);
+    this.gameManager.createGame(newRoomName, member.data.gameType);
   }
 
   @SubscribeMessage("watchMatch")
@@ -299,6 +299,18 @@ export class GameSocketGateway {
       member.uid,
       member.roomID,
       batPositionPayload.posY
+    );
+  }
+
+  @SubscribeMessage("createMatchRecord")
+  async createRecord(@MessageBody() recordPayload: Payload.Game.CreateRecord) {
+    console.log(recordPayload);
+    await this.matchHistoryService.createRecord(
+      recordPayload.playerOne,
+      recordPayload.playerTwo,
+      recordPayload.scoreOne,
+      recordPayload.scoreTwo,
+      recordPayload.gameType
     );
   }
 }

@@ -1,7 +1,7 @@
 // API Request config
 import ApiRoutes from "../../../config/ApiRoutes";
 import { API } from "../../instances/apiInstance";
-
+import * as Profile from "../../../types/Profile";
 ////////////////////////////////////////////////////////////
 
 const confirmTFA = async (tfaCode: string): Promise<any> => {
@@ -10,8 +10,8 @@ const confirmTFA = async (tfaCode: string): Promise<any> => {
         const config = {
             tfaCode
         };
-
-        const { data } = await API.post(route, config);
+        console.log("I have been summoned")
+        const {data} = await API.post(route, config);
         return Promise.resolve(data);
     } catch (err) {
         return Promise.reject(err);

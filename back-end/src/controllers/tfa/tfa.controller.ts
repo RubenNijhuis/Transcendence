@@ -51,17 +51,21 @@ export class TfaController {
   @UseGuards(Jwt2faStrategy)
   async authenticate(
     @Req() req: Request,
-    @Res() res: Response,
     @Body() tfaDto: TfaDto
   ) {
     const profile: User = req.user["profile"];
-    const isCodeValid = await this.tfaService.isTfaValid(
-      profile.uid,
-      tfaDto.tfaCode
-    );
-    if (isCodeValid === false) {
-      throw new UnauthorizedException("Wrong authentication code");
+    try {
+      const isCodeValid = await this.tfaService.isTfaValid(
+        profile.uid,
+        tfaDto.tfaCode
+      );
+      if (isCodeValid === false) {
+        throw new UnauthorizedException("Wrong authentication code");
+      }
+      console.log(tfaDto, profile)
+      return profile;
+    } catch (err) {
+      console.log(err);
     }
-    return res.status(HttpStatus.OK).send();
   }
 }

@@ -61,7 +61,7 @@ const ProfileSettings = () => {
     ////////////////////////////////////////////////////////
 
     const renderTFAModal = () => {
-        setModalElement(<TwoFactorAuthentication user={user} />);
+        setModalElement(<TwoFactorAuthentication user={user} showToggle={true} />);
         openModal(true);
     };
 

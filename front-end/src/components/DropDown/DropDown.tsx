@@ -16,11 +16,14 @@ const DropDown = () => {
 
     return (
         <Container>
+            <div style={{background: "black"}}>
             <FiSettings onClick={handleOpen} className="settings-icon" />
+            </div>
             { open ? (
                 <List>
                     <li key="settings">
-                        <Link to={PageRoutes.settings} className="link" >{"settings"}</Link>
+
+                            <Link to={PageRoutes.settings} className="link" >{"settings"}</Link>
                     </li>
                     <li key="logout">
                         <Link onClick={signOut} to={PageRoutes.home} className="link" >{"logout"}</Link>

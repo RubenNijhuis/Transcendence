@@ -1,6 +1,8 @@
 // Connections
+import { forwardRef, Inject } from "@nestjs/common";
 import { emit } from "process";
 import { Server } from "socket.io";
+import { MatchHistoryService } from "src/services/matchhistory/matchhistory.service";
 
 // User type
 import RoomManager, { Member, Room } from "../RoomManager";
@@ -18,7 +20,7 @@ class GameInstance {
   private readonly ball: Ball;
   private readonly player1Bat: Bat;
   private readonly player2Bat: Bat;
-  private readonly powerUp: PowerUp;
+  private readonly powerUp: PowerUp | null;
   private readonly arena: Game.Dimentions;
 
   private readonly player1Profile: Member.Instance;
@@ -33,12 +35,15 @@ class GameInstance {
 
   roomManager: RoomManager;
 
+  gameType: number;
+
   room: Room.Instance;
 
   constructor(
     connection: Server,
     room: Room.Instance,
-    roomManager: RoomManager
+    roomManager: RoomManager,
+    gameType: number
   ) {
     this.roomManager = roomManager;
     this.status = Match.Status.Playing;
@@ -53,8 +58,14 @@ class GameInstance {
       posY: this.scaleViewInput("50vh")
     };
 
+    this.gameType = gameType;
+
     this.ball = new Ball(this.scaleViewInput("2.5vh"), center);
-    this.powerUp = new PowerUp(this.arena, this.scaleViewInput("5vh"));
+    if (!this.gameType) {
+      this.powerUp = null;
+    } else {
+      this.powerUp = new PowerUp(this.arena, this.scaleViewInput("5vh"));
+    }
     // this.extraBall = new Ball(this.scaleViewInput("2.5vh"), center);
     const bat1pos: Game.Position = {
       posX: this.scaleViewInput("10vw"),
@@ -74,7 +85,7 @@ class GameInstance {
     this.player1Bat = new Bat(bat1pos, batSize.posX, batSize.posY);
     this.player2Bat = new Bat(bat2pos, batSize.posX, batSize.posY);
 
-    this.score = { player1: 0, player2: 0 };
+    this.score = { player1: 4, player2: 4 };
     this.connection = connection;
     this.roomID = room.id;
     this.maxScore = 5; // should get this from hame mode I think
@@ -107,12 +118,14 @@ class GameInstance {
 
     if (this.status === Match.Status.Finished) return;
 
-    if (this.powerUp.placed === false) {
-      this.connection.to(this.roomID).emit("powerUp", {
-        size: this.inputToScaled(this.powerUp.size.height, "vh"),
-        posX: this.inputToScaled(this.powerUp.position.posX, "vw"),
-        posY: this.inputToScaled(this.powerUp.position.posY, "vh")
-      });
+    if (this.gameType) {
+      if (this.powerUp.placed === false) {
+        this.connection.to(this.roomID).emit("powerUp", {
+          size: this.inputToScaled(this.powerUp.size.height, "vh"),
+          posX: this.inputToScaled(this.powerUp.position.posX, "vw"),
+          posY: this.inputToScaled(this.powerUp.position.posY, "vh")
+        });
+      }
     }
     this.ball.updatePosition(this.arena);
 
@@ -217,7 +230,7 @@ class GameInstance {
       posY: this.inputToScaled(player2.pos.posY, "vh")
     });
 
-    this.powerUp.reset();
+    if (this.powerUp) this.powerUp.reset();
     this.ball.reset(this.arena);
   }
 
@@ -312,6 +325,7 @@ class GameInstance {
     ballRad: number,
     rect: PowerUp | Bat
   ): boolean {
+    if (!rect) return;
     const circDistX = Math.abs(ballPos.posX - rect.position.posX);
     const circDistY = Math.abs(ballPos.posY - rect.position.posY);
 

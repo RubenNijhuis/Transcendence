@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  UseGuards,
-  Req
-} from "@nestjs/common";
+import { Body, Controller, Get, Post, UseGuards, Req } from "@nestjs/common";
 import { Request } from "express";
 import { CreateRecordDto } from "src/dtos/matchhistory/create-record.dto";
 import { User } from "src/entities";
@@ -42,8 +35,7 @@ export class MatchHistoryController {
         dto.playerTwo,
         dto.scoreOne,
         dto.scoreTwo,
-        dto.scoreType,
-        dto.gameType
+        dto.scoreType
       );
       return ret;
     } catch (error) {

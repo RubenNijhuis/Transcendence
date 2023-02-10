@@ -88,7 +88,7 @@ export class UserService {
   async getUsersSortedOnElo(): Promise<User[]> {
     const returnedUsers: User[] = await this.userRepository.find({
       order: {
-        elo: "DESC"
+        wins: "DESC"
       }
     });
     const filteredUsers = returnedUsers.map((profile) =>
@@ -213,6 +213,28 @@ export class UserService {
       .where("username =:username", { username })
       .execute();
     return result;
+  }
+
+  async incWins(uid: string) {
+    const user: User = await this.findUserByUid(uid);
+    return await this.userRepository
+      .createQueryBuilder()
+      .update(user)
+      .set({ wins: user.wins + 1 })
+      .where({ uid: user.uid })
+      .returning("*")
+      .execute();
+  }
+
+  async incLosses(uid: string) {
+    const user: User = await this.findUserByUid(uid);
+    return await this.userRepository
+      .createQueryBuilder()
+      .update(user)
+      .set({ losses: user.losses + 1 })
+      .where({ uid: user.uid })
+      .returning("*")
+      .execute();
   }
 
   async setRefreshToken(uid: string, token: string): Promise<UpdateResult> {

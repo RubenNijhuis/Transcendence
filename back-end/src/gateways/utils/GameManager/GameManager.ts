@@ -81,10 +81,10 @@ class GameManager {
     }
   }
 
-  createGame(roomID: Room.ID): void {
+  createGame(roomID: Room.ID, gameType: number): void {
     const room = this.roomManager.getRoomByID(roomID);
     this.server.to(roomID).emit("gameStatus", Match.Status.Setup);
-    const newGame = new GameInstance(this.server, room, this.roomManager);
+    const newGame = new GameInstance(this.server, room, this.roomManager, gameType);
     this.games.push(newGame);
   }
 

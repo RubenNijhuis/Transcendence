@@ -1,11 +1,14 @@
-import { Injectable } from "@nestjs/common";
+import { forwardRef, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import MatchHistory from "src/entities/matchhistory/matchhistory.entity";
+import { UserService } from "../user/user.service";
 
 @Injectable()
 export class MatchHistoryService {
   constructor(
+    @Inject(forwardRef(() => UserService))
+    private readonly userService: UserService,
     @InjectRepository(MatchHistory)
     private readonly matchHistoryRepository: Repository<MatchHistory>
   ) {}
@@ -36,7 +39,6 @@ export class MatchHistoryService {
     playerTwo: string,
     scoreOne: number,
     scoreTwo: number,
-    scoreType: number,
     gameType: number
   ) {
     const query = {
@@ -44,11 +46,17 @@ export class MatchHistoryService {
       playerTwo: playerTwo,
       scoreOne: scoreOne,
       scoreTwo: scoreTwo,
-      scoreType: scoreType,
       gameType: gameType
     };
 
     const newRecord: MatchHistory = this.matchHistoryRepository.create(query);
+    if (scoreOne > scoreTwo) {
+      await this.userService.incWins(playerOne);
+      await this.userService.incLosses(playerTwo);
+    } else {
+      await this.userService.incWins(playerTwo);
+      await this.userService.incLosses(playerOne);
+    }
     return await this.matchHistoryRepository.save(newRecord);
   }
 

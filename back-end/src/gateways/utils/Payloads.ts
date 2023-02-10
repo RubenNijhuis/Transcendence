@@ -3,13 +3,21 @@ export namespace Game {
   export interface WatchMatch {
     gameId: string;
   }
-    
+
   export interface FriendlyMatch {
     friendId: string;
   }
 
   export interface BatPositionUpdate {
     posY: string;
+  }
+
+  export interface CreateRecord {
+    playerOne: string;
+    playerTwo: string;
+    scoreOne: number;
+    scoreTwo: number;
+    gameType: number;
   }
 
   export interface JoinQueue {
