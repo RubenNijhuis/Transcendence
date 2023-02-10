@@ -188,6 +188,15 @@ class GameInstance {
     });
   }
 
+  finishGame(): void {
+    this.status = Match.Status.Finished;
+    this.connection.to(this.roomID).emit("gameStatus", this.status);
+
+    const members = this.roomManager.getRoomMembers(this.roomID);
+    this.roomManager.removeMemberFromRoom(members);
+    this.roomManager.logAllRooms();
+  }
+
   // retrieve ball pos
   private getBallPos(): Game.Position {
     return this.ball.getPosition();

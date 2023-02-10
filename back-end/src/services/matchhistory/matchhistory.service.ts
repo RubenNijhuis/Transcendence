@@ -50,7 +50,7 @@ export class MatchHistoryService {
     };
 
     const newRecord: MatchHistory = this.matchHistoryRepository.create(query);
-    if (scoreOne > scoreTwo) {
+    if (scoreOne >= scoreTwo) {
       await this.userService.incWins(playerOne);
       await this.userService.incLosses(playerTwo);
     } else {
