@@ -96,7 +96,7 @@ class GameManager {
   closeGame(playerWhoLeft: string, roomName: string) {
     for (const gameInstance of this.games) {
       if (gameInstance.room.id === roomName) {
-        // gameInstance.finishGameByForce(playerWhoLeft);
+        gameInstance.finishGameByForce(playerWhoLeft);
       }
     }
   }
