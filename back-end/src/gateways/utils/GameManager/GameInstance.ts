@@ -188,6 +188,10 @@ class GameInstance {
     });
   }
 
+  getScore(): Game.Score {
+    return this.score;
+  }
+
   finishGame(): void {
     this.status = Match.Status.Finished;
     this.connection.to(this.roomID).emit("gameStatus", this.status);

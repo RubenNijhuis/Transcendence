@@ -84,7 +84,12 @@ class GameManager {
   createGame(roomID: Room.ID, gameType: number): void {
     const room = this.roomManager.getRoomByID(roomID);
     this.server.to(roomID).emit("gameStatus", Match.Status.Setup);
-    const newGame = new GameInstance(this.server, room, this.roomManager, gameType);
+    const newGame = new GameInstance(
+      this.server,
+      room,
+      this.roomManager,
+      gameType
+    );
     this.games.push(newGame);
   }
 
@@ -92,7 +97,6 @@ class GameManager {
     this.games = games.filter((game) => {
       return game.getGameStatus() !== Match.Status.Finished;
     });
-
 
     if (this.games.length === 0) {
       this.isRunning = false;
