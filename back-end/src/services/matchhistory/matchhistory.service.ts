@@ -25,8 +25,7 @@ export class MatchHistoryService {
     try {
       const matches: MatchHistory[] = await this.matchHistoryRepository
         .createQueryBuilder()
-        .where({ playerOne: id })
-        .orWhere({ playerTwo: id })
+        .where("playerOne = :id OR playerTwo = :id", { id })
         .getMany();
       return matches;
     } catch (err) {

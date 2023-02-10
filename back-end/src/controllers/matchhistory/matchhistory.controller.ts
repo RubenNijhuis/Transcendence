@@ -1,16 +1,29 @@
-import { Body, Controller, Get, Post, UseGuards, Req } from "@nestjs/common";
-import { Request } from "express";
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Param,
+  forwardRef,
+  Inject
+} from "@nestjs/common";
 import { CreateRecordDto } from "src/dtos/matchhistory/create-record.dto";
 import { User } from "src/entities";
 import MatchHistory from "src/entities/matchhistory/matchhistory.entity";
 import { AccessTokenGuard } from "src/guards/accessToken.guard";
 
 import { MatchHistoryService } from "src/services/matchhistory/matchhistory.service";
+import { UserService } from "src/services/user/user.service";
 
 @Controller("matchhistory")
 @UseGuards(AccessTokenGuard)
 export class MatchHistoryController {
-  constructor(private readonly matchHistoryService: MatchHistoryService) {}
+  constructor(
+    @Inject(forwardRef(() => UserService))
+    private readonly userService: UserService,
+    private readonly matchHistoryService: MatchHistoryService
+  ) {}
 
   @Get()
   async getAllMessages() {
@@ -18,10 +31,12 @@ export class MatchHistoryController {
   }
 
   @Get("getmatches")
-  async getMatchByUserID(@Req() req: Request): Promise<MatchHistory[]> {
+  async getMatchByUserID(
+    @Param("username") username: string
+  ): Promise<MatchHistory[]> {
     try {
-      const profile: User = req.user["profile"];
-      return await this.matchHistoryService.findMatchesByUserId(profile.uid);
+      const user: User = await this.userService.findUserByUsername(username);
+      return await this.matchHistoryService.findMatchesByUserId(user.uid);
     } catch (error) {
       throw error;
     }
