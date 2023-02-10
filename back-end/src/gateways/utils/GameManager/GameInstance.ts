@@ -85,7 +85,7 @@ class GameInstance {
     this.player1Bat = new Bat(bat1pos, batSize.posX, batSize.posY);
     this.player2Bat = new Bat(bat2pos, batSize.posX, batSize.posY);
 
-    this.score = { player1: 4, player2: 4 };
+    this.score = { player1: 0, player2: 0 };
     this.connection = connection;
     this.roomID = room.id;
     this.maxScore = 5; // should get this from hame mode I think
@@ -186,6 +186,15 @@ class GameInstance {
       playerUid,
       posY
     });
+  }
+
+  finishGame(): void {
+    this.status = Match.Status.Finished;
+    this.connection.to(this.roomID).emit("gameStatus", this.status);
+
+    const members = this.roomManager.getRoomMembers(this.roomID);
+    this.roomManager.removeMemberFromRoom(members);
+    this.roomManager.logAllRooms();
   }
 
   // retrieve ball pos

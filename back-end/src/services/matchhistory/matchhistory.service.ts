@@ -25,7 +25,8 @@ export class MatchHistoryService {
     try {
       const matches: MatchHistory[] = await this.matchHistoryRepository
         .createQueryBuilder()
-        .where("playerOne = :id OR playerTwo = :id", { id })
+        .where({ playerOne: id })
+        .orWhere({ playerTwo: id })
         .getMany();
       return matches;
     } catch (err) {
@@ -49,7 +50,7 @@ export class MatchHistoryService {
     };
 
     const newRecord: MatchHistory = this.matchHistoryRepository.create(query);
-    if (scoreOne > scoreTwo) {
+    if (scoreOne >= scoreTwo) {
       await this.userService.incWins(playerOne);
       await this.userService.incLosses(playerTwo);
     } else {
