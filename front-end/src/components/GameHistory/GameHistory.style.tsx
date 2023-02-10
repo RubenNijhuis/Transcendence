@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import {
+    backgroundColor,
     darkTextColor,
     largeRadius,
     lightTextColor,
@@ -25,9 +26,17 @@ const MatchListContainer = styled.div`
     gap: calc(${magicNum} / 4);
 
     flex-direction: column;
+
+    ul li {
+        margin-bottom: calc(${magicNum} / 4);
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
 `;
 
-const MatchItem = styled.div<{ win: boolean }>`
+const MatchItem = styled.li`
     padding: calc(${magicNum} / 4);
     padding-right: calc(${magicNum} / 2);
 
@@ -37,8 +46,7 @@ const MatchItem = styled.div<{ win: boolean }>`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    background-color: ${(props) =>
-        props.win ? `rgba(0, 255, 0, 0.5)` : `rgba(255, 0, 0, 0.5)`};
+    background-color: ${backgroundColor};
 `;
 
 const OpponentProfile = styled.div`

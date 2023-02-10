@@ -1,4 +1,3 @@
-
 // React
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -63,7 +62,13 @@ const keyPressListener = (gameManager: GameManager) => {
 
 const ScoreBoard = ({ score }: { score: [number, number] }): JSX.Element => {
     return (
-        <div style={{display: "flex", fontSize: '24px', justifyContent: "center"}}>
+        <div
+            style={{
+                display: "flex",
+                fontSize: "24px",
+                justifyContent: "center"
+            }}
+        >
             <span>{score[0]}</span> - <span>{score[1]}</span>
         </div>
     );
@@ -84,6 +89,9 @@ const Pong = (): JSX.Element => {
 
     interface WatchPongState {
         watchId: string | null;
+        gameType: Match.GameType | null;
+        asFriendly: boolean | null;
+        friendId: string | null;
     }
 
     const location = useLocation();
@@ -122,12 +130,18 @@ const Pong = (): JSX.Element => {
 
         const gameType = getGameTypeFromLocation(location.pathname);
 
-        if (locState && locState.watchId !== null) {
+        if (locState && locState.watchId !== null && locState.watchId !== undefined) {
             gameConnection.emit("watchMatch", {
                 gameId: locState.watchId
             });
         } else {
-            gameConnection.emit("joinQueue", { gameType });
+            if (locState && locState.asFriendly) {
+                gameConnection.emit("friendlyMatch", {
+                    friendId: locState.friendId
+                });
+            } else {
+                gameConnection.emit("joinQueue", { gameType });
+            }
         }
 
         Manager = new GameManager(context, gameConnection);
@@ -141,14 +155,19 @@ const Pong = (): JSX.Element => {
                     break;
                 case Match.Status.Finished:
                     if (user.uid === Manager.player1Bat.playerUid) {
-                        console.log(Manager.player1Bat.playerUid, Manager.player2Bat.playerUid, Manager.score, gameType);
-                            gameConnection.emit("createMatchRecord", {
-                                playerOne: Manager.player1Bat.playerUid,
-                                playerTwo: Manager.player2Bat.playerUid,
-                                scoreOne: Manager.score[0],
-                                scoreTwo: Manager.score[1],
-                                gameType: getGameTypeFromLocation(location.pathname)
-                            })
+                        console.log(
+                            Manager.player1Bat.playerUid,
+                            Manager.player2Bat.playerUid,
+                            Manager.score,
+                            gameType
+                        );
+                        gameConnection.emit("createMatchRecord", {
+                            playerOne: Manager.player1Bat.playerUid,
+                            playerTwo: Manager.player2Bat.playerUid,
+                            scoreOne: Manager.score[0],
+                            scoreTwo: Manager.score[1],
+                            gameType: getGameTypeFromLocation(location.pathname)
+                        });
                     }
             }
         });
@@ -158,14 +177,14 @@ const Pong = (): JSX.Element => {
         });
 
         gameConnection.on("powerUpActivated", (res) => {
-            Manager.activatePowerUp(res.uid, res.size)            
+            Manager.activatePowerUp(res.uid, res.size);
         });
 
         gameConnection.on("powerUp", (res) => {
             const { posX, posY, size } = res;
 
             Manager.placePowerup(posX, posY, size);
-        })
+        });
 
         gameConnection.on("gameConfig", async (res) => {
             try {
@@ -186,7 +205,7 @@ const Pong = (): JSX.Element => {
                     Manager.setActivePlayer(1);
                 }
 
-                console.log("config", playerOne, playerTwo)
+                console.log("config", playerOne, playerTwo);
                 setPlayers([playerOne, playerTwo]);
                 setMatchState(res.state);
 
@@ -212,6 +231,7 @@ const Pong = (): JSX.Element => {
         keyPressListener(Manager);
 
         return () => {
+            gameConnection.emit("leave");
             gameConnection.removeAllListeners();
             window.removeEventListener("keydown", () => {});
             window.removeEventListener("keyup", () => {});
@@ -225,11 +245,12 @@ const Pong = (): JSX.Element => {
             <MatchMakingStatus status={matchState} players={players} />
             <ScoreBoard score={score} />
 
-            {matchState === Match.Status.Finished ?
-                <div style={{textAlign: "center"}}>
-                    {score[0] === 5 ? players[0].username : players[1].username} won the game!
+            {matchState === Match.Status.Finished ? (
+                <div style={{ textAlign: "center" }}>
+                    {score[0] === 5 ? players[0].username : players[1].username}{" "}
+                    won the game!
                 </div>
-            : null}
+            ) : null}
             <Canvas canvasRef={canvasRef} />
         </Layout>
     );

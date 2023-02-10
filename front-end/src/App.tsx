@@ -4,9 +4,6 @@ import GlobalStyle from "./styles/GlobalStyle";
 // Routing
 import Router from "./containers/Router";
 
-// Only for debug purposes
-import FakeDataProvider from "./contexts/FakeDataContext";
-
 // Providers
 import AuthProvider from "./contexts/AuthContext";
 import ModalProvider from "./contexts/ModalContext";
@@ -17,23 +14,19 @@ import SocketProvider from "./contexts/SocketContext";
 const App = (): JSX.Element => {
     return (
         <UserProvider>
-            <FakeDataProvider>
-                <AuthProvider>
-                    <SocketProvider>
-                        {/* TODO: wrapper for providers? */}
-                        <ModalProvider>
-                            {/* TODO: remove data debug provider */}
-                            <ChatProvider>
-                                {/* Global Styling */}
-                                <GlobalStyle />
+            <AuthProvider>
+                <SocketProvider>
+                    <ModalProvider>
+                        <ChatProvider>
+                            {/* Global Styling */}
+                            <GlobalStyle />
 
-                                {/* Page routing */}
-                                <Router />
-                            </ChatProvider>
-                        </ModalProvider>
-                    </SocketProvider>
-                </AuthProvider>
-            </FakeDataProvider>
+                            {/* Page routing */}
+                            <Router />
+                        </ChatProvider>
+                    </ModalProvider>
+                </SocketProvider>
+            </AuthProvider>
         </UserProvider>
     );
 };

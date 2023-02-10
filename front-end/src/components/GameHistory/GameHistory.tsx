@@ -35,19 +35,19 @@ interface IMatchList {
 const MatchList = ({ matches }: IMatchList) => {
     return (
         <ul>
-            {matches.map(({ player1, player2, score }, count) => (
-                <MatchItem key={count} win={score.player1 < score.player2}>
+            {matches.map(({ playerOne, playerTwo, scoreOne, scoreTwo }, count) => (
+                <MatchItem key={count}>
                     <OpponentProfile>
-                        <Asset url={player1.img_url} alt="player1" />
-                        <Link to={`/profile/${player1.username}`}>
-                            <span>{player1.username}</span>
+                        <Asset url={playerOne.img_url} alt="playerOne" />
+                        <Link to={`/profile/${playerOne.username}`}>
+                            <span>{playerOne.username}</span>
                         </Link>
                     </OpponentProfile>
                     <ScoreBoard>
                         <div>
-                            <span>{score.player1}</span>
+                            <span>{scoreOne}</span>
                             <span>—</span>
-                            <span>{score.player2}</span>
+                            <span>{scoreTwo}</span>
                         </div>
                     </ScoreBoard>
                 </MatchItem>
@@ -63,7 +63,7 @@ interface IGameHistory {
 
 const GameHistory = ({ player, matches }: IGameHistory): JSX.Element => {
     const [selectedPage, setSelectedPage] = useState<number>(0);
-    const [matchesPage, setMatchesPage] = useState<Match.Record[]>(null!);
+    const [matchesPage, setMatchesPage] = useState<Match.Record[]>([]);
 
     ////////////////////////////////////////////////////////
 
@@ -81,11 +81,13 @@ const GameHistory = ({ player, matches }: IGameHistory): JSX.Element => {
         }
     };
 
+    
     ////////////////////////////////////////////////////////
-
+    
     useEffect(() => {
         setMatchesPage(paginatedMatches[0]);
-    }, [setMatchesPage]);
+        console.log(matches, matchesPage);
+    }, [setMatchesPage, matches]);
 
     ////////////////////////////////////////////////////////
 

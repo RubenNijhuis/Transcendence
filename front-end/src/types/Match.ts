@@ -1,4 +1,3 @@
-import * as Game from "./Game";
 import * as Profile from "./Profile";
 
 ////////////////////////////////////////////////////////////
@@ -42,14 +41,11 @@ export interface Request {
 }
 
 export interface Record {
-    uid: ID;
+    id: ID;
 
-    player1: Profile.Instance;
-    player2: Profile.Instance;
+    playerOne: Profile.Instance;
+    playerTwo: Profile.Instance;
 
-    scoreType: ScoreType;
-    gameType: GameType;
-
-    elo: ELO;
-    score: Game.Score;
+    scoreOne: number;
+    scoreTwo: number;
 }

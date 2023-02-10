@@ -132,6 +132,8 @@ export class GameSocketGateway {
 
     // If already in game
     if (member.roomID !== Room.DefaultID) {
+      console.log("Rejoin queue");
+      this.roomManager.logAllRooms();
       const matchRoom = this.roomManager.getRoomByID(member.roomID);
 
       client.emit("gameConfig", {
@@ -236,10 +238,19 @@ export class GameSocketGateway {
     });
   }
 
-  @SubscribeMessage("leaveQueue")
+  @SubscribeMessage("leave")
   async leaveQueue(@ConnectedSocket() client: Socket) {
     const member = this.roomManager.getMemberByConnectionID(client.id);
+    const room = this.roomManager.getRoomByID(member.roomID);
+    const members = [...room.members];
+
     this.roomManager.removeMemberFromRoom(member, member.roomID);
+    this.gameManager.closeGame(member.uid, member.roomID);
+    //   this.yomakerecord({
+    //       playerOne: members[0],
+    //       playerTwo: members[1],
+    //       scoreOne: 
+    // });
   }
 
   @SubscribeMessage("friendlyMatch")
@@ -275,11 +286,18 @@ export class GameSocketGateway {
     this.roomManager.addMemberToRoom([member, friend], newRoomName);
 
     // Send the opponent data to each player
-    member.connection.emit("matchedWith", friend.uid);
-    friend.connection.emit("matchedWith", member.uid);
+    this.roomManager.setRoomData(newRoomName, {
+      playerOne: member.uid,
+      playerTwo: friend.uid
+    });
 
     // Send new game status to players
-    this._server.to(newRoomName).emit("gameStatus", Match.Status.Matched);
+    this._server.to(newRoomName).emit("gameConfig", {
+      status: Match.Status.Matched,
+      players: [member.uid, friend.uid]
+    });
+
+    this.gameManager.createGame(newRoomName, member.data.gameType);
   }
 
   //////////////////////////////////////////////////////////
@@ -295,6 +313,7 @@ export class GameSocketGateway {
       client.emit("failure", "No member found with your connection");
       return;
     }
+      
     this.gameManager.updateBatPosition(
       member.uid,
       member.roomID,
@@ -302,9 +321,7 @@ export class GameSocketGateway {
     );
   }
 
-  @SubscribeMessage("createMatchRecord")
-  async createRecord(@MessageBody() recordPayload: Payload.Game.CreateRecord) {
-    console.log(recordPayload);
+  async yomakerecord(recordPayload: Payload.Game.CreateRecord) {
     await this.matchHistoryService.createRecord(
       recordPayload.playerOne,
       recordPayload.playerTwo,
@@ -312,5 +329,10 @@ export class GameSocketGateway {
       recordPayload.scoreTwo,
       recordPayload.gameType
     );
+  }
+
+  @SubscribeMessage("createMatchRecord")
+  async createRecord(@MessageBody() recordPayload: Payload.Game.CreateRecord) {
+    await this.yomakerecord(recordPayload);
   }
 }

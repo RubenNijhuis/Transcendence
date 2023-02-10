@@ -45,10 +45,10 @@ const Leaderboard = (): JSX.Element => {
 
     return (
         <Layout>
-            {leaderboard.length >= 3 ? (
+            {leaderboard && leaderboard.length >= 3 ? (
                 <Container>
                     <Heading type={1}>Leaderboard</Heading>
-                    {/* <Podium rankings={leaderboard} /> */}
+                    <Podium rankings={leaderboard} />
                     <RankingList rankings={leaderboard} />
                 </Container>
             ) : (

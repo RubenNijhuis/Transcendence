@@ -84,15 +84,27 @@ class GameManager {
   createGame(roomID: Room.ID, gameType: number): void {
     const room = this.roomManager.getRoomByID(roomID);
     this.server.to(roomID).emit("gameStatus", Match.Status.Setup);
-    const newGame = new GameInstance(this.server, room, this.roomManager, gameType);
+    const newGame = new GameInstance(
+      this.server,
+      room,
+      this.roomManager,
+      gameType
+    );
     this.games.push(newGame);
+  }
+
+  closeGame(playerWhoLeft: string, roomName: string) {
+    for (const gameInstance of this.games) {
+      if (gameInstance.room.id === roomName) {
+        // gameInstance.finishGameByForce(playerWhoLeft);
+      }
+    }
   }
 
   removeGamesFromRunning(games: GameInstance[]): void {
     this.games = games.filter((game) => {
       return game.getGameStatus() !== Match.Status.Finished;
     });
-
 
     if (this.games.length === 0) {
       this.isRunning = false;
