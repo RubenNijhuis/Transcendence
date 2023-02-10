@@ -30,7 +30,7 @@ export class MatchHistoryController {
     return await this.matchHistoryService.getAllMatches();
   }
 
-  @Get("getmatches")
+  @Get("getmatches/:username")
   async getMatchByUserID(
     @Param("username") username: string
   ): Promise<MatchHistory[]> {

@@ -372,6 +372,7 @@ class GameInstance {
 
       const members = this.roomManager.getRoomMembers(this.roomID);
       this.roomManager.removeMemberFromRoom(members);
+      console.log("From game instance");
       this.roomManager.logAllRooms();
     }
   }

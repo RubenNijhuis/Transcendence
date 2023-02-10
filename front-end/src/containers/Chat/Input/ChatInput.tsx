@@ -226,6 +226,8 @@ const ChatInput = ({ user, chat }: IChatInput): JSX.Element => {
             content_type: messageType
         });
 
+        console.log('peepee')
+
         // Reset input field
         setMessageType(Chat.Message.ContentType.Simple);
         setMessageContent({ content: "" });

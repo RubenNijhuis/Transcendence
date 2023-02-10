@@ -93,6 +93,14 @@ class GameManager {
     this.games.push(newGame);
   }
 
+  closeGame(playerWhoLeft: string, roomName: string) {
+    for (const gameInstance of this.games) {
+      if (gameInstance.room.id === roomName) {
+        // gameInstance.finishGameByForce(playerWhoLeft);
+      }
+    }
+  }
+
   removeGamesFromRunning(games: GameInstance[]): void {
     this.games = games.filter((game) => {
       return game.getGameStatus() !== Match.Status.Finished;

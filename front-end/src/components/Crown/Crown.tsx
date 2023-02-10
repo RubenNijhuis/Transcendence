@@ -15,9 +15,9 @@ interface ICrown {
 const Crown = ({ rank }: ICrown): JSX.Element => {
     let src: any = GoldCrown;
 
-    if (rank === 1) src = GoldCrown;
-    else if (rank === 2) src = SilverCrown;
-    else if (rank === 3) src = BronzeCrown;
+    if (rank === 0) src = SilverCrown;
+    else if (rank === 1) src = GoldCrown;
+    else if (rank === 2) src = BronzeCrown;
 
     return <Asset url={src} alt="crown" className="crown" />;
 };

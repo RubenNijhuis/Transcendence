@@ -1,5 +1,5 @@
 // React
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // UI
 import Layout from "../../components/Layout";
@@ -12,9 +12,6 @@ import { ProfileDisplay } from "../../components/Profile";
 import { useAuth } from "../../contexts/AuthContext";
 import { useUser } from "../../contexts/UserContext";
 import { useSocket } from "../../contexts/SocketContext";
-
-// DEBUG
-import { useFakeData } from "../../contexts/FakeDataContext";
 
 // API
 import { useNavigate, useParams } from "react-router-dom";
@@ -36,9 +33,13 @@ import TwoFactorAuthentication from "../../containers/TwoFactorAuthentication";
 // Business logic
 import { useProfileFriends, useGetSelectedProfile } from "./Profile.bl";
 
+import * as Match from '../../types/Match'
+import { getMatchesByUsername } from "../../proxies/profile/getMatchesByUsername";
+
 ////////////////////////////////////////////////////////////
 
 const ProfilePage = (): JSX.Element => {
+    const [matches, setMatches] = useState<Match.Record[]>([]);
     // Find the user to be displayed
     const { profileName } = useParams();
 
@@ -52,15 +53,8 @@ const ProfilePage = (): JSX.Element => {
     // Auth
     const { signIn } = useAuth();
 
-    ////////////////////////////////////////////////////////
-
-    // Temp debug data
-    const { matchHistory } = useFakeData();
-
     // Create account modal
     const { openModal, setModalElement, setAllowClose } = useModal();
-
-    const { eventConnection } = useSocket();
 
     ////////////////////////////////////////////////////////
 
@@ -115,6 +109,8 @@ const ProfilePage = (): JSX.Element => {
             openModal(false);
             setAllowClose(true);
             setFriends(profileFriends);
+
+            getMatchesByUsername(selectedProfile.username).then(setMatches);
             return;
         }
 
@@ -132,7 +128,7 @@ const ProfilePage = (): JSX.Element => {
                 <>
                     <ProfileDisplay
                         profile={selectedProfile}
-                        matchHistory={matchHistory}
+                        matchHistory={matches}
                     />
 
                     <ProfileDetailsContainer>
@@ -144,7 +140,7 @@ const ProfilePage = (): JSX.Element => {
                         />
                         <GameHistory
                             player={selectedProfile}
-                            matches={matchHistory}
+                            matches={matches}
                         />
                     </ProfileDetailsContainer>
                 </>

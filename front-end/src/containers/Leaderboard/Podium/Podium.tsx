@@ -30,19 +30,20 @@ const Podium = ({ rankings }: IPodium): JSX.Element => {
 
     return (
         <PodiumContainer>
-            {formattedRankings.map(({ img_url, username }, count) => (
-                <PodiumPosition pos={count + 1} key={count}>
+            {formattedRankings.map(({ img_url, username, wins }, count) => (
+                <PodiumPosition pos={count} key={count}>
                     <Link
                         to={PageRoutes.profileWithUsername(username)}
                         className="finalist"
                     >
-                        <Crown rank={count + 1} />
+                        <Crown rank={count} />
                         <Asset
                             url={img_url}
                             className="profile-img"
                             alt={`winner ${username}`}
                         />
                         <span>{username}</span>
+                        <span>Wins: {wins}</span>
                     </Link>
                 </PodiumPosition>
             ))}

@@ -13,6 +13,7 @@ import {
 // UI
 import Button from "../../Button";
 import { useUser } from "../../../contexts/UserContext";
+import { Link } from "react-router-dom";
 
 ////////////////////////////////////////////////////////////
 
@@ -57,11 +58,16 @@ const InviteMessageDisplay = ({
 
     return (
         <Container fromUser={fromUser}>
-            <div className="content">
-                <span>{user.username}</span>
-                <p>Is inviting you to play</p>
-                <Button theme="light">Play a game</Button>
-            </div>
+                <div className="content">
+            <Link
+                to={`/play/classic`}
+                state={{ friendId: formattedContent.opponent }}
+            >
+                    <span>{user.username}</span>
+                    <p>Is inviting you to play</p>
+                    <Button theme="light">Play a game</Button>
+            </Link>
+                </div>
         </Container>
     );
 };
